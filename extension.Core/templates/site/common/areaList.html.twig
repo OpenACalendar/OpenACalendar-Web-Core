@@ -1,0 +1,27 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<ul class="areas">
+	{% for areaToList in areasToList %}
+			<li class="area">
+				{% spaceless %}
+					<span class="content{% if areaToList.cachedFutureEvents %}WithEvents{% else %}WithNoEvents{% endif %}">
+						<a href="/area/{{ areaToList.slug }}">
+							{{ areaToList.title }}
+							{% if areaToList.cachedFutureEvents %}
+								<span title="{{areaToList.cachedFutureEvents}} future events"> ({{areaToList.cachedFutureEvents}})</span>
+							{% endif %}
+						</a>
+					</span>
+				{% endspaceless %}
+				<span class="aftercontent">&nbsp;</span>
+			</li>
+	{% endfor %}
+</ul>
+
+
+

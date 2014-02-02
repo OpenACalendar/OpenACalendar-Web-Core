@@ -1,0 +1,33 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/country/page.html.twig' %}
+
+
+{% block pageTitle %}{{ country.title }} - {% endblock %} 
+
+	{% block htmlHeader %}
+{% endblock %}
+
+{% block actions %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<P>Is this an area with several venues?</P>
+	
+	{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+	
+	<p><a href="/country/{{ country.twoCharCode }}/newArea">New Area</a></p>
+	
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

@@ -1,0 +1,141 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+  background: #9b8735;
+  font-family: arial, sans-serif;
+}
+#headerAndBodyWrapper {
+  padding: 10px;
+  background: #9b8735;
+}
+#pageWrapper.displayBoard {
+  width: 100%;
+  max-width: 100%;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper {
+  background-image: none;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper {
+  min-height: 30px;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper img.logo {
+  max-width: 20px;
+  max-height: 20px;
+  display: inline;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h1 {
+  display: inline;
+  font-size: 1.3em;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h1 a {
+  text-decoration: none;
+  color: black;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 {
+  display: inline;
+  font-size: 1.0em;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 a {
+  text-decoration: none;
+  color: black;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h1 a,
+#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 a {
+  text-decoration: none;
+  color: #fff;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment {
+  min-height: 50px;
+  background: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment h3 {
+  font-size: 2em;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents {
+  margin-top: 15px;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li {
+  display: block;
+  float: left;
+  width: 250px;
+  min-height: 100px;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon {
+  float: left;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  background: #231f20;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  position: relative;
+  z-index: 100;
+  margin-right: 5px;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a {
+  text-decoration: none;
+  color: white;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.deleted {
+  padding-top: 5px;
+  display: block;
+  color: white;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startDay {
+  font-weight: 200;
+  padding-top: 5px;
+  display: block;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startDate {
+  font-size: 16pt;
+  font-weight: 400;
+  display: block;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startMonthYear {
+  font-weight: 200;
+  display: block;
+  font-size: 0.75em;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startTime1 {
+  font-size: 16pt;
+  font-weight: 400;
+  display: block;
+  padding-top: 5px;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startTime2 {
+  font-size: 16pt;
+  font-weight: 400;
+  display: block;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.title {
+  font-size: 16pt;
+  font-weight: bold;
+  line-height: 1.25em;
+  padding: 2px 0 10px 70px;
+  position: relative;
+  top: -5px;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.title a {
+  color: #70601f;
+  text-decoration: none;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .afterDisplayBoardSegment {
+  clear: both;
+}
+#footer {
+  padding: 10px 5px;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.8em;
+}

@@ -1,0 +1,111 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ user.id }}</td>
+		</tr>
+		<tr>
+			<th>Username</th>
+			<td>{{ user.username }}</td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td>{{ user.email }}</td>
+		</tr>
+		<tr>
+			<th>Email Verified</th>
+			<td>{% if user.isEmailVerified %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Editor</th>
+			<td>{% if user.isEditor %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Closed by sys admin</th>
+			<td>
+				{% if user.isClosedBySysAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}				
+			</td>
+		</tr>
+		{% if user.isClosedBySysAdmin %}
+			<tr>
+				<th>Closed by sys admin reason</th>
+				<td>
+					{{ user.ClosedBySysAdminReason }}
+				</td>
+			</tr>
+		{% endif %}		
+		<tr>
+			<th>System Admin</th>
+			<td>{% if user.isSystemAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Email Watch Prompt</th>
+			<td>{% if user.getIsEmailWatchPrompt %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Email Watch Notify</th>
+			<td>{% if user.getIsEmailWatchNotify %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Email Watch Import Expired</th>
+			<td>{% if user.getIsEmailWatchImportExpired %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Email Upcoming Events</th>
+			<td>{{ user.getEmailUpcomingEvents }}</td>
+		</tr>
+		<tr>
+			<th>Email Upcoming Events Days Notice</th>
+			<td>{{ user.getEmailUpcomingEventsDaysNotice }}</td>
+		</tr>
+		<tr>
+			<th>Clock</th>
+			<td>{% if user.getIsClock12Hour %}12hr{% else %}24hr{% endif %}</td>
+		</tr>	
+		<tr>
+			<th>Created</th>
+			<td>{% if user.createdAt %}{{ user.createdAt |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}{% endif %}</td>
+		</tr>
+		<tr>
+			<th>More</th>
+			<td>
+				<ul>
+					<li><a href="/sysadmin/user/{{ user.id }}/verify">Verify</a></li>
+					<li><a href="/sysadmin/user/{{ user.id }}/reset">Reset</a></li>
+					<li><a href="/sysadmin/user/{{ user.id }}/watchesSitePromptEmail">Watches Site Prompt Email</a></li>
+					<li><a href="/sysadmin/user/{{ user.id }}/watchesSiteGroupPromptEmail">Watches Site Group Prompt Email</a></li>
+					<li><a href="/sysadmin/user/{{ user.id }}/watchesGroupPromptEmail">Watches Group Prompt Email</a></li>
+					<li><a href="/sysadmin/user/{{ user.id }}/watchesSiteNotifyEmail">Watches Site Notify Email</a></li>
+					<li><a href="/sysadmin/user/{{ user.id }}/watchesGroupNotifyEmail">Watches Group Notify Email</a></li>
+				</ul>
+			</td>
+		</tr>		
+	</table>
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>editor yes</li>
+		<li>editor no</li>
+		<li>verifyemail</li>
+		<li>resendverificationemail</li>
+		<li>close  <span class="param">reason</a></li>
+		<li>open</li>	
+	</ul>
+
+{% endblock %}

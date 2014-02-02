@@ -1,0 +1,51 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.html.twig' %}
+
+{% block content %}
+	
+	<p style="font-weight: bold;">Subject</p>
+	<p>{{ contact.subject }}</p>
+	
+	<p style="font-weight: bold;">Message</p>
+	<p>{{ contact.message | nl2br }}</p>
+	
+	<p style="font-weight: bold;">Email</p>
+	<p>{{ contact.email }}</p>
+	
+	{% if userFrom is null %}
+	
+		<p style="font-weight: bold;">User</p>
+		<p>None</p>
+
+	{% else %}
+	
+		<p style="font-weight: bold;">User ID</p>
+		<p>{{ userFrom.id }}</p>
+
+		<p style="font-weight: bold;">User UserName</p>
+		<p>{{ userFrom.userName }}</p>
+
+		<p style="font-weight: bold;">User Email</p>
+		<p>{{ userFrom.email }}</p>
+
+		<p style="font-weight: bold;">User Verified</p>
+		<p>{% if userFrom.isEmailVerified %}Yes{% else %}No{% endif %}</p>
+	
+	{% endif %}
+	
+	<p style="font-weight: bold;">IP</p>
+	<p>{{ contact.ip }}</p>
+		
+	<p style="font-weight: bold;">Browser</p>
+	<p>{{ contact.browser }}</p>
+		
+	<p>Thanks,<br>
+	{{ config.siteTitle }}</p>
+
+{% endblock %}

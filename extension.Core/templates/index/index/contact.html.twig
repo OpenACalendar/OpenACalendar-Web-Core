@@ -1,0 +1,72 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page.html.twig' %}
+
+{% block pageTitle %}Contact - {% endblock %} 
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebIndexDomainSecure }}/contact" />
+{% endblock %}
+
+{% block content %}
+	
+	<h2>Email Us</h2>
+	
+	<p>Email us on {{ config.contactEmailHTML }}</p>
+	
+	<h2>Contact Us</h2>
+	
+	<form class="styled" method="post">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		
+		<div class="rowWrapper">
+			<div class="labelWrapper"><label for="subject">Subject</label></div>
+			<div class="widgetWrapperPlacementOnly">
+				<input type="text" name="subject">
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		<div class="rowWrapper">
+			<div class="labelWrapper"><label for="message">Message</label></div>
+			<div class="widgetWrapperPlacementOnly">
+				<textarea name="message"></textarea>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		<div class="rowWrapper">
+			<div class="labelWrapper"><label for="email">Email</label></div>
+			<div class="widgetWrapperPlacementOnly">
+				<input type="email" name="email" value="{% if currentUser is not null %}{{ currentUser.email }}{% endif %}">
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		<div style="display: none;">
+			<label>URL<input type="text" name="url"></label>
+		</div>
+		
+		<input type="submit" value="Send Message">
+	</form>
+	
+	<h2>Social?</h2>
+	
+	{% if config.contactTwitter %}
+		<p>Follow us on <a target="_blank" href="http://twitter.com/{{  config.contactTwitter }}">Twitter @{{  config.contactTwitter }}</a>.</p>
+	{% endif %}
+		
+	{% if config.facebookPage %}
+		<p>Follow us on <a target="_blank" href="{{ config.facebookPage }}">Facebook</a>.</p>
+	{% endif %}
+		
+	{% if config.googlePlusPage %}
+		<p>Follow us on <a target="_blank" href="{{ config.googlePlusPage }}">Google+</a>.</p>
+	{% endif %}
+
+{% endblock %}

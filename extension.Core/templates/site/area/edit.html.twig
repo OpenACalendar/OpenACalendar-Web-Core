@@ -1,0 +1,56 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/area/page.html.twig' %}
+
+{% block pageTitle %}Edit {{ area.title }} - {% endblock %} 
+
+
+
+{% block innerContent %}
+
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">&nbsp;</div>
+			<div class="widgetWrapperPlacementOnly">
+				<ul id="ChangeAreaAreaList">
+					<li class="selectedarea">
+						<span class="content">
+							<span class="title">{{ country.title }}</span>
+						</span>
+					</li>
+
+					{% for parentArea in parentAreas %}
+						<li class="selectedarea">
+							<span class="content">
+								<span class="title">{{ parentArea.title }}</span>
+							</span>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		
+		{{ form_row(form.title) }}
+		{{ form_row(form.description) }}
+		{{ form_rest(form) }}
+		
+
+		<input type="submit"  value="Save" />	
+	</form>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

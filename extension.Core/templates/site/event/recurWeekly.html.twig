@@ -1,0 +1,72 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block pageTitle %}Recur {{ event.summaryDisplay }} - {% endblock %} 
+
+
+{% block htmlHeader %}
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+{% endblock %}
+
+
+{% block actions %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<p>Select the dates you want to create events on.</p>
+	
+	<form method="post" action="">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="submitted" value="yes">
+
+		<ul class="newRecuringEvents">
+			{% for newEvent in newEvents %}
+				<li  class="newRecuringEvent">
+					<label>
+						<input type="checkbox" name="new[]" value="{{ newEvent.getStartAt.getTimeStamp }}" checked>
+						<div class="summary">{{ newEvent.summary }}</div>
+						<div class="date">
+							<time datetime="{{ newEvent.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+								<span class="startDay">{{ newEvent.getStartAt|tolocaltimeformatted('D jS', currentTimeZone) }}</span>
+								<span class="startMonthYear">{{ newEvent.getStartAt|tolocaltimeformatted('M Y', currentTimeZone) }}</span>
+								<span class="startTime">
+									{{ newEvent.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+								</span>
+							</time>
+							<span class="to">to</span>
+							{% if sameday(newEvent.getStartAt,newEvent.getEndAt) %}
+								<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+									<span class="end">
+										{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+									</span>
+								</time>
+							{% else %}
+								<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+									<span class="end">
+										{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+									</span>
+								</time>
+							{% endif %}
+						</div>
+					</label>
+
+				</li>
+			{% endfor %}
+		</ul>
+
+		<input type="submit" value="Create new events">
+	</form>
+
+
+
+{% endblock %}
+

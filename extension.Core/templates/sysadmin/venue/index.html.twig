@@ -1,0 +1,51 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ venue.id }}</td>
+		</tr>
+		<tr>
+			<th>Slug</th>
+			<td>{{ venue.slug }}</td>
+		</tr>
+		<tr>
+			<th>Deleted</th>
+			<td>{% if venue.isDeleted %}Deleted{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ venue.title }}</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td>{{ venue.description | nl2br }}</td>
+		</tr>	
+		<tr>
+			<th>Position</th>
+			<td>{{ venue.lat }},{{ venue.lng }}</td>
+		</tr>	
+	</table>
+
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>delete</li>
+		<li>undelete</li>
+	</ul>
+{% endblock %}

@@ -1,0 +1,15 @@
+{
+    "require": {
+		"silex/silex": "1.*",
+		"twig/twig": ">=1.8,<2.0-dev",
+		"symfony/twig-bridge": "~2.3",
+		"symfony/form": "~2.3",
+		"symfony/validator": "~2.3",
+		"symfony/config": "~2.3",
+		"symfony/translation": "~2.3",
+		"swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
+		"ircmaxell/password-compat": "1.0.3",
+		"monolog/monolog": ">=1.0.0",
+		"symfony/monolog-bridge": "~2.3"
+    }
+}

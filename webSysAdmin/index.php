@@ -1,0 +1,17 @@
+<?php
+require 'localConfig.php';
+require_once APP_ROOT_DIR.'/vendor/autoload.php'; 
+require_once APP_ROOT_DIR.'/extension.Core/php/autoload.php';
+require_once APP_ROOT_DIR.'/extension.Core/php/autoloadWebApp.php';
+require_once APP_ROOT_DIR.'/extension.Core/webSysAdmin/index.php';
+
+
+/**
+ *
+ * 
+ * 
+ * @author James Baster <james@jarofgreen.co.uk>
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @license All rights reserved. Do not distribute.  
+ */
+

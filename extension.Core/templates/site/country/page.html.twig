@@ -1,0 +1,55 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}
+	<li class="current"><a href="/country/{{ country.twoCharCode }}">{{ country.title }}</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+	<h2>{{  country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></h2>
+	
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% block actions %}{% endblock %}
+			<li class="action">
+				<a href="/api1/country/{{ country.twoCharCode }}/events.ical" onclick="showExportPopup(); return false;">
+					<img src="/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+				</a>
+			</li>
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/country/{{ country.twoCharCode }}">Details</a></li>
+			<li class="tab"><a href="/country/{{ country.twoCharCode }}/calendar">Calendar</a></li>
+		</ul>
+		<div id="innerPage">
+
+			{% block innerContent %}{% endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	<script type="text/javascript">
+		var exportData = { country:"{{ country.twoCharCode }}" };
+		var countryData = { code: "{{ country.twoCharCode }}",
+					maxLat: {% if country.maxLat %}{{ country.maxLat }}{% else %}null{% endif %},
+					maxLng: {% if country.maxLng %}{{ country.maxLng }}{% else %}null{% endif %}, 
+					minLat: {% if country.minLat %}{{ country.minLat }}{% else %}null{% endif %},
+					minLng: {% if country.minLng %}{{ country.minLng }}{% else %}null{% endif %}, };
+	</script>
+{% endblock %}
+

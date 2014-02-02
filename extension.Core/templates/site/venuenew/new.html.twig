@@ -1,0 +1,67 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}New Venue - {% endblock %} 
+
+{% block htmlHeader %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}
+	{% if country %}<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>{% endif %}
+	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></li>{% endfor %}
+	{% if area %}<li class="current"><a href="/area/{{ area.slug }}">{{ area.title }}</a></li>{% endif %}
+	<li class="current"><a href="#">new venue</a></li>
+{% endblock %}
+
+{% block content %}
+	
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.description) }}
+		{{ form_row(form.country_id) }}
+		
+		{% include 'site/common/venueFormAreaBrowser.html.twig' %}
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Map (Click to set location)</div>
+			<div class="widgetWrapperPlacementOnly"><div id="Map"></div></div>
+			<div class="after"></div>
+		</div>
+
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Save" />	
+	</form>
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script type="text/javascript">
+		{% if area and area.cachedMinLat and area.cachedMaxLat and area.cachedMinLng and area.cachedMaxLng %}
+			var mapData = { lat: null, lng:null, min_lat:{{ area.cachedMinLat }}, max_lat:{{ area.cachedMaxLat }}, min_lng: {{ area.cachedMinLng }}, max_lng:{{ area.cachedMaxLng }} };
+		{% else %}
+			var mapData = { lat: null, lng:null, min_lat:null, max_lat:null, min_lng: null, max_lng:null };
+		{% endif %}
+	</script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script type="text/javascript" src="/js/venueform.js?v={{ config.assetsVersion }}"></script>
+	{% if startAreaBrowserFromScratch %}
+		<script type="text/javascript">
+			$(document).ready(function() {  setUpBlankVenueForm(); });
+		</script>
+	{% endif %}
+{% endblock %}
+

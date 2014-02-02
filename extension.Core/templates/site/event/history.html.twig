@@ -1,0 +1,89 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block pageTitle %}History of changes of {{ event.summaryDisplay }} - {% endblock %} 
+
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+	
+{% block tabHistory %}currentTab{% endblock %}
+
+{% block innerContent %}
+
+
+	<ul class="history">
+		{% for eventHistory in eventHistories %}
+			{# we don't use common template here because we want more detail than normal #}
+			<li class="event">
+				{% if eventHistory.isdeleted %}
+					<div class="dateTimeIcon">
+						<div class="dateIcon">
+							<span class="deleted">Deleted!</span>
+						</div>
+					</div>
+				{% else %}
+					<div class="dateTimeIcon">
+						<time datetime="{{ eventHistory.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+							<a href="/event/{{ eventHistory.eventSlug }}">
+								<div class="dateIcon">
+									<span class="startDay">{{ eventHistory.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
+									<span class="startDate">{{ eventHistory.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+									<span class="startMonthYear">{{ eventHistory.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+								</div>
+								<div class="timeIcon">
+									<span class="startTime">{{ eventHistory.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+								</div>
+							</a>
+						</time>				
+					</div>
+				{% endif %}
+				<div class="title">{{ eventHistory.summaryDisplay }}</div>
+				<div class="description">{{ eventHistory.description | nl2br }}</div>
+				<div>
+					<time datetime="{{ eventHistory.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+						<span class="startDay">{{ eventHistory.getStartAt|tolocaltimeformatted('D jS', currentTimeZone) }}</span>
+						<span class="startMonthYear">{{ eventHistory.getStartAt|tolocaltimeformatted('M Y', currentTimeZone) }}</span>
+						<span class="startTime">
+							{{ eventHistory.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+						</span>
+					</time>
+					<span class="to">to</span>
+					{% if sameday(eventHistory.getStartAt,eventHistory.getEndAt) %}
+						<time datetime="{{ eventHistory.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+							<span class="end">
+								{{ eventHistory.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+							</span>
+						</time>
+					{% else %}
+						<time datetime="{{ eventHistory.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+							<span class="end">
+								{{ eventHistory.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+							</span>
+						</time>
+					{% endif %}
+				</div>
+				<div class="created">
+					Edited at 
+					<time datetime="{{ eventHistory.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
+						{{ eventHistory.getCreatedAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+					</time>	
+					{% if eventHistory.userAccountID %}by {{  eventHistory.userAccountUserName }}{% endif %}
+				</div>
+				{% if currentUserCanEditSite and not event.isImported %}
+					<a href="/event/{{ event.slug }}/rollback/{{ eventHistory.createdAtTimeStamp }}">Rollback to this</a>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+

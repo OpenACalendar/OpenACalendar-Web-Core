@@ -1,0 +1,50 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ sitequota.id }}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ sitequota.title }}</td>
+		</tr>
+		<tr>
+			<th>Code</th>
+			<td>{{ sitequota.code }}</td>
+		</tr>
+		<tr>
+			<th>Max New Events Per Month</th>
+			<td>{{ sitequota.maxNewEventsPerMonth }}</td>
+		</tr>
+		<tr>
+			<th>Max New Groups Per Month</th>
+			<td>{{ sitequota.maxNewGroupsPerMonth }}</td>
+		</tr>
+		<tr>
+			<th>Max New Venues Per Month</th>
+			<td>{{ sitequota.maxNewVenuesPerMonth }}</td>
+		</tr>
+		<tr>
+			<th>Max Countries</th>
+			<td>{{ sitequota.maxCountries }}</td>
+		</tr>
+		<tr>
+			<th>Max Media MB</th>
+			<td>{{ sitequota.maxMediaMB }}</td>
+		</tr>
+	</table>
+
+
+
+{% endblock %}

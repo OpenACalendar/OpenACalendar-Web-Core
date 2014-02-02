@@ -1,0 +1,54 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ contactsupport.id }}</td>
+		</tr>
+		<tr>
+			<th>Subject</th>
+			<td>{{ contactsupport.subject }}</td>
+		</tr>
+		<tr>
+			<th>Body</th>
+			<td>{{ contactsupport.message | nl2br }}</td>
+		</tr>
+		<tr>
+			<th>IP</th>
+			<td>{{ contactsupport.ip  }}</td>
+		</tr>
+		<tr>
+			<th>Browser</th>
+			<td>{{ contactsupport.browser  }}</td>
+		</tr>
+		<tr>
+			<th>User Account ID</th>
+			<td>{{ contactsupport.userAccountID  }}</td>
+		</tr>
+		{% if user is not null %}
+			<tr class="sub">
+				<th>User UserName</th>
+				<td>{{ user.username }}</td>
+			</tr>
+			<tr class="sub">
+				<th>User Email</th>
+				<td>{{ user.email }}</td>
+			</tr>
+			<tr class="sub">
+				<th>More</th>
+				<td><a href="/sysadmin/user/{{ user.id }}">User</a></td>
+			</tr>
+		{% endif %}		
+	</table>
+
+{% endblock %}

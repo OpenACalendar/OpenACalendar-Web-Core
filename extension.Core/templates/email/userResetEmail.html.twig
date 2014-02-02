@@ -1,0 +1,22 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.html.twig' %}
+
+{% block content %}
+	
+	<p>Hello {{ user.username }}</p>
+
+	<p>
+		To reset your account please visit 
+		<a href="{{ config.getWebIndexDomainSecure() }}/you/reset/{{ user.id }}/{{ code }}">this webpage</a>
+	</p>
+
+	<p>Thanks,<br>
+	{{ config.siteTitle }}</p>
+
+{% endblock %}

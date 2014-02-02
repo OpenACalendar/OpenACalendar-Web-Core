@@ -1,0 +1,54 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/group/page.html.twig' %}
+
+{% block pageTitle %}Add Media to {{ group.title }} - {% endblock %} 
+
+
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block tabMedia %}currentTab{% endblock %}
+
+{% block innerContent %}
+
+	<h3>Pictures</h3>
+
+	{% if medias %}
+		<ul class="mediaList">
+			{% for media in medias %}
+				<li class="media">
+					<div class="thumbnail">
+						<a href="/media/{{ media.slug }}"><img src="/media/{{ media.slug }}/thumbnail"></a>
+					</div>
+					<div class="title">{% if media.title %}{{ media.title }}{% else %}Picture{% endif %}</div>
+					<div class="source">Source: 
+						<a href="{% if media.sourceUrl %}{{ media.sourceUrl }}{% else %}/media/{{ media.slug }}/{% endif %}" target="_blank">
+							{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
+						</a>
+					</div>
+					{% if currentUserCanEditSite and currentSite.isFeatureGroup %}
+						<form action="" method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="addMedia" value="{{ media.slug }}">
+							<input type="submit" value="Add this picture">
+						</form>
+					{% endif %}
+					<div class="afterMediaListing"></div>
+				</li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<p>There are no pictures to add.</p>
+	{% endif %}
+	
+{% endblock %}
+
+

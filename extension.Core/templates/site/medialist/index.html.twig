@@ -1,0 +1,48 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block pageTitle %}Media - {% endblock %} 
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/media/" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/media">media</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<h2>Media</h2>
+
+	<ul class="mediaList">
+		{% for media in medias %}
+			<li class="media">
+				<div class="thumbnail">
+					<a href="/media/{{ media.slug }}"><img src="/media/{{ media.slug }}/thumbnail"></a>
+				</div>
+				<div class="title">{% if media.title %}{{ media.title }}{% else %}Picture{% endif %}</div>
+				<div class="source">Source: 
+					<a href="{% if media.sourceUrl %}{{ media.sourceUrl }}{% else %}/media/{{ media.slug }}/{% endif %}" target="_blank">
+						{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
+					</a>
+				</div>
+				<div class="afterMediaListing"></div>
+			</li>
+		{% endfor %}
+	</ul>
+
+
+
+
+{% endblock %}
+

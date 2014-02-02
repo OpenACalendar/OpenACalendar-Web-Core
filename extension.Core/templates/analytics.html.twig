@@ -1,0 +1,26 @@
+{% if config.piwikServerHTTPS and config.piwikServerHTTP and config.piwikSiteID %}
+<!-- Piwik -->
+<script type="text/javascript"> 
+  var _paq = _paq || [];
+{% if currentSite is defined and currentSite is not null %} _paq.push(['setCustomVariable', 1, 'CurrentSiteID', '{{ currentSite.id }}', 'page']);  
+{% endif %}
+{% if currentUser is defined and currentUser is not null %} _paq.push(['setCustomVariable', 2, 'CurrentUserID', '{{ currentUser.id }}', 'page']); 
+{% endif %}
+  _paq.push(['trackPageView']);
+  _paq.push(['setDocumentTitle', document.domain + "/" + document.title]);
+  _paq.push(['setCookieDomain', '*.{{ config.webCommonSessionDomain  }}']);
+  _paq.push(['setDomains', '*.{{ config.webCommonSessionDomain  }}']);
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https://{{ config.piwikServerHTTPS }}/" : "http://{{ config.piwikServerHTTP }}/") ;
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', {{ config.piwikSiteID }}]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+
+</script>
+<noscript><p><img src="https://{{ config.piwikServerHTTPS }}/piwik.php?idsite={{ config.piwikSiteID }}" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Code -->
+{% endif %}
+
+

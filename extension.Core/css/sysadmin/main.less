@@ -1,0 +1,247 @@
+/**
+ * @package Core
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+*/
+
+@import("../mixins.less");
+
+
+
+body, html {
+	padding: 0;
+	margin: 0;
+}
+
+#header {
+	padding: 5px;
+	background: #0DA20D;
+	border-bottom: #075007 2px solid;
+	a.homelink {
+		text-decoration: none;
+		img.logo {
+			width: 30px;
+			height: 30px;
+			display: inline;
+		}
+		h1 {
+			font-size: 2em;
+			display: inline;
+			color: black;
+		}
+	}	
+	#currentUser {
+		float: right;
+		text-align: right;
+		width: 40%;
+	}
+	#afterHeader {
+		clear: both;
+		height: 5px;
+	}
+	ul#menu {
+		li {
+			display: inline;
+			a {
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+#body {
+	padding: 10px ;
+}
+
+.flash-notice {
+	margin: 10px 5px;
+	padding: 10px 5px;
+	text-align: center;
+	background: #cadeea;
+	border: 2px solid #A8C7DB;
+}
+
+.flash-error {
+	margin: 10px 5px;
+	padding: 10px 5px;
+	text-align: center;
+	background: #eb6c6c;
+	border: 2px solid #6f1818;
+}
+
+
+
+table.data {
+	margin: 10px 20px;
+	tr th {
+		background: #ccc;
+		border-bottom: 1px solid black;
+		padding: 3px;
+		text-align: left;
+	}
+	tr {
+		background: #fff;       
+		td {
+			padding: 3px;
+		}
+	}
+	tr.alternative {
+		background: #ccc;       
+	}
+	tr.nodata {
+		background: #ccc;       
+		td {
+			font-style: italic;
+		}
+	}
+	div.revertedInfo {
+        font-style: italic;
+	}
+	div.buttonContainer {
+		padding: 6px;
+		margin: 0;
+	}
+	a.button {
+		border: 1px solid black;
+		background: white;
+		padding: 3px;
+		-webkit-border-radius: 3px; /* Safari 3-4, iOS 1-3.2, Android <=1.6 */
+		border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */            
+		margin: 1px;
+		color: black;
+		display: block;
+		text-decoration: none;
+	}
+	a.button:hover {
+		color: red;
+		text-decoration: underline;
+	}
+	td {
+		span.yes {
+			color: green;
+		}
+		span.no {
+			color: red;
+			font-size: 90%;
+		}
+	}
+}
+
+table.oneData {
+	th {
+		padding: 5px 10px;
+		border-bottom: 1px solid #ccc;
+		min-width: 100px;
+		text-align: right;
+		font-weight: bold;
+	}
+	tr.sub {
+		background: #ccc;
+	}
+	td {
+		border-bottom: 1px solid #ccc;
+		padding: 5px 10px;
+		min-width: 100px;
+		span.yes {
+			color: green;
+		}
+		span.no {
+			color: red;
+			font-size: 90%;
+		}
+	}
+}
+
+form.action {
+	padding: 20px 0;
+}
+
+ul.actionHelp {
+	padding: 10px  40px;
+	li {
+		list-style-type:circle;
+		padding: 5px;
+		font-style: italic;
+		span.param {
+			margin: 0 5px;
+			border: 1px solid #ccc;
+		}
+	}
+}
+
+ul.history {
+	li.event, li.group, li.venue {
+		padding: 5px;
+		margin: 5px 0 5px 0;
+		.rounded-corners (5px);
+		div.icon {
+			float: left;
+			width: 60px;
+			height: 60px;
+			text-align: center;
+			background: #231f20;
+			.rounded-corners(4px);
+			position: relative;
+			z-index: 100;
+			a {
+				text-decoration: none;
+				color: white;
+				span.deleted {
+					padding-top: 5px;
+					display: block;
+					color: white;
+				}
+				span.startDay {
+					font-weight: 200;
+					padding-top: 5px;
+					display: block;
+				}
+				span.startDate {
+					font-size: 16pt;
+					font-weight: 400;
+					display: block;
+				}
+				span.startMonthYear {
+					font-weight: 200;
+					display: block;
+					font-size: 0.75em;
+				}
+			}
+			margin-right: 5px;
+		}
+		.title {
+			font-weight: bold;
+			a {
+				color: black;
+				text-decoration: none;
+			}
+		}
+		.created {
+			padding: 5px 0 0 0;
+			clear:both;
+			font-style: italic;
+			font-size: 0.8em;
+		}
+	}
+	li.event {
+		background: #dcc;
+	}
+	li.group {
+		background: #cdc;
+	}
+	li.venue {
+		background: #8ac4bc;
+	}
+	li.deleted {
+		text-color: #999;
+	}
+}
+
+#footer {
+	padding: 10px 5px;
+	text-align: center;
+	font-style: italic;
+	font-size: 0.8em;
+}

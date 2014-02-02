@@ -1,0 +1,33 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<div class="date">
+	<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', timezone) }}">
+		<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D jS', timezone) }}</span>
+		<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M Y', timezone) }}</span>
+		<span class="startTime">
+			{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
+		</span>
+	</time>
+	<span class="to">to</span>
+	{% if sameday(event.getStartAt,event.getEndAt) %}
+		<time datetime="{{ event.getEndAt|tolocaltimeformatted('c', timezone) }}">
+			<span class="end">
+				{{ event.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
+			</span>
+		</time>
+	{% else %}
+		<time datetime="{{ event.getEndAt|tolocaltimeformatted('c', timezone) }}">
+			<span class="end">
+				{{ event.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, timezone) }}
+			</span>
+		</time>
+	{% endif %}
+	{% if showTimeZone %}
+		({{ timezone }} time)
+	{% endif %}
+</div>

@@ -1,0 +1,42 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<div id="header">
+	<ul class="menu">
+		<li class="title">
+			<a href="/"><img src="/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.siteTitle  }}</h1></a>
+		</li>
+		{% if currentUser is null %}
+		{% else %}
+			<li><a href="/create">Create</a></li>
+		{% endif %}
+		<li><a href="/pricing">Pricing</a></li>
+		<li><a href="/discover">Discover</a></li>
+		<li class="user">
+			{% if currentUser is null %}
+				<a href="/you">Your details</a>
+				<ul class="submenu">
+					<li><a href="/you/login">Login</a></li>
+					<li><a href="/you/register">Register</a></li>
+				</ul>				
+			{% else %}
+				<a href="/me">{{ currentUser.username }}</a>
+				<ul class="submenu">
+					{# At the moment only logged in users can see any times on the Index site, so let's not confuse logged out users #}
+					<li><a href="/mytimezone">{{ currentTimeZone }}</a></li>	
+					<li><a href="/me/sites">Calendars</a></li>
+					<li><a href="/me/agenda">My Personal Agenda</a></li>
+					<li><a href="/me/calendar">My Personal Calendar</a></li>					
+					<li><a href="/me/">Your account</a></li>
+					<li><a href="/me/logout">Logout</a></li>
+				</ul>				
+			{% endif %}
+		</li>
+	</ul>
+	<div class="afterMenu"></div>
+</div>
+

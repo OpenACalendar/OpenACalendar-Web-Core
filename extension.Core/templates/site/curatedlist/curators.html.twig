@@ -1,0 +1,66 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/curatedlist/page.html.twig' %}
+
+{% block pageTitle %}Curators of {{ curatedlist.title }} - {% endblock %} 
+
+{% block tabCurators %}currentTab{% endblock %}
+	
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slug }}/curators" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+{% endblock %}
+	
+{% block actions %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<p>The owner of this curated list is {{ curatedlistOwner.username }}</p>
+
+	{% if curatedlistEditors is not empty %}
+		<h3>Curators</h3>
+		
+		<ul>
+			{% for curator in curatedlistEditors %}
+				<li>
+					{{  curator.username }}
+					{% if currentUserCanEditCuratedList and currentSite.isFeatureCuratedList %}
+						<form action="#" method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="submitted" value="remove">
+							<input type="hidden" name="username" value="{{ curator.username }}">
+							<input type="submit" value="Remove">
+						</form>
+					{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	
+	{% if currentUserCanEditCuratedList and currentSite.isFeatureCuratedList %}
+	
+		<h3>Add a Curator</h3>
+		<form action="#" method="post">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="submitted" value="add">
+			
+			<div class="rowWrapper">
+				<div class="labelWrapper">Username</div>
+				<div class="widgetWrapperPlacementOnly smallInputs"><input type="text" name="userdetails" value=""></div>
+				<div class="after"></div>
+			</div>
+			
+			<input type="submit" value="Add">
+		</form>
+	{% endif %}
+
+{% endblock %}
+

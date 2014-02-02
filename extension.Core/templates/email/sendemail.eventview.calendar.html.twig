@@ -1,0 +1,32 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% for d in data %}
+	<div style="background: {% if d.dayOfWeek > 5 %}#ccc{% else %}white{% endif %}; padding-bottom:10px;">
+		<div style="padding: 2px 5px; font-weight: bold;">
+			{% if d.dayOfWeek == 1 %}Mon
+			{% elseif d.dayOfWeek == 2 %}Tue
+			{% elseif d.dayOfWeek == 3 %}Wed
+			{% elseif d.dayOfWeek == 4 %}Thu
+			{% elseif d.dayOfWeek == 5 %}Fri
+			{% elseif d.dayOfWeek == 6 %}Sat
+			{% elseif d.dayOfWeek == 7 %}Sun{% endif %}
+			{{ d.display }}
+		</div>
+		{% for event in d.eventsContinuing %}
+			<div style="padding: 5px 10px;">
+				<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{event.slug}}?mytimezone={{ currentTimeZone }}"> {{ event.summaryDisplay }}</a>
+			</div>
+		{% endfor %}
+		{% for event in d.events %}
+			<div style="padding: 5px 10px;">
+				<i>{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</i>
+				<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{event.slug}}?mytimezone={{ currentTimeZone }}">{{ event.summaryDisplay }}</a>
+			</div>
+		{% endfor %}
+	</div>
+{% endfor %}

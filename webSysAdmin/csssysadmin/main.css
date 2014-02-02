@@ -1,0 +1,244 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+}
+#header {
+  padding: 5px;
+  background: #0DA20D;
+  border-bottom: #075007 2px solid;
+}
+#header a.homelink {
+  text-decoration: none;
+}
+#header a.homelink img.logo {
+  width: 30px;
+  height: 30px;
+  display: inline;
+}
+#header a.homelink h1 {
+  font-size: 2em;
+  display: inline;
+  color: black;
+}
+#header #currentUser {
+  float: right;
+  text-align: right;
+  width: 40%;
+}
+#header #afterHeader {
+  clear: both;
+  height: 5px;
+}
+#header ul#menu li {
+  display: inline;
+}
+#header ul#menu li a {
+  text-decoration: none;
+}
+#body {
+  padding: 10px;
+}
+.flash-notice {
+  margin: 10px 5px;
+  padding: 10px 5px;
+  text-align: center;
+  background: #cadeea;
+  border: 2px solid #A8C7DB;
+}
+.flash-error {
+  margin: 10px 5px;
+  padding: 10px 5px;
+  text-align: center;
+  background: #eb6c6c;
+  border: 2px solid #6f1818;
+}
+table.data {
+  margin: 10px 20px;
+}
+table.data tr th {
+  background: #ccc;
+  border-bottom: 1px solid black;
+  padding: 3px;
+  text-align: left;
+}
+table.data tr {
+  background: #fff;
+}
+table.data tr td {
+  padding: 3px;
+}
+table.data tr.alternative {
+  background: #ccc;
+}
+table.data tr.nodata {
+  background: #ccc;
+}
+table.data tr.nodata td {
+  font-style: italic;
+}
+table.data div.revertedInfo {
+  font-style: italic;
+}
+table.data div.buttonContainer {
+  padding: 6px;
+  margin: 0;
+}
+table.data a.button {
+  border: 1px solid black;
+  background: white;
+  padding: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  margin: 1px;
+  color: black;
+  display: block;
+  text-decoration: none;
+}
+table.data a.button:hover {
+  color: red;
+  text-decoration: underline;
+}
+table.data td span.yes {
+  color: green;
+}
+table.data td span.no {
+  color: red;
+  font-size: 90%;
+}
+table.oneData th {
+  padding: 5px 10px;
+  border-bottom: 1px solid #ccc;
+  min-width: 100px;
+  text-align: right;
+  font-weight: bold;
+}
+table.oneData tr.sub {
+  background: #ccc;
+}
+table.oneData td {
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
+  min-width: 100px;
+}
+table.oneData td span.yes {
+  color: green;
+}
+table.oneData td span.no {
+  color: red;
+  font-size: 90%;
+}
+form.action {
+  padding: 20px 0;
+}
+ul.actionHelp {
+  padding: 10px 40px;
+}
+ul.actionHelp li {
+  list-style-type: circle;
+  padding: 5px;
+  font-style: italic;
+}
+ul.actionHelp li span.param {
+  margin: 0 5px;
+  border: 1px solid #ccc;
+}
+ul.history li.event,
+ul.history li.group,
+ul.history li.venue {
+  padding: 5px;
+  margin: 5px 0 5px 0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+ul.history li.event div.icon,
+ul.history li.group div.icon,
+ul.history li.venue div.icon {
+  float: left;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  background: #231f20;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  position: relative;
+  z-index: 100;
+  margin-right: 5px;
+}
+ul.history li.event div.icon a,
+ul.history li.group div.icon a,
+ul.history li.venue div.icon a {
+  text-decoration: none;
+  color: white;
+}
+ul.history li.event div.icon a span.deleted,
+ul.history li.group div.icon a span.deleted,
+ul.history li.venue div.icon a span.deleted {
+  padding-top: 5px;
+  display: block;
+  color: white;
+}
+ul.history li.event div.icon a span.startDay,
+ul.history li.group div.icon a span.startDay,
+ul.history li.venue div.icon a span.startDay {
+  font-weight: 200;
+  padding-top: 5px;
+  display: block;
+}
+ul.history li.event div.icon a span.startDate,
+ul.history li.group div.icon a span.startDate,
+ul.history li.venue div.icon a span.startDate {
+  font-size: 16pt;
+  font-weight: 400;
+  display: block;
+}
+ul.history li.event div.icon a span.startMonthYear,
+ul.history li.group div.icon a span.startMonthYear,
+ul.history li.venue div.icon a span.startMonthYear {
+  font-weight: 200;
+  display: block;
+  font-size: 0.75em;
+}
+ul.history li.event .title,
+ul.history li.group .title,
+ul.history li.venue .title {
+  font-weight: bold;
+}
+ul.history li.event .title a,
+ul.history li.group .title a,
+ul.history li.venue .title a {
+  color: black;
+  text-decoration: none;
+}
+ul.history li.event .created,
+ul.history li.group .created,
+ul.history li.venue .created {
+  padding: 5px 0 0 0;
+  clear: both;
+  font-style: italic;
+  font-size: 0.8em;
+}
+ul.history li.event {
+  background: #dcc;
+}
+ul.history li.group {
+  background: #cdc;
+}
+ul.history li.venue {
+  background: #8ac4bc;
+}
+ul.history li.deleted {
+  text-color: #999;
+}
+#footer {
+  padding: 10px 5px;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.8em;
+}

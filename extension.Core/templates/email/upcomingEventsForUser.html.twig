@@ -1,0 +1,55 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.html.twig' %}
+
+{% block content %}
+
+	<p>Hello {{ user.username }},</p>
+
+	<p>We wanted to let you know about upcoming events you have expressed an interest in.</p>
+	
+	{% for event in allEvents|slice(0,config.upcomingEventsForUserEmailHTMLListsEvents)  %}
+		<div style="margin: 5px 10px; padding: 2px 0 10px 0;">
+			<div style="background: #231F20; ; float: left; height: 60px; margin: 2px; text-align: center; width: 60px;">
+				{# If event less than 6 days in future show day of week. If further in future show date and month. #}
+				{% if event.getStartAt.Timestamp < "now"|date("U") + 6*24*60*60  %}
+					<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
+					<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+					<span style="color: white; font-size: 10pt;">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+				{% else %}
+					<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+					<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|tolocaltimeformatted('M', currentTimeZone) }}</span>
+					<span style="color: white; font-size: 10pt;">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>					
+				{% endif %}
+			</div>
+			<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slug}}">
+				{{ event.summaryDisplay }}
+			</a>
+			<br>
+			{{ event.description | nl2br}}
+			{% if userAtEvent[event.id] and ( userAtEvent[event.id].isPlanAttending or userAtEvent[event.id].isPlanMaybeAttending ) %}
+				<div style="font-style: italic;">
+					{% if userAtEvent[event.id].isPlanAttending %}
+						You plan to attend.
+					{% elseif userAtEvent[event.id].isPlanMaybeAttending %}
+						You may attend.
+					{% endif %}
+					<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slug}}">Change this</a>.
+				</div>
+			{% endif %}
+			<div style="clear: both;"></div>
+		</div>
+	{% endfor %}
+	
+	<p>Thanks,<br>{{ config.siteTitle }}</p>
+		
+	<p>ps. 
+		To <a href="{{ config.getWebIndexDomainSecure() }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}">change which emails you get, click here</a>.
+	</p>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<li>
+	<div class="dateIcon">
+		<a href="/event/{{ event.slug }}">
+			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c',currentTimeZone) }}">
+				{% if showStart == 'date' %}
+					<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D',currentTimeZone) }}</span>
+					<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS',currentTimeZone) }}</span>
+					<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y',currentTimeZone) }}</span>
+				{% else %}
+					{# TODO We don't follow 12/24 hour pref here. We could do but must pay attention to styling. #}
+					<span class="startTime1">{{ event.getStartAt|tolocaltimeformatted('g:i',currentTimeZone) }}</span>
+					<span class="startTime2">{{ event.getStartAt|tolocaltimeformatted('a',currentTimeZone) }}</span>
+				{% endif %}
+			</time>				
+		</a>
+	</div>
+	<div class="title">
+		<a href="/event/{{ event.slug }}">
+			{{ event.summaryDisplay }}
+		</a>
+	</div>
+	{% if showCharsOfDescription > 0 %}
+		<div class="description">
+			{{ event.description | truncate(showCharsOfDescription) }}
+		</div>
+	{% endif %}
+</li>

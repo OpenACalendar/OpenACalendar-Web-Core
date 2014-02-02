@@ -1,0 +1,32 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page2col.html.twig' %}
+
+{% block pageTitle %}You - {% endblock %} 
+
+{% block breadcrumbs %}
+	<li class="current"><a href="/me/">your account</a></li>
+{% endblock %}
+
+
+{% block contentLeft %}
+
+	<p>Welcome!</p>
+
+{% endblock %}
+
+
+{% block contentRight %}
+
+	<ul class="actionList">
+		<li><a href="/you/register"><img src="/img/actionUserIcon.png">Register</a></li>
+		<li><a href="/you/login"><img src="/img/actionUserIcon.png">Login</a></li>
+		<li><a href="/you/forgot"><img src="/img/actionUserIcon.png">Forgot your login details?</a></li>
+	</ul>
+
+{% endblock %}

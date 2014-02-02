@@ -1,0 +1,11 @@
+BEGIN:VCALENDAR
+VERSION:1.0
+BEGIN:VEVENT
+URL:https://casscot13.eventbrite.co.uk
+DTSTART:20131026T073000Z
+DTEND:20131026T160000Z
+SUMMARY:Computing At School Scotland Conference 2013
+DESCRIPTION:For details, click here: https://casscot13.eventbrite.co.uk
+LOCATION:University of Glasgow - University Avenue - G12 8QQ Glasgow - United Kingdom
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,20 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<div class="filterListVenueWrapper">
+	<form method="get" class="filterListVenue">
+		<input type="hidden" name="venueListFilterDataSubmitted" value="1">
+
+		<div class="inputField">
+			<label>Search: <input type="text" name="freeTextSearch" value="{{ venueListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+		</div>
+
+		<div class="submitField">
+			<input type="submit" value="Filter">
+		</div>
+	</form>
+</div>

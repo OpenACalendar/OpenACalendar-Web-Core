@@ -1,0 +1,52 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page2col.html.twig' %}
+
+{% block pageTitle %}You - {% endblock %} 
+
+{% block breadcrumbs %}
+	<li class="current"><a href="/me/">your account</a></li>
+{% endblock %}
+
+
+{% block contentLeft %}
+
+	<p>Welcome.</p>
+
+{% endblock %}
+	
+{% set currentUserPrivateFeedKey = getCurrentUserPrivateFeedKey() %}
+
+{% block contentRight %}
+
+	<ul class="actionList">
+		<li class="header">Your Personal Calendar</li>
+		<li><a href="/me/agenda"><img src="/img/actionCalendarIcon.png">Agenda</a></li>
+		<li><a href="/me/calendar"><img src="/img/actionCalendarIcon.png">Calendar</a></li>
+		<li>
+			<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
+				<img src="/img/actionExportLargeIcon.png">Export
+			</a>
+		</li>
+		<li class="header">Your account</li>
+		{% if not config.isSingleSiteMode %}
+			<li><a href="/me/sites"><img src="/img/actionCalendarIcon.png">Calendars</a></li>
+		{% endif %}
+		<li><a href="/me/password"><img src="/img/actionChangePasswordIcon.png">Change Password</a></li>
+		<li><a href="/me/emails"><img src="/img/actionEmailIcon.png">Emails we send you</a></li>
+		<li><a href="/me/prefs"><img src="/img/actionPrefsIcon.png">Preferences</a></li>
+		<li><a href="/person/{{ currentUser.username }}"><img src="/img/actionUserIcon.png">View your public profile</a></li>
+	</ul>
+
+{% endblock %}
+
+{% block scriptsForState %}
+	<script type="text/javascript">var exportData = {user:'{{ currentUser.username }}', userAccessKey: '{{ currentUserPrivateFeedKey.accessKey }}'}</script>
+{% endblock %}
+
+

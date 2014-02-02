@@ -1,0 +1,62 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}
+	<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>
+	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></li>{% endfor %}
+	<li class="current"><a href="/area/{{ area.slug }}">{{ area.title }}</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+	{% if not currentSite.isFeaturePhysicalEvents %}
+		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+	{% endif %}
+		
+		
+	<h2>{{  area.title }}</h2>
+	
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% block actions %}{% endblock %}
+			<li class="action">
+				<a href="/api1/area/{{ area.slug }}/events.ical" onclick="showExportPopup(); return false;">
+					<img src="/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+				</a>
+			</li>
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/area/{{ area.slug }}">Details</a></li>
+			<li class="tab"><a href="/area/{{ area.slug }}/calendar">Calendar</a></li>
+		</ul>
+		<div id="innerPage">
+
+			{% block innerContent %}{% endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	<script type="text/javascript">
+		var exportData = { area:{{ area.slug }}, country: "{{ country.twoCharCode }}" };
+		var areaData = { slug: {{ area.slug }},
+					maxLat: {% if area.maxLat %}{{ area.maxLat }}{% else %}null{% endif %},
+					maxLng: {% if area.maxLng %}{{ area.maxLng }}{% else %}null{% endif %}, 
+					minLat: {% if area.minLat %}{{ area.minLat }}{% else %}null{% endif %},
+					minLng: {% if area.minLng %}{{ area.minLng }}{% else %}null{% endif %}, };		
+	</script>
+{% endblock %}
+

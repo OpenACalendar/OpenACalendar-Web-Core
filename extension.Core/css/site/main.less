@@ -1,0 +1,878 @@
+/**
+ * @package Core
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+*/
+
+@import("../mixins.less");
+@import("../vars.less");
+
+
+
+
+
+
+html {
+	background-color: #B7CFB7;
+}
+body {
+	padding: 0;
+	margin: 0;
+	font-family: arial, sans-serif;
+	background-color: #B7CFB7;
+}
+
+#page {
+	max-width: 1000px;
+	margin: 0 auto;
+	background: white;
+}
+
+#header {
+	background: #0DA20D;
+	border-bottom: #075007 2px solid;
+	padding: 5px;
+	ul.menu {
+		padding:0;
+		margin: 0;
+		li {
+			list-style-type: none;
+			display: inline-block;
+			font-size: 1.4em;
+			a {
+				text-decoration: none;
+				color: #333;
+				padding: 5px;
+				display:inline-block;
+			}
+			ul.submenu {
+				padding:0;
+				margin: 0;
+				display:none;
+				position: absolute;
+				background: #FFF;
+				border-bottom: #4d3e04 2px solid;
+				border-left: #4d3e04 2px solid;
+				border-right: #4d3e04 2px solid;
+				z-index: 999;
+				li {
+					list-style-type: none;
+					display: block;
+					a {
+						text-decoration: none;
+						color: #333;
+						font-size: 14pt;
+						padding: 5px;
+						display:inline-block;
+					}
+					a:hover {
+						color: black;
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+		li.title {
+			img {
+				max-width: 30px;
+				max-height: 30px;
+			}
+			h1 {
+				color: black;
+				display: inline;
+				font-weight: bold;
+				font-size: 1.6em;
+			}
+		}
+		li.user {
+			float: right;
+		}
+	}
+	.afterMenu {
+		clear: both;
+	}
+}
+
+#body {
+	min-height: 400px;
+	padding: 5px ;
+	p {
+		padding: 5px 0;
+	}
+}
+
+#bodyLeft, #bodyRight {
+	padding: 10px 2px;
+	img {
+		max-width: 100%;	
+	}
+	p {
+		padding: 5px 0;
+	}
+}
+/** on wide screens have 2 columns here **/
+@media screen and (min-width: 750px) {
+	#bodyLeft{
+		width: 47%;
+		float: left;
+	}
+	#bodyRight{
+		width: 47%;
+		float: right;
+	}
+	#afterPage2Col {
+		clear: both;
+	}
+}
+
+
+
+.flash-notice {
+	margin: 10px 5px;
+	padding: 10px 5px;
+	text-align: center;
+	background: #cadeea;
+	border: 2px solid #A8C7DB;
+}
+
+
+.flash-error {
+	margin: 10px 5px;
+	padding: 10px 5px;
+	text-align: center;
+	background: #eb6c6c;
+	border: 2px solid #6f1818;
+}
+
+form.styled {
+	.rowWrapper {
+		padding: 10px 0;
+		.labelWrapper {
+			padding: 0px 5px 0px 0px;
+			text-align: right;
+			display: block;
+			width: 20%;
+			float: left;
+		}
+		.widgetWrapper {
+			display: block;
+			width: 70%;
+			float: left;
+		}
+		.after {
+			clear: both;
+		}
+	}
+	input[type="text"] {
+		width: 80%; 
+	}
+	div.dateInput input[type="text"] {
+		width: 100px; 
+	}
+	input[type="url"] {
+		width: 80%; 
+	}
+	textarea { 
+		width: 80%; 
+		height: 100px;
+	}
+	ul.formErrors {
+		li {
+			margin: 5px 0;
+			background: #eb6c6c;
+			border: 2px solid #6f1818;
+			padding: 5px;
+		}
+	}
+	img.logo {
+		max-width: 60px;
+		max-height: 60px;
+	}
+	.widgetWrapperPlacementOnly {
+		display: block;
+		width: 70%;
+		float: left;
+	}
+	#Map {
+		width: 50%;
+		height: 300px;
+	}
+	#Map.fullWidth {
+		width: 99%;
+		height: 300px;
+	}
+	p.information {
+		font-style: italic;
+		font-size: 0.8em;
+	}
+	.actionWrapperBig {
+		padding: 6px;
+		margin: 0;
+		line-height: 1.8;
+		text-align: right;
+		input[type="submit"] {
+			display: inline;
+			background: #B7CFB7;
+			padding: 3px;
+			-webkit-border-radius: 3px; /* Safari 3-4, iOS 1-3.2, Android <=1.6 */
+			border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */            
+			margin: 1px;
+			color: #333;
+			font-size: 1.20em;
+			text-decoration: none;
+		}
+		input[type="submit"]:hover {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+
+}
+
+h2 {
+	font-weight: bold;
+	font-size: 1.5em;
+	padding: 10px 0;
+}
+
+h3 {
+	font-weight: bold;
+	font-size: 1.2em;
+	padding: 10px 0;
+}
+
+#groupSummaryPanel {
+	padding: 10px;
+
+	float: right;
+	.rounded-corners(5px);
+	background: #ccc;
+	text-align: right;
+}
+
+
+
+ul.groups {
+	li.group {
+		border-bottom: 2px solid #E9E9E9;
+	}
+}
+
+ul.groups li.group, div.group {
+	min-height: 50px;
+	padding: 5px 0 20px 0;
+	.title {
+		font-size: 1.1em;
+		font-weight: bold;
+		padding: 2px 0;
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+}
+
+ul.countries {
+	li.country {
+		border-bottom: 2px solid #E9E9E9;
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+ul.venues {
+	li.venue {
+		border-bottom: 2px solid #E9E9E9;
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+ul.importurls {
+	li.importurl {
+		border-bottom: 2px solid #E9E9E9;
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+ul.curatedlists {
+	li.curatedlist {
+		border-bottom: 2px solid #E9E9E9;
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+
+table.data {
+	margin: 10px 20px;
+	tr th {
+		background: #ccc;
+		border-bottom: 1px solid black;
+		padding: 3px;
+		text-align: left;
+	}
+	tr {
+		background: #fff;       
+		td {
+			padding: 3px;
+		}
+	}
+	tr.alternative {
+		background: #ccc;       
+	}
+	tr.nodata {
+		background: #ccc;       
+		td {
+			font-style: italic;
+		}
+	}
+	div.buttonContainer {
+		padding: 6px;
+		margin: 0;
+	}
+	a.button {
+		border: 1px solid black;
+		background: white;
+		padding: 3px;
+		-webkit-border-radius: 3px; /* Safari 3-4, iOS 1-3.2, Android <=1.6 */
+		border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */            
+		margin: 1px;
+		color: black;
+		display: block;
+		text-decoration: none;
+	}
+	a.button:hover {
+		color: red;
+		text-decoration: underline;
+	}
+}
+
+ul.history {
+	li.event, li.group, li.venue {
+		padding: 5px;
+		margin: 5px 0 5px 0;
+		.rounded-corners (5px);
+		div.dateTimeIcon {
+			float: left;
+			width: 60px;
+			height: 80px;
+			position: relative;
+			z-index: 100;
+			margin-right: 5px;
+			border: 2px solid #231f20;
+			.rounded-corners(4px);
+			div.dateIcon {
+				width: 60px;
+				height: 60px;
+				text-align: center;
+				background: #231f20;
+				.rounded-corners-bottom(2px);
+			}
+			div.timeIcon {
+				padding: 1px;
+				text-align: center;
+			}
+			span.deleted {
+				padding-top: 5px;
+				display: block;
+				color: white;
+			}
+			span.startDay {
+				font-weight: 200;
+				padding-top: 5px;
+				display: block;
+				color: white;
+			}
+			span.startDate {
+				font-size: 16pt;
+				font-weight: 400;
+				display: block;
+				color: white;
+			}
+			span.startMonthYear {
+				font-weight: 200;
+				display: block;
+				font-size: 0.75em;
+				color: white;
+			}
+			span.startTime {
+				font-size: 11pt;
+				color: black;
+			}
+			a {
+				text-decoration: none;
+				span.startDay {
+					color: white;
+				}
+				span.startDate {
+					color: white;
+				}
+				span.startMonthYear {
+					color: white;
+				}
+				span.startTime {
+					color: black;
+				}
+			}
+		}
+
+		div.icon {
+			float: left;
+			width: 60px;
+			height: 60px;
+			text-align: center;
+			background: #231f20;
+			.rounded-corners(4px);
+			position: relative;
+			z-index: 100;
+			img {
+				padding: 10px;
+			}
+			margin-right: 5px;
+		}
+		.title {
+			font-weight: bold;
+			a {
+				color: black;
+				text-decoration: none;
+			}
+		}
+		.created {
+			padding: 5px 0 0 0;
+			clear:both;
+			font-style: italic;
+			font-size: 0.8em;
+		}
+	}
+	li.event {
+		background: #dcc;
+	}
+	li.group {
+		background: #cdc;
+	}
+	li.venue {
+		background: #8ac4bc;
+	}
+	li.deleted {
+		text-color: #999;
+	}
+}
+
+#NewVenueForm {
+	form {
+		label {
+			display: block;
+		}
+	}
+}
+
+#VenuePopup {
+	 .PopUpTitle {
+		font-weight: bold;
+		font-size: 1.2em;
+		padding: 0 0 5px 0;
+   }
+}
+
+#MediaPopup {
+	.imageWrapper {
+		img {
+			max-width: 100%;
+		}
+	}
+	.title {
+		font-size: 1.1em;
+		font-weight: bold;
+		
+	}
+	.link {
+		text-align: right;
+	}
+	#MediaPopupContents {
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+}
+
+ul.eventSmallListings {
+	li.eventSmallListing {
+		padding: 4px 0;
+		.time {
+			color: #ec2327;
+			font-weight: 400;
+			background: url('/img/eventFooterCalendarIcon.png') no-repeat;
+			padding: 5px 10px 5px 20px;			
+		}
+		.summary {
+			
+		}
+	}
+}
+
+
+ul.newRecuringEvents li.newRecuringEvent {
+	margin-bottom: 10px;
+	padding: 5px;
+	background: #ddd;
+	.rounded-corners(5px);
+	.summary {
+		display: inline;
+		font-size: 1.0em;
+		font-weight: bold;
+		line-height: 1.25em;
+	}
+	.date {
+		clear: both;
+		margin-top: 10px;
+		display: block;
+		color: #ec2327;
+		font-weight: 400;
+		background: url('/img/eventFooterCalendarIcon.png') no-repeat;
+		padding: 5px 10px 5px 20px;
+
+	}
+}
+
+
+.SendEmailPreview {
+	border: #555 2px solid;
+	background: #ddd;
+	margin: 10px 0;
+	.SendEmailPreviewHeader {
+		background: #ddd;
+		padding: 10px;
+		.SendEmailPreviewFieldKey {
+			font-weight: bold;
+		}
+	}
+	.SendEmailPreviewBody {
+		background: white;
+		padding: 10px;
+	}
+
+}
+
+.requestAccessWrapper {
+	.rounded-corners (5px);
+	padding: 10px;
+	background: #ddd;
+	.emailWarning{
+		font-style: italic;
+	}
+}
+
+#Map.fullScreen {
+		width: 90%;
+		height: 400px;
+	}
+
+#curatedListsOnEventWrapper {
+	margin: 10px;
+	max-width: 600px;
+	padding: 10px;
+	background: #ddd;
+	.title {
+		font-weight: bold;
+	}
+	form {
+		display: inline;
+	}
+}
+
+#MapTimeControls {
+	input {
+		width: 75px;
+	}
+}
+#MapTimeDisplay .value {
+	display: inline;
+	padding: 2px 5px;
+	div {
+		display: inline;
+	}
+}
+ul.mapTimeEvents {
+	li {
+		width: 30%;
+		background: #dcc;
+		.rounded-corners(4px);
+		border: 2px solid black;
+		margin: 5px;
+		padding: 5px;
+		p.eventTitle {
+			margin: 2px 0;
+			padding: 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+		p.venueTitle {
+			margin: 2px 0;
+			padding: 0;
+			font-style: italic;
+			text-align: right;
+		}
+	}
+}
+.afterMapTimeEvents { clear: both; }
+
+
+/** event is in common **/
+div.filterListGroupWrapper, div.filterListVenueWrapper {
+	padding: 5px 0;
+	form.filterListGroup , form.filterListVenue {
+		background: #e9e9e9;
+		padding: 10px;
+		div.inputField {
+			display: inline;
+			padding: 10px;
+		}
+		div.submitField {
+			display: inline;
+			padding: 10px;
+			input {
+				background: #009900;
+				color: white;
+				border: 2px solid #009900;
+				.rounded-corners(2px);
+				cursor:pointer;
+			}
+		}
+	}
+}
+
+
+#footer {
+	padding: 10px 5px;
+	text-align: center;
+	font-style: italic;
+	font-size: 0.8em;
+	color: #333;
+	a {
+		color: #333;
+	}
+	a:hover {
+		color: black;
+	}
+}
+
+.bigButtonContainer {
+	padding: 6px;
+	margin: 0;
+	line-height: 1.8;
+	text-align: right;
+	a.button {
+		background: #B7CFB7;
+		padding: 3px;
+		-webkit-border-radius: 3px; /* Safari 3-4, iOS 1-3.2, Android <=1.6 */
+		border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */            
+		margin: 1px;
+		color: #333;
+		font-size: 1.20em;
+		text-decoration: none;
+	}
+	a.button:hover {
+		color: black;
+		text-decoration: underline;
+	}
+}
+
+.UserAttendingList {
+	margin: 5px 0;
+	padding: 5px 5px 5px 50px;
+	.rounded-corners(5px);
+	background: #ddd;
+	background-image: url('/img/usersAttendingListBackground.png');
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+}
+
+ul.mediaGrid {
+	li {
+		width: 100px;
+		height: 100px;
+		text-align: center;
+		vertical-align: middle;
+		float: left;
+		margin: 2px;
+		img {
+			max-width: 100px;
+			max-height: 100px;
+		}
+	}
+}
+.afterMediaGrid {
+	clear: left;
+}
+
+ul.mediaList {
+	li.media {
+		padding: 5px 0;
+		.thumbnail {
+			width: 70px;
+			height: 70px;
+			float: left;
+			margin: 2px;
+			img {
+				max-width: 70px;
+				max-height: 70px;
+			}
+		}
+		.title {
+			font-weight: bold;
+		}
+		div.afterMediaListing {
+			clear: both;
+		}
+	}
+}
+
+ul.areas {
+	padding: 20px 0;
+	font-weight: 200;
+	li.area {
+		padding: 2px;
+		display: inline;
+		line-height: 1.8em;
+		span.content {
+			font-size: 13pt;
+			background: url('/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentWithEvents {
+			font-size: 13pt;
+			background: url('/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentWithNoEvents {
+			font-size: 10pt;
+			background: url('/img/areaBackground.png') no-repeat #676767;
+		}
+		span.content, span.contentWithEvents, span.contentWithNoEvents {
+			white-space: nowrap;
+			.rounded-corners(2px);
+			padding: 2px 5px 2px 20px;
+			color: white;
+			a {
+				color: white;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+ul.areasAdmin {
+	padding: 10px 5px 10px 20px;
+	font-weight: 200;
+	li.area {
+		padding: 2px;
+		span.content {
+			font-size: 13pt;
+			background: url('/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentWithEvents {
+			font-size: 13pt;
+			background: url('/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentWithNoEvents {
+			font-size: 10pt;
+			background: url('/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentNew {
+			font-size: 10pt;
+			background: url('/img/areaBackground.png') no-repeat #676767;
+		}
+		span.content, span.contentWithEvents, span.contentWithNoEvents, span.contentNew {
+			white-space: nowrap;
+			.rounded-corners(2px);
+			padding: 2px 2px 2px 20px;
+			color: white;
+			a {
+				color: white;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+#ChangeVenueAreaList, #ChangeEventAreaList, #ChangeAreaAreaList {
+	li.selectedarea {
+		padding: 10px 0;
+		.content {
+			background: url('/img/areaBackground.png') no-repeat #0DA20D;
+			.rounded-corners(2px);
+			padding: 2px 5px 2px 20px;
+			color: white;
+			a.remove {
+				padding-left: 10px; 
+				color: white;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+
+@import("../commonIndexAndSite/main.less");
+

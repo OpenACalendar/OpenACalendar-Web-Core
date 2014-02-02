@@ -1,0 +1,34 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.html.twig' %}
+
+{% block content %}
+	
+	<p>Hello {{ user.username }}</p>
+
+	<p>
+		<span style="font-weight: bold;">Do you know of any more events for <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}">{{ group.title }}</a>?</span> 
+		There will soon be no events, and that makes people sad.
+	</p>
+
+	{% if lastEvents %}
+		<p>Is one of these events a recuring event? If so, you can easily add more.</p>
+
+		{% for event in lastEvents %}
+			{% include 'email/common/promptEmailEventToRecur.html.twig' with { event: event } %}
+		{% endfor %}
+	{% endif %}
+
+	<p>Thanks,<br>
+	{{ config.siteTitle }}</p>
+		
+	<p>ps. 
+		To <a href="{{ config.getWebIndexDomainSecure(site.slug) }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}">change which emails you get, click here</a>.
+		To <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ site.title }} click here</a>.</p>
+
+{% endblock %}

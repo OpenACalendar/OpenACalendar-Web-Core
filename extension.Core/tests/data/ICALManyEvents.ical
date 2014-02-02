@@ -1,0 +1,49 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//JarOfGreen//NONSGML JarOfGreenWikiCalendarBundle//EN
+BEGIN:VEVENT
+UID:event-166@opentechcalendar.co.uk
+SUMMARY:Test 3 SpecFic Writing Group
+DESCRIPTION:http://opentechcalendar.co.uk/index.php/event/166
+URL:http://opentechcalendar.co.uk/index.php/event/166
+LOCATION: Illegal Jacks, Edinburgh
+DTSTART:20121112T180000Z
+DTEND:20121112T203000Z
+END:VEVENT
+BEGIN:VEVENT
+UID:event-167@opentechcalendar.co.uk
+SUMMARY:Test 4 SpecFic Writing Group
+DESCRIPTION:http://opentechcalendar.co.uk/index.php/event/166
+URL:http://opentechcalendar.co.uk/index.php/event/166
+LOCATION: Illegal Jacks, Edinburgh
+DTSTART:20121113T180000Z
+DTEND:20121113T203000Z
+END:VEVENT
+BEGIN:VEVENT
+UID:event-168@opentechcalendar.co.uk
+SUMMARY:Test 5 SpecFic Writing Group
+DESCRIPTION:http://opentechcalendar.co.uk/index.php/event/166
+URL:http://opentechcalendar.co.uk/index.php/event/166
+LOCATION: Illegal Jacks, Edinburgh
+DTSTART:20121114T180000Z
+DTEND:20121114T203000Z
+END:VEVENT
+BEGIN:VEVENT
+UID:event-169@opentechcalendar.co.uk
+SUMMARY:Test 6 SpecFic Writing Group
+DESCRIPTION:http://opentechcalendar.co.uk/index.php/event/166
+URL:http://opentechcalendar.co.uk/index.php/event/166
+LOCATION: Illegal Jacks, Edinburgh
+DTSTART:20121115T180000Z
+DTEND:20121115T203000Z
+END:VEVENT
+BEGIN:VEVENT
+UID:event-170@opentechcalendar.co.uk
+SUMMARY:Test 7 SpecFic Writing Group
+DESCRIPTION:http://opentechcalendar.co.uk/index.php/event/166
+URL:http://opentechcalendar.co.uk/index.php/event/166
+LOCATION: Illegal Jacks, Edinburgh
+DTSTART:20121116T180000Z
+DTEND:20121116T203000Z
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,7 @@
+
+components:
+all core
+datepicker
+
+
+

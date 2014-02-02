@@ -1,0 +1,36 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/importurl/page.html.twig' %}
+
+
+{% block pageTitle %}Edit {{ importurl.title }} - {% endblock %} 
+
+
+{% block actions %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	
+
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Save" />	
+	</form>
+
+
+{% endblock %}
+
+
+	

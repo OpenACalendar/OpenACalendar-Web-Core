@@ -1,0 +1,29 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.txt.twig' %}
+
+{% block content %}
+	
+Hello {{ user.username }}
+
+You watch the {{ site.title }}, and changes have been made.
+
+To see them please visit:
+{{ config.getWebSiteDomainSecure(site.slug) }}/history
+
+To stop watching {{ site.title }}:
+{{ config.getWebSiteDomainSecure(site.slug) }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}
+
+To change which emails you get:
+{{ config.getWebIndexDomainSecure(site.slug) }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}
+
+
+Thanks,
+{{ config.siteTitle }}
+
+{% endblock %}

@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule  ^sysadmin(.*)$ /gotosysadmin.php/sysadmin$1  [L]

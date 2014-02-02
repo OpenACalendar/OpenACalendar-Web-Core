@@ -1,0 +1,58 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<title>{% block pageTitle %}{% endblock %} {{ currentSite.title }} {{ config.siteTitle }}</title>
+		<link rel="stylesheet" type="text/css" href="/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="/css/main.css?v={{ config.assetsVersion }}">
+		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
+		<link rel="shortcut icon" href="/img/favicon.png?v={{ config.assetsVersion }}" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		{% block htmlHeader %}{% endblock %}
+	</head>
+	<body>
+		<div id="page">
+			{% include 'site/pageHeader.html.twig' %}
+			<div id="body">
+				{% if  currentUser is not null and config.siteReadOnly %}
+					<div class="flash-error">
+						Sorry, the site is currently read only. {{ config.siteReadOnlyReason }}
+					</div>				
+				{% elseif currentUser is not null and not currentUser.isEmailVerified %}
+					<div class="flash-notice">
+						Please check your email for instructions on how to verify your account. Until you do, some features are not available.
+						<a href="{{ config.getWebIndexDomainSecure() }}/me/resendverifyemail">Click here to resend the email</a>.
+					</div>
+				{% endif %}
+				{% for msg in getAndClearFlashErrors() %}
+					<div class="flash-error">{{ msg }}</div>
+				{% endfor %}
+				{% for msg in getAndClearFlashMessages() %}
+					<div class="flash-notice">{{ msg }}</div>
+				{% endfor %}						
+				<ul class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</ul>
+				{% block content %}{% endblock %}
+			</div>
+			{% include 'site/pageFooter.html.twig' %}
+		</div>
+		{% block scriptsForState %}{% endblock %}
+		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+		<script src="/jqueryui/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+		<script src="/js/general.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/js/general.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		{% block scripts %}{% endblock %}
+		{% include 'analytics.html.twig' %}
+	</body>
+</html>
+
+

@@ -1,0 +1,34 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/publicuser/page2col.html.twig' %}
+
+{% block pageTitle %}{{ user.username }} - {% endblock %} 
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebIndexDomainSecure }}/person/{{ user.username }}/" />
+{% endblock %}
+
+	
+{% block tabIndex %}currentTab{% endblock %}
+
+	
+{% block innerContentLeft %}
+	<p>User: {{ user.username }}</p>
+{% endblock %}
+
+{% block innerContentRight %}
+	<ul class="events">
+		{% for event in events %}
+			{% include '/index/common/eventListing.html.twig' with {'event':event, 'showOtherUserOptions':true}  %}
+		{% else %}
+			<li>
+				This person has not made any event attendance plans public.
+			</li>					
+		{% endfor %}
+	</ul>
+{% endblock %}

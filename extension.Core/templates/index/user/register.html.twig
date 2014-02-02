@@ -1,0 +1,32 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page.html.twig' %}
+
+{% block pageTitle %}Register - {% endblock %} 
+
+{% block content %}
+	
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.username) }}
+		{{ form_row(form.email) }}
+		{{ form_row(form.password1) }}
+		{{ form_row(form.password2) }}
+		{{ form_row(form.agree) }}
+
+		<p><a href="/terms" target="_new">Open Terms & Conditions in a separate window</a></p>
+
+
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Create my account" />	
+	</form>
+
+{% endblock %}

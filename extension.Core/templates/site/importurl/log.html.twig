@@ -1,0 +1,61 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/importurl/page.html.twig' %}
+
+
+{% block pageTitle %}Log of {{ importurl.title }} - {% endblock %} 
+
+
+{% block tabLog %}currentTab{% endblock %}
+
+{% block actions %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<table class="data">
+		<tr>
+			<th>At</th>
+			<th>Success</th>
+			<th>Message</th>
+			<th>New</th>
+			<th>Existing</th>
+			<th>Saved</th>
+			<th>In Past</th>
+			<th>In Far in Future</th>
+			<th>Not Valid Count</th>
+		</tr>
+		{% for result in results %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %}>
+				<td>
+					{{ result.getCreatedAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+				</td>
+				<td>{% if result.isSuccess %}Yes{% else %}No{% endif %}</td>
+				<td>{{ result.message }}</td>
+				<td>{{ result.newCount }}</td>
+				<td>{{ result.existingCount }}</td>
+				<td>{{ result.savedCount }}</td>
+				<td>{{ result.inPastCount }}</td>
+				<td>{{ result.toFarInFutureCount }}</td>
+				<td>{{ result.notValidCount }}</td>
+			</tr>
+		{% else %}
+			<tr class="nodata">
+				<td colspan="9">
+					This importer has not run yet. Importers only run at set times. Please check again later.
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+
+{% endblock %}
+
+
+	

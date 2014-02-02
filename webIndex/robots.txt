@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /me
+Disallow: /you
+Disallow: /mytimezone
+
+

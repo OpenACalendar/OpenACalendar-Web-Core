@@ -1,0 +1,23 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<li class="group">
+	<div class="icon">
+		<a href="#">
+			Group
+		</a>
+	</div>
+	<div class="title">{# <a href="/group/{{ historyItem.groupSlug }}"> #}{{ historyItem.title }}{# </a> #}</div>
+	<div>{{ historyItem.description | nl2br  }}</div>
+	<div class="created">
+		Edited at 
+		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
+			{{ historyItem.getCreatedAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+		</time>	
+		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
+	</div>
+</li>

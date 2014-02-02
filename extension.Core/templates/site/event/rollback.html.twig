@@ -1,0 +1,39 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block pageTitle %}Rollback {{ event.summaryDisplay }} - {% endblock %} 
+
+{% block innerContent %}
+	
+
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.summary) }}
+		{{ form_row(form.description) }}
+		{{ form_row(form.start_at) }}
+		{{ form_row(form.end_at) }}
+		{{ form_rest(form) }}
+
+		{% if event.isDeleted %}
+			<p>(The event will no longer be deleted.)</p>
+		{% endif %}
+
+		<input type="submit"  value="Rollback to this state" />	
+	</form>
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script type="text/javascript" src="/js/eventform.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+

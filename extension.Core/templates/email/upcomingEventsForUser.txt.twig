@@ -1,0 +1,28 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.txt.twig' %}
+
+{% block content %}
+
+Hello {{ user.username }},
+
+We wanted to let you know about upcoming events you have expressed an interest in.
+
+{% for event in allEvents|slice(0,config.upcomingEventsForUserEmailTextListsEvents)  %}
+EVENT: {{ event.summary }}
+{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slug}}
+
+{% endfor %}
+
+Thanks,
+{{ config.siteTitle }}
+
+ps. 
+To change which emails you get, click:
+{{ config.getWebIndexDomainSecure() }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}
+{% endblock %}

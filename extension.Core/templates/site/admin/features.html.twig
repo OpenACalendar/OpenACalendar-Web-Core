@@ -1,0 +1,90 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}Features Admin - {% endblock %} 
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li class="current"><a href="/admin/features">features</a></li>
+{% endblock %}
+
+{% block content %}
+
+
+	<form action="#" method="post"  class="styled">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="submitted" value="yes">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Groups</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<label><input type="checkbox" name="isFeatureGroup" value="1" {% if currentSite.isFeatureGroup %}checked="checked"{% endif %}>Use Groups</label>
+				<p class="information">
+					Events can be grouped by organiser to make it easy to find other events from the same people.
+				</p>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Virtual Events</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<label><input type="checkbox" name="isFeatureVirtualEvents" value="1" {% if currentSite.isFeatureVirtualEvents %}checked="checked"{% endif %}>Use Virtual Events</label>
+				<p class="information">
+					Events can be marked as virtual if they are accessible online from anywhere.
+				</p>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Map</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<label><input type="checkbox" name="isFeatureMap" value="1" {% if currentSite.isFeatureMap %}checked="checked"{% endif %}>Use Map Feature</label>
+				<p class="information">
+					Maps shows you events on a map to browse around. 
+					We recommend you only turn this on if you have lots of venues in different places.
+				</p>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		
+		<div class="rowWrapper">
+			<div class="labelWrapper">Curated Lists</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<label><input type="checkbox" name="isFeatureCuratedList" value="1" {% if currentSite.isFeatureCuratedList %}checked="checked"{% endif %}>Use Curated List Feature</label>
+				<p class="information">
+					Curated Lists allow users to build lists of events and share them with others.
+					We recommend you only turn this on if you have lots of events.
+				</p>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		<div class="rowWrapper">
+			<div class="labelWrapper">Importer</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<label><input type="checkbox" name="isFeatureImporter" value="1" {% if currentSite.getIsFeatureImporter %}checked="checked"{% endif %}>Use Importer Feature</label>
+				<p class="information">
+					Events can be imported directly from other sites.
+				</p>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		<input type="submit"  value="Save" />	
+
+	</form>
+
+{% endblock %}
+		

@@ -1,0 +1,53 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{# class UserAttendingListWrapper is always there and can be targeted by JS/AJAX loading.
+ class  UserAttendingList should only be there if there is some content, and can be targeted by CSS for styling. #}
+<div class="UserAttendingListWrapper">
+	{% if userAtEventYesPublic|length > 0 or userAtEventYesPrivate|length > 0 or userAtEventMaybePublic|length > 0 or userAtEventMaybePrivate|length > 0 %}
+		<div class="UserAttendingList">
+			{% if userAtEventYesPublic|length > 0 and userAtEventYesPrivate|length > 0 %}
+				<p>
+					Attending: 
+					{% for userAtEvent in userAtEventYesPublic %}
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+					{% endfor %}
+					and {{ userAtEventYesPrivate|length }} {% if userAtEventYesPrivate|length > 1 %}others{% else %}other{% endif %}.	
+				</p>
+			{% elseif userAtEventYesPublic|length > 0 %}
+				<p>
+					Attending: 
+					{% for userAtEvent in userAtEventYesPublic %}
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+					{% endfor %}
+				</p>
+			{% elseif userAtEventYesPrivate|length > 0 %}
+				<p>Attending: {{ userAtEventYesPrivate|length }} {% if userAtEventYesPrivate|length > 1 %}people{% else %}person{% endif %}.</p>
+			{% endif %}
+				
+			{% if userAtEventMaybePublic|length > 0 and userAtEventMaybePrivate|length > 0 %}
+				<p>
+					Maybe attending: 
+					{% for userAtEvent in userAtEventMaybePublic %}
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+					{% endfor %}
+					and {{ userAtEventMaybePrivate|length }} {% if userAtEventMaybePrivate|length > 1 %}others{% else %}other{% endif %}.	
+				</p>
+			{% elseif userAtEventMaybePublic|length > 0 %}
+				<p>
+					Maybe attending: 
+					{% for userAtEvent in userAtEventMaybePublic %}
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+					{% endfor %}
+				</p>
+			{% elseif userAtEventMaybePrivate|length > 0 %}
+				<p>Maybe attending: {{ userAtEventMaybePrivate|length }} {% if userAtEventMaybePrivate|length > 1 %}people{% else %}person{% endif %}.</p>
+			{% endif %}	
+		</div>
+	{% endif %}	
+</div>
+

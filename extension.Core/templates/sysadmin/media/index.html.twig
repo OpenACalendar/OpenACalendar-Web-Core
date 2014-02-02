@@ -1,0 +1,64 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	{% if not media.isDeleted %}
+		<div>
+			<img src="{{ config.getWebSiteDomainSecure(site.slug) }}/media/{{ media.slug }}/normal">
+		</div>
+	{% endif %}
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ media.id }}</td>
+		</tr>
+		<tr>
+			<th>Slug</th>
+			<td>{{ media.slug }}</td>
+		</tr>
+		<tr>
+			<th>Deleted</th>
+			<td>{% if media.isDeleted %}Deleted{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ media.title }}</td>
+		</tr>
+		<tr>
+			<th>Source</th>
+			<td>{{ media.sourceText }}</td>
+		</tr>	
+		<tr>
+			<th>Source URL</th>
+			<td>{{ media.sourceUrl }}</td>
+		</tr>
+		{% if not media.isDeleted %}
+			<tr>
+				<th>Thumb</th>
+				<td><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/media/{{ media.slug }}/thumbnail"></td>
+			</tr>	
+			<tr>
+				<th>Full</th>
+				<td><a href="{{ config.getWebSiteDomainSecure(site.slug) }}/media/{{ media.slug }}/full">Full</a></td>
+			</tr>	
+		{% endif %}
+	</table>
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>delete</li>
+	</ul>
+{% endblock %}

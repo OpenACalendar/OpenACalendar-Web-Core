@@ -1,0 +1,27 @@
+RewriteEngine on
+RewriteRule  ^event(.*)$ /index.php/event$1  [L]
+RewriteRule  ^group(.*)$ /index.php/group$1  [L]
+RewriteRule  ^venue(.*)$ /index.php/venue$1  [L]
+RewriteRule  ^country(.*)$ /index.php/country$1  [L]
+RewriteRule  ^area(.*)$ /index.php/country$1  [L]
+RewriteRule  ^admin(.*)$ /index.php/admin$1  [L]
+RewriteRule  ^dataforcountryid.json(.*)$ /index.php/dataforcountryid.json$1  [L]
+RewriteRule  ^history(.*)$ /index.php/history$1  [L]
+RewriteRule  ^watch(.*)$ /index.php/watch$1  [L]
+RewriteRule  ^robots.txt$ /robots.txt.php$1  [L]
+RewriteRule  ^mytimezone(.*)$ /index.php/mytimezone$1  [L]
+RewriteRule  ^displayboard(.*)$ /index.php/displayboard$1  [L]
+RewriteRule  ^stopWatchingFromEmail(.*)$ /index.php/stopWatchingFromEmail$1  [L]
+RewriteRule  ^requestaccess(.*)$ /index.php/requestaccess$1  [L]
+RewriteRule  ^api1(.*)$ /indexapi1.php/api1$1  [L]
+RewriteRule  ^map(.*)$ /index.php/map$1  [L]
+RewriteRule  ^importurl(.*)$ /index.php/importurl$1  [L]
+RewriteRule  ^curatedlist(.*)$ /index.php/curatedlist$1  [L]
+RewriteRule  ^demo(.*)$ /index.php/demo$1  [L]
+RewriteRule  ^places(.*)$ /index.php/places$1  [L]
+RewriteRule  ^currentuser(.*)$ /index.php/currentuser$1  [L]
+RewriteRule  ^media(.*)$ /index.php/media$1  [L]
+
+RewriteRule  ^sitemap.xml$ /indexsitemap.php$1  [L]
+
+ErrorDocument 404 /404.php

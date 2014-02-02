@@ -1,0 +1,59 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page.html.twig' %}
+
+{% block pageTitle %}Help - {% endblock %} 
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebIndexDomainSecure }}/help/urlimport" />
+{% endblock %}
+
+{% block breadcrumbs %}
+	<li><a href="/help/">help</a></li>
+	<li class="current"><a href="/help/urlimport">urlimport</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Import</h2>
+	
+<p>We can import content from other sites.</p>
+
+<ul>
+	<li>Eventbrite</li>
+	<li>Meetup</li>
+	<li>Lanyrd</li>
+	<li>Any iCal feed, such as Google Calendar</li>
+</ul>
+
+<p>Feeds must be added in a group. To add a feed, simply go to the group you want and click new event.</p>
+
+<P>Copy in the URL of the content:</p>
+
+<ul>
+	<li>For EventBrite, copy in the page. eg. http://startupschristmas.eventbrite.co.uk/</li>
+	<li>For Meetup, copy in the page. eg. http://www.meetup.com/ORG-Edinburgh/</li>
+	<li>For Lanyrd, copy in the page. eg. http://lanyrd.com/2012/mozilla-festival/</li>
+	<li>For a iCal feed, copy in the feed address. eg. http://www.wpscotland.org/?eme_ical=public</li>
+</ul>
+
+<p>Note data from feeds will only be imported several months in advance, and only 
+  a maximum number of events will be imported at once.</p>
+
+<p>Feeds can be disabled or enabled by editing them.</p>
+
+<p>After a number of months, feeds will expire. This is to prevent old data 
+  continuing to be importing if the feed is no longer valid. When we expire a feed,
+  we email everyone watching that group. If you know that the feed is still 
+  valid, you can simply press "enable" to re-enable it.</p>
+
+	
+	
+	
+{% endblock %}

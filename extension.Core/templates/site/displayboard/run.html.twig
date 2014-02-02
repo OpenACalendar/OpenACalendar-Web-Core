@@ -1,0 +1,50 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/displayBoard.html.twig' %}
+
+
+{% block pageTitle %}Display Board - {% endblock %} 
+
+
+
+{% block today %}
+	<h3>Today</h3>
+	<ul class="displayBoardEvents">
+		{% for event in eventsToday %}
+			{%  include '/site/displayboard/event.html.twig' with { showStart : 'time' }  %}			
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+{% block next %}
+	{% if daysAheadInNextBox == 1 %}
+		<h3>Tomorrow</h3>
+		<ul class="displayBoardEvents">
+			{% for event in eventsNext %}
+				{%  include '/site/displayboard/event.html.twig' with { showStart : 'time' }  %}			
+			{% endfor %}
+		</ul>
+	{% else %}
+		<h3>Next {{ daysAheadInNextBox }} days</h3>
+		<ul class="displayBoardEvents">
+			{% for event in eventsNext %}
+				{%  include '/site/displayboard/event.html.twig' with { showStart : 'date' }  %}			
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock %}
+
+{% block later %}
+	<h3>Later</h3>
+	<ul class="displayBoardEvents">
+		{% for event in eventsLater %}
+			{%  include '/site/displayboard/event.html.twig' with { showStart : 'date' }  %}			
+		{% endfor %}
+	</ul>
+{% endblock %}
+

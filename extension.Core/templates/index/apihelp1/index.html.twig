@@ -1,0 +1,34 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page.html.twig' %}
+
+{% block pageTitle %}API V1 Help - {% endblock %} 
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebIndexDomainSecure }}/apihelp/v1" />
+{% endblock %}
+
+{% block breadcrumbs %}
+	<li><a href="/apihelp/v1/">API V1 Help</a></li>
+{% endblock %}
+
+
+
+{% block content %}
+
+	<h2>API V1 Help</h2>
+	
+	<P>
+	We have several API's to make our data as re-usable as possible.
+	</p>
+
+	<h2>Contact us</h2>
+	
+	<p>If you have not found an answer, <a href="/contact">please contact us</a>.</p>
+
+{% endblock %}

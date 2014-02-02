@@ -1,0 +1,49 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}Profile Admin - {% endblock %} 
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li class="current"><a href="/admin/profile">profile</a></li>
+{% endblock %}
+
+
+{% block content %}
+	
+
+	<form action="#" method="post"  {{ form_enctype(form) }} class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.description_text) }}
+		{{ form_row(form.footer_text) }}
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Existing Logo</div>
+			<div class="widgetWrapper">
+				<img src="/getLogo.php?t={{ "now"|date('U') }}" class="logo" alt="Logo">
+			</div>
+			<div class="after"></div>
+		</div>
+
+		{{ form_row(form.logo) }}
+
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Save" />	
+
+	</form>
+
+	<p>(Note you can also pick a site logo from <a href="/media/">your existing media</a>.)</p>
+		
+{% endblock %}
+

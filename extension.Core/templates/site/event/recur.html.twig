@@ -1,0 +1,28 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+
+{% block pageTitle %}Recur {{ event.summaryDisplay }} - {% endblock %} 
+
+{% block htmlHeader %}
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+{% endblock %}
+
+
+{% block actions %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+
+	<p>Does this event recur <a href="/event/{{ event.slug }}/recur/weekly">weekly</a> or <a href="/event/{{ event.slug }}/recur/monthly">monthly</a>?</p>
+{% endblock %}
+

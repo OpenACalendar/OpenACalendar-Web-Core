@@ -1,0 +1,147 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ site.id }}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ site.title }}</td>
+		</tr>
+		<tr>
+			<th>Slug</th>
+			<td>{{ site.slug }}</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td>{{ site.descriptionText }}</td>
+		</tr>
+		<tr>
+			<th>Footer Text</th>
+			<td>{{ site.footerText }}</td>
+		</tr>
+		<tr>
+			<th>Prompt Emails Days In Advance</th>
+			<td>{{ site.promptEmailsDaysInAdvance }}</td>
+		</tr>
+		<tr>
+			<th>Web Robots</th>
+			<td>{% if site.isWebRobotsAllowed %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Listed in index</th>
+			<td>{% if site.isListedInIndex %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>All users editors</th>
+			<td>{% if site.IsAllUsersEditors %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Is Request Access Allowed</th>
+			<td>{% if site.isRequestAccessAllowed %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Request Access Question</th>
+			<td>{{ site.requestAccessQuestion | nl2br }}</td>
+		</tr>
+		<tr>
+			<th>Closed by sys admin</th>
+			<td>
+				{% if site.isClosedBySysAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}				
+			</td>
+		</tr>
+		{% if site.isClosedBySysAdmin %}
+			<tr>
+				<th>Closed by sys admin reason</th>
+				<td>
+					{{ site.ClosedBySysAdminReason }}
+				</td>
+			</tr>
+		{% endif %}
+		<tr>
+			<th>Is Feature Group</th>
+			<td>{% if site.isFeatureGroup %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>		
+		<tr>
+			<th>Is Feature Map</th>
+			<td>{% if site.isFeatureMap %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>		
+		<tr>
+			<th>Is Feature Importer</th>
+			<td>{% if site.isFeatureImporter %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>		
+		<tr>
+			<th>Is Feature Curated List</th>
+			<td>{% if site.isFeatureCuratedList %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>		
+		<tr>
+			<th>Is Feature Physical Events</th>
+			<td>{% if site.isFeaturePhysicalEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>		
+		<tr>
+			<th>Is Feature Virtual Events</th>
+			<td>{% if site.isFeatureVirtualEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>		
+		{% if sitequota %}
+			<tr>
+				<th>Quota</th>
+				<td>{{ sitequota.title }} (<a href="/sysadmin/sitequota/{{ sitequota.code }}/">{{ sitequota.code }}</a>)</td>
+			</tr>
+		{% endif %}
+		<tr>
+			<th>More</th>
+			<td>
+				<ul>
+					<li><a href="/sysadmin/site/{{ site.id }}/editors">Editors</a></li>
+					<li><a href="/sysadmin/site/{{ site.id }}/watchers">Watchers</a></li>
+					<li><a href="/sysadmin/site/{{ site.id }}/event">Events</a></li>
+					<li><a href="/sysadmin/site/{{ site.id }}/group">Groups</a></li>
+					<li><a href="/sysadmin/site/{{ site.id }}/venue">Venues</a></li>
+					<li><a href="/sysadmin/site/{{ site.id }}/media">Medias</a></li>
+					<li><a href="/sysadmin/site/{{ site.id }}/curatedlist">Curated Lists</a></li>
+				</ul>
+			</td>
+		</tr>
+
+	</table>
+
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>close  <span class="param">reason</a></li>
+		<li>open</li>
+		<li>webrobots <span class="param">boolean</a></li>
+		<li>listedinindex <span class="param">boolean</a></li>
+		<li>allusersedit <span class="param">boolean</a></li>
+		<li>requestaccessallowed <span class="param">boolean</a></li>
+		<li>featuregroup <span class="param">boolean</a></li>
+		<li>featuremap <span class="param">boolean</a></li>
+		<li>featureimporter <span class="param">boolean</a></li>
+		<li>featurecuratedlist <span class="param">boolean</a></li>
+		<li>featurevirtualevents <span class="param">boolean</a></li>
+		<li>featurephysicalevents <span class="param">boolean</a></li>
+		<li>quota <span class="param">code</a></li>
+		<li>addadmin <span class="param">id</a></li>
+		<li>addeditor <span class="param">id</a></li>
+		<li>owner <span class="param">id</a></li>
+	</ul>
+
+{% endblock %}
+
+

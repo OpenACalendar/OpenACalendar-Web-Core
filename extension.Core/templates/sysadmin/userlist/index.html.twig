@@ -1,0 +1,41 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	
+	<table class="data">
+		<tr>
+			<th>ID</th>
+			<th>Username</th>
+			<th>Email</th>
+			<th>Is Verifed</th>
+			<th>Is Editor</th>
+			<th>Is Closed</th>
+			<th>Is System Admin</th>			
+			<th>&nbsp;</th>
+		</tr>
+		{% for user in users %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %}>
+				<td>{{ user.id }}</td>
+				<td>{{ user.username }}</td>
+				<td>{{ user.email }}</td>
+				<td>{% if user.isEmailVerified %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>{% if user.isEditor %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>{% if user.isClosedBySysAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>{% if user.isSystemAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>
+					<a href="/sysadmin/user/{{ user.id }}/" class="button">Show</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}
+

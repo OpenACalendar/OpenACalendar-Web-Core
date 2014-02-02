@@ -1,0 +1,35 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.html.twig' %}
+
+{% block content %}
+	
+	<p>Hello {{ user.username }}</p>
+
+	<p>You watch the group {{ group.title }}, and changes have been made to that group.</p>
+	
+	{% for historyItem in histories %}
+		{% if historyItem is eventhistory %}
+			{% include 'email/common/eventHistoryItem.html.twig' %}
+		{% elseif historyItem is grouphistory %}
+			{% include 'email/common/groupHistoryItem.html.twig' %}</li>
+		{% elseif historyItem is venuehistory %}
+			{% include 'email/common/venueHistoryItem.html.twig' %}
+		{% endif %}		
+	{% endfor %}
+	
+	<p>To see <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/history">the full history, click here</a>.</p>
+		
+	<p>Thanks,<br>
+	{{ config.siteTitle }}</p>
+		
+	<p>ps.  
+		To <a href="{{ config.getWebIndexDomainSecure(site.slug) }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}">change which emails you get, click here</a>.
+		To <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
+
+{% endblock %}

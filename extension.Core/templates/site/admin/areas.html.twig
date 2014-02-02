@@ -1,0 +1,40 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block pageTitle %}Admin Areas - {% endblock %} 
+
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li class="current"><a href="/admin/areas">areas in a country</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<h2>Areas in a country</h2>
+
+	<ul class="countries">
+		{% for country in countries %}
+			<li class="country">
+				<div class="title"><a href="/admin/areas/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+			</li>
+		{% else %}
+			<li>
+				There are no countries.
+			</li>								
+		{% endfor %}
+	</ul>
+
+
+
+
+{% endblock %}
+

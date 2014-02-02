@@ -1,0 +1,84 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/area/page2col.html.twig' %}
+
+{% block pageTitle %}{{ area.title }} - {% endblock %} 
+
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slug }}/" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
+{% block actions %}
+	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not area.isDeleted %}
+		<li class="action">
+			<a href="/area/{{ area.slug }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+		</li>		
+		<li class="action">
+			<a href="/area/{{ area.slug }}/new">
+				<img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new
+			</a>
+		</li>
+	{% endif %}
+{% endblock %}
+
+{% block tabDetails %}currentTab{% endblock %}
+		
+{% block innerContentLeft %}
+		
+	<div class="venue">
+		<p>{{ area.description | nl2br  | linkify }}</p>
+
+		<div id="Map" class="map"></div>
+
+		{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+		
+		<div class="locationWrapper">
+			<div class="location">
+				<div class="area"><a href="/area/{{ area.slug }}">{{ area.title }}</a></div>	
+				{% for parentArea in parentAreas|reverse %}
+					<div class="area"><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></div>
+				{% endfor %}
+				<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+			</div>
+		</div>
+		
+	</div>
+		
+		
+{% endblock %}
+
+
+{% block innerContentRight %}
+
+	{% include '/site/eventListFilterParams.html.twig' %}
+
+	<ul class="events">
+		{% for event in events %}
+			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
+		{% else %}
+			<li>
+				No events found.
+			</li>		
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+
+{% block scripts %}
+	<script src="/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	<script type="text/javascript" src="/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script src="/js/areaShow.js?v={{ config.assetsVersion }}" type="text/javascript"></script>	
+{% endblock %}
+
+
+
+

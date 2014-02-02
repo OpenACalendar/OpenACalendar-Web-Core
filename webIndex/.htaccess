@@ -1,0 +1,22 @@
+RewriteEngine on
+RewriteRule  ^create$ /index.php/create  [L]
+RewriteRule  ^discover(.*)$ /index.php/discover$1  [L]
+RewriteRule  ^me(.*)$ /index.php/me$1  [L]
+RewriteRule  ^you(.*)$ /index.php/you$1  [L]
+RewriteRule  ^user(.*)$ /index.php/user$1  [L]
+RewriteRule  ^person(.*)$ /index.php/person$1  [L]
+RewriteRule  ^for(.*)$ /index.php/for$1  [L]
+RewriteRule  ^mytimezone(.*)$ /index.php/mytimezone$1  [L]
+RewriteRule  ^contact(.*)$ /index.php/contact$1  [L]
+RewriteRule  ^pricing(.*)$ /index.php/pricing$1  [L]
+RewriteRule  ^terms(.*)$ /index.php/terms$1  [L]
+RewriteRule  ^privacy(.*)$ /index.php/privacy$1  [L]
+RewriteRule  ^widgethelp(.*)$ /index.php/widgethelp$1  [L]
+RewriteRule  ^credits(.*)$ /index.php/credits$1  [L]
+RewriteRule  ^about(.*)$ /index.php/about$1  [L]
+RewriteRule  ^api1(.*)$ /indexapi1.php/api1$1  [L]
+RewriteRule  ^site(.*)$ /index.php/site$1  [L]
+RewriteRule  ^help(.*)$ /index.php/site$1  [L]
+RewriteRule  ^apihelp(.*)$ /index.php/apihelp$1  [L]
+
+ErrorDocument 404 /404.php

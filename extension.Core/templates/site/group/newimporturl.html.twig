@@ -1,0 +1,31 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/group/page.html.twig' %}
+
+{% block pageTitle %}New import in {{ group.title }} - {% endblock %} 
+
+
+{% block innerContent %}
+
+	<p>You can also <a href="/group/{{ group.slug }}/newevent">add the event details by hand</a>.</p>
+
+
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.url) }}
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Save" />	
+	</form>
+
+{% endblock %}
+
+

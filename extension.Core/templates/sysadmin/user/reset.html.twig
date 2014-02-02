@@ -1,0 +1,31 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="data">
+		<tr>
+			<th>Created</th>
+			<th>Reset<th>
+		</tr>
+		{% for reset in resets %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %} >
+				<td>{{ reset.getCreatedAt  |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}</td>
+				<td>
+					{% if reset.getResetAt %}
+						{{ reset.getResetAt  |tolocaltimeformatted('D H:i jS M Y', currentTimeZone )}}
+					{% endif %}
+				</td>				
+				
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}

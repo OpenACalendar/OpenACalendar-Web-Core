@@ -1,0 +1,19 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<script type="text/javascript">
+	var mediaData = [
+		{% for media in medias %}
+			{
+				'slug':{{  media.slug }},
+				'title': "{{ media.title |e('js') }}",
+				'sourceText': "{{ media.sourceText |e('js') }}",
+				'sourceURL': "{{ media.sourceURL |e('js') }}",
+			} {% if not loop.last %},{% endif %}
+		{% endfor %}	
+	];
+</script>

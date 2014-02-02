@@ -1,0 +1,36 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}History - {% endblock %} 
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/history">History of changes</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+	<ul class="history">
+		{% for historyItem in historyItems %}
+			{% if historyItem is eventhistory %}
+				{% include 'site/common/eventHistoryItem.html.twig' %}
+			{% elseif historyItem is grouphistory %}
+				{% include 'site/common/groupHistoryItem.html.twig' %}</li>
+			{% elseif historyItem is venuehistory %}
+				{% include 'site/common/venueHistoryItem.html.twig' %}
+			{% endif %}
+		{% endfor %}
+	</ul>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}Countries Admin - {% endblock %} 
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li class="current"><a href="/admin/countries">countries</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<a href="#" onclick="selectAll(); return false;">Select all</a>
+	<a href="#" onclick="selectNone(); return false;">Select none</a>
+		
+	<form id="CountriesForm" action="" method="post">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="submitted" value="yes">
+
+		<div id="searchWrapper" style="display: none;">
+			Search by country: <input type="text" id="searchTerm">
+		</div>
+		
+		<ul class="selectCountries">
+			{% for country in countries %}
+				<li class="country">
+					<label>
+						<input type="checkbox" name="country[{{ country.twoCharCode }}]" value="yes" {% if country.siteIsIn %}checked{% endif %}>
+						<img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag">  {{ country.title }}
+					</label>
+				</li>
+			{% endfor %}
+		</ul>
+
+		<input type="submit" value="Save">
+	</form>
+		
+		
+		
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="/js/adminCountries.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+
+	

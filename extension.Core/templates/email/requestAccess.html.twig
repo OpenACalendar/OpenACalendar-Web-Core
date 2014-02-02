@@ -1,0 +1,28 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.html.twig' %}
+
+{% block content %}
+
+	<p>Hello {{ admin.username }},</p>
+
+	<p>User {{ user.username }} has requested access to {{ currentSite.title }} which you are an administrator for.</p>
+	
+	<div style="padding: 20px; background: #ccc;">
+		<p>{{ currentSite.requestAccessQuestion | nl2br }}</p>
+		<p>{{ answer | nl2br }}</p>
+	</div>
+	
+	<p>Please <a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/admin/users">go here to refuse or accept this</a>.</p>
+	
+	<p>Thanks,<br> {{ currentSite.title }} {{ config.siteTitle }}</p>
+	
+	
+{% endblock %}
+
+	
