@@ -155,6 +155,15 @@ class SiteController {
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					}
 					
+					
+				} else if ($action->getCommand() == 'newslug') {
+					$newslug = $action->getParam(0);
+					if (ctype_alnum($newslug) && strlen($newslug) > 1) {
+						$this->parameters['site']->setSlug($newslug);
+						$sr->editSlug($this->parameters['site'], userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
+					}
+					
 				}
 		
 			}
