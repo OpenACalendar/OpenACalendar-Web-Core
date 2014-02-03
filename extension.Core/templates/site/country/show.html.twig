@@ -32,7 +32,12 @@
 
 	<div class="country">
 	
-		<div id="Map" class="map"></div>
+		<div id="MapWrapper">
+			<div id="Map" class="map"></div>
+			{% if currentSite.isFeatureMap %}
+				<p class="largerMapLink"><a href="/map?country={{ country.twoCharCode }}">View larger map</a></p>
+			{% endif %}
+		</div>
 	
 		{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
 		

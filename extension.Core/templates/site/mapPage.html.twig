@@ -42,6 +42,24 @@
 					'lng':'{{ vd.venue_lng }}',
 				},
 			{% endfor %}  ];
+			{% if country %}
+				var country = {
+					maxLat: {% if country.maxLat %}{{ country.maxLat }}{% else %}null{% endif %},
+					maxLng: {% if country.maxLng %}{{ country.maxLng }}{% else %}null{% endif %}, 
+					minLat: {% if country.minLat %}{{ country.minLat }}{% else %}null{% endif %},
+					minLng: {% if country.minLng %}{{ country.minLng }}{% else %}null{% endif %} };
+			{% else %}
+				var country = null;
+			{% endif %}
+			{% if area %}
+				var area = {
+					maxLat: {% if area.maxLat %}{{ area.maxLat }}{% else %}null{% endif %},
+					maxLng: {% if area.maxLng %}{{ area.maxLng }}{% else %}null{% endif %}, 
+					minLat: {% if area.minLat %}{{ area.minLat }}{% else %}null{% endif %},
+					minLng: {% if area.minLng %}{{ area.minLng }}{% else %}null{% endif %} };
+			{% else %}
+				var area = null;
+			{% endif %}
 		</script>
 		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>

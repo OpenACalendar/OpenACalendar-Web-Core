@@ -28,7 +28,17 @@ $(document).ready(function() {
 		}
 	}
 	
-	if (hasMarkers) {
+	if (area && area.maxLat && area.minLat && area.maxLng && area.minLng) {
+		var southWest = L.latLng(area.minLat, area.minLng),
+			northEast = L.latLng(area.maxLat, area.maxLng),
+			bounds = L.latLngBounds(southWest, northEast);
+		map.fitBounds(bounds);
+	} else if (country && country.maxLat && country.minLat && country.maxLng && country.minLng) {
+		var southWest = L.latLng(country.minLat, country.minLng),
+			northEast = L.latLng(country.maxLat, country.maxLng),
+			bounds = L.latLngBounds(southWest, northEast);
+		map.fitBounds(bounds);
+	} else if (hasMarkers) {
 		map.fitBounds(markerGroup.getBounds());
 	} else {
 		map.setView([55.948792,-3.200115],5);

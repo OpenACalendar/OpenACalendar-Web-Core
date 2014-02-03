@@ -4,9 +4,10 @@ namespace site\controllers;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\VenueRepository;
+use repositories\CountryRepository;
+use repositories\AreaRepository;
 
 /**
  *
@@ -17,8 +18,36 @@ use repositories\VenueRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class MapController {
+
 	
-	function index(Application $app) {
+	protected $parameters = array();
+	
+	protected function build($countryCode, $areaSlug, Request $request, Application $app) {
+		$this->parameters = array('country'=>null,'area'=>array());
+		
+		if ($areaSlug) {
+			$ar = new AreaRepository();
+			$this->parameters['area'] = $ar->loadBySlug($app['currentSite'], $areaSlug);
+		}
+		
+		if ($this->parameters['area']) {
+			$cr = new CountryRepository();
+			$this->parameters['country'] = $cr->loadById($this->parameters['area']->getCountryID());
+		} else if ($countryCode) {
+			$cr = new CountryRepository();
+			$this->parameters['country'] = $cr->loadByTwoCharCode($countryCode);
+		}
+
+		return true;
+	}
+	
+	
+	function index(Application $app, Request $request) {
+		
+		$this->build(
+				isset($_GET['country'])?$_GET['country']:null, 
+				isset($_GET['area'])?$_GET['area']:null, 
+				$request, $app);
 		
 		$erb = new EventRepositoryBuilder();
 		$erb->setSite($app['currentSite']);
@@ -28,12 +57,12 @@ class MapController {
 		
 		$events = $erb->fetchAll();
 		
-		$venues = array();
+		$this->parameters['venueData'] = array();
 		
 		$venueRepo = new VenueRepository();
 		
 		foreach($events as $event) {
-			$venues[$event->getVenueId()] = array(
+			$this->parameters['venueData'][$event->getVenueId()] = array(
 				'venue_lat'=> $event->getVenueLat(),
 				'venue_lng'=> $event->getVenueLng(),
 				'venue_title'=> $event->getVenueTitle(),
@@ -41,9 +70,7 @@ class MapController {
 			);
 		}
 		
-		return $app['twig']->render('site/mapPage.html.twig', array(
-				'venueData'=>$venues,
-			));
+		return $app['twig']->render('site/mapPage.html.twig', $this->parameters);
 		
 	}
 	

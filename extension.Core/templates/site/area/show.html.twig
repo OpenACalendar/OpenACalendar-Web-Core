@@ -35,9 +35,14 @@
 		
 	<div class="venue">
 		<p>{{ area.description | nl2br  | linkify }}</p>
-
-		<div id="Map" class="map"></div>
-
+		
+		<div id="MapWrapper">
+			<div id="Map" class="map"></div>
+			{% if currentSite.isFeatureMap %}
+				<p class="largerMapLink"><a href="/map?area={{ area.slug }}">View larger map</a></p>
+			{% endif %}
+		</div>
+		
 		{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
 		
 		<div class="locationWrapper">
