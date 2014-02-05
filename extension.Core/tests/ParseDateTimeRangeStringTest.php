@@ -219,6 +219,8 @@ class ParseDateTimeRangeStringTest  extends \PHPUnit_Framework_TestCase {
 			// between and
 			array('between mon 7pm and 10pm',  2013,10,7,19,0,  2013,10,7,22,0),
 			array('friday between 7pm and 10pm',  2013,10,4,19,0,  2013,10,4,22,0),
+			// from Al.
+			array('20th Dec 2014 1800 to 1900',  2014,12,20,18,0,  2014,12,20,19,0),
 		);
 	}
 	
