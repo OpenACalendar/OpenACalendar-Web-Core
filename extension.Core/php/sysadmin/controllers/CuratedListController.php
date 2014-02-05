@@ -10,6 +10,7 @@ use models\EventModel;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
 use repositories\CuratedListRepository;
+use repositories\EventRepository;
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
 use sysadmin\forms\ActionForm;
@@ -48,7 +49,7 @@ class CuratedListController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
-
+		
 		$this->build($siteid, $slug, $request, $app);
 		
 				
@@ -68,6 +69,7 @@ class CuratedListController {
 						$clr->addEditorToCuratedList($user, $this->parameters['curatedlist'], userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
 					}					
+					
 				} else if ($action->getCommand() == 'removeeditor') {
 					$userRepo = new UserAccountRepository;
 					$user = $userRepo->loadByID($action->getParam(0));
@@ -75,7 +77,25 @@ class CuratedListController {
 						$clr = new CuratedListRepository();
 						$clr->removeEditorFromCuratedList($user, $this->parameters['curatedlist'], userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
-					}					
+					}	
+					
+				} else if ($action->getCommand() == 'addevent') {
+					$eventRepository = new EventRepository();
+					$event = $eventRepository->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($event) {
+						$clr = new CuratedListRepository();
+						$clr->addEventtoCuratedList($event, $this->parameters['curatedlist'], userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$event->getSlug());
+					}
+					
+				} else if ($action->getCommand() == 'removeevent') {
+					$eventRepository = new EventRepository();
+					$event = $eventRepository->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($event) {
+						$clr = new CuratedListRepository();
+						$clr->removeEventFromCuratedList($event, $this->parameters['curatedlist'], userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$event->getSlug());
+					}
 				}
 			}
 		}
