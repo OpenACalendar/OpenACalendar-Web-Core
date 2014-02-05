@@ -12,6 +12,7 @@ use repositories\EventRepository;
 use repositories\GroupRepository;
 use repositories\CountryRepository;
 use repositories\VenueRepository;
+use repositories\CuratedListRepository;
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
@@ -105,11 +106,29 @@ class EventController {
 					$er = new EventRepository();
 					$er->delete($this->parameters['event'],  userGetCurrent());
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['event']->getIsDeleted()) {
 					$this->parameters['event']->setIsDeleted(false);
 					$er = new EventRepository();
 					$er->edit($this->parameters['event'],  userGetCurrent());
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					
+				} else if ($action->getCommand() == 'addcuratedlist') {
+					$clr = new CuratedListRepository();
+					$curatedList = $clr->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($curatedList) {
+						$clr->addEventtoCuratedList($this->parameters['event'], $curatedList, userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$curatedList->getSlug());
+					}
+					
+				} else if ($action->getCommand() == 'removecuratedlist') {
+					$clr = new CuratedListRepository();
+					$curatedList = $clr->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($curatedList) {
+						$clr->removeEventFromCuratedList($this->parameters['event'], $curatedList, userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$curatedList->getSlug());
+					}
+					
 				}
 		
 			}
