@@ -1471,5 +1471,50 @@
         ],
         "description": "Symfony Monolog Bridge",
         "homepage": "http://symfony.com"
+    },
+    {
+        "name": "jmbtechnologylimited/parsedatetimerangestring",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/JMB-Technology-Limited/ParseDateTimeRangeString.git",
+            "reference": "a73e0c3d096d535f9885b170e7e4a0d27fbd6865"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/JMB-Technology-Limited/ParseDateTimeRangeString/zipball/a73e0c3d096d535f9885b170e7e4a0d27fbd6865",
+            "reference": "a73e0c3d096d535f9885b170e7e4a0d27fbd6865",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2014-02-05 19:02:44",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "JMBTechnologyLimited": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD"
+        ],
+        "authors": [
+            {
+                "name": "James Baster",
+                "email": "james@jarofgreen.co.uk",
+                "homepage": "http://jamesbaster.co.uk",
+                "role": "Developer"
+            }
+        ],
+        "description": "Takes a string with a date and time range, tries to parse it into date objects.",
+        "homepage": "https://github.com/JMB-Technology-Limited/ParseDateTimeRangeString",
+        "keywords": [
+            "date",
+            "time"
+        ]
     }
 ]

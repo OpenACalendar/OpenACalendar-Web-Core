@@ -27,7 +27,7 @@ use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
 use repositories\builders\ImportURLRepositoryBuilder;
 use site\forms\ImportURLNewForm;
-use \ParseDateTimeRangeString;
+use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 
 use repositories\builders\filterparams\EventFilterParams;
 
@@ -286,7 +286,7 @@ class GroupController {
 			$event->setSummary($_GET['what']);
 		}
 		if (isset($_GET['when']) && trim($_GET['when'])) {
-			$parse = new ParseDateTimeRangeString($app['currentTimeZone']);
+			$parse = new ParseDateTimeRangeString(\TimeSource::getDateTime(), $app['currentTimeZone']);
 			$parseResult = $parse->parse($_GET['when']);
 			$event->setStartAt($parseResult->getStart());
 			$event->setEndAt($parseResult->getEnd());

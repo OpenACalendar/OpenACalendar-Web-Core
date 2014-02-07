@@ -29,4 +29,5 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Pimple' => array($vendorDir . '/pimple/pimple/lib'),
     'Monolog' => array($vendorDir . '/monolog/monolog/src'),
+    'JMBTechnologyLimited' => array($vendorDir . '/jmbtechnologylimited/parsedatetimerangestring/src'),
 );

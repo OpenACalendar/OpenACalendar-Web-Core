@@ -1,0 +1,24 @@
+{
+    "name": "jmbtechnologylimited/parsedatetimerangestring",
+    "type": "library",
+    "description": "Takes a string with a date and time range, tries to parse it into date objects.",
+    "keywords": ["time","date"],
+    "homepage": "https://github.com/JMB-Technology-Limited/ParseDateTimeRangeString",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "James Baster",
+            "email": "james@jarofgreen.co.uk",
+            "homepage": "http://jamesbaster.co.uk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "JMBTechnologyLimited": "src"
+        }
+    }
+}

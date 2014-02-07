@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use models\EventModel;
 use repositories\EventRepository;
-use \ParseDateTimeRangeString;
+use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 
 /**
  *
@@ -58,7 +58,7 @@ class EventNewController {
 			$event->setSummary($_GET['what']);
 		}
 		if (isset($_GET['when']) && trim($_GET['when'])) {
-			$parse = new ParseDateTimeRangeString($app['currentTimeZone']);
+			$parse = new ParseDateTimeRangeString(\TimeSource::getDateTime(), $app['currentTimeZone']);
 			$parseResult = $parse->parse($_GET['when']);
 			$event->setStartAt($parseResult->getStart());
 			$event->setEndAt($parseResult->getEnd());

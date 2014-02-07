@@ -10,6 +10,7 @@
 		"swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
 		"ircmaxell/password-compat": "1.0.3",
 		"monolog/monolog": ">=1.0.0",
-		"symfony/monolog-bridge": "~2.3"
+		"symfony/monolog-bridge": "~2.3",
+		"jmbtechnologylimited/parsedatetimerangestring":"1.0.*"
     }
 }

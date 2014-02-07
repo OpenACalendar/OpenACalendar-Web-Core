@@ -1,10 +1,11 @@
 <?php
 
+namespace JMBTechnologyLimited\ParseDateTimeRangeString;
+
 /**
  *
- * @package Core
- * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
- * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @link https://github.com/JMB-Technology-Limited/ParseDateTimeRangeString
+ * @license https://raw.github.com/JMB-Technology-Limited/ParseDateTimeRangeString/master/LICENSE.txt 3-clause BSD
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
@@ -14,9 +15,14 @@ class ParseDateTimeRangeString {
 	protected $yearsGoingForwards = 10;
 
 	protected $timezone;
+	/** @var \DateTime **/
+	protected $currentDateTime;
+
+
+	public function __construct($currentDateTime,  $timezone='UTC') {
 	
-	public function __construct($timezone) {
-	
+		$this->currentDateTime = $currentDateTime;
+		$this->currentDateTime->setTimezone(new \DateTimeZone($timezone));
 		$this->timezone = $timezone;
 		
 	}
@@ -28,8 +34,7 @@ class ParseDateTimeRangeString {
 		$string = str_replace("\r", " ", $string);
 		$string = str_replace("  ", " ", $string);
 		
-		$start = \TimeSource::getDateTime();
-		$start->setTimezone(new \DateTimeZone($this->timezone));
+		$start = clone $this->currentDateTime;
 
 		$stringStart = $string;
 		$stringEnd="";
@@ -188,7 +193,7 @@ class ParseDateTimeRangeString {
 		}
 		
 		
-		$now = \TimeSource::getDateTime();
+		$now = clone $this->currentDateTime;
 		$from = $now->format('Y') - $this->yearsGoingBack;
 		$to = $now->format('Y') + $this->yearsGoingForwards;
 		for($i = $from; $i <= $to; $i++) {
@@ -344,7 +349,7 @@ class ParseDateTimeRangeString {
 		
 		if (preg_match("/(\d{2})(\d{2})/", $string, $matches)) {
 			$ifItWasAYear = $matches[1]*100 + $matches[2];
-			$now = \TimeSource::getDateTime();
+			$now = clone $this->currentDateTime;
 			$from = $now->format('Y') - $this->yearsGoingBack;
 			$to = $now->format('Y') + $this->yearsGoingForwards;
 			if ($ifItWasAYear < $from || $ifItWasAYear > $to) {
@@ -407,24 +412,3 @@ class ParseDateTimeRangeString {
 
 }
 
-class ParseDateTimeRangeStringResult {
-	/** @var \DateTime **/
-	protected $start;
-	/** @var \DateTime **/
-	protected $end;
-	
-	function __construct(\DateTime $start, \DateTime $end) {
-		$this->start = $start;
-		$this->end = $end;
-	}
-
-	public function getStart() {
-		return $this->start;
-	}
-
-	public function getEnd() {
-		return $this->end;
-	}
-
-}
-	
