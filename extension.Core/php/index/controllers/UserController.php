@@ -188,7 +188,11 @@ class UserController {
 				$data = $form->getData();
 				
 				$userRepository = new UserAccountRepository();
-				$user = $userRepository->loadByUserNameOrEmail($data['details']);
+				if ($data['email']) {
+					$user = $userRepository->loadByEmail($data['email']);
+				} else if ($data['username']) {
+					$user = $userRepository->loadByUserName($data['username']);
+				}
 				if ($user) {
 					if ($user->getIsClosedBySysAdmin()) {
 						$form->addError(new FormError('There was a problem with this account and it has been closed: '.$user->getClosedBySysAdminReason()));
