@@ -304,7 +304,7 @@ class UserWatchesSitePromptTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array());
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
 		$start = \TimeSource::getDateTime();
