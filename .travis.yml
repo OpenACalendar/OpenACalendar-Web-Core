@@ -9,11 +9,11 @@ services: PostgreSQL
 before_script:
   - psql -c 'create database openacalendartest;' -U postgres
   - echo "<?php" >> config.test.php
-  - echo "$CONFIG->isDebug = false;" >> config.test.php
-  - echo "$CONFIG->databaseName = 'openacalendartest';" >> config.test.php
-  - echo "$CONFIG->databaseHost = 'localhost';" >> config.test.php
-  - echo "$CONFIG->databaseUser = 'postgres';" >> config.test.php
-  - echo "$CONFIG->databasePassword = '';" >> config.test.php
+  - echo "\$CONFIG->isDebug = false;" >> config.test.php
+  - echo "\$CONFIG->databaseName = 'openacalendartest';" >> config.test.php
+  - echo "\$CONFIG->databaseHost = 'localhost';" >> config.test.php
+  - echo "\$CONFIG->databaseUser = 'postgres';" >> config.test.php
+  - echo "\$CONFIG->databasePassword = '';" >> config.test.php
 
 script: phpunit --configuration extension.Core/tests/phpunit.xml
 
