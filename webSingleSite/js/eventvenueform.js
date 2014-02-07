@@ -159,6 +159,11 @@ function listVenues(venueList) {
 	html += '<input type="radio" name="venue_id" value="new">Other new venue: ';
 	html += '</label><input type="text" name="newVenueTitle" class=""></li>'
 	$('#ChangeEventVenueList').empty().html(html);
+	$('#ChangeEventVenueList li.newvenue input[name="newVenueTitle"]').keyup(function () {
+		if ($(this).val().trim() != "") {
+			$('#ChangeEventVenueList li.newvenue input[type="radio"]').prop('checked',true);
+		}
+	});
 }
 
 function useVenue(venueSlug) {
