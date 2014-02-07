@@ -18,8 +18,11 @@ date_default_timezone_set('UTC');
 define('VARCHAR_COLUMN_LENGTH_USED', 255);
 
 function autoload($class) {
-	require_once __DIR__. DIRECTORY_SEPARATOR. "..". DIRECTORY_SEPARATOR."php". DIRECTORY_SEPARATOR.
-			str_replace("\\", DIRECTORY_SEPARATOR, $class).'.php';
+	$file = __DIR__. DIRECTORY_SEPARATOR. "..". DIRECTORY_SEPARATOR."php". DIRECTORY_SEPARATOR.
+				str_replace("\\", DIRECTORY_SEPARATOR, $class).'.php';
+	if (file_exists($file)) {
+		require_once $file;
+	}
 }
 spl_autoload_register('autoload'); 
 
