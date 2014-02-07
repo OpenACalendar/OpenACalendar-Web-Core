@@ -23,9 +23,19 @@ class UserChangePasswordForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('oldpassword', 'password', array('label'=>'Old Password','required'=>true, 'attr' => array('autofocus' => 'autofocus')));
-		$builder->add('password1', 'password', array('label'=>'New Password','required'=>true));
-		$builder->add('password2', 'password', array('label'=>'Repeat new password','required'=>true));	
+		$builder->add('oldpassword', 'password', array(
+			'label'=>'Old Password',
+			'required'=>true, 
+			'attr' => array('autofocus' => 'autofocus')
+		));
+		$builder->add('password1', 'password', array(
+			'label'=>'New Password',
+			'required'=>true
+		));
+		$builder->add('password2', 'password', array(
+			'label'=>'Repeat new password',
+			'required'=>true
+		));	
 
 		$myExtraFieldValidator = function(FormEvent $event){
 			$form = $event->getForm();

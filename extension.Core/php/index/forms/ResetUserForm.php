@@ -23,8 +23,15 @@ class ResetUserForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('password1', 'password', array('label'=>'Password','required'=>true, 'attr' => array('autofocus' => 'autofocus')));
-		$builder->add('password2', 'password', array('label'=>'Repeat password','required'=>true));	
+		$builder->add('password1', 'password', array(
+			'label'=>'Password',
+			'required'=>true, 
+			'attr' => array('autofocus' => 'autofocus')
+		));
+		$builder->add('password2', 'password', array(
+			'label'=>'Repeat password',
+			'required'=>true
+		));	
 
 		$myExtraFieldValidator = function(FormEvent $event){
 			$form = $event->getForm();

@@ -22,7 +22,11 @@ class ImportURLEditForm extends AbstractType{
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
 		
-		$builder->add('title', 'text', array('label'=>'Title','required'=>false));
+		$builder->add('title', 'text', array(
+			'label'=>'Title',
+			'required'=>false, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
 		
 		
 	}

@@ -32,12 +32,23 @@ class EventNewForm extends AbstractType{
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('summary', 'text', array('label'=>'Summary','required'=>true, 'attr' => array('autofocus' => 'autofocus')));
+		$builder->add('summary', 'text', array(
+			'label'=>'Summary',
+			'required'=>true, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
+			'attr' => array('autofocus' => 'autofocus')
+		));
 		
-		$builder->add('description', 'textarea', array('label'=>'Description','required'=>false));
+		$builder->add('description', 'textarea', array(
+			'label'=>'Description',
+			'required'=>false
+		));
 		
 		
-		$builder->add('url', 'url', array('label'=>'Web Page URL','required'=>false));
+		$builder->add('url', 'url', array(
+			'label'=>'Web Page URL',
+			'required'=>false
+		));
 		
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);

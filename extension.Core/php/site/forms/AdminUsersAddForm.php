@@ -26,12 +26,20 @@ class AdminUsersAddForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('username', 'text', array('label'=>'Username','required'=>true));
+		$builder->add('username', 'text', array(
+			'label'=>'Username',
+			'required'=>true, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
 		$choices = array('admin'=>'Administrator');
 		if (!$this->site->getIsAllUsersEditors()) {
 			$choices['edit'] = 'Editor';
 		}
-		$builder->add('role', 'choice', array('label'=>'Role','required'=>true,'choices'=>$choices));
+		$builder->add('role', 'choice', array(
+			'label'=>'Role',
+			'required'=>true,
+			'choices'=>$choices
+		));
 		
 	}
 	

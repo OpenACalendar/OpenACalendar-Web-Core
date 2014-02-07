@@ -21,13 +21,28 @@ class SiteEditProfileForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('title', 'text', array('label'=>'Title','required'=>false, 'attr' => array('autofocus' => 'autofocus')));
+		$builder->add('title', 'text', array(
+			'label'=>'Title',
+			'required'=>false, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
+			'attr' => array('autofocus' => 'autofocus')
+		));
 		
-		$builder->add('description_text', 'textarea', array('label'=>'Description','required'=>false));
+		$builder->add('description_text', 'textarea', array(
+			'label'=>'Description',
+			'required'=>false
+		));
 		
-		$builder->add('footer_text', 'textarea', array('label'=>'Footer Text','required'=>false));
+		$builder->add('footer_text', 'textarea', array(
+			'label'=>'Footer Text',
+			'required'=>false
+		));
 		
-		$builder->add('logo', 'file', array("mapped" => false, 'label'=>'Upload new Logo','required'=>false));
+		$builder->add('logo', 'file', array(
+			"mapped" => false, 
+			'label'=>'Upload new Logo',
+			'required'=>false
+		));
 	}
 	
 	public function getName() {

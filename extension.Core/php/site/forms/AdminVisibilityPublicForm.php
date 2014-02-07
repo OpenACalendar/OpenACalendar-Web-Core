@@ -21,8 +21,14 @@ class AdminVisibilityPublicForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('is_web_robots_allowed', 'checkbox', array('label'=>'Allow search engines to list','required'=>false));
-		$builder->add('is_listed_in_index', 'checkbox', array('label'=>'List is directory for others to discover','required'=>false));
+		$builder->add('is_web_robots_allowed', 'checkbox', array(
+			'label'=>'Allow search engines to list',
+			'required'=>false
+		));
+		$builder->add('is_listed_in_index', 'checkbox', array(
+			'label'=>'List is directory for others to discover',
+			'required'=>false
+		));
 		
 		
 	}

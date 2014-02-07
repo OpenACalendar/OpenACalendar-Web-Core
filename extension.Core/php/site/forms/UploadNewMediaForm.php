@@ -20,12 +20,28 @@ use Symfony\Component\Form\FormError;
 class UploadNewMediaForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('media', 'file', array("mapped" => false, 'label'=>'Picture','required'=>false));
+		$builder->add('media', 'file', array(
+			"mapped" => false, 
+			'label'=>'Picture',
+			'required'=>false
+		));
 		
-		$builder->add('title', 'text', array('label'=>'Title','required'=>false));
+		$builder->add('title', 'text', array(
+			'label'=>'Title',
+			'required'=>false, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
 		
-		$builder->add('source_text', 'text', array('label'=>'Source','required'=>false));
-		$builder->add('sorce_url', 'url', array('label'=>'Source URL','required'=>false));
+		$builder->add('source_text', 'text', array(
+			'label'=>'Source',
+			'required'=>false, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
+		$builder->add('sorce_url', 'url', array(
+			'label'=>'Source URL',
+			'required'=>false, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
 	}
 	
 	public function getName() {

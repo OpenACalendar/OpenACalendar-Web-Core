@@ -30,9 +30,17 @@ class VenueNewForm extends AbstractType{
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('title', 'text', array('label'=>'Title','required'=>true, 'attr' => array('autofocus' => 'autofocus')));
+		$builder->add('title', 'text', array(
+				'label'=>'Title',
+				'required'=>true, 
+				'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
+				'attr' => array('autofocus' => 'autofocus')
+			));
 		
-		$builder->add('description', 'textarea', array('label'=>'Description','required'=>false));
+		$builder->add('description', 'textarea', array(
+				'label'=>'Description',
+				'required'=>false
+			));
 		
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);

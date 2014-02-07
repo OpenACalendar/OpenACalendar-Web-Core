@@ -23,7 +23,11 @@ class ForgotUserForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('details', 'text', array('label'=>'Email or Username','required'=>true, 'attr' => array('autofocus' => 'autofocus')));
+		$builder->add('details', 'text', array(
+			'label'=>'Email or Username',
+			'required'=>true, 
+			'attr' => array('autofocus' => 'autofocus')
+		));
 		
 	}
 	

@@ -24,10 +24,25 @@ class SignUpUserForm  extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		global $CONFIG;
 		
-		$builder->add('email', 'text', array('label'=>'Email','required'=>true));
-		$builder->add('username', 'text', array('label'=>'Username','required'=>true, 'attr' => array('autofocus' => 'autofocus')));
-		$builder->add('password1', 'password', array('label'=>'Password','required'=>true));
-		$builder->add('password2', 'password', array('label'=>'Repeat password','required'=>true));
+		$builder->add('email', 'text', array(
+			'label'=>'Email',
+			'required'=>true, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
+		$builder->add('username', 'text', array(
+			'label'=>'Username',
+			'required'=>true, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
+			'attr' => array('autofocus' => 'autofocus')
+		));
+		$builder->add('password1', 'password', array(
+			'label'=>'Password',
+			'required'=>true
+		));
+		$builder->add('password2', 'password', array(
+			'label'=>'Repeat password',
+			'required'=>true
+		));
 		
 		$builder->add("agree",
 				"checkbox",

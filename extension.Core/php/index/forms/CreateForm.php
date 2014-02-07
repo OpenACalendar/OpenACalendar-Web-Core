@@ -20,9 +20,18 @@ class CreateForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('title', 'text', array('label'=>'Title','required'=>true, 'attr' => array('autofocus' => 'autofocus')));
+		$builder->add('title', 'text', array(
+			'label'=>'Title',
+			'required'=>true, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
+			'attr' => array('autofocus' => 'autofocus')
+		));
 		
-		$builder->add('slug', 'text', array('label'=>'Address','required'=>true));
+		$builder->add('slug', 'text', array(
+			'label'=>'Address',
+			'required'=>true, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
 		
 		$myExtraFieldValidator = function(FormEvent $event){
 			global $CONFIG;

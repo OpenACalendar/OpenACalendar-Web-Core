@@ -24,9 +24,19 @@ class SendEmailNewForm extends AbstractType{
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('subject', 'text', array('label'=>'Subject','required'=>true));
-		$builder->add('introduction', 'textarea', array('label'=>'Introduction','required'=>true));
-		$builder->add('days_into_future', 'number', array('label'=>'Days into future','required'=>true));
+		$builder->add('subject', 'text', array(
+			'label'=>'Subject',
+			'required'=>true, 
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+		));
+		$builder->add('introduction', 'textarea', array(
+			'label'=>'Introduction',
+			'required'=>true
+		));
+		$builder->add('days_into_future', 'number', array(
+			'label'=>'Days into future',
+			'required'=>true
+		));
 		
 	}
 	
