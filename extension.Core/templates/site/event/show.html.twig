@@ -80,6 +80,9 @@
 				{% if group.url and group.url != event.url %}
 					<p class="groupDescription">More details at <a href="{{ group.url }}" target="_blank">{{ group.url | linkinfo }}</a></p>
 				{% endif %}
+				{% if group.twitterUsername %}
+					<p class="groupDescription">Follow: <a href="https://twitter.com/{{ group.twitterUsername }}">@{{ group.twitterUsername }}</a></p>
+				{% endif %}
 				{% if mediasForGroup[group.slug] %}
 					<ul class="mediaGrid">
 						{% for media in mediasForGroup[group.slug] %}
