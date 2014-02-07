@@ -71,8 +71,19 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 				'rfc2882utc'=>$event->getStartAt()->format('r'),
 				'rfc2882local'=>$startLocal->format('r'),
 				'displaylocal'=>$startLocal->format('D j M Y h:ia'),
+				'yearlocal'=>$startLocal->format('Y'),
+				'monthlocal'=>$startLocal->format('n'),
+				'daylocal'=>$startLocal->format('j'),
+				'hourlocal'=>$startLocal->format('G'),
+				'minutelocal'=>$startLocal->format('i'),
 				'rfc2882timezone'=>$startTimeZone->format('r'),
 				'displaytimezone'=>$startTimeZone->format('D j M Y h:ia'),
+				'yeartimezone'=>$startTimeZone->format('Y'),
+				'monthtimezone'=>$startTimeZone->format('n'),
+				'daytimezone'=>$startTimeZone->format('j'),
+				'hourtimezone'=>$startTimeZone->format('G'),
+				'minutetimezone'=>$startTimeZone->format('i'),
+			
 			);
 		
 		
@@ -85,8 +96,18 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 				'rfc2882utc'=>$event->getEndAt()->format('r'),
 				'rfc2882local'=>$endLocal->format('r'),
 				'displaylocal'=>$endLocal->format('D j M Y h:ia'),
+				'yearlocal'=>$endLocal->format('Y'),
+				'monthlocal'=>$endLocal->format('n'),
+				'daylocal'=>$endLocal->format('j'),
+				'hourlocal'=>$endLocal->format('G'),
+				'minutelocal'=>$endLocal->format('i'),
 				'rfc2882timezone'=>$endTimeZone->format('r'),
 				'displaytimezone'=>$endTimeZone->format('D j M Y h:ia'),
+				'yeartimezone'=>$endTimeZone->format('Y'),
+				'monthtimezone'=>$endTimeZone->format('n'),
+				'daytimezone'=>$endTimeZone->format('j'),
+				'hourtimezone'=>$endTimeZone->format('G'),
+				'minutetimezone'=>$endTimeZone->format('i'),
 			);
 		
 		
