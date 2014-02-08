@@ -108,9 +108,15 @@
 					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
 				</div>				
 			</div>
-			<img src="/{% if config.isSingleSiteMode %}img/logo.png{% else %}getLogo.php{% endif %}?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
-			<h1><a href="/">{{ currentSite.title }}</a></h1>
-			<h2><a href="/">{{ config.siteTitle }}</a></h2>
+			{% if config.isSingleSiteMode %}
+				<img src="/img/logo.png?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+				<h1><a href="/">{{ config.siteTitle }}</a></h1>
+			{% else %}
+				<img src="/getLogo.php?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+				<h1><a href="/">{{ currentSite.title }}</a></h1>
+				<h2><a href="/">{{ config.siteTitle }}</a></h2>
+			{% endif %}
+			
 			{% if group is defined %}
 				<h3 class="group"><a href="/group/{{ group.slug }}">{{ group.title }}</a></h3>
 			{% elseif curatedlist is defined %}
