@@ -114,20 +114,22 @@
 
 		
 		{% if childAreas and venue is null and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not event.isDeleted %}
-			<p>Is this in one of these places?</p>
-			
-			<form action="/event/{{ event.slug }}/moveToArea" method="post"  class="styled">
-				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-				<input type="hidden" name="submitted" value="yes">
-				
-				{% for childArea in childAreas %}
-					<p><label><input type="radio" name="area" value="{{ childArea.slug }}">{{ childArea.title }}</label></p>
-				{% endfor %}
-				
-				<p><label><input type="radio" name="area" value="new">Other:</label> <input type="text" name="newAreaTitle"></p>
-				
-				<input type="submit" value="Save">
-			</form>
+			<div id="userCanPushToChildAreaWrapper">
+				<p>Is this in one of these places?</p>
+				<form action="/event/{{ event.slug }}/moveToArea" method="post"  class="styled">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="submitted" value="yes">
+					<ul class="areas">
+						{% for childArea in childAreas %}
+							<li class="area">{% spaceless %}<span class="content"><label>
+								<input type="radio" name="area" value="{{ childArea.slug }}">{{ childArea.title }}
+							</label></span>{% endspaceless %}</li>
+						{% endfor %}
+						<li class="newarea"><label><input type="radio" name="area" value="new">Other:</label> <input type="text" name="newAreaTitle"></li>
+					</ul>
+					<input type="submit" value="Save">
+				</form>
+			</div>
 		{% endif %}
 		
 		<div class="dateAndLocationWrapper">

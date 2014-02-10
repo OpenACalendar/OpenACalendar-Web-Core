@@ -621,6 +621,13 @@ ul.newRecuringEvents li.newRecuringEvent .date {
 #curatedListsOnEventWrapper form {
   display: inline;
 }
+#userCanPushToChildAreaWrapper {
+  clear: both;
+  margin: 10px;
+  max-width: 600px;
+  padding: 10px;
+  background: #ddd;
+}
 #MapTimeControls input {
   width: 75px;
 }
