@@ -113,7 +113,22 @@
 		{% endif %}
 
 		
-
+		{% if childAreas and venue is null and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not event.isDeleted %}
+			<p>Is this in one of these places?</p>
+			
+			<form action="/event/{{ event.slug }}/moveToArea" method="post"  class="styled">
+				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+				<input type="hidden" name="submitted" value="yes">
+				
+				{% for childArea in childAreas %}
+					<p><label><input type="radio" name="area" value="{{ childArea.slug }}">{{ childArea.title }}</label></p>
+				{% endfor %}
+				
+				<p><label><input type="radio" name="area" value="new">Other:</label> <input type="text" name="newAreaTitle"></p>
+				
+				<input type="submit" value="Save">
+			</form>
+		{% endif %}
 		
 		<div class="dateAndLocationWrapper">
 			{% if event.isVirtual %}

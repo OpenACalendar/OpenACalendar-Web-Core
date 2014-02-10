@@ -92,7 +92,11 @@ $app->match('/event/{slug}/recur/monthly', "site\controllers\EventController::re
 		->assert('slug', '\d+'); 
 $app->match('/event/{slug}/recur/monthly/', "site\controllers\EventController::recurMonthly")
 		->assert('slug', '\d+'); 
-
+$app->match('/event/{slug}/moveToArea', "site\controllers\EventController::moveToArea")
+		->assert('slug', '\d+')
+		->before($appVerifiedEditorUserRequired)
+		->before($featurePhysicalEventsRequired)		
+		->before($canChangeSite); 
 
 $app->match('/group', "site\controllers\GroupListController::index"); 
 $app->match('/group/', "site\controllers\GroupListController::index"); 

@@ -16,6 +16,7 @@ use models\VenueModel;
 use models\AreaModel;
 use repositories\EventRepository;
 use repositories\EventHistoryRepository;
+use repositories\builders\AreaRepositoryBuilder;
 use repositories\GroupRepository;
 use repositories\CountryRepository;
 use repositories\VenueRepository;
@@ -43,7 +44,15 @@ class EventController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		$this->parameters = array('group'=>null,'venue'=>null,'country'=>null,'area'=>null, 'parentAreas'=>array(), 'importurl'=>null);
+		$this->parameters = array(
+			'group'=>null,
+			'venue'=>null,
+			'country'=>null,
+			'area'=>null, 
+			'parentAreas'=>array(), 
+			'childAreas'=>array(),
+			'importurl'=>null, 			
+		);
 
 		$eventRepository = new EventRepository();
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $slug);
@@ -76,7 +85,7 @@ class EventController {
 			while($checkArea) {
 				array_unshift($this->parameters['parentAreas'],$checkArea);
 				$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
-			}
+			}			
 		}
 		
 		if ($this->parameters['event']->getImportUrlId()) {
@@ -164,6 +173,18 @@ class EventController {
 		$uaerb->setPlanAttendingMaybeOnly(true);
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
+		
+		if ($this->parameters['country']) {
+			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder->setSite($app['currentSite']);
+			$areaRepoBuilder->setCountry($this->parameters['country']);
+			if ($this->parameters['area']) {
+				$areaRepoBuilder->setParentArea($this->parameters['area']);
+			} else {
+				$areaRepoBuilder->setNoParentArea(true);
+			}
+			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
+		}
 		
 		return $app['twig']->render('site/event/show.html.twig', $this->parameters);
 	}
@@ -607,6 +628,52 @@ class EventController {
 		
 	}
 	
+	
+	function moveToArea($slug, Request $request, Application $app) {
+		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+	
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+		
+		if (isset($_POST) && isset($_POST['area']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken() && 
+				!$this->parameters['venue']) {
+			
+			if ($_POST['area'] == 'new' && trim($_POST['newAreaTitle']) && $this->parameters['country']) {
+				
+				$area = new AreaModel();
+				$area->setTitle(trim($_POST['newAreaTitle']));
+				
+				$areaRepository = new AreaRepository();
+				$areaRepository->create($area, $this->parameters['area'], $app['currentSite'], $this->parameters['country'], userGetCurrent());
+				
+				$this->parameters['event']->setAreaId($area->getId());
+				$eventRepository = new EventRepository();
+				$eventRepository->edit($this->parameters['event'], userGetCurrent());
+				
+				$areaRepository->buildCacheAreaHasParent($area);
+				
+				$FLASHMESSAGES->addMessage('Thank you; event updated!');
+				
+			} elseif (intval($_POST['area'])) {
+				
+				$areaRepository = new AreaRepository();
+				$area = $areaRepository->loadBySlug($app['currentSite'], $_POST['area']);
+				if ($area) {
+					$this->parameters['event']->setAreaId($area->getId());
+					$eventRepository = new EventRepository();
+					$eventRepository->edit($this->parameters['event'], userGetCurrent());
+					$FLASHMESSAGES->addMessage('Thank you; event updated!');
+				}
+			
+			}
+			
+		}
+		
+		return $app->redirect("/event/".$this->parameters['event']->getSlug().'/');
+
+	}
 	
 }
 
