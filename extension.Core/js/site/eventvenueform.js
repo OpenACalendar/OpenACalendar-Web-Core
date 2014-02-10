@@ -158,6 +158,9 @@ function listVenues(venueList) {
 	html += '<li class="newvenue"><label>';
 	html += '<input type="radio" name="venue_id" value="new">Other new venue: ';
 	html += '</label><input type="text" name="newVenueTitle" class=""></li>'
+	html += '<li class="novenue"><label>';
+	html += '<input type="radio" name="venue_id" value="no">Exact Venue not known.';
+	html += '</label></li>'
 	$('#ChangeEventVenueList').empty().html(html);
 	$('#ChangeEventVenueList li.newvenue input[name="newVenueTitle"]').keyup(function () {
 		if ($(this).val().trim() != "") {

@@ -27,6 +27,7 @@ class EventModel {
 	protected $timezone = 'Europe/London';
 	protected $venue_id;
 	protected $country_id;
+	protected $area_id;
 	protected $import_url_id;
 	protected $import_id;
 	protected $url;
@@ -75,6 +76,7 @@ class EventModel {
 		$this->event_recur_set_id = $data['event_recur_set_id'];
 		$this->country_id = $data['country_id'];
 		$this->venue_id = $data['venue_id'];
+		$this->area_id = $data['area_id'];
 		$this->timezone = $data['timezone'];
 		$this->import_id = $data['import_id'];
 		$this->import_url_id = $data['import_url_id'];
@@ -244,6 +246,14 @@ class EventModel {
 		$this->venue_id = $venue_id;
 	}
 	
+	public function getAreaId() {
+		return $this->area_id;
+	}
+
+	public function setAreaId($area_id) {
+		$this->area_id = $area_id;
+	}
+
 	public function getImportUrlId() {
 		return $this->import_url_id;
 	}
@@ -317,6 +327,8 @@ class EventModel {
 		return $this;
 	}
 
+
+	
 }
 
 

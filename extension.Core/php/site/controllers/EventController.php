@@ -56,24 +56,27 @@ class EventController {
 			$this->parameters['country'] = $cr->loadById($this->parameters['event']->getCountryID());
 		}
 		
+		$areaID = null;
 		if ($this->parameters['event']->getVenueID()) {
 			$cr = new VenueRepository();
 			$this->parameters['venue'] = $cr->loadById($this->parameters['event']->getVenueID());
-			
-			if ($this->parameters['venue']->getAreaId()) {	
-				$ar = new AreaRepository();
-				$this->parameters['area'] = $ar->loadById($this->parameters['venue']->getAreaId());
-				if (!$this->parameters['area']) {
-					return false;
-				}
-
-				$checkArea = $this->parameters['area']->getParentAreaId() ? $ar->loadById($this->parameters['area']->getParentAreaId())  : null;
-				while($checkArea) {
-					array_unshift($this->parameters['parentAreas'],$checkArea);
-					$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
-				}
+			$areaID = $this->parameters['venue']->getAreaId();
+		} else if ($this->parameters['event']->getAreaId()) {
+			$areaID = $this->parameters['event']->getAreaId();
+		}
+		
+		if ($areaID) {	
+			$ar = new AreaRepository();
+			$this->parameters['area'] = $ar->loadById($areaID);
+			if (!$this->parameters['area']) {
+				return false;
 			}
-			
+
+			$checkArea = $this->parameters['area']->getParentAreaId() ? $ar->loadById($this->parameters['area']->getParentAreaId())  : null;
+			while($checkArea) {
+				array_unshift($this->parameters['parentAreas'],$checkArea);
+				$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
+			}
 		}
 		
 		if ($this->parameters['event']->getImportUrlId()) {
@@ -317,7 +320,7 @@ class EventController {
 			$venueRepository = new VenueRepository;
 			$areaRepository = new AreaRepository();
 			$countryRepository = new CountryRepository();
-			
+
 			if (isset($_POST['venue_id']) && $_POST['venue_id'] == 'new' && trim($_POST['newVenueTitle'])) {
 				
 				$area = null;
@@ -343,6 +346,33 @@ class EventController {
 				$venueRepository->create($venue, $app['currentSite'], userGetCurrent());
 				
 				$this->parameters['event']->setVenueId($venue->getId());
+				$eventRepository = new EventRepository();
+				$eventRepository->edit($this->parameters['event'], userGetCurrent());
+				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+				
+			} if (isset($_POST['venue_id']) && $_POST['venue_id'] == 'no') {
+				
+				$area = null;
+				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
+					foreach ($_POST['areas'] as $areaCode) {
+						if (substr($areaCode, 0, 9) == 'EXISTING:') {
+							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
+						} else if (substr($areaCode, 0, 4) == 'NEW:') {
+							$newArea = new AreaModel();
+							$newArea->setTitle(substr($areaCode, 4));
+							$areaRepository->create($newArea, $area, $app['currentSite'], $this->parameters['country'] , userGetCurrent());
+							$areaRepository->buildCacheAreaHasParent($newArea);
+							$area = $newArea;
+						}
+					}
+				}
+				
+				if ($area) {
+					$this->parameters['event']->setAreaId($area->getId());
+				} else {
+					$this->parameters['event']->setAreaId(null);
+				}
+				$this->parameters['event']->setVenueId(null);
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
 				return $app->redirect("/event/".$this->parameters['event']->getSlug());

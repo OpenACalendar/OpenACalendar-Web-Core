@@ -216,8 +216,9 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 				$areaids[] = $d['area_id'];
 			}
 			
-			$this->joins[] = " JOIN venue_information ON venue_information.id = event_information.venue_id ";
-			$this->where[] =  " venue_information.area_id IN (".  implode(",", $areaids).")";
+			$this->joins[] = " LEFT JOIN venue_information ON venue_information.id = event_information.venue_id ";
+			$this->where[] =  " (venue_information.area_id IN (".  implode(",", $areaids).") ".
+					"OR event_information.area_id IN (".  implode(",", $areaids).")) ";
 		}
 		
 		if ($this->venue) {
