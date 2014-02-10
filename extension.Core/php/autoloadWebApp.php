@@ -127,14 +127,14 @@ function userGetCurrent() {
 		if ($WEBSESSION->has('userID') && $WEBSESSION->get('userID') > 0) {
 			$uar = new UserAccountRepository();
 			$USER_CURRENT = $uar->loadByID($WEBSESSION->get('userID'));
-			if ($USER_CURRENT->getIsClosedBySysAdmin()) $USER_CURRENT = null;
+			if ($USER_CURRENT && $USER_CURRENT->getIsClosedBySysAdmin()) $USER_CURRENT = null;
 		} else if (isset($_COOKIE['userID']) && isset($_COOKIE['userKey'])) {
 			$uarmr = new UserAccountRememberMeRepository();
 			$uarm = $uarmr->loadByUserAccountIDAndAccessKey($_COOKIE['userID'], $_COOKIE['userKey']);
 			if ($uarm) {
 				$uar = new UserAccountRepository();
 				$USER_CURRENT = $uar->loadByID($uarm->getUserAccountId());
-				if ($USER_CURRENT->getIsClosedBySysAdmin()) $USER_CURRENT = null;
+				if ($USER_CURRENT && $USER_CURRENT->getIsClosedBySysAdmin()) $USER_CURRENT = null;
 				if ($USER_CURRENT) {
 					userLogIn($USER_CURRENT);
 				}
