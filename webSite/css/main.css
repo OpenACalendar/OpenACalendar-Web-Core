@@ -723,6 +723,16 @@ div.filterListVenueWrapper form.filterListVenue div.submitField input {
 #footer a:hover {
   color: black;
 }
+#footer ul li {
+  display: inline;
+  padding: 0 5px;
+}
+@media screen and (max-width: 750px) {
+  #footer ul li {
+    padding: 5px 0;
+    display: block;
+  }
+}
 .bigButtonContainer {
   padding: 6px;
   margin: 0;

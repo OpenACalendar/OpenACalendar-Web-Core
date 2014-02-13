@@ -285,6 +285,16 @@ table.pricing tr td.parameterValue {
 #footer a:hover {
   color: black;
 }
+#footer ul li {
+  display: inline;
+  padding: 0 5px;
+}
+@media screen and (max-width: 750px) {
+  #footer ul li {
+    padding: 5px 0;
+    display: block;
+  }
+}
 p {
   margin: 10px 0;
 }

@@ -118,7 +118,7 @@ body {
 	}
 }
 /** on wide screens have 2 columns here **/
-@media screen and (min-width: 750px) {
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
 	#bodyLeft{
 		width: 47%;
 		float: left;
@@ -322,7 +322,21 @@ table.pricing {
 	a:hover {
 		color: black;
 	}
+	ul {
+		li {
+			display: inline;
+			padding: 0 5px;
+		}
+	}
 }
+
+@media screen and (max-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	#footer ul li {
+		padding: 5px 0;
+		display: block;
+	}
+}
+
 
 @import("../commonIndexAndSite/main.less");
 
