@@ -118,6 +118,7 @@ class Config {
 	public $newSiteHasQuotaCode = 'BASIC';
 	
 	public $newUserRegisterAntiSpam = false;
+	public $contactFormAntiSpam = false;
 	
 	public $importURLExpireSecondsAfterLastEdit = 7776000; // 90 days
 	public $importURLSecondsBetweenImports = 36000; // 10 hours

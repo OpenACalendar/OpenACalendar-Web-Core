@@ -4,6 +4,7 @@ namespace index\controllers;
 
 use Silex\Application;
 use index\forms\CreateForm;
+use index\forms\ContactForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use models\ContactSupportModel;
@@ -128,38 +129,43 @@ class IndexController {
 		
 	}
 	
-	function contact(Application $app) {
-		global $WEBSESSION, $FLASHMESSAGES;
+	function contact(Application $app, Request $request) {
+		global $FLASHMESSAGES;
 		
+		$form = $app['form.factory']->create(new ContactForm());
 		
-		if (isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$data = $form->getData();
 
-			$contact = new ContactSupportModel();
-			$contact->setSubject($_POST['subject']);
-			$contact->setMessage($_POST['message']);
-			$contact->setEmail($_POST['email']);
-			if (userGetCurrent()) {
-				$contact->setUserAccountId(userGetCurrent()->getId());
+				$contact = new ContactSupportModel();
+				$contact->setSubject($data['subject']);
+				$contact->setMessage($data['message']);
+				$contact->setEmail($data['email']);
+				if (userGetCurrent()) {
+					$contact->setUserAccountId(userGetCurrent()->getId());
+				}
+				$contact->setIp($_SERVER['REMOTE_ADDR']);
+				$contact->setBrowser($_SERVER['HTTP_USER_AGENT']);			
+				if (isset($_POST['url']) && $_POST['url']) {
+					$contact->setIsSpamHoneypotFieldDetected(true);
+				}
+
+				$contactSupportRepository = new ContactSupportRepository();
+				$contactSupportRepository->create($contact);
+
+				if (!$contact->getIsSpam()) {
+					$contact->sendEmailToSupport($app, userGetCurrent());
+				}
+
+				$FLASHMESSAGES->addMessage('Your message has been sent');
+				return $app->redirect('/contact');		
 			}
-			$contact->setIp($_SERVER['REMOTE_ADDR']);
-			$contact->setBrowser($_SERVER['HTTP_USER_AGENT']);			
-			if (isset($_POST['url']) && $_POST['url']) {
-				$contact->setIsSpamHoneypotFieldDetected(true);
-			}
-			
-			$contactSupportRepository = new ContactSupportRepository();
-			$contactSupportRepository->create($contact);
-			
-			if (!$contact->getIsSpam()) {
-				$contact->sendEmailToSupport($app, userGetCurrent());
-			}
-			
-			$FLASHMESSAGES->addMessage('Your message has been sent');
-			return $app->redirect('/contact');
 		}
 		
-		
 		return $app['twig']->render('index/index/contact.html.twig', array(
+				'form'=>$form->createView(),
 			));
 		
 	}
