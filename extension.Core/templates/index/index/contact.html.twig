@@ -55,7 +55,9 @@
 		<input type="submit" value="Send Message">
 	</form>
 	
-	<h2>Social?</h2>
+	{% if config.contactTwitter or config.facebookPage or config.googlePlusPage %}
+		<h2>Social?</h2>
+	{% endif %}
 	
 	{% if config.contactTwitter %}
 		<p>Follow us on <a target="_blank" href="http://twitter.com/{{  config.contactTwitter }}">Twitter @{{  config.contactTwitter }}</a>.</p>
