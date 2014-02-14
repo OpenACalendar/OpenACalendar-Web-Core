@@ -107,6 +107,7 @@ class UserController {
 					if ($user->checkPassword($data['password'])) {
 						if ($user->getIsClosedBySysAdmin()) {
 							$form->addError(new FormError('There was a problem with this account and it has been closed: '.$user->getClosedBySysAdminReason()));
+							$app['monolog']->addError("Login attempt - account ".$user->getId().' - closed.');
 						} else {
 							userLogIn($user);
 
@@ -119,9 +120,11 @@ class UserController {
 							return $app->redirect("/");
 						}
 					} else {
+						$app['monolog']->addError("Login attempt - account ".$user->getId().' - password wrong.');
 						$form->addError(new FormError('password wrong'));
 					}
 				} else {
+					$app['monolog']->addError("Login attempt - unknown account");
 					$form->addError(new FormError('User not known'));
 				}
 				
@@ -150,9 +153,11 @@ class UserController {
 		}
 		
 		if (!$user) {
+			$app['monolog']->addError("Failed verifying account - no user");
 			return $app['twig']->render('index/user/verifyFail.html.twig', array());
 		}
 		if ($user->getIsEmailVerified()) {
+			$app['monolog']->addError("Failed verifying account - user ".$user->getId()." - already verified");
 			return $app['twig']->render('index/user/verifyDone.html.twig', array());
 		}
 		
@@ -170,6 +175,7 @@ class UserController {
 			$user->setIsEmailVerified(true);
 			return $app['twig']->render('index/user/verifyDone.html.twig', array());
 		} else {
+			$app['monolog']->addError("Failed verifying account - user ".$user->getId());
 			return $app['twig']->render('index/user/verifyFail.html.twig', array());
 		}
 
@@ -232,6 +238,7 @@ class UserController {
 		}
 		
 		if (!$user) {
+			$app['monolog']->addError("Failed resetting account - user not known");
 			return $app['twig']->render('index/user/resetFail.html.twig', array());
 		}
 		
@@ -239,10 +246,12 @@ class UserController {
 		$userAccountReset = $userAccountResetRepository->loadByUserAccountIDAndAccessKey($id, $code);
 		
 		if (!$userAccountReset) {
+			$app['monolog']->addError("Failed resetting account - user ".$user->getId()." - code wrong");
 			return $app['twig']->render('index/user/resetFail.html.twig', array());
 		}
 		
 		if ($userAccountReset->getIsAlreadyUsed()) {
+			$app['monolog']->addError("Failed resetting account - user ".$user->getId()." - code already used");
 			return $app['twig']->render('index/user/resetFail.html.twig', array());
 		}
 		
@@ -286,6 +295,7 @@ class UserController {
 		
 		
 		if (!$user) {
+			$app['monolog']->addError("Failed changing email - no account");
 			return $app['twig']->render('index/user/emails.fail.html.twig', array());
 		}
 		
@@ -293,6 +303,7 @@ class UserController {
 		$userAccountGSK = $userAccountGeneralSecurityKeyRepository->loadByUserAccountIDAndAccessKey($id, $code);
 		
 		if (!$userAccountGSK) {
+			$app['monolog']->addError("Failed changing email - account user ".$user->getId()." - code wrong");
 			return $app['twig']->render('index/user/emails.fail.html.twig', array());
 		}
 		

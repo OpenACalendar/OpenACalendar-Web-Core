@@ -413,18 +413,21 @@ class GroupController {
 		$userRepo = new UserAccountRepository();
 		$user = $userRepo->loadByID($userid);
 		if (!$user) {
+			$app['monolog']->addError("Failed stop watching group from email - no user ");
 			die("NO"); // TODO
 		}
 		
 		$userWatchesGroupStopRepo = new UserWatchesGroupStopRepository();
 		$userWatchesGroupStop = $userWatchesGroupStopRepo->loadByUserAccountIDAndGroupIDAndAccessKey($user->getId(), $this->parameters['group']->getId(), $code);
 		if (!$userWatchesGroupStop) {
+			$app['monolog']->addError("Failed stop watching group from email - user ".$user->getId()." - code wrong");
 			die("NO"); // TODO
 		}
 		
 		$userWatchesGroupRepo = new UserWatchesGroupRepository();
 		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $this->parameters['group']);
 		if (!$userWatchesGroup || !$userWatchesGroup->getIsWatching()) {
+			$app['monolog']->addError("Failed stop watching group from email - user ".$user->getId()." - not watching");
 			die("You don't watch this group"); // TODO
 		}
 		

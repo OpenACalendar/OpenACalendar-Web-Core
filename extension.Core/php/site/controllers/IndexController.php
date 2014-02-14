@@ -76,18 +76,21 @@ class IndexController {
 		$userRepo = new UserAccountRepository();
 		$user = $userRepo->loadByID($userid);
 		if (!$user) {
+			$app['monolog']->addError("Failed stop watching site from email - user not known");
 			die("NO"); // TODO
 		}
 		
 		$userWatchesSiteStopRepo = new UserWatchesSiteStopRepository();
 		$userWatchesSiteStop = $userWatchesSiteStopRepo->loadByUserAccountIDAndSiteIDAndAccessKey($user->getId(), $app['currentSite']->getId(), $code);
 		if (!$userWatchesSiteStop) {
+			$app['monolog']->addError("Failed stop watching site from email - user ".$user->getId()." - code wrong");
 			die("NO"); // TODO
 		}
 		
 		$userWatchesSiteRepo = new UserWatchesSiteRepository();
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $app['currentSite']);
 		if (!$userWatchesSite || !$userWatchesSite->getIsWatching()) {
+			$app['monolog']->addError("Failed stop watching site from email - user ".$user->getId()." - not watching");
 			die("You don't watch this site"); // TODO
 		}
 		
