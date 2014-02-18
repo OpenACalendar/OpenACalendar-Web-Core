@@ -73,6 +73,14 @@ class UserController {
 					$this->parameters['user']->setIsEditor(false);
 					$uar->edit($this->parameters['user']);
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+				} else if ($action->getCommand() == 'sysadmin' && $action->getParam(0) == 'yes') {
+					$this->parameters['user']->setIsSystemAdmin(true);
+					$uar->edit($this->parameters['user']);
+					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+				} else if ($action->getCommand() == 'sysadmin' && $action->getParam(0) == 'no') {
+					$this->parameters['user']->setIsSystemAdmin(false);
+					$uar->edit($this->parameters['user']);
+					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
 				} else if ($action->getCommand() == 'verifyemail') {
 					$uar->verifyEmail($this->parameters['user']);
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());					

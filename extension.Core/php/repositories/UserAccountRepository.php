@@ -167,10 +167,11 @@ class UserAccountRepository {
 	public function edit(UserAccountModel $user) {
 		global $DB;
 	
-		$stat = $DB->prepare("UPDATE user_account_information SET  is_editor=:is_editor WHERE id =:id");
+		$stat = $DB->prepare("UPDATE user_account_information SET  is_editor=:is_editor, is_system_admin=:is_system_admin WHERE id =:id");
 		$stat->execute(array( 
 				'id'=>$user->getId() ,
 				'is_editor'=>$user->getIsEditor()?1:0,
+				'is_system_admin'=>$user->getIsSystemAdmin()?1:0,
 			));
 
 			
