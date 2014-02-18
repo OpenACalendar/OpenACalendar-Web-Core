@@ -55,6 +55,32 @@ class AreaController {
 		$this->build($siteid, $slug, $request, $app);
 		
 				
+				
+		$form = $app['form.factory']->create(new ActionForm());
+		
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$data = $form->getData();
+				$action = new ActionParser($data['action']);
+			
+				if ($action->getCommand() == 'parentarea') {
+					$ar = new AreaRepository();
+					$newparentarea = $ar->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($newparentarea) {
+						// TODO make sure they aren't doing something dumb like moving under themselves or making a loop
+						$this->parameters['area']->setParentAreaId($newparentarea->getId());
+						$ar->edit($this->parameters['area'], userGetCurrent());
+					}
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+				}
+			}
+		}
+		
+		$this->parameters['form'] = $form->createView();
+			
+		
+		
 		return $app['twig']->render('sysadmin/area/index.html.twig', $this->parameters);		
 	
 	}
