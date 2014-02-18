@@ -1,0 +1,50 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ area.id }}</td>
+		</tr>
+		<tr>
+			<th>Slug</th>
+			<td>{{ area.slug }}</td>
+		</tr>
+		{% if parentarea %}
+		<tr>
+			<th>Parent Area</th>
+			<td><a href="/sysadmin/site/{{ site.id }}/area/{{ parentarea.slug }}">{{ parentarea.title }}</a></td>
+		</tr>
+		{% endif %}
+		<tr>
+			<th>Deleted</th>
+			<td>{% if area.isDeleted %}Deleted{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ area.title }}</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td>{{ area.description | nl2br }}</td>
+		</tr>
+		<tr>
+			<th>More</th>
+			<td>
+
+			</td>
+		</tr>		
+	</table>
+
+
+
+{% endblock %}
