@@ -17,7 +17,7 @@
 			{% include 'site/adminareas/index.areaAsTree.html.twig' with {'areaData':areaChild} %}
 		{% endfor %}
 		<li class="area">
-			<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new?parentAreaSlug={{ areaData.area.slug }}">New</a></span>
+			<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new?parentAreaSlug={{ areaData.area.slug }}">New area inside "{{ areaData.area.title }}"</a></span>
 		</li>
 	</ul>
 </li>
