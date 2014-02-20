@@ -72,7 +72,7 @@ function loadCountry(countryID) {
 						// must have space at start so items break over long lines
 						html += ' <li class="area"><span class="content"><a href="#" onclick="existingAreaChoosen('+data.childAreas[i].slug+'); return false;">' + escapeHTML(data.childAreas[i].title) + '</a></span><span class="aftercontent">&nbsp;</span></li>';
 					}
-					html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Other</a></span><span class="aftercontent">&nbsp;</span></li>'
+					html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Create new</a></span><span class="aftercontent">&nbsp;</span></li>'
 					html += '</ul></li>';
 				}
 				$('#ChangeEventAreaList').html(html);
@@ -114,7 +114,7 @@ function loadNextArea(areaSlug, includeCurrentArea) {
 						// must have space at start so items break over long lines
 						html += ' <li class="area"><span class="content"><a href="#" onclick="existingAreaChoosen('+data.childAreas[i].slug+'); return false;">' + escapeHTML(data.childAreas[i].title) + '</a></span><span class="aftercontent">&nbsp;</span></li>';
 					}
-					html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Other</a></span><span class="aftercontent">&nbsp;</span></li>'
+					html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Create new</a></span><span class="aftercontent">&nbsp;</span></li>'
 					html += '</ul></li>';
 				}
 				$('#ChangeEventAreaList').append(html);
