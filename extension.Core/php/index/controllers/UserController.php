@@ -121,11 +121,11 @@ class UserController {
 						}
 					} else {
 						$app['monolog']->addError("Login attempt - account ".$user->getId().' - password wrong.');
-						$form->addError(new FormError('password wrong'));
+						$form->addError(new FormError('User and password not recognised'));
 					}
 				} else {
 					$app['monolog']->addError("Login attempt - unknown account");
-					$form->addError(new FormError('User not known'));
+					$form->addError(new FormError('User and password not recognised'));
 				}
 				
 			}
