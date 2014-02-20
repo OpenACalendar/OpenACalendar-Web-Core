@@ -142,3 +142,7 @@ $app->match('/sysadmin/server', "sysadmin\controllers\ServerController::index");
 $app->match('/sysadmin/server/', "sysadmin\controllers\ServerController::index"); 
 
 $app->match('/sysadmin/server/phpinfo', "sysadmin\controllers\ServerController::phpinfo"); 
+
+$app->match('/sysadmin/config', "sysadmin\controllers\ConfigController::index"); 
+$app->match('/sysadmin/config', "sysadmin\controllers\ConfigController::index"); 
+

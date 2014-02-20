@@ -1,0 +1,436 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>Database</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>databaseType</th>
+			<td>{{ config.databaseType }}</td>
+		</tr>
+		<tr>
+			<th>databaseName</th>
+			<td>{{ config.databaseName }}</td>
+		</tr>
+		<tr>
+			<th>databaseHost</th>
+			<td>{{ config.databaseHost }}</td>
+		</tr>
+		<tr>
+			<th>databaseUser</th>
+			<td>{{ config.databaseUser }}</td>
+		</tr>
+		<tr>
+			<th>databasePassword</th>
+			<td>***********</td>
+		</tr>
+		<tr>
+			<th>Site Mode</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>isSingleSiteMode</th>
+			<td>{% if config.isSingleSiteMode %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>singleSiteID</th>
+			<td>{{ config.singleSiteID }}</td>
+		</tr>
+		<tr>
+			<th>siteSlugReserved</th>
+			<td>{{ config.siteSlugReserved | join(", ") }}</td>
+		</tr>
+		<tr>
+			<th>siteSlugDemoSite</th>
+			<td>{{ config.siteSlugDemoSite }}</td>
+		</tr>
+		<tr>
+			<th>Web Addresses</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>webIndexDomain</th>
+			<td>{{ config.webIndexDomain }}</td>
+		</tr>
+		<tr>
+			<th>webSiteDomain</th>
+			<td>{{ config.webSiteDomain }}</td>
+		</tr>
+		<tr>
+			<th>webSysAdminDomain</th>
+			<td>{{ config.webSysAdminDomain }}</td>
+		</tr>
+		<tr>
+			<th>hasSSL</th>
+			<td>{% if config.hasSSL %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>webIndexDomainSSL</th>
+			<td>{{ config.webIndexDomainSSL }}</td>
+		</tr>
+		<tr>
+			<th>webSiteDomainSSL</th>
+			<td>{{ config.webSiteDomainSSL }}</td>
+		</tr>
+		<tr>
+			<th>webSysAdminDomainSSL</th>
+			<td>{{ config.webSysAdminDomainSSL }}</td>
+		</tr>
+		<tr>
+			<th>webSiteAlternateDomains</th>
+			<td>{{ config.webSiteAlternateDomains | join(", ") }}</td>
+		</tr>
+		<tr>
+			<th>webCommonSessionDomain</th>
+			<td>{{ config.webCommonSessionDomain }}</td>
+		</tr>
+		<tr>
+			<th>Site State</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>isDebug</th>
+			<td>{% if config.isDebug %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>siteReadOnly</th>
+			<td>{% if config.siteReadOnly %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>siteReadOnlyReason</th>
+			<td>{{ config.siteReadOnlyReason }}</td>
+		</tr>
+		<tr>
+			<th>extensions</th>
+			<td>{{ config.extensions  | join(", ")}}</td>
+		</tr>		
+		<tr>
+			<th>Site identity and contact details</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>siteTitle</th>
+			<td>{{ config.siteTitle }}</td>
+		</tr>
+		<tr>
+			<th>emailFrom</th>
+			<td>{{ config.emailFrom }}</td>
+		</tr>
+		<tr>
+			<th>emailFromName</th>
+			<td>{{ config.emailFromName }}</td>
+		</tr>
+		<tr>
+			<th>contactTwitter</th>
+			<td>{{ config.contactTwitter }}</td>
+		</tr>
+		<tr>
+			<th>contactEmail</th>
+			<td>{{ config.contactEmail }}</td>
+		</tr>
+		<tr>
+			<th>contactEmailHTML</th>
+			<td>{{ config.contactEmailHTML }}</td>
+		</tr>
+		<tr>
+			<th>facebookPage</th>
+			<td>{{ config.facebookPage }}</td>
+		</tr>
+		<tr>
+			<th>googlePlusPage</th>
+			<td>{{ config.googlePlusPage }}</td>
+		</tr>
+		<tr>
+			<th>ourBlog</th>
+			<td>{{ config.ourBlog }}</td>
+		</tr>
+		<tr>
+			<th>Media</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>fileStoreLocation</th>
+			<td>{{ config.fileStoreLocation }}</td>
+		</tr>
+		<tr>
+			<th>mediaNormalSize</th>
+			<td>{{ config.mediaNormalSize }}</td>
+		</tr>
+		<tr>
+			<th>mediaThumbnailSize</th>
+			<td>{{ config.mediaThumbnailSize }}</td>
+		</tr>
+		<tr>
+			<th>mediaQualityJpeg</th>
+			<td>{{ config.mediaQualityJpeg }}</td>
+		</tr>
+		<tr>
+			<th>mediaQualityPng</th>
+			<td>{{ config.mediaQualityPng }}</td>
+		</tr>
+		<tr>
+			<th>mediaBrowserCacheExpiresInseconds</th>
+			<td>{{ config.mediaBrowserCacheExpiresInseconds }}
+				({{ (config.mediaBrowserCacheExpiresInseconds / 60) | round (0,'floor') }} mins)
+				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60) | round (0,'floor') }} hours)
+				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60/24 )| round (0,'floor') }} days)
+			</td>
+		</tr>
+		<tr>
+			<th>cacheSiteLogoInSeconds</th>
+			<td>{{ config.cacheSiteLogoInSeconds }}
+				({{ (config.cacheSiteLogoInSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.cacheSiteLogoInSeconds / 60/60) | round (0,'floor') }} hours)
+				({{ (config.cacheSiteLogoInSeconds / 60/60/24 )| round (0,'floor') }} days)</td>
+		</tr>
+		<tr>
+			<th>Security and Antispam</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>allowNewUsersToRegister</th>
+			<td>{% if config.allowNewUsersToRegister %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>newUsersAreEditors</th>
+			<td>{% if config.newUsersAreEditors %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>bcryptRounds</th>
+			<td>{{ config.bcryptRounds }}</td>
+		</tr>
+		<tr>
+			<th>newUserRegisterAntiSpam</th>
+			<td>{% if config.newUserRegisterAntiSpam %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>contactFormAntiSpam</th>
+			<td>{% if config.contactFormAntiSpam %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Sys admin interface</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>sysAdminExtraPassword</th>
+			<td>**********</td>
+		</tr>
+		<tr>
+			<th>sysAdminTimeZone</th>
+			<td>{{ config.sysAdminTimeZone }}</td>
+		</tr>
+		<tr>
+			<th>sysAdminLogInTimeOutSeconds</th>
+			<td>{{ config.sysAdminLogInTimeOutSeconds }}
+				({{ (config.sysAdminLogInTimeOutSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.sysAdminLogInTimeOutSeconds / 60/60) | round (0,'floor') }} hours)</td>
+		</tr>
+		<tr>
+			<th>Analytics</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>piwikServerHTTP</th>
+			<td>{{ config.piwikServerHTTP }}</td>
+		</tr>
+		<tr>
+			<th>piwikServerHTTPS</th>
+			<td>{{ config.piwikServerHTTPS }}</td>
+		</tr>
+		<tr>
+			<th>piwikSiteID</th>
+			<td>{{ config.piwikSiteID }}</td>
+		</tr>
+		<tr>
+			<th>New Sites</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureMap</th>
+			<td>{% if config.newSiteHasFeatureMap %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureCuratedList</th>
+			<td>{% if config.newSiteHasFeatureCuratedList %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureImporter</th>
+			<td>{% if config.newSiteHasFeatureImporter %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureGroup</th>
+			<td>{% if config.newSiteHasFeatureGroup %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureVirtualEvents</th>
+			<td>{% if config.newSiteHasFeatureVirtualEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeaturePhysicalEvents</th>
+			<td>{% if config.newSiteHasFeaturePhysicalEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>newSitePromptEmailsDaysInAdvance</th>
+			<td>{{ config.newSitePromptEmailsDaysInAdvance }}</td>
+		</tr>
+		<tr>
+			<th>newSiteHasQuotaCode</th>
+			<td>{{ config.newSiteHasQuotaCode }}</td>
+		</tr>
+		<tr>
+			<th>Misc</th>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>cacheFeedsInSeconds</th>
+			<td>{{ config.cacheFeedsInSeconds }}
+				({{ (config.cacheFeedsInSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.cacheFeedsInSeconds / 60/60) | round (0,'floor') }} hours)
+				({{ (config.cacheFeedsInSeconds / 60/60/24 )| round (0,'floor') }} days)</td>
+		</tr>
+		<tr>
+			<th>clockDisplayDefault</th>
+			<td>{{ config.clockDisplayDefault }}</td>
+		</tr>
+		<tr>
+			<th>assetsVersion</th>
+			<td>{{ config.assetsVersion }}</td>
+		</tr>
+		<tr>
+			<th>eventsCantBeMoreThanYearsInFuture</th>
+			<td>{{ config.eventsCantBeMoreThanYearsInFuture }}</td>
+		</tr>
+		<tr>
+			<th>eventsCantBeMoreThanYearsInPast</th>
+			<td>{{ config.eventsCantBeMoreThanYearsInPast }}</td>
+		</tr>
+		<tr>
+			<th>calendarEarliestYearAllowed</th>
+			<td>{{ config.calendarEarliestYearAllowed }}</td>
+		</tr>
+		<tr>
+			<th>userAccountVerificationSecondsBetweenAllowedSends</th>
+			<td>{{ config.userAccountVerificationSecondsBetweenAllowedSends }}
+				({{ (config.userAccountVerificationSecondsBetweenAllowedSends / 60) | round (0,'floor') }} mins)
+				({{ (config.userAccountVerificationSecondsBetweenAllowedSends / 60/60) | round (0,'floor') }} hours)</td>
+		</tr>
+		<tr>
+			<th>tmpFileCacheLocation</th>
+			<td>{{ config.tmpFileCacheLocation }}</td>
+		</tr>
+		<tr>
+			<th>tmpFileCacheCreationPermissions</th>
+			<td>{{ config.tmpFileCacheCreationPermissions }}</td>
+		</tr>
+		<tr>
+			<th>logFile</th>
+			<td>{{ config.logFile }}</td>
+		</tr>
+		<tr>
+			<th>logFileParseDateTimeRange</th>
+			<td>{{ config.logFileParseDateTimeRange }}</td>
+		</tr>
+		<tr>
+			<th>sessionLastsInSeconds</th>
+			<td>{{ config.sessionLastsInSeconds }}
+				({{ (config.sessionLastsInSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.sessionLastsInSeconds / 60/60) | round (0,'floor') }} hours)
+				({{ (config.sessionLastsInSeconds / 60/60/24 )| round (0,'floor') }} days)</td>
+		</tr>
+		<tr>
+			<th>resetEmailsGapBetweenInSeconds</th>
+			<td>{{ config.resetEmailsGapBetweenInSeconds }}
+				({{ (config.resetEmailsGapBetweenInSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.resetEmailsGapBetweenInSeconds / 60/60) | round (0,'floor') }} hours)</td>
+		</tr>
+		<tr>
+			<th>userWatchesGroupPromptEmailShowEvents</th>
+			<td>{{ config.userWatchesGroupPromptEmailShowEvents }}</td>
+		</tr>
+		<tr>
+			<th>userWatchesSitePromptEmailShowEvents</th>
+			<td>{{ config.userWatchesSitePromptEmailShowEvents }}</td>
+		</tr>
+		<tr>
+			<th>userWatchesSiteGroupPromptEmailShowEvents</th>
+			<td>{{ config.userWatchesSiteGroupPromptEmailShowEvents }}</td>
+		</tr>
+		<tr>
+			<th>userWatchesPromptEmailSafeGapDays</th>
+			<td>{{ config.userWatchesPromptEmailSafeGapDays }}</td>
+		</tr>
+		<tr>
+			<th>importURLExpireSecondsAfterLastEdit</th>
+			<td>{{ config.importURLExpireSecondsAfterLastEdit }}
+				({{ (config.importURLExpireSecondsAfterLastEdit / 60) | round (0,'floor') }} mins)
+				({{ (config.importURLExpireSecondsAfterLastEdit / 60/60) | round (0,'floor') }} hours)
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)</td>
+		</tr>
+		<tr>
+			<th>importURLSecondsBetweenImports</th>
+			<td>{{ config.importURLSecondsBetweenImports }}
+				({{ (config.importURLSecondsBetweenImports / 60) | round (0,'floor') }} mins)
+				({{ (config.importURLSecondsBetweenImports / 60/60) | round (0,'floor') }} hours)
+				({{ (config.importURLSecondsBetweenImports / 60/60/24 )| round (0,'floor') }} days)</td>
+		</tr>
+		<tr>
+			<th>importURLAllowEventsSecondsIntoFuture</th>
+			<td>{{ config.importURLAllowEventsSecondsIntoFuture }}
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60) | round (0,'floor') }} mins)
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60 )| round (0,'floor') }} hours)
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)</td>
+		</tr>
+		<tr>
+			<th>upcomingEventsForUserEmailTextListsEvents</th>
+			<td>{{ config.upcomingEventsForUserEmailTextListsEvents }}</td>
+		</tr>
+		<tr>
+			<th>upcomingEventsForUserEmailHTMLListsEvents</th>
+			<td>{{ config.upcomingEventsForUserEmailHTMLListsEvents }}</td>
+		</tr>
+		<tr>
+			<th>siteSeenCookieStoreForDays</th>
+			<td>{{ config.siteSeenCookieStoreForDays }}</td>
+		</tr>
+		<tr>
+			<th>sponsor1MightExist</th>
+			<td>{% if config.sponsor1MightExist %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>sponsor1Text</th>
+			<td>{{ config.sponsor1Text }}</td>
+		</tr>
+		<tr>
+			<th>sponsor1Html</th>
+			<td>{{ config.sponsor1Html }}</td>
+		</tr>
+		<tr>
+			<th>sponsor1Link</th>
+			<td>{{ config.sponsor1Link }}</td>
+		</tr>
+		<tr>
+			<th>sponsor1Image</th>
+			<td>{{ config.sponsor1Image }}</td>
+		</tr>
+		<tr>
+			<th>apiExtraHeader1Html</th>
+			<td>{{ config.apiExtraHeader1Html }}</td>
+		</tr>
+		<tr>
+			<th>apiExtraHeader1Text</th>
+			<td>{{ config.apiExtraHeader1Text }}</td>
+		</tr>
+	</table>
+
+{% endblock %}
+
