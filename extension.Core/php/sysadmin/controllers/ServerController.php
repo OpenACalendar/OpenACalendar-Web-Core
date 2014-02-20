@@ -27,7 +27,9 @@ class ServerController {
 	function phpinfo(Request $request, Application $app) {
 		
 		phpinfo();
-		return null;
+		
+		// now return a space, so silex thinks there is some output to send.
+		return " ";
 		
 	}
 	
