@@ -110,4 +110,7 @@ $app->match('/me/calendar/{year}/{month}/', "index\controllers\CurrentUserContro
 
 $app->match("/site/{siteSlug}/event/{eventSlug}/myAttendance.json", "index\controllers\SiteController::eventMyAttendanceJson");
 
+$app->match("/person/{username}", "index\controllers\PublicUserController::index");
+$app->match("/person/{username}/", "index\controllers\PublicUserController::index");
+
 
