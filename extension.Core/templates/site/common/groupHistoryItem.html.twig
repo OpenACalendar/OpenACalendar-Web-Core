@@ -12,7 +12,40 @@
 		</a>
 	</div>
 	<div class="title"><a href="/group/{{ historyItem.groupSlug }}">{{ historyItem.title }}</a></div>
-	<div>{{ historyItem.description | nl2br  }}</div>
+	{% if historyItem.isAnyChangeFlagsUnknown %}
+		<div>{{ historyItem.description | nl2br  }}</div>
+	{% else %}
+		{% if historyItem.getTitleChanged %}
+			<div class="fieldChanged">
+				<div class="field">Title changed:</div>
+				<div class="value">{{ historyItem.title }}</div>
+			</div>
+		{%endif %}
+		{% if historyItem.getDescriptionChanged %}
+			<div class="fieldChanged">
+				<div class="field">Description changed:</div>
+				<div class="value">{{ historyItem.description }}</div>
+			</div>
+		{%endif %}
+		{% if historyItem.getUrlChanged %}
+			<div class="fieldChanged">
+				<div class="field">URL changed:</div>
+				<div class="value">{{ historyItem.url }}</div>
+			</div>
+		{%endif %}
+		{% if historyItem.getTwitterUsernameChanged %}
+			<div class="fieldChanged">
+				<div class="field">Twitter changed:</div>
+				<div class="value">{{ historyItem.twitterUsername }}</div>
+			</div>
+		{%endif %}
+		{% if historyItem.getIsDeletedChanged %}
+			<div class="fieldChanged">
+				<div class="field">Status changed:</div>
+				<div class="value">{% if historyItem.getIsDeleted %}Deleted!{% else %}Restored!{% endif %}</div>
+			</div>
+		{%endif %}
+	{% endif %}
 	<div class="created">
 		Edited at 
 		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
