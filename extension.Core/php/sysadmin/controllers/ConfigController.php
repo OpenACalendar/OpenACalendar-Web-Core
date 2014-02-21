@@ -18,8 +18,10 @@ class ConfigController {
 	
 	
 	function index(Request $request, Application $app) {
+		global $CONFIG;
 		
 		return $app['twig']->render('sysadmin/config/index.html.twig', array(
+				'configCheck'=>new \ConfigCheck($CONFIG),
 			));
 		
 	}

@@ -16,19 +16,23 @@
 		</tr>
 		<tr>
 			<th>databaseType</th>
-			<td>{{ config.databaseType }}</td>
+			<td>{{ config.databaseType }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseType'} %}</td>
 		</tr>
 		<tr>
 			<th>databaseName</th>
-			<td>{{ config.databaseName }}</td>
+			<td>{{ config.databaseName }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseName'} %}</td>
 		</tr>
 		<tr>
 			<th>databaseHost</th>
-			<td>{{ config.databaseHost }}</td>
+			<td>{{ config.databaseHost }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseHost'} %}</td>
 		</tr>
 		<tr>
 			<th>databaseUser</th>
-			<td>{{ config.databaseUser }}</td>
+			<td>{{ config.databaseUser }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseUser'} %}</td>
 		</tr>
 		<tr>
 			<th>databasePassword</th>
@@ -40,19 +44,23 @@
 		</tr>
 		<tr>
 			<th>isSingleSiteMode</th>
-			<td>{% if config.isSingleSiteMode %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.isSingleSiteMode %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'isSingleSiteMode'} %}</td>
 		</tr>
 		<tr>
 			<th>singleSiteID</th>
-			<td>{{ config.singleSiteID }}</td>
+			<td>{{ config.singleSiteID }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'singleSiteID'} %}</td>
 		</tr>
 		<tr>
 			<th>siteSlugReserved</th>
-			<td>{{ config.siteSlugReserved | join(", ") }}</td>
+			<td>{{ config.siteSlugReserved | join(", ") }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteSlugReserved'} %}</td>
 		</tr>
 		<tr>
 			<th>siteSlugDemoSite</th>
-			<td>{{ config.siteSlugDemoSite }}</td>
+			<td>{{ config.siteSlugDemoSite }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteSlugDemoSite'} %}</td>
 		</tr>
 		<tr>
 			<th>Web Addresses</th>
@@ -60,39 +68,50 @@
 		</tr>
 		<tr>
 			<th>webIndexDomain</th>
-			<td>{{ config.webIndexDomain }}</td>
+			<td>{{ config.webIndexDomain }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webIndexDomain'} %}</td>
 		</tr>
 		<tr>
 			<th>webSiteDomain</th>
-			<td>{{ config.webSiteDomain }}</td>
+			<td>{{ config.webSiteDomain }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomain'} %}</td>
 		</tr>
 		<tr>
 			<th>webSysAdminDomain</th>
-			<td>{{ config.webSysAdminDomain }}</td>
+			<td>{{ config.webSysAdminDomain }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSysAdminDomain'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>hasSSL</th>
-			<td>{% if config.hasSSL %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.hasSSL %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'hasSSL'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>webIndexDomainSSL</th>
-			<td>{{ config.webIndexDomainSSL }}</td>
+			<td>{{ config.webIndexDomainSSL }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webIndexDomainSSL'} %}</td>
 		</tr>
 		<tr>
 			<th>webSiteDomainSSL</th>
-			<td>{{ config.webSiteDomainSSL }}</td>
+			<td>{{ config.webSiteDomainSSL }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomainSSL'} %}</td>
 		</tr>
 		<tr>
 			<th>webSysAdminDomainSSL</th>
-			<td>{{ config.webSysAdminDomainSSL }}</td>
+			<td>{{ config.webSysAdminDomainSSL }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSysAdminDomainSSL'} %}</td>
 		</tr>
 		<tr>
 			<th>webSiteAlternateDomains</th>
-			<td>{{ config.webSiteAlternateDomains | join(", ") }}</td>
+			<td>{{ config.webSiteAlternateDomains | join(", ") }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteAlternateDomains'} %}</td>
 		</tr>
 		<tr>
 			<th>webCommonSessionDomain</th>
-			<td>{{ config.webCommonSessionDomain }}</td>
+			<td>{{ config.webCommonSessionDomain }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webCommonSessionDomain'} %}</td>
 		</tr>
 		<tr>
 			<th>Site State</th>
@@ -100,19 +119,23 @@
 		</tr>
 		<tr>
 			<th>isDebug</th>
-			<td>{% if config.isDebug %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.isDebug %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'isDebug'} %}</td>
 		</tr>
 		<tr>
 			<th>siteReadOnly</th>
-			<td>{% if config.siteReadOnly %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.siteReadOnly %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteReadOnly'} %}</td>
 		</tr>
 		<tr>
 			<th>siteReadOnlyReason</th>
-			<td>{{ config.siteReadOnlyReason }}</td>
+			<td>{{ config.siteReadOnlyReason }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteReadOnlyReason'} %}</td>
 		</tr>
 		<tr>
 			<th>extensions</th>
-			<td>{{ config.extensions  | join(", ")}}</td>
+			<td>{{ config.extensions  | join(", ")}}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'extensions'} %}</td>
 		</tr>		
 		<tr>
 			<th>Site identity and contact details</th>
@@ -120,39 +143,48 @@
 		</tr>
 		<tr>
 			<th>siteTitle</th>
-			<td>{{ config.siteTitle }}</td>
+			<td>{{ config.siteTitle }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteTitle'} %}</td>
 		</tr>
 		<tr>
 			<th>emailFrom</th>
-			<td>{{ config.emailFrom }}</td>
+			<td>{{ config.emailFrom }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'emailFrom'} %}</td>
 		</tr>
 		<tr>
 			<th>emailFromName</th>
-			<td>{{ config.emailFromName }}</td>
+			<td>{{ config.emailFromName }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'emailFromName'} %}</td>
 		</tr>
 		<tr>
 			<th>contactTwitter</th>
-			<td>{{ config.contactTwitter }}</td>
+			<td>{{ config.contactTwitter }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'contactTwitter'} %}</td>
 		</tr>
 		<tr>
 			<th>contactEmail</th>
-			<td>{{ config.contactEmail }}</td>
+			<td>{{ config.contactEmail }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'contactEmail'} %}</td>
 		</tr>
 		<tr>
 			<th>contactEmailHTML</th>
-			<td>{{ config.contactEmailHTML }}</td>
+			<td>{{ config.contactEmailHTML }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'contactEmailHTML'} %}</td>
 		</tr>
 		<tr>
 			<th>facebookPage</th>
-			<td>{{ config.facebookPage }}</td>
+			<td>{{ config.facebookPage }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'facebookPage'} %}</td>
 		</tr>
 		<tr>
 			<th>googlePlusPage</th>
-			<td>{{ config.googlePlusPage }}</td>
+			<td>{{ config.googlePlusPage }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'googlePlusPage'} %}</td>
 		</tr>
 		<tr>
 			<th>ourBlog</th>
-			<td>{{ config.ourBlog }}</td>
+			<td>{{ config.ourBlog }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'ourBlog'} %}</td>
 		</tr>
 		<tr>
 			<th>Media</th>
@@ -160,23 +192,28 @@
 		</tr>
 		<tr>
 			<th>fileStoreLocation</th>
-			<td>{{ config.fileStoreLocation }}</td>
+			<td>{{ config.fileStoreLocation }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'fileStoreLocation'} %}</td>
 		</tr>
 		<tr>
 			<th>mediaNormalSize</th>
-			<td>{{ config.mediaNormalSize }}</td>
+			<td>{{ config.mediaNormalSize }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaNormalSize'} %}</td>
 		</tr>
 		<tr>
 			<th>mediaThumbnailSize</th>
-			<td>{{ config.mediaThumbnailSize }}</td>
+			<td>{{ config.mediaThumbnailSize }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaThumbnailSize'} %}</td>
 		</tr>
 		<tr>
 			<th>mediaQualityJpeg</th>
-			<td>{{ config.mediaQualityJpeg }}</td>
+			<td>{{ config.mediaQualityJpeg }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaQualityJpeg'} %}</td>
 		</tr>
 		<tr>
 			<th>mediaQualityPng</th>
-			<td>{{ config.mediaQualityPng }}</td>
+			<td>{{ config.mediaQualityPng }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaQualityPng'} %}</td>
 		</tr>
 		<tr>
 			<th>mediaBrowserCacheExpiresInseconds</th>
@@ -184,6 +221,7 @@
 				({{ (config.mediaBrowserCacheExpiresInseconds / 60) | round (0,'floor') }} mins)
 				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60) | round (0,'floor') }} hours)
 				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaBrowserCacheExpiresInseconds'} %}
 			</td>
 		</tr>
 		<tr>
@@ -191,7 +229,8 @@
 			<td>{{ config.cacheSiteLogoInSeconds }}
 				({{ (config.cacheSiteLogoInSeconds / 60) | round (0,'floor') }} mins)
 				({{ (config.cacheSiteLogoInSeconds / 60/60) | round (0,'floor') }} hours)
-				({{ (config.cacheSiteLogoInSeconds / 60/60/24 )| round (0,'floor') }} days)</td>
+				({{ (config.cacheSiteLogoInSeconds / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'cacheSiteLogoInSeconds'} %}</td>
 		</tr>
 		<tr>
 			<th>Security and Antispam</th>
@@ -199,11 +238,14 @@
 		</tr>
 		<tr>
 			<th>allowNewUsersToRegister</th>
-			<td>{% if config.allowNewUsersToRegister %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.allowNewUsersToRegister %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'allowNewUsersToRegister'} %}</td>
 		</tr>
 		<tr>
 			<th>newUsersAreEditors</th>
-			<td>{% if config.newUsersAreEditors %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newUsersAreEditors %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newUsersAreEditors'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>bcryptRounds</th>
@@ -211,11 +253,15 @@
 		</tr>
 		<tr>
 			<th>newUserRegisterAntiSpam</th>
-			<td>{% if config.newUserRegisterAntiSpam %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newUserRegisterAntiSpam %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newUserRegisterAntiSpam'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>contactFormAntiSpam</th>
-			<td>{% if config.contactFormAntiSpam %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.contactFormAntiSpam %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'contactFormAntiSpam'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>Sys admin interface</th>
@@ -227,13 +273,17 @@
 		</tr>
 		<tr>
 			<th>sysAdminTimeZone</th>
-			<td>{{ config.sysAdminTimeZone }}</td>
+			<td>{{ config.sysAdminTimeZone }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminTimeZone'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>sysAdminLogInTimeOutSeconds</th>
 			<td>{{ config.sysAdminLogInTimeOutSeconds }}
 				({{ (config.sysAdminLogInTimeOutSeconds / 60) | round (0,'floor') }} mins)
-				({{ (config.sysAdminLogInTimeOutSeconds / 60/60) | round (0,'floor') }} hours)</td>
+				({{ (config.sysAdminLogInTimeOutSeconds / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminLogInTimeOutSeconds'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>Analytics</th>
@@ -241,15 +291,21 @@
 		</tr>
 		<tr>
 			<th>piwikServerHTTP</th>
-			<td>{{ config.piwikServerHTTP }}</td>
+			<td>{{ config.piwikServerHTTP }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikServerHTTP'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>piwikServerHTTPS</th>
-			<td>{{ config.piwikServerHTTPS }}</td>
+			<td>{{ config.piwikServerHTTPS }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikServerHTTPS'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>piwikSiteID</th>
-			<td>{{ config.piwikSiteID }}</td>
+			<td>{{ config.piwikSiteID }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikSiteID'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>New Sites</th>
@@ -257,35 +313,51 @@
 		</tr>
 		<tr>
 			<th>newSiteHasFeatureMap</th>
-			<td>{% if config.newSiteHasFeatureMap %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newSiteHasFeatureMap %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureMap'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>newSiteHasFeatureCuratedList</th>
-			<td>{% if config.newSiteHasFeatureCuratedList %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newSiteHasFeatureCuratedList %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureCuratedList'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>newSiteHasFeatureImporter</th>
-			<td>{% if config.newSiteHasFeatureImporter %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newSiteHasFeatureImporter %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureImporter'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>newSiteHasFeatureGroup</th>
-			<td>{% if config.newSiteHasFeatureGroup %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newSiteHasFeatureGroup %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureGroup'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>newSiteHasFeatureVirtualEvents</th>
-			<td>{% if config.newSiteHasFeatureVirtualEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newSiteHasFeatureVirtualEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureVirtualEvents'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>newSiteHasFeaturePhysicalEvents</th>
-			<td>{% if config.newSiteHasFeaturePhysicalEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.newSiteHasFeaturePhysicalEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeaturePhysicalEvents'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>newSitePromptEmailsDaysInAdvance</th>
-			<td>{{ config.newSitePromptEmailsDaysInAdvance }}</td>
+			<td>{{ config.newSitePromptEmailsDaysInAdvance }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSitePromptEmailsDaysInAdvance'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>newSiteHasQuotaCode</th>
-			<td>{{ config.newSiteHasQuotaCode }}</td>
+			<td>{{ config.newSiteHasQuotaCode }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasQuotaCode'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>Misc</th>
@@ -296,139 +368,199 @@
 			<td>{{ config.cacheFeedsInSeconds }}
 				({{ (config.cacheFeedsInSeconds / 60) | round (0,'floor') }} mins)
 				({{ (config.cacheFeedsInSeconds / 60/60) | round (0,'floor') }} hours)
-				({{ (config.cacheFeedsInSeconds / 60/60/24 )| round (0,'floor') }} days)</td>
+				({{ (config.cacheFeedsInSeconds / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'cacheFeedsInSeconds'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>clockDisplayDefault</th>
-			<td>{{ config.clockDisplayDefault }}</td>
+			<td>{{ config.clockDisplayDefault }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'clockDisplayDefault'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>assetsVersion</th>
-			<td>{{ config.assetsVersion }}</td>
+			<td>{{ config.assetsVersion }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'assetsVersion'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>eventsCantBeMoreThanYearsInFuture</th>
-			<td>{{ config.eventsCantBeMoreThanYearsInFuture }}</td>
+			<td>{{ config.eventsCantBeMoreThanYearsInFuture }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'eventsCantBeMoreThanYearsInFuture'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>eventsCantBeMoreThanYearsInPast</th>
-			<td>{{ config.eventsCantBeMoreThanYearsInPast }}</td>
+			<td>{{ config.eventsCantBeMoreThanYearsInPast }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'eventsCantBeMoreThanYearsInPast'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>calendarEarliestYearAllowed</th>
-			<td>{{ config.calendarEarliestYearAllowed }}</td>
+			<td>{{ config.calendarEarliestYearAllowed }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'calendarEarliestYearAllowed'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>userAccountVerificationSecondsBetweenAllowedSends</th>
 			<td>{{ config.userAccountVerificationSecondsBetweenAllowedSends }}
 				({{ (config.userAccountVerificationSecondsBetweenAllowedSends / 60) | round (0,'floor') }} mins)
-				({{ (config.userAccountVerificationSecondsBetweenAllowedSends / 60/60) | round (0,'floor') }} hours)</td>
+				({{ (config.userAccountVerificationSecondsBetweenAllowedSends / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'userAccountVerificationSecondsBetweenAllowedSends'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>tmpFileCacheLocation</th>
-			<td>{{ config.tmpFileCacheLocation }}</td>
+			<td>{{ config.tmpFileCacheLocation }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'tmpFileCacheLocation'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>tmpFileCacheCreationPermissions</th>
-			<td>{{ config.tmpFileCacheCreationPermissions }}</td>
+			<td>{{ config.tmpFileCacheCreationPermissions }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'tmpFileCacheCreationPermissions'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>logFile</th>
-			<td>{{ config.logFile }}</td>
+			<td>{{ config.logFile }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logFile'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>logFileParseDateTimeRange</th>
-			<td>{{ config.logFileParseDateTimeRange }}</td>
+			<td>{{ config.logFileParseDateTimeRange }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logFileParseDateTimeRange'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>sessionLastsInSeconds</th>
 			<td>{{ config.sessionLastsInSeconds }}
 				({{ (config.sessionLastsInSeconds / 60) | round (0,'floor') }} mins)
 				({{ (config.sessionLastsInSeconds / 60/60) | round (0,'floor') }} hours)
-				({{ (config.sessionLastsInSeconds / 60/60/24 )| round (0,'floor') }} days)</td>
+				({{ (config.sessionLastsInSeconds / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sessionLastsInSeconds'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>resetEmailsGapBetweenInSeconds</th>
 			<td>{{ config.resetEmailsGapBetweenInSeconds }}
 				({{ (config.resetEmailsGapBetweenInSeconds / 60) | round (0,'floor') }} mins)
-				({{ (config.resetEmailsGapBetweenInSeconds / 60/60) | round (0,'floor') }} hours)</td>
+				({{ (config.resetEmailsGapBetweenInSeconds / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'resetEmailsGapBetweenInSeconds'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>userWatchesGroupPromptEmailShowEvents</th>
-			<td>{{ config.userWatchesGroupPromptEmailShowEvents }}</td>
+			<td>{{ config.userWatchesGroupPromptEmailShowEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'userWatchesGroupPromptEmailShowEvents'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>userWatchesSitePromptEmailShowEvents</th>
-			<td>{{ config.userWatchesSitePromptEmailShowEvents }}</td>
+			<td>{{ config.userWatchesSitePromptEmailShowEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'userWatchesSitePromptEmailShowEvents'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>userWatchesSiteGroupPromptEmailShowEvents</th>
-			<td>{{ config.userWatchesSiteGroupPromptEmailShowEvents }}</td>
+			<td>{{ config.userWatchesSiteGroupPromptEmailShowEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'userWatchesSiteGroupPromptEmailShowEvents'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>userWatchesPromptEmailSafeGapDays</th>
-			<td>{{ config.userWatchesPromptEmailSafeGapDays }}</td>
+			<td>{{ config.userWatchesPromptEmailSafeGapDays }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'userWatchesPromptEmailSafeGapDays'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>importURLExpireSecondsAfterLastEdit</th>
 			<td>{{ config.importURLExpireSecondsAfterLastEdit }}
 				({{ (config.importURLExpireSecondsAfterLastEdit / 60) | round (0,'floor') }} mins)
 				({{ (config.importURLExpireSecondsAfterLastEdit / 60/60) | round (0,'floor') }} hours)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)</td>
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>importURLSecondsBetweenImports</th>
 			<td>{{ config.importURLSecondsBetweenImports }}
 				({{ (config.importURLSecondsBetweenImports / 60) | round (0,'floor') }} mins)
 				({{ (config.importURLSecondsBetweenImports / 60/60) | round (0,'floor') }} hours)
-				({{ (config.importURLSecondsBetweenImports / 60/60/24 )| round (0,'floor') }} days)</td>
+				({{ (config.importURLSecondsBetweenImports / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLSecondsBetweenImports'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>importURLAllowEventsSecondsIntoFuture</th>
 			<td>{{ config.importURLAllowEventsSecondsIntoFuture }}
 				({{ (config.importURLAllowEventsSecondsIntoFuture / 60) | round (0,'floor') }} mins)
 				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60 )| round (0,'floor') }} hours)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)</td>
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>upcomingEventsForUserEmailTextListsEvents</th>
-			<td>{{ config.upcomingEventsForUserEmailTextListsEvents }}</td>
+			<td>{{ config.upcomingEventsForUserEmailTextListsEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'upcomingEventsForUserEmailTextListsEvents'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>upcomingEventsForUserEmailHTMLListsEvents</th>
-			<td>{{ config.upcomingEventsForUserEmailHTMLListsEvents }}</td>
+			<td>{{ config.upcomingEventsForUserEmailHTMLListsEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'upcomingEventsForUserEmailHTMLListsEvents'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>siteSeenCookieStoreForDays</th>
-			<td>{{ config.siteSeenCookieStoreForDays }}</td>
+			<td>{{ config.siteSeenCookieStoreForDays }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteSeenCookieStoreForDays'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>sponsor1MightExist</th>
-			<td>{% if config.sponsor1MightExist %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<td>{% if config.sponsor1MightExist %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sponsor1MightExist'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>sponsor1Text</th>
-			<td>{{ config.sponsor1Text }}</td>
+			<td>{{ config.sponsor1Text }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sponsor1Text'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>sponsor1Html</th>
-			<td>{{ config.sponsor1Html }}</td>
+			<td>{{ config.sponsor1Html }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sponsor1Html'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>sponsor1Link</th>
-			<td>{{ config.sponsor1Link }}</td>
+			<td>{{ config.sponsor1Link }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sponsor1Link'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>sponsor1Image</th>
-			<td>{{ config.sponsor1Image }}</td>
+			<td>{{ config.sponsor1Image }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sponsor1Image'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>apiExtraHeader1Html</th>
-			<td>{{ config.apiExtraHeader1Html }}</td>
+			<td>{{ config.apiExtraHeader1Html }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'apiExtraHeader1Html'} %}
+			</td>
 		</tr>
 		<tr>
 			<th>apiExtraHeader1Text</th>
-			<td>{{ config.apiExtraHeader1Text }}</td>
+			<td>{{ config.apiExtraHeader1Text }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'apiExtraHeader1Text'} %}
+			</td>
 		</tr>
 	</table>
 
