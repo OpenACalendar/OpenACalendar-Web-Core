@@ -20,7 +20,13 @@ class ConfigCheck {
 	}
 	
 	public function getErrors($field) {
-		return array();
+		$out = array();
+		
+		if (in_array($field, array('webIndexDomain','webSiteDomain')) && $this->config->isSingleSiteMode && $this->config->webIndexDomain != $this->config->webSiteDomain) {
+			$out[] = 'In single site mode, webIndexDomain and webSiteDomain should be the same!';
+		}
+		
+		return $out;
 	}
 
 	
