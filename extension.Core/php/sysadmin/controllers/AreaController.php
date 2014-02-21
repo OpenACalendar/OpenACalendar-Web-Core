@@ -70,7 +70,7 @@ class AreaController {
 					if ($newparentarea) {
 						// TODO make sure they aren't doing something dumb like moving under themselves or making a loop
 						$this->parameters['area']->setParentAreaId($newparentarea->getId());
-						$ar->edit($this->parameters['area'], userGetCurrent());
+						$ar->editParentArea($this->parameters['area'], userGetCurrent());
 					}
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
 				}
