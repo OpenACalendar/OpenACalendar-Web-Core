@@ -6,10 +6,13 @@ use Silex\Application;
 use site\forms\EventNewForm;
 use site\forms\EventEditForm;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use models\SiteModel;
 use models\EventModel;
 use repositories\EventRepository;
 use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
+use \SearchForDuplicateEvents;
+
 
 /**
  *
@@ -121,6 +124,35 @@ class EventNewController {
 		
 	}
 	
+	
+	public function creatingThisNewEvent(Request $request, Application $app) {
+		
+		$data = array('duplicates'=>array());
+
+		$event = new EventModel();
+		$event->setDefaultOptionsFromSite($app['currentSite']);
+		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone']), $event);
+		$form->bind($request);
+		
+		// TODO set group somehow
+		
+		$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite']);
+		
+		foreach($searchForDuplicateEvents->getPossibleDuplicates() as $dupeEvent) {
+			$data['duplicates'][] = array(
+				'slug'=>$dupeEvent->getSlug(),
+				'summary'=>$dupeEvent->getSummary(),
+			);
+		}
+		
+		
+		
+		
+		$response = new Response(json_encode($data));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;		
+		
+	}
 }
 
 

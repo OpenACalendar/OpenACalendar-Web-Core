@@ -18,7 +18,7 @@
 	
 
 
-	<form action="#" method="post" class="styled">
+	<form action="#" method="post" class="styled" id="NewEventForm">
 
 		{{ form_errors(form) }}
 
@@ -49,6 +49,15 @@
 
 		{{ form_rest(form) }}
 
+		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
+			<div class="labelWrapper">Final check ...</div>
+			<div class="widgetWrapperPlacementOnly">
+				<p>Is this event maybe a duplicate of one of these?</p>
+				<ul id="DuplicateEventsList" class="events"></ul>
+			</div>
+			<div class="after"></div>
+		</div>
+		
 		<input type="submit"  value="Save" />	
 	</form>
 {% endblock %}
@@ -56,5 +65,6 @@
 
 {% block scripts %}
 	<script type="text/javascript" src="/js/eventform.js?v={{ config.assetsVersion }}"></script>
+	<script type="text/javascript" src="/js/eventform.new.js?v={{ config.assetsVersion }}"></script>
 {% endblock %}
 

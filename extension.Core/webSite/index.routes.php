@@ -41,6 +41,9 @@ $app->match('/event/calendar/{year}/{month}/', "site\controllers\EventListContro
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
 
+$app->match('/event/creatingThisNewEvent.json',"site\controllers\EventNewController::creatingThisNewEvent")
+		->before($appUserRequired);
+
 $app->match('/event/new', "site\controllers\EventNewController::newEvent")
 		->before($appVerifiedEditorUserRequired)
 		->before($canChangeSite); 
