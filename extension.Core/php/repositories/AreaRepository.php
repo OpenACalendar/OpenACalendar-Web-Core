@@ -173,7 +173,6 @@ class AreaRepository {
 					'id'=>$area->getId(),
 					'title'=>$area->getTitle(),
 					'description'=>$area->getDescription(),
-					'parent_area_id'=>$area->getParentAreaId(),
 				));
 			
 			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at) VALUES ".
@@ -204,12 +203,10 @@ class AreaRepository {
 			$DB->beginTransaction();
 
 			$stat = $DB->prepare("UPDATE area_information  SET ".
-					"title=:title,description=:description, is_deleted='0', parent_area_id=:parent_area_id ".
+					"parent_area_id=:parent_area_id ".
 					"WHERE id=:id");
 			$stat->execute(array(
 					'id'=>$area->getId(),
-					'title'=>$area->getTitle(),
-					'description'=>$area->getDescription(),
 					'parent_area_id'=>$area->getParentAreaId(),
 				));
 			
