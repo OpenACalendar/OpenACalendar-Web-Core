@@ -173,7 +173,6 @@ class AreaRepository {
 					'id'=>$area->getId(),
 					'title'=>$area->getTitle(),
 					'description'=>$area->getDescription(),
-					'parent_area_id'=>$area->getParentAreaId(),
 				));
 			
 			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at) VALUES ".

@@ -14,7 +14,25 @@ require_once APP_ROOT_DIR.'/extension.Core/php/autoloadCLI.php';
  */
 
 use repositories\GroupHistoryRepository;
+use repositories\AreaHistoryRepository;
 use models\GroupHistoryModel;
+use models\AreaHistoryModel;
+
+
+################################################################################
+
+print "Areas ";
+$areaHistoryRepo = new AreaHistoryRepository();
+$stat = $DB->prepare("SELECT * FROM area_history");
+$stat->execute();
+while($data = $stat->fetch()) {
+	$areaHistory = new AreaHistoryModel();
+	$areaHistory->setFromDataBaseRow($data);
+	
+	$areaHistoryRepo->ensureChangedFlagsAreSet($areaHistory);
+	print ".";
+}
+print "\n\n";
 
 
 ################################################################################
