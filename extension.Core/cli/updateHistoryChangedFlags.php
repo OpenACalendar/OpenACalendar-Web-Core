@@ -15,8 +15,10 @@ require_once APP_ROOT_DIR.'/extension.Core/php/autoloadCLI.php';
 
 use repositories\GroupHistoryRepository;
 use repositories\AreaHistoryRepository;
+use repositories\VenueHistoryRepository;
 use models\GroupHistoryModel;
 use models\AreaHistoryModel;
+use models\VenueHistoryModel;
 
 
 ################################################################################
@@ -46,6 +48,21 @@ while($data = $stat->fetch()) {
 	$groupHistory->setFromDataBaseRow($data);
 	
 	$groupHistoryRepo->ensureChangedFlagsAreSet($groupHistory);
+	print ".";
+}
+print "\n\n";
+
+################################################################################
+
+print "Venues ";
+$venueHistoryRepo = new VenueHistoryRepository();
+$stat = $DB->prepare("SELECT * FROM venue_history");
+$stat->execute();
+while($data = $stat->fetch()) {
+	$venueHistory = new VenueHistoryModel();
+	$venueHistory->setFromDataBaseRow($data);
+	
+	$venueHistoryRepo->ensureChangedFlagsAreSet($venueHistory);
 	print ".";
 }
 print "\n\n";
