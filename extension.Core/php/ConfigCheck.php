@@ -26,6 +26,14 @@ class ConfigCheck {
 			$out[] = 'In single site mode, webIndexDomain and webSiteDomain should be the same!';
 		}
 		
+		if ($field == 'emailFrom' && !filter_var($this->config->emailFrom, FILTER_VALIDATE_EMAIL)) {
+			$out[] = 'This must be a valid email address!';
+		}
+		
+		if ($field == 'contactEmail' && !filter_var($this->config->contactEmail, FILTER_VALIDATE_EMAIL)) {
+			$out[] = 'This must be a valid email address!';
+		}
+		
 		return $out;
 	}
 

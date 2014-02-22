@@ -54,5 +54,30 @@ class ConfigCheckTest extends \PHPUnit_Framework_TestCase {
 		
 	}
 	
+	
+	
+	function testEmailsOk() {
+		$config = new Config();
+		$config->emailFrom = 'test@test.com';
+		$config->contactEmail = 'test@test.com';
+		
+		$configCheck = new ConfigCheck($config);
+		
+		$this->assertEquals(0, count($configCheck->getErrors('emailFrom')));
+		$this->assertEquals(0, count($configCheck->getErrors('contactEmail')));
+	}
+	
+	
+	function testEmailsBad() {
+		$config = new Config();
+		$config->emailFrom = 'test@test';
+		$config->contactEmail = 'testtest.com';
+		
+		$configCheck = new ConfigCheck($config);
+		
+		$this->assertEquals(1, count($configCheck->getErrors('emailFrom')));
+		$this->assertEquals(1, count($configCheck->getErrors('contactEmail')));
+	}
+	
 }
 
