@@ -12,7 +12,40 @@
 		</a>
 	</div>
 	<div class="title"><a href="/venue/{{ historyItem.venueSlug }}">{{ historyItem.title }}</a></div>
-	<div>{{ historyItem.description | nl2br  }}</div>
+	{% if historyItem.isAnyChangeFlagsUnknown %}
+		<div>{{ historyItem.description | nl2br  }}</div>
+	{% else %}
+		{% if historyItem.getTitleChanged %}
+			<div class="fieldChanged">
+				<div class="field">Title changed:</div>
+				<div class="value">{{ historyItem.title }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getDescriptionChanged %}
+			<div class="fieldChanged">
+				<div class="field">Description changed:</div>
+				<div class="value">{{ historyItem.description }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getLatChanged or historyItem.getLatChanged %}
+			<div class="fieldChanged">
+				<div class="field">Position on map changed:</div>
+				<div class="value">Yes ({{ historyItem.lat }},{{ historyItem.lng }})</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getAreaIdChanged %}
+			<div class="fieldChanged">
+				<div class="field">Area changed:</div>
+				<div class="value">Yes</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getCountryIdChanged %}
+			<div class="fieldChanged">
+				<div class="field">Country changed:</div>
+				<div class="value">Yes</div>
+			</div>
+		{% endif %}
+	{% endif %}
 	<div class="created">
 		Edited at 
 		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
