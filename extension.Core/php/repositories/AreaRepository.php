@@ -201,14 +201,12 @@ class AreaRepository {
 		}
 		try {
 			$DB->beginTransaction();
-
+			
 			$stat = $DB->prepare("UPDATE area_information  SET ".
-					"title=:title,description=:description, is_deleted='0', parent_area_id=:parent_area_id ".
+					"parent_area_id=:parent_area_id ".
 					"WHERE id=:id");
 			$stat->execute(array(
 					'id'=>$area->getId(),
-					'title'=>$area->getTitle(),
-					'description'=>$area->getDescription(),
 					'parent_area_id'=>$area->getParentAreaId(),
 				));
 			
