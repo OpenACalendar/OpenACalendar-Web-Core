@@ -42,6 +42,17 @@ class VenueNewForm extends AbstractType{
 				'required'=>false
 			));
 		
+		$builder->add('address', 'textarea', array(
+				'label'=>'Address',
+				'required'=>false
+			));
+		
+		// TODO use proper label for country
+		$builder->add('address_code', 'text', array(
+				'label'=>'Postcode',
+				'required'=>false
+			));
+		
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);
 		$countries = array();

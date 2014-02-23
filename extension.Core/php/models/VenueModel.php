@@ -19,6 +19,8 @@ class VenueModel {
 	protected $slug;
 	protected $title;
 	protected $description;
+	protected $address;
+	protected $address_code;
 	protected $lat;
 	protected $lng;
 	protected $country_id;
@@ -32,6 +34,8 @@ class VenueModel {
 		$this->slug = $data['slug'];
 		$this->title = $data['title'];
 		$this->description = $data['description'];
+		$this->address = $data['address'];
+		$this->address_code = $data['address_code'];
 		$this->lat = $data['lat'];
 		$this->lng = $data['lng'];
 		$this->country_id = $data['country_id'];
@@ -78,6 +82,22 @@ class VenueModel {
 
 	public function setDescription($description) {
 		$this->description = $description;
+	}
+	
+	public function getAddress() {
+		return $this->address;
+	}
+
+	public function setAddress($address) {
+		$this->address = $address;
+	}
+
+	public function getAddressCode() {
+		return $this->address_code;
+	}
+
+	public function setAddressCode($address_code) {
+		$this->address_code = $address_code;
 	}
 
 	public function getLat() {

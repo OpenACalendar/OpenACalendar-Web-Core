@@ -38,12 +38,14 @@
 
 		<div class="locationWrapper">
 			<div class="location">
+				{% if venue.address %}<div class="address">{{ venue.address | nl2br }}</div>{% endif %}
 				{% if area %}
 					<div class="area"><a href="/area/{{ area.slug }}">{{ area.title }}</a></div>
 				{% endif %}
 				{% for parentArea in parentAreas|reverse %}
 					<div class="area"><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></div>
 				{% endfor %}	
+				{% if venue.addressCode %}<div class="addressCode">{{ venue.addressCode  }}</div>{% endif %}
 				{% if country %}
 					<div class="country">
 						<a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a>

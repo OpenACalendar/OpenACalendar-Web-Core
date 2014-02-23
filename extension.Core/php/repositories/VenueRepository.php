@@ -29,8 +29,8 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, title,description,lat,lng,country_id,area_id,created_at) ".
-					"VALUES (:site_id, :slug, :title, :description, :lat, :lng,:country_id, :area_id,:created_at) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, title,description,lat,lng,country_id,area_id,created_at,address,address_code) ".
+					"VALUES (:site_id, :slug, :title, :description, :lat, :lng,:country_id, :area_id,:created_at,:address,:address_code) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$venue->getSlug(),
@@ -38,6 +38,8 @@ class VenueRepository {
 					'lat'=>$venue->getLat(),
 					'lng'=>$venue->getLng(),
 					'description'=>$venue->getDescription(),
+					'address'=>$venue->getAddress(),
+					'address_code'=>$venue->getAddressCode(),
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase()
@@ -45,14 +47,16 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at) VALUES ".
-					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at)");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,address,address_code) VALUES ".
+					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:address,:address_code)");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'lat'=>$venue->getLat(),
 					'lng'=>$venue->getLng(),
 					'description'=>$venue->getDescription(),
+					'address'=>$venue->getAddress(),
+					'address_code'=>$venue->getAddressCode(),
 					'user_account_id'=>$creator->getId(),				
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
@@ -98,25 +102,31 @@ class VenueRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE venue_information  SET title=:title,description=:description,lat=:lat,lng=:lng , country_id=:country_id, area_id=:area_id, is_deleted='0' WHERE id=:id");
+			$stat = $DB->prepare("UPDATE venue_information  SET title=:title,description=:description,".
+					"lat=:lat,lng=:lng , country_id=:country_id, area_id=:area_id, address=:address, ".
+					"address_code=:address_code, is_deleted='0' WHERE id=:id");
 			$stat->execute(array(
 					'id'=>$venue->getId(),
 					'title'=>$venue->getTitle(),
 					'lat'=>$venue->getLat(),
 					'lng'=>$venue->getLng(),
 					'description'=>$venue->getDescription(),
+					'address'=>$venue->getAddress(),
+					'address_code'=>$venue->getAddressCode(),
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, area_id, description, user_account_id  , created_at) VALUES ".
-					"(:venue_id, :title, :lat, :lng, :country_id,:area_id,:description,  :user_account_id  , :created_at)");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, area_id, description, user_account_id  , created_at,address,address_code) VALUES ".
+					"(:venue_id, :title, :lat, :lng, :country_id,:area_id,:description,  :user_account_id  , :created_at,:address,:address_code)");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>$venue->getTitle(),
 					'lat'=>$venue->getLat(),
 					'lng'=>$venue->getLng(),
 					'description'=>$venue->getDescription(),
+					'address'=>$venue->getAddress(),
+					'address_code'=>$venue->getAddressCode(),
 					'user_account_id'=>$creator->getId(),				
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
