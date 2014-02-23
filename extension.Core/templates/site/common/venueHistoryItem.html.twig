@@ -24,7 +24,19 @@
 		{% if historyItem.getDescriptionChanged %}
 			<div class="fieldChanged">
 				<div class="field">Description changed:</div>
-				<div class="value">{{ historyItem.description }}</div>
+				<div class="value">{{ historyItem.description | nl2br }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getAddressChanged %}
+			<div class="fieldChanged">
+				<div class="field">Address changed:</div>
+				<div class="value">{{ historyItem.address | nl2br }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getAddressCodeChanged %}
+			<div class="fieldChanged">
+				<div class="field">Address postcode changed:</div>
+				<div class="value">{{ historyItem.addressCode }}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getLatChanged or historyItem.getLatChanged %}

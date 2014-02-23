@@ -43,6 +43,8 @@ class VenueHistoryRepository {
 				" lng_changed = :lng_changed,  ".
 				" country_id_changed = :country_id_changed,  ".
 				" area_id_changed = :area_id_changed,  ".
+				" address_changed = :address_changed,  ".
+				" address_code_changed = :address_code_changed,  ".
 				" is_deleted_changed = :is_deleted_changed  ".
 				"WHERE venue_id = :id AND created_at = :created_at");
 		$statUpdate->execute(array(
@@ -55,6 +57,8 @@ class VenueHistoryRepository {
 				'is_deleted_changed'=> $venuehistory->getIsDeletedChanged() ? 1 : -1,
 				'country_id_changed'=> $venuehistory->getCountryIdChanged() ? 1 : -1,
 				'area_id_changed'=> $venuehistory->getAreaIdChanged() ? 1 : -1,
+				'address_changed'=> $venuehistory->getAddressChanged() ? 1 : -1,
+				'address_code_changed'=> $venuehistory->getAddressCodeChanged() ? 1 : -1,
 			));
 	}
 	
