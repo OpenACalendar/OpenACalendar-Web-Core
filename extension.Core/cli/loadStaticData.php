@@ -19,7 +19,15 @@ $data = array();
 foreach(explode("\n", file_get_contents(APP_ROOT_DIR.'/staticdatatoload/iso3166.tab')) as $line) {
 	if ($line && substr($line, 0,1) != '#') {
 		$bits = explode("\t", $line) ;
-		$data[$bits[0]] = array('Title'=>$bits[1],'TimeZones'=>array(),'MaxLat'=>null,'MaxLng'=>null,'MinLat'=>null,'MinLng'=>null );
+		$data[$bits[0]] = array(
+			'Title'=>$bits[1],
+			'TimeZones'=>array(),
+			'MaxLat'=>null,
+			'MaxLng'=>null,
+			'MinLat'=>null,
+			'MinLng'=>null,
+			'AddressCodeLabel'=>'Postcode'
+		);
 	}
 }
 
@@ -44,6 +52,16 @@ foreach(explode("\n", file_get_contents(APP_ROOT_DIR.'/staticdatatoload/countryB
 	}
 }
 
+# Step - Load Address Code Label
+foreach(explode("\n", file_get_contents(APP_ROOT_DIR.'/staticdatatoload/countryAddressCodeLabels.tab')) as $line) {
+	if ($line && substr($line, 0,1) != '#') {
+		$bits = explode("\t", $line) ;
+		if ($bits[0] && isset($data[$bits[0]])) {
+			$data[$bits[0]]['AddressCodeLabel'] = $bits[1];
+		}
+	}
+}
+
 
 //var_dump($data);
 
@@ -53,10 +71,10 @@ $data['GB']['Title'] = 'United Kingdom';
 
 # Step - Save to DB
 $statCheck = $DB->prepare("SELECT * FROM country WHERE two_char_code=:code");
-$statInsert = $DB->prepare("INSERT INTO country (two_char_code,title,timezones,max_lat,max_lng,min_lat,min_lng) ".
-		"VALUES (:two_char_code,:title,:timezones,:max_lat,:max_lng,:min_lat,:min_lng)");
+$statInsert = $DB->prepare("INSERT INTO country (two_char_code,title,timezones,max_lat,max_lng,min_lat,min_lng,address_code_label) ".
+		"VALUES (:two_char_code,:title,:timezones,:max_lat,:max_lng,:min_lat,:min_lng,:address_code_label)");
 $statUpdate = $DB->prepare("UPDATE country SET title=:title, timezones=:timezones,  ".
-		" max_lat=:max_lat, max_lng=:max_lng, min_lat=:min_lat, min_lng=:min_lng  ".
+		" max_lat=:max_lat, max_lng=:max_lng, min_lat=:min_lat, min_lng=:min_lng, address_code_label=:address_code_label  ".
 		" WHERE two_char_code=:two_char_code");
 foreach($data as $code=>$countryData) {
 	$statCheck->execute(array('code'=>$code));
@@ -68,6 +86,7 @@ foreach($data as $code=>$countryData) {
 			'max_lng'=>$countryData['MaxLng'],
 			'min_lat'=>$countryData['MinLat'],
 			'min_lng'=>$countryData['MinLng'],
+			'address_code_label'=>$countryData['AddressCodeLabel'],
 		);
 	if ($statCheck->rowCount() > 0) {
 		$statUpdate->execute($params);
