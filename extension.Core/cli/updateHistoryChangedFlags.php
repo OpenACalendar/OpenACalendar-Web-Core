@@ -16,22 +16,24 @@ require_once APP_ROOT_DIR.'/extension.Core/php/autoloadCLI.php';
 use repositories\GroupHistoryRepository;
 use repositories\AreaHistoryRepository;
 use repositories\VenueHistoryRepository;
+use repositories\SiteHistoryRepository;
 use models\GroupHistoryModel;
 use models\AreaHistoryModel;
 use models\VenueHistoryModel;
+use models\SiteHistoryModel;
 
 
 ################################################################################
 
-print "Areas ";
-$areaHistoryRepo = new AreaHistoryRepository();
-$stat = $DB->prepare("SELECT * FROM area_history");
+print "Sites ";
+$siteHistoryRepo = new SiteHistoryRepository();
+$stat = $DB->prepare("SELECT * FROM site_history");
 $stat->execute();
 while($data = $stat->fetch()) {
-	$areaHistory = new AreaHistoryModel();
-	$areaHistory->setFromDataBaseRow($data);
+	$siteHistory = new SiteHistoryModel();
+	$siteHistory->setFromDataBaseRow($data);
 	
-	$areaHistoryRepo->ensureChangedFlagsAreSet($areaHistory);
+	$siteHistoryRepo->ensureChangedFlagsAreSet($siteHistory);
 	print ".";
 }
 print "\n\n";

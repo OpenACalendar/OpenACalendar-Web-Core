@@ -47,7 +47,7 @@ class SiteModel {
 	
 	protected $site_quota_id;
 
-
+	protected $created_at;
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
@@ -74,6 +74,8 @@ class SiteModel {
 		$this->is_feature_virtual_events = (boolean)$data['is_feature_virtual_events'];
 		$this->is_feature_physical_events = (boolean)$data['is_feature_physical_events'];
 		$this->is_feature_group = (boolean)$data['is_feature_group'];
+		$utc = new \DateTimeZone("UTC");
+		$this->created_at = new \DateTime($data['created_at'], $utc);		
 	}
 	
 	public function getId() {
@@ -295,6 +297,13 @@ class SiteModel {
 	}
 
 
+	public function getCreatedAt() {
+		return $this->created_at;
+	}
+
+	public function setCreatedAt($created_at) {
+		$this->created_at = $created_at;
+	}
 
 
 }
