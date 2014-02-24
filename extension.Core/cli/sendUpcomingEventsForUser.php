@@ -65,6 +65,10 @@ foreach($userRepoBuilder->fetchAll() as $user) {
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.html', $messageHTML);
 			$message->addPart($messageHTML,'text/html');
+						
+			$headers = $message->getHeaders();
+			$unsubURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+			$headers->addTextHeader('List-Unsubscribe', $unsubURL);
 			
 			if ($actuallySend) {
 				print " ... sending\n";
