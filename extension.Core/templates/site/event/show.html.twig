@@ -26,7 +26,7 @@
 		{% endif %}
 		{% if not event.isImported %}
 			{% if not event.isDeleted %}
-				{% if group is not null %}
+				{% if group is not null or currentSite.isFeatureGroup %}
 					<li class="action"><a href="/event/{{ event.slug }}/recur"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> recur</a></li>
 				{% endif %}
 				<li class="action"><a href="/event/{{ event.slug }}/delete"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> delete</a></li>

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use models\SiteModel;
 use models\EventModel;
 use models\EventRecurSetModel;
+use models\GroupModel;
 use models\VenueModel;
 use models\AreaModel;
 use repositories\EventRepository;
@@ -24,6 +25,7 @@ use repositories\EventRecurSetRepository;
 use repositories\UserAtEventRepository;
 use repositories\ImportURLRepository;
 use repositories\AreaRepository;
+use repositories\UserWatchesGroupRepository;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\EventHistoryRepositoryBuilder;
 use repositories\builders\CuratedListRepositoryBuilder;
@@ -417,14 +419,12 @@ class EventController {
 	
 	
 	function recur($slug, Request $request, Application $app) {
+		global $WEBSESSION;
+		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
-		
-		if (!$this->parameters['group']) {
-			die("NO");
-		}
-		
+
 		if ($this->parameters['event']->getIsDeleted()) {
 			die("No"); // TODO
 		}
@@ -433,7 +433,39 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		return $app['twig']->render('site/event/recur.html.twig', $this->parameters);
+		
+		if (!$this->parameters['group']) {
+			
+			// Existing Group
+			// TODO csfr
+			if (isset($_POST['intoGroupSlug']) && $_POST['intoGroupSlug']) {
+				$groupRepo = new GroupRepository();
+				$group = $groupRepo->loadBySlug($app['currentSite'], $_POST['intoGroupSlug']);
+				if ($group) {
+					$groupRepo->addEventToGroup($this->parameters['event'], $group);
+					$repo = new UserWatchesGroupRepository();
+					$repo->startUserWatchingGroupIfNotWatchedBefore(userGetCurrent(), $group);
+					return $app->redirect("/event/".$this->parameters['event']->getSlug()."/recur/");
+				}
+			}
+			
+			// New group
+			if (isset($_POST['NewGroupTitle']) && $_POST['NewGroupTitle'] && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+				$group = new GroupModel();
+				$group->setTitle($_POST['NewGroupTitle']);
+				$groupRepo = new GroupRepository();
+				$groupRepo->create($group, $app['currentSite'], userGetCurrent());
+				$groupRepo->addEventToGroup($this->parameters['event'], $group);
+				return $app->redirect("/event/".$this->parameters['event']->getSlug()."/recur/");
+			}
+			
+			return $app['twig']->render('site/event/recur.groupneeded.html.twig', $this->parameters);
+			
+		} else {
+			
+			return $app['twig']->render('site/event/recur.html.twig', $this->parameters);
+		}
+		
 	}
 	
 	function recurWeekly($slug, Request $request, Application $app) {
