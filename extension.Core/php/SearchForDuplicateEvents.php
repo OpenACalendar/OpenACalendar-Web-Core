@@ -108,6 +108,27 @@ class SearchForDuplicateEvents {
 		if ($this->event->getUrl() && $this->event->getUrl() == $event->getUrl()) {
 			$score++;
 		}
+		if ($this->event->getSummary()) {
+			if ($this->event->getSummary() == $event->getSummary()) {
+				$score++;
+			} else {
+				$bits1 = explode(" ", strtolower($this->event->getSummary()));
+				$bits2 = explode(" ", strtolower($event->getSummary()));
+				$flag = false;
+				foreach($bits1 as $bit) {
+					if ($bit && in_array($bit, $bits2)) {
+						$flag = true;
+					}
+				}
+				if ($flag) $score++;
+			}
+		}
+		if ($this->event->getVenueId() && $this->event->getVenueId() == $event->getVenueId()) {
+			$score++;
+		}
+		if ($this->event->getAreaId() && $this->event->getAreaId() == $event->getAreaId()) {
+			$score++;
+		}
 		
 		return $score;
 	}
