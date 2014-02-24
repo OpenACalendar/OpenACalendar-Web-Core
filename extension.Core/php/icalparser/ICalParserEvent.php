@@ -50,9 +50,9 @@ class ICalParserEvent
 		} else if ($keyword == 'URL') {
 			$this->url = $value;
 		} else if ($keyword == 'DTSTART') {
-			$this->start = $this->parseDateTime($value);
+			$this->start = $this->parseDateTime($value, true);
 		} else if ($keyword == 'DTEND') {
-			$this->end = $this->parseDateTime($value);
+			$this->end = $this->parseDateTime($value, false);
 		} else if ($keyword == 'METHOD' && $value == 'CANCEL') {
 			$this->deleted = true;
 		} else if ($keyword == 'STATUS' && $value == 'CANCELLED') {
@@ -67,16 +67,22 @@ class ICalParserEvent
 	* @license  http://www.opensource.org/licenses/mit-license.php  MIT License
 	* @link     http://code.google.com/p/ics-parser/
 	**/
-	protected function parseDateTime($value) {
-        $value = str_replace('T', '', $value);
+	protected function parseDateTime($value, $isStart) {
         $value = str_replace('Z', '', $value);
-
-        $pattern  = '/([0-9]{4})';   // 1: YYYY
+		$pattern  = '/([0-9]{4})';   // 1: YYYY
         $pattern .= '([0-9]{2})';    // 2: MM
         $pattern .= '([0-9]{2})';    // 3: DD
-        $pattern .= '([0-9]{0,2})';  // 4: HH
-        $pattern .= '([0-9]{0,2})';  // 5: MM
-        $pattern .= '([0-9]{0,2})/'; // 6: SS
+        
+		$hasTimePart = false;
+		if (strpos($value, "T") > 1) {
+			$value = str_replace('T', '', $value);
+			$pattern .= '([0-9]{0,2})';  // 4: HH
+			$pattern .= '([0-9]{0,2})';  // 5: MM
+			$pattern .= '([0-9]{0,2})/'; // 6: SS
+			$hasTimePart = true;
+		} else {
+			$pattern .= '/';
+		}
         preg_match($pattern, $value, $date);
 
         // Unix timestamp can't represent dates before 1970
@@ -88,7 +94,13 @@ class ICalParserEvent
 		
 		$out = new \DateTime('', $this->timeZone);
 		$out->setDate((int)$date[1], (int)$date[2], (int)$date[3]);
-		$out->setTime((int)$date[4], (int)$date[5], (int)$date[6]);
+		if ($hasTimePart) {
+			$out->setTime((int)$date[4], (int)$date[5], (int)$date[6]);
+		} else if ($isStart) {
+			$out->setTime(0,0,0);
+		} else if (!$isStart) {
+			$out->setTime(23,59,59);
+		}
 		if ($this->timeZone->getName() != 'UTC') {
 			$out->setTimezone($this->timeZoneUTC);
 		}
