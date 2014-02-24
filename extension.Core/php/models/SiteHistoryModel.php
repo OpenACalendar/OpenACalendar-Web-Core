@@ -78,8 +78,25 @@ class SiteHistoryModel extends SiteModel {
 	}
 	
 	public function isAnyChangeFlagsUnknown() {
-		return $this->title_changed == 0 || $this->description_changed == 0 || $this->country_id_changed == 0 ||
-				$this->parent_site_id_changed == 0 || $this->is_deleted_changed == 0;
+		return $this->title_changed == 0 || 
+			$this->slug_changed == 0 || 
+			$this->description_text_changed == 0 || 
+			$this->footer_text_changed == 0 || 
+			$this->is_web_robots_allowed_changed == 0 || 
+			$this->is_closed_by_sys_admin_changed == 0 || 
+			$this->is_all_users_editors_changed == 0 || 
+			$this->closed_by_sys_admin_reason_changed == 0 || 
+			$this->is_listed_in_index_changed == 0 || 
+			$this->is_request_access_allowed_changed == 0 || 
+			$this->request_access_question_changed == 0 || 
+			$this->is_feature_map_changed == 0 || 
+			$this->is_feature_importer_changed == 0 || 
+			$this->is_feature_curated_list_changed == 0 || 
+			$this->prompt_emails_days_in_advance_changed == 0 || 
+			$this->is_feature_virtual_events_changed == 0 || 
+			$this->is_feature_virtual_events_changed == 0 || 
+			$this->is_feature_physical_events_changed == 0 || 
+			$this->is_feature_group_changed == 0;
 	}
 	
 	public function setChangedFlagsFromNothing() {
