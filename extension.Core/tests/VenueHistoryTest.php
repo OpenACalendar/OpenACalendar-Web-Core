@@ -117,6 +117,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'address'=>'',
+			'address_code'=>'',
 			'title_changed'=>0,
 			'description_changed'=>0,
 			'country_id_changed'=>0,
@@ -125,6 +127,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'lat_changed'=>0,
 			'area_id_changed'=>0,
 			'is_deleted_changed'=>0,
+			'address_changed'=>0,
+			'address_code_changed'=>0,
 		));
 		
 		$venueHistory->setChangedFlagsFromNothing();
@@ -151,6 +155,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'address'=>'',
+			'address_code'=>'',
 			'title_changed'=>0,
 			'description_changed'=>0,
 			'country_id_changed'=>0,
@@ -159,6 +165,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'lat_changed'=>0,
 			'area_id_changed'=>0,
 			'is_deleted_changed'=>0,
+			'address_changed'=>0,
+			'address_code_changed'=>0,
 		));
 		
 		$venueHistory->setChangedFlagsFromNothing();
@@ -186,6 +194,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'address'=>'',
+			'address_code'=>'',
 			'title_changed'=>0,
 			'description_changed'=>0,
 			'country_id_changed'=>0,
@@ -194,6 +204,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'lat_changed'=>0,
 			'area_id_changed'=>0,
 			'is_deleted_changed'=>0,
+			'address_changed'=>0,
+			'address_code_changed'=>0,
 		));
 		
 		$venueHistory = new VenueHistoryModel();
@@ -208,6 +220,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'address'=>'',
+			'address_code'=>'',
 			'title_changed'=>0,
 			'description_changed'=>0,
 			'country_id_changed'=>0,
@@ -216,6 +230,8 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'lat_changed'=>0,
 			'area_id_changed'=>0,
 			'is_deleted_changed'=>0,
+			'address_changed'=>0,
+			'address_code_changed'=>0,
 		));
 		
 		$venueHistory->setChangedFlagsFromLast($lastHistory);
