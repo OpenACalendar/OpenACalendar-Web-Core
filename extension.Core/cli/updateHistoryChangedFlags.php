@@ -17,10 +17,12 @@ use repositories\GroupHistoryRepository;
 use repositories\AreaHistoryRepository;
 use repositories\VenueHistoryRepository;
 use repositories\SiteHistoryRepository;
+use repositories\EventHistoryRepository;
 use models\GroupHistoryModel;
 use models\AreaHistoryModel;
 use models\VenueHistoryModel;
 use models\SiteHistoryModel;
+use models\EventHistoryModel;
 
 
 ################################################################################
@@ -65,6 +67,22 @@ while($data = $stat->fetch()) {
 	$venueHistory->setFromDataBaseRow($data);
 	
 	$venueHistoryRepo->ensureChangedFlagsAreSet($venueHistory);
+	print ".";
+}
+print "\n\n";
+
+
+################################################################################
+
+print "Events ";
+$eventHistoryRepo = new EventHistoryRepository();
+$stat = $DB->prepare("SELECT * FROM event_history");
+$stat->execute();
+while($data = $stat->fetch()) {
+	$eventHistory = new EventHistoryModel();
+	$eventHistory->setFromDataBaseRow($data);
+	
+	$eventHistoryRepo->ensureChangedFlagsAreSet($eventHistory);
 	print ".";
 }
 print "\n\n";
