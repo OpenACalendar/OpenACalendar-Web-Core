@@ -127,6 +127,8 @@ class EventNewController {
 	
 	public function creatingThisNewEvent(Request $request, Application $app) {
 		
+		$notDuplicateSlugs = isset($_GET['notDuplicateSlugs']) ? explode(",", $_GET['notDuplicateSlugs']) : array();
+		
 		$data = array('duplicates'=>array());
 
 		$event = new EventModel();
@@ -137,6 +139,7 @@ class EventNewController {
 		// TODO set group somehow
 		
 		$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite']);
+		$searchForDuplicateEvents->setNotDuplicateSlugs($notDuplicateSlugs);
 		
 		foreach($searchForDuplicateEvents->getPossibleDuplicates() as $dupeEvent) {
 			$data['duplicates'][] = array(

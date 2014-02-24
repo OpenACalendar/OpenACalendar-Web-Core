@@ -29,6 +29,16 @@ class SearchForDuplicateEvents {
 		$this->site = $site;
 	}
 	
+	protected $notTheseSlugs = array();
+	
+	function setNotDuplicateSlugs($in) {
+		foreach($in as $slug) {
+			if ($slug) {
+				$this->notTheseSlugs[] = $slug;
+			}
+		}
+	}
+	
 	function getPossibleDuplicates() {
 	
 		if (!$this->event->getStartAt() || !$this->event->getEndAt()) {
@@ -52,10 +62,12 @@ class SearchForDuplicateEvents {
 		## Score
 		$eventsWithScore = array();
 		foreach($events as $event) {
-			$eventsWithScore[] = array(
-				'event'=>$event,
-				'score'=>$this->getScoreForConsideredEvent($event),
-			); 
+			if (!in_array($event->getSlug(), $this->notTheseSlugs)) {
+				$eventsWithScore[] = array(
+					'event'=>$event,
+					'score'=>$this->getScoreForConsideredEvent($event),
+				); 
+			}
 		}
 		
 		## sort
