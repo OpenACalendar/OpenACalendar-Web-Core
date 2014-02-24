@@ -55,6 +55,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 	$twig->addExtension(new twig\extensions\TruncateExtension($app));
 	$twig->addGlobal('config', $CONFIG);
 	$twig->addGlobal('currentUserClock12Hour', true);
+	$twig->addGlobal('COPYRIGHT_YEARS', COPYRIGHT_YEARS);
 	return $twig;
 }));
 	
