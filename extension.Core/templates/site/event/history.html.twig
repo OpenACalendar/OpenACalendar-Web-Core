@@ -47,30 +47,82 @@
 					</div>
 				{% endif %}
 				<div class="title">{{ eventHistory.summaryDisplay }}</div>
-				<div class="description">{{ eventHistory.description | nl2br }}</div>
-				<div>
-					<time datetime="{{ eventHistory.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
-						<span class="startDay">{{ eventHistory.getStartAt|tolocaltimeformatted('D jS', currentTimeZone) }}</span>
-						<span class="startMonthYear">{{ eventHistory.getStartAt|tolocaltimeformatted('M Y', currentTimeZone) }}</span>
-						<span class="startTime">
-							{{ eventHistory.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
-						</span>
-					</time>
-					<span class="to">to</span>
-					{% if sameday(eventHistory.getStartAt,eventHistory.getEndAt) %}
-						<time datetime="{{ eventHistory.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
-							<span class="end">
-								{{ eventHistory.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
-							</span>
-						</time>
-					{% else %}
-						<time datetime="{{ eventHistory.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
-							<span class="end">
-								{{ eventHistory.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
-							</span>
-						</time>
+				{% if eventHistory.isAnyChangeFlagsUnknown %}
+					<div>{{ eventHistory.description | nl2br  }}</div>
+				{% else %}
+					{% if eventHistory.getSummaryChanged %}
+						<div class="fieldChanged">
+							<div class="field">Summary changed:</div>
+							<div class="value">{{ eventHistory.summary }}</div>
+						</div>
 					{% endif %}
-				</div>
+					{% if eventHistory.getDescriptionChanged %}
+						<div class="fieldChanged">
+							<div class="field">Description changed:</div>
+							<div class="value">{{ eventHistory.description | nl2br }}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getUrlChanged %}
+						<div class="fieldChanged">
+							<div class="field">URL changed:</div>
+							<div class="value">{{ eventHistory.url }}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getStartAtChanged %}
+						<div class="fieldChanged">
+							<div class="field">Start changed:</div>
+							<div class="value">{{ eventHistory.startAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, eventHistory.timezone) }} ({{ eventHistory.timezone }})</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getEndAtChanged %}
+						<div class="fieldChanged">
+							<div class="field">End changed:</div>
+							<div class="value">{{ eventHistory.endAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, eventHistory.timezone)}} ({{ eventHistory.timezone }})</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getCountryIdChanged %}
+						<div class="fieldChanged">
+							<div class="field">Country changed:</div>
+							<div class="value">changed{# TODO #}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getTimezoneChanged %}
+						<div class="fieldChanged">
+							<div class="field">Timezone changed:</div>
+							<div class="value">{{ eventHistory.timezone }}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getAreaIdChanged %}
+						<div class="fieldChanged">
+							<div class="field">Area changed:</div>
+							<div class="value">changed{# TODO #}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getVenueIdChanged %}
+						<div class="fieldChanged">
+							<div class="field">Venue changed:</div>
+							<div class="value">changed{# TODO #}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getIsVirtualChanged %}
+						<div class="fieldChanged">
+							<div class="field">Is Virtual changed:</div>
+							<div class="value">{% if eventHistory.isVirtual %}Yes{% else %}No{% endif %}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getIsPhysicalChanged %}
+						<div class="fieldChanged">
+							<div class="field">Is Physical changed:</div>
+							<div class="value">{% if eventHistory.isPhysical %}Yes{% else %}No{% endif %}</div>
+						</div>
+					{% endif %}
+					{% if eventHistory.getIsDeletedChanged %}
+						<div class="fieldChanged">
+							<div class="field">Status changed:</div>
+							<div class="value">{% if eventHistory.getIsDeleted %}Deleted!{% else %}Restored!{% endif %}</div>
+						</div>
+					{%endif %}
+				{% endif %}
 				<div class="created">
 					Edited at 
 					<time datetime="{{ eventHistory.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
