@@ -32,7 +32,7 @@ trait TraitATOM   {
 	
 
 	protected function getData($in) {
-		return str_replace(array('&','<','>'), array('&amp;','&lt;','&gt;'), iconv("UTF-8", "ISO-8859-1//TRANSLIT", $in) );
+		return str_replace(array('&','<','>'), array('&amp;','&lt;','&gt;'), $in );
 	}
 
 	protected function getBigData($in) {
