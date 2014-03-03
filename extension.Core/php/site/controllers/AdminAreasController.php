@@ -84,6 +84,43 @@ class AdminAreasController {
 		
 	}
 	
+	
+	function action($countryslug, Request $request, Application $app) {
+		global $WEBSESSION, $FLASHMESSAGES;
+		
+		if (!$this->build($countryslug, $request, $app)) {
+			$app->abort(404, "country does not exist.");
+		}	
+	
+		if (isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+			$areaSlugs = is_array($_POST['area']) ? $_POST['area'] : array();
+			$areaRepository = new AreaRepository();
+			if ($_POST['action'] == 'delete') {
+				foreach($areaSlugs as $areaSlug) {
+					$area = $areaRepository->loadBySlugAndCountry($app['currentSite'], $areaSlug, $this->parameters['country']);
+					if ($area && !$area->getIsDeleted()) {
+						$areaRepository->delete($area, userGetCurrent());
+					}
+					$FLASHMESSAGES->addMessage("Deleted!");
+				}
+			} else if ($_POST['action'] == 'undelete') {
+				foreach($areaSlugs as $areaSlug) {
+					$area = $areaRepository->loadBySlugAndCountry($app['currentSite'], $areaSlug, $this->parameters['country']);
+					if ($area) {
+						$areaRepository->edit($area, userGetCurrent());
+					}
+					$FLASHMESSAGES->addMessage("Undeleted!");
+				}
+			}
+			
+		}		
+		
+		
+		
+		return $app->redirect("/admin/areas/".$this->parameters['country']->getTwoCharCode());
+		
+	}
+	
 	function newArea($countryslug, Request $request, Application $app) {
 		
 		if (!$this->build($countryslug, $request, $app)) {

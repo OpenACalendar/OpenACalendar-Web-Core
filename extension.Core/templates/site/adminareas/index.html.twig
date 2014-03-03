@@ -22,14 +22,22 @@
 
 	<h2>Areas in {{  country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></h2>
 		
-	<ul class="areasAdmin">
-		{% for area in areaTree.children %}
-			{% include 'site/adminareas/index.areaAsTree.html.twig' with {'areaData':area} %}
-		{% endfor %}
-		<li class="area">
-			<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new">New</a></class>
-		</li>
-	</ul>
+	<form action="/admin/areas/{{ country.twoCharCode }}/action" method="POST">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<ul class="areasAdmin">
+			{% for area in areaTree.children %}
+				{% include 'site/adminareas/index.areaAsTree.html.twig' with {'areaData':area} %}
+			{% endfor %}
+			<li class="area">
+				<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new">New</a></class>
+			</li>
+		</ul>
+		<select name="action">
+			<option value="delete">Delete</option>
+			<option value="undelete">Undelete</option>
+		</select>
+		<input type="submit" value="Go">
+	</form>
 
 
 

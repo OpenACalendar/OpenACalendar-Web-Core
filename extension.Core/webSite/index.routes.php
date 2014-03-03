@@ -368,6 +368,9 @@ $app->match('/admin/areas/{countryslug}', "site\controllers\AdminAreasController
 $app->match('/admin/areas/{countryslug}/new', "site\controllers\AdminAreasController::newArea")
 		->before($appVerifiedAdminUserRequired)
 		->before($canChangeSite);
+$app->match('/admin/areas/{countryslug}/action', "site\controllers\AdminAreasController::action")
+		->before($appVerifiedAdminUserRequired)
+		->before($canChangeSite);
 
 
 $app->match('/map', "site\controllers\MapController::index");
