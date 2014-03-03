@@ -71,6 +71,21 @@ while($data = $stat->fetch()) {
 }
 print "\n\n";
 
+################################################################################
+
+print "Areas ";
+$areaHistoryRepo = new AreaHistoryRepository();
+$stat = $DB->prepare("SELECT * FROM area_history");
+$stat->execute();
+while($data = $stat->fetch()) {
+	$areaHistory = new AreaHistoryModel();
+	$areaHistory->setFromDataBaseRow($data);
+	
+	$areaHistoryRepo->ensureChangedFlagsAreSet($areaHistory);
+	print ".";
+}
+print "\n\n";
+
 
 ################################################################################
 
