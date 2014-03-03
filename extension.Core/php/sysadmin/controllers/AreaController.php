@@ -7,6 +7,7 @@ use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use models\EventModel;
+use repositories\CountryRepository;
 use repositories\SiteRepository;
 use repositories\AreaRepository;
 use repositories\builders\SiteRepositoryBuilder;
@@ -46,6 +47,11 @@ class AreaController {
 		if ($this->parameters['area']->getParentAreaId()) {
 			$this->parameters['parentarea'] = $ar->loadById($this->parameters['area']->getParentAreaId());
 		}
+		
+		
+		$cr = new CountryRepository();
+		$this->parameters['country'] = $this->parameters['area']->getCountryId() 
+				? $cr->loadById($this->parameters['area']->getCountryId()) : null; 
 		
 	
 	}

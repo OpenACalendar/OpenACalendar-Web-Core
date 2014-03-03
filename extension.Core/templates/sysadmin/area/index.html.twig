@@ -19,6 +19,12 @@
 			<th>Slug</th>
 			<td>{{ area.slug }}</td>
 		</tr>
+		{% if country %}
+		<tr>
+			<th>Country</th>
+			<td>{{ country.title }}</td>
+		</tr>
+		{% endif %}
 		{% if parentarea %}
 		<tr>
 			<th>Parent Area</th>
