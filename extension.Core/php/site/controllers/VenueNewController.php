@@ -55,6 +55,7 @@ class VenueNewController {
 				$areaRepoBuilder->setSite($app['currentSite']);
 				$areaRepoBuilder->setCountry($this->parameters['country']);
 				$areaRepoBuilder->setParentArea($this->parameters['area']);
+				$areaRepoBuilder->setIncludeDeleted(false);
 				$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 				
 				$this->parameters['startAreaBrowserFromScratch'] = false;

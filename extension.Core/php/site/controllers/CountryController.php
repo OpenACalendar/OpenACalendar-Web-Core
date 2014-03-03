@@ -47,6 +47,7 @@ class CountryController {
 		$areaRepoBuilder->setSite($app['currentSite']);
 		$areaRepoBuilder->setCountry($this->parameters['country']);
 		$areaRepoBuilder->setNoParentArea(true);
+		$areaRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 		
 		

@@ -7,7 +7,7 @@
  #}
 <li class="area">
 	<span class="content{% if areaData.area.cachedFutureEvents %}WithEvents{% else %}WithNoEvents{% endif %}">
-		<a href="/area/{{ areaData.area.slug }}">{{ areaData.area.title }}</a>
+		<a href="/area/{{ areaData.area.slug }}">{{ areaData.area.title }} {% if areaData.area.isDeleted %}[DELETED]{% endif %} </a>
 		{% if areaData.area.cachedFutureEvents %}
 			<span title="{{areaData.area.cachedFutureEvents}} future events"> ({{areaData.area.cachedFutureEvents}})</span>
 		{% endif %}

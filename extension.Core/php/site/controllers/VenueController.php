@@ -64,12 +64,14 @@ class VenueController {
 			$areaRepoBuilder->setSite($app['currentSite']);
 			$areaRepoBuilder->setCountry($this->parameters['country']);
 			$areaRepoBuilder->setParentArea($this->parameters['area']);
+			$areaRepoBuilder->setIncludeDeleted(false);
 			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 		} else {
 			$areaRepoBuilder = new AreaRepositoryBuilder();
 			$areaRepoBuilder->setSite($app['currentSite']);
 			$areaRepoBuilder->setCountry($this->parameters['country']);
 			$areaRepoBuilder->setNoParentArea(true);
+			$areaRepoBuilder->setIncludeDeleted(false);
 			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 		}
 		

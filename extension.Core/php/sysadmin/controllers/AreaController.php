@@ -64,7 +64,16 @@ class AreaController {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
 			
-				if ($action->getCommand() == 'parentarea') {
+				if ($action->getCommand() == 'delete' && !$this->parameters['area']->getIsDeleted()) {
+					$ar = new AreaRepository();
+					$ar->delete($this->parameters['area'],  userGetCurrent());
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+				} else if ($action->getCommand() == 'undelete' && $this->parameters['area']->getIsDeleted()) {
+					$this->parameters['area']->setIsDeleted(false);
+					$ar = new AreaRepository();
+					$ar->edit($this->parameters['area'],  userGetCurrent());
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+				} else if ($action->getCommand() == 'parentarea') {
 					$ar = new AreaRepository();
 					$newparentarea = $ar->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($newparentarea) {

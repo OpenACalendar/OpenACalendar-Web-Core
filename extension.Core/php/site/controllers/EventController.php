@@ -180,6 +180,7 @@ class EventController {
 			$areaRepoBuilder = new AreaRepositoryBuilder();
 			$areaRepoBuilder->setSite($app['currentSite']);
 			$areaRepoBuilder->setCountry($this->parameters['country']);
+			$areaRepoBuilder->setIncludeDeleted(false);
 			if ($this->parameters['area']) {
 				$areaRepoBuilder->setParentArea($this->parameters['area']);
 			} else {
