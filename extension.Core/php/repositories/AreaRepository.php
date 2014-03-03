@@ -158,11 +158,11 @@ class AreaRepository {
 	}
 	
 	
+	/** 
+	 * This will undelete the area to.
+	 */
 	public function edit(AreaModel $area, UserAccountModel $creator) {
 		global $DB;
-		if ($area->getIsDeleted()) {
-			throw new \Exception("Can't edit deleted area!");
-		}
 		try {
 			$DB->beginTransaction();
 
