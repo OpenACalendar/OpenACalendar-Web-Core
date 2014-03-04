@@ -26,7 +26,7 @@ function showEventPopup(data) {
 	$('#EventPopupContent').html('<div id="EventPopupTitle">Loading ...</div>'+
 			'<div id="EventPopupDescription"></div>'+
 			'<div id="EventPopupTimes"></div>'+
-			'<div id="EventPopupLink"><a href="http://'+data.site+'.'+config.httpDomainSite+'/event/'+data.slug+'">View More Details</a></div>');
+			'<div class="EventPopupLink"><a href="http://'+data.site+'.'+config.httpDomainSite+'/event/'+data.slug+'">View More Details</a></div>');
 	var url = (config.hasSSL ? "https://"+data.site+"."+config.httpsDomainSite : "http://"+data.site+"."+config.httpDomainSite ) + "/api1/event/"+data.slug+"/info.jsonp?callback=?";
 	$.getJSON(url,{
 	}).success(function ( eventdata ) {

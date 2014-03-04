@@ -4,8 +4,10 @@ namespace api1exportbuilders;
 
 use models\EventModel;
 use models\SiteModel;
+use models\GroupModel;
 use models\VenueModel;
-
+use models\AreaModel;
+use models\CountryModel;
 
 /**
  *
@@ -43,7 +45,8 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 		return json_encode($out);
 	}
 	
-	public function addEvent(EventModel $event) {
+	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null, 
+			AreaModel $area = null, CountryModel $country = null) {
 		global $CONFIG;
 		
 		$out = array(
@@ -110,7 +113,41 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 				'minutetimezone'=>$endTimeZone->format('i'),
 			);
 		
+		if (is_array($groups)) {
+			$out['groups'] = array();
+			foreach($groups as $group) {
+				$out['groups'][] = array(
+						'slug'=>$group->getSlug(),
+						'title'=>$group->getTitle(),
+						'description'=>$group->getDescription(),
+					);
+			}
+		}
 		
+		if ($venue) {
+			$out['venue'] = array(
+				'slug'=>$venue->getSlug(),
+				'title'=>$venue->getTitle(),
+				'description'=>$venue->getDescription(),
+				'address'=>$venue->getAddress(),
+				'addresscode'=>$venue->getAddressCode(),
+				'lat'=>$venue->getLat(),
+				'lng'=>$venue->getLng(),
+				);
+		}
+		
+		if ($area) {
+			$out['areas'] = array(array(
+				'slug'=>$area->getSlug(),
+				'title'=>$area->getTitle(),
+			));
+		}
+		
+		if ($country) {
+			$out['country'] = array(
+				'title'=>$country->getTitle(),
+			);
+		}
 		
 		$this->events[] = $out;
 	}

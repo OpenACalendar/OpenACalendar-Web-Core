@@ -25,14 +25,35 @@ function showEventPopup(data) {
 
 	$('#EventPopupContent').html('<div id="EventPopupTitle">Loading ...</div>'+
 			'<div id="EventPopupDescription"></div>'+
+			'<div id="EventPopupGroupsWrapper"></div>'+
+			'<div id="EventPopupVenueWrapper"></div>'+
 			'<div id="EventPopupTimes"></div>'+
-			'<div id="EventPopupLink"><a href="/event/' + data.slug + '">View More Details</a></div>');
+			'<div class="EventPopupLink"><a href="/event/' + data.slug + '">View More Details</a></div>');
 	$.ajax({
 		url: "/api1/event/"+data.slug+"/info.json"
 	}).success(function ( eventdata ) {
-		$('#EventPopupTitle').text(eventdata.data[0].summaryDisplay);
-		$('#EventPopupDescription').html(escapeHTMLNewLine(eventdata.data[0].description,1000));
-		$('#EventPopupTimes').html(escapeHTML(eventdata.data[0].start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
+	var event = eventdata.data[0];
+		$('#EventPopupTitle').text(event.summaryDisplay);
+		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,1000));
+		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
+		if (event.venue) {
+			$('#EventPopupVenueWrapper').html(
+					'<div class="venueTitle">Venue '+escapeHTML(event.venue.title)+'</div>'+
+					'<div class="venueDescription">'+escapeHTMLNewLine(event.venue.description, 500)+'</div>'+
+					'<div class="venueAddress">'+escapeHTMLNewLine(event.venue.address, 500)+' '+escapeHTML(event.venue.addresscode)+'</div>'
+				);
+		} else {
+			$('#EventPopupVenueWrapper').html('&nbsp;');
+		}
+		var html = '';
+		if (event.groups) {
+			for(groupIdx in event.groups) {
+				var group = event.groups[groupIdx];
+				html += '<div class="groupTitle">Group '+escapeHTML(group.title)+'</div>';
+				html += '<div class="groupDescription">'+escapeHTMLNewLine(group.description,500)+'</div>';
+			}
+		}
+		$('#EventPopupGroupsWrapper').html(html);
 	});
 	if (showCurrentUserOptions) {
 		showCurrentUserAttendanceForEventInPopup(data.slug,'EventPopupAttendanceContent');

@@ -8,6 +8,8 @@
 
 @import("../mixins.less");
 @import("../vars.less");
+@import("calendarAndSite.less");
+
 
 
 html {
@@ -290,24 +292,8 @@ table.calendar {
 		display: block;
 		width: 100%;
 	}
-	#EventPopupContent, #EventAttendancePopupContent {
+	#EventAttendancePopupContent {
 		padding: 5px;
-	}
-	#EventPopupTitle {
-		padding: 5px 0;
-		font-weight: bold;
-	}
-	#EventPopupDescription {
-		padding: 5px 0;
-	}
-	#EventPopupTimes {
-		color: #ec2327;
-		background: url('/img/eventFooterCalendarIcon.png') no-repeat;
-		padding: 5px 10px 5px 20px;	
-	}
-	#EventPopupLink {
-		padding: 5px 0;
-		text-align: right;
 	}
 	#EventAttendancePopupContent, #EventPopupAttendanceContent{
 		.savingIndicator, .savedIndicator {

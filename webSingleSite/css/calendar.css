@@ -1,3 +1,40 @@
+.PopupBox #EventPopupContent {
+  padding: 5px;
+}
+.PopupBox #EventPopupTitle {
+  padding: 5px 0;
+  font-weight: bold;
+  font-size: 110%;
+}
+.PopupBox #EventPopupDescription {
+  padding: 5px 0;
+}
+.PopupBox #EventPopupTimes {
+  color: #ec2327;
+  background: url('/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+.PopupBox .EventPopupLink {
+  padding: 5px 0;
+  text-align: right;
+}
+.PopupBox #EventPopupGroupsWrapper .groupTitle {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.PopupBox #EventPopupGroupsWrapper .groupDescription {
+  padding: 5px 0;
+}
+.PopupBox #EventPopupVenueWrapper .venueTitle {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.PopupBox #EventPopupVenueWrapper .venueDescription {
+  padding: 5px 0;
+}
+.PopupBox #EventPopupVenueWrapper .venueAddress {
+  padding: 5px 0;
+}
 html {
   background-color: #eeeeee;
 }
@@ -278,25 +315,8 @@ table.calendar .deleted {
   display: block;
   width: 100%;
 }
-.PopupBox #EventPopupContent,
 .PopupBox #EventAttendancePopupContent {
   padding: 5px;
-}
-.PopupBox #EventPopupTitle {
-  padding: 5px 0;
-  font-weight: bold;
-}
-.PopupBox #EventPopupDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupTimes {
-  color: #ec2327;
-  background: url('/img/eventFooterCalendarIcon.png') no-repeat;
-  padding: 5px 10px 5px 20px;
-}
-.PopupBox #EventPopupLink {
-  padding: 5px 0;
-  text-align: right;
 }
 .PopupBox #EventAttendancePopupContent .savingIndicator,
 .PopupBox #EventAttendancePopupContent .savedIndicator,

@@ -14,10 +14,12 @@ use models\EventRecurSetModel;
 use repositories\EventRepository;
 use repositories\EventHistoryRepository;
 use repositories\GroupRepository;
+use repositories\VenueRepository;
+use repositories\AreaRepository;
 use repositories\CountryRepository;
 use repositories\EventRecurSetRepository;
 use repositories\UserAtEventRepository;
-use repositories\builders\EventRepositoryBuilder;
+use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\EventHistoryRepositoryBuilder;
 use api1exportbuilders\EventListICalBuilder;
 use api1exportbuilders\EventListJSONBuilder;
@@ -35,7 +37,7 @@ class EventController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		$this->parameters = array('group'=>null,'country'=>null);
+		$this->parameters = array('groups'=>array(),'country'=>null,'venue'=>null,'area'=>null);
 
 		$eventRepository = new EventRepository();
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $slug);
@@ -44,11 +46,23 @@ class EventController {
 		}
 
 		if ($this->parameters['event']->getGroupId()) {
-			$gr = new GroupRepository();
-			$this->parameters['group'] = $gr->loadById($this->parameters['event']->getGroupId());
+			$grb = new GroupRepositoryBuilder();
+			$grb->setEvent($this->parameters['event']);
+			$this->parameters['groups'] = $grb->fetchAll();
 		}
 		
-		if ($this->parameters['event']->getCountryID()) {
+		if ($this->parameters['event']->getVenueID()) {
+			$vr = new VenueRepository();
+			$this->parameters['venue'] = $vr->loadById($this->parameters['event']->getVenueID());
+		}
+		
+		if ($this->parameters['event']->getAreaID()) {
+			$ar = new AreaRepository();
+			$this->parameters['area'] = $ar->loadById($this->parameters['event']->getAreaID());
+		}
+		
+		
+		if ($this->parameters['event']->getVenueID()) {
 			$cr = new CountryRepository();
 			$this->parameters['country'] = $cr->loadById($this->parameters['event']->getCountryID());
 		}
@@ -83,7 +97,8 @@ class EventController {
 				
 		
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
-		$json->addEvent($this->parameters['event']);
+		$json->addEvent($this->parameters['event'], $this->parameters['groups'], 
+				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country']);
 		return $json->getResponse();
 				
 	}
@@ -96,7 +111,8 @@ class EventController {
 
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
-		$jsonp->addEvent($this->parameters['event']);
+		$jsonp->addEvent($this->parameters['event'], $this->parameters['groups'], 
+				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country']);
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();
 				
