@@ -20,7 +20,16 @@ use repositories\SiteRepository;
 	
 $data  = array();
 $data['httpDomain'] = $CONFIG->webSiteDomain;
+$data['httpDomainSite'] = $CONFIG->webSiteDomain;
 $data['twitter'] = $CONFIG->contactTwitter;
+$data['isSingleSiteMode'] = true;
+if ($CONFIG->hasSSL) {
+	$data['hasSSL'] = true;
+	$data['httpsDomain'] = $CONFIG->webIndexDomainSSL;
+	$data['httpsDomainSite'] = $CONFIG->webSiteDomainSSL;
+} else {
+	$data['hasSSL'] = false;
+}
 
 print "var config = ".json_encode($data);
 
