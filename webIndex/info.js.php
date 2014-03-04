@@ -27,6 +27,7 @@ if ($CONFIG->hasSSL) {
 } else {
 	$data['hasSSL'] = false;
 }
+$data['isSingleSiteMode'] = $CONFIG->isSingleSiteMode;
 
 print "var config = ".json_encode($data);
 	

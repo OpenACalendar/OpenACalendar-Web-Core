@@ -28,7 +28,14 @@ if (!$site) {
 } else {
 	$data  = array();
 	$data['httpDomain'] = $site->getSlug().".".$CONFIG->webSiteDomain;
+	if ($CONFIG->hasSSL) {
+		$data['hasSSL'] = true;
+		$data['httpsDomain'] = $site->getSlug().".".$CONFIG->webSiteDomainSSL;
+	} else {
+		$data['hasSSL'] = false;
+	}
 	$data['twitter'] = $CONFIG->contactTwitter;
+	$data['isSingleSiteMode'] = false;
 	
 	print "var config = ".json_encode($data);
 	

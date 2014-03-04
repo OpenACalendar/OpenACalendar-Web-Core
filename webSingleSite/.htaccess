@@ -11,6 +11,7 @@ RewriteRule  ^credits(.*)$ /index.php/credits$1  [L]
 RewriteRule  ^about(.*)$ /index.php/about$1  [L]
 RewriteRule  ^help(.*)$ /index.php/site$1  [L]
 RewriteRule  ^apihelp(.*)$ /index.php/apihelp$1  [L]
+RewriteRule  ^site(.*)$ /index.php/site$1  [L]
 
 RewriteRule  ^event(.*)$ /index.php/event$1  [L]
 RewriteRule  ^group(.*)$ /index.php/group$1  [L]

@@ -23,12 +23,21 @@ function showEventPopup(data) {
 	}
 	showPopup();
 
+	var eventURL = (config.hasSSL ? "https://" : "http://") +
+				(config.isSingleSiteMode ? '' : data.site+'.') +
+				(config.hasSSL ? config.httpsDomainSite : config.httpDomainSite )+
+				'/event/'+data.slug;
+
 	$('#EventPopupContent').html('<div id="EventPopupTitle">Loading ...</div>'+
 			'<div id="EventPopupDescription"></div>'+
 			'<div id="EventPopupTimes"></div>'+
-			'<div id="EventPopupLink"><a href="http://'+data.site+'.'+config.httpDomainSite+'/event/'+data.slug+'">View More Details</a></div>');
-	var url = (config.hasSSL ? "https://"+data.site+"."+config.httpsDomainSite : "http://"+data.site+"."+config.httpDomainSite ) + "/api1/event/"+data.slug+"/info.jsonp?callback=?";
-	$.getJSON(url,{
+			'<div id="EventPopupLink"><a href="'+eventURL+'">View More Details</a></div>');
+	var apiURL = (config.hasSSL ? "https://" : "http://") +
+				(config.isSingleSiteMode ? '' : data.site+'.') +
+				(config.hasSSL ? config.httpsDomainSite : config.httpDomainSite )+
+				'/api1/event/'+data.slug+"/info.jsonp?callback=?";
+	
+	$.getJSON(apiURL,{
 	}).success(function ( eventdata ) {
 		$('#EventPopupTitle').text(eventdata.data[0].summaryDisplay);
 		$('#EventPopupDescription').html(escapeHTMLNewLine(eventdata.data[0].description,1000));
