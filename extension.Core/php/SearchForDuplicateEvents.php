@@ -22,11 +22,13 @@ class SearchForDuplicateEvents {
 			
 	protected $showEventsCount = 3;
 	
-	protected $showEventsThreshhold = 1;
+	protected $showEventsThreshhold = 2;
 			
-	function __construct(EventModel $event, SiteModel $site) {
+	function __construct(EventModel $event, SiteModel $site, $showEventsCount=3, $showEventsThreshhold=2) {
 		$this->event = $event;
 		$this->site = $site;
+		$this->showEventsCount = $showEventsCount;
+		$this->showEventsThreshhold = $showEventsThreshhold;
 	}
 	
 	protected $notTheseSlugs = array();

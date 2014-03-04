@@ -147,6 +147,9 @@ class Config {
 	public $apiExtraHeader1Html = null;
 	public $apiExtraHeader1Text = null;
 	
+	public $findDuplicateEventsShow = 3;
+	public $findDuplicateEventsThreshhold = 2;
+	
 	function getWebIndexDomainSecure() {
 		return $this->hasSSL ? "https://".$this->webIndexDomainSSL : "http://".$this->webIndexDomain;
 	}

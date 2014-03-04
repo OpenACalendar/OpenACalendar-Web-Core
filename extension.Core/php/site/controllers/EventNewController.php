@@ -126,30 +126,33 @@ class EventNewController {
 	
 	
 	public function creatingThisNewEvent(Request $request, Application $app) {
+		global $CONFIG;
 		
 		$notDuplicateSlugs = isset($_GET['notDuplicateSlugs']) ? explode(",", $_GET['notDuplicateSlugs']) : array();
 		
 		$data = array('duplicates'=>array());
 
-		$event = new EventModel();
-		$event->setDefaultOptionsFromSite($app['currentSite']);
-		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone']), $event);
-		$form->bind($request);
+		if ($CONFIG->findDuplicateEventsShow > 0) {
+
+			$event = new EventModel();
+			$event->setDefaultOptionsFromSite($app['currentSite']);
+			$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone']), $event);
+			$form->bind($request);
+
+			// TODO set group somehow
+
+			$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite'], 
+					$CONFIG->findDuplicateEventsShow, $CONFIG->findDuplicateEventsThreshhold);
+			$searchForDuplicateEvents->setNotDuplicateSlugs($notDuplicateSlugs);
+
+			foreach($searchForDuplicateEvents->getPossibleDuplicates() as $dupeEvent) {
+				$data['duplicates'][] = array(
+					'slug'=>$dupeEvent->getSlug(),
+					'summary'=>$dupeEvent->getSummary(),
+				);
+			}
 		
-		// TODO set group somehow
-		
-		$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite']);
-		$searchForDuplicateEvents->setNotDuplicateSlugs($notDuplicateSlugs);
-		
-		foreach($searchForDuplicateEvents->getPossibleDuplicates() as $dupeEvent) {
-			$data['duplicates'][] = array(
-				'slug'=>$dupeEvent->getSlug(),
-				'summary'=>$dupeEvent->getSummary(),
-			);
 		}
-		
-		
-		
 		
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');

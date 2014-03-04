@@ -562,6 +562,18 @@
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'apiExtraHeader1Text'} %}
 			</td>
 		</tr>
+		<tr>
+			<th>findDuplicateEventsShow</th>
+			<td>{{ config.findDuplicateEventsShow }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'findDuplicateEventsShow'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>findDuplicateEventsThreshhold</th>
+			<td>{{ config.findDuplicateEventsThreshhold }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'findDuplicateEventsThreshhold'} %}
+			</td>
+		</tr>
 	</table>
 
 {% endblock %}
