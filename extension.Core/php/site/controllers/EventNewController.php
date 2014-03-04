@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use models\SiteModel;
 use models\EventModel;
 use repositories\EventRepository;
+use repositories\GroupRepository;
 use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 use \SearchForDuplicateEvents;
 
@@ -139,7 +140,13 @@ class EventNewController {
 			$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone']), $event);
 			$form->bind($request);
 
-			// TODO set group somehow
+			if (isset($_POST['group_slug']) && $_POST['group_slug']) {
+				$gr = new GroupRepository();
+				$group = $gr->loadBySlug($app['currentSite'], $_POST['group_slug']);
+				if ($group) {
+					$event->setGroup($group);
+				}
+			}
 
 			$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite'], 
 					$CONFIG->findDuplicateEventsShow, $CONFIG->findDuplicateEventsThreshhold);

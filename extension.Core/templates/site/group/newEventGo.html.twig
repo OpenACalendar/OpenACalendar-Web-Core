@@ -13,7 +13,8 @@
 {% block innerContent %}
 
 	<form action="#" method="post" class="styled" id="NewEventForm">
-
+		<input type="hidden" name="group_slug" value="{{ group.slug }}">
+		
 		{{ form_errors(form) }}
 
 		{{ form_row(form.summary) }}
