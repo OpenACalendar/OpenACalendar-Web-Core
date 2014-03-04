@@ -145,10 +145,18 @@ class EventNewController {
 					$CONFIG->findDuplicateEventsShow, $CONFIG->findDuplicateEventsThreshhold);
 			$searchForDuplicateEvents->setNotDuplicateSlugs($notDuplicateSlugs);
 
+			$timeZone = new \DateTimeZone($event->getTimezone());
 			foreach($searchForDuplicateEvents->getPossibleDuplicates() as $dupeEvent) {
+				$start = clone $dupeEvent->getStartAt();
+				$start->setTimezone($timeZone);
 				$data['duplicates'][] = array(
 					'slug'=>$dupeEvent->getSlug(),
 					'summary'=>$dupeEvent->getSummary(),
+					'description'=>$dupeEvent->getDescription(),
+					'startDay'=>$start->format("D"),
+					'startDate'=>$start->format("jS"),
+					'startMonthYear'=>$start->format("M \'y"),
+					'startTime'=>$start->format("g:ia"),
 				);
 			}
 		

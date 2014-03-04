@@ -25,7 +25,18 @@ function loadDupes() {
 			for (idx in data.duplicates) {
 				var event = data.duplicates[idx];
 				html += '<li class="event">';
+				html += '<div class="dateTimeIcon"><a href="#" onclick="showEventPopup('+ event.slug +'); return false;">';
+				html += '<div class="dateIcon">';
+				html += '<span class="startDay">'+event.startDay+'</span>';
+				html += '<span class="startDate">'+event.startDate+'</span>';
+				html += '<span class="startMonthYear">'+event.startMonthYear+'</span>';
+				html += '</div>';
+				html += '<div class="timeIcon">';
+				html += '<span class="startTime">'+event.startTime+'</span>';
+				html += '</div>';
+				html += '</a></div>';
 				html += '<div class="title"><a href="#" onclick="showEventPopup('+ event.slug +'); return false;">'+escapeHTML(event.summary)+'</a></div>';
+				html += '<div class="description">'+escapeHTMLNewLine(event.description)+'</div>';
 				html += '</li>';
 			}
 			$('#DuplicateEventsList').empty().append(html);

@@ -917,6 +917,14 @@ ul.areasAdmin li.area span.contentNew a {
   color: white;
   text-decoration: none;
 }
+#DuplicateEventsContainer {
+  border: 1px solid #ccc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
 p {
   margin: 10px 0;
 }
