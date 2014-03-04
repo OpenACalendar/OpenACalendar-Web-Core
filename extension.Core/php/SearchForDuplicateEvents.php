@@ -51,6 +51,8 @@ class SearchForDuplicateEvents {
 		$eventRepositoryBuilder = new EventRepositoryBuilder();
 		$eventRepositoryBuilder->setSite($this->site);
 		
+		$eventRepositoryBuilder->setIncludeDeleted(true);
+		
 		$after = clone $this->event->getStartAt();
 		$after->sub(new \DateInterval("PT4H"));
 		$eventRepositoryBuilder->setAfter($after);
