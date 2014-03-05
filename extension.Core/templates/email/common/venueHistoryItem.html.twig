@@ -7,7 +7,58 @@
  #}
 <div style="padding: 5px; margin: 5px 0 5px 0; background: #ccc; border-radius: 5px;">
 	<div style="font-weight: bold;">Venue: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/venue/{{ historyItem.venueSlug }}">{{ historyItem.title }}</a></div>
-	<div>{{ historyItem.description | nl2br  }}</div>
+	{% if historyItem.isAnyChangeFlagsUnknown %}
+		<div>{{ historyItem.description | nl2br  }}</div>
+	{% else %}
+		{% if historyItem.getTitleChanged %}
+			<div>
+				<div>Title changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.title }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getDescriptionChanged %}
+			<div>
+				<div>Description changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.description | nl2br }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getAddressChanged %}
+			<div>
+				<div>Address changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.address | nl2br }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getAddressCodeChanged %}
+			<div>
+				<div>Address postcode changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.addressCode }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getLatChanged or historyItem.getLatChanged %}
+			<div>
+				<div>Position on map changed:</div>
+				<div style="font-size: 10pt;">Yes ({{ historyItem.lat }},{{ historyItem.lng }})</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getAreaIdChanged %}
+			<div>
+				<div>Area changed:</div>
+				<div style="font-size: 10pt;">Yes</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getCountryIdChanged %}
+			<div>
+				<div>Country changed:</div>
+				<div style="font-size: 10pt;">Yes</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getIsDeletedChanged %}
+			<div>
+				<div>Status changed:</div>
+				<div style="font-size: 10pt;">{% if historyItem.getIsDeleted %}Deleted!{% else %}Restored!{% endif %}</div>
+			</div>
+		{%endif %}
+	{% endif %}
 	<div style="font-style: italic; font-size: 0.8em;">
 		Edited at 
 		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">

@@ -7,7 +7,82 @@
  #}
 <div style="padding: 5px; margin: 5px 0 5px 0; background: #ccc; border-radius: 5px;">
 	<div style="font-weight: bold;">Event: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/{{ historyItem.eventSlug }}">{{ historyItem.summaryDisplay }}</a></div>
-	<div>{{ historyItem.description | nl2br  }}</div>
+	{% if historyItem.isAnyChangeFlagsUnknown %}
+		<div>{{ historyItem.description | nl2br  }}</div>
+	{% else %}
+		{% if historyItem.getSummaryChanged %}
+			<div>
+				<div>Summary changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.summary }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getDescriptionChanged %}
+			<div>
+				<div>Description changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.description | nl2br }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getUrlChanged %}
+			<div>
+				<div>URL changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.url }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getStartAtChanged %}
+			<div>
+				<div>Start changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.startAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, historyItem.timezone) }} ({{ historyItem.timezone }})</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getEndAtChanged %}
+			<div>
+				<div>End changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.endAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, historyItem.timezone)}} ({{ historyItem.timezone }})</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getCountryIdChanged %}
+			<div>
+				<div>Country changed:</div>
+				<div style="font-size: 10pt;">changed{# TODO #}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getTimezoneChanged %}
+			<div>
+				<div>Timezone changed:</div>
+				<div style="font-size: 10pt;">{{ historyItem.timezone }}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getAreaIdChanged %}
+			<div>
+				<div>Area changed:</div>
+				<div style="font-size: 10pt;">changed{# TODO #}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getVenueIdChanged %}
+			<div>
+				<div>Venue changed:</div>
+				<div style="font-size: 10pt;">changed{# TODO #}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getIsVirtualChanged %}
+			<div>
+				<div>Is Virtual changed:</div>
+				<div style="font-size: 10pt;">{% if historyItem.isVirtual %}Yes{% else %}No{% endif %}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getIsPhysicalChanged %}
+			<div>
+				<div>Is Physical changed:</div>
+				<div style="font-size: 10pt;">{% if historyItem.isPhysical %}Yes{% else %}No{% endif %}</div>
+			</div>
+		{% endif %}
+		{% if historyItem.getIsDeletedChanged %}
+			<div>
+				<div>Status changed:</div>
+				<div style="font-size: 10pt;">{% if historyItem.getIsDeleted %}Deleted!{% else %}Restored!{% endif %}</div>
+			</div>
+		{%endif %}
+	{% endif %}
 	<div style="font-style: italic; font-size: 0.8em;">
 		Edited at
 		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
