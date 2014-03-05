@@ -12,8 +12,8 @@
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}
 	<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>
-	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></li>{% endfor %}
-	<li class="current"><a href="/area/{{ area.slug }}">{{ area.title }}</a></li>
+	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></li>{% endfor %}
+	<li class="current"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>
 {% endblock %}
 
 
@@ -34,8 +34,8 @@
 					<img src="/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
 				</a>
 			</li>
-			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/area/{{ area.slug }}">Details</a></li>
-			<li class="tab"><a href="/area/{{ area.slug }}/calendar">Calendar</a></li>
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/area/{{ area.slugForUrl }}">Details</a></li>
+			<li class="tab"><a href="/area/{{ area.slugForUrl }}/calendar">Calendar</a></li>
 		</ul>
 		<div id="innerPage">
 

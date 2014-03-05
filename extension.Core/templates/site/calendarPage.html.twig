@@ -6,18 +6,18 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% if group is defined %}
-	{% set calURL = '/group/' ~ group.slug ~ '/calendar' %}
-	{% set addURL = '/group/' ~ group.slug ~ '/newevent/go?' %}
+	{% set calURL = '/group/' ~ group.slugForUrl ~ '/calendar' %}
+	{% set addURL = '/group/' ~ group.slugForUrl ~ '/newevent/go?' %}
 {% elseif curatedlist is defined %}
 	{% set calURL = '/curatedlist/' ~ curatedlist.slug ~ '/calendar' %}
 	{% set addURL = false %}
 {% elseif venue is defined %}
 	{#  When we have a venue, we also have a country & area so must check venue first #}
-	{% set calURL = '/venue/' ~ venue.slug ~ '/calendar' %}
+	{% set calURL = '/venue/' ~ venue.slugForUrl ~ '/calendar' %}
 	{% set addURL = false %}
 {% elseif area is defined %}
 	{#  When we have a area, we also have a country so must check venue first #}
-	{% set calURL = '/area/' ~ area.slug ~ '/calendar' %}
+	{% set calURL = '/area/' ~ area.slugForUrl ~ '/calendar' %}
 	{% set addURL = false %}
 {% elseif country is defined %}
 	{% set calURL = '/country/' ~ country.twoCharCode ~ '/calendar' %}
@@ -43,13 +43,13 @@
 		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
 		<link rel="shortcut icon" href="/img/favicon.png?v={{ config.assetsVersion }}" />
 		{% if group is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slug }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
 		{% elseif curatedlist is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slug }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
 		{% elseif venue is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/{{ venue.slug }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/{{ venue.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
 		{% elseif area is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slug }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
 		{% elseif venueVirtual is defined and venueVirtual %}
 			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/virtual/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
 		{% elseif country is defined %}
@@ -84,15 +84,15 @@
 
 
 					{% if group is defined %}
-						<a href="/group/{{ group.slug }}">
+						<a href="/group/{{ group.slugForUrl }}">
 					{% elseif venue is defined %}
-						<a href="/venue/{{ venue.slug }}">
+						<a href="/venue/{{ venue.slugForUrl }}">
 					{% elseif curatedlist is defined %}
-						<a href="/curatedlist/{{ curatedlist.slug }}">
+						<a href="/curatedlist/{{ curatedlist.slugForUrl }}">
 					{% elseif venueVirtual is defined and venueVirtual %}
 						<a href="/venue/virtual">
 					{% elseif area is defined %}
-						<a href="/area/{{ area.slug }}">
+						<a href="/area/{{ area.slugForUrl }}">
 					{% elseif country is defined %}
 						<a href="/country/{{ country.twoCharCode }}">
 					{% else %}
@@ -118,13 +118,13 @@
 			{% endif %}
 			
 			{% if group is defined %}
-				<h3 class="group"><a href="/group/{{ group.slug }}">{{ group.title }}</a></h3>
+				<h3 class="group"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></h3>
 			{% elseif curatedlist is defined %}
-				<h3 class="curatedlist"><a href="/curatedlist/{{ curatedlist.slug }}">{{ curatedlist.title }}</a></h3>
+				<h3 class="curatedlist"><a href="/curatedlist/{{ curatedlist.slugForUrl }}">{{ curatedlist.title }}</a></h3>
 			{% elseif venue is defined %}
-				<h3 class="country"><a href="/venue/{{ venue.slug }}">{{ venue.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+				<h3 class="country"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 			{% elseif area is defined %}
-				<h3 class="country"><a href="/area/{{ area.slug }}">{{ area.title }}</a></h3>
+				<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
 			{% elseif country is defined %}
 				<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 			{% endif %}
@@ -156,7 +156,7 @@
 							{% for event in data.eventsContinuing %}
 								<div class="event continuing">
 									<div class="above"></div>
-									<a href="/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
+									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
 										{{ event.getSummaryDisplay()  }} 
 									</a>
 									<div class="before"></div>
@@ -167,7 +167,7 @@
 									<div class="above"></div>
 									{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
 										<div class="currentUserAttendance" id="currentUserAttendanceForEvent{{ event.slug }}">
-											<a href="/event/{{ event.slug }}" onclick="showCurrentUserAttendanceForEvent({{ event.slug }}); return false;" class="activationLinkWrapper">
+											<a href="/event/{{ event.slugForUrl }}" onclick="showCurrentUserAttendanceForEvent({{ event.slug }}); return false;" class="activationLinkWrapper">
 												{% if event.userIsPlanAttending %}
 													<img src="/img/actionUserAttendingIcon.png" alt="You are attending" title="You are attending">
 												{% elseif event.userIsPlanMaybeAttending %}
@@ -181,7 +181,7 @@
 									<span class="start_at">
 										{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
 									</span>
-									<a href="/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
+									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
 										{{ event.getSummaryDisplay() }}
 									</a>
 									

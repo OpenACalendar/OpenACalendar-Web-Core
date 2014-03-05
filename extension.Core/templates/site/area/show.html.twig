@@ -11,7 +11,7 @@
 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slug }}/" />
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/" />
 	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
 {% endblock %}
@@ -19,10 +19,10 @@
 {% block actions %}
 	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not area.isDeleted %}
 		<li class="action">
-			<a href="/area/{{ area.slug }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+			<a href="/area/{{ area.slugForUrl }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
 		</li>		
 		<li class="action">
-			<a href="/area/{{ area.slug }}/new">
+			<a href="/area/{{ area.slugForUrl }}/new">
 				<img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new
 			</a>
 		</li>
@@ -47,9 +47,9 @@
 		
 		<div class="locationWrapper">
 			<div class="location">
-				<div class="area"><a href="/area/{{ area.slug }}">{{ area.title }}</a></div>	
+				<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>	
 				{% for parentArea in parentAreas|reverse %}
-					<div class="area"><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></div>
+					<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
 				{% endfor %}
 				<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
 			</div>

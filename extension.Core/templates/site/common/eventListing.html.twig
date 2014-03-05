@@ -15,7 +15,7 @@
 	{% else %}
 		<div class="dateTimeIcon">
 			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
-				<a href="/event/{{ event.slug }}">
+				<a href="/event/{{ event.slugForUrl }}">
 					<div class="dateIcon">
 						<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
 						<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
@@ -29,7 +29,7 @@
 		</div>
 	{% endif %}
 	<div class="title">
-		<a href="/event/{{ event.slug }}">
+		<a href="/event/{{ event.slugForUrl }}">
 			{{ event.summaryDisplay}}
 		</a>
 	</div>
@@ -37,7 +37,7 @@
 	<div class="afterEventListing"></div>
 	{% if showCurrentUserOptions is defined and showCurrentUserOptions and currentUser is not null %}
 		<div class="currentUserAttendance" id="currentUserAttendanceForEvent{{ event.slug }}">
-			<a href="/event/{{ event.slug }}" onclick="showCurrentUserAttendanceForEvent({{ event.slug }}); return false;" class="activationLinkWrapper">
+			<a href="/event/{{ event.slugForUrl }}" onclick="showCurrentUserAttendanceForEvent({{ event.slug }}); return false;" class="activationLinkWrapper">
 				{% if event.userIsPlanAttending %}
 					<img src="/img/actionUserAttendingIcon.png" alt="You are attending" title="You are attending">
 				{% elseif event.userIsPlanMaybeAttending %}
