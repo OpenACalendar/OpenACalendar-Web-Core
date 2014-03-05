@@ -96,7 +96,7 @@ class EventHistoryModel extends EventModel {
 		$this->description_changed = $this->description ? 1 : -1;
 		$this->start_at_changed = $this->start_at ? 1 : -1;
 		$this->end_at_changed = $this->end_at ? 1 : -1;
-		$this->is_deleted_changed = 1;
+		$this->is_deleted_changed = $this->is_deleted ?  1 : -1;
 		$this->country_id_changed = $this->country_id ? 1 : -1;
 		$this->timezone_changed = $this->timezone ? 1 : -1;
 		$this->venue_id_changed = $this->venue_id ? 1 : -1;

@@ -60,7 +60,7 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $eventHistory->getDescriptionChanged());
 		$this->assertEquals(true,  $eventHistory->getStartAtChanged());
 		$this->assertEquals(true,  $eventHistory->getEndAtChanged());
-		$this->assertEquals(true,  $eventHistory->getIsDeletedChanged());
+		$this->assertEquals(false,  $eventHistory->getIsDeletedChanged());
 		$this->assertEquals(true,  $eventHistory->getCountryIdChanged());
 		$this->assertEquals(true,  $eventHistory->getTimezoneChanged());
 		$this->assertEquals(true,  $eventHistory->getVenueIdChanged());
