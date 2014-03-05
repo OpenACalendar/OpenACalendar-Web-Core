@@ -56,6 +56,10 @@ class EventController {
 			'importurl'=>null, 			
 		);
 
+		if (strpos($slug, "-")) {
+			$slug = array_shift(explode("-", $slug, 2));
+		}
+		
 		$eventRepository = new EventRepository();
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['event']) {

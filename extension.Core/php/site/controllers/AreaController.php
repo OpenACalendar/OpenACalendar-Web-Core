@@ -38,6 +38,10 @@ class AreaController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array('country'=>null,'parentAreas'=>array());
 		
+		if (strpos($slug, "-")) {
+			$slug = array_shift(explode("-", $slug, 2));
+		}
+		
 		$ar = new AreaRepository();
 		$this->parameters['area'] = $ar->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['area']) {

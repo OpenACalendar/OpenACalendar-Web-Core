@@ -193,6 +193,8 @@ $canChangeSite = function(Request $request) use ($app) {
 	}		
 };
 
+define('FRIENDLY_SLUG_REGEX','\d[a-z\d\-]*');
+
 $app->match('/', "site\controllers\IndexController::index") ; 
 
 require APP_ROOT_DIR.'/extension.Core/webSite/index.routes.php';

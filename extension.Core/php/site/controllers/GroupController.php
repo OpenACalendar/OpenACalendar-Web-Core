@@ -47,6 +47,10 @@ class GroupController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array('currentUserWatchesGroup'=>false);
 		
+		if (strpos($slug, "-")) {
+			$slug = array_shift(explode("-", $slug, 2));
+		}
+		
 		$gr = new GroupRepository();
 		$this->parameters['group'] = $gr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['group']) {

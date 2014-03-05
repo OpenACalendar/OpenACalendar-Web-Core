@@ -26,6 +26,10 @@ class CuratedListController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array();
 
+		if (strpos($slug, "-")) {
+			$slug = array_shift(explode("-", $slug, 2));
+		}
+		
 		$curatedlistRepository = new CuratedListRepository();
 		$this->parameters['curatedlist'] =  $curatedlistRepository->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['curatedlist']) {
