@@ -1,6 +1,3 @@
-OpenACalendar License
-=====================
-
 Copyright (c) 2013-2014, JMB Technology Ltd
 All rights reserved.
 
@@ -31,32 +28,11 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+
 Other Licenses
 ==============
 
-Note this software includes some static data.
-
-* Time Zone data http://www.iana.org/time-zones
-* Country Bound Data http://wiki.openstreetmap.org/wiki/User:Ewmjc/Country_bounds
-
 Note this software includes other libraries.
 
-* password-compat
-* Monolog
-* Pimple
-* PSR
-* Silex
-* Swiftmailer
-* Symfony
-* Twig
-* FamFam Flags http://www.famfamfam.com/lab/icons/flags/
-* JQuery
-* JQueryUI
-* Leaflet
 * http://bramp.net/blog/2008/06/04/os-easting-northing-to-lat-long/
-
-The build scripts will install (via composer):
-
-* assetic
-* lessphp
 
