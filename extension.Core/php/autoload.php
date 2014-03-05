@@ -35,6 +35,8 @@ spl_autoload_register('autoload');
 $CONFIG = new Config();
 require APP_ROOT_DIR."/config.php";
 
+$EXTENSIONHOOKRUNNER = new ExtensionHookRunner();
+
 /** @var PDO **/
 $DB = new PDO($CONFIG->databaseType.':host='.$CONFIG->databaseHost.';dbname='.$CONFIG->databaseName, $CONFIG->databaseUser, $CONFIG->databasePassword);
 $DB->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);

@@ -14,6 +14,11 @@ use models\UserAccountModel;
 ///////////////////////// App
 $app = new Silex\Application(); 
 $app['debug'] = $CONFIG->isDebug;
+foreach($CONFIG->extensions as $extensionName) {
+	$className = "Extension".$extensionName;
+	require APP_ROOT_DIR.'/extension.'.$extensionName.'/extension.php';
+	$app['extension'.strtolower($extensionName)] = new $className($app);
+}
 
 ///////////////////////// LOGGING
 

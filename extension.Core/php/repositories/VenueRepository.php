@@ -20,7 +20,10 @@ class VenueRepository {
 	
 	
 	public function create(VenueModel $venue, SiteModel $site, UserAccountModel $creator) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+		
+		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$creator);
+		
 		try {
 			$DB->beginTransaction();
 
@@ -95,10 +98,14 @@ class VenueRepository {
 	}
 	
 	public function edit(VenueModel $venue, UserAccountModel $creator) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+		
 		if ($venue->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted venue!");
 		}
+		
+		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$creator);
+		
 		try {
 			$DB->beginTransaction();
 
