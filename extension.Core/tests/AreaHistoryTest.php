@@ -126,6 +126,7 @@ class AreaHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true,  $areaHistory->getCountryIdChanged());
 		$this->assertEquals(false,  $areaHistory->getParentAreaIdChanged());
 		$this->assertEquals(false,  $areaHistory->getIsDeletedChanged());
+		$this->assertEquals(true, $areaHistory->getIsNew());
 	}
 	
 	
@@ -171,6 +172,7 @@ class AreaHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true,  $areaHistory->getCountryIdChanged());
 		$this->assertEquals(true,  $areaHistory->getParentAreaIdChanged());
 		$this->assertEquals(false,  $areaHistory->getIsDeletedChanged());
+		$this->assertEquals(false, $areaHistory->getIsNew());
 	}
 	
 	

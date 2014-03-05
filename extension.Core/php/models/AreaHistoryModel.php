@@ -20,7 +20,9 @@ class AreaHistoryModel extends AreaModel {
 	protected $parent_area_id_changed = 0;
 	protected $is_deleted_changed = 0;
 
-	
+	protected $is_new = 0;
+
+
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['area_id'];
 		$this->title = $data['title'];
@@ -35,6 +37,7 @@ class AreaHistoryModel extends AreaModel {
 		$this->country_id_changed  = $data['country_id_changed'];
 		$this->parent_area_id_changed  = $data['parent_area_id_changed'];
 		$this->is_deleted_changed  = $data['is_deleted_changed'];
+		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 	}
 	
 	public function isAnyChangeFlagsUnknown() {
@@ -48,6 +51,7 @@ class AreaHistoryModel extends AreaModel {
 		$this->country_id_changed = $this->country_id ? 1 : -1;
 		$this->parent_area_id_changed = $this->parent_area_id ? 1 : -1;
 		$this->is_deleted_changed = $this->is_deleted ? 1 : -1;
+		$this->is_new = 1;
 	}
 	
 	public function setChangedFlagsFromLast(AreaHistoryModel $last) {		
@@ -56,6 +60,7 @@ class AreaHistoryModel extends AreaModel {
 		$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
 		$this->parent_area_id_changed  = ($this->parent_area_id  != $last->parent_area_id  )? 1 : -1;
 		$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
+		$this->is_new = 0;
 	}
 	
 	public function getTitleChanged() {
@@ -77,6 +82,11 @@ class AreaHistoryModel extends AreaModel {
 	public function getIsDeletedChanged() {
 		return ($this->is_deleted_changed != -1);
 	}
+
+	public function getIsNew() {
+		return ($this->is_new == 1);
+	}
+
 
 }
 

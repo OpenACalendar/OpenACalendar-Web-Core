@@ -30,6 +30,9 @@ class VenueHistoryModel extends VenueModel {
 	protected $address_changed = 0;
 	protected $address_code_changed = 0;
 
+	protected $is_new = 0;
+
+
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['venue_id'];
@@ -55,6 +58,7 @@ class VenueHistoryModel extends VenueModel {
 		$this->area_id_changed = $data['area_id_changed'];
 		$this->address_changed = $data['address_changed'];
 		$this->address_code_changed = $data['address_code_changed'];
+		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 	}
 	
 	public function getCreatedAt() {
@@ -112,7 +116,8 @@ class VenueHistoryModel extends VenueModel {
 		$this->country_id_changed = $this->country_id ? 1 : -1;
 		$this->area_id_changed = $this->area_id ? 1 : -1;
 		$this->address_changed = $this->address ? 1 : -1;
-		$this->address_code_changed = $this->address_code ? 1 : -1;		
+		$this->address_code_changed = $this->address_code ? 1 : -1;	
+		$this->is_new = 1;	
 	}
 	
 	public function setChangedFlagsFromLast(VenueHistoryModel $last) {		
@@ -125,6 +130,7 @@ class VenueHistoryModel extends VenueModel {
 		$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
 		$this->address_changed  = ($this->address  != $last->address  )? 1 : -1;
 		$this->address_code_changed  = ($this->address_code  != $last->address_code  )? 1 : -1;
+		$this->is_new = 0;
 	}
 	
 	public function getTitleChanged() {
@@ -161,6 +167,10 @@ class VenueHistoryModel extends VenueModel {
 
 	public function getAddressCodeChanged() {
 		return ($this->address_code_changed != -1);
+	}
+
+	public function getIsNew() {
+		return ($this->is_new == 1);
 	}
 
 

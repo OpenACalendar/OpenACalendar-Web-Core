@@ -140,6 +140,7 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $venueHistory->getIsDeletedChanged());
 		$this->assertEquals(true,  $venueHistory->getLatChanged());
 		$this->assertEquals(true,  $venueHistory->getLngChanged());
+		$this->assertEquals(true, $venueHistory->getIsNew());
 	}
 	
 	function testSetChangedFlagsFromNothing2() {
@@ -178,6 +179,7 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $venueHistory->getIsDeletedChanged());
 		$this->assertEquals(false,  $venueHistory->getLatChanged());
 		$this->assertEquals(false ,  $venueHistory->getLngChanged());
+		$this->assertEquals(true, $venueHistory->getIsNew());
 	}
 	
 	
@@ -242,6 +244,7 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $venueHistory->getIsDeletedChanged());
 		$this->assertEquals(true,  $venueHistory->getLatChanged());
 		$this->assertEquals(false,  $venueHistory->getLngChanged());
+		$this->assertEquals(false, $venueHistory->getIsNew());
 	}
 	
 	

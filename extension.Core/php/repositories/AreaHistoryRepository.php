@@ -37,6 +37,7 @@ class AreaHistoryRepository {
 		}
 		
 		$statUpdate = $DB->prepare("UPDATE area_history SET ".
+				" is_new = :is_new, ".
 				" title_changed = :title_changed,  ".
 				" description_changed = :description_changed,  ".
 				" country_id_changed = :country_id_changed,  ".
@@ -46,6 +47,7 @@ class AreaHistoryRepository {
 		$statUpdate->execute(array(
 				'id'=>$areahistory->getId(),
 				'created_at'=>$areahistory->getCreatedAt()->format("Y-m-d H:i:s"),
+				'is_new'=>$areahistory->getIsNew()?1:0,
 				'title_changed'=> $areahistory->getTitleChanged() ? 1 : -1,
 				'description_changed'=> $areahistory->getDescriptionChanged() ? 1 : -1,
 				'country_id_changed'=> $areahistory->getCountryIdChanged() ? 1 : -1,

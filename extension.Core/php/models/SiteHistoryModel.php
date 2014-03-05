@@ -33,6 +33,9 @@ class SiteHistoryModel extends SiteModel {
 	protected $is_feature_physical_events_changed = 0;
 	protected $is_feature_group_changed = 0;
 
+	protected $is_new = 0;
+
+
 	
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['site_id'];
@@ -74,6 +77,7 @@ class SiteHistoryModel extends SiteModel {
 		$this->is_feature_virtual_events_changed  = isset($data['is_feature_virtual_events_changed']) ? $data['is_feature_virtual_events_changed'] : 0;
 		$this->is_feature_physical_events_changed  = isset($data['is_feature_physical_events_changed']) ? $data['is_feature_physical_events_changed'] : 0;
 		$this->is_feature_group_changed  = isset($data['is_feature_group_changed']) ? $data['is_feature_group_changed'] : 0;
+		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 		
 	}
 	
@@ -118,6 +122,7 @@ class SiteHistoryModel extends SiteModel {
 		$this->is_feature_virtual_events_changed  = 1;
 		$this->is_feature_physical_events_changed  = 1;
 		$this->is_feature_group_changed  = 1;
+		$this->is_new = 1;
 	}
 	
 	public function setChangedFlagsFromLast(SiteHistoryModel $last) {		
@@ -139,6 +144,7 @@ class SiteHistoryModel extends SiteModel {
 		$this->is_feature_virtual_events_changed   = ($this->is_feature_virtual_events  != $last->is_feature_virtual_events  )? 1 : -1;
 		$this->is_feature_physical_events_changed   = ($this->is_feature_physical_events  != $last->is_feature_physical_events  )? 1 : -1;
 		$this->is_feature_group_changed   = ($this->is_feature_group  != $last->is_feature_group  )? 1 : -1;
+		$this->is_new = 0;
 	}
 	
 	public function getTitleChanged() {
@@ -211,6 +217,10 @@ class SiteHistoryModel extends SiteModel {
 
 	public function getIsFeatureGroupChanged() {
 		return ($this->is_feature_group_changed != -1);
+	}
+
+	public function getIsNew() {
+		return ($this->is_new == 1);
 	}
 
 

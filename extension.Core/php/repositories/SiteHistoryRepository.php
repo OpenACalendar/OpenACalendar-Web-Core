@@ -37,6 +37,7 @@ class SiteHistoryRepository {
 		}
 		
 		$statUpdate = $DB->prepare("UPDATE site_history SET ".
+				" is_new = :is_new, ".
 				" title_changed = :title_changed,  ".
 				" slug_changed = :slug_changed,  ".
 				" description_text_changed = :description_text_changed,  ".
@@ -59,6 +60,7 @@ class SiteHistoryRepository {
 		$statUpdate->execute(array(
 				'id'=>$sitehistory->getId(),
 				'created_at'=>$sitehistory->getCreatedAt()->format("Y-m-d H:i:s"),
+				'is_new'=>$sitehistory->getIsNew()?1:0,
 				'title_changed'=> $sitehistory->getTitleChanged() ? 1 : -1,
 				'slug_changed'=> $sitehistory->getSlugChanged() ? 1 : -1,
 				'description_text_changed'=> $sitehistory->getDescriptionTextChanged() ? 1 : -1,

@@ -120,6 +120,7 @@ class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $groupHistory->getUrlChanged());
 		$this->assertEquals(false,  $groupHistory->getTwitterUsernameChanged());
 		$this->assertEquals(false,  $groupHistory->getIsDeletedChanged());
+		$this->assertEquals(true, $groupHistory->getIsNew());
 	}
 	
 	function testSetChangedFlagsFromNothing2() {
@@ -147,6 +148,7 @@ class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true,  $groupHistory->getUrlChanged());
 		$this->assertEquals(true,  $groupHistory->getTwitterUsernameChanged());
 		$this->assertEquals(false,  $groupHistory->getIsDeletedChanged());
+		$this->assertEquals(true, $groupHistory->getIsNew());
 	}
 	
 	function testSetChangedFlagsFromLast1() {
@@ -191,6 +193,7 @@ class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true,  $groupHistory->getUrlChanged());
 		$this->assertEquals(false,  $groupHistory->getTwitterUsernameChanged());
 		$this->assertEquals(false,  $groupHistory->getIsDeletedChanged());
+		$this->assertEquals(false, $groupHistory->getIsNew());
 	}
 	
 	function testSetChangedFlagsFromLast2() {
@@ -235,6 +238,7 @@ class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $groupHistory->getUrlChanged());
 		$this->assertEquals(true,  $groupHistory->getTwitterUsernameChanged());
 		$this->assertEquals(false,  $groupHistory->getIsDeletedChanged());
+		$this->assertEquals(false, $groupHistory->getIsNew());
 	}
 	
 	function testSetChangedFlagsFromLast3() {
@@ -279,6 +283,7 @@ class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $groupHistory->getUrlChanged());
 		$this->assertEquals(false,  $groupHistory->getTwitterUsernameChanged());
 		$this->assertEquals(true,  $groupHistory->getIsDeletedChanged());
+		$this->assertEquals(false, $groupHistory->getIsNew());
 	}
 	
 }

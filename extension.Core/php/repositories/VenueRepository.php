@@ -47,8 +47,8 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,address,address_code) VALUES ".
-					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:address,:address_code)");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,address,address_code, is_new) VALUES ".
+					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:address,:address_code, '1')");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

@@ -56,6 +56,7 @@ class SiteHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true,  $siteHistory->getIsFeatureVirtualEventsChanged());
 		$this->assertEquals(true,  $siteHistory->getIsFeaturePhysicalEventsChanged());
 		$this->assertEquals(true,  $siteHistory->getIsFeatureGroupChanged());
+		$this->assertEquals(true, $siteHistory->getIsNew());
 	}
 	
 	
@@ -101,6 +102,7 @@ class SiteHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $siteHistory->getIsFeatureVirtualEventsChanged());
 		$this->assertEquals(false,  $siteHistory->getIsFeaturePhysicalEventsChanged());
 		$this->assertEquals(false,  $siteHistory->getIsFeatureGroupChanged());
+		$this->assertEquals(false, $siteHistory->getIsNew());
 	}
 	
 	

@@ -44,8 +44,8 @@ class GroupRepository {
 			$data = $stat->fetch();
 			$group->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, twitter_username) VALUES ".
-					"(:group_id, :title, :url, :description, :user_account_id  , :created_at, :twitter_username)");
+			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, twitter_username, is_new) VALUES ".
+					"(:group_id, :title, :url, :description, :user_account_id  , :created_at, :twitter_username, '1')");
 			$stat->execute(array(
 					'group_id'=>$group->getId(),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

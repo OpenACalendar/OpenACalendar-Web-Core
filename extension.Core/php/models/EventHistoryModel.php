@@ -34,6 +34,9 @@ class EventHistoryModel extends EventModel {
 	protected $is_virtual_changed   = 0;
 	protected $is_physical_changed   = 0;
 	protected $area_id_changed   = 0;
+
+	protected $is_new = 0;
+
 	
 
 
@@ -70,6 +73,7 @@ class EventHistoryModel extends EventModel {
 		$this->is_virtual_changed  = isset($data['is_virtual_changed']) ? $data['is_virtual_changed'] : 0;
 		$this->is_physical_changed  = isset($data['is_physical_changed']) ? $data['is_physical_changed'] : 0;
 		$this->area_id_changed  = isset($data['area_id_changed']) ? $data['area_id_changed'] : 0;
+		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 	}
 	
 	public function isAnyChangeFlagsUnknown() {
@@ -100,6 +104,7 @@ class EventHistoryModel extends EventModel {
 		$this->is_virtual_changed = 1;
 		$this->is_physical_changed = 1;
 		$this->area_id_changed = $this->area_id ? 1 : -1;
+		$this->is_new = 1;
 	}
 	
 	public function setChangedFlagsFromLast(EventHistoryModel $last) {		
@@ -115,6 +120,7 @@ class EventHistoryModel extends EventModel {
 		$this->is_virtual_changed  = ($this->is_virtual  != $last->is_virtual  )? 1 : -1;
 		$this->is_physical_changed  = ($this->is_physical  != $last->is_physical  )? 1 : -1;
 		$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
+		$this->is_new = 0;
 	}
 	
 	
@@ -200,6 +206,10 @@ class EventHistoryModel extends EventModel {
 		return ($this->area_id_changed != -1);
 	}
 
+
+	public function getIsNew() {
+		return ($this->is_new == 1);
+	}
 
 
 }

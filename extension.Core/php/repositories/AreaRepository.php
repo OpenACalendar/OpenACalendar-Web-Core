@@ -48,8 +48,8 @@ class AreaRepository {
 			$data = $stat->fetch();
 			$area->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at)");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, is_new) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,'1')");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

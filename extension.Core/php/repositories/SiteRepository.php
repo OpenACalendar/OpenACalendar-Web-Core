@@ -70,11 +70,11 @@ class SiteRepository {
 			$stat = $DB->prepare("INSERT INTO site_history (site_id, user_account_id, ".
 						"title, slug, slug_canonical, created_at,is_feature_map,is_feature_importer,".
 						"is_feature_curated_list,is_listed_in_index,is_web_robots_allowed, ".
-						"is_all_users_editors, is_request_access_allowed, prompt_emails_days_in_advance) ".
+						"is_all_users_editors, is_request_access_allowed, prompt_emails_days_in_advance, is_new) ".
 					"VALUES (:site_id, :user_account_id, :title, ".
 						":slug, :slug_canonical,  :created_at,:is_feature_map,:is_feature_importer,".
 						":is_feature_curated_list,:is_listed_in_index,:is_web_robots_allowed, ".
-						":is_all_users_editors, :is_request_access_allowed, :prompt_emails_days_in_advance)");
+						":is_all_users_editors, :is_request_access_allowed, :prompt_emails_days_in_advance, '1')");
 			$stat->execute(array(
 					'site_id'=>$site->getId(),
 					'user_account_id'=>$owner->getId(),

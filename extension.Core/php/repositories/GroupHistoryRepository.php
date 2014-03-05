@@ -37,6 +37,7 @@ class GroupHistoryRepository {
 		}
 		
 		$statUpdate = $DB->prepare("UPDATE group_history SET ".
+				" is_new = :is_new, ".
 				" title_changed = :title_changed,  ".
 				" description_changed = :description_changed,  ".
 				" url_changed = :url_changed,  ".
@@ -46,6 +47,7 @@ class GroupHistoryRepository {
 		$statUpdate->execute(array(
 				'id'=>$grouphistory->getId(),
 				'created_at'=>$grouphistory->getCreatedAt()->format("Y-m-d H:i:s"),
+				'is_new'=>$grouphistory->getIsNew()?1:0,
 				'title_changed'=> $grouphistory->getTitleChanged() ? 1 : -1,
 				'description_changed'=> $grouphistory->getDescriptionChanged() ? 1 : -1,
 				'url_changed'=> $grouphistory->getUrlChanged() ? 1 : -1,

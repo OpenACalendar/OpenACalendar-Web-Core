@@ -68,6 +68,7 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true,  $eventHistory->getIsVirtualChanged());
 		$this->assertEquals(true,  $eventHistory->getIsPhysicalChanged());
 		$this->assertEquals(false,  $eventHistory->getAreaIdChanged());
+		$this->assertEquals(true, $eventHistory->getIsNew());
 	}
 	
 	
@@ -145,7 +146,9 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $eventHistory->getUrlChanged());
 		$this->assertEquals(false,  $eventHistory->getIsVirtualChanged());
 		$this->assertEquals(false,  $eventHistory->getIsPhysicalChanged());
-		$this->assertEquals(true,  $eventHistory->getAreaIdChanged());	}
+		$this->assertEquals(true,  $eventHistory->getAreaIdChanged());	
+		$this->assertEquals(false, $eventHistory->getIsNew());
+	}
 	
 	
 }

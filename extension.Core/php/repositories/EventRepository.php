@@ -61,10 +61,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
 				" user_account_id  , created_at,venue_id,country_id,timezone,".
-				" url, is_physical, is_virtual, area_id) VALUES ".
+				" url, is_physical, is_virtual, area_id, is_new) VALUES ".
 					" (:event_id, :summary, :description, :start_at, :end_at, ".
 						" :user_account_id  , :created_at,:venue_id,:country_id,:timezone,".
-						" :url, :is_physical, :is_virtual, :area_id)");
+						" :url, :is_physical, :is_virtual, :area_id, '1')");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),

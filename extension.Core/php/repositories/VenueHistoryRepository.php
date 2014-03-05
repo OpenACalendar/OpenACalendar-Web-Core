@@ -37,6 +37,7 @@ class VenueHistoryRepository {
 		}
 		
 		$statUpdate = $DB->prepare("UPDATE venue_history SET ".
+				" is_new = :is_new, ".
 				" title_changed = :title_changed,  ".
 				" description_changed = :description_changed,  ".
 				" lat_changed = :lat_changed,  ".
@@ -50,6 +51,7 @@ class VenueHistoryRepository {
 		$statUpdate->execute(array(
 				'id'=>$venuehistory->getId(),
 				'created_at'=>$venuehistory->getCreatedAt()->format("Y-m-d H:i:s"),
+				'is_new'=>$venuehistory->getIsNew()?1:0,
 				'title_changed'=> $venuehistory->getTitleChanged() ? 1 : -1,
 				'description_changed'=> $venuehistory->getDescriptionChanged() ? 1 : -1,
 				'lat_changed'=> $venuehistory->getLatChanged() ? 1 : -1,

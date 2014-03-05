@@ -26,6 +26,9 @@ class GroupHistoryModel extends GroupModel {
 	protected $twitter_username_changed = 0;
 	protected $is_deleted_changed = 0;
 
+	protected $is_new = 0;
+
+
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['group_id'];
@@ -44,6 +47,7 @@ class GroupHistoryModel extends GroupModel {
 		$this->url_changed = $data['url_changed'];
 		$this->twitter_username_changed = $data['twitter_username_changed'];
 		$this->is_deleted_changed = $data['is_deleted_changed'];
+		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 	}
 	
 	public function getCreatedAt() {
@@ -90,6 +94,7 @@ class GroupHistoryModel extends GroupModel {
 		$this->url_changed = $this->url ? 1 : -1;
 		$this->twitter_username_changed = $this->twitter_username ? 1 : -1;
 		$this->is_deleted_changed = $this->is_deleted ? 1 : -1;
+		$this->is_new = 1;
 	}
 	
 	public function setChangedFlagsFromLast(GroupHistoryModel $last) {
@@ -98,6 +103,7 @@ class GroupHistoryModel extends GroupModel {
 		$this->url_changed  = ($this->url  != $last->url  )? 1 : -1;
 		$this->twitter_username_changed  = ($this->twitter_username  != $last->twitter_username  )? 1 : -1;
 		$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
+		$this->is_new = 0;
 	}
 	
 	public function getTitleChanged() {
@@ -118,6 +124,10 @@ class GroupHistoryModel extends GroupModel {
 
 	public function getIsDeletedChanged() {
 		return ($this->is_deleted_changed != -1);
+	}
+
+	public function getIsNew() {
+		return ($this->is_new == 1);
 	}
 
 }

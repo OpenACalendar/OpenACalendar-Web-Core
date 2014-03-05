@@ -49,6 +49,7 @@ class EventHistoryRepository {
 		}
 		
 		$statUpdate = $DB->prepare("UPDATE event_history SET ".
+				" is_new = :is_new, ".
 				" summary_changed = :summary_changed   , ".
 				" description_changed = :description_changed   , ".
 				" start_at_changed = :start_at_changed   , ".
@@ -65,6 +66,7 @@ class EventHistoryRepository {
 		$statUpdate->execute(array(
 				'id'=>$eventhistory->getId(),
 				'created_at'=>$eventhistory->getCreatedAt()->format("Y-m-d H:i:s"),
+				'is_new'=>$eventhistory->getIsNew()?1:0,
 				'summary_changed'=> $eventhistory->getSummaryChanged() ? 1 : -1,
 				'description_changed'=> $eventhistory->getDescriptionChanged() ? 1 : -1,
 				'start_at_changed'=> $eventhistory->getStartAtChanged() ? 1 : -1,
