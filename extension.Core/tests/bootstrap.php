@@ -31,6 +31,8 @@ $CONFIG = new Config();
 require __DIR__."/../../config.test.php";
 $CONFIG->isDebug = true;
 
+$EXTENSIONHOOKRUNNER = new ExtensionHookRunner();
+
 /** @var PDO **/
 $DB = new PDO('pgsql:host='.$CONFIG->databaseHost.';dbname='.$CONFIG->databaseName, $CONFIG->databaseUser, $CONFIG->databasePassword);
 $DB->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
