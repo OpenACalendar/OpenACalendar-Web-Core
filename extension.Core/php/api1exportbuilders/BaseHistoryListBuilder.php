@@ -38,6 +38,8 @@ abstract class BaseHistoryListBuilder extends BaseBuilder {
 			$this->addGroupHistory($history);
 		} else if (is_a($history,'models\VenueHistoryModel')) {
 			$this->addVenueHistory($history);
+		} else if (is_a($history,'models\AreaHistoryModel')) {
+			$this->addAreaHistory($history);
 		} else {
 			die(get_class($history));
 		}

@@ -11,6 +11,7 @@ use models\UserAccountModel;
 use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
+use models\AreaHistoryModel;
 
 /**
  *
@@ -25,6 +26,7 @@ class HistoryRepositoryBuilder {
 	protected $includeEventHistory = true;
 	protected $includeGroupHistory = true;
 	protected $includeVenueHistory = true;
+	protected $includeAreaHistory = true;
 	
 	public function getIncludeEventHistory() {
 		return $this->includeEventHistory;
@@ -50,6 +52,15 @@ class HistoryRepositoryBuilder {
 		$this->includeVenueHistory = $includeVenueHistory;
 	}
 	
+	public function getIncludeAreaHistory() {
+		return $this->includeAreaHistory;
+	}
+
+	public function setIncludeAreaHistory($includeAreaHistory) {
+		$this->includeAreaHistory = $includeAreaHistory;
+	}
+
+		
 	protected $since;
 	
 	public function setSince($since) {
@@ -64,6 +75,7 @@ class HistoryRepositoryBuilder {
 		$this->includeEventHistory = true;
 		$this->includeGroupHistory = true;
 		$this->includeVenueHistory = true;
+		$this->includeAreaHistory = true;
 	}
 
 
@@ -75,6 +87,7 @@ class HistoryRepositoryBuilder {
 		$this->includeEventHistory = true;
 		$this->includeGroupHistory = true;
 		$this->includeVenueHistory = false;
+		$this->includeAreaHistory = false;
 	}
 
 	/** @var EventModel **/
@@ -85,6 +98,7 @@ class HistoryRepositoryBuilder {
 		$this->includeEventHistory = true;
 		$this->includeGroupHistory = true;
 		$this->includeVenueHistory = true;
+		$this->includeAreaHistory = false;
 	}
 
 	/** @var VenueModel **/
@@ -95,6 +109,7 @@ class HistoryRepositoryBuilder {
 		$this->includeEventHistory = true;
 		$this->includeGroupHistory = false;
 		$this->includeVenueHistory = true;
+		$this->includeAreaHistory = false;
 	}
 	
 	protected $venueVirtualOnly = false;
@@ -106,6 +121,7 @@ class HistoryRepositoryBuilder {
 			$this->includeEventHistory = true;
 			$this->includeGroupHistory = false;
 			$this->includeVenueHistory = false;
+			$this->includeAreaHistory = false;
 		}
 	}
 	
@@ -285,6 +301,47 @@ class HistoryRepositoryBuilder {
 				$venueHistory = new VenueHistoryModel();
 				$venueHistory->setFromDataBaseRow($data);
 				$results[] = $venueHistory;
+			}
+			
+		}
+		
+		/////////////////////////// Area History
+
+		if ($this->includeAreaHistory) {
+			$where = array();
+			$params = array();
+			
+
+			if ($this->site) {
+				$where[] = 'area_information.site_id =:site';
+				$params['site'] = $this->site->getId();
+			}
+			
+			if ($this->since) {
+				$where[] = ' area_history.created_at >= :since ';
+				$params['since'] = $this->since->format("Y-m-d H:i:s");
+			}
+			
+			if ($this->notUser) {
+				$where[] = 'area_history.user_account_id != :userid ';
+				$params['userid'] = $this->notUser->getId();
+			}
+			
+			$sql = "SELECT area_history.*, area_information.slug AS area_slug, user_account_information.username AS user_account_username FROM area_history ".
+					" LEFT JOIN user_account_information ON user_account_information.id = area_history.user_account_id ".
+					" LEFT JOIN area_information ON area_information.id = area_history.area_id ".
+					($where ? " WHERE ".implode(" AND ", $where) : "").
+					" ORDER BY area_history.created_at DESC LIMIT ".$this->limit;
+
+			//var_dump($sql); var_dump($params);
+			
+			$stat = $DB->prepare($sql);
+			$stat->execute($params);
+			
+			while($data = $stat->fetch()) {
+				$areaHistory = new AreaHistoryModel();
+				$areaHistory->setFromDataBaseRow($data);
+				$results[] = $areaHistory;
 			}
 			
 		}

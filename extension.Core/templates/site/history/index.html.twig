@@ -29,6 +29,8 @@
 				{% include 'site/common/groupHistoryItem.html.twig' %}</li>
 			{% elseif historyItem is venuehistory %}
 				{% include 'site/common/venueHistoryItem.html.twig' %}
+			{% elseif historyItem is areahistory %}
+				{% include 'site/common/areaHistoryItem.html.twig' %}
 			{% endif %}
 		{% endfor %}
 	</ul>

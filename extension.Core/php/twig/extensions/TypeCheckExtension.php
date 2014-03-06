@@ -6,6 +6,7 @@ use Silex\Application;
 use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
+use models\AreaHistoryModel;
 
 
 /**
@@ -29,6 +30,7 @@ class TypeCheckExtension extends \Twig_Extension
 			new \Twig_SimpleTest('eventhistory',function($item) {  return $item instanceof EventHistoryModel; }),
 			new \Twig_SimpleTest('grouphistory',function($item) {  return $item instanceof GroupHistoryModel; }),
 			new \Twig_SimpleTest('venuehistory',function($item) {  return $item instanceof VenueHistoryModel; }),
+			new \Twig_SimpleTest('areahistory',function($item) {  return $item instanceof AreaHistoryModel; }),
 		);
 	}
 

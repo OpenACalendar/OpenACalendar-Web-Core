@@ -7,6 +7,7 @@ use models\EventModel;
 use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
+use models\AreaHistoryModel;
 use repositories\builders\HistoryRepositoryBuilder;
 
 
@@ -110,6 +111,29 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 		
 		$txt = '<entry>';
 		$txt .= '<id>'.$ourUrl.'/history/'.$history->getCreatedAtTimeStamp().'</id>';
+		$txt .= '<link href="'.$ourUrl.'"/>';
+		
+		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
+
+		$txt .= '<summary>'.$this->getBigData($history->getDescription()).'</summary>';
+		
+		$txt .= '<updated>'.$history->getCreatedAt()->format("Y-m-d")."T".$history->getCreatedAt()->format("H:i:s")."Z</updated>";
+		
+		$txt .= '<author><name>'.$CONFIG->siteTitle.'</name></author></entry>'." \r\n";
+		
+		$this->histories[] = $txt;		
+	}
+	
+	public function addAreaHistory(AreaHistoryModel $history) {
+		global $CONFIG;
+		
+		$siteSlug = $this->site ? $this->site->getSlug() : $history->getSiteSlug();		
+		$ourUrl = $CONFIG->isSingleSiteMode ? 
+				'http://'.$CONFIG->webSiteDomain.'/area/'.$history->getSlug() : 
+				'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/area/'.$history->getSlug() ;
+		
+		$txt = '<entry>';
+		$txt .= '<id>'.$ourUrl.'/area/'.$history->getCreatedAtTimeStamp().'</id>';
 		$txt .= '<link href="'.$ourUrl.'"/>';
 		
 		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
