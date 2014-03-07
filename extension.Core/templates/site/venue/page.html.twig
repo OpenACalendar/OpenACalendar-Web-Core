@@ -13,8 +13,8 @@
 	<li><a href="/venue">venues</a></li>
 	<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>
 	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></li>{% endfor %}
-	{% if area %}<li class="current"><a href="/area/{{ area.slug }}">{{ area.title }}</a></li>{% endif %}
-	<li class="current"><a href="/venue/{{ venue.slug }}">{{ venue.title }}</a></li>
+	{% if area %}<li class="current"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>{% endif %}
+	<li class="current"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></li>
 {% endblock %}
 
 
@@ -35,9 +35,9 @@
 					<img src="/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
 				</a>
 			</li>
-			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/venue/{{ venue.slug }}">Details</a></li>
-			<li class="tab"><a href="/venue/{{ venue.slug }}/calendar">Calendar</a></li>
-			<li class="tab {% block tabHistory %}{% endblock %}"><a href="/venue/{{ venue.slug }}/history">History of changes</a></li>
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/venue/{{ venue.slugForUrl }}">Details</a></li>
+			<li class="tab"><a href="/venue/{{ venue.slugForUrl }}/calendar">Calendar</a></li>
+			<li class="tab {% block tabHistory %}{% endblock %}"><a href="/venue/{{ venue.slugForUrl }}/history">History of changes</a></li>
 		</ul>
 		<div id="innerPage">
 

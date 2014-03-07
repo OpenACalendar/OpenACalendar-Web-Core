@@ -20,13 +20,13 @@
 {% block actions %}
 	{% if currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}
 		<li class="action">
-			<a href="/group/{{ group.slug }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+			<a href="/group/{{ group.slugForUrl }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
 		</li>
 		<li class="action">
-			<a href="/group/{{ group.slug }}/media"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
+			<a href="/group/{{ group.slugForUrl }}/media"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
 		</li>
 		<li class="action">
-			<a href="/group/{{ group.slug }}/newevent"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new event</a>
+			<a href="/group/{{ group.slugForUrl }}/newevent"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new event</a>
 		</li>
 	{% endif %}
 {% endblock %}
@@ -51,7 +51,7 @@
 		
 	{% if importurls %}
 		<ul class="actionList">
-			<li><p><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"><a href="/group/{{ group.slug }}/importers">List importers</a></p></li>
+			<li><p><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"><a href="/group/{{ group.slugForUrl }}/importers">List importers</a></p></li>
 		</ul>
 	{% endif %}
 	
@@ -68,7 +68,7 @@
 		{% else %}
 			<li>
 				No events found.
-				{% if currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}Why not <a href="/group/{{ group.slug }}/newevent">add one</a>?{% endif %}
+				{% if currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}Why not <a href="/group/{{ group.slugForUrl }}/newevent">add one</a>?{% endif %}
 			</li>		
 		{% endfor %}
 	</ul>

@@ -12,9 +12,9 @@
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	<li><a href="/event">events</a></li>
 	{% if group is not null %}
-		<li><a href="/group/{{ group.slug }}">{{ group.title }}</a></li>
+		<li><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></li>
 	{% endif %}
-	<li class="current"><a href="/event/{{ event.slug }}">{{ event.summary }}</a></li>
+	<li class="current"><a href="/event/{{ event.slugForUrl }}">{{ event.summary }}</a></li>
 {% endblock %}
 
 
@@ -24,7 +24,7 @@
 		<div id="groupSummaryPanel">
 			<ul>
 			{% for group in groups %}
-				<li>In group: <a href="/group/{{ group.slug }}">{{ group.title }}</a></li>
+				<li>In group: <a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></li>
 			{% endfor %}
 			</ul>
 		</div>
@@ -48,8 +48,8 @@
 					</a>
 				</li>
 			{% endif %}
-			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/event/{{ event.slug }}">Details</a></li>
-			<li class="tab {% block tabHistory %}{% endblock %}"><a href="/event/{{ event.slug }}/history">History of changes</a></li>
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/event/{{ event.slugForUrl }}">Details</a></li>
+			<li class="tab {% block tabHistory %}{% endblock %}"><a href="/event/{{ event.slugForUrl }}/history">History of changes</a></li>
 		</ul>
 		<div id="innerPage">
 

@@ -54,7 +54,7 @@
 			<ul class="venues">
 				{% for venue in venues %}
 					<li class="venue">
-						<div class="title"><a href="/venue/{{ venue.slug }}">{{ venue.title }}</a></div>
+						<div class="title"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></div>
 						{{ venue.description | nl2br }}
 					</li>
 				{% else %}

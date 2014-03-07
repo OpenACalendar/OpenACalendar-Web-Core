@@ -11,7 +11,7 @@
 {% block breadcrumbs %}
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	<li><a href="/group">groups</a></li>
-	<li class="current"><a href="/group/{{ group.slug }}">{{ group.title }}</a></li>
+	<li class="current"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></li>
 {% endblock %}
 
 
@@ -38,15 +38,15 @@
 					</a>
 				</li>
 			{% endif %}			
-			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/group/{{ group.slug }}">Details</a></li>
-			<li class="tab"><a href="/group/{{ group.slug }}/calendar">Calendar</a></li>
-			<li class="tab {% block tabHistory %}{% endblock %}"><a href="/group/{{ group.slug }}/history">History of changes</a></li>
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/group/{{ group.slugForUrl }}">Details</a></li>
+			<li class="tab"><a href="/group/{{ group.slugForUrl }}/calendar">Calendar</a></li>
+			<li class="tab {% block tabHistory %}{% endblock %}"><a href="/group/{{ group.slugForUrl }}/history">History of changes</a></li>
 			{% if currentUser is not null and not currentUserWatchesSite %}
 				<li class="action">
 					{% if currentUserWatchesGroup %}
-						<a href="/group/{{ group.slug }}/watch/">Watching!</a>
+						<a href="/group/{{ group.slugForUrl }}/watch/">Watching!</a>
 					{% else %}
-						<a href="/group/{{ group.slug }}/watch/">Watch?</a>
+						<a href="/group/{{ group.slugForUrl }}/watch/">Watch?</a>
 					{% endif %}			
 				</li>
 			{% endif %}

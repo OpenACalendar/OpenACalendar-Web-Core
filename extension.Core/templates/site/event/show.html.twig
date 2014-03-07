@@ -21,17 +21,17 @@
 {% block actions %}
 	{% if currentUserCanEditSite %}
 		{% if not event.isDeleted %}
-			<li class="action"><a href="/event/{{ event.slug }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a></li>
-			<li class="action"><a href="/event/{{ event.slug }}/edit/venue"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit venue</a></li>
+			<li class="action"><a href="/event/{{ event.slugForUrl }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a></li>
+			<li class="action"><a href="/event/{{ event.slugForUrl }}/edit/venue"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit venue</a></li>
 		{% endif %}
 		{% if not event.isImported %}
 			{% if not event.isDeleted %}
 				{% if group is not null or currentSite.isFeatureGroup %}
-					<li class="action"><a href="/event/{{ event.slug }}/recur"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> recur</a></li>
+					<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> recur</a></li>
 				{% endif %}
-				<li class="action"><a href="/event/{{ event.slug }}/delete"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> delete</a></li>
+				<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> delete</a></li>
 			{% else %}
-				<li class="action"><a href="/event/{{ event.slug }}/undelete"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> undelete</a></li>
+				<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> undelete</a></li>
 			{% endif %}
 		{% endif %}
 	{% endif %}
@@ -71,7 +71,7 @@
 		
 		{% if groups|length > 0 %}
 			{% for group in groups %}
-				<p class="groupTitle">About <a href="/group/{{ group.slug }}">{{ group.title }}</a></p>
+				<p class="groupTitle">About <a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></p>
 				{% if group.description  %}
 					<p class="groupDescription">{{ group.description | nl2br  | linkify }}</p>
 				{% else %}
@@ -95,7 +95,7 @@
 		{% endif %}
 				
 		{% if venue is not null %}
-			<p class="venueTitle">About <a href="/venue/{{ venue.slug }}">{{ venue.title }}</a></p>
+			<p class="venueTitle">About <a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></p>
 			{% if venue.description %}
 				<p class="venueDescription">{{ venue.description | nl2br  | linkify }}</p>
 			{% else %}
@@ -116,7 +116,7 @@
 		{% if childAreas and venue is null and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not event.isDeleted %}
 			<div id="userCanPushToChildAreaWrapper">
 				<p>Is this in one of these places?</p>
-				<form action="/event/{{ event.slug }}/moveToArea" method="post"  class="styled">
+				<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post"  class="styled">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					<input type="hidden" name="submitted" value="yes">
 					<ul class="areas">
@@ -139,14 +139,14 @@
 			{% if country or venue%}
 				<div class="location">
 					{% if event.isPhysical and venue %}
-						<div class="venue"><a href="/venue/{{ venue.slug }}">{{ venue.title }}</a></div>
+						<div class="venue"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></div>
 					{% endif %}
 					{% if venue and venue.address %}<div class="address">{{ venue.address | nl2br }}</div>{% endif %}
 					{% if area %}
-						<div class="area"><a href="/area/{{ area.slug }}">{{ area.title }}</a></div>
+						<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
 					{% endif %}						
 					{% for parentArea in parentAreas|reverse %}
-						<div class="area"><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></div>
+						<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
 					{% endfor %}
 					{% if venue and venue.addressCode %}<div class="addressCode">{{ venue.addressCode  }}</div>{% endif %}
 					{% if country %}

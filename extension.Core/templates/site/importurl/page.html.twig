@@ -20,7 +20,7 @@
 	{% if group %}
 		<div id="groupSummaryPanel">
 			<ul>
-				<li>In group: <a href="/group/{{ group.slug }}">{{ group.title }}</a></li>
+				<li>In group: <a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></li>
 			</ul>
 		</div>
 	{% endif %}

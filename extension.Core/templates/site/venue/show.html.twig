@@ -19,10 +19,10 @@
 {% block actions %}
 	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
 		<li class="action">
-			<a href="/venue/{{ venue.slug }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+			<a href="/venue/{{ venue.slugForUrl }}/edit"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
 		</li>
 		<li class="action">
-			<a href="/venue/{{ venue.slug }}/media"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
+			<a href="/venue/{{ venue.slugForUrl }}/media"><img src="/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
 		</li>		
 	{% endif %}
 {% endblock %}
@@ -40,10 +40,10 @@
 			<div class="location">
 				{% if venue.address %}<div class="address">{{ venue.address | nl2br }}</div>{% endif %}
 				{% if area %}
-					<div class="area"><a href="/area/{{ area.slug }}">{{ area.title }}</a></div>
+					<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
 				{% endif %}
 				{% for parentArea in parentAreas|reverse %}
-					<div class="area"><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></div>
+					<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
 				{% endfor %}	
 				{% if venue.addressCode %}<div class="addressCode">{{ venue.addressCode  }}</div>{% endif %}
 				{% if country %}
@@ -57,7 +57,7 @@
 		{% if childAreas and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
 			<div id="userCanPushToChildAreaWrapper">
 				<p>Is {{ venue.title }} in one of these places?</p>
-				<form action="/venue/{{ venue.slug }}/moveToArea" method="post"  class="styled">
+				<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post"  class="styled">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					<input type="hidden" name="submitted" value="yes">
 					<ul class="areas">

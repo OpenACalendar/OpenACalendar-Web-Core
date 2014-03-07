@@ -131,7 +131,7 @@
 					{% if eventHistory.userAccountID %}by {{  eventHistory.userAccountUserName }}{% endif %}
 				</div>
 				{% if currentUserCanEditSite and not event.isImported %}
-					<a href="/event/{{ event.slug }}/rollback/{{ eventHistory.createdAtTimeStamp }}">Rollback to this</a>
+					<a href="/event/{{ event.slugForUrl }}/rollback/{{ eventHistory.createdAtTimeStamp }}">Rollback to this</a>
 				{% endif %}
 			</li>
 		{% endfor %}

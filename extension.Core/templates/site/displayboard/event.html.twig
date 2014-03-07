@@ -7,7 +7,7 @@
  #}
 <li>
 	<div class="dateIcon">
-		<a href="/event/{{ event.slug }}">
+		<a href="/event/{{ event.slugForUrl }}">
 			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c',currentTimeZone) }}">
 				{% if showStart == 'date' %}
 					<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D',currentTimeZone) }}</span>
@@ -22,7 +22,7 @@
 		</a>
 	</div>
 	<div class="title">
-		<a href="/event/{{ event.slug }}">
+		<a href="/event/{{ event.slugForUrl }}">
 			{{ event.summaryDisplay }}
 		</a>
 	</div>

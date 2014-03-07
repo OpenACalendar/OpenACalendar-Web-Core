@@ -17,8 +17,8 @@
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}
 	{% if country %}<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>{% endif %}
-	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></li>{% endfor %}
-	{% if area %}<li class="current"><a href="/area/{{ area.slug }}">{{ area.title }}</a></li>{% endif %}
+	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></li>{% endfor %}
+	{% if area %}<li class="current"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>{% endif %}
 	<li class="current"><a href="#">new venue</a></li>
 {% endblock %}
 
