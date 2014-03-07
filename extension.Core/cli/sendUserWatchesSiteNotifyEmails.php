@@ -66,6 +66,7 @@ foreach($b->fetchAll() as $userWatchesSite) {
 			configureAppForUser($user);
 			
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
+			$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 			
 			$message = \Swift_Message::newInstance();
 			$message->setSubject("Changes on ".$site->getTitle());
@@ -77,6 +78,7 @@ foreach($b->fetchAll() as $userWatchesSite) {
 				'histories'=>$histories,
 				'stopCode'=>$userWatchesSiteStop->getAccessKey(),
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteNotifyEmail.txt', $messageText);
 			$message->setBody($messageText);
@@ -86,9 +88,15 @@ foreach($b->fetchAll() as $userWatchesSite) {
 				'histories'=>$histories,
 				'stopCode'=>$userWatchesSiteStop->getAccessKey(),
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteNotifyEmail.html', $messageHTML);
 			$message->addPart($messageHTML,'text/html');
+						
+			$headers = $message->getHeaders();
+			$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
+			
+
 			
 			if ($actuallySend) {
 				print " ... sending\n";

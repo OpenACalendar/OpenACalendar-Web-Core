@@ -38,7 +38,8 @@ foreach($userRepoBuilder->fetchAll() as $user) {
 			configureAppForUser($user);
 			
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
-			
+			$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+						
 			$message = \Swift_Message::newInstance();
 			$message->setSubject("Events coming up");
 			$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
@@ -51,6 +52,7 @@ foreach($userRepoBuilder->fetchAll() as $user) {
 				'userAtEvent'=>$userAtEvent,
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
 				'currentTimeZone'=>'Europe/London',
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.txt', $messageText);
 			$message->setBody($messageText);
@@ -62,13 +64,13 @@ foreach($userRepoBuilder->fetchAll() as $user) {
 				'userAtEvent'=>$userAtEvent,
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
 				'currentTimeZone'=>'Europe/London',
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.html', $messageHTML);
 			$message->addPart($messageHTML,'text/html');
 						
 			$headers = $message->getHeaders();
-			$unsubURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
-			$headers->addTextHeader('List-Unsubscribe', $unsubURL);
+			$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
 			
 			if ($actuallySend) {
 				print " ... sending\n";

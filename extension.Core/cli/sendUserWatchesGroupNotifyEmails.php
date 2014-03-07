@@ -72,6 +72,7 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 			configureAppForUser($user);
 			
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
+			$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 			
 			$message = \Swift_Message::newInstance();
 			$message->setSubject("Changes on ".$group->getTitle());
@@ -84,6 +85,7 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 				'histories'=>$histories,
 				'stopCode'=>$userWatchesGroupStop->getAccessKey(),
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesGroupNotifyEmail.txt', $messageText);
 			$message->setBody($messageText);
@@ -94,9 +96,14 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 				'histories'=>$histories,
 				'stopCode'=>$userWatchesGroupStop->getAccessKey(),
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesGroupNotifyEmail.html', $messageHTML);
 			$message->addPart($messageHTML,'text/html');
+						
+			$headers = $message->getHeaders();
+			$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
+			
 			
 			
 			if ($actuallySend) {

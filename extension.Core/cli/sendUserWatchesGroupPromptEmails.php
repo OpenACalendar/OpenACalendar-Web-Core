@@ -70,6 +70,7 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 			configureAppForUser($user);
 			
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
+			$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 			
 			$lastEventsBuilder = new EventRepositoryBuilder();
 			$lastEventsBuilder->setSite($site);
@@ -91,6 +92,7 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 				'lastEvents'=>$lastEvents,
 				'stopCode'=>$userWatchesGroupStop->getAccessKey(),
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesGroupPromptEmail.txt', $messageText);
 			$message->setBody($messageText);
@@ -101,9 +103,14 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 				'lastEvents'=>$lastEvents,
 				'stopCode'=>$userWatchesGroupStop->getAccessKey(),
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'unsubscribeURL'=>$unsubscribeURL,
 			));
 			if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesGroupPromptEmail.html', $messageHTML);
 			$message->addPart($messageHTML,'text/html');
+						
+			$headers = $message->getHeaders();
+			$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
+			
 			
 			if ($actuallySend) {
 				print " ... sending\n";
