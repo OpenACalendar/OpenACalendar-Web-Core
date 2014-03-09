@@ -102,7 +102,11 @@ class UserController {
 				$data = $form->getData();
 				
 				$userRepository = new UserAccountRepository();
-				$user = $userRepository->loadByUserNameOrEmail($data['details']);
+				if ($data['email']) {
+					$user = $userRepository->loadByEmail($data['email']);
+				} else if ($data['username']) {
+					$user = $userRepository->loadByUserName($data['username']);
+				}
 				if ($user) {
 					if ($user->checkPassword($data['password'])) {
 						if ($user->getIsClosedBySysAdmin()) {

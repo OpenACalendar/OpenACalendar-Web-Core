@@ -15,7 +15,17 @@
 
 		{{ form_errors(form) }}
 
-		{{ form_row(form.details) }}
+
+		{{ form_row(form.username) }}
+		
+		<div class="rowWrapper">
+			<div class="labelWrapper">&nbsp;</div>
+			<div class="widgetWrapperPlacementOnly">OR</div>
+			<div class="after"></div>
+		</div>
+		
+		{{ form_row(form.email) }}
+
 		{{ form_row(form.password) }}
 
 		{{ form_rest(form) }}
