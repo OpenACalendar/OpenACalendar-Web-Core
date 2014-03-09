@@ -122,9 +122,18 @@
 			{% elseif curatedlist is defined %}
 				<h3 class="curatedlist"><a href="/curatedlist/{{ curatedlist.slugForUrl }}">{{ curatedlist.title }}</a></h3>
 			{% elseif venue is defined %}
-				<h3 class="country"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+				<h3 class="country"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></h3>
+				{% if area is defined %}
+					<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
+				{% endif %}
+				{% if country is defined %}
+					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+				{% endif %}
 			{% elseif area is defined %}
 				<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
+				{% if country is defined %}
+					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+				{% endif %}
 			{% elseif country is defined %}
 				<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 			{% endif %}
