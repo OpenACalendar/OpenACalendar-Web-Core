@@ -202,10 +202,14 @@
 				var exportData = { group:{{ group.slug }} };
 			{% elseif curatedlist is defined %} 
 				var exportData = { curatedlist:{{ curatedlist.slug }}  };
+			{% elseif venue is defined and area is defined and country is defined %} 
+				var exportData = { venue:{{ venue.slug }}, area:"{{ area.slug }}", country:"{{ country.twoCharCode }}"   };
 			{% elseif venue is defined %} 
 				var exportData = { venue:{{ venue.slug }}  };
 			{% elseif venueVirtual is defined and venueVirtual %} 
 				var exportData = { venue:'virtual'  };
+			{% elseif area is defined and country is defined %} 
+				var exportData = { area:"{{ area.slug }}", country:"{{ country.twoCharCode }}"  };
 			{% elseif area is defined %} 
 				var exportData = { area:"{{ area.slug }}"  };
 			{% elseif country is defined %} 
