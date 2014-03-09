@@ -22,49 +22,54 @@
 
 {% block innerContent %}
 
-	<p>Select the dates you want to create events on.</p>
-	
-	<form method="post" action="">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="submitted" value="yes">
+	{% if newEvents %}
+		<p>Select the dates you want to create events on.</p>
 
-		<ul class="newRecuringEvents">
-			{% for newEvent in newEvents %}
-				<li  class="newRecuringEvent">
-					<label>
-						<input type="checkbox" name="new[]" value="{{ newEvent.getStartAt.getTimeStamp }}" checked>
-						<div class="summary">{{ newEvent.summary }}</div>
-						<div class="date">
-							<time datetime="{{ newEvent.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
-								<span class="startDay">{{ newEvent.getStartAt|tolocaltimeformatted('D jS', currentTimeZone) }}</span>
-								<span class="startMonthYear">{{ newEvent.getStartAt|tolocaltimeformatted('M Y', currentTimeZone) }}</span>
-								<span class="startTime">
-									{{ newEvent.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
-								</span>
-							</time>
-							<span class="to">to</span>
-							{% if sameday(newEvent.getStartAt,newEvent.getEndAt) %}
-								<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
-									<span class="end">
-										{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+		<form method="post" action="">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="submitted" value="yes">
+
+			<ul class="newRecuringEvents">
+				{% for newEvent in newEvents %}
+					<li  class="newRecuringEvent">
+						<label>
+							<input type="checkbox" name="new[]" value="{{ newEvent.getStartAt.getTimeStamp }}" checked>
+							<div class="summary">{{ newEvent.summary }}</div>
+							<div class="date">
+								<time datetime="{{ newEvent.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+									<span class="startDay">{{ newEvent.getStartAt|tolocaltimeformatted('D jS', currentTimeZone) }}</span>
+									<span class="startMonthYear">{{ newEvent.getStartAt|tolocaltimeformatted('M Y', currentTimeZone) }}</span>
+									<span class="startTime">
+										{{ newEvent.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
 									</span>
 								</time>
-							{% else %}
-								<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
-									<span class="end">
-										{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
-									</span>
-								</time>
-							{% endif %}
-						</div>
-					</label>
+								<span class="to">to</span>
+								{% if sameday(newEvent.getStartAt,newEvent.getEndAt) %}
+									<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+										<span class="end">
+											{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+										</span>
+									</time>
+								{% else %}
+									<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+										<span class="end">
+											{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+										</span>
+									</time>
+								{% endif %}
+							</div>
+						</label>
 
-				</li>
-			{% endfor %}
-		</ul>
+					</li>
+				{% endfor %}
+			</ul>
 
-		<input type="submit" value="Create new events">
-	</form>
+			<input type="submit" value="Create new events">
+		</form>
+	{% else %}
+		<p>We could find no new dates to create. 
+		This may be because events alredy exist, or because the event is to far in the future.</p>
+	{% endif %}
 
 {% endblock %}
 
