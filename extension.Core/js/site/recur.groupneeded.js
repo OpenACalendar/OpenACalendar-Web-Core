@@ -8,6 +8,7 @@
 $( document ).ready( function() {
 	$('#GroupSearchText').change(function() { groupSearchChanged(); });
 	$('#GroupSearchText').keyup(function() { groupSearchChanged(); });
+	groupSearchChanged();
 });
 
 var lastGroupSearchValue = '';
@@ -36,7 +37,7 @@ function groupSearchChanged() {
 					out += '<div class="title">'+escapeHTML(group.title)+'</div>';
 					out += '<form action="" method="POST">';
 					out += '<input type="hidden" name="intoGroupSlug" value="'+group.slug+'">';
-					out += '<input type="submit" value="Put event in this group">';
+					out += '<div class="bigButtonContainer"><input type="submit" value="Put event in this group" class="button"></div>';
 					out += '</form>';
 					out += '</li>';
 				}

@@ -750,7 +750,8 @@ div.filterListVenueWrapper form.filterListVenue div.submitField input {
   line-height: 1.8;
   text-align: right;
 }
-.bigButtonContainer a.button {
+.bigButtonContainer a.button,
+.bigButtonContainer input.button {
   background: #B7CFB7;
   padding: 3px;
   -webkit-border-radius: 3px;
@@ -760,7 +761,8 @@ div.filterListVenueWrapper form.filterListVenue div.submitField input {
   font-size: 1.20em;
   text-decoration: none;
 }
-.bigButtonContainer a.button:hover {
+.bigButtonContainer a.button:hover,
+.bigButtonContainer input.button:hover {
   color: black;
   text-decoration: underline;
 }
