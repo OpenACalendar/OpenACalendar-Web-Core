@@ -21,7 +21,7 @@ use repositories\UserWatchesGroupRepository;
 class EventRepository {
 	
 	
-	public function create(EventModel $event, SiteModel $site, UserAccountModel $creator = null, GroupModel $group = null) {
+	public function create(EventModel $event, SiteModel $site, UserAccountModel $creator = null, GroupModel $group = null, $additionalGroups = null) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
@@ -82,15 +82,29 @@ class EventRepository {
 					'is_virtual'=>$event->getIsVirtual()?1:0,
 				));
 			
-			if ($group) {
+			if ($group || $additionalGroups) {
 				$stat = $DB->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,is_main_group) ".
-						"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,'1')");
-				$stat->execute(array(
-						'group_id'=>$group->getId(),
-						'event_id'=>$event->getId(),
-						'added_by_user_account_id'=>($creator ? $creator->getId(): null),
-						'added_at'=>\TimeSource::getFormattedForDataBase(),
-					));
+						"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,:is_main_group)");
+				if ($group) {
+					$stat->execute(array(
+							'group_id'=>$group->getId(),
+							'event_id'=>$event->getId(),
+							'added_by_user_account_id'=>($creator ? $creator->getId(): null),
+							'added_at'=>\TimeSource::getFormattedForDataBase(),
+							'is_main_group'=>1,
+						));
+				}
+				foreach ($additionalGroups as $additionalGroup) {
+					if ($additionalGroup->getId() != $group->getId()) {
+						$stat->execute(array(
+								'group_id'=>$additionalGroup->getId(),
+								'event_id'=>$event->getId(),
+								'added_by_user_account_id'=>($creator ? $creator->getId(): null),
+								'added_at'=>\TimeSource::getFormattedForDataBase(),
+								'is_main_group'=>0,
+							));
+					}
+				}
 			}
 			
 			

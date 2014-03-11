@@ -505,7 +505,7 @@ class EventController {
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group']);
+					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], $this->parameters['groups']);
 					++$count;
 				}
 			}
@@ -552,7 +552,7 @@ class EventController {
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group']);
+					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], $this->parameters['groups']);
 					++$count;
 				}
 			}
