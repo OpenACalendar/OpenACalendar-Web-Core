@@ -368,6 +368,8 @@ class EventController {
 
 				$venue = new VenueModel();
 				$venue->setTitle($_POST['newVenueTitle']);
+				$venue->setAddress($_POST['newVenueAddress']);
+				$venue->setAddressCode($_POST['newVenueAddressCode']);
 				$venue->setCountryId($this->parameters['country']->getId());
 				if ($area) $venue->setAreaId($area->getId());
 				

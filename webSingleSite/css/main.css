@@ -276,6 +276,21 @@ ul.venues li.venue .title a:hover {
   color: black;
   text-decoration: underline;
 }
+ul.selectvenue li.newvenue .newvenueform {
+  border: 1px solid #ccc;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  padding: 5px;
+}
+ul.selectvenue li.newvenue .newvenueform label {
+  display: block;
+}
+ul.selectvenue li.newvenue .newvenueform label input[type="text"] {
+  width: 50%;
+}
 ul.importurls li.importurl {
   border-bottom: 2px solid #E9E9E9;
 }

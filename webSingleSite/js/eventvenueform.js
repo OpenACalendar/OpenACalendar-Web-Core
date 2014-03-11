@@ -155,9 +155,13 @@ function listVenues(venueList) {
 		
 		
 	}
-	html += '<li class="newvenue"><label>';
-	html += '<input type="radio" name="venue_id" value="new">Other new venue: ';
-	html += '</label><input type="text" name="newVenueTitle" class=""></li>'
+	html += '<li class="newvenue">';
+	html += '<label><input type="radio" name="venue_id" value="new">Other new venue</label>';
+	html += '<div class="newvenueform">';
+	html += '<label>Venue: <input type="text" name="newVenueTitle" class=""></label>';
+	html += '<label>Address: <input type="text" name="newVenueAddress" class=""></label>';
+	html += '<label>Postcode: <input type="text" name="newVenueAddressCode" class=""></label>';
+	html += '</div></li>'
 	html += '<li class="novenue"><label>';
 	html += '<input type="radio" name="venue_id" value="no">Exact Venue not known.';
 	html += '</label></li>'
