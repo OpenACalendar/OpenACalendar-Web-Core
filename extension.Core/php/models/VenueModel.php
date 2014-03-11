@@ -64,7 +64,7 @@ class VenueModel {
 	}
 
 	public function getSlugForUrl() {
-		$extraSlug = str_replace(" ", "-", preg_replace("/[^a-zA-Z0-9]+/", "", strtolower($this->title)));
+		$extraSlug = preg_replace("/[^a-zA-Z0-9\-]+/", "", str_replace(" ", "-",strtolower($this->title)));
 		return $this->slug.($extraSlug?"-".$extraSlug:'');
 	}
 	
