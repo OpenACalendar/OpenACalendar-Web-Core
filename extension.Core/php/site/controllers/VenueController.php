@@ -167,7 +167,7 @@ class VenueController {
 
 		
 		$now = \TimeSource::getDateTime();
-		return $app->redirect("/venue/".$this->parameters['venue']->getSlug()."/calendar/".$now->format("Y")."/".$now->format("m"));
+		return $app->redirect("/venue/".$this->parameters['venue']->getSlugForUrl()."/calendar/".$now->format("Y")."/".$now->format("m"));
 	}
 	
 	function calendar($slug, $year, $month, Request $request, Application $app) {

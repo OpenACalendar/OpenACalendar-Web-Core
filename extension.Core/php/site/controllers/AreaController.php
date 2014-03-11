@@ -168,7 +168,7 @@ class AreaController {
 
 		
 		$now = \TimeSource::getDateTime();
-		return $app->redirect("/area/".$this->parameters['area']->getSlug()."/calendar/".$now->format("Y")."/".$now->format("m"));
+		return $app->redirect("/area/".$this->parameters['area']->getSlugForUrl()."/calendar/".$now->format("Y")."/".$now->format("m"));
 	}
 	
 	function calendar($slug, $year, $month, Request $request, Application $app) {

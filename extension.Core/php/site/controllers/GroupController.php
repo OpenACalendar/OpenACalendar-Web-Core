@@ -357,7 +357,7 @@ class GroupController {
 
 		
 		$now = \TimeSource::getDateTime();
-		return $app->redirect("/group/".$this->parameters['group']->getSlug()."/calendar/".$now->format("Y")."/".$now->format("m"));
+		return $app->redirect("/group/".$this->parameters['group']->getSlugForUrl()."/calendar/".$now->format("Y")."/".$now->format("m"));
 	}
 	
 	function calendar($slug, $year, $month, Request $request, Application $app) {
