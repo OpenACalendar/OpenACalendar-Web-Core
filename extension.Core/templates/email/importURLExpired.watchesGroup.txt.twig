@@ -33,6 +33,6 @@ Thanks,
 To change which emails you get, click:
 {{ config.getWebIndexDomainSecure() }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}
 To stop watching {{ group.title }} click:
-{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slug }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}
+{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}
 
 {% endblock %}

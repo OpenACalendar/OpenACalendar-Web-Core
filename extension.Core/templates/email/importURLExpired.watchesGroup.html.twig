@@ -38,6 +38,6 @@
 
 	<p>ps.  
 		To <a href="{{ config.getWebIndexDomainSecure() }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}">change which emails you get, click here</a>.
-		To <a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slug }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
+		To <a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
 
 {% endblock %}

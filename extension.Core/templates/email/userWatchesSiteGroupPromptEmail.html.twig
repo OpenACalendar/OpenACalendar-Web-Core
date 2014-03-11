@@ -12,7 +12,7 @@
 	<p>Hello {{ user.username }}</p>
 
 	<p>
-		<span style="font-weight: bold;">Do you know of any more events for <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}">{{ group.title }}</a>?</span> 
+		<span style="font-weight: bold;">Do you know of any more events for <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}">{{ group.title }}</a>?</span> 
 		There will soon be no events, and that makes people sad.
 	</p>
 

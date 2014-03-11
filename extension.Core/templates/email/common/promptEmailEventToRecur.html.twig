@@ -15,7 +15,7 @@
 	<p style="clear:both; padding: 5px 0;">{{ event.description }}</p>
 	<p style="padding: 5px 10px 5px 20px; color: #ec2327; background: url('{{  config.getWebSiteDomainSecure(site.slug)  }}/img/eventFooterCalendarIcon.png') no-repeat;">{{ event.startAt |tolocaltimeformatted12or24hourclock('g:ia D M Y', 'H:i D M Y', currentUserClock12Hour, currentTimeZone )}} ({{ event.timeZone }})</p>
 	<p style="padding: 5px 0;">
-		<a href="{{  config.getWebSiteDomainSecure(site.slug)  }}/event/{{ event.slug }}/recur/weekly">Recurs Weekly</a>
-		<a href="{{  config.getWebSiteDomainSecure(site.slug)  }}/event/{{ event.slug }}/recur/monthly">Recurs Monthly</a>
+		<a href="{{  config.getWebSiteDomainSecure(site.slug)  }}/event/{{ event.slugForUrl }}/recur/weekly">Recurs Weekly</a>
+		<a href="{{  config.getWebSiteDomainSecure(site.slug)  }}/event/{{ event.slugForUrl }}/recur/monthly">Recurs Monthly</a>
 	</p>
 </div>

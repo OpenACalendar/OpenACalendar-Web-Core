@@ -7,10 +7,10 @@ Hello {{ user.username }}
 You watch the group {{ group.title }}, and changes have been made to that group.
 
 To see them please visit:
-{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/history
+{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/history
 
 To stop watching {{ group.title }}:
-{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}
+{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}
 
 To change which emails you get:
 {{ unsubscribeURL }}

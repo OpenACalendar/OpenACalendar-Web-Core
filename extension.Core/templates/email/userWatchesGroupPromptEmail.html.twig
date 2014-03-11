@@ -12,7 +12,7 @@
 	<p>Hello {{ user.username }}</p>
 
 	<p>
-		You watch <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/">{{ group.title }}</a>. 
+		You watch <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/">{{ group.title }}</a>. 
 		<span style="font-weight: bold;">Do you know of any more events?</span> 
 		There will soon be no events, and that makes people sad.
 	</p>
@@ -30,6 +30,6 @@
 		
 	<p>ps.  
 		To <a href="{{ unsubscribeURL }}">change which emails you get, click here</a>.
-		To <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
+		To <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
 
 {% endblock %}

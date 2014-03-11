@@ -27,7 +27,7 @@
 					<span style="color: white; font-size: 10pt;">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>					
 				{% endif %}
 			</div>
-			<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slug}}">
+			<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slugForUrl}}">
 				{{ event.summaryDisplay }}
 			</a>
 			<br>
@@ -39,7 +39,7 @@
 					{% elseif userAtEvent[event.id].isPlanMaybeAttending %}
 						You may attend.
 					{% endif %}
-					<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slug}}">Change this</a>.
+					<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slugForUrl}}">Change this</a>.
 				</div>
 			{% endif %}
 			<div style="clear: both;"></div>

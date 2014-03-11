@@ -12,7 +12,7 @@
 Hello {{ user.username }}
 
 Do you know of any more events to add for {{ group.title }}? We will soon run out.
-{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/
+{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/
 
 To stop watching {{ site.title }}:
 {{ config.getWebSiteDomainSecure(site.slug) }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}

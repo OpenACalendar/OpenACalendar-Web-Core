@@ -23,13 +23,13 @@
 		{% endif %}		
 	{% endfor %}
 	
-	<p>To see <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/history">the full history, click here</a>.</p>
+	<p>To see <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/history">the full history, click here</a>.</p>
 		
 	<p>Thanks,<br>
 	{{ config.siteTitle }}</p>
 		
 	<p>ps.  
 		To <a href="{{ unsubscribeURL }}">change which emails you get, click here</a>.
-		To <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
+		To <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
 
 {% endblock %}

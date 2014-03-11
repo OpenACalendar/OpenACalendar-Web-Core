@@ -19,13 +19,13 @@
 		</div>
 		{% for event in d.eventsContinuing %}
 			<div style="padding: 5px 10px;">
-				<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{event.slug}}?mytimezone={{ currentTimeZone }}"> {{ event.summaryDisplay }}</a>
+				<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{event.slugForUrl}}?mytimezone={{ currentTimeZone }}"> {{ event.summaryDisplay }}</a>
 			</div>
 		{% endfor %}
 		{% for event in d.events %}
 			<div style="padding: 5px 10px;">
 				<i>{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</i>
-				<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{event.slug}}?mytimezone={{ currentTimeZone }}">{{ event.summaryDisplay }}</a>
+				<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{event.slugForUrl}}?mytimezone={{ currentTimeZone }}">{{ event.summaryDisplay }}</a>
 			</div>
 		{% endfor %}
 	</div>

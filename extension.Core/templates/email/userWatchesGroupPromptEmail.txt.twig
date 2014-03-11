@@ -12,10 +12,10 @@
 Hello {{ user.username }}
 
 You watch {{ group.title }}. Do you know of any more events to add? We will soon run out.
-{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/
+{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/
 
 To stop watching {{ group.title }}:
-{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slug }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}
+{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}
 
 To change which emails you get:
 {{ unsubscribeURL }}

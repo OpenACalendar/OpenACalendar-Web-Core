@@ -15,7 +15,7 @@ We wanted to let you know about upcoming events you have expressed an interest i
 
 {% for event in allEvents|slice(0,config.upcomingEventsForUserEmailTextListsEvents)  %}
 EVENT: {{ event.summary }}
-{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slug}}
+{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{event.slugForUrl}}
 
 {% endfor %}
 
