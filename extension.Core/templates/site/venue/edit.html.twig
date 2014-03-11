@@ -23,11 +23,12 @@
 		{{ form_row(form.title) }}
 		{{ form_row(form.description) }}
 		{{ form_row(form.address) }}
-		{{ form_row(form.address_code) }}
-		{{ form_row(form.country_id) }}
 		
 		{% include 'site/common/venueFormAreaBrowser.html.twig' %}
 						
+		{{ form_row(form.address_code) }}
+		{{ form_row(form.country_id) }}
+								
 		<div class="rowWrapper">
 			<div class="labelWrapper">Map (Click to set location)</div>
 			<div class="widgetWrapperPlacementOnly"><div id="Map"></div></div>
