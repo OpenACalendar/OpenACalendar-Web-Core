@@ -26,6 +26,10 @@ use repositories\builders\UserWatchesGroupRepositoryBuilder;
 use repositories\builders\UserWatchesSiteRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 use repositories\UserAccountGeneralSecurityKeyRepository;
+use repositories\EventHistoryRepository;
+use repositories\GroupHistoryRepository;
+use repositories\AreaHistoryRepository;
+use repositories\VenueHistoryRepository;
 
 $userRepo = new UserAccountRepository();
 $groupRepo = new GroupRepository();
@@ -33,6 +37,10 @@ $siteRepo = new SiteRepository();
 $userWatchesGroupRepository = new UserWatchesGroupRepository();
 $userWatchesGroupStopRepository = new UserWatchesGroupStopRepository();
 $userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
+$eventHistoryRepository =  new EventHistoryRepository;
+$groupHistoryRepository = new GroupHistoryRepository;
+$areaHistoryRepository = new AreaHistoryRepository;
+$venueHistoryRepository = new VenueHistoryRepository;
 
 $b = new UserWatchesGroupRepositoryBuilder();
 foreach($b->fetchAll() as $userWatchesGroup) {
@@ -64,6 +72,18 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 		
 		if ($histories) {
 			
+			// lets make sure histories are correct
+			foreach($histories as $history) {
+				if ($history instanceof EventHistoryModel) {
+					$eventHistoryRepository->ensureChangedFlagsAreSet($history);
+				} elseif ($history instanceof GroupHistoryModel) {
+					$groupHistoryRepository->ensureChangedFlagsAreSet($history);
+				} elseif ($history instanceof VenueHistoryModel) {
+					$venueHistoryRepository->ensureChangedFlagsAreSet($history);
+				} elseif ($history instanceof AreaHistoryModel) {
+					$areaHistoryRepository->ensureChangedFlagsAreSet($history);
+				}
+			}
 			$userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($user, $group);
 			
 			print " ... found data\n";
