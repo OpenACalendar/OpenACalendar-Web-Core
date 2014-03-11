@@ -18,8 +18,10 @@ class EventSummaryDisplayTest  extends \PHPUnit_Framework_TestCase {
 				array('My group','Monthly meetup','My group: Monthly meetup'),
 				array('My group','','My group'),
 				array('EDLUG','EDLUG','EDLUG'),
+				array('edlug','EDLUG','EDLUG'),
 				array('Monthly meetup','Monthly meetup','Monthly meetup'),
 				array('BCS Glasgow','BCS Glasgow Branch Meeting - Optimising virtual keyboards','BCS Glasgow Branch Meeting - Optimising virtual keyboards'),
+				array('bcs glasgow','BCS Glasgow Branch Meeting - Optimising virtual keyboards','BCS Glasgow Branch Meeting - Optimising virtual keyboards'),
 			);
 	}
 			
@@ -35,3 +37,5 @@ class EventSummaryDisplayTest  extends \PHPUnit_Framework_TestCase {
 	}
 	
 }
+
+

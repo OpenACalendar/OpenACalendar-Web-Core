@@ -147,10 +147,10 @@ class EventModel {
 	}
 
 	public function getSummaryDisplay() {
-		if ($this->group_title && $this->summary &&  $this->group_title == $this->summary) {
+		if ($this->group_title && $this->summary &&  strtolower($this->group_title) == strtolower($this->summary)) {
 			return $this->summary;
-		} else if ($this->group_title && $this->summary &&  $this->group_title != $this->summary) {
-			if (strpos($this->summary, $this->group_title) === false) {
+		} else if ($this->group_title && $this->summary &&  strtolower($this->group_title) != strtolower($this->summary)) {
+			if (stripos($this->summary, $this->group_title) === false) {
 				return $this->group_title.": ".$this->summary;
 			} else {
 				return $this->summary;
