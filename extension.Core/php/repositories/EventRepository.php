@@ -94,15 +94,17 @@ class EventRepository {
 							'is_main_group'=>1,
 						));
 				}
-				foreach ($additionalGroups as $additionalGroup) {
-					if ($additionalGroup->getId() != $group->getId()) {
-						$stat->execute(array(
-								'group_id'=>$additionalGroup->getId(),
-								'event_id'=>$event->getId(),
-								'added_by_user_account_id'=>($creator ? $creator->getId(): null),
-								'added_at'=>\TimeSource::getFormattedForDataBase(),
-								'is_main_group'=>0,
-							));
+				if ($additionalGroups && is_array($additionalGroups)) {
+					foreach ($additionalGroups as $additionalGroup) {
+						if ($additionalGroup->getId() != $group->getId()) {
+							$stat->execute(array(
+									'group_id'=>$additionalGroup->getId(),
+									'event_id'=>$event->getId(),
+									'added_by_user_account_id'=>($creator ? $creator->getId(): null),
+									'added_at'=>\TimeSource::getFormattedForDataBase(),
+									'is_main_group'=>0,
+								));
+						}
 					}
 				}
 			}
