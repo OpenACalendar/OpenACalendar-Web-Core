@@ -44,7 +44,7 @@
 
 {% block scriptsForState %}
 	<script type="text/javascript">
-		var exportData = { country:"{{ country.twoCharCode }}" };
+		var exportData = { country:"{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"   };
 		var countryData = { code: "{{ country.twoCharCode }}",
 					maxLat: {% if country.maxLat %}{{ country.maxLat }}{% else %}null{% endif %},
 					maxLng: {% if country.maxLng %}{{ country.maxLng }}{% else %}null{% endif %}, 

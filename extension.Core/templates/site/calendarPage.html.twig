@@ -208,19 +208,19 @@
 		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			{% if group is defined %} 
-				var exportData = { group:{{ group.slug }} };
+				var exportData = { group:{{ group.slug }}, groupTitle: "{{  group.title | e('js') }}" };
 			{% elseif curatedlist is defined %} 
-				var exportData = { curatedlist:{{ curatedlist.slug }}  };
+				var exportData = { curatedlist:{{ curatedlist.slug }} , curatedlistTitle: "{{  curatedlist.title | e('js') }}" };
 			{% elseif venue is defined and area is defined and country is defined %} 
-				var exportData = { venue:{{ venue.slug }}, area:"{{ area.slug }}", country:"{{ country.twoCharCode }}"   };
+				var exportData = { venue:{{ venue.slug }}, venueTitle: "{{  venue.title | e('js') }}", area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}", country:"{{ country.twoCharCode }}"  , countryTitle: "{{  country.title | e('js') }}" };
 			{% elseif venue is defined %} 
-				var exportData = { venue:{{ venue.slug }}  };
+				var exportData = { venue:{{ venue.slug }}, venueTitle: "{{  venue.title | e('js') }}" };
 			{% elseif venueVirtual is defined and venueVirtual %} 
-				var exportData = { venue:'virtual'  };
+				var exportData = { venue:'virtual' };
 			{% elseif area is defined and country is defined %} 
-				var exportData = { area:"{{ area.slug }}", country:"{{ country.twoCharCode }}"  };
+				var exportData = { area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}", country:"{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  };
 			{% elseif area is defined %} 
-				var exportData = { area:"{{ area.slug }}"  };
+				var exportData = { area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}"  };
 			{% elseif country is defined %} 
 				var exportData = { country:"{{ country.twoCharCode }}"  };
 			{% else %}

@@ -18,19 +18,29 @@ function showExportPopup() {
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label>';
 			if (exportData.hasOwnProperty("country") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportCountry"> all events from this country</label>';
+				html += '<label><input type="radio" name="ExportWhat" id="ExportCountry"> all events from ';
+				html += (exportData.hasOwnProperty("countryTitle") ? 'country: '+ escapeHTML(exportData.countryTitle) : 'this country' );
+				html += '</label>';
 			}
 			if (exportData.hasOwnProperty("area") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportArea"> all events from this area</label>';
+				html += '<label><input type="radio" name="ExportWhat" id="ExportArea"> all events from ';
+				html += (exportData.hasOwnProperty("areaTitle") ? 'area: '+ escapeHTML(exportData.areaTitle) : 'this area' );
+				html += '</label>';
 			}
 			if (exportData.hasOwnProperty("venue") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportVenue"> all events from this venue</label>';
+				html += '<label><input type="radio" name="ExportWhat" id="ExportVenue"> all events from ';
+				html += (exportData.hasOwnProperty("venueTitle") ? 'venue: '+ escapeHTML(exportData.venueTitle) : 'this venue' );
+				html += '</label>';
 			}
 			if (exportData.hasOwnProperty("group") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportGroup"> all events from this group</label>';
+				html += '<label><input type="radio" name="ExportWhat" id="ExportGroup"> all events from ';
+				html += (exportData.hasOwnProperty("groupTitle") ? 'group: '+ escapeHTML(exportData.groupTitle) : 'this group' );
+				html += '</label>';
 			}
 			if (exportData.hasOwnProperty("curatedlist") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportCuratedList"> all events in this curated list</label>';
+				html += '<label><input type="radio" name="ExportWhat" id="ExportCuratedList"> all events from ';
+				html += (exportData.hasOwnProperty("curatedlistTitle") ? 'curated list: '+ escapeHTML(exportData.curatedlistTitle) : 'this curated list' );
+				html += '</label>';
 			}			
 			if (exportData.hasOwnProperty("event") ) {
 				html += '<label><input type="radio" name="ExportWhat" id="ExportEvent"> just this event</label>';

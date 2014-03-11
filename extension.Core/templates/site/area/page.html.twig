@@ -51,7 +51,7 @@
 
 {% block scriptsForState %}
 	<script type="text/javascript">
-		var exportData = { area:{{ area.slug }}, country: "{{ country.twoCharCode }}" };
+		var exportData = { area:{{ area.slug }} , areaTitle: "{{  area.title | e('js') }}", country: "{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  };
 		var areaData = { slug: {{ area.slug }},
 					maxLat: {% if area.maxLat %}{{ area.maxLat }}{% else %}null{% endif %},
 					maxLng: {% if area.maxLng %}{{ area.maxLng }}{% else %}null{% endif %}, 
