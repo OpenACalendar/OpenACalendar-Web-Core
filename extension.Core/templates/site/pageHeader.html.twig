@@ -50,6 +50,8 @@
 				<ul class="submenu">
 					{% if currentSite.cachedIsMultipleCountries %}
 						<li><a href="/country">Countries</a></li>
+					{% else %}
+						<li><a href="/country/{{ currentSiteHasOneCountry.twoCharCode }}">{{ currentSiteHasOneCountry.title }}</a></li>
 					{% endif %}
 					{% if currentSite.isFeatureVirtualEvents %}
 						<li><a href="/venue/virtual">Virtual</a></li>

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use repositories\SiteRepository;
 use repositories\UserInSiteRepository;
 use repositories\UserWatchesSiteRepository;
+use repositories\CountryRepository;
 
 
 /**
@@ -91,6 +92,12 @@ $app->before(function (Request $request) use ($app) {
 	$app['twig']->addGlobal('currentTimeZone', $timezone);	
 	$app['currentTimeZone'] = $timezone;
 	
+	# ////////////// Country
+	if (!$app['currentSite']->getCachedIsMultipleCountries()) {
+		$cr = new CountryRepository();
+		$app['currentSiteHasOneCountry'] = $cr->loadBySite($app['currentSite']);
+		$app['twig']->addGlobal('currentSiteHasOneCountry', $app['currentSiteHasOneCountry']);	
+	}
 });
 
 $appUserRequired = function(Request $request) {

@@ -4,6 +4,7 @@
 namespace repositories;
 
 use models\CountryModel;
+use models\SiteModel;
 
 
 /**
@@ -40,6 +41,23 @@ class CountryRepository {
 			return $country;
 		}
 	}
+	
+	/**
+	 * This will return one country only. It is intended for sites with one country only.
+	 **/
+	public function loadBySite(SiteModel $site) {
+		global $DB;
+		$stat = $DB->prepare("SELECT country.* FROM country ".
+				" JOIN country_in_site_information ON country_in_site_information.country_id = country.id AND country_in_site_information.is_in = '1' ".
+				" WHERE country_in_site_information.site_id=:id ");
+		$stat->execute(array( 'id'=>$site->getId()));
+		if ($stat->rowCount() > 0) {
+			$country = new CountryModel();
+			$country->setFromDataBaseRow($stat->fetch());
+			return $country;
+		}
+	}
+	
 	
 }
 
