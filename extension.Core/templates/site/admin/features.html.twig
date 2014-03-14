@@ -35,6 +35,17 @@
 		
 
 		<div class="rowWrapper">
+			<div class="labelWrapper">Physical Events</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<label><input type="checkbox" name="isFeaturePhysicalEvents" value="1" {% if currentSite.isFeaturePhysicalEvents %}checked="checked"{% endif %}>Use Physical Events</label>
+				<p class="information">
+					Events happen in a place. Venues can me set and browsed.
+				</p>
+			</div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
 			<div class="labelWrapper">Virtual Events</div>
 			<div class="widgetWrapperPlacementOnly smallInputs">
 				<label><input type="checkbox" name="isFeatureVirtualEvents" value="1" {% if currentSite.isFeatureVirtualEvents %}checked="checked"{% endif %}>Use Virtual Events</label>
@@ -87,4 +98,6 @@
 	</form>
 
 {% endblock %}
-		
+
+
+	
