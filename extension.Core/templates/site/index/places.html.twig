@@ -24,13 +24,21 @@
 	<ul class="actionList">
 		{% if currentSite.cachedIsMultipleCountries %}
 			<li><a href="/country"><img src="/img/actionPlacesIcon.png">Countries</a></li>
+		{% else %}
+			<li><a href="/country/{{ currentSiteHasOneCountry.twoCharCode }}"><img src="/img/actionPlacesIcon.png">{{ currentSiteHasOneCountry.title }}</a></li>
+		{% endif %}
+		{% if currentSite.isFeatureVirtualEvents %}
+			<li><a href="/venue/virtual"><img src="/img/actionPlacesIcon.png">Virtual</a></li>
 		{% endif %}
 		{% if currentSite.isFeaturePhysicalEvents %}
 			<li><a href="/venue"><img src="/img/actionPlacesIcon.png">Venues</a></li>
+			{% if currentSite.isFeatureMap %}
+				<li><a href="/map"><img src="/img/actionPlacesIcon.png">Map</a></li>
+			{% endif %}	
+			{% if currentUserCanEditSite %}
+				<li><a href="/venue/new"><img src="/img/actionPlacesIcon.png">New venue</a></li>
+			{% endif %}
 		{% endif %}
-		{% if currentSite.isFeatureMap %}
-			<li><a href="/map"><img src="/img/actionPlacesIcon.png">Map</a></li>
-		{% endif %}	
 	</ul>
 
 {% endblock %}

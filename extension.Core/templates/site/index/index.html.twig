@@ -32,7 +32,13 @@
 		{% if currentSite.isFeatureGroup %}
 			<li><a href="/group"><img src="/img/actionGroupsIcon.png">Groups</a></li>
 		{% endif %}
-		<li><a href="/places"><img src="/img/actionPlacesIcon.png">Places</a></li>
+		{# We don't have currentSite.isFeatureVirtualEvents in the next OR statement because if 
+		site has virtual only, theres not much point showing places menu at all. 
+		It'll only have one entry and it will be the same as the main event listings anyway.
+		#}
+		{% if currentSite.cachedIsMultipleCountries  or currentSite.isFeaturePhysicalEvents %}
+			<li><a href="/places"><img src="/img/actionPlacesIcon.png">Places</a></li>
+		{% endif %}
 		<li><a href="/history"><img src="/img/actionHistoryIcon.png">Recent Changes</a></li>
 	</ul>
 		
