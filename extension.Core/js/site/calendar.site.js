@@ -39,8 +39,8 @@ function showEventPopup(data) {
 		if (event.venue) {
 			$('#EventPopupVenueWrapper').html(
 					'<div class="venueTitle">Venue '+escapeHTML(event.venue.title)+'</div>'+
-					'<div class="venueDescription">'+escapeHTMLNewLine(event.venue.description, 500)+'</div>'+
-					'<div class="venueAddress">'+escapeHTMLNewLine(event.venue.address, 500)+' '+escapeHTML(event.venue.addresscode)+'</div>'
+					'<div class="venueDescription">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 500) : '')+'</div>'+
+					'<div class="venueAddress">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 500) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
 				);
 		} else {
 			$('#EventPopupVenueWrapper').html('&nbsp;');
@@ -50,7 +50,7 @@ function showEventPopup(data) {
 			for(groupIdx in event.groups) {
 				var group = event.groups[groupIdx];
 				html += '<div class="groupTitle">Group '+escapeHTML(group.title)+'</div>';
-				html += '<div class="groupDescription">'+escapeHTMLNewLine(group.description,500)+'</div>';
+				html += '<div class="groupDescription">'+(group.description ? escapeHTMLNewLine(group.description,500) : '')+'</div>';
 			}
 		}
 		$('#EventPopupGroupsWrapper').html(html);
