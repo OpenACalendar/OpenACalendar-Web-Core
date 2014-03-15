@@ -117,24 +117,24 @@
 				<h2><a href="/">{{ config.siteTitle }}</a></h2>
 			{% endif %}
 			
-			{% if group is defined %}
+			{% if group is defined and group %}
 				<h3 class="group"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></h3>
-			{% elseif curatedlist is defined %}
+			{% elseif curatedlist is defined and curatedlist %}
 				<h3 class="curatedlist"><a href="/curatedlist/{{ curatedlist.slugForUrl }}">{{ curatedlist.title }}</a></h3>
-			{% elseif venue is defined %}
+			{% elseif venue is defined and venue %}
 				<h3 class="country"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></h3>
-				{% if area is defined %}
+				{% if area is defined and area %}
 					<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
 				{% endif %}
-				{% if country is defined %}
+				{% if country is defined and country %}
 					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 				{% endif %}
-			{% elseif area is defined %}
+			{% elseif area is defined and area %}
 				<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
-				{% if country is defined %}
+				{% if country is defined and country %}
 					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 				{% endif %}
-			{% elseif country is defined %}
+			{% elseif country is defined and country %}
 				<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 			{% endif %}
 		</div>
@@ -207,21 +207,21 @@
 		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			{% if group is defined %} 
+			{% if group is defined and group %} 
 				var exportData = { group:{{ group.slug }}, groupTitle: "{{  group.title | e('js') }}" };
-			{% elseif curatedlist is defined %} 
+			{% elseif curatedlist is defined and curatedlist %} 
 				var exportData = { curatedlist:{{ curatedlist.slug }} , curatedlistTitle: "{{  curatedlist.title | e('js') }}" };
-			{% elseif venue is defined and area is defined and country is defined %} 
+			{% elseif venue is defined and venue and area is defined and area and country is defined and country %} 
 				var exportData = { venue:{{ venue.slug }}, venueTitle: "{{  venue.title | e('js') }}", area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}", country:"{{ country.twoCharCode }}"  , countryTitle: "{{  country.title | e('js') }}" };
-			{% elseif venue is defined %} 
+			{% elseif venue is defined and venue %} 
 				var exportData = { venue:{{ venue.slug }}, venueTitle: "{{  venue.title | e('js') }}" };
 			{% elseif venueVirtual is defined and venueVirtual %} 
 				var exportData = { venue:'virtual' };
-			{% elseif area is defined and country is defined %} 
+			{% elseif area is defined and area and country is defined and country %} 
 				var exportData = { area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}", country:"{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  };
-			{% elseif area is defined %} 
+			{% elseif area is defined and area %} 
 				var exportData = { area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}"  };
-			{% elseif country is defined %} 
+			{% elseif country is defined and country %} 
 				var exportData = { country:"{{ country.twoCharCode }}"  };
 			{% else %}
 				var exportData = {  };
