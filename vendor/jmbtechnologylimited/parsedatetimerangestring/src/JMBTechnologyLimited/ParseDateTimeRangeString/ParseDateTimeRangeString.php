@@ -64,7 +64,7 @@ class ParseDateTimeRangeString {
 	
 	protected $monthNames = array(
 		1=>array('January','Jan'),
-		2=>array('Febuary','Feb'),
+		2=>array('February','Febuary','Feb'),
 		3=>array('March','Mar'),
 		4=>array('April','Apr'),
 		5=>array('May','May'),

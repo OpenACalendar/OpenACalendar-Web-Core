@@ -9,7 +9,7 @@ namespace JMBTechnologyLimited\ParseDateTimeRangeString;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ParseDateTimeRangeStringTest extends \PHPUnit_Framework_TestCase{
+class ParseDateTimeRangeStringStartTest extends \PHPUnit_Framework_TestCase{
 
 	
 	function startProvider() {
