@@ -1,0 +1,88 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/group/page2col.html.twig' %}
+
+{% block pageTitle %}{{ group.title }} - {% endblock %} 
+
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+{% endblock %}
+
+{% block tabDetails %}currentTab{% endblock %}
+	
+{% block actions %}
+	{% if currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}
+		<li class="action">
+			<a href="/group/{{ group.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+		</li>
+		<li class="action">
+			<a href="/group/{{ group.slugForUrl }}/media"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
+		</li>
+		<li class="action">
+			<a href="/group/{{ group.slugForUrl }}/newevent"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new event</a>
+		</li>
+	{% endif %}
+{% endblock %}
+
+
+{% block innerContentLeft %}
+
+	<p>{{ group.description | nl2br  | linkify }}</p>
+
+	{% if group.twitterUsername %}<p>Follow: <a href="https://twitter.com/{{ group.twitterUsername }}">@{{ group.twitterUsername }}</a></p>{% endif %}
+	
+	{% if group.url %}<p>Website: <a href="{{ group.url }}" target="_blank">{{ group.url | linkinfo }}</a></p>{% endif %}
+
+	{% if medias %}
+		<ul class="mediaGrid">
+			{% for media in medias %}
+				<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
+			{% endfor %}
+		</ul>
+		<div class="afterMediaGrid"></div>
+	{% endif %}
+		
+	{% if importurls %}
+		<ul class="actionList">
+			<li><p><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"><a href="/group/{{ group.slugForUrl }}/importers">List importers</a></p></li>
+		</ul>
+	{% endif %}
+	
+{% endblock %}
+
+
+{% block innerContentRight %}
+
+			{% include '/site/eventListFilterParams.html.twig' %}
+
+	<ul class="events">
+		{% for event in events %}
+			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
+		{% else %}
+			<li>
+				No events found.
+				{% if currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}Why not <a href="/group/{{ group.slugForUrl }}/newevent">add one</a>?{% endif %}
+			</li>		
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+
+{% block scriptsForState %}
+	{% include '/site/common/mediasJavaScriptInformation.html.twig' with { medias:medias } %}
+	{{ parent() }}
+{% endblock %}		
+		
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	<script src="/theme/default/js/mediaPopup.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+

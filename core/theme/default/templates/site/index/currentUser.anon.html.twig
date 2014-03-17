@@ -1,0 +1,40 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page2col.html.twig' %}
+
+
+{% block pageTitle %}You - {% endblock %} 
+
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/currentuser">Your details</a></li>
+{% endblock %}
+
+{% block contentLeft %}
+	Let's talk about you.
+{% endblock %}
+
+
+{% block contentRight %}
+
+	<ul class="actionList">
+		
+		{% if currentSite.cachedIsMultipleTimezones %}
+			<li><a href="/mytimezone"><img src="/theme/default/img/actionPlacesIcon.png">Timezone: {{ currentTimeZone }}</a></li>
+		{% endif %}
+					
+		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login"><img src="/theme/default/img/actionUserIcon.png">Login</a></li>
+		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register"><img src="/theme/default/img/actionUserIcon.png">Register</a></li>
+			
+					
+		
+	</ul>
+
+{% endblock %}
+

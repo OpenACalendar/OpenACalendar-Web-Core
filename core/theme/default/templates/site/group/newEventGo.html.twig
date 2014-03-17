@@ -1,0 +1,68 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/group/page.html.twig' %}
+
+{% block pageTitle %}New event in {{ group.title }} - {% endblock %} 
+
+
+{% block innerContent %}
+
+	<form action="#" method="post" class="styled" id="NewEventForm">
+		<input type="hidden" name="group_slug" value="{{ group.slug }}">
+		
+		{{ form_errors(form) }}
+
+		{{ form_row(form.summary) }}
+		{{ form_row(form.description) }}
+		{{ form_row(form.url) }}
+		{{ form_row(form.start_at) }}
+		{{ form_row(form.end_at) }}
+		{{ form_row(form.country_id) }}
+		
+		{% if currentSite.isFeatureVirtualEvents %}
+			{# Firstly, if both are an option, user must check which one.  #}
+			{% if currentSite.isFeaturePhysicalEvents %}
+				{{ form_row(form.is_virtual) }}
+			{% endif %}
+			{# Secondly, any options for virtual events? ... nope #}
+		{% endif %}
+		{% if currentSite.isFeaturePhysicalEvents %}
+			{# Firstly, if both are an option, user must check which one.  #}
+			{% if currentSite.isFeatureVirtualEvents %}
+				{{ form_row(form.is_physical) }}
+			{% endif %}
+			{# Secondly, any options for physical events? #}
+			<div id="physicalEventOptions">
+
+			</div>
+		{% endif %}
+		
+		{{ form_row(form.timezone) }}
+		{{ form_rest(form) }}
+
+		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
+			<div class="labelWrapper">Final check ...</div>
+			<div class="widgetWrapperPlacementOnly">
+				<p>Is this event maybe a duplicate of one of these?</p>
+				<ul id="DuplicateEventsList" class="events"></ul>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		<input type="submit"  value="Save" />	
+	</form>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+	<script type="text/javascript" src="/theme/default/js/eventform.js?v={{ config.assetsVersion }}"></script>
+	<script type="text/javascript" src="/theme/default/js/eventform.new.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+

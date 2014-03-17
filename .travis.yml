@@ -15,5 +15,5 @@ before_script:
   - echo "\$CONFIG->databaseUser = 'postgres';" >> config.test.php
   - echo "\$CONFIG->databasePassword = '';" >> config.test.php
 
-script: phpunit --configuration extension.Core/tests/phpunit.xml
+script: phpunit --configuration core/tests/phpunit.xml
 

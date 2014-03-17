@@ -1,0 +1,59 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/venue/page.html.twig' %}
+
+{% block pageTitle %}Edit {{ venue.title }} - {% endblock %} 
+
+
+{% block htmlHeader %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
+{% block innerContent %}
+
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.description) }}
+		{{ form_row(form.address) }}
+		
+		{% include 'site/common/venueFormAreaBrowser.html.twig' %}
+						
+		{{ form_row(form.address_code) }}
+		{{ form_row(form.country_id) }}
+								
+		<div class="rowWrapper">
+			<div class="labelWrapper">Map (Click to set location)</div>
+			<div class="widgetWrapperPlacementOnly"><div id="Map"></div></div>
+			<div class="after"></div>
+		</div>
+
+		{{ form_rest(form) }}
+		
+		<input type="submit"  value="Save" />	
+	</form>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script type="text/javascript">
+		{% if venue.lat is not null and venue.lng is not null %}
+			var mapData = { lat: {{ venue.lat }}, lng: {{ venue.lng }} }
+		{% else %}
+			var mapData = { lat: null, lng:null }
+		{% endif %}
+	</script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script type="text/javascript" src="/theme/default/js/venueform.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+

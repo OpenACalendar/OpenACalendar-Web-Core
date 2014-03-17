@@ -1,0 +1,87 @@
+<?php
+define('APP_ROOT_DIR',__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
+require_once APP_ROOT_DIR.'/vendor/autoload.php'; 
+require_once APP_ROOT_DIR.'/core/php/autoload.php';
+require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
+
+/**
+ *
+ * @package Core
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+ */
+
+$actuallySend = isset($argv[1]) && strtolower($argv[1]) == 'yes';
+print "Actually Send: ". ($actuallySend ? "YES":"nah")."\n";
+
+use repositories\builders\UserAccountRepositoryBuilder;
+use repositories\UserAccountGeneralSecurityKeyRepository;
+
+$userRepoBuilder = new UserAccountRepositoryBuilder();
+$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
+
+foreach($userRepoBuilder->fetchAll() as $user) {
+	
+	print date("c")." User ".$user->getEmail()."\n";
+	if (!$user->getIsCanSendNormalEmails()) {
+		print " ... can't send normal emails for some reason\n";
+	} else if ($user->getEmailUpcomingEvents() == 'n') {
+		print " ... email turned off\n";
+	} else {
+		print " ... searching\n";
+		list($upcomingEvents, $allEvents, $userAtEvent, $flag) = $user->getDataForUpcomingEventsEmail();
+		if ($flag) {
+			print " ... found data\n";
+			
+			configureAppForUser($user);
+			
+			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
+			$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+						
+			$message = \Swift_Message::newInstance();
+			$message->setSubject("Events coming up");
+			$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+			$message->setTo($user->getEmail());
+			
+			$messageText = $app['twig']->render('email/upcomingEventsForUser.txt.twig', array(
+				'user'=>$user,
+				'upcomingEvents'=>$upcomingEvents,
+				'allEvents'=>$allEvents,
+				'userAtEvent'=>$userAtEvent,
+				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'currentTimeZone'=>'Europe/London',
+				'unsubscribeURL'=>$unsubscribeURL,
+			));
+			if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.txt', $messageText);
+			$message->setBody($messageText);
+			
+			$messageHTML = $app['twig']->render('email/upcomingEventsForUser.html.twig', array(
+				'user'=>$user,
+				'upcomingEvents'=>$upcomingEvents,
+				'allEvents'=>$allEvents,
+				'userAtEvent'=>$userAtEvent,
+				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+				'currentTimeZone'=>'Europe/London',
+				'unsubscribeURL'=>$unsubscribeURL,
+			));
+			if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.html', $messageHTML);
+			$message->addPart($messageHTML,'text/html');
+						
+			$headers = $message->getHeaders();
+			$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
+			
+			if ($actuallySend) {
+				print " ... sending\n";
+				if (!$CONFIG->isDebug) {
+					$mailer = getSwiftMailer();
+					$mailer->send($message);	
+				}
+			}
+			
+		}
+	}
+	
+}
+

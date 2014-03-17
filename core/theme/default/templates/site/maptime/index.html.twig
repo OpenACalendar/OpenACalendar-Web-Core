@@ -1,0 +1,70 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block pageTitle %}Map by time - {% endblock %} 
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/maptime" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
+{% block content %}
+	<div id="Map" class="fullScreen"></div>
+	<form id="MapTimeControls" onsubmit="loadNewData(); return false;">
+		<input type="text" name="day" value="{{ start|tolocaltimeformatted('j', currentTimeZone)  }}">
+		<select name="month">
+			<option value="1" {%  if start.format('n') == 1 %}selected="selected"{% endif %}>Jan</option>
+			<option value="2" {%  if start.format('n') == 2 %}selected="selected"{% endif %}>Feb</option>
+			<option value="3" {%  if start.format('n') == 3 %}selected="selected"{% endif %}>Mar</option>
+			<option value="4" {%  if start.format('n') == 4 %}selected="selected"{% endif %}>Apr</option>
+			<option value="5" {%  if start.format('n') == 5 %}selected="selected"{% endif %}>May</option>
+			<option value="6" {%  if start.format('n') == 6 %}selected="selected"{% endif %}>Jun</option>
+			<option value="7" {%  if start.format('n') == 7 %}selected="selected"{% endif %}>Jul</option>
+			<option value="8" {%  if start.format('n') == 8 %}selected="selected"{% endif %}>Aug</option>
+			<option value="9" {%  if start.format('n') == 9 %}selected="selected"{% endif %}>Sep</option>
+			<option value="10" {%  if start.format('n') == 10 %}selected="selected"{% endif %}>Oct</option>
+			<option value="11" {%  if start.format('n') == 11 %}selected="selected"{% endif %}>Nov</option>
+			<option value="12" {%  if start.format('n') == 12 %}selected="selected"{% endif %}>Dec</option>
+		</select>
+		<input type="text" name="year" value="{{ start|tolocaltimeformatted('Y', currentTimeZone)  }}">
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		
+		<input type="text" name="hour" value="{{ start|tolocaltimeformatted('H', currentTimeZone)  }}">:
+		<input type="text" name="min" value="{{ start|tolocaltimeformatted('i', currentTimeZone)  }}">
+		
+		<select name="speed">
+			<option value="60">x60 (1 min/second)</option>
+			<option value="3600" selected="selected">x3600 (1 hour/second)</option>
+			<option value="21600">x21600 (6 hour/second)</option>
+		</select>
+
+		
+		<input type="submit" value="Go">
+	</form>
+	<div id="MapTimeDisplay" style="display: none;">
+		<input type="button" value="Stop" onclick="stop();">
+		<div id="MapTimeDisplayDay" class="value"></div>
+		<div id="MapTimeDisplayMonth" class="value"></div>
+		<div id="MapTimeDisplayYear" class="value"></div>
+		<div class="value"><div id="MapTimeDisplayHour"></div>:<div id="MapTimeDisplayMin"></div></div>
+	</div>
+	
+	<ul id="CurrentEvents" class="mapTimeEvents">
+	</ul>
+	<div class="afterMapTimeEvents"></div>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+	</script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script type="text/javascript" src="/theme/default/js/maptime.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}

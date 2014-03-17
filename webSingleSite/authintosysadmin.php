@@ -1,8 +1,8 @@
 <?php
 require 'localConfig.php';
 require_once APP_ROOT_DIR.'/vendor/autoload.php'; 
-require_once APP_ROOT_DIR.'/extension.Core/php/autoload.php';
-require_once APP_ROOT_DIR.'/extension.Core/php/autoloadWebApp.php';
+require_once APP_ROOT_DIR.'/core/php/autoload.php';
+require_once APP_ROOT_DIR.'/core/php/autoloadWebApp.php';
 
 
 /**
@@ -15,5 +15,5 @@ require_once APP_ROOT_DIR.'/extension.Core/php/autoloadWebApp.php';
  */
 
 
-require_once APP_ROOT_DIR.'/extension.Core/webSysAdmin/login.php';
+require_once APP_ROOT_DIR.'/core/webSysAdmin/login.php';
 

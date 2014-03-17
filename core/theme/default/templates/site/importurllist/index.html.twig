@@ -1,0 +1,60 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block pageTitle %}Imports - {% endblock %} 
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/importurl">import from web</a></li>
+{% endblock %}
+
+{% block content %}
+
+	{% if not currentSite.isFeatureImporter %}
+		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+	{% endif %}
+		
+	<h2>Import from web</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% if currentUserCanEditSite and currentSite.isFeatureImporter %}
+				<li class="action">
+					<a href="/importurl/new"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new</a>
+				</li>
+			{% endif %}
+			<li class="tab currentTab">List</li>
+		</ul>
+		<div id="innerPage">
+
+			<ul class="importurls">
+				{% for importurl in importurls %}
+					<li class="importurl">
+						<div class="title"><a href="/importurl/{{ importurl.slug }}">{{ importurl.title }}</a></div>
+					</li>
+				{% else %}
+					<li>
+						There are no imports.
+					</li>								
+				{% endfor %}
+			</ul>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+
+{% endblock %}
+

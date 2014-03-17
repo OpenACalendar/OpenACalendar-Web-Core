@@ -1,7 +1,7 @@
 <?php
 require 'localConfig.php';
 require_once APP_ROOT_DIR.'/vendor/autoload.php'; 
-require_once APP_ROOT_DIR.'/extension.Core/php/autoload.php';
+require_once APP_ROOT_DIR.'/core/php/autoload.php';
 
 use repositories\SiteRepository;
 use repositories\MediaRepository;
@@ -51,6 +51,6 @@ if (!$site) {
 	}
 
 	// send standard logo if we can't send another
-	writeFile(dirname(__FILE__).DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR.'logo.png','image/png' );
+	writeFile(dirname(__FILE__).'/theme/default/img/logo.png','image/png' );
 	
 }

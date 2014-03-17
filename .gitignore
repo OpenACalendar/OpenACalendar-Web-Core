@@ -7,7 +7,7 @@ webSingleSite/js/blank.js
 webSite/js/blank.js
 build/composer.lock
 build/vendor/*
-extension.AddressCodeGBOpenCodePoint/data/*.csv
+extension/AddressCodeGBOpenCodePoint/data/*.csv
 
 
 

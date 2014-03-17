@@ -1,8 +1,8 @@
 <?php
 require 'localConfig.php';
 require_once APP_ROOT_DIR.'/vendor/autoload.php'; 
-require_once APP_ROOT_DIR.'/extension.Core/php/autoload.php';
-require_once APP_ROOT_DIR.'/extension.Core/php/autoloadWebApp.php';
+require_once APP_ROOT_DIR.'/core/php/autoload.php';
+require_once APP_ROOT_DIR.'/core/php/autoloadWebApp.php';
 
 
 /**
@@ -14,4 +14,4 @@ require_once APP_ROOT_DIR.'/extension.Core/php/autoloadWebApp.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-require_once APP_ROOT_DIR.'/extension.Core/webSingleSite/indexapi1.php';
+require_once APP_ROOT_DIR.'/core/webSingleSite/indexapi1.php';

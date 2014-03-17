@@ -1,0 +1,38 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page.html.twig' %}
+
+{% block pageTitle %}My Timezone - {% endblock %} 
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block content %}
+
+	<p>Please choose the timezone you want to browse this calendar in:</p>
+
+	<div id="searchWrapper" style="display: none;">
+		Search by capital city: <input type="text" id="searchTerm">
+	</div>
+	
+	<ul class="timezones">
+		{% for timezone in allowedTimeZones %}
+			{% if timezone == currentTimeZone %}
+				<li>{{ timezone }}</li>
+			{% else %}
+				<li><a href="/?mytimezone={{ timezone|url_encode }}">{{ timezone }}</a></li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="/theme/default/js/searchTimeZones.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}

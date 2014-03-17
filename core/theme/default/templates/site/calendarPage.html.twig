@@ -1,0 +1,237 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% if group is defined %}
+	{% set calURL = '/group/' ~ group.slugForUrl ~ '/calendar' %}
+	{% set addURL = '/group/' ~ group.slugForUrl ~ '/newevent/go?' %}
+{% elseif curatedlist is defined %}
+	{% set calURL = '/curatedlist/' ~ curatedlist.slug ~ '/calendar' %}
+	{% set addURL = false %}
+{% elseif venue is defined %}
+	{#  When we have a venue, we also have a country & area so must check venue first #}
+	{% set calURL = '/venue/' ~ venue.slugForUrl ~ '/calendar' %}
+	{% set addURL = false %}
+{% elseif area is defined %}
+	{#  When we have a area, we also have a country so must check venue first #}
+	{% set calURL = '/area/' ~ area.slugForUrl ~ '/calendar' %}
+	{% set addURL = false %}
+{% elseif country is defined %}
+	{% set calURL = '/country/' ~ country.twoCharCode ~ '/calendar' %}
+	{% set addURL = false %}
+{% else %}
+	{% set calURL = '/event/calendar' %}
+	{% if currentSite.isFeatureGroup %}
+		{% set addURL = '/event/new?' %}
+	{% else %}
+		{% set addURL = '/event/new/go?' %}
+	{% endif %}
+{% endif %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<title>{{ pageTitle }} - {{ currentSite.title }} {{ config.siteTitle }}</title>
+		<link rel="stylesheet" type="text/css" href="/theme/default/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
+		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
+		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
+		{% if group is defined %}
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% elseif curatedlist is defined %}
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% elseif venue is defined %}
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/{{ venue.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% elseif area is defined %}
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% elseif venueVirtual is defined and venueVirtual %}
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/virtual/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% elseif country is defined %}
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% else %}
+			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% endif %}
+		{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	</head>
+	<body>
+		<div id="header">
+			<div id="headerOptions">
+				<div id="actions">
+
+					<a href="#" onclick="showExportPopup(); return false;">
+						<img src="/theme/default/img/calendarExport.png" alt="Export" title="Export">
+					</a>
+					{% if prevYear %}
+						<a href="{{ calURL }}/{{ prevYear }}/{{ prevMonth }}">
+							<img src="/theme/default/img/calendarPrev.png" alt="Previous" title="Previous">
+						</a>
+					{% endif %}
+					<a href="{{ calURL }}">
+						<img src="/theme/default/img/calendarToday.png" alt="Today" title="Today">
+					</a>
+					{% if nextYear %}
+						<a href="{{ calURL }}/{{ nextYear }}/{{ nextMonth }}">
+							<img src="/theme/default/img/calendarNext.png" alt="Next" title="Next">
+						</a>
+					{% endif %}
+
+
+
+					{% if group is defined %}
+						<a href="/group/{{ group.slugForUrl }}">
+					{% elseif venue is defined %}
+						<a href="/venue/{{ venue.slugForUrl }}">
+					{% elseif curatedlist is defined %}
+						<a href="/curatedlist/{{ curatedlist.slugForUrl }}">
+					{% elseif venueVirtual is defined and venueVirtual %}
+						<a href="/venue/virtual">
+					{% elseif area is defined %}
+						<a href="/area/{{ area.slugForUrl }}">
+					{% elseif country is defined %}
+						<a href="/country/{{ country.twoCharCode }}">
+					{% else %}
+						<a href="/event/">
+					{% endif %}
+						<img src="/theme/default/img/calendarClose.png" alt="Close" title="Close">
+					</a>							
+				</div>
+				<div id="calendarPosition">
+					{% if currentSite.cachedIsMultipleTimezones %}
+						<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
+					{% endif %}
+					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+				</div>				
+			</div>
+			{% if config.isSingleSiteMode %}
+				<img src="/theme/default/img/logo.png?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+				<h1><a href="/">{{ config.siteTitle }}</a></h1>
+			{% else %}
+				<img src="/getLogo.php?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+				<h1><a href="/">{{ currentSite.title }}</a></h1>
+				<h2><a href="/">{{ config.siteTitle }}</a></h2>
+			{% endif %}
+			
+			{% if group is defined and group %}
+				<h3 class="group"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></h3>
+			{% elseif curatedlist is defined and curatedlist %}
+				<h3 class="curatedlist"><a href="/curatedlist/{{ curatedlist.slugForUrl }}">{{ curatedlist.title }}</a></h3>
+			{% elseif venue is defined and venue %}
+				<h3 class="country"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></h3>
+				{% if area is defined and area %}
+					<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
+				{% endif %}
+				{% if country is defined and country %}
+					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+				{% endif %}
+			{% elseif area is defined and area %}
+				<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
+				{% if country is defined and country %}
+					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+				{% endif %}
+			{% elseif country is defined and country %}
+				<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+			{% endif %}
+		</div>
+		<div id="page">
+			<table class="calendar">
+				<tr>
+					<th>Mon</th>
+					<th>Tue</th>
+					<th>Wed</th>
+					<th>Thu</th>
+					<th>Fri</th>
+					<th>Sat</th>
+					<th>Sun</th>
+				</tr>
+				{% for data in calendar.getData() %}
+					{% if data.dayOfWeek == 1 %}<tr>{% endif %}
+					{#  the "Now" ID is used in URLs to make browser scroll to today's box #}
+					<td {% if data.today %}id="Now"{% endif %} class="day{{data.dayOfWeek}} {% if data.today %}today{% endif %}">
+						<div class="date">
+							{{data.display}}
+							{% if addURL and currentUserCanEditSite and data.dataForAddUrl %}
+								<div class="addURL">
+									<a href="{{ addURL }}&date={{ data.dataForAddUrl }}" title="Add an event"><img src="/theme/default/img/calendarAddEvent.png" alt="Add"></a>
+								</div>
+							{% endif %}
+						</div>
+						<div class="events">
+							{% for event in data.eventsContinuing %}
+								<div class="event continuing">
+									<div class="above"></div>
+									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
+										{{ event.getSummaryDisplay()  }} 
+									</a>
+									<div class="before"></div>
+								</div>
+							{% endfor %}
+							{% for event in data.events %}
+								<div class="event starting">
+									<div class="above"></div>
+									{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
+										<div class="currentUserAttendance" id="currentUserAttendanceForEvent{{ event.slug }}">
+											<a href="/event/{{ event.slugForUrl }}" onclick="showCurrentUserAttendanceForEvent({{ event.slug }}); return false;" class="activationLinkWrapper">
+												{% if event.userIsPlanAttending %}
+													<img src="/theme/default/img/actionUserAttendingIcon.png" alt="You are attending" title="You are attending">
+												{% elseif event.userIsPlanMaybeAttending %}
+													<img src="/theme/default/img/actionUserMaybeAttendingIcon.png" alt="You are maybe attending" title="You are maybe attending">
+												{% else %}
+													<img src="/theme/default/img/actionUserNotAttendingIcon.png" alt="You are not attending" title="You are not attending">
+												{% endif %}
+											</a>
+										</div>
+									{% endif %}									
+									<span class="start_at">
+										{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+									</span>
+									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
+										{{ event.getSummaryDisplay() }}
+									</a>
+									
+									<div class="before"></div>
+								</div>
+							{% endfor %}
+						</div>
+					</td>
+					{% if data.dayOfWeek == 7 %}</tr>{% endif %}
+				{% endfor %}	
+			</table>
+		</div>
+		{% include 'site/calendarPage.footer.html.twig' %}
+		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			{% if group is defined and group %} 
+				var exportData = { group:{{ group.slug }}, groupTitle: "{{  group.title | e('js') }}" };
+			{% elseif curatedlist is defined and curatedlist %} 
+				var exportData = { curatedlist:{{ curatedlist.slug }} , curatedlistTitle: "{{  curatedlist.title | e('js') }}" };
+			{% elseif venue is defined and venue and area is defined and area and country is defined and country %} 
+				var exportData = { venue:{{ venue.slug }}, venueTitle: "{{  venue.title | e('js') }}", area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}", country:"{{ country.twoCharCode }}"  , countryTitle: "{{  country.title | e('js') }}" };
+			{% elseif venue is defined and venue %} 
+				var exportData = { venue:{{ venue.slug }}, venueTitle: "{{  venue.title | e('js') }}" };
+			{% elseif venueVirtual is defined and venueVirtual %} 
+				var exportData = { venue:'virtual' };
+			{% elseif area is defined and area and country is defined and country %} 
+				var exportData = { area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}", country:"{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  };
+			{% elseif area is defined and area %} 
+				var exportData = { area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}"  };
+			{% elseif country is defined and country %} 
+				var exportData = { country:"{{ country.twoCharCode }}"  };
+			{% else %}
+				var exportData = {  };
+			{% endif %}
+			var showCurrentUserOptions = {% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}true{% else %}false{% endif %};
+		</script>
+		<script src="/theme/default/js/general.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/theme/default/js/general.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/theme/default/js/calendar.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		{% include 'analytics.html.twig' %}
+	</body>
+</html>
+

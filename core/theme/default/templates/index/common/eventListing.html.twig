@@ -1,0 +1,53 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<li class="event">
+	{% if event.isdeleted %}
+		<div class="dateTimeIcon">
+			<div class="dateIcon">
+				<span class="deleted">Deleted!</span>
+			</div>
+		</div>
+	{% else %}
+		<div class="dateTimeIcon">
+			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+				<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}">
+					<div class="dateIcon">
+						<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
+						<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+						<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+					</div>
+					<div class="timeIcon">
+						<span class="startTime">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+					</div>
+				</a>
+			</time>				
+		</div>
+	{% endif %}
+	<div class="title">
+		<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}">
+			{{ event.summaryDisplay }}
+		</a>
+	</div>
+	<p class="description">{{ event.description |  nl2br  | linkify }}</p>
+	<div class="afterEventListing"></div>
+	{% if showCurrentUserOptions is defined and showCurrentUserOptions and currentUser is not null %}
+		{# The below is a seperate file, as it varies slightly on Site and SingleSite #}
+		{% include '/index/common/eventListing.currentUserOptions.html.twig' %}
+	{% endif %}
+	{% if showOtherUserOptions is defined and showOtherUserOptions %}
+		<div class="currentUserAttendance">
+			{% if event.userIsPlanAttending %}
+				<img src="/theme/default/img/actionUserAttendingIcon.png" alt="They are attending" title="They are attending">
+			{% elseif event.userIsPlanMaybeAttending %}
+				<img src="/theme/default/img/actionUserMaybeAttendingIcon.png" alt="They are maybe attending" title="They are maybe attending">
+			{% else %}
+				<img src="/theme/default/img/actionUserNotAttendingIcon.png" alt="They are not attending" title="They are not attending">
+			{% endif %}
+		</div>	
+	{% endif %}
+</li>

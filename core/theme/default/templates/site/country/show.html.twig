@@ -1,0 +1,73 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/country/page2col.html.twig' %}
+
+
+{% block pageTitle %}{{ country.title }} - {% endblock %} 
+
+{% block tabDetails %}currentTab{% endblock %}
+	
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
+
+{% block actions %}
+	<li class="action">
+		<a href="/country/{{ country.twoCharCode }}/new">
+			<img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new
+		</a>
+	</li>
+{% endblock %}
+	
+	
+{% block innerContentLeft %}
+
+	<div class="country">
+	
+		<div id="MapWrapper">
+			<div id="Map" class="map"></div>
+			{% if currentSite.isFeatureMap %}
+				<p class="largerMapLink"><a href="/map?country={{ country.twoCharCode }}">View larger map</a></p>
+			{% endif %}
+		</div>
+	
+		{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+		
+	</div>
+	
+{% endblock %}
+
+
+{% block innerContentRight %}
+
+	{% include '/site/eventListFilterParams.html.twig' %}
+
+	<ul class="events">
+		{% for event in events %}
+			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
+		{% else %}
+			<li>
+				No events found.
+				{% if currentUserCanEditSite %}Why not <a href="/event/new">add one</a>?{% endif %}
+			</li>		
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+
+	
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script src="/theme/default/js/countryShow.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}
+

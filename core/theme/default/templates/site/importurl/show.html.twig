@@ -1,0 +1,46 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/importurl/page.html.twig' %}
+
+{% block pageTitle %}{{ importurl.title }} - {% endblock %} 
+
+{% block tabDetails %}currentTab{% endblock %}
+
+{% block actions %}
+	{% if currentUserCanEditSite and currentSite.isFeatureImporter %}
+		<li class="action">
+			<a href="/importurl/{{ importurl.slug }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+		</li>
+		{% if not importurl.isEnabled or importurl.expiredat  %}
+			<li class="action">
+				<a href="/importurl/{{ importurl.slug }}/enable"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> enable</a>
+			</li>
+		{% else %}
+			<li class="action">
+				<a href="/importurl/{{ importurl.slug }}/disable"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> disable</a>
+			</li>			
+		{% endif %}
+		<li class="action">
+			<a href="/importurl/{{ importurl.slug }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+		</li>
+	{% endif %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<p>Imported from: {{ importurl.url }}</p>
+
+	{% if not hasLogEntries and  importurl.isEnabled %}
+		<p>This importer has not been run yet. It will be run shortly, please return soon to check on the results.</p>
+	{% endif %}
+	
+{% endblock %}
+
+
+	

@@ -1,0 +1,66 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page.html.twig' %}
+
+{% block pageTitle %}Your personal agenda - {% endblock %} 
+
+	{% set currentUserPrivateFeedKey = getCurrentUserPrivateFeedKey() %}
+
+
+{% block breadcrumbs %}
+	<li><a href="/me/">your account</a></li>
+	<li class="current"><a href="/me/agenda">personal agenda</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+	<div id="innerPageWrapper">
+			<ul id="innerPageActions">
+				<li class="action">
+					<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
+						<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+					</a>
+				</li>
+				<li class="tab currentTab"><a href="/me/agenda">Agenda</a></li>
+				<li class="tab"><a href="/me/calendar">Calendar</a></li>
+			</ul>
+			<div id="innerPage">
+
+				{% include '/index/eventListFilterParams.html.twig' %}
+
+				<ul class="events">
+					{% for event in events %}
+						{% include '/index/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
+					{% else %}
+						<p>You can watch groups of events or say you are attending them - and 
+							then your personal list of only the events you are interested in will build up here.</p>
+					{% endfor %}
+				</ul>
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	<script type="text/javascript">var exportData = {user:'{{ currentUser.username }}', userAccessKey: '{{ currentUserPrivateFeedKey.accessKey }}'}</script>
+{% endblock %}
+
+
+
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{% if config.isSingleSiteMode %}
+		<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>	
+	{% else %}
+		<script type="text/javascript" src="/theme/default/js/userAtEvents.index.js?v={{ config.assetsVersion }}"></script>	
+	{% endif %}
+{% endblock %}
+

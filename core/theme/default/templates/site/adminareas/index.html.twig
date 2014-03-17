@@ -1,0 +1,44 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block pageTitle %}Admin Areas - {% endblock %} 
+
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li><a href="/admin/areas">areas in a country</a></li>
+	<li class="current"><a href="/admin/areas/{{ country.twoCharCode }}">{{ country.title }}</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<h2>Areas in {{  country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></h2>
+		
+	<form action="/admin/areas/{{ country.twoCharCode }}/action" method="POST">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<ul class="areasAdmin">
+			{% for area in areaTree.children %}
+				{% include 'site/adminareas/index.areaAsTree.html.twig' with {'areaData':area} %}
+			{% endfor %}
+			<li class="area">
+				<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new">New</a></class>
+			</li>
+		</ul>
+		<select name="action">
+			<option value="delete">Delete</option>
+			<option value="undelete">Undelete</option>
+		</select>
+		<input type="submit" value="Go">
+	</form>
+
+
+
+{% endblock %}

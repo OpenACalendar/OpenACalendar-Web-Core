@@ -1,0 +1,104 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page2col.html.twig' %}
+
+
+{% block pageTitle %}New Event - {% endblock %} 
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/event">events</a></li>
+{% endblock %}
+
+{% block contentLeft %}
+	<div class="a2colPanel">
+
+		<h3>Does one group do many events?</h3>
+
+		<p>You can put all your events into one group.</p>
+
+		<p>Groups let you add more information and lets users find future events 
+			from the same organisers easily.</p>
+
+		<form id="GroupSearchForm" style="display: none;">
+			Search for an existing group: <input type="text" id="GroupSearchText">
+		</form>
+		
+		<ul class="groups" id="GroupSearchList">
+		</ul>
+		
+		<div class="bigButtonContainer">
+			<a  class="button" href="/group/new">Create a new group</a>
+			<a  class="button" href="/group" id="GroupFindFallback">Find an existing group</a>
+		</div>	
+
+	</div>	
+{% endblock %}
+
+{% block contentRight %}
+	<div class="a2colPanel">
+
+		<h3>Is this a one-off event?</h3>
+
+		<p>You can just create an event by itself.</p>
+
+		<form action="/event/new/go" class="styled" method="GET">
+			
+			<div class="rowWrapper">
+				<div class="labelWrapper">What is it?</div>
+				<div class="widgetWrapper">
+					<input type="text" name="what">
+				</div>
+				<div class="after"></div>
+			</div>
+			
+			<div class="rowWrapper">
+				<div class="labelWrapper">When is it?</div>
+				<div class="widgetWrapper">
+					<input type="text" name="when" value="{% if when %}{{ when }} ?pm{% endif %}">
+					{% include '/site/common/helpLink.html.twig' with {'id':'WhenHelpPopup' } %}
+				</div>
+				<div class="after"></div>
+			</div>
+			
+			<div class="actionWrapperBig">
+				<input type="submit" value="Continue creating an event">
+			</div>	
+		</form>
+		
+		
+
+	</div>
+{% endblock %}
+		
+{% block scriptsForState %}
+	<script type="text/javascript">
+		var dateForEvent = '{{ date }}';
+	</script>
+{% endblock %}
+		
+
+{% block scripts %}
+	<script type="text/javascript">
+		$( document ).ready( function() {
+			$('#WhenHelpPopup')
+			.show()
+			.click(function() { 
+				showHelpPopup('Enter when the event is.<ul>'+
+						'<li>eg. 2nd dec 2013 7pm to 9pm</li>'+
+						'<li>eg. 2nd wed dec between 19:30 and 22:00 </li>'+
+						'<li>eg. fri 7pm for 3 hours 30 mins</li>'+
+						'</ul>');
+				return false; 
+			});
+		} );
+	</script>
+	<script type="text/javascript" src="/theme/default/js/eventnew.js"></script>
+{% endblock %}
+	
+	

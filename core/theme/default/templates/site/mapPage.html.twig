@@ -1,0 +1,72 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<title>Map - {{ currentSite.title }} {{ config.siteTitle }}</title>
+		<link rel="stylesheet" type="text/css" href="/theme/default/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="//theme/defaultcss/map.css?v={{ config.assetsVersion }}">
+		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
+		{% include 'site/common/mapLibrary.css.html.twig' %}
+		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/map" />
+		{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	</head>
+	<body>
+		<div id="Map">
+		</div>
+		<div id="NoEventsNotice" {% if venueData %}style="display: none;"{% endif %}>
+			We could not find any future events with a known location on the map. You can add a venue to events, then edit a venue to add it to the map.
+		</div>
+		<div id="MapInfo">
+			<h1><a href="/">{{ currentSite.title }}</a></h1>
+			{% if not config.isSingleSiteMode %}<h2><a href="/">{{ config.siteTitle }}</a></h2>{% endif %}
+			<a href="/">
+				<img src="/theme/default/img/calendarClose.png" alt="Close" title="Close">
+			</a>	
+		</div>
+		<script type="text/javascript">
+			var mapData = [ {% for vd in venueData  %}
+				{
+					'slug':'{{ vd.venue_slug }}',
+					'lat':'{{ vd.venue_lat }}',
+					'lng':'{{ vd.venue_lng }}',
+				},
+			{% endfor %}  ];
+			{% if country %}
+				var country = {
+					maxLat: {% if country.maxLat %}{{ country.maxLat }}{% else %}null{% endif %},
+					maxLng: {% if country.maxLng %}{{ country.maxLng }}{% else %}null{% endif %}, 
+					minLat: {% if country.minLat %}{{ country.minLat }}{% else %}null{% endif %},
+					minLng: {% if country.minLng %}{{ country.minLng }}{% else %}null{% endif %} };
+			{% else %}
+				var country = null;
+			{% endif %}
+			{% if area %}
+				var area = {
+					maxLat: {% if area.maxLat %}{{ area.maxLat }}{% else %}null{% endif %},
+					maxLng: {% if area.maxLng %}{{ area.maxLng }}{% else %}null{% endif %}, 
+					minLat: {% if area.minLat %}{{ area.minLat }}{% else %}null{% endif %},
+					minLng: {% if area.minLng %}{{ area.minLng }}{% else %}null{% endif %} };
+			{% else %}
+				var area = null;
+			{% endif %}
+		</script>
+		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+		{% include 'site/common/mapLibrary.js.html.twig' %}
+		<script type="text/javascript" src="/theme/default/js/general.js?v={{ config.assetsVersion }}"></script>
+		<script src="/theme/default/js/general.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script type="text/javascript" src="/theme/default/js/map.js?v={{ config.assetsVersion }}"></script>
+		{% include 'analytics.html.twig' %}
+	</body>
+</html>

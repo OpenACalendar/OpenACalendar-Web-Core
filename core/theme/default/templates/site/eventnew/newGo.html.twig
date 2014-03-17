@@ -1,0 +1,70 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}New Event - {% endblock %} 
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/event">events</a></li>
+{% endblock %}
+
+{% block content %}
+	
+
+
+	<form action="#" method="post" class="styled" id="NewEventForm">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.summary) }}
+		{{ form_row(form.description) }}
+		{{ form_row(form.url) }}
+		{{ form_row(form.start_at) }}
+		{{ form_row(form.end_at) }}
+		{{ form_row(form.country_id) }}
+		{{ form_row(form.timezone) }}
+
+		{% if currentSite.isFeatureVirtualEvents %}
+			{# If both are an option, user must check which one.  #}
+			{% if currentSite.isFeaturePhysicalEvents %}
+				{{ form_row(form.is_virtual) }}
+			{% endif %}
+		{% endif %}
+		{% if currentSite.isFeaturePhysicalEvents %}
+			{#  If both are an option, user must check which one.  #}
+			{% if currentSite.isFeatureVirtualEvents %}
+				{{ form_row(form.is_physical) }}
+			{% endif %}
+			{# Secondly, any options for physical events? #}
+			<div id="physicalEventOptions">
+				
+			</div>
+		{% endif %}
+
+		{{ form_rest(form) }}
+
+		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
+			<div class="labelWrapper">&nbsp;</div>
+			<div class="widgetWrapperPlacementOnly">
+				<p>Wait, is this event maybe a duplicate of one of these? Click for more information - you won't lose what you have already entered.</p>
+				<ul id="DuplicateEventsList" class="events"></ul>
+			</div>
+			<div class="after"></div>
+		</div>
+		
+		<input type="submit"  value="Save" />	
+	</form>
+{% endblock %}
+
+
+{% block scripts %}
+	<script type="text/javascript" src="/theme/default/js/eventform.js?v={{ config.assetsVersion }}"></script>
+	<script type="text/javascript" src="/theme/default/js/eventform.new.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+

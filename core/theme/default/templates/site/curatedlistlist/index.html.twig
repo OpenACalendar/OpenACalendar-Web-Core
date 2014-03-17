@@ -1,0 +1,63 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block pageTitle %}Lists - {% endblock %} 
+
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/curatedlist">curated lists</a></li>
+{% endblock %}
+
+{% block content %}
+
+	{% if not currentSite.isFeatureCuratedList %}
+		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+	{% endif %}
+		
+	<h2>Curated Lists</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% if currentUserCanEditSite and currentSite.isFeatureCuratedList %}
+				<li class="action">
+					<a href="/curatedlist/new"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new</a>
+				</li>
+			{% endif %}
+			<li class="tab">List</li>
+		</ul>
+		<div id="innerPage">
+
+			<ul class="curatedlists">
+				{% for curatedlist in curatedlists %}
+					<li class="curatedlist">
+						<div class="title"><a href="/curatedlist/{{ curatedlist.slug }}">{{ curatedlist.title }}</a></div>
+					</li>
+				{% else %}
+					<li>
+						There are no lists.
+						{# TODO why not create one? link #}
+					</li>								
+				{% endfor %}
+			</ul>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+
+{% endblock %}
+

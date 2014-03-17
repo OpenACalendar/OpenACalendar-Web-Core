@@ -1,0 +1,313 @@
+/**
+ * @package Core
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+*/
+
+@import("../mixins.less");
+@import("../vars.less");
+@import("calendarAndSite.less");
+
+
+
+html {
+	background-color: #eeeeee;
+}
+body {
+	padding: 0;
+	margin: 0;
+	font-family: arial, sans-serif;
+	background-color: #eeeeee;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#eeeeee)); /* Chrome, Safari 4+ */
+	background-image: -webkit-linear-gradient(top, #dddddd, #eeeeee); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+	background-image:    -moz-linear-gradient(top, #dddddd, #eeeeee); /* Firefox 3.6-15 */
+	background-image:      -o-linear-gradient(top, #dddddd, #eeeeee); /* Opera 11.10-12.00 */
+	background-image:         linear-gradient(to bottom, #dddddd, #eeeeee); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+}
+
+
+p {
+	margin: 10px 0;
+}
+
+
+#header {
+	padding: 5px;
+	#headerOptions {
+		float: right;
+		text-align: right;
+		#actions {
+			a {
+				margin: 0px 5px;
+				text-decoration: none;
+			}
+			.currentCalendarDate {
+				font-size: 1.1em;
+				font-weight: bold;
+			}
+		}
+		#calendarPosition {
+			padding: 5px 0;
+			.date {
+				font-size: 1.2em;
+				font-weight: bold;
+			}
+			.timezone {
+				font-size: 1.0em;
+			}
+		}
+	}
+	img.logo {
+		max-width: 20px;
+		max-height: 20px;
+		display: inline;
+	}
+	h1 {
+		display: inline;
+		font-size: 1.3em;
+		a {
+			text-decoration: none;
+			color: black;
+		}
+	}
+	h2 {
+		display: inline;
+		font-size: 1.0em;
+		a {
+			text-decoration: none;
+			color: black;
+		}
+	}
+	h3 {
+		padding: 0px 0px 0px 10px;
+		background: url('/theme/default/img/breadcrumbsDivider.png') left center no-repeat;
+		display: inline;
+		font-size: 1.1em;
+		a {
+			text-decoration: none;
+			color: black;
+		}
+	}
+}
+
+#page {
+	clear: both;
+	padding: 5px;
+}
+
+div.filterListEventWrapper {
+	padding: 5px 0;
+	form.filterListEvent {
+		background: #e9e9e9;
+		padding: 10px;
+		div.inputField {
+			display: inline;
+			padding: 10px;
+		}
+		#eventListFilterFromWrapper {
+			input {
+				background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
+			}
+		}
+		div.submitField {
+			display: inline;
+			padding: 10px;
+			input {
+				background: #009900;
+				color: white;
+				border: 2px solid #009900;
+				.rounded-corners(2px);
+				cursor:pointer;
+			}
+		}
+	}
+}
+
+
+table.calendar {
+	width: 100%;
+	td {
+		border: 1px solid black;
+		padding: 2px;
+		width: 14%;
+		div.date {
+			font-weight: bold;
+			text-align: center;
+		}
+		background: white;
+		.addURL {
+			display: none;
+		}
+	}
+	td:hover {
+		.addURL {
+			display: inline;
+		}
+	}
+	td.day6, td.day7 {
+		background: none repeat scroll 0 0 #EEEEEE;
+	}
+	td.today {
+		background: none repeat scroll 0 0 #F8E8D7;
+		border: 3px solid #F89E3E;
+	}
+	.events {
+		min-height: 50px;
+	}
+	.event {
+		background: none repeat scroll 0 0 #DBD3AF;
+		border: 1px solid #356C8F;
+		border-radius: 3px 3px 3px 3px;
+		margin: 5px 15px;
+		padding: 5px;
+		.start_at {
+			font-size: 0.8em;
+		}
+		a {
+			color: #222;
+			text-decoration: none;
+		}
+		a:hover {
+			color: block;
+			text-decoration: underline;
+		}
+		div.currentUserAttendance {
+			float: right;
+			padding: 0px 0px 5px 5px;
+			a {
+				text-decoration: none;
+			}
+		}
+	}
+	.deleted {
+		background: url('/theme/default/img/deletedBackground.png');
+	}
+}
+
+
+
+#PopupMask {
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #ccc;
+    background-color: rgba(200,200,200,0.7);
+	z-index: 500;
+}
+
+.PopupBox {
+	border: 4px solid #0DA20D;
+	.rounded-corners(2px);
+	background: white;
+	padding: 0;
+	min-width: 600px;
+	width: 50%;
+	top: 25px;
+	left: 20%;
+	@media screen and (max-width: 750px) {
+		min-width: 200px;
+		width: 95%;
+		top: 25px;
+		left: 10px;
+	}
+	position: fixed;
+	z-index: 1000;
+	.PopupBoxClose {
+		padding: 3px;
+		a {
+			color: white;
+			text-decoration: none;
+		}
+		background: #0DA20D;
+		text-align: right;
+	}
+	#ExportPopupIntroText {
+		padding: 10px;
+		div {
+			display: inline;
+		}
+		label {
+			display: block;
+		}
+	}
+	ul#ExportPopupMenu {
+		padding: 15px 5px 5px 5px;
+		li {
+			padding: 2px;
+			line-height: 2.0em;
+			display: inline;
+			.wrapper {
+				.rounded-corners(3px);
+				display: inline;
+				padding: 5px;
+				margin: 3px;
+				border: 1px solid black;
+				background: #d4d8db;
+				line-height: 1.6;
+				a {
+					white-space: nowrap;
+					color: black;
+					text-decoration: none;
+					font-weight: bold;
+				}
+				&.current {
+					font-weight: bold;
+					background: #ffffff;
+					a {
+						color: #333;
+						text-decoration: none;
+						font-weight: bold;
+					}
+				}
+				&:hover {
+					background: #f2f2f2;
+				}
+				img {
+					max-width: 16px;
+					max-height: 16px;
+				}
+				@media screen and (max-width: @narrowScreensMakeEverythingHorizontalIntoVerticalBoundary) {
+					line-height: 0.1em;
+					.wrapper {
+						display:block;
+						a {
+							display:block;
+						}
+					}
+				}
+			}
+		}
+	}
+	.content {
+		padding: 10px;
+	}
+	.PopupBoxContent {
+		padding: 10px;
+	}
+	#ExportToGoogleCalendar input.exportlink {
+		display: block;
+		width: 100%;
+	}
+	#EventAttendancePopupContent {
+		padding: 5px;
+	}
+	#EventAttendancePopupContent, #EventPopupAttendanceContent{
+		.savingIndicator, .savedIndicator {
+			padding-left: 10px;
+			font-style: italic;
+		}
+	}
+}
+
+
+
+#footer {
+	padding: 10px 5px;
+	text-align: center;
+	font-style: italic;
+	font-size: 0.8em;
+}

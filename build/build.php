@@ -1,6 +1,6 @@
 <?php
 require __DIR__.'/localConfig.php';
-require APP_ROOT_DIR.'/extension.Core/php/autoload.php';
+require APP_ROOT_DIR.'/core/php/autoload.php';
 require APP_ROOT_DIR.'/config.php';
 require __DIR__.'/vendor/autoload.php';
 
@@ -31,8 +31,10 @@ use Assetic\AssetWriter;
 use Assetic\Filter\LessphpFilter;
 use Assetic\AssetManager;
 
-$extensions = array_merge(array('Core'),$CONFIG->extensions);
-
+$extensions = array('/core/');
+foreach($CONFIG->extensions as $ext) {
+	$extensions[] = '/extension/'.$ext.'/';
+}
 
 ################################################################################ CSS
 
@@ -45,7 +47,7 @@ if ($runCSS) {
 	foreach(array('index','site','sysadmin','widget') as $type) {
 		$cssFiles[$type] = array();
 		foreach ($extensions as $extension) {
-			$dir = APP_ROOT_DIR.'/extension.'.$extension.'/css/'.$type.DIRECTORY_SEPARATOR;
+			$dir = APP_ROOT_DIR.$extension.'/theme/default/css/'.$type.DIRECTORY_SEPARATOR;
 			if (is_dir($dir) && $handle = opendir($dir)) {
 				while (false !== ($entry = readdir($handle))) {
 					if ($entry != '.' && $entry != '..' && substr($entry, -5) == '.less') {
@@ -67,7 +69,7 @@ if ($runCSS) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_INDEX_DIR) {
-			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/css/');
+			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/css/');
 			$writer->writeManagerAssets($am);
 		}
 	}
@@ -81,11 +83,11 @@ if ($runCSS) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SITE_DIR.'/css/');
+			$writer = new AssetWriter(APP_WED_SITE_DIR.'/theme/default/css/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/css/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/css/');
 			$writer->writeManagerAssets($am);
 		}
 	}
@@ -99,11 +101,11 @@ if ($runCSS) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_SYSADMIN_DIR) {
-			$writer = new AssetWriter(APP_WED_SYSADMIN_DIR.'/csssysadmin/');
+			$writer = new AssetWriter(APP_WED_SYSADMIN_DIR.'/theme/default/csssysadmin/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/csssysadmin/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/csssysadmin/');
 			$writer->writeManagerAssets($am);	
 		}
 	}
@@ -121,7 +123,7 @@ if ($runJS) {
 	foreach(array('commonIndexAndSite','index','site','widget') as $type) {
 		$jsFiles[$type] = array();
 		foreach ($extensions as $extension) {
-			$dir = APP_ROOT_DIR.'/extension.'.$extension.'/js/'.$type.DIRECTORY_SEPARATOR;
+			$dir = APP_ROOT_DIR.$extension.'/theme/default/js/'.$type.DIRECTORY_SEPARATOR;
 			if (is_dir($dir) && $handle = opendir($dir)) {
 				while (false !== ($entry = readdir($handle))) {
 					if ($entry != '.' && $entry != '..' && substr($entry, -3) == '.js') {
@@ -143,15 +145,15 @@ if ($runJS) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_INDEX_DIR) {
-			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/js/');
+			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/js/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SITE_DIR.'/js/');
+			$writer = new AssetWriter(APP_WED_SITE_DIR.'/theme/default/js/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/js/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/js/');
 			$writer->writeManagerAssets($am);
 		}
 	}
@@ -165,11 +167,11 @@ if ($runJS) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_INDEX_DIR) {
-			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/js/');
+			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/js/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/js/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/js/');
 			$writer->writeManagerAssets($am);
 		}
 	}
@@ -183,11 +185,11 @@ if ($runJS) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SITE_DIR.'/js/');
+			$writer = new AssetWriter(APP_WED_SITE_DIR.'/theme/default/js/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/js/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/js/');
 			$writer->writeManagerAssets($am);
 		}
 	}
@@ -206,7 +208,7 @@ if ($runIMG) {
 	foreach(array('commonIndexAndSite','index','site') as $type) {
 		$imgFiles[$type] = array();
 		foreach ($extensions as $extension) {
-			$dir = APP_ROOT_DIR.'/extension.'.$extension.'/img/'.$type.DIRECTORY_SEPARATOR;
+			$dir = APP_ROOT_DIR.$extension.'/theme/default/img/'.$type.DIRECTORY_SEPARATOR;
 			if (is_dir($dir) && $handle = opendir($dir)) {
 				while (false !== ($entry = readdir($handle))) {
 					if ($entry != '.' && $entry != '..' && in_array(substr($entry, -4), array('.png','.gif','.jpg'))) {
@@ -228,15 +230,15 @@ if ($runIMG) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_INDEX_DIR) {
-			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/img/');
+			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/img/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SITE_DIR.'/img/');
+			$writer = new AssetWriter(APP_WED_SITE_DIR.'/theme/default/img/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/img/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/img/');
 			$writer->writeManagerAssets($am);
 		}
 	}
@@ -250,11 +252,11 @@ if ($runIMG) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_INDEX_DIR) {
-			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/img/');
+			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/img/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/img/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/img/');
 			$writer->writeManagerAssets($am);
 		}
 	}
@@ -268,11 +270,11 @@ if ($runIMG) {
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
 		if (APP_WED_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SITE_DIR.'/img/');
+			$writer = new AssetWriter(APP_WED_SITE_DIR.'/theme/default/img/');
 			$writer->writeManagerAssets($am);
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/img/');
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/img/');
 			$writer->writeManagerAssets($am);
 		}
 	}
