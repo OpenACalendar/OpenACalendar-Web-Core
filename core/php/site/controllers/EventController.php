@@ -314,7 +314,7 @@ class EventController {
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
 				
-				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 				
 			}
 		}
@@ -378,7 +378,7 @@ class EventController {
 				$this->parameters['event']->setVenueId($venue->getId());
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
-				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 				
 			} if (isset($_POST['venue_id']) && $_POST['venue_id'] == 'no') {
 				
@@ -405,7 +405,7 @@ class EventController {
 				$this->parameters['event']->setVenueId(null);
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
-				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 				
 			} else if (isset($_POST['venue_id']) && intval($_POST['venue_id'])) {
 				$venue = $venueRepository->loadBySlug($app['currentSite'], $_POST['venue_id']);
@@ -413,7 +413,7 @@ class EventController {
 					$this->parameters['event']->setVenueId($venue->getId());
 					$eventRepository = new EventRepository();
 					$eventRepository->edit($this->parameters['event'], userGetCurrent());
-					return $app->redirect("/event/".$this->parameters['event']->getSlug());
+					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 				}
 			}
 			
