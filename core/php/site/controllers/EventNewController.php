@@ -110,9 +110,9 @@ class EventNewController {
 				
 				
 				if ($event->getIsPhysical() && $app['currentSite']->getIsFeaturePhysicalEvents()) {
-					return $app->redirect("/event/".$event->getSlug().'/edit/venue');
+					return $app->redirect("/event/".$event->getSlugForURL().'/edit/venue');
 				} else {
-					return $app->redirect("/event/".$event->getSlug());
+					return $app->redirect("/event/".$event->getSlugForURL());
 				}
 				
 			}
