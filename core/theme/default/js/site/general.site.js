@@ -261,6 +261,7 @@ function showSharePopup() {
 			text = exportData.hasOwnProperty("groupTwitterUsername") && exportData.groupTwitterUsername ? exportData.groupTitle + " @" + exportData.groupTwitterUsername :  exportData.groupTitle;
 		} else if (exportData.hasOwnProperty("venue")) {
 			url +=  exportData.hasOwnProperty("venueSlugURL") ? "/venue/"+exportData.venueSlugURL : "/venue/"+exportData.venue;
+			text += exportData.venueTitle;	
 		} else if (exportData.hasOwnProperty("country")) {
 			url += "/country/"+exportData.country;
 		} else if (exportData.hasOwnProperty("curatedlist")) {

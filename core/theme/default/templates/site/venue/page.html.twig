@@ -35,6 +35,13 @@
 					<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
 				</a>
 			</li>
+			{% if currentSite.getIsWebRobotsAllowed %}
+				<li class="action">
+					<a href="#" onclick="showSharePopup(); return false;">
+						<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+					</a>
+				</li>
+			{% endif %}	
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/venue/{{ venue.slugForUrl }}">Details</a></li>
 			<li class="tab"><a href="/venue/{{ venue.slugForUrl }}/calendar">Calendar</a></li>
 			<li class="tab {% block tabHistory %}{% endblock %}"><a href="/venue/{{ venue.slugForUrl }}/history">History of changes</a></li>
