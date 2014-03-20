@@ -70,7 +70,7 @@ function showCurrentUserAttendanceForEvent(eventSlug) {
 	var div = $('#EventAttendancePopup');
 	if (div.size() == 0) {
 		var html = '<div id="EventAttendancePopup" class="PopupBox">';
-		html +=	'<div id="EventAttendancePopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/img/actionClosePopup.png" alt="Close"></a></div>';
+		html +=	'<div id="EventAttendancePopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
 		html += '<div id="EventAttendancePopupContent" class="PopupBoxContent">';
 		html += '</div>';
 		html += '</div>';
