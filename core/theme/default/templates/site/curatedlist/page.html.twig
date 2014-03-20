@@ -55,6 +55,6 @@
 
 
 {% block scriptsForState %}
-	<script type="text/javascript">var exportData = { curatedlist:{{ curatedlist.slug }}, curatedlistTitle:"{{ curatedlist.title|e('js') }}"  }</script>
+	<script type="text/javascript">var exportData = { curatedlist:{{ curatedlist.slug }}, curatedlistSlugURL:"{{ curatedlist.slugForURL|e('js') }}"  , curatedlistTitle:"{{ curatedlist.title|e('js') }}"  }</script>
 {% endblock %}
 

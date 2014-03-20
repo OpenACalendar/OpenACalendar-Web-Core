@@ -64,6 +64,6 @@
 
 
 {% block scriptsForState %}
-	<script type="text/javascript">var exportData = {event:{{ event.slug }}, eventTitle:"{{ event.summaryDisplay|e('js') }}"{% if group is not null %}, group: {{ group.slug }}, groupTitle:"{{ group.title|e('js') }}"{% endif %}}</script>
+	<script type="text/javascript">var exportData = {event:{{ event.slug }}, eventSlugURL:"{{ event.slugForURL|e('js') }}", eventTitle:"{{ event.summaryDisplay|e('js') }}"{% if group is not null %}, group: {{ group.slug }}, groupTitle:"{{ group.title|e('js') }}"{% endif %}}</script>
 {% endblock %}
 

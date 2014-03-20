@@ -64,6 +64,6 @@
 
 
 {% block scriptsForState %}
-	<script type="text/javascript">var exportData = { group:{{ group.slug }}, groupTitle:"{{ group.title|e('js') }}" , groupTwitterUsername:"{{ group.twitterUsername|e('js') }}"}</script>
+	<script type="text/javascript">var exportData = { group:{{ group.slug }}, groupSlugURL:"{{ group.slugForURL|e('js') }}", groupTitle:"{{ group.title|e('js') }}" , groupTwitterUsername:"{{ group.twitterUsername|e('js') }}"}</script>
 {% endblock %}
 

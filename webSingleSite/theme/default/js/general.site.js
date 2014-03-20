@@ -254,17 +254,17 @@ function showSharePopup() {
 		var text = "";
 		/** Sometimes more than one will be set (eg event and group) so must check most important one first **/
 		if (exportData.hasOwnProperty("event")) {
-			url += "/event/"+exportData.event;					
+			url += exportData.hasOwnProperty("eventSlugURL") ? "/event/"+exportData.eventSlugURL :  "/event/"+exportData.event ;
 			text = exportData.eventTitle;
 		} else if (exportData.hasOwnProperty("group")) {
-			url += "/group/"+exportData.group;	
+			url += exportData.hasOwnProperty("groupSlugURL") ? "/group/"+exportData.groupSlugURL : "/group/"+exportData.group;	
 			text = exportData.hasOwnProperty("groupTwitterUsername") && exportData.groupTwitterUsername ? exportData.groupTitle + " @" + exportData.groupTwitterUsername :  exportData.groupTitle;
 		} else if (exportData.hasOwnProperty("venue")) {
-			url += "/venue/"+exportData.venue;
+			url +=  exportData.hasOwnProperty("venueSlugURL") ? "/venue/"+exportData.venueSlugURL : "/venue/"+exportData.venue;
 		} else if (exportData.hasOwnProperty("country")) {
 			url += "/country/"+exportData.country;
 		} else if (exportData.hasOwnProperty("curatedlist")) {
-			url += "/curatedlist/"+exportData.curatedlist;				
+			url += exportData.hasOwnProperty("curatedlistSlugURL") ? "/curatedlist/"+exportData.curatedlistSlugURL : "/curatedlist/"+exportData.curatedlist;
 			text = exportData.curatedlistTitle;	
 		} else {
 			url += "/";

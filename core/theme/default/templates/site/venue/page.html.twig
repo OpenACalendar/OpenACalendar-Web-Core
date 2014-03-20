@@ -53,7 +53,7 @@
 
 {% block scriptsForState %}
 	<script type="text/javascript">
-		var exportData = { venue:{{ venue.slug }} , venueTitle: "{{  venue.title | e('js') }}" {% if country is not null %}, country: "{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  {% endif %} }
+		var exportData = { venue:{{ venue.slug }} , venueSlugURL: "{{  venue.slugForURL | e('js') }}" , venueTitle: "{{  venue.title | e('js') }}" {% if country is not null %}, country: "{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  {% endif %} }
 	</script>
 {% endblock %}
 
