@@ -149,7 +149,7 @@ class VenueController {
 				$venueRepository = new VenueRepository();
 				$venueRepository->edit($this->parameters['venue'], userGetCurrent());
 				
-				return $app->redirect("/venue/".$this->parameters['venue']->getSlug());
+				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
 				
 			}
 		}

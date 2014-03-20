@@ -147,7 +147,7 @@ class AreaController {
 				$areaRepository = new AreaRepository();
 				$areaRepository->edit($this->parameters['area'], userGetCurrent());
 				
-				return $app->redirect("/area/".$this->parameters['area']->getSlug());
+				return $app->redirect("/area/".$this->parameters['area']->getSlugForURL());
 				
 			}
 		}

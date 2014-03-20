@@ -247,7 +247,7 @@ class GroupController {
 				$groupRepository = new GroupRepository();
 				$groupRepository->edit($this->parameters['group'], userGetCurrent());
 				
-				return $app->redirect("/group/".$this->parameters['group']->getSlug());
+				return $app->redirect("/group/".$this->parameters['group']->getSlugForUrl());
 				
 			}
 		}
