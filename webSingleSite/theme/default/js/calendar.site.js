@@ -34,13 +34,13 @@ function showEventPopup(data) {
 	}).success(function ( eventdata ) {
 	var event = eventdata.data[0];
 		$('#EventPopupTitle').text(event.summaryDisplay);
-		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,1000));
+		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,500));
 		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
 		if (event.venue) {
 			$('#EventPopupVenueWrapper').html(
 					'<div class="venueTitle">Venue '+escapeHTML(event.venue.title)+'</div>'+
-					'<div class="venueDescription">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 500) : '')+'</div>'+
-					'<div class="venueAddress">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 500) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
+					'<div class="venueDescription">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 300) : '')+'</div>'+
+					'<div class="venueAddress">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
 				);
 		} else {
 			$('#EventPopupVenueWrapper').html('&nbsp;');
@@ -50,7 +50,7 @@ function showEventPopup(data) {
 			for(groupIdx in event.groups) {
 				var group = event.groups[groupIdx];
 				html += '<div class="groupTitle">Group '+escapeHTML(group.title)+'</div>';
-				html += '<div class="groupDescription">'+(group.description ? escapeHTMLNewLine(group.description,500) : '')+'</div>';
+				html += '<div class="groupDescription">'+(group.description ? escapeHTMLNewLine(group.description,300) : '')+'</div>';
 			}
 		}
 		$('#EventPopupGroupsWrapper').html(html);
