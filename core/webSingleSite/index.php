@@ -219,14 +219,14 @@ if (!$CONFIG->isDebug) {
 }
 
 foreach($CONFIG->extensions as $extensionName) {
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webSingleSite/index.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webSingleSite/index.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webSingleSite/index.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webSingleSite/index.routes.php';
 	}
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webSite/index.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webSite/index.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webSite/index.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webSite/index.routes.php';
 	}
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webIndex/index.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webIndex/index.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/index.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/index.routes.php';
 	}
 }
 

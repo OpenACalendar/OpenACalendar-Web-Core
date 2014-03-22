@@ -53,8 +53,8 @@ require APP_ROOT_DIR.'/core/webSysAdmin/index.routes.php';
 
 
 foreach($CONFIG->extensions as $extensionName) {
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webSysAdmin/index.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webSysAdmin/index.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webSysAdmin/index.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webSysAdmin/index.routes.php';
 	}
 }
 

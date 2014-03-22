@@ -42,8 +42,8 @@ require APP_ROOT_DIR.'/core/webIndex/indexapi1.routes.php';
 
 
 foreach($CONFIG->extensions as $extensionName) {
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webIndex/indexapi1.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webIndex/indexapi1.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/indexapi1.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/indexapi1.routes.php';
 	}
 }
 
