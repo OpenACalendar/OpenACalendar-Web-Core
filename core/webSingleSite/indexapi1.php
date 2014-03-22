@@ -66,14 +66,14 @@ require APP_ROOT_DIR.'/core/webSite/indexapi1.routes.php';
 require APP_ROOT_DIR.'/core/webIndex/indexapi1.routes.php';
 
 foreach($CONFIG->extensions as $extensionName) {
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webIndex/indexapi1.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webIndex/indexapi1.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/indexapi1.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/indexapi1.routes.php';
 	}
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webSite/indexapi1.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webSite/indexapi1.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webSite/indexapi1.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webSite/indexapi1.routes.php';
 	}
-	if (file_exists(APP_ROOT_DIR.'/extension.'.$extensionName.'/webSingleSite/indexapi1.routes.php')) {
-		require APP_ROOT_DIR.'/extension.'.$extensionName.'/webSingleSite/indexapi1.routes.php';
+	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webSingleSite/indexapi1.routes.php')) {
+		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webSingleSite/indexapi1.routes.php';
 	}
 }
 
