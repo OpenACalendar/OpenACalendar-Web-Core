@@ -13,6 +13,9 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
+print "Starting ".date("c")."\n";
+
+
 $actuallySend = isset($argv[1]) && strtolower($argv[1]) == 'yes';
 print "Actually Send: ". ($actuallySend ? "YES":"nah")."\n";
 
@@ -128,3 +131,5 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 	}
 	
 }
+
+print "Finished ".date("c")."\n";

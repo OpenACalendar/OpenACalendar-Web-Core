@@ -13,6 +13,9 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
+print "Starting ".date("c")."\n";
+
+
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\SiteRepository;
@@ -43,4 +46,6 @@ foreach($siteRepositoryBuilder->fetchAll() as $site) {
 	print "Done\n";
 }
 
+
+print "Finished ".date("c")."\n";
 

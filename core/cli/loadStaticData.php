@@ -13,6 +13,9 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
+print "Starting ".date("c")."\n";
+
+
 $data = array();
 
 # Step - Load Countries
@@ -97,3 +100,4 @@ foreach($data as $code=>$countryData) {
 }
 print "\n";
 
+print "Finished ".date("c")."\n";

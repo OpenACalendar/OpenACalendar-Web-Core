@@ -13,6 +13,9 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
+print "Starting ".date("c")."\n";
+
+
 use repositories\builders\ImportURLRepositoryBuilder;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
@@ -151,4 +154,4 @@ foreach($iurlBuilder->fetchAll() as $importURL) {
 	
 }
 
-Print "Done\n";
+print "Finished ".date("c")."\n";

@@ -13,6 +13,9 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
+print "Starting ".date("c")."\n";
+
+
 use repositories\GroupHistoryRepository;
 use repositories\AreaHistoryRepository;
 use repositories\VenueHistoryRepository;
@@ -104,5 +107,5 @@ print "\n\n";
 
 
 
-print " done\n\n";
+print "Finished ".date("c")."\n";
 

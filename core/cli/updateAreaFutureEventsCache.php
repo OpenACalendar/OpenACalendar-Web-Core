@@ -13,6 +13,9 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
+print "Starting ".date("c")."\n";
+
+
 use repositories\builders\AreaRepositoryBuilder;
 use repositories\AreaRepository;
 
@@ -25,5 +28,4 @@ foreach($arb->fetchAll() as $area) {
 	print ".";
 }
 
-print " done\n\n";
-
+print "\nFinished ".date("c")."\n";
