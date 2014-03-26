@@ -24,6 +24,7 @@ class SlugForUrlTest extends \PHPUnit_Framework_TestCase {
 				array(4,'','4'),
 				array(5,'café','5-cafe'),
 				array(6,'cafe meetup - bob\'s group','6-cafe-meetup-bobs-group'),
+				array(7,'  cafe meetup ','7-cafe-meetup'),
 			);
 	}
 	
