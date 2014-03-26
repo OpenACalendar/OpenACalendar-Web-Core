@@ -135,6 +135,9 @@ class EventModel {
                             );
 		$extraSlug = strtr( $this->summary, $unwanted_array );
 		$extraSlug = preg_replace("/[^a-zA-Z0-9\-]+/", "", str_replace(" ", "-",strtolower($extraSlug)));
+		// Do it twice to get ---'s turned to -'s to.
+		$extraSlug = str_replace("--", "-", $extraSlug);
+		$extraSlug = str_replace("--", "-", $extraSlug);
 		return $this->slug.($extraSlug?"-".$extraSlug:'');
 	}
 	
