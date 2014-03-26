@@ -75,13 +75,13 @@ foreach($b->fetchAll() as $userWatchesSite) {
 			
 			// lets make sure histories are correct
 			foreach($histories as $history) {
-				if ($history instanceof EventHistoryModel) {
+				if ($history instanceof models\EventHistoryModel) {
 					$eventHistoryRepository->ensureChangedFlagsAreSet($history);
-				} elseif ($history instanceof GroupHistoryModel) {
+				} elseif ($history instanceof models\GroupHistoryModel) {
 					$groupHistoryRepository->ensureChangedFlagsAreSet($history);
-				} elseif ($history instanceof VenueHistoryModel) {
+				} elseif ($history instanceof models\VenueHistoryModel) {
 					$venueHistoryRepository->ensureChangedFlagsAreSet($history);
-				} elseif ($history instanceof AreaHistoryModel) {
+				} elseif ($history instanceof models\AreaHistoryModel) {
 					$areaHistoryRepository->ensureChangedFlagsAreSet($history);
 				}
 			}
