@@ -90,7 +90,8 @@ $app->before(function (Request $request) use ($app) {
 		$timezone  = $site->getCachedTimezonesAsList()[0];
 	}
 	$app['twig']->addGlobal('currentTimeZone', $timezone);	
-	$app['currentTimeZone'] = $timezone;
+	$app['twig']->addGlobal('allowedTimeZones', $app['currentSite']->getCachedTimezonesAsList());	
+	$app['currentTimeZone'] = $timezone;	
 	
 	# ////////////// Country
 	if (!$app['currentSite']->getCachedIsMultipleCountries()) {
