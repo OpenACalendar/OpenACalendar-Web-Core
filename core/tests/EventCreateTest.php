@@ -21,17 +21,17 @@ use repositories\EventRepository;
 class EventCreateTest extends \PHPUnit_Framework_TestCase {
 	
 	
-	public function mktime($year=2012, $month=1, $day=1, $hour=0, $minute=0, $second=0) {
-		$dt = new \DateTime('', new \DateTimeZone('UTC'));
+	public function mktime($year=2012, $month=1, $day=1, $hour=0, $minute=0, $second=0, $timeZone='Europe/London') {
+		$dt = new \DateTime('', new \DateTimeZone($timeZone));
 		$dt->setTime($hour, $minute, $second);
 		$dt->setDate($year, $month, $day);
 		return $dt;
 	}
 	
-	function test1() {
+	function testSummerTime() {
 		$DB = getNewTestDB();
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		TimeSource::mock(2014,5,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -51,20 +51,67 @@ class EventCreateTest extends \PHPUnit_Framework_TestCase {
 		$event = new EventModel();
 		$event->setSummary("test");
 		$event->setDescription("test test");
-		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
-		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
+		$event->setStartAt($this->mktime(2014,5,10,19,0,0,'Europe/London'));
+		$event->setEndAt($this->mktime(2014,5,10,21,0,0,'Europe/London'));
 
 		$eventRepository = new EventRepository();
 		$eventRepository->create($event, $site, $user);
+
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+
 		
-		$this->checkEventInTest1($eventRepository->loadBySlug($site, $event->getSlug()));
+		$this->assertEquals("test test", $event->getDescription());
+		$this->assertEquals("test", $event->getSummary());
+		
+		$startAtShouldBe = $this->mktime(2014,5,10,18,0,0,'UTC'); // Not summer time so London is +1 UTC!
+		$startAtIs = clone $event->getStartAt();
+		$startAtIs->setTimezone(new \DateTimeZone('UTC'));
+		$this->assertEquals($startAtShouldBe->format("c"), $startAtIs->format("c"));
+		
 		
 	}
 	
-	protected function checkEventInTest1(EventModel $event) {
+	function testWinterTime() {
+		$DB = getNewTestDB();
+
+		TimeSource::mock(2014,5,1,7,0,0);
+		
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+		
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+		
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+		
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		
+		$event = new EventModel();
+		$event->setSummary("test");
+		$event->setDescription("test test");
+		$event->setStartAt($this->mktime(2014,11,10,19,0,0,'Europe/London'));
+		$event->setEndAt($this->mktime(2014,11,10,21,0,0,'Europe/London'));
+
+		$eventRepository = new EventRepository();
+		$eventRepository->create($event, $site, $user);
+
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+
+		
 		$this->assertEquals("test test", $event->getDescription());
 		$this->assertEquals("test", $event->getSummary());
-		// TODO start end
+		
+		$startAtShouldBe = $this->mktime(2014,11,10,19,0,0,'UTC');
+		$startAtIs = clone $event->getStartAt();
+		$startAtIs->setTimezone(new \DateTimeZone('UTC'));
+		$this->assertEquals($startAtShouldBe->format("c"), $startAtIs->format("c"));
+		
+		
 	}
 	
 }

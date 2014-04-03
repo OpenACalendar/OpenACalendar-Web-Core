@@ -182,6 +182,17 @@ class EventModel {
 	public function getStartAt() {
 		return $this->start_at;
 	}
+	
+	
+	public function getStartAtInUTC() {
+		if ($this->start_at->getTimezone() == 'UTC') {
+			return $this->start_at;
+		} else {
+			$sa = clone $this->start_at;
+			$sa->setTimezone(new \DateTimeZone("UTC"));
+			return $sa;
+		}
+	}
 
 	public function setStartAt(\DateTime $start_at) {
 		$this->start_at = $start_at;
@@ -191,6 +202,16 @@ class EventModel {
 		return $this->end_at;
 	}
 
+	
+	public function getEndAtInUTC() {
+		if ($this->end_at->getTimezone() == 'UTC') {
+			return $this->end_at;
+		} else {
+			$ea = clone $this->end_at;
+			$ea->setTimezone(new \DateTimeZone("UTC"));
+			return $ea;
+		}
+	}
 	public function setEndAt(\DateTime $end_at) {
 		$this->end_at = $end_at;
 	}
