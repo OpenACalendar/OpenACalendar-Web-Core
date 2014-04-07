@@ -164,16 +164,30 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 			$event->setIsVirtual(true);
 		}				
 		
-		$crb = new \repositories\builders\CountryRepositoryBuilder();
-		$crb->setSiteIn($this->importURLRun->getSite());
-		$countries = $crb->fetchAll();
-		
-		if (count($countries) > 0) {
-			$country = $countries[0];
-			$event->setCountryId($country->getId());
-			$timezones = $country->getTimezonesAsList();
+		if ($this->importURLRun->getCountry()) {
+			
+			// country is set on importer.
+			$event->setCountryId($this->importURLRun->getCountry()->getId());
+			// take first timezone in that country at random :-/
+			$timezones = $this->importURLRun->getCountry()->getTimezonesAsList();
 			if ($timezones) {
 				$event->setTimezone($timezones[0]);
+			}
+			
+		} else {
+		
+			// if no country set on importer, we just pick first one at random :-/
+			$crb = new \repositories\builders\CountryRepositoryBuilder();
+			$crb->setSiteIn($this->importURLRun->getSite());
+			$countries = $crb->fetchAll();
+			if (count($countries) > 0) {
+				$country = $countries[0];
+				$event->setCountryId($country->getId());
+				// take first timezone in that country at random :-/
+				$timezones = $country->getTimezonesAsList();
+				if ($timezones) {
+					$event->setTimezone($timezones[0]);
+				}
 			}
 		}
 		

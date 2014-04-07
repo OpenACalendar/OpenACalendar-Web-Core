@@ -20,6 +20,7 @@ class ImportURLModel {
 	protected $site_id;
 	protected $slug;
 	protected $group_id;
+	protected $country_id;
 	protected $title;
 	protected $url;
 	protected $url_canonical;
@@ -32,6 +33,7 @@ class ImportURLModel {
 		$this->site_id = $data['site_id'];
 		$this->slug = $data['slug'];
 		$this->group_id = $data['group_id'];
+		$this->country_id = $data['country_id'];
 		$this->title = $data['title'];
 		$this->url = $data['url'];
 		$this->url_canonical = $data['url_canonical'];
@@ -140,6 +142,14 @@ class ImportURLModel {
 		return $lastEdit->getTimeStamp() < (\TimeSource::time() - $CONFIG->importURLExpireSecondsAfterLastEdit);
 	}
 
-	
+	public function getCountryId() {
+		return $this->country_id;
+	}
+
+	public function setCountryId($country_id) {
+		$this->country_id = $country_id;
+	}
+
+
 }
 

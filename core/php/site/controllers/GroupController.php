@@ -462,7 +462,7 @@ class GroupController {
 		$importurl->setSiteId($app['currentSite']->getId());
 		$importurl->setGroupId($this->parameters['group']->getId());
 		
-		$form = $app['form.factory']->create(new ImportURLNewForm(), $importurl);
+		$form = $app['form.factory']->create(new ImportURLNewForm($app['currentSite']), $importurl);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -471,8 +471,7 @@ class GroupController {
 				
 				$importURLRepository = new ImportURLRepository();
 				
-				$iRepository = new ImportURLRepository();
-				$clash = $iRepository->loadClashForImportUrl($importurl);
+				$clash = $importURLRepository->loadClashForImportUrl($importurl);
 				if ($clash) {
 					$importurl->setIsEnabled(false);
 					$FLASHMESSAGES->addMessage("There was a problem enabling this importer. Please try to enable it for details.");

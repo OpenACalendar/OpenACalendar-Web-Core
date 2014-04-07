@@ -11,6 +11,7 @@ use repositories\builders\ImportURLResultRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\EventRepository;
 use repositories\GroupRepository;
+use repositories\CountryRepository;
 
 /**
  *
@@ -25,12 +26,17 @@ class ImportURLController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		$this->parameters = array();
+		$this->parameters = array('country'=>null);
 
 		$iurlRepository = new ImportURLRepository();
 		$this->parameters['importurl'] =  $iurlRepository->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['importurl']) {
 			return false;
+		}
+		
+		if ($this->parameters['importurl']->getCountryID()) {
+			$cr = new CountryRepository();
+			$this->parameters['country'] = $cr->loadById($this->parameters['importurl']->getCountryID());
 		}
 		
 		
@@ -76,9 +82,7 @@ class ImportURLController {
 			$app->abort(404, "Import does not exist.");
 		}
 		
-		
-		
-		$form = $app['form.factory']->create(new ImportURLEditForm(), $this->parameters['importurl']);
+		$form = $app['form.factory']->create(new ImportURLEditForm($app['currentSite']), $this->parameters['importurl']);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

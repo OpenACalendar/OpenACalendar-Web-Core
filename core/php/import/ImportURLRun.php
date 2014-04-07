@@ -4,8 +4,10 @@ namespace import;
 use models\ImportURLModel;
 use models\SiteModel;
 use models\GroupModel;
+use models\CountryModel;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
+use repositories\CountryRepository;
 
 /**
  *
@@ -26,6 +28,9 @@ class ImportURLRun {
 	/** @var GroupModel **/
 	protected $group;
 	
+	/** @var CountryModel **/
+	protected $country;
+	
 	protected $realurl;
 		
 	public static $FLAG_ADD_UIDS = 1;
@@ -44,6 +49,10 @@ class ImportURLRun {
 			$siteRepo = new SiteRepository();
 			$this->site = $siteRepo->loadById($importURL->getSiteId());
 		}
+		if ($importURL->getCountryId()) {
+			$countryRepo = new CountryRepository();
+			$this->country = $countryRepo->loadById($importURL->getCountryId());
+		}
 		$groupRepository = new GroupRepository();
 		$this->group = $groupRepository->loadById($importURL->getGroupId());
 	}
@@ -60,7 +69,9 @@ class ImportURLRun {
 		return $this->group;
 	}
 
-		
+	public function getCountry() {
+		return $this->country;
+	}	
 	
 	public function downloadURLreturnFileName() {
 		if ($this->temporaryFileStorageFromTesting) return $this->temporaryFileStorageFromTesting;

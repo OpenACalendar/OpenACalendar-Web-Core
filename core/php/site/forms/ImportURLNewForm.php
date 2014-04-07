@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use repositories\builders\CountryRepositoryBuilder;
+use models\SiteModel;
 
 
 /**
@@ -18,7 +20,14 @@ use Symfony\Component\Form\FormError;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLNewForm extends AbstractType{
-
+	
+	/** @var SiteModel **/
+	protected $site;
+	
+	function __construct(SiteModel $site) {
+		$this->site = $site;
+	}
+	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
 		$builder->add('title', 'text', array(
@@ -32,7 +41,19 @@ class ImportURLNewForm extends AbstractType{
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
 		));
-		
+			
+		$crb = new CountryRepositoryBuilder();
+		$crb->setSiteIn($this->site);
+		$countries = array();
+		foreach($crb->fetchAll() as $country) {
+			$countries[$country->getId()] = $country->getTitle();
+		}
+		// TODO if current country not in list add it now
+		$builder->add('country_id', 'choice', array(
+			'label'=>'Country',
+			'choices' => $countries,
+			'required' => true,
+		));
 		
 	}
 	
