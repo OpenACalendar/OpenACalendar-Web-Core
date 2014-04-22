@@ -29,11 +29,6 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
-			{% if currentUserCanEditSite and currentSite.isFeatureImporter %}
-				<li class="action">
-					<a href="/importurl/new"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new</a>
-				</li>
-			{% endif %}
 			<li class="tab currentTab">List</li>
 		</ul>
 		<div id="innerPage">
