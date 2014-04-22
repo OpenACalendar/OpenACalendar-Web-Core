@@ -93,7 +93,7 @@ class SignUpUserForm  extends AbstractType {
 			$form = $event->getForm();
 			$myExtraField = $form->get('username')->getData();
 			if (!ctype_alnum($myExtraField) || strlen($myExtraField) < 2) {
-				$form['username']->addError(new FormError("Username: Numbers and letters only, at least 2 characters."));
+				$form['username']->addError(new FormError("Please choose a username with numbers and letters only and at least 2 characters."));
 			}
 		};
 		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator3);
@@ -104,10 +104,10 @@ class SignUpUserForm  extends AbstractType {
 			$myExtraField1 = $form->get('password1')->getData();
 			$myExtraField2 = $form->get('password2')->getData();
 			if (strlen($myExtraField1) < 2) {
-				$form['password1']->addError(new FormError("Password: at least 2 characters."));
+				$form['password1']->addError(new FormError("Please choose a password with at least 2 characters."));
 			}
 			if ($myExtraField1 != $myExtraField2) {
-				$form['password2']->addError(new FormError("Passwords do not match"));
+				$form['password2']->addError(new FormError("Please enter your password again; they did not match."));
 			}
 		};
 		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator4);		
