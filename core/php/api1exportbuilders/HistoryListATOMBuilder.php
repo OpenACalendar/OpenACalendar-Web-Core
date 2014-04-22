@@ -69,7 +69,48 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 		
 		$txt .= '<title>'.  $this->getData($history->getSummaryDisplay()).'</title>';
 
-		$txt .= '<summary>'.$this->getBigData($history->getDescription()).'</summary>';
+		$txt .= '<summary>';
+		if ($history->isAnyChangeFlagsUnknown()) {
+			$txt .= $this->getBigData($history->getDescription());
+		} else {
+			if ($history->getSummaryChanged()) {
+				$txt .= 'Summary Changed: '.$this->getData($history->getSummary())."\n\n";
+			}
+			if ($history->getDescriptionChanged()) {
+				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+			}
+			if ($history->getUrlChanged()) {
+				$txt .= 'URL Changed: '.$this->getData($history->getUrl())."\n\n";
+			}
+			if ($history->getStartAtChanged()) {
+				$txt .= 'Start Changed'."\n\n"; // TODO show time, but in what timezone?
+			}
+			if ($history->getEndAtChanged()) {
+				$txt .= 'End Changed'."\n\n"; // TODO show time, but in what timezone?
+			}
+			if ($history->getCountryIdChanged()) {
+				$txt .= 'Country Changed'."\n\n";
+			}
+			if ($history->getTimezoneChanged()) {
+				$txt .= 'Timezone Changed: '.$this->getData($history->getTimezone())."\n\n";
+			}
+			if ($history->getAreaIdChanged()) {
+				$txt .= 'Area Changed'."\n\n";
+			}
+			if ($history->getVenueIdChanged()) {
+				$txt .= 'Venue Changed'."\n\n";
+			}
+			if ($history->getIsVirtualChanged()) {
+				$txt .= 'Is Virtual Changed'."\n\n";
+			}
+			if ($history->getIsPhysicalChanged()) {
+				$txt .= 'Is Physical Changed'."\n\n";
+			}
+			if ($history->getIsDeletedChanged()) {
+				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
+			}
+		}
+		$txt .= '</summary>';
 		
 		$txt .= '<updated>'.$history->getCreatedAt()->format("Y-m-d")."T".$history->getCreatedAt()->format("H:i:s")."Z</updated>";
 		
@@ -92,7 +133,27 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 		
 		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
 
-		$txt .= '<summary>'.$this->getBigData($history->getDescription()).'</summary>';
+		$txt .= '<summary>';
+		if ($history->isAnyChangeFlagsUnknown()) {
+			$txt .= $this->getBigData($history->getDescription());
+		} else {
+			if ($history->getTitleChanged()) {
+				$txt .= 'Title Changed: '.$this->getData($history->getTitle())."\n\n";
+			}	
+			if ($history->getDescriptionChanged()) {
+				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+			}
+			if ($history->getUrlChanged()) {
+				$txt .= 'URL Changed: '.$this->getData($history->getUrl())."\n\n";
+			}
+			if ($history->getTwitterUsernameChanged()) {
+				$txt .= 'Twitter Changed: '.$this->getData($history->getTwitterUsername())."\n\n";
+			}
+			if ($history->getIsDeletedChanged()) {
+				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
+			}
+		}
+		$txt .= '</summary>';
 		
 		$txt .= '<updated>'.$history->getCreatedAt()->format("Y-m-d")."T".$history->getCreatedAt()->format("H:i:s")."Z</updated>";
 		
@@ -115,7 +176,36 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 		
 		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
 
-		$txt .= '<summary>'.$this->getBigData($history->getDescription()).'</summary>';
+		$txt .= '<summary>';
+		if ($history->isAnyChangeFlagsUnknown()) {
+			$txt .= $this->getBigData($history->getDescription());
+		} else {
+			if ($history->getTitleChanged()) {
+				$txt .= 'Title Changed: '.$this->getData($history->getTitle())."\n\n";
+			}	
+			if ($history->getDescriptionChanged()) {
+				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+			}
+			if ($history->getAddressChanged()) {
+				$txt .= 'Address Changed: '.$this->getBigData($history->getAddress())."\n\n";
+			}
+			if ($history->getAddressCodeChanged()) {
+				$txt .= 'Address Code Changed: '.$this->getData($history->getAddressCode())."\n\n";
+			}	
+			if ($history->getLatChanged() || $history->getLngChanged()) {
+				$txt .= 'Position on Map Changed'."\n\n";
+			}
+			if ($history->getAreaIdChanged()) {
+				$txt .= 'Area Changed'."\n\n";
+			}			
+			if ($history->getCountryIdChanged()) {
+				$txt .= 'Country Changed'."\n\n";
+			}
+			if ($history->getIsDeletedChanged()) {
+				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
+			}
+		}
+		$txt .= '</summary>';
 		
 		$txt .= '<updated>'.$history->getCreatedAt()->format("Y-m-d")."T".$history->getCreatedAt()->format("H:i:s")."Z</updated>";
 		
@@ -138,7 +228,27 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 		
 		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
 
-		$txt .= '<summary>'.$this->getBigData($history->getDescription()).'</summary>';
+		$txt .= '<summary>';
+		if ($history->isAnyChangeFlagsUnknown()) {
+			$txt .= $this->getBigData($history->getDescription());
+		} else {
+			if ($history->getTitleChanged()) {
+				$txt .= 'Title Changed: '.$this->getData($history->getTitle())."\n\n";
+			}
+			if ($history->getDescriptionChanged()) {
+				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+			}
+			if ($history->getParentAreaIdChanged()) {
+				$txt .= 'Parent Area Changed'."\n\n";
+			}			
+			if ($history->getCountryIdChanged()) {
+				$txt .= 'Country Changed'."\n\n";
+			}
+			if ($history->getIsDeletedChanged()) {
+				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
+			}
+		}
+		$txt .= '</summary>';
 		
 		$txt .= '<updated>'.$history->getCreatedAt()->format("Y-m-d")."T".$history->getCreatedAt()->format("H:i:s")."Z</updated>";
 		
