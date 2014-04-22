@@ -74,6 +74,7 @@ class ImportURLRun {
 	}	
 	
 	public function downloadURLreturnFileName() {
+		global $CONFIG;
 		if ($this->temporaryFileStorageFromTesting) return $this->temporaryFileStorageFromTesting;
 		if ($this->temporaryFileStorage) return $this->temporaryFileStorage;
 		
@@ -88,7 +89,7 @@ class ImportURLRun {
 			$ch = curl_init();      
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_FILE, $fp);
-			curl_setopt($ch, CURLOPT_USERAGENT, 'OPEN WIKI CALENDAR from jmbtechnology.co.uk');
+			curl_setopt($ch, CURLOPT_USERAGENT, 'OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
 			curl_exec($ch);
 			$response = curl_getinfo( $ch );
 			curl_close($ch);
