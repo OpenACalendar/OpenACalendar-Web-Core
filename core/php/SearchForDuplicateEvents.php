@@ -98,14 +98,16 @@ class SearchForDuplicateEvents {
 	function getScoreForConsideredEvent(EventModel $event) {
 		$score = 0;
 		
+		// Only 1 of Start or End matching can count as a point. To many false positives when both matched.
+		// Due to standard event time of 2 hours, an event that happened to be at same start and end time would show as match when it was completely different.
 		if ($this->event->getStartAt() && $event->getStartAt() && 
 				$this->event->getStartAt()->getTimestamp() == $event->getStartAt()->getTimestamp()) {
 			$score++;
-		}
-		if ($this->event->getEndAt() && $event->getEndAt() && 
+		} else if ($this->event->getEndAt() && $event->getEndAt() && 
 				$this->event->getEndAt()->getTimestamp() == $event->getEndAt()->getTimestamp()) {
 			$score++;
 		}
+		
 		if ($this->event->getGroupId() && $this->event->getGroupId() == $event->getGroupId()) {
 			$score++;
 		}

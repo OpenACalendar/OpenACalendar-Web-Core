@@ -155,7 +155,8 @@ class SearchForDuplicateEventsTest  extends \PHPUnit_Framework_TestCase {
 		
 		$score = $sfde->getScoreForConsideredEvent($eventExisting);
 		
-		$this->assertEquals(2, $score);
+		// Only 1 of start or end matching counts as a point
+		$this->assertEquals(1, $score);
 	}
 	
 
