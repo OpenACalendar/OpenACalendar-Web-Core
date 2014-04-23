@@ -74,37 +74,37 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 			$txt .= $this->getBigData($history->getDescription());
 		} else {
 			if ($history->getSummaryChanged()) {
-				$txt .= 'Summary Changed: '.$this->getData($history->getSummary())."\n\n";
+				$txt .= 'Summary Changed. ';
 			}
 			if ($history->getDescriptionChanged()) {
-				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+				$txt .= 'Description Changed. ';
 			}
 			if ($history->getUrlChanged()) {
-				$txt .= 'URL Changed: '.$this->getData($history->getUrl())."\n\n";
+				$txt .= 'URL Changed. ';
 			}
 			if ($history->getStartAtChanged()) {
-				$txt .= 'Start Changed'."\n\n"; // TODO show time, but in what timezone?
+				$txt .= 'Start Changed. ';
 			}
 			if ($history->getEndAtChanged()) {
-				$txt .= 'End Changed'."\n\n"; // TODO show time, but in what timezone?
+				$txt .= 'End Changed. ';
 			}
 			if ($history->getCountryIdChanged()) {
-				$txt .= 'Country Changed'."\n\n";
+				$txt .= 'Country Changed.';
 			}
 			if ($history->getTimezoneChanged()) {
-				$txt .= 'Timezone Changed: '.$this->getData($history->getTimezone())."\n\n";
+				$txt .= 'Timezone Changed. ';
 			}
 			if ($history->getAreaIdChanged()) {
-				$txt .= 'Area Changed'."\n\n";
+				$txt .= 'Area Changed. ';
 			}
 			if ($history->getVenueIdChanged()) {
-				$txt .= 'Venue Changed'."\n\n";
+				$txt .= 'Venue Changed. ';
 			}
 			if ($history->getIsVirtualChanged()) {
-				$txt .= 'Is Virtual Changed'."\n\n";
+				$txt .= 'Is Virtual Changed. ';
 			}
 			if ($history->getIsPhysicalChanged()) {
-				$txt .= 'Is Physical Changed'."\n\n";
+				$txt .= 'Is Physical Changed.';
 			}
 			if ($history->getIsDeletedChanged()) {
 				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
@@ -138,16 +138,16 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 			$txt .= $this->getBigData($history->getDescription());
 		} else {
 			if ($history->getTitleChanged()) {
-				$txt .= 'Title Changed: '.$this->getData($history->getTitle())."\n\n";
+				$txt .= 'Title Changed. ';
 			}	
 			if ($history->getDescriptionChanged()) {
-				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+				$txt .= 'Description Changed. ';
 			}
 			if ($history->getUrlChanged()) {
-				$txt .= 'URL Changed: '.$this->getData($history->getUrl())."\n\n";
+				$txt .= 'URL Changed. ';
 			}
 			if ($history->getTwitterUsernameChanged()) {
-				$txt .= 'Twitter Changed: '.$this->getData($history->getTwitterUsername())."\n\n";
+				$txt .= 'Twitter Changed. ';
 			}
 			if ($history->getIsDeletedChanged()) {
 				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
@@ -181,25 +181,25 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 			$txt .= $this->getBigData($history->getDescription());
 		} else {
 			if ($history->getTitleChanged()) {
-				$txt .= 'Title Changed: '.$this->getData($history->getTitle())."\n\n";
+				$txt .= 'Title Changed. ';
 			}	
 			if ($history->getDescriptionChanged()) {
-				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+				$txt .= 'Description Changed. ';
 			}
 			if ($history->getAddressChanged()) {
-				$txt .= 'Address Changed: '.$this->getBigData($history->getAddress())."\n\n";
+				$txt .= 'Address Changed. ';
 			}
 			if ($history->getAddressCodeChanged()) {
-				$txt .= 'Address Code Changed: '.$this->getData($history->getAddressCode())."\n\n";
+				$txt .= 'Address Code Changed. ';
 			}	
 			if ($history->getLatChanged() || $history->getLngChanged()) {
-				$txt .= 'Position on Map Changed'."\n\n";
+				$txt .= 'Position on Map Changed. ';
 			}
 			if ($history->getAreaIdChanged()) {
-				$txt .= 'Area Changed'."\n\n";
+				$txt .= 'Area Changed. ';
 			}			
 			if ($history->getCountryIdChanged()) {
-				$txt .= 'Country Changed'."\n\n";
+				$txt .= 'Country Changed. ';
 			}
 			if ($history->getIsDeletedChanged()) {
 				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
@@ -233,16 +233,16 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 			$txt .= $this->getBigData($history->getDescription());
 		} else {
 			if ($history->getTitleChanged()) {
-				$txt .= 'Title Changed: '.$this->getData($history->getTitle())."\n\n";
+				$txt .= 'Title Changed. ';
 			}
 			if ($history->getDescriptionChanged()) {
-				$txt .= 'Description Changed: '.$this->getBigData($history->getDescription())."\n\n";
+				$txt .= 'Description Changed. ';
 			}
 			if ($history->getParentAreaIdChanged()) {
-				$txt .= 'Parent Area Changed'."\n\n";
+				$txt .= 'Parent Area Changed. ';
 			}			
 			if ($history->getCountryIdChanged()) {
-				$txt .= 'Country Changed'."\n\n";
+				$txt .= 'Country Changed. ';
 			}
 			if ($history->getIsDeletedChanged()) {
 				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
