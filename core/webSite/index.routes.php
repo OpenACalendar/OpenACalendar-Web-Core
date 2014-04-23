@@ -95,6 +95,10 @@ $app->match('/event/{slug}/recur/monthly', "site\controllers\EventController::re
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/event/{slug}/recur/monthly/', "site\controllers\EventController::recurMonthly")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
+$app->match('/event/{slug}/recur/monthlyLast', "site\controllers\EventController::recurMonthlyLast")
+		->assert('slug', FRIENDLY_SLUG_REGEX); 
+$app->match('/event/{slug}/recur/monthlyLast/', "site\controllers\EventController::recurMonthlyLast")
+		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/event/{slug}/moveToArea', "site\controllers\EventController::moveToArea")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)

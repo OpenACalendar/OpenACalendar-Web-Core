@@ -13,6 +13,61 @@ use models\EventRecurSetModel;
  */
 class EventRecurSetModelGetNewMontlyEventsTest extends \PHPUnit_Framework_TestCase {
 	
+	
+	function dataForTestGetEventPatternData() {
+		return array(
+				array(2014,4,1,1,false),
+				array(2014,4,2,1,false),
+				array(2014,4,3,1,false),
+				array(2014,4,4,1,false),
+				array(2014,4,5,1,false),
+				array(2014,4,6,1,false),
+				array(2014,4,7,1,false),
+				array(2014,4,8,2,false),
+				array(2014,4,9,2,false),
+				array(2014,4,10,2,false),
+				array(2014,4,11,2,false),
+				array(2014,4,12,2,false),
+				array(2014,4,13,2,false),
+				array(2014,4,14,2,false),
+				array(2014,4,15,3,false),
+				array(2014,4,16,3,false),
+				array(2014,4,17,3,false),
+				array(2014,4,18,3,false),
+				array(2014,4,19,3,false),
+				array(2014,4,20,3,false),
+				array(2014,4,21,3,false),
+				array(2014,4,22,4,false),
+				array(2014,4,23,4,false),
+				array(2014,4,24,4,true),
+				array(2014,4,25,4,true),
+				array(2014,4,26,4,true),
+				array(2014,4,27,4,true),
+				array(2014,4,28,4,true),
+				array(2014,4,29,5,true),
+				array(2014,4,30,5,true),
+			);
+	}
+	
+	/**
+     * @dataProvider dataForTestGetEventPatternData
+     */
+	function testGetEventPatternData($year, $month, $day, $weekOfmonth, $lastInMonth) {
+		$event = new EventModel();
+		$event->setStartAt($this->mktime($year,$month,$day,19,0,0));
+		$event->setEndAt($this->mktime($year,$month,$day,21,0,0));		
+		$event->setSummary("Event Please");
+		
+		$eventSet = new EventRecurSetModel();
+		$eventSet->setTimeZoneName('Europe/London');
+		$data = $eventSet->getEventPatternData($event);
+		
+		$this->assertEquals($weekOfmonth, $data['weekInMonth']);
+		$this->assertEquals($lastInMonth, $data['isLastWeekInMonth']);
+	}
+	
+	
+	
 	public function mktime($year=2012, $month=1, $day=1, $hour=0, $minute=0, $second=0) {
 		$dt = new \DateTime('', new \DateTimeZone('UTC'));
 		$dt->setTime($hour, $minute, $second);
@@ -38,7 +93,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewMonthlyEvents($event, 6);
+		$newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6);
 		
 		$this->assertTrue(count($newEvents) >= 6);
 		
@@ -87,7 +142,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewMonthlyEvents($event, 6);
+		$newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6);
 		
 		$this->assertTrue(count($newEvents) >= 6);
 		
@@ -137,7 +192,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewMonthlyEvents($event, 6);
+		$newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6);
 		
 		$this->assertTrue(count($newEvents) >= 6);
 		
@@ -182,7 +237,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewMonthlyEvents($event, 6);
+		$newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6);
 		
 		$this->assertTrue(count($newEvents) >= 6);
 		
@@ -211,7 +266,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewMonthlyEvents($event, 6);
+		$newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6);
 		
 		$this->assertTrue(count($newEvents) >= 6);
 		
@@ -239,14 +294,50 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewMonthlyEvents($event, 6);
+		$newEvents = $eventSet->getNewMonthlyEventsOnLastDayInWeek($event, 6);
 		
-		$this->assertTrue(count($newEvents) >= 1);
+		$this->assertTrue(count($newEvents) >= 3);
+				
+		$this->assertEquals($this->mktime(2012,10,27,18,30,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+		$this->assertEquals($this->mktime(2012,10,27,21,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
 		
-		$this->assertEquals($this->mktime(2012,12,29,19,30,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
-		$this->assertEquals($this->mktime(2012,12,29,22,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+		$this->assertEquals($this->mktime(2012,11,24,19,30,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+		$this->assertEquals($this->mktime(2012,11,24,22,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+		
+		$this->assertEquals($this->mktime(2012,12,29,19,30,0)->format('r'), $newEvents[2]->getStartAt()->format('r'));
+		$this->assertEquals($this->mktime(2012,12,29,22,0,0)->format('r'), $newEvents[2]->getEndAt()->format('r'));
 
 	}
+
+	/** test event on 5TH tue in month. **/
+	function testFiveWeekInMonth2() {
+		
+		
+		TimeSource::mock(2014,4,20,14,27,0);
+		
+		$event = new EventModel();
+		$event->setStartAt($this->mktime(2014,4,29,18,30,0));
+		$event->setEndAt($this->mktime(2014,4,29,21,0,0));		
+		
+		$eventSet = new EventRecurSetModel();
+		$eventSet->setTimeZoneName('Europe/London');
+		
+		$newEvents = $eventSet->getNewMonthlyEventsOnLastDayInWeek($event, 6);
+		
+		$this->assertTrue(count($newEvents) >= 3);
+				
+		$this->assertEquals($this->mktime(2014,5,27,18,30,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+		$this->assertEquals($this->mktime(2014,5,27,21,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+		
+		$this->assertEquals($this->mktime(2014,6,24,18,30,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+		$this->assertEquals($this->mktime(2014,6,24,21,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+		
+		$this->assertEquals($this->mktime(2014,7,29,18,30,0)->format('r'), $newEvents[2]->getStartAt()->format('r'));
+		$this->assertEquals($this->mktime(2014,7,29,21,0,0)->format('r'), $newEvents[2]->getEndAt()->format('r'));
+
+	}
+	
+	
 	
 	
 }

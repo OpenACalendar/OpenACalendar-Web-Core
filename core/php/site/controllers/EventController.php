@@ -470,6 +470,20 @@ class EventController {
 			
 		} else {
 			
+			$eventRecurSet = new EventRecurSetModel();
+			$eventRecurSet->setTimeZoneName($this->parameters['event']->getTimezone());
+			$data = $eventRecurSet->getEventPatternData($this->parameters['event']);
+			
+			if ($data['weekInMonth'] < 5) {
+				$this->parameters['recurMonthlyOnWeekNumber'] = $data['weekInMonth'];
+				$ordinal = array(1 => 'st',2 => 'nd',3 => 'rd',4 => 'th');
+				$this->parameters['recurMonthlyOnWeekNumberOrdinal'] = $ordinal[$data['weekInMonth']];
+			} else {
+				$this->parameters['recurMonthlyOnWeekNumber'] = null;
+				$this->parameters['recurMonthlyOnWeekNumberOrdinal'] = null;
+			}
+			$this->parameters['recurMonthlyOnLastWeek'] = $data['isLastWeekInMonth'];
+			
 			return $app['twig']->render('site/event/recur.html.twig', $this->parameters);
 		}
 		
@@ -544,7 +558,56 @@ class EventController {
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
-		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsFilteredForExisting($this->parameters['event']);
+		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnSetDayInWeekFilteredForExisting($this->parameters['event']);
+		
+		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+			
+			$data = is_array($_POST['new']) ? $_POST['new'] : array();
+			
+			$eventRepository = new EventRepository();
+			$count = 0;
+			foreach($this->parameters['newEvents'] as $event) {
+				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
+					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], $this->parameters['groups']);
+					++$count;
+				}
+			}
+			
+			if ($count > 0) {
+				return $app->redirect("/group/".$this->parameters['group']->getSlug());
+			}
+			
+		}
+		
+		return $app['twig']->render('site/event/recurMonthly.html.twig', $this->parameters);
+	}
+	
+	
+	
+	
+	function recurMonthlyLast($slug, Request $request, Application $app) {
+		global $WEBSESSION;
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+		
+		if (!$this->parameters['group']) {
+			die("NO");
+		}
+		
+		if ($this->parameters['event']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+		
+		if ($this->parameters['event']->getIsImported()) {
+			die("No"); // TODO
+		}
+		
+		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
+		
+		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
+		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnLastDayInWeekFilteredForExisting($this->parameters['event']);
 		
 		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
 			
