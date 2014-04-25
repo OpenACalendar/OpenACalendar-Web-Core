@@ -205,7 +205,7 @@ if ($runIMG) {
 	
 	$imgFiles = array();
 
-	foreach(array('commonIndexAndSite','index','site') as $type) {
+	foreach(array('commonIndexAndSite','index','site','sysadmin') as $type) {
 		$imgFiles[$type] = array();
 		foreach ($extensions as $extension) {
 			$dir = APP_ROOT_DIR.$extension.'/theme/default/img/'.$type.DIRECTORY_SEPARATOR;
@@ -275,6 +275,25 @@ if ($runIMG) {
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
 			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/img/');
+			$writer->writeManagerAssets($am);
+		}
+	}
+
+
+	# Sysadmin
+	if (APP_WED_SYSADMIN_DIR || APP_WED_SINGLE_SITE_DIR) {
+		$am = new AssetManager();
+		foreach($imgFiles['sysadmin'] as $nameonly=>$filename) {
+			$fa = new FileAsset($filename,$imgFilters);
+			$fa->setTargetPath($nameonly);
+			$am->set(str_replace('.','_',$nameonly),$fa);
+		}
+		if (APP_WED_SYSADMIN_DIR) {
+			$writer = new AssetWriter(APP_WED_SYSADMIN_DIR.'/theme/default/imgsysadmin/');
+			$writer->writeManagerAssets($am);
+		}
+		if (APP_WED_SINGLE_SITE_DIR) {
+			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/imgsysadmin/');
 			$writer->writeManagerAssets($am);
 		}
 	}
