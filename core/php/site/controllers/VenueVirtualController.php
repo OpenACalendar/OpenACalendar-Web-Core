@@ -46,6 +46,7 @@ class VenueVirtualController {
 		$this->parameters['calendar'] = new \RenderCalendar();
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if (userGetCurrent()) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
 			$this->parameters['showCurrentUserOptions'] = true;
@@ -64,6 +65,7 @@ class VenueVirtualController {
 		$this->parameters['calendar'] = new \RenderCalendar();
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if (userGetCurrent()) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
 			$this->parameters['showCurrentUserOptions'] = true;

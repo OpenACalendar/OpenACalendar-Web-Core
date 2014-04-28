@@ -85,6 +85,7 @@ class CountryController {
 		$this->parameters['calendar'] = new \RenderCalendar();
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if (userGetCurrent()) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
 			$this->parameters['showCurrentUserOptions'] = true;
@@ -106,6 +107,7 @@ class CountryController {
 		$this->parameters['calendar'] = new \RenderCalendar();
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if (userGetCurrent()) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
 			$this->parameters['showCurrentUserOptions'] = true;

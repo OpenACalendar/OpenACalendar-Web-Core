@@ -140,6 +140,7 @@ class CuratedListController {
 		$this->parameters['calendar'] = new \RenderCalendar();
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if (userGetCurrent()) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
 			$this->parameters['showCurrentUserOptions'] = true;
@@ -161,6 +162,7 @@ class CuratedListController {
 		$this->parameters['calendar'] = new \RenderCalendar();
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if (userGetCurrent()) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
 			$this->parameters['showCurrentUserOptions'] = true;
