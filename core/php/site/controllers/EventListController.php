@@ -37,8 +37,25 @@ class EventListController {
 	
 	
 	function calendarNow(Application $app) {
-		$now = \TimeSource::getDateTime();
-		return $app->redirect("/event/calendar/".$now->format("Y")."/".$now->format("m"));
+		$cal = new \RenderCalendar();
+		$cal->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$cal->getEventRepositoryBuilder()->setIncludeDeleted(false);
+		if (userGetCurrent()) {
+			$cal->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		}
+		$cal->byDate(\TimeSource::getDateTime(), 31, true);
+		
+		list($prevYear,$prevMonth,$nextYear,$nextMonth) = $cal->getPrevNextLinksByMonth();
+
+		return $app['twig']->render('/site/calendarPage.html.twig', array(
+				'calendar'=>$cal,
+				'prevYear' => $prevYear,
+				'prevMonth' => $prevMonth,
+				'nextYear' => $nextYear,
+				'nextMonth' => $nextMonth,
+				'pageTitle' => 'Calendar',
+				'showCurrentUserOptions' => true,
+			));
 	}
 	
 	function calendar($year, $month, Application $app) {

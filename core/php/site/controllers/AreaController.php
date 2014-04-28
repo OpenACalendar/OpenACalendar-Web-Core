@@ -166,9 +166,20 @@ class AreaController {
 			$app->abort(404, "Area does not exist.");
 		}
 
+		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+		if (userGetCurrent()) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+			$this->parameters['showCurrentUserOptions'] = true;
+		}
+		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
 		
-		$now = \TimeSource::getDateTime();
-		return $app->redirect("/area/".$this->parameters['area']->getSlugForUrl()."/calendar/".$now->format("Y")."/".$now->format("m"));
+		list($this->parameters['prevYear'],$this->parameters['prevMonth'],$this->parameters['nextYear'],$this->parameters['nextMonth']) = $this->parameters['calendar']->getPrevNextLinksByMonth();
+		
+		$this->parameters['pageTitle'] = $this->parameters['area']->getTitle();
+		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
 	}
 	
 	function calendar($slug, $year, $month, Request $request, Application $app) {

@@ -175,8 +175,24 @@ class CurrentUserController {
 	
 	
 	function calendarNow(Application $app) {
-		$now = \TimeSource::getDateTime();
-		return $app->redirect("/me/calendar/".$now->format("Y")."/".$now->format("m"));
+		$cal = new \RenderCalendar();
+		$params = new EventFilterParams($cal->getEventRepositoryBuilder());
+		$params->setHasDateControls(false);
+		$params->setSpecifiedUserControls(true, userGetCurrent(), true);
+		$params->set($_GET);
+		$cal->byDate(\TimeSource::getDateTime(), 31, true);
+		
+		list($prevYear,$prevMonth,$nextYear,$nextMonth) = $cal->getPrevNextLinksByMonth();
+
+		return $app['twig']->render('/index/currentuser/calendar.html.twig', array(
+				'calendar'=>$cal,
+				'eventListFilterParams'=>$params,
+				'prevYear' => $prevYear,
+				'prevMonth' => $prevMonth,
+				'nextYear' => $nextYear,
+				'nextMonth' => $nextMonth,
+				'showCurrentUserOptions' => true,
+			));
 	}
 	
 	function calendar($year, $month, Application $app) {

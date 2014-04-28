@@ -26,7 +26,7 @@ class RenderCalendar {
 		global $CONFIG;
 		$this->eventRepositoryBuilder = new EventRepositoryBuilder();	
 		$this->minYear = $CONFIG->calendarEarliestYearAllowed;
-		$this->maxYear = (date('Y')+ $CONFIG->eventsCantBeMoreThanYearsInFuture);
+		$this->maxYear = (\TimeSource::getDateTime()->format("Y")+ $CONFIG->eventsCantBeMoreThanYearsInFuture);
 	}
 
 	public function getEventRepositoryBuilder() {
@@ -45,7 +45,16 @@ class RenderCalendar {
 	public function getMonth() {
 		return $this->month;
 	}
+	
+	public function getStart() {
+		return $this->start;
+	}
 
+	public function getEnd() {
+		return $this->end;
+	}
+
+	
 	public function getMonthLongName() {
 		$months = array(
 			1=>'January',
@@ -108,6 +117,50 @@ class RenderCalendar {
 		
 		$this->year = $year;
 		$this->month = $month;
+	}
+	
+	public function byDate(\DateTime $dateTime, $days=31, $expandToFullWeek = false) {
+		if ($dateTime->format("Y") < $this->minYear) throw new \Exception($this->minYear.' Onwards Only');
+		if ($dateTime->format("Y") > $this->maxYear) throw  new \Exception('Up to '.$this->maxYear.' only');
+		
+		$this->start = clone $dateTime;
+		$this->start->setTimezone(new \DateTimeZone('UTC'));
+		$this->start->setTime(0, 0, 0);
+		
+		if ($expandToFullWeek) {
+			$oneDay = new \DateInterval('P1D');
+			while($this->start->format('N') != 1) {
+				$this->start->sub($oneDay);
+			}
+		}
+
+		$this->end = clone $this->start;
+		$this->end->add(new \DateInterval('P'.$days.'D'));
+		$this->end->setTime(23, 59, 59);		
+
+		if ($expandToFullWeek) {
+			while($this->end->format('N') != 7) {
+				$this->end->add($oneDay);
+			}
+		}
+		
+		
+		
+		if ($this->start->format("j") > 15) {
+			$m = $dateTime->format("n");
+			if ($m == 12) {
+				$this->year = $dateTime->format("Y")+1;
+				$this->month = 1;
+			} else {
+				$this->year = $dateTime->format("Y");
+				$this->month = $this->start->format("n")+1;
+			}
+		} else {
+			$this->year = $this->start->format("Y");
+			$this->month = $this->start->format("n");
+		}
+		
+		
 	}
 	
 	public function setStartAndEnd($start, $end) {

@@ -43,9 +43,20 @@ class VenueVirtualController {
 	
 	function calendarNow(Request $request, Application $app) {
 
+		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+		if (userGetCurrent()) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+			$this->parameters['showCurrentUserOptions'] = true;
+		}	
+		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
 		
-		$now = \TimeSource::getDateTime();
-		return $app->redirect("/venue/virtual/calendar/".$now->format("Y")."/".$now->format("m"));
+		list($this->parameters['prevYear'],$this->parameters['prevMonth'],$this->parameters['nextYear'],$this->parameters['nextMonth']) = $this->parameters['calendar']->getPrevNextLinksByMonth();
+		
+		$this->parameters['pageTitle'] = "Virtual";
+		$this->parameters['venueVirtual'] = true;
+		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
 	}
 	
 	function calendar($year, $month, Request $request, Application $app) {
