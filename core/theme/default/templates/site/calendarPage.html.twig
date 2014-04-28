@@ -42,20 +42,38 @@
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
 		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
-		{% if group is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
-		{% elseif curatedlist is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
-		{% elseif venue is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/{{ venue.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
-		{% elseif area is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
-		{% elseif venueVirtual is defined and venueVirtual %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/virtual/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
-		{% elseif country is defined %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+		{% if calendar.modeByMonth %}
+			{% if group is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% elseif curatedlist is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% elseif venue is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/{{ venue.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% elseif area is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% elseif venueVirtual is defined and venueVirtual %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/virtual/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% elseif country is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% else %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% endif %}
 		{% else %}
-			<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/calendar/{{ calendar.year }}/{{ calendar.month }}/" />
+			{% if group is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/calendar/" />
+			{% elseif curatedlist is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slugForUrl }}/calendar/" />
+			{% elseif venue is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/{{ venue.slugForUrl }}/calendar/" />
+			{% elseif area is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/calendar/" />
+			{% elseif venueVirtual is defined and venueVirtual %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/virtual/calendar/" />
+			{% elseif country is defined %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/calendar/" />
+			{% else %}
+				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/calendar/" />
+			{% endif %}				
 		{% endif %}
 		{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	</head>
@@ -105,7 +123,9 @@
 					{% if currentSite.cachedIsMultipleTimezones %}
 						<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
 					{% endif %}
-					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+					{% if calendar.modeByMonth %}
+						<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+					{% endif %}
 				</div>				
 			</div>
 			{% if config.isSingleSiteMode %}

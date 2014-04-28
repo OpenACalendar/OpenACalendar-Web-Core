@@ -19,6 +19,10 @@ class RenderCalendar {
 	protected $year;
 	protected $month;
 	
+	protected $modeByMonth = false;
+	protected $modeByDate = false;
+
+
 	/** @var EventRepositoryBuilder **/
 	protected  $eventRepositoryBuilder;
 	
@@ -54,6 +58,15 @@ class RenderCalendar {
 		return $this->end;
 	}
 
+	public function getModeByMonth() {
+		return $this->modeByMonth;
+	}
+
+	public function getModeByDate() {
+		return $this->modeByDate;
+	}
+
+		
 	
 	public function getMonthLongName() {
 		$months = array(
@@ -117,6 +130,7 @@ class RenderCalendar {
 		
 		$this->year = $year;
 		$this->month = $month;
+		$this->modeByMonth = true;
 	}
 	
 	public function byDate(\DateTime $dateTime, $days=31, $expandToFullWeek = false) {
@@ -160,6 +174,7 @@ class RenderCalendar {
 			$this->month = $this->start->format("n");
 		}
 		
+		$this->modeByDate = true;
 		
 	}
 	

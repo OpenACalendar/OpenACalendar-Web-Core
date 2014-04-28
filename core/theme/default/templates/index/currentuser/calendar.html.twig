@@ -44,7 +44,9 @@
 				</div>
 				<div id="calendarPosition">
 					<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
-					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+					{% if calendar.modeByMonth %}
+						<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+					{% endif %}
 				</div>	
 			</div>
 				

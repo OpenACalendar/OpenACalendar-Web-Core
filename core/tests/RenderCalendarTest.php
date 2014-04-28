@@ -26,6 +26,9 @@ class RenderCalendarTest extends \PHPUnit_Framework_TestCase {
 		return array(
 				array(2014,4,28,  31,true,  2014,4,28,  2014,6,1,  2014,5),
 				array(2014,4,9,  31,true,  2014,4,7,  2014,5,11,  2014,4),
+				array(2014,12,2,  31,true,  2014,12,1,  2015,1,4,  2014,12),
+				array(2014,12,20,  31,true,  2014,12,15,  2015,1,18,  2014,12),
+				array(2014,12,27,  31,true,  2014,12,22,  2015,1,25,  2015,1),
 			);
 	}
 	
@@ -33,6 +36,8 @@ class RenderCalendarTest extends \PHPUnit_Framework_TestCase {
      * @dataProvider dataForTestByDate
      */
 	function testByDate($inYear, $inMonth, $inDay, $days, $expand, $startYear, $startMonth, $startDate, $endYear, $endMonth, $endDate, $outYear, $outMonth) {
+		\TimeSource::mock($inYear, $inMonth, $inDay, 1, 2, 3);
+		
 		$cal = new RenderCalendar();
 		
 		$inDate = new \DateTime();
