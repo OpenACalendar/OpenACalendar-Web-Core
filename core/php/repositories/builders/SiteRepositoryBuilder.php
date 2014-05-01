@@ -27,6 +27,12 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->isListedInIndexOnly = $value;
 	}
 
+	protected $isOpenBySysAdminsOnly = false;
+	
+	public function setIsOpenBySysAdminsOnly($value) {
+		$this->isOpenBySysAdminsOnly = $value;
+	}
+	
 	protected function build() {
 		if ($this->userInterestedIn) {
 			$this->joins[] = " LEFT JOIN user_in_site_information ON user_in_site_information.site_id = site_information.id AND user_in_site_information.user_account_id = :user_in_site ";
@@ -41,6 +47,10 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 
 		if ($this->isListedInIndexOnly) {
 			$this->where[] = " site_information.is_listed_in_index = '1' ";
+		}
+		
+		if ($this->isOpenBySysAdminsOnly) {
+			$this->where[] = "  site_information.is_closed_by_sys_admin = '0' ";
 		}
 	}
 	

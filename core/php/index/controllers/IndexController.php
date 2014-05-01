@@ -43,6 +43,7 @@ class IndexController {
 		
 		if (userGetCurrent()) {
 			$srb = new SiteRepositoryBuilder();
+			$srb->setIsOpenBySysAdminsOnly(true);
 			$srb->setUserInterestedIn(userGetCurrent());
 			foreach($srb->fetchAll() as $site) {
 				$sites[$site->getId()] = $site;
