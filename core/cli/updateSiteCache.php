@@ -13,39 +13,5 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-print "Starting ".date("c")."\n";
-
-
-use repositories\builders\SiteRepositoryBuilder;
-use repositories\builders\CountryRepositoryBuilder;
-use repositories\SiteRepository;
-
-$siteRepository = new SiteRepository();
-
-$siteRepositoryBuilder = new SiteRepositoryBuilder();
-foreach($siteRepositoryBuilder->fetchAll() as $site) {
-
-	print $site->getId().": ".$site->getTitle()."\n";
-	
-	$crb = new CountryRepositoryBuilder();
-	$crb->setSiteIn($site);
-	$countries = $crb->fetchAll();
-	
-	$timezones = array();
-	foreach($countries as $country) {
-		foreach(explode(",", $country->getTimezones()) as $timeZone) {
-			$timezones[] = $timeZone;
-		}
-	}
-	
-	$site->setCachedTimezonesAsList($timezones);
-	$site->setCachedIsMultipleCountries(count($countries) > 1);
-	
-	$siteRepository->editCached($site);
-	
-	print "Done\n";
-}
-
-
-print "Finished ".date("c")."\n";
+tasks\UpdateSiteCache::update(true);
 

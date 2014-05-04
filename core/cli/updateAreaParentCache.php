@@ -13,20 +13,5 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-print "Starting ".date("c")."\n";
+tasks\UpdateAreaParentCache::update(true);
 
-
-use repositories\builders\AreaRepositoryBuilder;
-use repositories\AreaRepository;
-
-$areaRepository = new AreaRepository();
-
-$arb = new AreaRepositoryBuilder();
-$arb->setCacheNeedsBuildingOnly(true);
-
-foreach($arb->fetchAll() as $area) {
-	$areaRepository->buildCacheAreaHasParent($area);
-	print ".";
-}
-
-print "\nFinished ".date("c")."\n";
