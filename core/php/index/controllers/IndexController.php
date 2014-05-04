@@ -200,17 +200,18 @@ class IndexController {
 	
 	
 	
-        function discover(Application $app) {
+	function discover(Application $app) {
 
 		$srb = new SiteRepositoryBuilder();
 		$srb->setIsListedInIndexOnly(true);
+		$srb->setIsOpenBySysAdminsOnly(true);
 		$sites = $srb->fetchAll();
 
-                return $app['twig']->render('index/index/discover.html.twig', array(
-				'sites'=>$sites
-			));
+		return $app['twig']->render('index/index/discover.html.twig', array(
+			'sites'=>$sites
+		));
 
-        }
+	 }
 
 	
 }
