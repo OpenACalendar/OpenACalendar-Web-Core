@@ -1,6 +1,6 @@
 <?php
 require 'localConfig.php';
-require_once APP_ROOT_DIR.'/vendor/autoload.php'; 
+require_once (defined('COMPOSER_ROOT_DIR') ? COMPOSER_ROOT_DIR : APP_ROOT_DIR).'/vendor/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoload.php';
 
 use repositories\SiteRepository;

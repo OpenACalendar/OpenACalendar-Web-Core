@@ -1,6 +1,6 @@
 <?php
 define('APP_ROOT_DIR',__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
-require_once APP_ROOT_DIR.'/vendor/autoload.php'; 
+require_once (defined('COMPOSER_ROOT_DIR') ? COMPOSER_ROOT_DIR : APP_ROOT_DIR).'/vendor/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
 

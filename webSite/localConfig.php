@@ -13,4 +13,10 @@
 /** If the web roots are under the APP_ROOT_DIR use this. This is the default. **/
 define('APP_ROOT_DIR',__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
 
+/**
+ * If you are using the vendor/, composer.json and composer.lock that came with 
+ * this software COMPOSER_ROOT_DIR sholud be the same as APP_ROOT_DIR
+ **/
+define('COMPOSER_ROOT_DIR',__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
+
 
