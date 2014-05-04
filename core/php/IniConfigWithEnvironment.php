@@ -4,6 +4,21 @@
 
 /**
  *
+ * 
+ * This loads ini files with variables in sections by Environments or a Common section for all Environments.
+ * 
+ * eg
+ * 
+ * [Common]
+ * FromEmail=james@example.com
+ * FromName=James Baster
+ * 
+ * [EnvironmentTest]
+ * To=james@example.com
+ * 
+ * [EnvironmentReal]
+ * To=emaillist@example.com
+ * 
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD

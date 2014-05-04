@@ -1,0 +1,24 @@
+{#
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.txt.twig' %}
+
+{% block content %}
+
+{{ intro | raw }}
+
+{% for d in data %}
+
+{% if d.dayOfWeek == 1 %}Mon{% elseif d.dayOfWeek == 2 %}Tue{% elseif d.dayOfWeek == 3 %}Wed{% elseif d.dayOfWeek == 4 %}Thu{% elseif d.dayOfWeek == 5 %}Fri{% elseif d.dayOfWeek == 6 %}SAT{% elseif d.dayOfWeek == 7 %}SUN{% endif %} {{ d.display }}
+{% for event in d.eventsContinuing %}
+- {{ event.summaryDisplay }}
+{% endfor %}
+{% for event in d.events %}
+- {{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }} {{ event.summaryDisplay }}
+{% endfor %}
+
+{% endfor %}
+
+{% endblock %}
