@@ -15,9 +15,13 @@
 
 {% block content %}
 	
-	<h2>Email Us</h2>
+	{% if config.contactEmailHTML %}
 	
-	<p>Email us on {{ config.contactEmailHTML }}</p>
+		<h2>Email Us</h2>
+
+		<p>Email us on {{ config.contactEmailHTML }}</p>
+	
+	{% endif %}
 	
 	<h2>Contact Us</h2>
 	

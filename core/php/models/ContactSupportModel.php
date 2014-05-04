@@ -126,26 +126,30 @@ class ContactSupportModel {
 	public function sendEmailToSupport($app, $userFrom = null) {
 		global $CONFIG;
 
-		$message = \Swift_Message::newInstance();
-		$message->setSubject("Contact Message From ".$CONFIG->siteTitle." : ".$this->subject);
-		$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
-		$message->setTo($CONFIG->contactEmail);
+		if ($CONFIG->contactEmail) {
+		
+			$message = \Swift_Message::newInstance();
+			$message->setSubject("Contact Message From ".$CONFIG->siteTitle." : ".$this->subject);
+			$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+			$message->setTo($CONFIG->contactEmail);
 
-		$messageText = $app['twig']->render('email/contactSupport.txt.twig', array(
-			'contact'=>$this,
-			'userFrom'=>$userFrom,
-		));
-		if ($CONFIG->isDebug) file_put_contents('/tmp/contactSupport.txt', $messageText);
-		$message->setBody($messageText);
+			$messageText = $app['twig']->render('email/contactSupport.txt.twig', array(
+				'contact'=>$this,
+				'userFrom'=>$userFrom,
+			));
+			if ($CONFIG->isDebug) file_put_contents('/tmp/contactSupport.txt', $messageText);
+			$message->setBody($messageText);
 
-		$messageHTML = $app['twig']->render('email/contactSupport.html.twig', array(
-			'contact'=>$this,
-			'userFrom'=>$userFrom,
-		));
-		if ($CONFIG->isDebug) file_put_contents('/tmp/contactSupport.html', $messageHTML);
-		$message->addPart($messageHTML,'text/html');
+			$messageHTML = $app['twig']->render('email/contactSupport.html.twig', array(
+				'contact'=>$this,
+				'userFrom'=>$userFrom,
+			));
+			if ($CONFIG->isDebug) file_put_contents('/tmp/contactSupport.html', $messageHTML);
+			$message->addPart($messageHTML,'text/html');
 
-		if (!$CONFIG->isDebug) $app['mailer']->send($message);
+			if (!$CONFIG->isDebug) $app['mailer']->send($message);
+
+		}
 	}
 	
 	

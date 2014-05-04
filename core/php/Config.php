@@ -58,8 +58,8 @@ class Config {
 	
 	public $contactTwitter = null;
 	
-	public $contactEmail = "hello@example.com";
-	public $contactEmailHTML = "hello at example dot com";
+	public $contactEmail = null;
+	public $contactEmailHTML = null;
 	
 	public $facebookPage=null;
 	public $googlePlusPage=null;
