@@ -79,5 +79,26 @@ class ConfigCheckTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, count($configCheck->getErrors('contactEmail')));
 	}
 	
+	function testLogOK() {
+		$config = new Config();
+		$config->logFile= '/tmp/log.txt';
+		$config->logToStdError = true;
+		
+		$configCheck = new ConfigCheck($config);
+		
+		$this->assertEquals(0, count($configCheck->getErrors('logFile')));
+		$this->assertEquals(0, count($configCheck->getErrors('logToStdError')));
+	}
+	
+	function testLogBad() {
+		$config = new Config();
+		$config->logFile= null;
+		$config->logToStdError = true;
+		
+		$configCheck = new ConfigCheck($config);
+		
+		$this->assertEquals(0, count($configCheck->getErrors('logFile')));
+		$this->assertEquals(1, count($configCheck->getErrors('logToStdError')));
+	}
 }
 

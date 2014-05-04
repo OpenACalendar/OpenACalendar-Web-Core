@@ -93,7 +93,8 @@ class Config {
 
 
 	public $logFile = '/tmp/openacalendar.log';
-	
+	public $logToStdError = false;
+		
 	public $logFileParseDateTimeRange = '/tmp/openacalendarParseDateTimeRange.log';
 	
 	public $sysAdminExtraPassword = "1234";
@@ -149,6 +150,13 @@ class Config {
 	
 	public $findDuplicateEventsShow = 3;
 	public $findDuplicateEventsThreshhold = 2;
+	
+	public $SMTPPort = 25;
+	public $SMTPHost = "localhost";
+	public $SMTPUsername = null;
+	public $SMTPPassword = null;
+	public $SMTPEncyption = null;
+	public $SMTPAuthMode = null;
 	
 	function getWebIndexDomainSecure() {
 		return $this->hasSSL ? "https://".$this->webIndexDomainSSL : "http://".$this->webIndexDomain;

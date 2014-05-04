@@ -34,6 +34,10 @@ class ConfigCheck {
 			$out[] = 'This must be a valid email address!';
 		}
 		
+		if ($field == 'logToStdError' && $this->config->logToStdError && !$this->config->logFile) {
+			$out[] = 'For logToStdError to work logFile must be set';
+		}
+		
 		return $out;
 	}
 

@@ -21,12 +21,16 @@ foreach($CONFIG->extensions as $extensionName) {
 }
 
 ///////////////////////// LOGGING
-
-$app->register(new Silex\Provider\MonologServiceProvider(), array(
-	'monolog.logfile' => $CONFIG->logFile,
-	'monolog.name'=>$CONFIG->siteTitle,
-	'monolog.level'=>  \Symfony\Bridge\Monolog\Logger::ERROR,
-));
+if ($CONFIG->logFile) {
+	$app->register(new Silex\Provider\MonologServiceProvider(), array(
+		'monolog.logfile' => $CONFIG->logFile,
+		'monolog.name'=>$CONFIG->siteTitle,
+		'monolog.level'=>  \Symfony\Bridge\Monolog\Logger::ERROR,
+	));
+	if ($CONFIG->logToStdError) {
+		$app['monolog']->pushHandler(new Monolog\Handler\StreamHandler('php://stderr', Monolog\Logger::ERROR));
+	}
+}
 
 ///////////////////////// TWIG
 $dirs = array();
@@ -106,7 +110,10 @@ $SWIFT_MAILER = null;
 function getSwiftMailer() {
 	global $SWIFT_MAILER;
 	if ($SWIFT_MAILER == null) {
-		$transport = Swift_SmtpTransport::newInstance('localhost', 25);
+		$transport = Swift_SmtpTransport::newInstance($CONFIG->SMTPHost, $CONFIG->SMTPPort);
+		$transport->setUsername($CONFIG->SMTPUsername);
+		$transport->setPassword($CONFIG->SMTPPassword);
+		$transport->setEncryption($CONFIG->SMTPEncyption);
 		$SWIFT_MAILER = Swift_Mailer::newInstance($transport);
 	}
 	return $SWIFT_MAILER;

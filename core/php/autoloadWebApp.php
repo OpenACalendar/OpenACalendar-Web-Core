@@ -45,7 +45,11 @@ if ($CONFIG->logFile) {
 		'monolog.name'=>$CONFIG->siteTitle,
 		'monolog.level'=>  \Symfony\Bridge\Monolog\Logger::ERROR,
 	));
+	if ($CONFIG->logToStdError) {
+		$app['monolog']->pushHandler(new Monolog\Handler\StreamHandler('php://stderr', Monolog\Logger::ERROR));
+	}
 }
+
 
 ///////////////////////// TWIG
 $dirs = array();
@@ -84,7 +88,12 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 ///////////////////////// Mailer
 $app->register(new Silex\Provider\SwiftmailerServiceProvider());
 $app['swiftmailer.options'] = array(
-    'host' => 'localhost',
+	'host' => $CONFIG->SMTPHost,
+	'port' => $CONFIG->SMTPPort,
+	'username' => $CONFIG->SMTPUsername,
+	'password' => $CONFIG->SMTPPassword,
+	'encryption' => $CONFIG->SMTPEncyption,
+	'auth_mode' => $CONFIG->SMTPAuthMode,
 );
 
 

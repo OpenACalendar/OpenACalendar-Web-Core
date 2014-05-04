@@ -429,6 +429,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th>logToStdError</th>
+			<td>{% if config.logToStdError %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logToStdError'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>logFileParseDateTimeRange</th>
 			<td>{{ config.logFileParseDateTimeRange }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logFileParseDateTimeRange'} %}
@@ -572,6 +578,42 @@
 			<th>findDuplicateEventsThreshhold</th>
 			<td>{{ config.findDuplicateEventsThreshhold }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'findDuplicateEventsThreshhold'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPPort</th>
+			<td>{{ config.SMTPPort }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPort'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPHost</th>
+			<td>{{ config.SMTPHost }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPHost'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPUsername</th>
+			<td>{{ config.SMTPUsername }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPUsername'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPPassword</th>
+			<td>{% if config.SMTPPassword %}***{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPassword'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPEncyption</th>
+			<td>{{ config.SMTPEncyption }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPEncyption'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPAuthMode</th>
+			<td>{{ config.SMTPAuthMode }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPAuthMode'} %}
 			</td>
 		</tr>
 	</table>
