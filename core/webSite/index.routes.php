@@ -70,6 +70,10 @@ $app->match('/event/{slug}/edit/venue', "site\controllers\EventController::editV
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)
 		->before($canChangeSite); 
+$app->match('/event/{slug}/edit/future', "site\controllers\EventController::editFuture")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite); 
 $app->match('/event/{slug}/delete', "site\controllers\EventController::delete")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)

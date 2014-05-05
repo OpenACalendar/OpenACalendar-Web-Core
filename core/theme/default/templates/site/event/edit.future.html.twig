@@ -1,0 +1,68 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
+
+{% block innerContent %}
+
+	<form action="#" method="post" class="styled">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="submitted" value="yes">
+		
+		<p>You changed:</p>
+
+		<ul>
+			{% if eventHistory.getAreaIdChanged or eventHistory.getVenueIdChanged%}
+				<li>
+					<input type="checkbox" name="fieldAreaVenue" value="1" checked="checked">
+					Venue for event
+				</li>
+			{% endif %}
+		</ul>
+		
+		<p>Do you want to change these future events to?</p>
+		
+		<ul class="events">
+			{% for event in futureEvents %}
+				<li class="event">
+					<div class="dateTimeIcon">
+						<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+							<div class="dateIcon">
+								<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
+								<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+								<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+							</div>
+							<div class="timeIcon">
+								<span class="startTime">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+							</div>
+						</time>				
+					</div>
+					<div class="title">
+						<input type="checkbox" name="eventSlug{{ event.slug }}" value="1" checked="checked">
+						{{ event.summaryDisplay}}
+					</div>
+					<div class="afterEventListing"></div>
+				</li>
+			{% endfor %}
+		</ul>
+		
+		
+
+	
+
+
+		<input type="submit"  value="Save" />	
+	</form>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

@@ -136,6 +136,14 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		return $this;
 	}
 
+	/** @var \DateTime **/
+	protected $startAfter;
+	
+	public function setStartAfter(\DateTime $a) {
+		$this->startAfter = $a;
+		return $this;
+	}
+	
 	
 	/** @var \DateTime **/
 	protected $start;
@@ -173,8 +181,13 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		$this->include_imported = $value;
 	}
 	
+	protected $event_recur_set_id;
 	
-	protected function build() {
+	public function setInSameRecurEventSet(EventModel $event) {
+		$this->event_recur_set_id = $event->getEventRecurSetId();
+	}
+
+		protected function build() {
 		global $DB;
 
 		$this->select[] = 'event_information.*';
@@ -248,6 +261,9 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		} else if ($this->after) {
 			$this->where[] = ' event_information.end_at > :after';
 			$this->params['after'] = $this->after->format("Y-m-d H:i:s");
+		} else if ($this->startAfter) {
+			$this->where[] = ' event_information.start_at > :startAfter';
+			$this->params['startAfter'] = $this->startAfter->format("Y-m-d H:i:s");
 		}
 		
 		if ($this->start) {
@@ -309,6 +325,11 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		
 		if ($this->venueVirtualOnly) {
 			$this->where[] = " event_information.is_virtual = '1' ";
+		}
+		
+		if ($this->event_recur_set_id) {
+			$this->where[] =  " event_information.event_recur_set_id = :event_recur_set_id ";
+			$this->params['event_recur_set_id'] = $this->event_recur_set_id;
 		}
 	}
 	
