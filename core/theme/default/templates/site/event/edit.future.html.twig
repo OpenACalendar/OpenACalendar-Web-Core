@@ -25,6 +25,42 @@
 					Venue for event
 				</li>
 			{% endif %}
+			{% if eventHistory.getDescriptionChanged %}
+				<li>
+					<input type="checkbox" name="fieldDescription" value="1" checked="checked">
+					Description
+				</li>
+			{% endif %}
+			{% if eventHistory.getUrlChanged %}
+				<li>
+					<input type="checkbox" name="fieldUrl" value="1" checked="checked">
+					Url
+				</li>
+			{% endif %}
+			{% if eventHistory.getCountryIdChanged %}
+				<li>
+					<input type="checkbox" name="fieldCountry" value="1" checked="checked">
+					Country
+				</li>
+			{% endif %}
+			{% if eventHistory.getTimezoneChanged %}
+				<li>
+					<input type="checkbox" name="fieldTimezone" value="1" checked="checked">
+					Timezone
+				</li>
+			{% endif %}
+			{% if eventHistory.getIsVirtualChanged %}
+				<li>
+					<input type="checkbox" name="fieldIsVirtual" value="1" checked="checked">
+					Is Virtual
+				</li>
+			{% endif %}
+			{% if eventHistory.getIsPhysicalChanged %}
+				<li>
+					<input type="checkbox" name="fieldIsPhysical" value="1" checked="checked">
+					Is Physical
+				</li>
+			{% endif %}
 		</ul>
 		
 		<p>Do you want to change these future events to?</p>
