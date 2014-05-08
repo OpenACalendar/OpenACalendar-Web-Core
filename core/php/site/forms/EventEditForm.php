@@ -146,7 +146,7 @@ class EventEditForm extends AbstractType{
 			}
 			// Validate end is after start?
 			if ($myExtraFieldStart > $myExtraFieldEnd) {
-				$form['start_at']->addError(new FormError("The end can not be after the start!"));
+				$form['start_at']->addError(new FormError("The start can not be after the end!"));
 			}
 			// validate not to far in future
 			$max = \TimeSource::getDateTime();
