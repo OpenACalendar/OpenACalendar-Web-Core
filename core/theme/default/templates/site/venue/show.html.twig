@@ -18,6 +18,7 @@
 
 {% block actions %}
 	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
+		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> delete</a></li>
 		<li class="action">
 			<a href="/venue/{{ venue.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
 		</li>

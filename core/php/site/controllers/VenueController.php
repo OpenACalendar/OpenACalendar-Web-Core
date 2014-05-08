@@ -8,12 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 use models\VenueModel;
 use models\AreaModel;
 use repositories\VenueRepository;
+use repositories\EventRepository;
 use repositories\CountryRepository;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 
 use repositories\builders\filterparams\EventFilterParams;
 use site\forms\UploadNewMediaForm;
+use site\forms\VenueDeleteForm;
 use repositories\MediaRepository;
 use repositories\AreaRepository;
 use repositories\MediaInVenueRepository;
@@ -360,6 +362,41 @@ class VenueController {
 		
 		return $app->redirect("/venue/".$this->parameters['venue']->getSlug().'/');
 
+	}
+	
+	
+	
+	function delete($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Venue does not exist.");
+		}
+
+		if ($this->parameters['venue']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+		
+		$form = $app['form.factory']->create(new VenueDeleteForm());
+		
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+
+			if ($form->isValid()) {
+				
+				$eventRepository = new EventRepository();
+				$eventRepository->moveAllFutureEventsAtVenueToNoSetVenue($this->parameters['venue'], userGetCurrent());
+
+				$venueRepository = new VenueRepository();
+				$venueRepository->delete($this->parameters['venue'], userGetCurrent());
+				
+				return $app->redirect("/venue/".$this->parameters['venue']->getSlug());
+				
+			}
+		}
+		
+		$this->parameters['form'] = $form->createView();
+		
+		return $app['twig']->render('site/venue/delete.html.twig', $this->parameters);
+		
 	}
 	
 }

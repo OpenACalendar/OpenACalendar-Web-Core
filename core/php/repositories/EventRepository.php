@@ -7,6 +7,7 @@ use models\EventModel;
 use models\EventHistoryModel;
 use models\SiteModel;
 use models\GroupModel;
+use models\VenueModel;
 use models\UserAccountModel;
 use repositories\UserWatchesGroupRepository;
 
@@ -308,6 +309,58 @@ class EventRepository {
 		}
 	}
 	
+	
+	
+	public function moveAllFutureEventsAtVenueToNoSetVenue(VenueModel $venue, UserAccountModel $user) {
+			global $DB;
+			
+			$statFetch = $DB->prepare("SELECT event_information.* FROM event_information WHERE venue_id = :venue_id AND start_at > :start_at AND is_deleted='0'");
+			$statUpdateEvent = $DB->prepare("UPDATE event_information  SET venue_id=null, area_id=:area_id WHERE id=:id");	
+			$statAddHistory = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
+					"created_at,venue_id,country_id,timezone,".
+					"url, is_physical, is_virtual, is_deleted) VALUES ".
+					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
+					":created_at,:venue_id,:country_id,:timezone,"."
+						:url, :is_physical, :is_virtual, '0')");
+			$statFetch->execute(array('venue_id'=>$venue->getId(), 'start_at'=>\TimeSource::getFormattedForDataBase()));
+			while($data = $statFetch->fetch()) {
+				$event = new EventModel();
+				$event->setFromDataBaseRow($data);
+				$event->setVenueId(null);
+				$event->setAreaId($venue->getAreaId());
+				
+				try {
+					$DB->beginTransaction();
+
+					$statUpdateEvent->execute(array(
+											'id'=>$event->getId(),
+											'area_id'=>$event->getAreaId(),
+										));
+										
+					$statAddHistory->execute(array(
+											'event_id'=>$event->getId(),
+											'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
+											'description'=>$event->getDescription(),
+											'start_at'=>$event->getStartAt()->format("Y-m-d H:i:s"),
+											'end_at'=>$event->getEndAt()->format("Y-m-d H:i:s"),
+											'venue_id'=>$event->getVenueId(),
+											'country_id'=>$event->getCountryId(),
+											'timezone'=>$event->getTimezone(),
+											'user_account_id'=>($user ? $user->getId(): null),				
+											'created_at'=>\TimeSource::getFormattedForDataBase(),
+											'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+											'is_physical'=>$event->getIsPhysical()?1:0,
+											'is_virtual'=>$event->getIsVirtual()?1:0,
+										));
+			
+					$DB->commit();
+				} catch (Exception $e) {
+					$DB->rollBack();
+				}
+					
+			}
+		
+	}
 	
 }
 

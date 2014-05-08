@@ -223,6 +223,11 @@ $app->match('/venue/{slug}/edit', "site\controllers\VenueController::edit")
 		->before($appVerifiedEditorUserRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite); 
+$app->match('/venue/{slug}/delete', "site\controllers\VenueController::delete")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($featurePhysicalEventsRequired)		
+		->before($canChangeSite); 
 $app->match('/venue/{slug}/moveToArea', "site\controllers\VenueController::moveToArea")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)

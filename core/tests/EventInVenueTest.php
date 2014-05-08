@@ -134,7 +134,139 @@ class EventInVenueTest extends \PHPUnit_Framework_TestCase {
 		
 	}
 	
+	function testMoveAllFutureEventsAtVenueToNoSetVenue() {
+		
+		
+		$DB = getNewTestDB();
+		addCountriesToTestDB();
+		
+		TimeSource::mock(2013,7,1,7,0,0);
+		
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+		
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+		
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+		
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		
+		$area = new AreaModel();
+		$area->setTitle("scotland");
+		
+		$areaRepo = new AreaRepository();
+		$countryRepo = new CountryRepository();
+		$areaRepo->create($area, null, $site, $countryRepo->loadByTwoCharCode('GB'), $user);
+		
+		$venue = new VenueModel();
+		$venue->setCountryId($countryRepo->loadByTwoCharCode('GB')->getId());
+		$venue->setTitle("edinburgh hall");
+		$venue->setAreaId($area->getId());
+		
+		$venueRepo = new VenueRepository();
+		$venueRepo->create($venue, $site, $user);
+		
+		#### Event To Change
+		$event = new EventModel();
+		$event->setCountryId($countryRepo->loadByTwoCharCode('GB')->getId());
+		$event->setSummary("test");
+		$event->setDescription("test test");
+		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
+		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
+		$event->setVenueId($venue->getId());
+				
+		$eventRepository = new EventRepository();
+		$eventRepository->create($event, $site, $user);
+		
+		#### Load Event, Check in Venue
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+		$this->assertEquals(false, $event->getIsDeleted());
+		$this->assertNull($event->getAreaId());
+		$this->assertEquals($venue->getId(), $event->getVenueId());
+		
+		#### In preperation for deleting event, call moveAllFutureEventsAtVenueToNoSetVenue()
+		TimeSource::mock(2013,7,1,8,0,0);
+		$eventRepository->moveAllFutureEventsAtVenueToNoSetVenue($venue, $user);
+		
+		#### Load event, check in area
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+		$this->assertEquals(false, $event->getIsDeleted());
+		$this->assertNull($event->getVenueId());
+		$this->assertEquals($area->getId(), $event->getAreaId());
+		
+		
+		
+	}
 	
+	function testMoveAllFutureEventsAtVenueToNoSetVenueWithNoArea() {
+		
+		
+		$DB = getNewTestDB();
+		addCountriesToTestDB();
+		
+		TimeSource::mock(2013,7,1,7,0,0);
+		
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+		
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+		
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+		
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		
+		$countryRepo = new CountryRepository();
+		
+		$venue = new VenueModel();
+		$venue->setCountryId($countryRepo->loadByTwoCharCode('GB')->getId());
+		$venue->setTitle("edinburgh hall");
+		
+		$venueRepo = new VenueRepository();
+		$venueRepo->create($venue, $site, $user);
+		
+		#### Event To Change
+		$event = new EventModel();
+		$event->setCountryId($countryRepo->loadByTwoCharCode('GB')->getId());
+		$event->setSummary("test");
+		$event->setDescription("test test");
+		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
+		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
+		$event->setVenueId($venue->getId());
+				
+		$eventRepository = new EventRepository();
+		$eventRepository->create($event, $site, $user);
+		
+		#### Load Event, Check in Venue
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+		$this->assertEquals(false, $event->getIsDeleted());
+		$this->assertNull($event->getAreaId());
+		$this->assertEquals($venue->getId(), $event->getVenueId());
+		
+		#### In preperation for deleting event, call moveAllFutureEventsAtVenueToNoSetVenue()
+		TimeSource::mock(2013,7,1,8,0,0);
+		$eventRepository->moveAllFutureEventsAtVenueToNoSetVenue($venue, $user);
+		
+		#### Load event, check in area
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+		$this->assertEquals(false, $event->getIsDeleted());
+		$this->assertNull($event->getVenueId());
+		$this->assertNull($event->getAreaId());
+		
+		
+		
+	}
 }
 
 
