@@ -140,6 +140,10 @@ class EventEditForm extends AbstractType{
 			$form = $event->getForm();
 			$myExtraFieldStart = $form->get('start_at')->getData();
 			$myExtraFieldEnd = $form->get('end_at')->getData();
+			// Validate end is not the same as start
+			if ($myExtraFieldStart == $myExtraFieldEnd) {
+				$form['end_at']->addError(new FormError("The end can not be the same as the start!"));
+			}
 			// Validate end is after start?
 			if ($myExtraFieldStart > $myExtraFieldEnd) {
 				$form['start_at']->addError(new FormError("The end can not be after the start!"));
@@ -185,3 +189,5 @@ class EventEditForm extends AbstractType{
 	}
 	
 }
+
+
