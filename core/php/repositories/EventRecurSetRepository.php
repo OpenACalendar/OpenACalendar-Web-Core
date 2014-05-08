@@ -21,6 +21,25 @@ use models\UserAccountModel;
 class EventRecurSetRepository {
 
 	
+	public function isEventInSetWithNotDeletedFutureEvents(EventModel $event) {
+		global $DB;
+		
+		if (!$event->getEventRecurSetId()) return false;
+		
+		$stat = $DB->prepare("SELECT event_information.id FROM event_information ".
+				"WHERE event_recur_set_id =:id AND start_at > :start_at AND is_deleted = '0'");
+		$stat->execute(array( 
+			'id'=>$event->getEventRecurSetId(), 
+			'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
+			));
+		if ($stat->rowCount() > 0) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
 	public function getForEvent(EventModel $event) {
 		global $DB;
 		

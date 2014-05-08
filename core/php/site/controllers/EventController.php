@@ -344,7 +344,9 @@ class EventController {
 		}
 		
 		if ('POST' == $request->getMethod() && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
-				
+			
+			$gotResult = false;
+			
 			$venueRepository = new VenueRepository;
 			$areaRepository = new AreaRepository();
 			$countryRepository = new CountryRepository();
@@ -378,7 +380,7 @@ class EventController {
 				$this->parameters['event']->setVenueId($venue->getId());
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
-				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
+				$gotResult = true;
 				
 			} if (isset($_POST['venue_id']) && $_POST['venue_id'] == 'no') {
 				
@@ -405,7 +407,7 @@ class EventController {
 				$this->parameters['event']->setVenueId(null);
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
-				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
+				$gotResult = true;
 				
 			} else if (isset($_POST['venue_id']) && intval($_POST['venue_id'])) {
 				$venue = $venueRepository->loadBySlug($app['currentSite'], $_POST['venue_id']);
@@ -413,14 +415,96 @@ class EventController {
 					$this->parameters['event']->setVenueId($venue->getId());
 					$eventRepository = new EventRepository();
 					$eventRepository->edit($this->parameters['event'], userGetCurrent());
+					$gotResult = true;
+				}
+			}
+			
+			if ($gotResult) {
+				
+				$repo = new EventRecurSetRepository();
+				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
+					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
+				} else {
 					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 				}
+				
 			}
 			
 		}
 		
 		
 		return $app['twig']->render('site/event/edit.venue.html.twig', $this->parameters);
+		
+	}
+	
+	
+	function editFuture($slug, Request $request, Application $app) {
+		global $WEBSESSION, $FLASHMESSAGES;
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+		
+		// Load history we are working with
+		$eventHistoryRepo = new EventHistoryRepository();
+		$this->parameters['eventHistory'] = $eventHistoryRepo->loadByEventAndlastEditByUser($this->parameters['event'], userGetCurrent());
+		if (!$this->parameters['eventHistory']) {
+			return false;
+		}
+
+		// Check flags, are fields we can change
+		$eventHistoryRepo->ensureChangedFlagsAreSet($this->parameters['eventHistory']);
+		$fieldsWeCanEditChanged =  $this->parameters['eventHistory']->getAreaIdChanged() ||
+				$this->parameters['eventHistory']->getVenueIdChanged();
+		
+		if ($fieldsWeCanEditChanged) {
+		
+			$eventRB = new EventRepositoryBuilder();
+			$eventRB->setStartAfter($this->parameters['event']->getStartAtInUTC());
+			$eventRB->setInSameRecurEventSet($this->parameters['event']);
+			$eventRB->setIncludeDeleted(false);
+			$this->parameters['futureEvents'] = $eventRB->fetchAll();
+			if (!$this->parameters['futureEvents']) {
+				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
+			}
+			
+			if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+				
+				$eventRepo = new EventRepository();
+				
+				$countEvents = 0;
+				foreach($this->parameters['futureEvents'] as $event) {
+					if (isset($_POST["eventSlug".$event->getSlug()]) && $_POST["eventSlug".$event->getSlug()] == 1) {
+						
+						$changes = false;
+						if (($this->parameters['eventHistory']->getVenueIdChanged() || $this->parameters['eventHistory']->getAreaIdChanged()) 
+								&& isset($_POST["fieldAreaVenue"]) && $_POST["fieldAreaVenue"] == 1) {
+							$changes = true;
+							$event->setVenueId($this->parameters['eventHistory']->getVenueId());
+							$event->setAreaId($this->parameters['eventHistory']->getAreaId());
+						}
+						if ($changes) {
+							$eventRepo->edit($event, userGetCurrent(), $this->parameters['eventHistory']);
+							$countEvents++;
+						}
+						
+					}
+				}
+
+				if ($countEvents > 0) {
+					$FLASHMESSAGES->addMessage($countEvents > 1 ? $countEvents . " future events edited." : "Future event edited.");
+					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
+				}
+				
+			}
+			
+		
+			return $app['twig']->render('site/event/edit.future.html.twig', $this->parameters);
+			
+			
+		} else {
+			return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
+		}
 		
 	}
 	
