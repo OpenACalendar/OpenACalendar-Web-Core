@@ -1,10 +1,11 @@
 <?php
 
+namespace org\openacalendar\addresscode\gb\opencodepoint;
 
 
 /**
  *
- * @package AddressCodeGBOpenCodePoint
+ * @package org.openacalendar.addresscode.gb.opencodepoint
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
@@ -16,7 +17,13 @@ class AddressCodeGBOpenCodePointGet {
 		$postcode = strtoupper(str_replace(" ","",$postcode));
 		$postcodeTwoChars = substr($postcode, 0,2);
 		
-		$ourdir = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'data');
+		$ourdir = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.
+				DIRECTORY_SEPARATOR.'..'.
+				DIRECTORY_SEPARATOR.'..'.
+				DIRECTORY_SEPARATOR.'..'.
+				DIRECTORY_SEPARATOR.'..'.
+				DIRECTORY_SEPARATOR.'..'.
+				DIRECTORY_SEPARATOR.'data');
 		$ourfile = $ourdir.DIRECTORY_SEPARATOR.$postcodeTwoChars.'.csv';
 		
 		if (is_file($ourfile)) {

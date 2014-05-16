@@ -17,8 +17,8 @@ class ExtensionHookRunner {
 	
 	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user) {
 		global $app, $CONFIG;
-		foreach($CONFIG->extensions as $extensionName) {
-			$app['extension'.strtolower($extensionName)]->beforeVenueSave($venue, $user);
+		foreach($CONFIG->extensions as $extensionDir) {
+			$app['extensions']->getExtensionByDir($extensionDir)->beforeVenueSave($venue, $user);
 		}
 	}
 	

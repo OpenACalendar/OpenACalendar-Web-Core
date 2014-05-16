@@ -19,17 +19,9 @@ class ExtensionController {
 	
 	function index(Request $request, Application $app) {
 		global $CONFIG;
-		
-		$extensions = array();
-		
-		foreach($CONFIG->extensions as $extensionName) {
-			$className = "ExtensionInfo".$extensionName;
-			require APP_ROOT_DIR.'/extension/'.$extensionName.'/extensioninfo.php';
-			$extensions[$extensionName] = new $className($app);
-		}
-		
+				
 		return $app['twig']->render('sysadmin/extension/index.html.twig', array(
-				'extensions'=>$extensions,
+				'extensions'=>$app['extensions']->getExtensions(),
 			));
 		
 	}

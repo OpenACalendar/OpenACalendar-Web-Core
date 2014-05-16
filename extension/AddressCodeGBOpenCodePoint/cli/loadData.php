@@ -6,7 +6,7 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
 
 // We could let autoloader get this, but for that to happen the extension has to be enabled in OAC.
 // Let's just manually add this so ppl can import then enable.
-require_once APP_ROOT_DIR.'/extension/AddressCodeGBOpenCodePoint/php/AddressCodeGBOpenCodePointConvert.php';
+require_once APP_ROOT_DIR.'/extension/AddressCodeGBOpenCodePoint/php/org/openacalendar/addresscode/gb/opencodepoint/AddressCodeGBOpenCodePointConvert.php';
 
 /**
  *
@@ -46,7 +46,7 @@ if ($handleDir = opendir($opencodepointdir)) {
 					if (count($data) > 3) {
 						
 						$postcode = strtoupper(str_replace(" ","",$data[0]));
-						list($lat,$lng) = AddressCodeGBOpenCodePointConvert::Convert($data[2],$data[3]);
+						list($lat,$lng) = org\openacalendar\addresscode\gb\opencodepoint\AddressCodeGBOpenCodePointConvert::Convert($data[2],$data[3]);
 						$postcodeTwoChars = substr($postcode, 0,2);
 						
 						if (!isset($outputfiles[$postcodeTwoChars])) {

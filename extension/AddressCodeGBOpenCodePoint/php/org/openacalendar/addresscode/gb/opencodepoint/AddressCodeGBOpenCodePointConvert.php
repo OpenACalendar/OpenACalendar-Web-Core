@@ -1,10 +1,11 @@
 <?php
 
+namespace org\openacalendar\addresscode\gb\opencodepoint;
 
 
 /**
  *
- * @package AddressCodeGBOpenCodePoint
+ * @package org.openacalendar.addresscode.gb.opencodepoint
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://bramp.net/blog/2008/06/04/os-easting-northing-to-lat-long/
  * @link http://bramp.net/blog/2008/06/04/os-easting-northing-to-lat-long/

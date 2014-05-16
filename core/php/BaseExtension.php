@@ -17,6 +17,15 @@ abstract class BaseExtension {
 	function __construct(Application $app) {
 		
 	}
+	
+	public abstract function getId();
+	
+	
+	public abstract function getTitle();
+	
+	public function getDescription() {
+		return null;
+	}
 
 	
 	
