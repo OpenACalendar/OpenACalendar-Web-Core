@@ -53,14 +53,19 @@ class EventNewForm extends AbstractType{
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);
 		$countries = array();
+		$defaultCountry = null;
 		foreach($crb->fetchAll() as $country) {
 			$countries[$country->getId()] = $country->getTitle();
+			if ($defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
+				$defaultCountry = $country->getId();
+			}			
 		}
 		
 		$builder->add('country_id', 'choice', array(
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
+			'data' => $defaultCountry,
 		));
 		
 		$timezones = array();
