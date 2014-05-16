@@ -65,7 +65,7 @@ class VenueNewController {
 		
 		
 		
-		$form = $app['form.factory']->create(new VenueNewForm($app['currentSite']), $venue);
+		$form = $app['form.factory']->create(new VenueNewForm($app['currentSite'], $app['currentTimeZone']), $venue);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
