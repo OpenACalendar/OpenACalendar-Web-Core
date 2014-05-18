@@ -859,8 +859,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		if (isset($_POST) && isset($_POST['area']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken() && 
-				!$this->parameters['venue']) {
+		if (isset($_POST) && isset($_POST['area']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
 			
 			if ($_POST['area'] == 'new' && trim($_POST['newAreaTitle']) && $this->parameters['country']) {
 				
@@ -870,9 +869,15 @@ class EventController {
 				$areaRepository = new AreaRepository();
 				$areaRepository->create($area, $this->parameters['area'], $app['currentSite'], $this->parameters['country'], userGetCurrent());
 				
-				$this->parameters['event']->setAreaId($area->getId());
-				$eventRepository = new EventRepository();
-				$eventRepository->edit($this->parameters['event'], userGetCurrent());
+				if ($this->parameters['venue']) {
+					$this->parameters['venue']->setAreaId($area->getId());
+					$venueRepository = new VenueRepository();
+					$venueRepository->edit($this->parameters['venue'], userGetCurrent());
+				} else {
+					$this->parameters['event']->setAreaId($area->getId());
+					$eventRepository = new EventRepository();
+					$eventRepository->edit($this->parameters['event'], userGetCurrent());
+				}
 				
 				$areaRepository->buildCacheAreaHasParent($area);
 				
@@ -883,12 +888,18 @@ class EventController {
 				$areaRepository = new AreaRepository();
 				$area = $areaRepository->loadBySlug($app['currentSite'], $_POST['area']);
 				if ($area) {
-					$this->parameters['event']->setAreaId($area->getId());
-					$eventRepository = new EventRepository();
-					$eventRepository->edit($this->parameters['event'], userGetCurrent());
+					if ($this->parameters['venue']) {
+						$this->parameters['venue']->setAreaId($area->getId());
+						$venueRepository = new VenueRepository();
+						$venueRepository->edit($this->parameters['venue'], userGetCurrent());
+					} else {
+						$this->parameters['event']->setAreaId($area->getId());
+						$eventRepository = new EventRepository();
+						$eventRepository->edit($this->parameters['event'], userGetCurrent());
+					}
 					$FLASHMESSAGES->addMessage('Thank you; event updated!');
 				}
-			
+							
 			}
 			
 		}
