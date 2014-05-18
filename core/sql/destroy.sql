@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS api2_application_user_authorisation_token CASCADE;
+DROP TABLE IF EXISTS api2_application_user_token_information CASCADE;
+DROP TABLE IF EXISTS api2_application_request_token CASCADE;
+DROP TABLE IF EXISTS user_in_api2_application_information CASCADE;
 DROP TABLE IF EXISTS newsletter_information CASCADE;
 DROP TABLE IF EXISTS newsletter_to_user CASCADE;
 DROP TABLE IF EXISTS media_in_group CASCADE;
@@ -42,6 +46,7 @@ DROP TABLE IF EXISTS site_profile_media_history CASCADE;
 DROP TABLE IF EXISTS media_information CASCADE;
 DROP TABLE IF EXISTS site_history  CASCADE;
 DROP TABLE IF EXISTS site_information  CASCADE;
+DROP TABLE IF EXISTS api2_application_information CASCADE;
 DROP TABLE IF EXISTS contact_support  CASCADE;
 DROP TABLE IF EXISTS user_account_reset  CASCADE;
 DROP TABLE IF EXISTS user_account_verify_email CASCADE;

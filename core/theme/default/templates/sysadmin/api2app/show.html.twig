@@ -1,0 +1,81 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ api2Application.id }}</td>
+		</tr>
+		<tr>
+			<th>User</th>
+			<td>{{ api2Application.userId }}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ api2Application.title }}</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td>{{ api2Application.description| nl2br }}</td>
+		</tr>
+		<tr>
+			<th>App Token</th>
+			<td>{{ api2Application.appToken }}</td>
+		</tr>
+		<tr>
+			<th>App Secret</th>
+			<td>{{ api2Application.appSecret }}</td> {# TODO Some JS show thing please #}
+		</tr>			
+		<tr>
+			<th>Is auto approve</th>
+			<td>{% if api2Application.isAutoApprove %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>	
+		<tr>
+			<th>is_write_user_actions</th>
+			<td>{% if api2Application.isWriteUserActions %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>is_write_user_profile</th>
+			<td>{% if api2Application.isWriteUserProfile %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>is_write_calendar</th>
+			<td>{% if api2Application.isWriteCalendar %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>is_callback_display</th>
+			<td>{% if api2Application.isCallbackDisplay %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>is_callback_javascript</th>
+			<td>{% if api2Application.isCallbackJavascript %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+		<tr>
+			<th>is_callback_url</th>
+			<td>{% if api2Application.isCallbackUrl %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+		</tr>
+	</table>
+
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+	</ul>
+
+
+{% endblock %}
+
+

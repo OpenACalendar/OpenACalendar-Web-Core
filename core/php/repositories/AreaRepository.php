@@ -162,7 +162,7 @@ class AreaRepository {
 	 * This will undelete the area to.
 	 */
 	public function edit(AreaModel $area, UserAccountModel $creator) {
-		global $DB;
+		global $DB, $USERAGENT;
 		try {
 			$DB->beginTransaction();
 
@@ -175,8 +175,8 @@ class AreaRepository {
 					'description'=>$area->getDescription(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at)");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, api2_application_id) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :api2_application_id)");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -184,6 +184,7 @@ class AreaRepository {
 					'country_id'=>$area->getCountryId(),
 					'parent_area_id'=>$area->getParentAreaId(),
 					'user_account_id'=>$creator->getId(),				
+					'api2_application_id'=>($USERAGENT->hasApi2ApplicationId()?$USERAGENT->getApi2ApplicationId():null),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			

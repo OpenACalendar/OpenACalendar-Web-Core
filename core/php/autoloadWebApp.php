@@ -21,13 +21,6 @@ if (!$parseDomain->isCoveredByCookies()) {
 	die("REDIRECT!");
 }
 
-///////////////////////// Sessions
-
-/** @var WebSession **/
-$WEBSESSION = new WebSession();
-/** @var FlashMessages **/
-$FLASHMESSAGES = new FlashMessages($WEBSESSION);
-
 ///////////////////////// App
 
 $app = new Silex\Application(); 
@@ -36,6 +29,16 @@ $app['extensions'] = new ExtensionManager();
 foreach($CONFIG->extensions as $extensionName) {
 	require APP_ROOT_DIR.'/extension/'.$extensionName.'/extension.php';
 }
+
+///////////////////////// Sessions
+
+/** @var WebSession **/
+$WEBSESSION = new WebSession();
+/** @var FlashMessages **/
+$FLASHMESSAGES = new FlashMessages($WEBSESSION);
+/** @var UserAgent **/
+$USERAGENT = new \UserAgent();
+$app['userAgent'] = $USERAGENT;
 
 ///////////////////////// LOGGING
 if ($CONFIG->logFile) {

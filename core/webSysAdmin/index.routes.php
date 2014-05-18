@@ -149,3 +149,13 @@ $app->match('/sysadmin/config', "sysadmin\controllers\ConfigController::index");
 
 $app->match('/sysadmin/extension', "sysadmin\controllers\ExtensionController::index"); 
 
+
+$app->match('/sysadmin/api2app', "sysadmin\controllers\API2ApplicationList::index"); 
+$app->match('/sysadmin/api2app/', "sysadmin\controllers\API2ApplicationList::index"); 
+$app->match('/sysadmin/api2app/{id}', "sysadmin\controllers\API2Application::show")
+		->assert('id', '\d+'); 
+$app->match('/sysadmin/api2app/{id}/', "sysadmin\controllers\API2Application::show")
+		->assert('id', '\d+'); 
+
+
+

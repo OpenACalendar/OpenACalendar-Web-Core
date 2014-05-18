@@ -26,7 +26,6 @@ $app->before(function (Request $request) use ($app) {
 	$timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 	$timezone = "";
 	if (isset($_GET['mytimezone']) && in_array($_GET['mytimezone'], $timezones)) {
-		setcookie("siteIndextimezone",$_GET['mytimezone'],time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,false,false);
 		$timezone = $_GET['mytimezone'];
 	} else if (isset($_COOKIE["siteIndextimezone"]) && in_array($_COOKIE["siteIndextimezone"],$timezones)) {
 		$timezone = $_COOKIE["siteIndextimezone"];
