@@ -112,7 +112,6 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 
 ///////////////////////// Users
 
-$app['debug'] = $CONFIG->isDebug;
 function userLogIn(UserAccountModel $user) {
 	global $WEBSESSION;
 	if (!$user->getIsClosedBySysAdmin()) {
