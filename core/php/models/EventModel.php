@@ -42,10 +42,12 @@ class EventModel {
 	/** @var DateTime **/
 	protected $created_at;
 
-	protected $venue_lat;
-	protected $venue_lng;
-	protected $venue_title;
-	protected $venue_slug;
+	/** @var VenueModel **/
+	protected $venue;
+	
+	/** @var AreaModel **/
+	protected $area;
+	
 	protected $user_is_plan_attending  = false;
 	protected $user_is_plan_maybe_attending = false;
 
@@ -81,10 +83,22 @@ class EventModel {
 		$this->import_id = $data['import_id'];
 		$this->import_url_id = $data['import_url_id'];
 		$this->url = $data['url'];
-		$this->venue_title = isset($data['venue_title']) ? $data['venue_title'] : null;
-		$this->venue_lat = isset($data['venue_lat']) ? $data['venue_lat'] : null;
-		$this->venue_lng = isset($data['venue_lng']) ? $data['venue_lng'] : null;
-		$this->venue_slug = isset($data['venue_slug']) ? $data['venue_slug'] : null;
+		if (isset($data['venue_slug'])) {
+			$this->venue = new VenueModel();
+			$this->venue->setTitle($data['venue_title']);
+			$this->venue->setSlug($data['venue_slug']);
+			$this->venue->setLat($data['venue_lat']);
+			$this->venue->setLng($data['venue_lng']);
+			$this->venue->setDescription($data['venue_description']);
+			$this->venue->setAddress($data['venue_address']);
+			$this->venue->setAddressCode($data['venue_address_code']);
+		}
+		
+		if (isset($data['area_slug'])) {
+			$this->area = new AreaModel();
+			$this->area->setTitle($data['area_title']);
+			$this->area->setSlug($data['area_slug']);
+		}
 		$this->user_is_plan_attending = isset($data['user_is_plan_attending']) ? (boolean)$data['user_is_plan_attending'] : false;
 		$this->user_is_plan_maybe_attending = isset($data['user_is_plan_maybe_attending']) ? (boolean)$data['user_is_plan_maybe_attending'] : false;
 		$this->is_virtual = (boolean)$data['is_virtual'];
@@ -323,20 +337,18 @@ class EventModel {
 		return $this;
 	}
 	
-	public function getVenueLat() {
-		return $this->venue_lat;
+	/**
+	 * @return VenueModel
+	 */
+	public function getVenue() {
+		return $this->venue;
 	}
 
-	public function getVenueSlug() {
-		return $this->venue_slug;
-	}
-
-	public function getVenueLng() {
-		return $this->venue_lng;
-	}
-
-	public function getVenueTitle() {
-		return $this->venue_title;
+	/** 
+	 * @return AreaModel 
+	 **/
+	public function getArea() {
+		return $this->area;
 	}
 
 	public function getUserIsPlanAttending() {

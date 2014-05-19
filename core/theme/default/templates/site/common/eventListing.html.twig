@@ -34,6 +34,18 @@
 		</a>
 	</div>
 	<p class="description">{{ event.description |  nl2br  | linkify }}</p>	
+	{% if showVenueAndArea is defined and showVenueAndArea and event.isPhysical and ( event.venue or event.area )%}
+		<div class="dateAndLocationWrapper">
+			<div class="location">
+				{% if event.venue %}
+					<div class="venue"><a href="/event/{{ event.slugForUrl }}">{{ event.venue.title }}</a></div>
+				{% endif %}
+				{% if event.area %}
+					<div class="area"><a href="/event/{{ event.slugForUrl }}">{{ event.area.title }}</a></div>
+				{% endif %}						
+			</div>			
+		</div>
+	{% endif %}
 	<div class="afterEventListing"></div>
 	{% if showCurrentUserOptions is defined and showCurrentUserOptions and currentUser is not null %}
 		<div class="currentUserAttendance" id="currentUserAttendanceForEvent{{ event.slug }}">

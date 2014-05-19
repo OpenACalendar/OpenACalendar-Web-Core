@@ -59,7 +59,7 @@ class MapTimeController {
 		$erb->setAfter($start);
 		$erb->setBefore($end);
 		$erb->setIncludeDeleted(false);
-		$erb->setVenueLatLngOnly(true);
+		$erb->setMustHaveLatLng(true);
 		$events = $erb->fetchAll();
 
 		$eventsStatus = array();
@@ -81,10 +81,10 @@ class MapTimeController {
 						$eventsStatus[$event->getId()] = true;
 						$thisData['events'][$event->getSlug()] = array(
 								'slug'=>$event->getSlug(),
-								'venue_slug'=>$event->getVenueSlug(),
-								'venue_lat'=>$event->getVenueLat(),
-								'venue_lng'=>$event->getVenueLng(),
-								'venue_title'=>$event->getVenueTitle(),
+								'venue_slug'=>$event->getVenue()->getSlug(),
+								'venue_lat'=>$event->getVenue()->getLat(),
+								'venue_lng'=>$event->getVenue()->getLng(),
+								'venue_title'=>$event->getVenue()->getTitle(),
 								'event_title'=>$event->getSummaryDisplay(),
 							); 
 					}

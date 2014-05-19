@@ -21,6 +21,8 @@ class EventListController {
 		$params = new EventFilterParams();
 		$params->set($_GET);
 		$params->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
+		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		if (userGetCurrent()) {
 			$params->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
 		}

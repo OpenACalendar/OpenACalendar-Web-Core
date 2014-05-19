@@ -31,6 +31,8 @@ class IndexController {
 		$erb->setSite($app['currentSite']);
 		$erb->setAfterNow();
 		$erb->setIncludeDeleted(false);
+		$erb->setIncludeAreaInformation(true);
+		$erb->setIncludeVenueInformation(true);
 		if (userGetCurrent()) {
 			$erb->setUserAccount(userGetCurrent(), true);
 		}		

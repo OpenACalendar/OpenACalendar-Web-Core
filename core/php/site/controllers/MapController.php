@@ -53,7 +53,7 @@ class MapController {
 		$erb->setSite($app['currentSite']);
 		$erb->setAfterNow();
 		$erb->setIncludeDeleted(false);
-		$erb->setVenueLatLngOnly(true);
+		$erb->setMustHaveLatLng(true);
 		
 		$events = $erb->fetchAll();
 		
@@ -63,10 +63,10 @@ class MapController {
 		
 		foreach($events as $event) {
 			$this->parameters['venueData'][$event->getVenueId()] = array(
-				'venue_lat'=> $event->getVenueLat(),
-				'venue_lng'=> $event->getVenueLng(),
-				'venue_title'=> $event->getVenueTitle(),
-				'venue_slug'=> $event->getVenueSlug(),
+				'venue_lat'=> $event->getVenue()->getLat(),
+				'venue_lng'=> $event->getVenue()->getLng(),
+				'venue_title'=> $event->getVenue()->getTitle(),
+				'venue_slug'=> $event->getVenue()->getSlug(),
 			);
 		}
 		
