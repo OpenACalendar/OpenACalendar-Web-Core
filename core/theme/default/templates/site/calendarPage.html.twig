@@ -37,7 +37,7 @@
         <meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>{{ pageTitle }} - {{ currentSite.title }} {{ config.siteTitle }}</title>
+		<title>{{ pageTitle }} - {% if not config.isSingleSiteMode %}{{ currentSite.title }} {% endif %}{{ config.siteTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/reset.css">
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
 		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
