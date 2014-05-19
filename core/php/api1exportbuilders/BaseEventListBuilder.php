@@ -23,6 +23,8 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 	public function __construct(SiteModel $site = null, $timeZone = null, $title = null) {
 		parent::__construct($site, $timeZone, $title);
 		$this->eventRepositoryBuilder = new EventRepositoryBuilder();
+		$this->eventRepositoryBuilder->setIncludeAreaInformation(true);
+		$this->eventRepositoryBuilder->setIncludeVenueInformation(true);
 		if ($site) $this->eventRepositoryBuilder->setSite($site);
 	}
 
@@ -31,7 +33,7 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 	
 	public function build() {	
 		foreach($this->eventRepositoryBuilder->fetchAll() as $event) {
-			$this->addEvent($event);
+			$this->addEvent($event, null, $event->getVenue(), $event->getArea());
 		}
 	}
 		

@@ -160,19 +160,34 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		$this->include_deleted = $value;
 	}
 	
-	protected $venue_lat_lng_only = false;
+	protected $include_venue_information= false;
 
-	public function setVenueLatLngOnly($value) {
-		$this->venue_lat_lng_only = $value;
+	public function setIncludeVenueInformation($value) {
+		$this->include_venue_information = $value;
 	}
 	
+	protected $include_area_information= false;
+
+	public function setIncludeAreaInformation($value) {
+		$this->include_area_information = $value;		
+	}
+	
+	protected $must_have_lat_lng = false;
+	
+	
+	public function setMustHaveLatLng($must_have_lat_lng) {
+		$this->must_have_lat_lng = $must_have_lat_lng;
+		if ($must_have_lat_lng) {
+			$this->include_venue_information = true;
+		}
+	}
+
 	
 	protected $include_imported = true;
 
 	public function setIncludeImported($value) {
 		$this->include_imported = $value;
 	}
-	
 	
 	protected function build() {
 		global $DB;
@@ -297,14 +312,26 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->params['user_account_id'] = $this->userAccount->getId();			
 		}
 		
-		if ($this->venue_lat_lng_only) {
-			$this->joins[] = " JOIN venue_information ON venue_information.id = event_information.venue_id";
-			$this->where[] = " venue_information.lat IS NOT NULL ";
-			$this->where[] = " venue_information.lng IS NOT NULL ";
-			$this->select[] = "  venue_information.lng AS venue_lng";
-			$this->select[] = "  venue_information.lat AS venue_lat";
-			$this->select[] = "  venue_information.title AS venue_title";
-			$this->select[] = "  venue_information.slug AS venue_slug";
+		if ($this->include_venue_information || $this->include_area_information || $this->must_have_lat_lng) {
+			$this->joins[] = " LEFT JOIN venue_information ON venue_information.id = event_information.venue_id";
+			if ($this->include_venue_information) {
+				$this->select[] = "  venue_information.lng AS venue_lng";
+				$this->select[] = "  venue_information.lat AS venue_lat";
+				$this->select[] = "  venue_information.title AS venue_title";
+				$this->select[] = "  venue_information.slug AS venue_slug";
+				$this->select[] = "  venue_information.description AS venue_description";
+				$this->select[] = "  venue_information.address AS venue_address";
+				$this->select[] = "  venue_information.address_code AS venue_address_code";
+			}
+			if ($this->include_area_information) {
+				$this->joins[] = " LEFT JOIN area_information ON area_information.id = event_information.area_id OR area_information.id = venue_information.area_id";
+				$this->select[] = "  area_information.title AS area_title";
+				$this->select[] = "  area_information.slug AS area_slug";
+			}
+			if ($this->must_have_lat_lng) {
+				$this->where[] = " venue_information.lat IS NOT NULL ";
+				$this->where[] = " venue_information.lng IS NOT NULL ";
+			}
 		}
 		
 		if ($this->venueVirtualOnly) {

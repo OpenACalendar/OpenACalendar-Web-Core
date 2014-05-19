@@ -75,7 +75,7 @@
 			{% endif %}				
 		</li>
 		{% for event in events %}
-			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
+			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 		{% else %}
 			<p>
 				There are no upcoming events.
