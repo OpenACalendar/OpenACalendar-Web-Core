@@ -51,6 +51,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 		
 		$out = array(
 			'slug'=>$event->getSlug(),
+			'slugforurl'=>$event->getSlugForUrl(),
 			'summary'=> $event->getSummary(),					
 			'summaryDisplay'=> $event->getSummaryDisplay(),			
 			'description'=> ($event->getDescription()?$event->getDescription():''),
@@ -60,9 +61,9 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 		);
 		
 		$out['siteurl'] = $CONFIG->isSingleSiteMode ?
-				'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlug() :
-				'http://'.$this->site->getSlug().".".$CONFIG->webSiteDomain.'/event/'.$event->getSlug();
-		$out['url'] = $out['siteurl']; // $event->getUrl() && filter_var($event->getUrl(), FILTER_VALIDATE_URL) ? $event->getUrl() : $out['siteurl'];
+				'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() :
+				'http://'.$this->site->getSlug().".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl();
+		$out['url'] = $event->getUrl() && filter_var($event->getUrl(), FILTER_VALIDATE_URL) ? $event->getUrl() : $out['siteurl'];
 		$out['timezone'] = $event->getTimezone();
 
 		$startLocal = clone $event->getStartAt();
