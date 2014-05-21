@@ -27,7 +27,11 @@ class API2ApplicationModel {
 	protected $is_callback_url = 1;
 	protected $is_callback_display = 1;
 	protected $is_callback_javascript = 1;
-	
+	protected $allowed_callback_urls;
+	protected $is_closed_by_sys_admin = 0;
+	protected $closed_by_sys_admin_reason;
+
+
 	public function setFromDataBaseRow($data) {
 		$this->id  = $data['id'];
 		$this->user_id  = $data['user_id'];
@@ -43,6 +47,9 @@ class API2ApplicationModel {
 		$this->is_callback_display  = $data['is_callback_display'];
 		$this->is_callback_javascript  = $data['is_callback_javascript'];
 		$this->is_callback_url  = $data['is_callback_url'];
+		$this->allowed_callback_urls = $data['allowed_callback_urls'];
+		$this->is_closed_by_sys_admin = $data['is_closed_by_sys_admin'];
+		$this->closed_by_sys_admin_reason = $data['closed_by_sys_admin_reason'];
 	}
 
 	public function getId() {
@@ -156,7 +163,71 @@ class API2ApplicationModel {
 	public function setIsCallbackJavascript($is_callback_javascript) {
 		$this->is_callback_javascript = $is_callback_javascript;
 	}
+	
+	public function getIsClosedBySysAdmin() {
+		return $this->is_closed_by_sys_admin;
+	}
 
+	public function setIsClosedBySysAdmin($is_closed_by_sys_admin) {
+		$this->is_closed_by_sys_admin = $is_closed_by_sys_admin;
+	}
+
+	public function getClosedBySysAdminReason() {
+		return $this->closed_by_sys_admin_reason;
+	}
+
+	public function setClosedBySysAdminReason($closed_by_sys_admin_reason) {
+		$this->closed_by_sys_admin_reason = $closed_by_sys_admin_reason;
+	}
+	
+	public function getAllowedCallbackUrls() {
+		return $this->allowed_callback_urls;
+	}
+
+	public function setAllowedCallbackUrls($allowed_callback_urls) {
+		$this->allowed_callback_urls = $allowed_callback_urls;
+	}
+
+	public function addAllowedCallbackUrl($urlToAdd) {
+		$this->allowed_callback_urls = trim($this->allowed_callback_urls."\n".$urlToAdd);
+	}
+
+	public function removeAllowedCallbackUrl($urlToRemove) {
+		$urls = array();
+		foreach(explode("\n", $this->allowed_callback_urls) as $url) {
+			$urlTrimmed = trim($url);
+			if ($urlTrimmed && filter_var($urlTrimmed, FILTER_VALIDATE_URL) && $urlTrimmed != $urlToRemove) {
+				$urls[] = $urlTrimmed;
+			}
+		}
+		$this->allowed_callback_urls = implode("\n", $urls);
+	}
+
+	public function hasAllowedCallbackUrls() {
+		foreach(explode("\n", $this->allowed_callback_urls) as $url) {
+			$urlTrimmed = trim($url);
+			if ($urlTrimmed && filter_var($urlTrimmed, FILTER_VALIDATE_URL)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function isCallbackUrlAllowed($urlToCheck) {
+		$urlsCount = 0;
+		foreach(explode("\n", $this->allowed_callback_urls) as $url) {
+			$urlTrimmed = trim($url);
+			if ($urlTrimmed && filter_var($urlTrimmed, FILTER_VALIDATE_URL)) {
+				$urlsCount++;
+				//print strlen($urlToCheck)." >= ".strlen($urlTrimmed) . "   ". substr($urlToCheck, 0, strlen($urlTrimmed)). "  =  ".$urlTrimmed."\n";
+				if (strlen($urlToCheck) >= strlen($urlTrimmed) && substr($urlToCheck, 0, strlen($urlTrimmed)) == $urlTrimmed) {
+					return true;
+				}
+			}
+		}
+		// if there are no URLs then we allow all URLs
+		return !$urlsCount;
+	}
 
 
 	

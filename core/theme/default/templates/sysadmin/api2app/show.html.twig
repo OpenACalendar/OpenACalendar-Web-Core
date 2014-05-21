@@ -63,6 +63,10 @@
 			<th>is_callback_url</th>
 			<td>{% if api2Application.isCallbackUrl %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
 		</tr>
+		<tr>
+			<th>callback_urls</th>
+			<td>{{  api2Application.allowedCallbackUrls | nl2br }}</td>
+		</tr>
 	</table>
 
 
@@ -73,6 +77,17 @@
 	</form>
 
 	<ul class="actionHelp">
+		<li>close  <span class="param">reason</a></li>
+		<li>open</li>
+		<li>autoapprove <span class="param">boolean</a></li>
+		<li>permissionwriteuseractions <span class="param">boolean</a></li>
+		<li>permissionwriteuserprofile <span class="param">boolean</a></li>
+		<li>permissionwritecalendar <span class="param">boolean</a></li>
+		<li>iscallbackdisplay <span class="param">boolean</a></li>
+		<li>iscallbackjavascript <span class="param">boolean</a></li>
+		<li>iscallbackurl <span class="param">boolean</a></li>
+		<li>addcallbackurl <span class="param">url</a></li>
+		<li>removecallbackurl <span class="param">url</a></li>
 	</ul>
 
 

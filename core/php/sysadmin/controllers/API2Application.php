@@ -34,6 +34,76 @@ class API2Application {
 				
 		$form = $app['form.factory']->create(new ActionForm());
 		
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$data = $form->getData();
+				$action = new ActionParser($data['action']);
+				$api2appRepo = new \repositories\API2ApplicationRepository();
+			
+				if ($action->getCommand() == 'close') {
+					$this->parameters['api2Application']->setIsClosedBySysAdmin(true);
+					$this->parameters['api2Application']->setClosedBySysAdminreason($action->getParam(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+					
+				} else if ($action->getCommand() == 'open') {
+					$this->parameters['api2Application']->setIsClosedBySysAdmin(false);
+					$this->parameters['api2Application']->setClosedBySysAdminreason(null);
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+			
+				} else if ($action->getCommand() == 'autoapprove') {
+					$this->parameters['api2Application']->setIsAutoApprove($action->getParamBoolean(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+					
+				} else if ($action->getCommand() == 'permissionwriteuseractions') {
+					$this->parameters['api2Application']->setIsWriteUserActions($action->getParamBoolean(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+				} else if ($action->getCommand() == 'permissionwriteuserprofile') {
+					$this->parameters['api2Application']->setIsWriteUserProfile($action->getParamBoolean(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+				} else if ($action->getCommand() == 'permissionwritecalendar') {
+					$this->parameters['api2Application']->setIsWriteCalendar($action->getParamBoolean(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+				} else if ($action->getCommand() == 'iscallbackdisplay') {
+					$this->parameters['api2Application']->setIsCallbackDisplay($action->getParamBoolean(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+				} else if ($action->getCommand() == 'iscallbackjavascript') {
+					$this->parameters['api2Application']->setIsCallbackJavascript($action->getParamBoolean(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+				} else if ($action->getCommand() == 'iscallbackurl') {
+					$this->parameters['api2Application']->setIsCallbackUrl($action->getParamBoolean(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+				} else if ($action->getCommand() == 'addcallbackurl') {
+					$this->parameters['api2Application']->addAllowedCallbackUrl($action->getParam(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+					
+				} else if ($action->getCommand() == 'removecallbackurl') {
+					$this->parameters['api2Application']->removeAllowedCallbackUrl($action->getParam(0));
+					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
+					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
+				
+					
+				}
+			}
+		}
+		
 		
 		$this->parameters['form'] = $form->createView();
 		

@@ -21,8 +21,7 @@ class API2ApplicationList {
 	
 	
 	function index(Request $request, Application $app) {
-
-			
+		global $FLASHMESSAGES;
 				
 		$form = $app['form.factory']->create(new NewAPI2ApplicationForm());
 		
@@ -38,10 +37,8 @@ class API2ApplicationList {
 					$apiapp = $appRepo->create($user, $data['title']);
 					return $app->redirect("/sysadmin/api2app/".$apiapp->getId());
 				} else {
-					// TODO
+					$FLASHMESSAGES->addError('Existing user not found!');
 				}
-				
-				
 				
 			}
 		}
