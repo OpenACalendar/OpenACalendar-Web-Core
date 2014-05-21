@@ -198,6 +198,8 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		$this->joins[] = " LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ";
 		$this->joins[] = " LEFT JOIN group_information ON group_information.id = event_in_group.group_id ";
 		
+		$joinsVenueInfoSQL = " LEFT JOIN venue_information ON venue_information.id = event_information.venue_id ";
+		
 		if ($this->site) {
 			$this->where[] =  " event_information.site_id = :site_id ";
 			$this->params['site_id'] = $this->site->getId();
@@ -231,7 +233,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 				$areaids[] = $d['area_id'];
 			}
 			
-			$this->joins[] = " LEFT JOIN venue_information ON venue_information.id = event_information.venue_id ";
+			$this->joins[] = $joinsVenueInfoSQL;
 			$this->where[] =  " (venue_information.area_id IN (".  implode(",", $areaids).") ".
 					"OR event_information.area_id IN (".  implode(",", $areaids).")) ";
 		}
@@ -313,7 +315,9 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		}
 		
 		if ($this->include_venue_information || $this->include_area_information || $this->must_have_lat_lng) {
-			$this->joins[] = " LEFT JOIN venue_information ON venue_information.id = event_information.venue_id";
+			if (!in_array($joinsVenueInfoSQL, $this->joins)) {
+				$this->joins[] = $joinsVenueInfoSQL;
+			}
 			if ($this->include_venue_information) {
 				$this->select[] = "  venue_information.lng AS venue_lng";
 				$this->select[] = "  venue_information.lat AS venue_lat";
