@@ -115,7 +115,7 @@
 		{% endif %}
 
 		
-		{% if childAreas and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not event.isDeleted %}
+		{% if childAreas and currentUserCanEditSite and event.isPhysical and currentSite.isFeaturePhysicalEvents and not event.isDeleted %}
 			<div id="userCanPushToChildAreaWrapper">
 				<p>Is {% if venue %}"{{ venue.title }}"{% else %}this{% endif %} in one of these places?</p>
 				<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post"  class="styled">
