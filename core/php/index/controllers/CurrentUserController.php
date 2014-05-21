@@ -162,6 +162,8 @@ class CurrentUserController {
 		
 		$params = new EventFilterParams();
 		$params->setSpecifiedUserControls(true, userGetCurrent(), true);
+		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
+		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$params->set($_GET);
 		$events = $params->getEventRepositoryBuilder()->fetchAll();
 		
