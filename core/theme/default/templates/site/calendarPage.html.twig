@@ -185,7 +185,7 @@
 							{% for event in data.eventsContinuing %}
 								<div class="event continuing">
 									<div class="above"></div>
-									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
+									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
 										{{ event.getSummaryDisplay()  }} 
 									</a>
 									<div class="before"></div>
@@ -210,7 +210,7 @@
 									<span class="start_at">
 										{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
 									</span>
-									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }} }); return false;">
+									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
 										{{ event.getSummaryDisplay() }}
 									</a>
 									
