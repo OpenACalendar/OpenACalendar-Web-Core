@@ -20,6 +20,7 @@ use repositories\EventRepository;
 use repositories\UserWatchesGroupRepository;
 use repositories\UserWatchesGroupStopRepository;
 use repositories\UserAccountRepository;
+use repositories\AreaRepository;
 use repositories\MediaRepository;
 use repositories\MediaInGroupRepository;
 use repositories\builders\EventRepositoryBuilder;
@@ -491,6 +492,17 @@ class GroupController {
 				} else {
 					$importurl->setIsEnabled(true);
 				}
+				
+				$area = null;
+				$areaRepository = new AreaRepository();
+				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
+					foreach ($_POST['areas'] as $areaCode) {
+						if (substr($areaCode, 0, 9) == 'EXISTING:') {
+							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
+						}
+					}
+				}
+				$importurl->setAreaId($area ? $area->getId() : null);
 				
 				$importURLRepository->create($importurl, $app['currentSite'], userGetCurrent());
 				

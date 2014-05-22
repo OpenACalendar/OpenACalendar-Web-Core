@@ -38,9 +38,12 @@
 
 	{% if country %}
 		<p>
-			Events are in country: 
-			<img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag">
-			{{ country.title }}
+			Events are in:
+			{% spaceless %}
+				<img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"> {{ country.title }}
+				{% for thisarea in parentAreas %}, {{ thisarea.title }}{% endfor %}
+				{% if area %}, {{ area.title }}{% endif %}
+			{% endspaceless %}
 		</p>
 	{% endif %}
 	

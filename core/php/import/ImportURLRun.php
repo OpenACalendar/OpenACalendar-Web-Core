@@ -8,6 +8,7 @@ use models\CountryModel;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\CountryRepository;
+use repositories\AreaRepository;
 
 /**
  *
@@ -31,6 +32,9 @@ class ImportURLRun {
 	/** @var CountryModel **/
 	protected $country;
 	
+	/** @var AreaModel **/
+	protected $area;
+	
 	protected $realurl;
 		
 	public static $FLAG_ADD_UIDS = 1;
@@ -53,6 +57,10 @@ class ImportURLRun {
 			$countryRepo = new CountryRepository();
 			$this->country = $countryRepo->loadById($importURL->getCountryId());
 		}
+		if ($importURL->getAreaId()) {
+			$areaRepo = new AreaRepository();
+			$this->area = $areaRepo->loadById($importURL->getAreaId());
+		}
 		$groupRepository = new GroupRepository();
 		$this->group = $groupRepository->loadById($importURL->getGroupId());
 	}
@@ -71,6 +79,10 @@ class ImportURLRun {
 
 	public function getCountry() {
 		return $this->country;
+	}	
+
+	public function getArea() {
+		return $this->area;
 	}	
 	
 	public function downloadURLreturnFileName() {

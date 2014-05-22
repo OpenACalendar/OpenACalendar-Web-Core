@@ -71,7 +71,7 @@ function addCountriesToTestDB() {
 	global $DB;
 	$statInsert = $DB->prepare("INSERT INTO country (two_char_code,title,timezones,max_lat,max_lng,min_lat,min_lng) ".
 		"VALUES (:two_char_code,:title,:timezones,:max_lat,:max_lng,:min_lat,:min_lng)");
-	$statInsert->execute(array('two_char_code'=>'GB','title'=>'United Kingdom','timezones'=>'','max_lat'=>null, 'max_lng'=>null, 'min_lat'=>null, 'min_lng'=>null));
+	$statInsert->execute(array('two_char_code'=>'GB','title'=>'United Kingdom','timezones'=>'Europe/London','max_lat'=>null, 'max_lng'=>null, 'min_lat'=>null, 'min_lng'=>null));
 }
 
 

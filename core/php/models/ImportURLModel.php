@@ -21,6 +21,7 @@ class ImportURLModel {
 	protected $slug;
 	protected $group_id;
 	protected $country_id;
+	protected $area_id;
 	protected $title;
 	protected $url;
 	protected $url_canonical;
@@ -34,6 +35,7 @@ class ImportURLModel {
 		$this->slug = $data['slug'];
 		$this->group_id = $data['group_id'];
 		$this->country_id = $data['country_id'];
+		$this->area_id = $data['area_id'];
 		$this->title = $data['title'];
 		$this->url = $data['url'];
 		$this->url_canonical = $data['url_canonical'];
@@ -149,6 +151,16 @@ class ImportURLModel {
 	public function setCountryId($country_id) {
 		$this->country_id = $country_id;
 	}
+	
+	public function getAreaId() {
+		return $this->area_id;
+	}
+
+	public function setAreaId($area_id) {
+		$this->area_id = $area_id;
+	}
+
+
 
 
 }

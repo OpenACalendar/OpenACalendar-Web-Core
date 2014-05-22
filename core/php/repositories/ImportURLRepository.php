@@ -29,8 +29,8 @@ class ImportURLRepository {
 			$data = $stat->fetch();
 			$importURL->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id) ".
-					"VALUES (:site_id, :slug, :title,:url,:url_canonical, :created_at, :group_id,:is_enabled,:country_id) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id,area_id) ".
+					"VALUES (:site_id, :slug, :title,:url,:url_canonical, :created_at, :group_id,:is_enabled,:country_id,:area_id) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$importURL->getSlug(),
@@ -39,19 +39,21 @@ class ImportURLRepository {
 					'url_canonical'=>substr($importURL->getUrlCanonical(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'group_id'=>$importURL->getGroupId(),
 					'country_id'=>$importURL->getCountryId(),
+					'area_id'=>$importURL->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),		
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
 				));
 			$data = $stat->fetch();
 			$importURL->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id)");
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id) VALUES ".
+					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id)");
 			$stat->execute(array(
 					'curated_list_id'=>$importURL->getId(),
 					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'group_id'=>$importURL->getGroupId(),
 					'country_id'=>$importURL->getCountryId(),
+					'area_id'=>$importURL->getAreaId(),
 					'user_account_id'=>$creator->getId(),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),		
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
@@ -91,20 +93,22 @@ class ImportURLRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE import_url_information  SET title=:title, country_id=:country_id WHERE id=:id");
+			$stat = $DB->prepare("UPDATE import_url_information  SET title=:title, country_id=:country_id, area_id=:area_id WHERE id=:id");
 			$stat->execute(array(
 					'id'=>$importURL->getId(),
 					'country_id'=>$importURL->getCountryId(),
+					'area_id'=>$importURL->getAreaId(),
 					'title'=>$importURL->getTitle(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at, country_id) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at, :country_id)");
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at, country_id, area_id) VALUES ".
+					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at, :country_id, :area_id)");
 			$stat->execute(array(
 					'curated_list_id'=>$importURL->getId(),
 					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'group_id'=>$importURL->getGroupId(),
 					'country_id'=>$importURL->getCountryId(),
+					'area_id'=>$importURL->getAreaId(),
 					'user_account_id'=>$creator->getId(),				
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),

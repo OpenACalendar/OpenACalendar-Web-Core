@@ -174,6 +174,10 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 				$event->setTimezone($timezones[0]);
 			}
 			
+			if ($this->importURLRun->getArea()) {
+				$event->setAreaId($this->importURLRun->getArea()->getId());
+			}
+			
 		} else {
 		
 			// if no country set on importer, we just pick first one at random :-/
