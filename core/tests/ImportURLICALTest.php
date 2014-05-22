@@ -5,10 +5,13 @@ use models\UserAccountModel;
 use models\SiteModel;
 use models\GroupModel;
 use models\ImportURLModel;
+use models\AreaModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\ImportURLRepository;
+use repositories\AreaRepository;
+use repositories\CountryRepository;
 use import\ImportURLRun;
 use import\ImportURLICalHandler;
 use repositories\builders\EventRepositoryBuilder;
@@ -31,6 +34,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
 		
 		$DB = getNewTestDB();
+		addCountriesToTestDB();
+		$countryRepo = new CountryRepository();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -45,7 +50,16 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), getSiteQuotaUsedForTesting());
+		
+		
+		$areaRepo = new AreaRepository();
+		
+		$area = new AreaModel();
+		$area->setTitle("test");
+		$area->setDescription("test test");
+		
+		$areaRepo->create($area, null, $site, $countryRepo->loadByTwoCharCode('GB') , $user);
 		
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -61,6 +75,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$importURL->setIsEnabled(true);
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
+		$importURL->setCountryId($countryRepo->loadByTwoCharCode('GB')->getId());
+		$importURL->setAreaId($area->getId());
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 		
@@ -88,6 +104,9 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getDescription());
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getURL());
 		$this->assertFalse($event->getIsDeleted());
+		$this->assertEquals($countryRepo->loadByTwoCharCode('GB')->getId(), $event->getCountryId());
+		$this->assertEquals($area->getId(), $event->getAreaId());
+		$this->assertEquals("Europe/London",$event->getTimezone());
 		
 		// Import again
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);

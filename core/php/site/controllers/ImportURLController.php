@@ -12,6 +12,7 @@ use repositories\builders\EventRepositoryBuilder;
 use repositories\EventRepository;
 use repositories\GroupRepository;
 use repositories\CountryRepository;
+use repositories\AreaRepository;
 
 /**
  *
@@ -26,7 +27,7 @@ class ImportURLController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		$this->parameters = array('country'=>null);
+		$this->parameters = array('country'=>null,'area'=>null,'parentAreas'=>array());
 
 		$iurlRepository = new ImportURLRepository();
 		$this->parameters['importurl'] =  $iurlRepository->loadBySlug($app['currentSite'], $slug);
@@ -43,6 +44,21 @@ class ImportURLController {
 		if ($this->parameters['importurl']->getGroupId()) {
 			$gr = new GroupRepository();
 			$this->parameters['group'] = $gr->loadById($this->parameters['importurl']->getGroupId());
+		}
+		
+		
+		if ($this->parameters['importurl']->getAreaId()) {	
+			$ar = new AreaRepository();
+			$this->parameters['area'] = $ar->loadById($this->parameters['importurl']->getAreaId());
+			if (!$this->parameters['area']) {
+				return false;
+			}
+
+			$checkArea = $this->parameters['area']->getParentAreaId() ? $ar->loadById($this->parameters['area']->getParentAreaId())  : null;
+			while($checkArea) {
+				array_unshift($this->parameters['parentAreas'],$checkArea);
+				$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
+			}			
 		}
 		
 		return true;
@@ -88,6 +104,17 @@ class ImportURLController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
+								
+				$area = null;
+				$areaRepository = new AreaRepository();
+				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
+					foreach ($_POST['areas'] as $areaCode) {
+						if (substr($areaCode, 0, 9) == 'EXISTING:') {
+							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
+						}
+					}
+				}
+				$this->parameters['importurl']->setAreaId($area ? $area->getId() : null);
 				
 				$iRepository = new ImportURLRepository();
 				$iRepository->edit($this->parameters['importurl'], userGetCurrent());
