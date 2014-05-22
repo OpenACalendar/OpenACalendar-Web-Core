@@ -105,12 +105,42 @@
 				<ul>
 					<li><a href="/sysadmin/site/{{ site.id }}/editors">Editors</a></li>
 					<li><a href="/sysadmin/site/{{ site.id }}/watchers">Watchers</a></li>
-					<li><a href="/sysadmin/site/{{ site.id }}/event">Events</a></li>
-					<li><a href="/sysadmin/site/{{ site.id }}/group">Groups</a></li>
-					<li><a href="/sysadmin/site/{{ site.id }}/venue">Venues</a></li>
-					<li><a href="/sysadmin/site/{{ site.id }}/media">Medias</a></li>
-					<li><a href="/sysadmin/site/{{ site.id }}/area">Areas</a></li>
-					<li><a href="/sysadmin/site/{{ site.id }}/curatedlist">Curated Lists</a></li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/event">Events</a>
+						<form id="GoToEvent" onsubmit="goToEvent(); return false;">
+							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
+						</form>
+					</li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/group">Groups</a>
+						<form id="GoToGroup" onsubmit="goToGroup(); return false;">
+							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
+						</form>
+					</li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/venue">Venues</a>
+						<form id="GoToVenue" onsubmit="goToVenue(); return false;">
+							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
+						</form>
+					</li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/media">Medias</a>
+						<form id="GoToMedia" onsubmit="goToMedia(); return false;">
+							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
+						</form>
+					</li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/area">Areas</a>
+						<form id="GoToArea" onsubmit="goToArea(); return false;">
+							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
+						</form>
+					</li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/curatedlist">Curated Lists</a>
+						<form id="GoToCuratedList" onsubmit="goToCuratedList(); return false;">
+							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
+						</form>
+					</li>
 				</ul>
 			</td>
 		</tr>
@@ -146,4 +176,46 @@
 
 {% endblock %}
 
+
+
+{% block scripts %}
+	<script type="text/javascript">
+		function goToEvent() {
+			var slug = parseInt($('#GoToEvent input[name="slug"]').val());
+			if (!isNaN(slug)) {
+				window.location.href = '/sysadmin/site/{{ site.id }}/event/'+slug;
+			}
+		}
+		function goToGroup() {
+			var slug = parseInt($('#GoToGroup input[name="slug"]').val());
+			if (!isNaN(slug)) {
+				window.location.href = '/sysadmin/site/{{ site.id }}/group/'+slug;
+			}
+		}
+		function goToVenue() {
+			var slug = parseInt($('#GoToVenue input[name="slug"]').val());
+			if (!isNaN(slug)) {
+				window.location.href = '/sysadmin/site/{{ site.id }}/venue/'+slug;
+			}
+		}
+		function goToArea() {
+			var slug = parseInt($('#GoToArea input[name="slug"]').val());
+			if (!isNaN(slug)) {
+				window.location.href = '/sysadmin/site/{{ site.id }}/area/'+slug;
+			}
+		}
+		function goToMedia() {
+			var slug = parseInt($('#GoToMedia input[name="slug"]').val());
+			if (!isNaN(slug)) {
+				window.location.href = '/sysadmin/site/{{ site.id }}/media/'+slug;
+			}
+		}
+		function goToCuratedList() {
+			var slug = parseInt($('#GoToCuratedList input[name="slug"]').val());
+			if (!isNaN(slug)) {
+				window.location.href = '/sysadmin/site/{{ site.id }}/curatedlist/'+slug;
+			}
+		}
+	</script>
+{% endblock %}
 
