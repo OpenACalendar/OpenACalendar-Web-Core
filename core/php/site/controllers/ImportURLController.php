@@ -13,6 +13,7 @@ use repositories\EventRepository;
 use repositories\GroupRepository;
 use repositories\CountryRepository;
 use repositories\AreaRepository;
+use repositories\builders\AreaRepositoryBuilder;
 
 /**
  *
@@ -122,6 +123,21 @@ class ImportURLController {
 				return $app->redirect("/importurl/".$this->parameters['importurl']->getSlug());
 				
 			}
+		}
+		
+		
+		
+		if ($this->parameters['country']) {
+			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder->setSite($app['currentSite']);
+			$areaRepoBuilder->setCountry($this->parameters['country']);
+			$areaRepoBuilder->setIncludeDeleted(false);
+			if ($this->parameters['area']) {
+				$areaRepoBuilder->setParentArea($this->parameters['area']);
+			} else {
+				$areaRepoBuilder->setNoParentArea(true);
+			}
+			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 		}
 		
 		
