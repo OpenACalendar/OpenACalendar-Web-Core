@@ -26,7 +26,7 @@ function showEventPopup(data) {
 	var eventURL = (config.hasSSL ? "https://" : "http://") +
 				(config.isSingleSiteMode ? '' : data.site+'.') +
 				(config.hasSSL ? config.httpsDomainSite : config.httpDomainSite )+
-				'/event/'+data.slug;
+				'/event/'+data.slugForURL;
 
 	$('#EventPopupContent').html('<div id="EventPopupTitle">Loading ...</div>'+
 			'<div id="EventPopupDescription"></div>'+

@@ -28,7 +28,7 @@ function showEventPopup(data) {
 			'<div id="EventPopupGroupsWrapper"></div>'+
 			'<div id="EventPopupVenueWrapper"></div>'+
 			'<div id="EventPopupTimes"></div>'+
-			'<div class="EventPopupLink"><a href="/event/' + data.slug + '">View More Details</a></div>');
+			'<div class="EventPopupLink"><a href="/event/' + data.slugForURL + '">View More Details</a></div>');
 	$.ajax({
 		url: "/api1/event/"+data.slug+"/info.json"
 	}).success(function ( eventdata ) {
