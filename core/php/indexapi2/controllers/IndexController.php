@@ -47,15 +47,30 @@ class IndexController {
 		
 		// Settings
 		$requestToken = new \models\API2ApplicationRequestTokenModel();
-		$requestToken->setCallbackUrl($apiapp->getIsCallbackUrl() && isset($data['callback_url']) && trim($data['callback_url']) ? trim($data['callback_url']) : null);
-		$requestToken->setIsCallbackDisplay($apiapp->getIsCallbackDisplay() && isset($data['callback_display']) && strtolower(trim($data['callback_display'])) == "true");
-		$requestToken->setIsCallbackJavascript($apiapp->getIsCallbackJavascript() && isset($data['callback_javascript']) && strtolower(trim($data['callback_javascript'])) == "true");
+		if ($apiapp->getIsCallbackUrl() && isset($data['callback_url']) && trim($data['callback_url'])) {
+			if ($apiapp->isCallbackUrlAllowed(trim($data['callback_url']))) {
+				$requestToken->setCallbackUrl(trim($data['callback_url']));
+			} else {
+				return json_encode(array(
+					'success'=>false,
+					'error_message'=>'That callback URL is not allowed',
+				));
+			}
+		}
+		if ($apiapp->getIsCallbackDisplay() && isset($data['callback_display']) && strtolower(trim($data['callback_display'])) == "true") {
+			$requestToken->setIsCallbackDisplay(true);
+		}
+		if ($apiapp->getIsCallbackJavascript() && isset($data['callback_javascript']) && strtolower(trim($data['callback_javascript'])) == "true") {
+			$requestToken->setIsCallbackJavascript(true);
+		}
 		// $requestToken->setUserId();  TODO
 		
 		$scopeArray = isset($data['scope']) ? explode(",", str_replace(" ", ",", $data['scope'])) : array();
 		$requestToken->setIsWriteUserActions(in_array('permission_write_user_actions', $scopeArray) && $apiapp->getIsWriteUserActions());
 		$requestToken->setIsWriteUserProfile(in_array('permission_write_user_profile', $scopeArray) && $apiapp->getIsWriteUserProfile());
 		$requestToken->setIsWriteCalendar(in_array('permission_write_calendar', $scopeArray) && $apiapp->getIsWriteCalendar());
+		
+		$requestToken->setStateFromUser(isset($data['state']) ? $data['state'] : null);
 		
 		// Check 
 		if (!$requestToken->isAnyCallbackSet()) {
@@ -126,9 +141,14 @@ class IndexController {
 		
 		if ($requestToken->getCallbackUrl()) {
 			if ($userAuthorisationToken) {
-				// TODO
+				return $app->redirect($requestToken->getCallbackUrlWithParams(array(
+						'authorisation_token'=>$userAuthorisationToken->getAuthorisationToken(),
+						'state'=>$requestToken->getStateFromUser(),
+					)));
 			} else {
-				// TODO
+				return $app->redirect($requestToken->getCallbackUrlWithParams(array(
+						'status'=>'failure',
+					)));
 			}
 		} else if ($requestToken->getIsCallbackJavascript()) {
 			if ($userAuthorisationToken) {
@@ -142,7 +162,8 @@ class IndexController {
 						'authorisationToken'=>$userAuthorisationToken->getAuthorisationToken(),
 					));
 			} else {
-				// TODO
+				return $app['twig']->render('indexapi2/index/login.callback.display.failure.html.twig', array(
+					));
 			}
 		} else {
 			return "No Callback was given!";

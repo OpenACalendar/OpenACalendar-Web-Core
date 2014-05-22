@@ -27,6 +27,7 @@ class API2ApplicationRequestTokenModel {
 	protected $is_write_user_actions;
 	protected $is_write_user_profile;
 	protected $is_write_calendar;
+	protected $state_from_user;
 
 	public function setFromDataBaseRow($data) {
 		$this->api2_application_id   = $data['api2_application_id'];
@@ -40,6 +41,7 @@ class API2ApplicationRequestTokenModel {
 		$this->is_write_calendar  = (boolean)$data['is_write_calendar'];
 		$this->is_write_user_actions  = (boolean)$data['is_write_user_actions'];
 		$this->is_write_user_profile  = (boolean)$data['is_write_user_profile'];
+		$this->state_from_user  = $data['state_from_user'];
 	}
 	
 	
@@ -87,7 +89,23 @@ class API2ApplicationRequestTokenModel {
 	public function getCallbackUrl() {
 		return $this->callback_url;
 	}
-
+	
+	public function getCallbackUrlWithParams($params) {
+		$url = $this->callback_url;
+		if (strpos($url, "?")) {
+			if (substr($url, -1) != '&') {
+				$url .= '&';
+			}
+		} else {
+			$url .= '?';
+		}
+		$paramsBits = array();
+		foreach($params as $k=>$v) {
+			$paramsBits[] =  $k.'='.urlencode($v);
+		}
+		return $url . implode('&', $paramsBits);
+	}
+	
 	public function setCallbackUrl($callback_url) {
 		$this->callback_url = $callback_url;
 	}
@@ -136,5 +154,15 @@ class API2ApplicationRequestTokenModel {
 		return $this->is_callback_display || $this->is_callback_javascript || $this->callback_url;
 	}
 
+	public function getStateFromUser() {
+		return $this->state_from_user;
+	}
+
+	public function setStateFromUser($state_from_user) {
+		$this->state_from_user = $state_from_user;
+	}
+
+
+	
 }
 
