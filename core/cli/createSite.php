@@ -54,10 +54,15 @@ $siteRepository = new SiteRepository();
 $countryRepository = new CountryRepository();
 $siteQuotaRepository = new SiteQuotaRepository();
 
+$gb = $countryRepository->loadByTwoCharCode("GB") ;
+if (!$gb) {
+	die("Can't load Country GB - have you loaded static data?\n\n");
+}		
+		
 $siteRepository->create(
 			$site, 
 			$user, 
-			array( $countryRepository->loadByTwoCharCode("GB") ), 
+			array( $gb ), 
 			$siteQuotaRepository->loadByCode($CONFIG->newSiteHasQuotaCode)
 		);
 
