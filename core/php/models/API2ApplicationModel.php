@@ -20,7 +20,6 @@ class API2ApplicationModel {
 	protected $app_token;
 	protected $app_secret;
 	protected $is_write_user_actions = 0;
-	protected $is_write_user_profile = 0;
 	protected $is_write_calendar = 0;
 	protected $is_auto_approve = 0;
 	protected $is_all_sites = 1;
@@ -40,7 +39,6 @@ class API2ApplicationModel {
 		$this->app_token  = $data['app_token'];
 		$this->app_secret  = $data['app_secret'];
 		$this->is_write_user_actions  = $data['is_write_user_actions'];
-		$this->is_write_user_profile  = $data['is_write_user_profile'];
 		$this->is_write_calendar  = $data['is_write_calendar'];
 		$this->is_auto_approve  = $data['is_auto_approve'];
 		$this->is_all_sites  = $data['is_all_sites'];
@@ -108,13 +106,6 @@ class API2ApplicationModel {
 		$this->is_write_user_actions = $is_write_user_actions;
 	}
 
-	public function getIsWriteUserProfile() {
-		return $this->is_write_user_profile;
-	}
-
-	public function setIsWriteUserProfile($is_write_user_profile) {
-		$this->is_write_user_profile = $is_write_user_profile;
-	}
 
 	public function getIsWriteCalendar() {
 		return $this->is_write_calendar;

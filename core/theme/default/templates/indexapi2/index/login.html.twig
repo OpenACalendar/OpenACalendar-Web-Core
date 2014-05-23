@@ -1,0 +1,49 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'indexapi2/page.html.twig' %}
+
+{% block content %}
+
+	<div>
+		<p>Log into app: {{ api2app.title }}</p>
+		<p>{{ api2app.description | nl2br }}</p>
+	</div>
+
+	<form action="/api2/login.html" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+
+		{{ form_row(form.username) }}
+		
+		<div class="rowWrapper">
+			<div class="labelWrapper">&nbsp;</div>
+			<div class="widgetWrapperPlacementOnly">OR</div>
+			<div class="after"></div>
+		</div>
+		
+		{{ form_row(form.email) }}
+
+		{{ form_row(form.password) }}
+
+		<div>
+			{% if askForPermissionWriteUserActions %}
+				{{ form_row(form.is_write_user_actions) }}
+			{% endif %}
+			{% if askForPermissionWriteCalendar %}
+				{{ form_row(form.is_write_calendar) }}
+			{% endif %}
+		</div>
+		
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Login" />	
+	</form>
+
+
+{% endblock %}

@@ -28,9 +28,9 @@ class API2ApplicationRequestTokenRepository {
 		// TODO make sure token is unique!!!!!
 		
 		$stat = $DB->prepare("INSERT INTO api2_application_request_token (api2_application_id, request_token, created_at, user_id, ".
-				"callback_url, is_callback_display, is_callback_javascript, is_write_user_actions, is_write_user_profile, is_write_calendar, state_from_user) ".
+				"callback_url, is_callback_display, is_callback_javascript, is_write_user_actions, is_write_calendar, state_from_user) ".
 				"VALUES (:api2_application_id, :request_token, :created_at,  :user_id, :callback_url, ".
-				":is_callback_display, :is_callback_javascript, :is_write_user_actions, :is_write_user_profile, :is_write_calendar, :state_from_user)");
+				":is_callback_display, :is_callback_javascript, :is_write_user_actions, :is_write_calendar, :state_from_user)");
 		$stat->execute(array( 
 				'api2_application_id'=>$app->getId(), 
 				'request_token'=>$requestToken->getRequestToken() ,
@@ -40,7 +40,6 @@ class API2ApplicationRequestTokenRepository {
 				'is_callback_display'=>($app->getIsCallbackDisplay() && $requestToken->getIsCallbackDisplay())?1:0,
 				'is_callback_javascript'=>($app->getIsCallbackJavascript() && $requestToken->getIsCallbackJavascript())?1:0,
 				'is_write_user_actions'=>($requestToken->getIsWriteUserActions() && $app->getIsWriteUserActions())?1:0,
-				'is_write_user_profile'=>($requestToken->getIsWriteUserProfile() && $app->getIsWriteUserActions())?1:0,
 				'is_write_calendar'=>($requestToken->getIsWriteCalendar() && $app->getIsWriteCalendar())?1:0,
 				'state_from_user'=>$requestToken->getStateFromUser(),
 			));

@@ -85,7 +85,6 @@ $appUserRequired = function(Request $request) use ($app) {
 	$app['apiUser'] = $userRepo->loadByID($app['apiUserToken']->getUserId());
 	
 	$app['apiUserIsWriteUserActions'] = false;
-	$app['apiUserIsWriteUserProfile'] = FALSE;
 	$app['apiUserIsWriteCalendar'] = FALSE;
 	
 	$uisr = new UserInSiteRepository();

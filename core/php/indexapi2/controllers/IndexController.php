@@ -7,8 +7,12 @@ use repositories\API2ApplicationRepository;
 use repositories\API2ApplicationRequestTokenRepository;
 use repositories\API2ApplicationUserAuthorisationTokenRepository;
 use repositories\API2ApplicationUserTokenRepository;
+use repositories\UserInAPI2ApplicationRepository;
+use repositories\UserAccountRepository;
 use models\API2ApplicationUserPermissionsModel;
 use models\API2ApplicationRequestTokenModel;
+use Symfony\Component\HttpFoundation\Request;
+use indexapi2\forms\LogInUserForm;
 
 /**
  *
@@ -67,7 +71,6 @@ class IndexController {
 		
 		$scopeArray = isset($data['scope']) ? explode(",", str_replace(" ", ",", $data['scope'])) : array();
 		$requestToken->setIsWriteUserActions(in_array('permission_write_user_actions', $scopeArray) && $apiapp->getIsWriteUserActions());
-		$requestToken->setIsWriteUserProfile(in_array('permission_write_user_profile', $scopeArray) && $apiapp->getIsWriteUserProfile());
 		$requestToken->setIsWriteCalendar(in_array('permission_write_calendar', $scopeArray) && $apiapp->getIsWriteCalendar());
 		
 		$requestToken->setStateFromUser(isset($data['state']) ? $data['state'] : null);
@@ -90,16 +93,22 @@ class IndexController {
 		));
 	}
 	
-	function login(Application $app) {
+	function login(Request $request, Application $app) {
+		global $WEBSESSION;
 		
 		$appRepo = new API2ApplicationRepository();
 		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository();
 		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository();
+		$userInApp2Repo = new UserInAPI2ApplicationRepository();
 		
 		######################################## Check Data In
 		
 		// Load and check request token!
-		$data = array_merge($_GET, $_POST);
+		$data = array();
+		if ($WEBSESSION->has('api2appToken')) $data['app_token'] = $WEBSESSION->get('api2appToken');
+		if ($WEBSESSION->has('api2requestToken')) $data['request_token'] = $WEBSESSION->get('api2requestToken');
+		$data = array_merge($data, $_GET, $_POST);
+		
 		$apiapp = $data['app_token'] ? $appRepo->loadByAppToken($data['app_token']) : null;
 		if (!$apiapp) {
 			// TODO also if app closed
@@ -112,32 +121,63 @@ class IndexController {
 		}
 		$userAuthorisationToken = null;
 		$permissionsGranted = new API2ApplicationUserPermissionsModel();
+
+		$WEBSESSION->set('api2appToken', $apiapp->getAppToken());
+		$WEBSESSION->set('api2requestToken', $requestToken->getRequestToken());
+
 		
 		######################################## User Workflow
 		
-		if (!userGetCurrent()) {
-			
-			// TODO Show Login Or Create Screen
-			
+		$formObj = new LogInUserForm(userGetCurrent(), $apiapp, $requestToken);
+		$form = $app['form.factory']->create($formObj);
+		
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+
+			if ($form->isValid()) {
+				$formData = $form->getData();
+				
+				$userRepository = new UserAccountRepository();
+				if ($formData['email']) {
+					$user = $userRepository->loadByEmail($formData['email']);
+				} else if ($formData['username']) {
+					$user = $userRepository->loadByUserName($formData['username']);
+				}
+				if ($user) {
+					if ($user->checkPassword($formData['password'])) {
+						
+						if ($apiapp->getIsAutoApprove()) {
+							$permissionsGranted->setFromApp($apiapp);
+						} else {
+							$permissionsGranted->setFromData($formData);
+						}
+						$userInApp2Repo->setPermissionsForUserInApp($permissionsGranted, $user, $apiapp);
+						$userAuthorisationToken = $userAuthorisationTokenRepo->createForAppAndUserFromRequestToken($apiapp, $user, $requestToken);
+						
+					} else {
+						$app['monolog']->addError("Login attempt on API2 - account ".$user->getId().' - password wrong.');
+						$form->addError(new FormError('User and password not recognised'));
+					}
+				} else {
+					$app['monolog']->addError("Login attempt on API2 - unknown account");
+					$form->addError(new FormError('User and password not recognised'));
+				}
+				
+			}
 		}
 		
-		if ($apiapp->getIsAutoApprove()) {
-
-			// Let's go!
-			$permissionsGranted->setFromApp($apiapp);
-			$userAuthorisationToken = $userAuthorisationTokenRepo->createForAppAndUserFromRequestToken($apiapp, userGetCurrent(), $requestToken, $permissionsGranted);
-			
-			
-		} else {
-
-			// TODO if app already approved, let's go
-
-			// TODO Show Approval Screen
-
+		if (!$userAuthorisationToken) {
+			return $app['twig']->render('indexapi2/index/login.html.twig', array(
+						'form'=>$form->createView(),
+						'api2app'=>$apiapp,
+						'askForPermissionWriteUserActions' => $formObj->getIsWriteUserActions(),
+						'askForPermissionWriteCalendar' => $formObj->getIsWriteCalendar(),
+					));
 		}
+		
+		
 		
 		###################################### Return
-		
 		
 		if ($requestToken->getCallbackUrl()) {
 			if ($userAuthorisationToken) {
@@ -152,9 +192,13 @@ class IndexController {
 			}
 		} else if ($requestToken->getIsCallbackJavascript()) {
 			if ($userAuthorisationToken) {
-				// TODO
+				return $app['twig']->render('indexapi2/index/login.callback.javascript.success.html.twig', array(
+						'authorisationToken'=>$userAuthorisationToken->getAuthorisationToken(),
+						'state'=>$requestToken->getStateFromUser(),
+					));
 			} else {
-				// TODO
+				return $app['twig']->render('indexapi2/index/login.callback.javascript.failure.html.twig', array(
+					));
 			}
 		} else if ($requestToken->getIsCallbackDisplay()) {
 			if ($userAuthorisationToken) {
@@ -201,13 +245,23 @@ class IndexController {
 		}
 		
 		// get user tokens
+		$userTokenRepo->createForAppAndUserId($apiapp, $authorisationToken->getUserId());
 		$userToken = $userTokenRepo->loadByAppAndUserID($apiapp, $authorisationToken->getUserId());
-		// TODO add permissions in here to
-		return json_encode(array(
-				'success'=>true,
-				'user_token'=>$userToken->getUserToken(),
-				'user_secret'=>$userToken->getUserSecret(),
-			));
+		if ($userToken) {
+			return json_encode(array(
+					'success'=>true,
+					'permissions'=>array(
+						'is_write_user_actions'=>$userToken->getIsWriteUserActions(),
+						'is_write_calendar'=>$userToken->getIsWriteCalendar(),
+					),
+					'user_token'=>$userToken->getUserToken(),
+					'user_secret'=>$userToken->getUserSecret(),
+				));
+		} else {
+			return json_encode(array(
+					'success'=>false,
+				));
+		}
 		
 	}
 	
@@ -221,7 +275,6 @@ class IndexController {
 				),
 				'permissions'=>array(
 					'is_write_user_actions'=>$app['apiUserToken']->getIsWriteUserActions(),
-					'is_write_user_profile'=>$app['apiUserToken']->getIsWriteUserProfile(),
 					'is_write_calendar'=>$app['apiUserToken']->getIsWriteCalendar(),
 				)
 			));

@@ -6,7 +6,6 @@ CREATE TABLE api2_application_information (
 	app_token VARCHAR(255) NOT NULL,
 	app_secret VARCHAR(255) NOT NULL,
 	is_write_user_actions SMALLINT DEFAULT '0' NOT NULL,
-	is_write_user_profile SMALLINT DEFAULT '0' NOT NULL,
 	is_write_calendar SMALLINT DEFAULT '0' NOT NULL,
 	is_callback_url SMALLINT DEFAULT '1' NOT NULL,
 	is_callback_display SMALLINT DEFAULT '1' NOT NULL,
@@ -27,7 +26,6 @@ CREATE TABLE user_in_api2_application_information (
 	user_id INTEGER NOT NULL,
 	is_in_app SMALLINT DEFAULT '1' NOT NULL,
 	is_write_user_actions SMALLINT DEFAULT '0' NOT NULL,
-	is_write_user_profile SMALLINT DEFAULT '0' NOT NULL,
 	is_write_calendar SMALLINT DEFAULT '0' NOT NULL,
 	created_at timestamp without time zone NOT NULL,
 	PRIMARY KEY(api2_application_id,user_id)
@@ -44,7 +42,6 @@ CREATE TABLE api2_application_request_token (
 	is_callback_display SMALLINT DEFAULT '0' NOT NULL,
 	is_callback_javascript SMALLINT DEFAULT '0' NOT NULL,
 	is_write_user_actions SMALLINT DEFAULT '0' NOT NULL,
-	is_write_user_profile SMALLINT DEFAULT '0' NOT NULL,
 	is_write_calendar SMALLINT DEFAULT '0' NOT NULL,
 	state_from_user VARCHAR(255) NULL,
 	created_at timestamp without time zone NOT NULL,

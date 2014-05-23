@@ -66,7 +66,6 @@ $appUserRequired = function(Request $request) use ($app) {
 	
 
 	$app['apiUserIsWriteUserActions'] = false;
-	$app['apiUserIsWriteUserProfile'] = FALSE;
 	$app['apiUserIsWriteCalendar'] = FALSE;
 	
 	$uisr = new UserInSiteRepository();

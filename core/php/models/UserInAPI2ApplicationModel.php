@@ -1,8 +1,6 @@
 <?php
 
 
-
-
 namespace models;
 
 
@@ -12,26 +10,24 @@ namespace models;
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
- * @author James Baster <james@jarofgreen.co.uk> 
+ * @author James Baster <james@jarofgreen.co.uk>
  */
-class API2ApplicationUserTokenModel {
-	
+class UserInAPI2ApplicationModel {
+
 	protected $api2_application_id;
 	protected $user_id;
-	protected $user_token;
-	protected $user_secret;
-	protected $is_write_user_actions;
-	protected $is_write_calendar;
+	protected $is_in_app;
+	protected $is_write_user_actions = false;
+	protected $is_write_calendar = false;
 	
 	public function setFromDataBaseRow($data) {
 		$this->api2_application_id = $data['api2_application_id'];
 		$this->user_id = $data['user_id'];
-		$this->user_token = $data['user_token'];
-		$this->user_secret = $data['user_secret'];
+		$this->is_in_app = (boolean)$data['is_in_app'];
 		$this->is_write_user_actions = (boolean)$data['is_write_user_actions'];
 		$this->is_write_calendar = (boolean)$data['is_write_calendar'];
 	}
-
+	
 	public function getApi2ApplicationId() {
 		return $this->api2_application_id;
 	}
@@ -48,20 +44,12 @@ class API2ApplicationUserTokenModel {
 		$this->user_id = $user_id;
 	}
 
-	public function getUserToken() {
-		return $this->user_token;
+	public function getIsInApp() {
+		return $this->is_in_app;
 	}
 
-	public function setUserToken($user_token) {
-		$this->user_token = $user_token;
-	}
-
-	public function getUserSecret() {
-		return $this->user_secret;
-	}
-
-	public function setUserSecret($user_secret) {
-		$this->user_secret = $user_secret;
+	public function setIsInApp($is_in_app) {
+		$this->is_in_app = $is_in_app;
 	}
 
 	public function getIsWriteUserActions() {
@@ -82,8 +70,7 @@ class API2ApplicationUserTokenModel {
 
 
 	
-			
-	
-	
 }
+
+
 

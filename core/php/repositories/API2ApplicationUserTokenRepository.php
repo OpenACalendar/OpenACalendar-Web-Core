@@ -18,6 +18,33 @@ use models\UserAccountModel;
 class API2ApplicationUserTokenRepository {
 
 	
+	public function createForAppAndUserId(API2ApplicationModel $app, $userID) {
+		global $DB;
+		
+		$stat = $DB->prepare("SELECT api2_application_user_token_information.* FROM api2_application_user_token_information WHERE ".
+				"api2_application_id =:api2_application_id AND user_id =:user_id");
+		$stat->execute(array( 'api2_application_id'=>$app->getId(), 'user_id'=>$userID ));
+		if ($stat->rowCount() == 0) {
+			
+			$stat = $DB->prepare("INSERT INTO api2_application_user_token_information ".
+					"(api2_application_id, user_id, user_token, user_secret, created_at) ".
+					"VALUES (:api2_application_id, :user_id, :user_token, :user_secret, :created_at)");
+			
+			$stat->execute(array(
+				'api2_application_id'=>$app->getId(),
+				'user_id'=> $userID ,
+				'user_token'=> createKey(1,255),
+				'user_secret'=> createKey(1,255),
+				'created_at'=>  \TimeSource::getFormattedForDataBase(),
+			));
+					
+			// TODO check for unique user_token
+			
+		}
+		
+	}
+	
+	
 	/** 
 	 * 
 	 * @return \models\API2ApplicationUserTokenModel
@@ -25,7 +52,7 @@ class API2ApplicationUserTokenRepository {
 	public function loadByAppAndUserID(API2ApplicationModel $app, $userID) {
 		global $DB;
 		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_write_user_actions, ".
-				" user_in_api2_application_information.is_write_user_profile, user_in_api2_application_information.is_write_calendar ".
+				" user_in_api2_application_information.is_write_calendar ".
 				" FROM api2_application_user_token_information".
 				" JOIN user_in_api2_application_information ON user_in_api2_application_information.is_in_app = '1' ".
 				" AND user_in_api2_application_information.user_id = api2_application_user_token_information.user_id ".
@@ -49,7 +76,7 @@ class API2ApplicationUserTokenRepository {
 	public function loadByAppAndUserTokenAndUserSecret(API2ApplicationModel $app, $userToken, $userSecret) {
 		global $DB;
 		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_write_user_actions, ".
-				" user_in_api2_application_information.is_write_user_profile, user_in_api2_application_information.is_write_calendar ".
+				" user_in_api2_application_information.is_write_calendar ".
 				" FROM api2_application_user_token_information".
 				" JOIN user_in_api2_application_information ON user_in_api2_application_information.is_in_app = '1' ".
 				" AND user_in_api2_application_information.user_id = api2_application_user_token_information.user_id ".

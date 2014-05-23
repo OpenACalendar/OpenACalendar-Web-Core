@@ -25,7 +25,6 @@ class API2ApplicationRequestTokenModel {
 	protected $is_callback_display;
 	protected $is_callback_javascript;
 	protected $is_write_user_actions;
-	protected $is_write_user_profile;
 	protected $is_write_calendar;
 	protected $state_from_user;
 
@@ -40,7 +39,6 @@ class API2ApplicationRequestTokenModel {
 		$this->is_callback_javascript   = $data['is_callback_javascript'];
 		$this->is_write_calendar  = (boolean)$data['is_write_calendar'];
 		$this->is_write_user_actions  = (boolean)$data['is_write_user_actions'];
-		$this->is_write_user_profile  = (boolean)$data['is_write_user_profile'];
 		$this->state_from_user  = $data['state_from_user'];
 	}
 	
@@ -132,14 +130,6 @@ class API2ApplicationRequestTokenModel {
 
 	public function setIsWriteUserActions($is_write_user_actions) {
 		$this->is_write_user_actions = $is_write_user_actions;
-	}
-
-	public function getIsWriteUserProfile() {
-		return $this->is_write_user_profile;
-	}
-
-	public function setIsWriteUserProfile($is_write_user_profile) {
-		$this->is_write_user_profile = $is_write_user_profile;
 	}
 
 	public function getIsWriteCalendar() {

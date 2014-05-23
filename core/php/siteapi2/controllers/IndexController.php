@@ -35,7 +35,6 @@ class IndexController {
 				),
 				'permissions'=>array(
 					'is_write_user_actions'=>$app['apiUserIsWriteUserActions'],
-					'is_write_user_profile'=>$app['apiUserIsWriteUserProfile'],
 					'is_write_calendar'=>$app['apiUserIsWriteCalendar'],
 				),
 				'site'=>array(
