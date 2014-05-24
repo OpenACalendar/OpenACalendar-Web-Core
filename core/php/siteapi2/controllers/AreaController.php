@@ -53,14 +53,15 @@ class AreaController {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Does not exist.");
 		}
-		
-		$data = $_POST;
+				
+		$ourRequest = new \Request($request);
 		
 		$edits = false;
-		if (isset($data['title']) && $data['title']) {
-			if ($data['title'] != $this->area->getTitle()) {
+		if ($ourRequest->hasGetOrPost('title')) {
+			$newValue = $ourRequest->getGetOrPostString('title', '');
+			if ($newValue && $newValue != $this->area->getTitle()) {
 				$edits = true;
-				$this->area->setTitle($data['title']);
+				$this->area->setTitle($newValue);
 			}
 		}
 		

@@ -18,6 +18,8 @@
 				{% include 'sysadmin/common/groupHistoryItem.html.twig' %}
 			{% elseif historyItem is venuehistory %}
 				{% include 'sysadmin/common/venueHistoryItem.html.twig' %}
+			{% elseif historyItem is areahistory %}
+				{% include 'sysadmin/common/areaHistoryItem.html.twig' %}
 			{% endif %}
 		{% endfor %}
 	</ul>
