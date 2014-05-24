@@ -29,7 +29,11 @@
 				{{ currentTimeZone }}
 			</div>
 			<ul id="menu">
-				<li><a href="/sysadmin/site">Sites</a></li>
+				{% if config.isSingleSiteMode %}
+					<li><a href="/sysadmin/site/{{ config.singleSiteID }}">SingleSite</a></li>
+				{% else %}
+					<li><a href="/sysadmin/site">Sites</a></li>
+				{% endif %}
 				<li><a href="/sysadmin/sitequota">(Quotas)</a></li>
 				<li><a href="/sysadmin/user">Users</a></li>
 				<li><a href="/sysadmin/history">History</a></li>
