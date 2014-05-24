@@ -224,6 +224,17 @@ ul.history li.venue .created {
   font-style: italic;
   font-size: 0.8em;
 }
+ul.history li.event .fieldChanged .field,
+ul.history li.group .fieldChanged .field,
+ul.history li.venue .fieldChanged .field {
+  display: inline;
+  font-style: italic;
+}
+ul.history li.event .fieldChanged .value,
+ul.history li.group .fieldChanged .value,
+ul.history li.venue .fieldChanged .value {
+  display: inline;
+}
 ul.history li.event {
   background: #dcc;
 }

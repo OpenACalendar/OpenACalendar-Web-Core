@@ -5,13 +5,13 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<li class="group">
+<li class="venue">
 	<div class="icon">
 		<a href="#">
-			<img src="/theme/default/imgsysadmin/historyGroupIcon.png" alt="Group" title="Group">
+			<img src="/theme/default/imgsysadmin/historyAreaIcon.png" alt="Area" title="Area">
 		</a>
 	</div>
-	<div class="title">{# <a href="/group/{{ historyItem.groupSlug }}"> #}{{ historyItem.title }}{# </a> #}</div>
+	<div class="title">{{ historyItem.title }}</div>
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.description | nl2br  }}</div>
 	{% else %}
@@ -20,25 +20,25 @@
 				<div class="field">Title changed:</div>
 				<div class="value">{{ historyItem.title }}</div>
 			</div>
-		{%endif %}
+		{% endif %}
 		{% if historyItem.getDescriptionChanged %}
 			<div class="fieldChanged">
 				<div class="field">Description changed:</div>
-				<div class="value">{{ historyItem.description }}</div>
+				<div class="value">{{ historyItem.description | nl2br }}</div>
 			</div>
-		{%endif %}
-		{% if historyItem.getUrlChanged %}
+		{% endif %}
+		{% if historyItem.getParentAreaIdChanged %}
 			<div class="fieldChanged">
-				<div class="field">URL changed:</div>
-				<div class="value">{{ historyItem.url }}</div>
+				<div class="field">Parent Area changed:</div>
+				<div class="value">Yes</div>
 			</div>
-		{%endif %}
-		{% if historyItem.getTwitterUsernameChanged %}
+		{% endif %}
+		{% if historyItem.getCountryIdChanged %}
 			<div class="fieldChanged">
-				<div class="field">Twitter changed:</div>
-				<div class="value">{{ historyItem.twitterUsername }}</div>
+				<div class="field">Country changed:</div>
+				<div class="value">Yes</div>
 			</div>
-		{%endif %}
+		{% endif %}
 		{% if historyItem.getIsDeletedChanged %}
 			<div class="fieldChanged">
 				<div class="field">Status changed:</div>
