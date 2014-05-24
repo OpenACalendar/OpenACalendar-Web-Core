@@ -20,9 +20,14 @@
 		<div id="pageWrapper" class="displayBoard">
 			<div id="headerAndBodyWrapper">
 				<div id="headerWrapper">
-					<img src="/getLogo.php?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
-					<h1><a href="/">{{ currentSite.title }}</a></h1>
-					<h2><a href="/">{{ config.siteTitle }}</a></h2>				
+					{% if config.isSingleSiteMode %}
+						<img src="/theme/default/img/logo.png?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+						<h1><a href="/">{{ config.siteTitle }}</a></h1>
+					{% else %}
+						<img src="/getLogo.php?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+						<h1><a href="/">{{ currentSite.title }}</a></h1>
+						<h2><a href="/">{{ config.siteTitle }}</a></h2>
+					{% endif %}					
 				</div>
 				<div class="displayBoardSegment">
 					{% block today %}{% endblock %}
