@@ -27,20 +27,33 @@ class IndexController {
 	
 	
 	public function currentUserOnSiteJson(Application $app) {
-
-		return json_encode(array(
+		$data = array(
 				'success'=>true,
-				'user'=>array(
-					'username'=>$app['apiUser']->getUserName(),
-				),
 				'permissions'=>array(
 					'is_write_user_actions'=>$app['apiUserIsWriteUserActions'],
 					'is_write_calendar'=>$app['apiUserIsWriteCalendar'],
 				),
 				'site'=>array(
 					'title'=>$app['currentSite']->getTitle(),
+					'description_text'=>$app['currentSite']->getDescriptionText(),
+					'footer_text'=>$app['currentSite']->getFooterText(),
+					'timezones'=>$app['currentSite']->getCachedTimezonesAsList(),
+					'is_feature_map'=>$app['currentSite']->getIsFeatureMap(),
+					'is_feature_importer'=>$app['currentSite']->getIsFeatureImporter(),
+					'is_feature_curated_list'=>$app['currentSite']->getIsFeatureCuratedList(),
+					'is_feature_virtual_events'=>$app['currentSite']->getIsFeatureVirtualEvents(),
+					'is_feature_physical_events'=>$app['currentSite']->getIsFeaturePhysicalEvents(),
+					'is_feature_group'=>$app['currentSite']->getIsFeatureGroup(),
 				),
-			));
+			);
+		
+		if ($app['apiUser']) {
+			$data['user'] = array(
+					'username'=>$app['apiUser']->getUserName(),
+				);
+		}
+		
+		return json_encode($data);
 	}
 	
 }

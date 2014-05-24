@@ -115,8 +115,7 @@ class IndexController {
 			return $app['twig']->render('indexapi2/index/login.app.problem.html.twig', array());
 		}
 		$requestToken = $data['request_token'] ? $appRequestTokenRepo->loadByAppAndRequestToken($apiapp, $data['request_token']) : null;
-		if (!$requestToken) {
-			// TODO also if token already used
+		if (!$requestToken || $requestToken->getIsUsed()) {
 			return $app['twig']->render('indexapi2/index/login.requestToken.problem.html.twig', array());
 		}
 		$userAuthorisationToken = null;
@@ -237,8 +236,7 @@ class IndexController {
 		$authorisationToken = $data['authorisation_token'] && $data['request_token'] ?
 				$userAuthorisationTokenRepo->loadByAppAndAuthorisationTokenAndRequestToken($apiapp, $data['authorisation_token'], $data['request_token'])
 				: null;
-		if (!$authorisationToken) {
-			// TODO also if token already used
+		if (!$authorisationToken || $authorisationToken->getIsUsed()) {
 			return json_encode(array(
 					'success'=>false,
 				));
@@ -247,6 +245,9 @@ class IndexController {
 		// get user tokens
 		$userTokenRepo->createForAppAndUserId($apiapp, $authorisationToken->getUserId());
 		$userToken = $userTokenRepo->loadByAppAndUserID($apiapp, $authorisationToken->getUserId());
+		// mark token used
+		$userAuthorisationTokenRepo->markTokenUsed($authorisationToken);
+		// return
 		if ($userToken) {
 			return json_encode(array(
 					'success'=>true,
@@ -258,6 +259,8 @@ class IndexController {
 					'user_secret'=>$userToken->getUserSecret(),
 				));
 		} else {
+			// This might happen if user redraws permissions from app between logging in and app gotting tokens, 
+			//   since loadByAppAndUserID() checks user permisisons.
 			return json_encode(array(
 					'success'=>false,
 				));

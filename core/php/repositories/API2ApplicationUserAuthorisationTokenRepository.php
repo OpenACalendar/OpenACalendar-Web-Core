@@ -81,6 +81,17 @@ class API2ApplicationUserAuthorisationTokenRepository {
 		}
 	}
 	
+	public function markTokenUsed(API2ApplicationUserAuthorisationTokenModel $token) {
+		global $DB;
+		$stat = $DB->prepare("UPDATE api2_application_user_authorisation_token SET used_at = :used_at ".
+				" WHERE api2_application_id = :api2_application_id AND authorisation_token = :authorisation_token");
+		$stat->execute(array( 
+				'api2_application_id'=>$token->getApi2ApplicationId(), 
+				'authorisation_token'=>$token->getAuthorisationToken(),  
+				'used_at'=>  \TimeSource::getFormattedForDataBase(),
+			));
+	}
+	
 	
 }
 

@@ -80,6 +80,10 @@ class API2ApplicationUserAuthorisationTokenModel {
 	public function setUsedAt($used_at) {
 		$this->used_at = $used_at;
 	}
-		
+	
+	public function getIsUsed() {
+		return (boolean)$this->used_at;
+	}
+	
 }
 

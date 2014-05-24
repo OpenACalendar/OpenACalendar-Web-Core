@@ -151,6 +151,10 @@ class API2ApplicationRequestTokenModel {
 	public function setStateFromUser($state_from_user) {
 		$this->state_from_user = $state_from_user;
 	}
+	
+	public function getIsUsed() {
+		return (boolean)$this->used_at;
+	}
 
 
 	

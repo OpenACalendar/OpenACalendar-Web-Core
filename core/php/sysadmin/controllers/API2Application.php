@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use repositories\API2ApplicationRepository;
 use sysadmin\forms\ActionForm;
 use sysadmin\ActionParser;
+use repositories\builders\HistoryRepositoryBuilder;
 
 /**
  *
@@ -105,4 +106,17 @@ class API2Application {
 		return $app['twig']->render('sysadmin/api2app/show.html.twig', $this->parameters);		
 	
 	}
+
+	function history($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+		
+		$hrb = new HistoryRepositoryBuilder();
+		$hrb->setAPI2Application($this->parameters['api2Application']);
+		
+		return $app['twig']->render('sysadmin/api2app/history.html.twig', array(
+				'historyItems'=>$hrb->fetchAll(),
+			));
+		
+	}
+
 }

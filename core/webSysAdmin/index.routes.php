@@ -157,5 +157,10 @@ $app->match('/sysadmin/api2app/{id}', "sysadmin\controllers\API2Application::sho
 $app->match('/sysadmin/api2app/{id}/', "sysadmin\controllers\API2Application::show")
 		->assert('id', '\d+'); 
 
+$app->match('/sysadmin/api2app/{id}/history', "sysadmin\controllers\API2Application::history")
+		->assert('id', '\d+'); 
+$app->match('/sysadmin/api2app/{id}/history', "sysadmin\controllers\API2Application::history")
+		->assert('id', '\d+'); 
+
 
 

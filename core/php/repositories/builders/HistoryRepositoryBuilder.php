@@ -12,6 +12,7 @@ use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
+use models\API2ApplicationModel;
 
 /**
  *
@@ -132,7 +133,16 @@ class HistoryRepositoryBuilder {
 		$this->notUser = $notUser;
 	}
 	
+	/** @var API2ApplicationModel **/
+	protected $api2app;
 	
+	public function setAPI2Application(API2ApplicationModel $api2app) {
+		$this->api2app = $api2app;
+	}
+
+		
+
+
 	protected $limit = 50;
 	
 	public function fetchAll() {
@@ -179,6 +189,11 @@ class HistoryRepositoryBuilder {
 			if ($this->notUser) {
 				$where[] = 'event_history.user_account_id != :userid ';
 				$params['userid'] = $this->notUser->getId();
+			}
+			
+			if ($this->api2app) {
+				$where[] = 'event_history.api2_application_id  = :api2app';
+				$params['api2app'] = $this->api2app->getId();
 			}
 			
 			if ($this->venueVirtualOnly) {
@@ -238,6 +253,11 @@ class HistoryRepositoryBuilder {
 				$params['userid'] = $this->notUser->getId();
 			}
 			
+			if ($this->api2app) {
+				$where[] = 'group_history.api2_application_id  = :api2app';
+				$params['api2app'] = $this->api2app->getId();
+			}
+			
 			$sql = "SELECT group_history.*, group_information.slug AS group_slug, user_account_information.username AS user_account_username FROM group_history ".
 					" LEFT JOIN user_account_information ON user_account_information.id = group_history.user_account_id ".
 					" LEFT JOIN group_information ON group_information.id = group_history.group_id ".
@@ -286,6 +306,11 @@ class HistoryRepositoryBuilder {
 				$params['userid'] = $this->notUser->getId();
 			}
 			
+			if ($this->api2app) {
+				$where[] = 'venue_history.api2_application_id  = :api2app';
+				$params['api2app'] = $this->api2app->getId();
+			}
+			
 			$sql = "SELECT venue_history.*, venue_information.slug AS venue_slug, user_account_information.username AS user_account_username FROM venue_history ".
 					" LEFT JOIN user_account_information ON user_account_information.id = venue_history.user_account_id ".
 					" LEFT JOIN venue_information ON venue_information.id = venue_history.venue_id ".
@@ -325,6 +350,11 @@ class HistoryRepositoryBuilder {
 			if ($this->notUser) {
 				$where[] = 'area_history.user_account_id != :userid ';
 				$params['userid'] = $this->notUser->getId();
+			}
+			
+			if ($this->api2app) {
+				$where[] = 'area_history.api2_application_id  = :api2app';
+				$params['api2app'] = $this->api2app->getId();
 			}
 			
 			$sql = "SELECT area_history.*, area_information.slug AS area_slug, user_account_information.username AS user_account_username FROM area_history ".
