@@ -451,79 +451,82 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
+		// Event Recur Set
+		$eventRecurSetRepo = new EventRecurSetRepository();
+		$this->parameters['eventRecurSet'] = $eventRecurSetRepo->loadForEvent($this->parameters['event']);
+		if (!$this->parameters['eventRecurSet']) {
+			return false; // TODO
+		}
+		
 		// Load history we are working with
 		$eventHistoryRepo = new EventHistoryRepository();
 		$this->parameters['eventHistory'] = $eventHistoryRepo->loadByEventAndlastEditByUser($this->parameters['event'], userGetCurrent());
 		if (!$this->parameters['eventHistory']) {
 			return false;
 		}
-
-		// Check flags, are fields we can change
 		$eventHistoryRepo->ensureChangedFlagsAreSet($this->parameters['eventHistory']);
-		$fieldsWeCanEditChanged =  $this->parameters['eventHistory']->getAreaIdChanged() ||
-				$this->parameters['eventHistory']->getVenueIdChanged() ||
-				$this->parameters['eventHistory']->getDescriptionChanged() ||
-				$this->parameters['eventHistory']->getUrlChanged() ||
-				$this->parameters['eventHistory']->getCountryIdChanged() ||
-				$this->parameters['eventHistory']->getTimezoneChanged() ||
-				$this->parameters['eventHistory']->getIsVirtualChanged() ||
-				$this->parameters['eventHistory']->getIsPhysicalChanged();
+		$this->parameters['eventRecurSet']->setInitalEventLastChange($this->parameters['eventHistory']);
+
+		// Event & Future Events
+		$this->parameters['eventRecurSet']->setInitalEvent($this->parameters['event']);
+		$eventRB = new EventRepositoryBuilder();
+		$eventRB->setStartAfter($this->parameters['event']->getStartAtInUTC());
+		$eventRB->setInSameRecurEventSet($this->parameters['event']);
+		$eventRB->setIncludeDeleted(false);
+		$this->parameters['eventRecurSet']->setFutureEvents($eventRB->fetchAll());
+		if (!$this->parameters['eventRecurSet']->getFutureEvents()) {
+			return false; // TODO
+		}		
 		
-		if ($fieldsWeCanEditChanged) {
+		// Let's check for upgrades, then apply or show user
+		$this->parameters['eventRecurSet']->applyChangeToFutureEvents();
 		
-			$eventRB = new EventRepositoryBuilder();
-			$eventRB->setStartAfter($this->parameters['event']->getStartAtInUTC());
-			$eventRB->setInSameRecurEventSet($this->parameters['event']);
-			$eventRB->setIncludeDeleted(false);
-			$this->parameters['futureEvents'] = $eventRB->fetchAll();
-			if (!$this->parameters['futureEvents']) {
-				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
-			}
-			
+		if ($this->parameters['eventRecurSet']->isAnyProposedChangesPossible()) {
+		
 			if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
 				
 				$eventRepo = new EventRepository();
 				
 				$countEvents = 0;
-				foreach($this->parameters['futureEvents'] as $event) {
-					if (isset($_POST["eventSlug".$event->getSlug()]) && $_POST["eventSlug".$event->getSlug()] == 1) {
-						
-						$changes = false;
-						if (($this->parameters['eventHistory']->getVenueIdChanged() || $this->parameters['eventHistory']->getAreaIdChanged()) 
-								&& isset($_POST["fieldAreaVenue"]) && $_POST["fieldAreaVenue"] == 1) {
-							$changes = true;
-							$event->setVenueId($this->parameters['eventHistory']->getVenueId());
-							$event->setAreaId($this->parameters['eventHistory']->getAreaId());
-						}
-						if ($this->parameters['eventHistory']->getDescriptionChanged() && isset($_POST["fieldDescription"]) && $_POST["fieldDescription"] == 1) {
-							$changes = true;
-							$event->setDescription($this->parameters['eventHistory']->getDescription());
-						}
-						if ($this->parameters['eventHistory']->getUrlChanged() && isset($_POST["fieldUrl"]) && $_POST["fieldUrl"] == 1) {
-							$changes = true;
-							$event->setUrl($this->parameters['eventHistory']->getUrl());
-						}
-						if ($this->parameters['eventHistory']->getCountryIdChanged() && isset($_POST["fieldCountry"]) && $_POST["fieldCountry"] == 1) {
-							$changes = true;
-							$event->setCountryId($this->parameters['eventHistory']->getCountryId());
-						}
-						if ($this->parameters['eventHistory']->getTimezoneChanged() && isset($_POST["fieldTimezone"]) && $_POST["fieldTimezone"] == 1) {
-							$changes = true;
-							$event->setTimezone($this->parameters['eventHistory']->getTimezone());
-						}
-						if ($this->parameters['eventHistory']->getIsVirtualChanged() && isset($_POST["fieldIsVirtual"]) && $_POST["fieldIsVirtual"] == 1) {
-							$changes = true;
-							$event->setIsVirtual($this->parameters['eventHistory']->getIsVirtual());
-						}
-						if ($this->parameters['eventHistory']->getIsPhysicalChanged() && isset($_POST["fieldIsPhysical"]) && $_POST["fieldIsPhysical"] == 1) {
-							$changes = true;
-							$event->setIsPhysical($this->parameters['eventHistory']->getIsPhysical());
-						}
-						if ($changes) {
-							$eventRepo->edit($event, userGetCurrent(), $this->parameters['eventHistory']);
-							$countEvents++;
-						}
-						
+				foreach($this->parameters['eventRecurSet']->getFutureEvents() as $futureEvent) {
+					
+					$proposedChanges = $this->parameters['eventRecurSet']->getFutureEventsProposedChangesForEventSlug($futureEvent->getSlug());
+					if ($proposedChanges->getSummaryChangePossible()) {
+						$proposedChanges->setSummaryChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldSummary']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldSummary'] == 1);
+					} 
+					
+					if ($proposedChanges->getDescriptionChangePossible()) {
+						$proposedChanges->setDescriptionChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldDescription']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldDescription'] == 1);
+					} 
+					if ($proposedChanges->getCountryAreaVenueIdChangePossible()) {
+						$proposedChanges->setCountryAreaVenueIdChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldCountryAreaVenue']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldCountryAreaVenue'] == 1);
+					} 
+					if ($proposedChanges->getTimezoneChangePossible()) {
+						$proposedChanges->setTimezoneChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldTimezone']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldTimezone'] == 1);
+					} 
+					if ($proposedChanges->getUrlChangePossible()) {
+						$proposedChanges->setUrlChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldUrl']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldUrl'] == 1);
+					} 
+					if ($proposedChanges->getIsVirtualChangePossible()) {
+						$proposedChanges->setIsVirtualChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldIsVirtual']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldIsVirtual'] == 1);
+					} 
+					if ($proposedChanges->getIsPhysicalChangePossible()) {
+						$proposedChanges->setIsPhysicalChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldIsPhysical']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldIsPhysical'] == 1);
+					} 
+					if ($proposedChanges->getStartEndAtChangePossible()) {
+						$proposedChanges->setStartEndAtChangePossible(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldStartEnd']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldStartEnd'] == 1);
+					} 
+					if ($proposedChanges->applyToEvent($futureEvent, $this->parameters['event'])) {
+						$eventRepo->edit($futureEvent, userGetCurrent(), $this->parameters['eventHistory']);
+						$countEvents++;
 					}
 				}
 
@@ -534,7 +537,9 @@ class EventController {
 				
 			}
 			
-		
+			$this->parameters['futureEvents'] = $this->parameters['eventRecurSet']->getFutureEvents();
+			$this->parameters['futureEventsProposedChanges'] = $this->parameters['eventRecurSet']->getFutureEventsProposedChanges();
+			
 			return $app['twig']->render('site/event/edit.future.html.twig', $this->parameters);
 			
 			

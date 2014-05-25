@@ -16,53 +16,6 @@
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 		<input type="hidden" name="submitted" value="yes">
 		
-		<p>You changed:</p>
-
-		<ul>
-			{% if eventHistory.getAreaIdChanged or eventHistory.getVenueIdChanged%}
-				<li>
-					<input type="checkbox" name="fieldAreaVenue" value="1" checked="checked">
-					Venue for event
-				</li>
-			{% endif %}
-			{% if eventHistory.getDescriptionChanged %}
-				<li>
-					<input type="checkbox" name="fieldDescription" value="1" checked="checked">
-					Description
-				</li>
-			{% endif %}
-			{% if eventHistory.getUrlChanged %}
-				<li>
-					<input type="checkbox" name="fieldUrl" value="1" checked="checked">
-					Url
-				</li>
-			{% endif %}
-			{% if eventHistory.getCountryIdChanged %}
-				<li>
-					<input type="checkbox" name="fieldCountry" value="1" checked="checked">
-					Country
-				</li>
-			{% endif %}
-			{% if eventHistory.getTimezoneChanged %}
-				<li>
-					<input type="checkbox" name="fieldTimezone" value="1" checked="checked">
-					Timezone
-				</li>
-			{% endif %}
-			{% if eventHistory.getIsVirtualChanged %}
-				<li>
-					<input type="checkbox" name="fieldIsVirtual" value="1" checked="checked">
-					Is Virtual
-				</li>
-			{% endif %}
-			{% if eventHistory.getIsPhysicalChanged %}
-				<li>
-					<input type="checkbox" name="fieldIsPhysical" value="1" checked="checked">
-					Is Physical
-				</li>
-			{% endif %}
-		</ul>
-		
 		<p>Do you want to change these future events to?</p>
 		
 		<ul class="events">
@@ -81,9 +34,76 @@
 						</time>				
 					</div>
 					<div class="title">
-						<input type="checkbox" name="eventSlug{{ event.slug }}" value="1" checked="checked">
 						{{ event.summaryDisplay}}
 					</div>
+						
+					<ul>
+						{% if futureEventsProposedChanges[event.slug].getSummaryChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldSummary" value="1" checked="checked">
+									Change Summary
+								</label>
+							</li>
+						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].getDescriptionChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldDescription" value="1" checked="checked">
+									Change Description
+								</label>
+							</li>
+						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].countryAreaVenueIdChangePossible  %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldCountryAreaVenue" value="1" checked="checked">
+									Change Country, Area and Venue
+								</label>
+							</li>
+						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].getTimezoneChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldTimezone" value="1" checked="checked">
+									Change Timezone
+								</label>
+							</li>
+						{% endif %}						
+						{% if futureEventsProposedChanges[event.slug].getUrlChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldUrl" value="1" checked="checked">
+									Change Url
+								</label>
+							</li>
+						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].getIsVirtualChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsVirtual" value="1" checked="checked">
+									Is Virtual
+								</label>
+							</li>
+						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].getIsPhysicalChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsPhysical" value="1" checked="checked">
+									Is Physical
+								</label>
+							</li>
+						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].getStartEndAtChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldStartEnd" value="1" checked="checked">
+									Change Start and End
+								</label>
+							</li>
+						{% endif %}
+					</ul>
+						
 					<div class="afterEventListing"></div>
 				</li>
 			{% endfor %}
