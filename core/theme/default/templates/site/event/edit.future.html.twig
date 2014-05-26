@@ -41,15 +41,15 @@
 						{% if futureEventsProposedChanges[event.slug].getSummaryChangePossible %}
 							<li>
 								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldSummary" value="1" checked="checked">
-									Change Summary
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldSummary" value="1" {% if futureEventsProposedChanges[event.slug].getSummaryChangeSelected %}checked="checked"{% endif %}>
+									Change Summary to: {{  futureEventsProposedChanges[event.slug].getSummary }}
 								</label>
 							</li>
 						{% endif %}
 						{% if futureEventsProposedChanges[event.slug].getDescriptionChangePossible %}
 							<li>
 								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldDescription" value="1" checked="checked">
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldDescription" value="1" {% if futureEventsProposedChanges[event.slug].getDescriptionChangeSelected %}checked="checked"{% endif %}>
 									Change Description
 								</label>
 							</li>
@@ -57,7 +57,7 @@
 						{% if futureEventsProposedChanges[event.slug].countryAreaVenueIdChangePossible  %}
 							<li>
 								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldCountryAreaVenue" value="1" checked="checked">
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldCountryAreaVenue" value="1" {% if futureEventsProposedChanges[event.slug].countryAreaVenueIdChangeSelected  %}checked="checked"{% endif %}>
 									Change Country, Area and Venue
 								</label>
 							</li>
@@ -65,7 +65,7 @@
 						{% if futureEventsProposedChanges[event.slug].getTimezoneChangePossible %}
 							<li>
 								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldTimezone" value="1" checked="checked">
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldTimezone" value="1" {% if futureEventsProposedChanges[event.slug].getTimezoneChangeSelected %}checked="checked"{% endif %}>
 									Change Timezone
 								</label>
 							</li>
@@ -73,7 +73,7 @@
 						{% if futureEventsProposedChanges[event.slug].getUrlChangePossible %}
 							<li>
 								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldUrl" value="1" checked="checked">
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldUrl" value="1" {% if futureEventsProposedChanges[event.slug].getUrlChangeSelected %}checked="checked"{% endif %}>
 									Change Url
 								</label>
 							</li>
@@ -81,7 +81,7 @@
 						{% if futureEventsProposedChanges[event.slug].getIsVirtualChangePossible %}
 							<li>
 								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsVirtual" value="1" checked="checked">
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsVirtual" value="1" {% if futureEventsProposedChanges[event.slug].getIsVirtualChangeSelected %}checked="checked"{% endif %}>
 									Is Virtual
 								</label>
 							</li>
@@ -89,7 +89,7 @@
 						{% if futureEventsProposedChanges[event.slug].getIsPhysicalChangePossible %}
 							<li>
 								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsPhysical" value="1" checked="checked">
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsPhysical" value="1" {% if futureEventsProposedChanges[event.slug].getIsPhysicalChangeSelected %}checked="checked"{% endif %}>
 									Is Physical
 								</label>
 							</li>
@@ -98,7 +98,13 @@
 							<li>
 								<label>
 									<input type="checkbox" name="eventSlug{{ event.slug }}fieldStartEnd" value="1" checked="checked">
-									Change Start and End
+									Change Start and End to:
+									{% if currentTimeZone == event.timezone %}
+										{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+									{% else %}
+										{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':event.timezone, 'showTimeZone':true} %}				
+										{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+									{% endif %}
 								</label>
 							</li>
 						{% endif %}
@@ -110,12 +116,17 @@
 		</ul>
 		
 		
-
-	
-
-
 		<input type="submit"  value="Save" />	
 	</form>
+
+
+	<form action="#" method="post" class="styled" onsubmit="return confirm('Are you sure you want to cancel?');">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="submitted" value="cancel">
+		<input type="submit"  value="Cancel" />	
+	</form>
+
+
 {% endblock %}
 
 

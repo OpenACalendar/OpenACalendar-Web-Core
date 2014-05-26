@@ -74,5 +74,12 @@ function addCountriesToTestDB() {
 	$statInsert->execute(array('two_char_code'=>'GB','title'=>'United Kingdom','timezones'=>'Europe/London','max_lat'=>null, 'max_lng'=>null, 'min_lat'=>null, 'min_lng'=>null));
 }
 
+function getUTCDateTime($year=2012, $month=1, $day=1, $hour=0, $minute=0, $second=0) {
+	$dt = new \DateTime('', new \DateTimeZone('UTC'));
+	$dt->setTime($hour, $minute, $second);
+	$dt->setDate($year, $month, $day);
+	return $dt;
+}
 
 
+	

@@ -6,24 +6,24 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="date">
-	<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', timezone) }}">
-		<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D jS', timezone) }}</span>
-		<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M Y', timezone) }}</span>
+	<time datetime="{{ startAt|tolocaltimeformatted('c', timezone) }}">
+		<span class="startDay">{{ startAt|tolocaltimeformatted('D jS', timezone) }}</span>
+		<span class="startMonthYear">{{ startAt|tolocaltimeformatted('M Y', timezone) }}</span>
 		<span class="startTime">
-			{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
+			{{ startAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
 		</span>
 	</time>
 	<span class="to">to</span>
-	{% if sameday(event.getStartAt,event.getEndAt) %}
-		<time datetime="{{ event.getEndAt|tolocaltimeformatted('c', timezone) }}">
+	{% if sameday(startAt,endAt) %}
+		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}">
 			<span class="end">
-				{{ event.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
+				{{ endAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
 			</span>
 		</time>
 	{% else %}
-		<time datetime="{{ event.getEndAt|tolocaltimeformatted('c', timezone) }}">
+		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}">
 			<span class="end">
-				{{ event.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, timezone) }}
+				{{ endAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, timezone) }}
 			</span>
 		</time>
 	{% endif %}

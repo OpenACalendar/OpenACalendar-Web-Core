@@ -57,7 +57,7 @@ class EventRepositoryBuilderTest  extends \PHPUnit_Framework_TestCase {
 		
 		
 		
-		######################## For new just test it doesn't crash, I commited a bug that did crash here
+		######################## For now just test it doesn't crash, I commited a bug that did crash here
 		
 		$erb = new EventRepositoryBuilder();
 		$erb->setArea($area);

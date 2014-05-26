@@ -33,9 +33,9 @@ class EventInRecurSetProposedChangesModel {
 	
 	protected $summary;
 	
-	/** @var DateTime **/
+	/** @var \DateTime **/
 	protected $start_at;
-	/** @var DateTime **/
+	/** @var \DateTime **/
 	protected $end_at;
 
 	public function getSummaryChangePossible() {
@@ -189,7 +189,7 @@ class EventInRecurSetProposedChangesModel {
 		return $this->start_at;
 	}
 
-	public function setStartAt(DateTime $start_at) {
+	public function setStartAt(\DateTime $start_at) {
 		$this->start_at = $start_at;
 	}
 
@@ -197,7 +197,7 @@ class EventInRecurSetProposedChangesModel {
 		return $this->end_at;
 	}
 
-	public function setEndAt(DateTime $end_at) {
+	public function setEndAt(\DateTime $end_at) {
 		$this->end_at = $end_at;
 	}
 

@@ -27,7 +27,9 @@ class EventRecurSetModel {
 	protected $initalEvent;
 	/** @var EventHistoryModel **/
 	protected $initalEventLastChange;
-	
+	/** @var EventModel **/
+	protected $initialEventJustBeforeLastChange;
+
 	protected $futureEvents = array();
 			
 	protected $futureEventsProposedChanges = array();
@@ -87,7 +89,15 @@ class EventRecurSetModel {
 		$this->futureEventsProposedChanges = $futureEventsProposedChanges;
 	}
 
-		
+	public function getInitialEventJustBeforeLastChange() {
+		return $this->initialEventJustBeforeLastChange;
+	}
+
+	public function setInitialEventJustBeforeLastChange(EventModel $initialEventJustBeforeLastChange) {
+		$this->initialEventJustBeforeLastChange = $initialEventJustBeforeLastChange;
+	}
+
+			
 	
 	public function getNewWeeklyEvents(EventModel $event,  $monthsInAdvance = 3) {
 		// constants
@@ -366,49 +376,81 @@ class EventRecurSetModel {
 	}
 	
 	public function applyChangeToFutureEvents() {
+		$startDiff = $this->initalEvent->getStartAtInUTC()->diff($this->initialEventJustBeforeLastChange->getStartAtInUTC());
+		$endDiff = $this->initalEvent->getEndAtInUTC()->diff($this->initialEventJustBeforeLastChange->getEndAtInUTC());
 		foreach($this->futureEvents as $futureEvent) {
 			$this->futureEventsProposedChanges[$futureEvent->getSlug()] = new EventInRecurSetProposedChangesModel();
 			
 			if (($this->initalEventLastChange->getCountryIdChanged() 
-					|| $this->initalEventLastChange->getVenueIdChanged() || $this->initalEventLastChange->getAreaIdChanged())) {
+					|| $this->initalEventLastChange->getVenueIdChanged() 
+					|| $this->initalEventLastChange->getAreaIdChanged()) && 
+					($this->initalEvent->getCountryId() != $futureEvent->getCountryId() 
+						|| $this->initalEvent->getAreaId() != $futureEvent->getAreaId() 
+						|| $this->initalEvent->getVenueId() != $futureEvent->getVenueId())) {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setCountryAreaVenueIdChangePossible(true);
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setCountryAreaVenueIdChangeSelected(true);
+				if ($this->initialEventJustBeforeLastChange->getCountryId() != $futureEvent->getCountryId() 
+						|| $this->initialEventJustBeforeLastChange->getAreaId() != $futureEvent->getAreaId() 
+						|| $this->initialEventJustBeforeLastChange->getVenueId() != $futureEvent->getVenueId()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setCountryAreaVenueIdChangeSelected(true);
+				}
 			}
-			/** if ($this->initalEventLastChange->getSummaryChanged()) {
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setSummaryChangePossible(true);
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setSummaryChangeSelected(true);
-				// TODO change month title
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setSummary($this->initalEvent->getSummary());
-			} **/
-			if ($this->initalEventLastChange->getDescriptionChanged()) {
+			if ($this->initalEventLastChange->getSummaryChanged()) {
+				$summary = $this->initalEvent->getSummary();
+				// change month title
+				$currentMonthLong = $this->initalEvent->getStartAtInUTC()->format('F');
+				$currentMonthShort = $this->initalEvent->getStartAtInUTC()->format('M');	
+				if (stripos($summary,$currentMonthLong) !== false) {
+					$summary = str_ireplace($currentMonthLong, $futureEvent->getStartAtInUTC()->format('F'), $summary);
+				} else if (stripos($summary,$currentMonthShort) !== false) {
+					$summary = str_ireplace($currentMonthShort, $futureEvent->getStartAtInUTC()->format('M'), $summary);
+				}
+				if ($summary != $futureEvent->getSummary()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setSummary($summary);
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setSummaryChangePossible(true);
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setSummaryChangeSelected(true);
+				}
+			}
+			if ($this->initalEventLastChange->getDescriptionChanged() && $this->initalEvent->getDescription() != $futureEvent->getDescription()) {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setDescriptionChangePossible(true);
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setDescriptionChangeSelected(true);
+				if ($this->initialEventJustBeforeLastChange->getDescription() == $futureEvent->getDescription()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setDescriptionChangeSelected(true);
+				}
 			}
-			if ($this->initalEventLastChange->getUrlChanged()) {
+			if ($this->initalEventLastChange->getUrlChanged() && $this->initalEvent->getUrl() != $futureEvent->getUrl()) {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setUrlChangePossible(true);
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setUrlChangeSelected(true);
+				if ($this->initialEventJustBeforeLastChange->getUrl() == $futureEvent->getUrl()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setUrlChangeSelected(true);
+				}
 			}
-			if ($this->initalEventLastChange->getTimezoneChanged()) {
+			if ($this->initalEventLastChange->getTimezoneChanged() && $this->initalEvent->getTimezone() != $futureEvent->getTimezone()) {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setTimezoneChangePossible(true);
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setTimezoneChangeSelected(true);
+				if ($this->initialEventJustBeforeLastChange->getTimezone() == $futureEvent->getTimezone()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setTimezoneChangeSelected(true);
+				}
 			}
-			if ($this->initalEventLastChange->getIsPhysicalChanged()) {
+			if ($this->initalEventLastChange->getIsPhysicalChanged() && $this->initalEvent->getIsPhysical() != $futureEvent->getIsPhysical()) {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsPhysicalChangePossible(true);
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsPhysicalChangeSelected(true);
+				if ($this->initialEventJustBeforeLastChange->getIsPhysical() == $futureEvent->getIsPhysical()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsPhysicalChangeSelected(true);
+				}
 			}
-			if ($this->initalEventLastChange->getIsVirtualChanged()) {
+			if ($this->initalEventLastChange->getIsVirtualChanged() && $this->initalEvent->getIsVirtual() != $futureEvent->getIsVirtual()) {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsVirtualChangePossible(true);
-				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsVirtualChangeSelected(true);
+				if ($this->initialEventJustBeforeLastChange->getIsVirtual() == $futureEvent->getIsVirtual()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsVirtualChangeSelected(true);
+				}
 			}
-			/** if ($this->initalEventLastChange->getStartAtChanged() || $eventHistoryModel->getEndAtChanged()) {
+			if (($startDiff->y != 0 || $startDiff->m != 0 || $startDiff->d != 0  || $startDiff->h != 0  || $startDiff->i != 0  || $startDiff->s != 0 ) || 
+					($endDiff->y != 0 || $endDiff->m != 0 || $endDiff->d != 0  || $endDiff->h != 0  || $endDiff->i != 0  || $endDiff->s != 0 )) {
+				$start = clone $futureEvent->getStartAtInUTC();
+				$start->sub($startDiff);
+				$end = clone $futureEvent->getEndAtInUTC();
+				$end->sub($endDiff);
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setStartEndAtChangePossible(true);
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setStartEndAtChangeSelected(true);
-				// TODO start and end times properly
-				$start = clone $futureEvent->getStartAt();
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setStartAt($start);
-				$end = clone $futureEvent->getEndAt();
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setEndAt($end);
-			} **/
+			}
 		}
 	}
 	

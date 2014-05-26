@@ -467,6 +467,10 @@ class EventController {
 		$eventHistoryRepo->ensureChangedFlagsAreSet($this->parameters['eventHistory']);
 		$this->parameters['eventRecurSet']->setInitalEventLastChange($this->parameters['eventHistory']);
 
+		// load event before this edit
+		$eventRepo = new EventRepository();
+		$this->parameters['eventRecurSet']->setInitialEventJustBeforeLastChange($eventRepo->loadEventJustBeforeEdit($this->parameters['event'], $this->parameters['eventHistory']));
+		
 		// Event & Future Events
 		$this->parameters['eventRecurSet']->setInitalEvent($this->parameters['event']);
 		$eventRB = new EventRepositoryBuilder();
@@ -483,6 +487,10 @@ class EventController {
 		
 		if ($this->parameters['eventRecurSet']->isAnyProposedChangesPossible()) {
 		
+			if (isset($_POST['submitted']) && $_POST['submitted'] == 'cancel' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
+			}
+			
 			if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
 				
 				$eventRepo = new EventRepository();
@@ -537,7 +545,14 @@ class EventController {
 				
 			}
 			
-			$this->parameters['futureEvents'] = $this->parameters['eventRecurSet']->getFutureEvents();
+			// Only pass $futureEvent to the view layer if there are actually changes that can be made.
+			$futureEvents = array();
+			foreach($this->parameters['eventRecurSet']->getFutureEvents() as $futureEvent) {
+				if ($this->parameters['eventRecurSet']->getFutureEventsProposedChangesForEventSlug($futureEvent->getSlug())->isAnyChangesPossible()) {
+					$futureEvents[] = $futureEvent;
+				}
+			}
+			$this->parameters['futureEvents'] = $futureEvents;
 			$this->parameters['futureEventsProposedChanges'] = $this->parameters['eventRecurSet']->getFutureEventsProposedChanges();
 			
 			return $app['twig']->render('site/event/edit.future.html.twig', $this->parameters);

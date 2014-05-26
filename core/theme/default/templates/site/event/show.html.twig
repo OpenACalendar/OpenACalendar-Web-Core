@@ -157,10 +157,10 @@
 				</div>
 			{% endif %}
 			{% if currentTimeZone == event.timezone %}
-				{% include 'site/common/eventFromToLine.html.twig' with {'event': event, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
 			{% else %}
-				{% include 'site/common/eventFromToLine.html.twig' with {'event': event, 'timezone':event.timezone, 'showTimeZone':true} %}				
-				{% include 'site/common/eventFromToLine.html.twig' with {'event': event, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}				
+				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
 			{% endif %}
 		</div>
 		

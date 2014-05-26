@@ -362,5 +362,31 @@ class EventRepository {
 		
 	}
 	
+	public function loadEventJustBeforeEdit(EventModel $event, EventHistoryModel $eventHistory) {
+		global $DB;
+		$eventOut = clone $event;
+		
+		/**
+		 * At moment the last edit has all state, changed or not.
+		 * 
+		 * In future we may only store state in event_history for changed fields to save space.
+		 * 
+		 * When we do that, we'll have to iterate back over multiple event_histories until we have all fields.
+		 */
+		$stat = $DB->prepare("SELECT event_history.* FROM event_history ".
+				"WHERE event_history.event_id = :id AND event_history.created_at < :cat ".
+				"ORDER BY event_history.created_at DESC LIMIT 1");
+		$stat->execute(array( 
+				'id'=>$event->getId(), 
+				'cat'=>date("Y-m-d H:i:s",$eventHistory->getCreatedAtTimeStamp()) 
+			));
+		if ($stat->rowCount() > 0) {
+			$eventHistoryToApply = new EventHistoryModel();
+			$eventHistoryToApply->setFromDataBaseRow($stat->fetch());
+			$eventOut->setFromHistory($eventHistoryToApply);
+		}
+		
+		return $eventOut;
+	}
 }
 
