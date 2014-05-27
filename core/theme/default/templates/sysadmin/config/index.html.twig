@@ -616,6 +616,19 @@
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPAuthMode'} %}
 			</td>
 		</tr>
+		<tr>
+			<th>recurEventForDaysInFutureWhenWeekly</th>
+			<td>{{ config.recurEventForDaysInFutureWhenWeekly }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'recurEventForDaysInFutureWhenWeekly'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>recurEventForDaysInFutureWhenMonthly</th>
+			<td>{{ config.recurEventForDaysInFutureWhenMonthly }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'recurEventForDaysInFutureWhenMonthly'} %}
+			</td>
+		</tr>d>
+		</tr>
 	</table>
 
 {% endblock %}

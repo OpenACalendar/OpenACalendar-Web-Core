@@ -193,6 +193,11 @@ class EventController {
 			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 		}
 		
+		if ($this->parameters['group']) {
+			$groupRepo = new GroupRepository();
+			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
+		}
+		
 		return $app['twig']->render('site/event/show.html.twig', $this->parameters);
 	}
 	
@@ -630,7 +635,7 @@ class EventController {
 	}
 	
 	function recurWeekly($slug, Request $request, Application $app) {
-		global $WEBSESSION;
+		global $WEBSESSION, $CONFIG;
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -651,7 +656,7 @@ class EventController {
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
-		$this->parameters['newEvents'] = $eventRecurSet->getNewWeeklyEventsFilteredForExisting($this->parameters['event']);
+		$this->parameters['newEvents'] = $eventRecurSet->getNewWeeklyEventsFilteredForExisting($this->parameters['event'], $CONFIG->recurEventForDaysInFutureWhenWeekly);
 		
 		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $WEBSESSION->getCSFRToken()) {
 			
@@ -677,7 +682,7 @@ class EventController {
 	
 	
 	function recurMonthly($slug, Request $request, Application $app) {
-		global $WEBSESSION;
+		global $WEBSESSION, $CONFIG;
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -698,7 +703,7 @@ class EventController {
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
-		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnSetDayInWeekFilteredForExisting($this->parameters['event']);
+		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnSetDayInWeekFilteredForExisting($this->parameters['event'], $CONFIG->recurEventForDaysInFutureWhenMonthly);
 		
 		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
 			
@@ -726,7 +731,7 @@ class EventController {
 	
 	
 	function recurMonthlyLast($slug, Request $request, Application $app) {
-		global $WEBSESSION;
+		global $WEBSESSION, $CONFIG;
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -747,7 +752,7 @@ class EventController {
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
-		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnLastDayInWeekFilteredForExisting($this->parameters['event']);
+		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnLastDayInWeekFilteredForExisting($this->parameters['event'], $CONFIG->recurEventForDaysInFutureWhenMonthly);
 		
 		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
 			

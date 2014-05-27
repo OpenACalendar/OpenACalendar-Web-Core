@@ -54,6 +54,22 @@
 			<li><p><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"><a href="/group/{{ group.slugForUrl }}/importers">List importers</a></p></li>
 		</ul>
 	{% endif %}
+		
+	{% if isGroupRunningOutOfFutureEvents and currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}
+		<div class="isGroupRunningOutOfFutureEventsWarning">
+			<p>
+				Do you know of any more events for {{ group.title }}?
+				{% if isGroupRunningOutOfFutureEvents == 1 %}
+					We are about to run out of future events!
+				{% else %}
+					We don't know of any future events.
+				{% endif %}
+			</p>
+			<p>
+				You can <a href="/group/{{ group.slugForUrl }}/newevent">create a new event</a> or look for an old event and select "recur".
+			</p>
+		</div>
+	{% endif %}
 	
 {% endblock %}
 

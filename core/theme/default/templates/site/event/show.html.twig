@@ -134,6 +134,8 @@
 			</div>
 		{% endif %}
 		
+			
+				
 		<div class="dateAndLocationWrapper">
 			{% if event.isVirtual %}
 				<div class="dateAndLocationWrapper"><div class="location"><a href="/venue/virtual">This event is Virtual</a></div></div>
@@ -200,8 +202,19 @@
 			{% include 'site/common/eventUsersAttending.html.twig' with {} %}				
 		</div>
 				
-		<p></p>
-
+		{% if group and isGroupRunningOutOfFutureEvents and currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}
+			<div class="isGroupRunningOutOfFutureEventsWarning">
+				<p>
+					Do you know of <a href="/group/{{ group.slugForUrl }}">any more events for {{ group.title }}</a>?
+					{% if isGroupRunningOutOfFutureEvents == 1 %}
+						We are about to run out of future events!
+					{% else %}
+						We don't know of any future events.
+					{% endif %}
+				</p>
+			</div>
+		{% endif %}
+				
 		<div class="afterEventListing"></div>
 	</div>
 	

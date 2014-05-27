@@ -99,7 +99,7 @@ class EventRecurSetModel {
 
 			
 	
-	public function getNewWeeklyEvents(EventModel $event,  $monthsInAdvance = 3) {
+	public function getNewWeeklyEvents(EventModel $event,  $daysInAdvance = 93) {
 		// constants
 		$interval = new \DateInterval('P1D');
 		$timeZone = new \DateTimeZone($this->timeZoneName);
@@ -111,7 +111,7 @@ class EventRecurSetModel {
 		$thisStart->setTimeZone($timeZone);
 		$thisEnd->setTimeZone($timeZone);
 		$out = array();
-		$loopStop = (\TimeSource::time() + $monthsInAdvance*30*24*60*60);
+		$loopStop = (\TimeSource::time() + $daysInAdvance*24*60*60);
 		while ( $thisStart->getTimestamp() < $loopStop) {
 			$thisStart->add($interval);
 			$thisEnd->add($interval);
@@ -183,7 +183,7 @@ class EventRecurSetModel {
 	}
 
 	
-	public function getNewMonthlyEventsOnLastDayInWeek(EventModel $event,  $monthsInAdvance = 6) {
+	public function getNewMonthlyEventsOnLastDayInWeek(EventModel $event,  $daysInAdvance = 186) {
 		// constants
 		$interval = new \DateInterval('P1D');
 		$timeZone = new \DateTimeZone($this->timeZoneName);
@@ -205,7 +205,7 @@ class EventRecurSetModel {
 		$currentMonthLong = $thisStart->format('F');
 		$currentMonthShort = $thisStart->format('M');		
 		$currentMonth = $thisStart->format('m');
-		$loopStop = \TimeSource::time() + $monthsInAdvance*30*24*60*60;
+		$loopStop = \TimeSource::time() + $daysInAdvance*24*60*60;
 		$startInMonth = null;
 		$endInMonth = null;
 		while ( $thisStart->getTimestamp() < $loopStop) {
@@ -259,7 +259,7 @@ class EventRecurSetModel {
 	 * @param type $monthsInAdvance
 	 * @return \models\EventModel
 	 */
-	public function getNewMonthlyEventsOnSetDayInWeek(EventModel $event,  $monthsInAdvance = 6) {
+	public function getNewMonthlyEventsOnSetDayInWeek(EventModel $event,  $daysInAdvance = 186) {
 		// constants
 		$interval = new \DateInterval('P1D');
 		$timeZone = new \DateTimeZone($this->timeZoneName);
@@ -284,7 +284,7 @@ class EventRecurSetModel {
 		$currentMonthShort = $thisStart->format('M');		
 		$currentMonth = $thisStart->format('m');
 		$currentWeekInMonth = 1;
-		$loopStop = \TimeSource::time() + $monthsInAdvance*30*24*60*60;
+		$loopStop = \TimeSource::time() + $daysInAdvance*24*60*60;
 		while ( $thisStart->getTimestamp() < $loopStop) {
 			$thisStart->add($interval);
 			$thisEnd->add($interval);
@@ -363,16 +363,16 @@ class EventRecurSetModel {
 		
 	}
 	
-	public function getNewWeeklyEventsFilteredForExisting(EventModel $event,  $monthsInAdvance = 3) {
-		return $this->filterEventsForExisting($event, $this->getNewWeeklyEvents($event, $monthsInAdvance));
+	public function getNewWeeklyEventsFilteredForExisting(EventModel $event,  $daysInAdvance = 93) {
+		return $this->filterEventsForExisting($event, $this->getNewWeeklyEvents($event, $daysInAdvance));
 	}
 	
-	public function getNewMonthlyEventsOnSetDayInWeekFilteredForExisting(EventModel $event,  $monthsInAdvance = 6) {
-		return $this->filterEventsForExisting($event, $this->getNewMonthlyEventsOnSetDayInWeek($event, $monthsInAdvance));
+	public function getNewMonthlyEventsOnSetDayInWeekFilteredForExisting(EventModel $event,  $daysInAdvance = 186) {
+		return $this->filterEventsForExisting($event, $this->getNewMonthlyEventsOnSetDayInWeek($event, $daysInAdvance));
 	}
 	
-	public function getNewMonthlyEventsOnLastDayInWeekFilteredForExisting(EventModel $event,  $monthsInAdvance = 6) {
-		return $this->filterEventsForExisting($event, $this->getNewMonthlyEventsOnLastDayInWeek($event, $monthsInAdvance));
+	public function getNewMonthlyEventsOnLastDayInWeekFilteredForExisting(EventModel $event,  $daysInAdvance = 186) {
+		return $this->filterEventsForExisting($event, $this->getNewMonthlyEventsOnLastDayInWeek($event, $daysInAdvance));
 	}
 	
 	public function applyChangeToFutureEvents() {

@@ -37,7 +37,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewWeeklyEvents($event, 2);
+		$newEvents = $eventSet->getNewWeeklyEvents($event, 60);
 		
 		$this->assertTrue(count($newEvents) >= 2);
 		
@@ -65,7 +65,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewWeeklyEvents($event, 2);
+		$newEvents = $eventSet->getNewWeeklyEvents($event, 60);
 		
 		$this->assertTrue(count($newEvents) >= 2);
 		
@@ -94,7 +94,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \PHPUnit_Framework_TestCa
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
 		
-		$newEvents = $eventSet->getNewWeeklyEvents($event, 2);
+		$newEvents = $eventSet->getNewWeeklyEvents($event, 60);
 		
 		$this->assertTrue(count($newEvents) >= 8);
 		

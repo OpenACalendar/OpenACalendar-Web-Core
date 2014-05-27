@@ -288,6 +288,38 @@ class GroupRepository {
 		}
 		
 	}
+	/**
+	 * 
+	 * @return int|boolean  0= false, 1=warn, 2=out
+	 */
+	public function isGroupRunningOutOfFutureEvents(GroupModel $group, SiteModel $site) {
+		global $DB, $CONFIG;
+		
+		if (!$group) return 0;
+		
+		$stat = $DB->prepare("SELECT event_information.start_at FROM event_information ".
+				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL ".
+				"WHERE event_in_group.group_id =:id AND start_at > :start_at AND is_deleted = '0' ".
+				"ORDER BY event_information.start_at DESC");
+		$stat->execute(array( 
+			'id'=>$group->getId(), 
+			'start_at'=>  \TimeSource::getFormattedForDataBase(),
+			));
+		if ($stat->rowCount() > 0) {
+			$data = $stat->fetch();
+			$utc = new \DateTimeZone("UTC");
+			$lastStartAt = new \DateTime($data['start_at'], $utc);
+			
+			$secondsToWarn = $site->getPromptEmailsDaysInAdvance() * 24 * 60 * 60;
+			if ($lastStartAt->getTimestamp() < \TimeSource::time() + $secondsToWarn) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		
+		return 2;
+	}
 	
 }
 

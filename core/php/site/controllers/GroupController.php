@@ -96,6 +96,9 @@ class GroupController {
 		$importurlRepoBuilder->setGroup($this->parameters['group']);
 		$this->parameters['importurls'] = $importurlRepoBuilder->fetchAll();
 		
+		$groupRepo = new GroupRepository();
+		$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
+		
 		return $app['twig']->render('site/group/show.html.twig', $this->parameters);
 	}
 	

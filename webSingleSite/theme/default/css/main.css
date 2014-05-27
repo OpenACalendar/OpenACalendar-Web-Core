@@ -770,7 +770,8 @@ ul.newRecuringEvents li.newRecuringEvent .date {
 #curatedListsOnEventWrapper form {
   display: inline;
 }
-#userCanPushToChildAreaWrapper {
+#userCanPushToChildAreaWrapper,
+.isGroupRunningOutOfFutureEventsWarning {
   clear: both;
   margin: 10px;
   max-width: 600px;

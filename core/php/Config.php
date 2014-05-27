@@ -157,6 +157,9 @@ class Config {
 	public $SMTPPassword = null;
 	public $SMTPEncyption = null;
 	public $SMTPAuthMode = null;
+		
+	public $recurEventForDaysInFutureWhenWeekly = 93; // 3 * 31
+	public $recurEventForDaysInFutureWhenMonthly = 186; // 6 * 31
 	
 	function getWebIndexDomainSecure() {
 		return $this->hasSSL ? "https://".$this->webIndexDomainSSL : "http://".$this->webIndexDomain;
