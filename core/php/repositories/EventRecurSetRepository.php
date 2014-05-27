@@ -40,6 +40,7 @@ class EventRecurSetRepository {
 		
 	}
 	
+	/** @return \models\EventRecurSetModel **/
 	public function getForEvent(EventModel $event) {
 		global $DB;
 		
