@@ -108,7 +108,7 @@ function configureAppForUser(UserAccountModel $user = null) {
 // Outside Silex. There is no need for it to be inside it and it does some funny spooling shit, so just keep it outside
 $SWIFT_MAILER = null;
 function getSwiftMailer() {
-	global $SWIFT_MAILER;
+	global $SWIFT_MAILER, $CONFIG;
 	if ($SWIFT_MAILER == null) {
 		$transport = Swift_SmtpTransport::newInstance($CONFIG->SMTPHost, $CONFIG->SMTPPort);
 		$transport->setUsername($CONFIG->SMTPUsername);
