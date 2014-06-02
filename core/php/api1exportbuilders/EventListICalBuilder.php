@@ -67,8 +67,8 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay());
 			
 			$url = $CONFIG->isSingleSiteMode ?
-					'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlug() : 
-					'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlug() ; 
+					'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() : 
+					'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() ; 
 			$txt .= $this->getIcalLine('URL',$url);
 			$description = '';
 			foreach($this->extraHeaders as $extraHeader) {
@@ -110,3 +110,5 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 	}
 
 }
+
+
