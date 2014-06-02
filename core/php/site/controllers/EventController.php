@@ -884,6 +884,8 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
+		$gotResult = false;
+		
 		if (isset($_POST) && isset($_POST['area']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
 			
 			if ($_POST['area'] == 'new' && trim($_POST['newAreaTitle']) && $this->parameters['country']) {
@@ -907,6 +909,7 @@ class EventController {
 				$areaRepository->buildCacheAreaHasParent($area);
 				
 				$FLASHMESSAGES->addMessage('Thank you; event updated!');
+				$gotResult = true;
 				
 			} elseif (intval($_POST['area'])) {
 				
@@ -923,13 +926,23 @@ class EventController {
 						$eventRepository->edit($this->parameters['event'], userGetCurrent());
 					}
 					$FLASHMESSAGES->addMessage('Thank you; event updated!');
+					$gotResult = true;
 				}
 							
 			}
 			
 		}
 		
-		return $app->redirect("/event/".$this->parameters['event']->getSlug().'/');
+		if ($gotResult) {
+			$repo = new EventRecurSetRepository();
+			if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl().'/edit/future');
+			} else {
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl());
+			}
+		} else {
+			return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl().'/');
+		}
 
 	}
 	
