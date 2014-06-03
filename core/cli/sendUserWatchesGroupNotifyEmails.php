@@ -17,8 +17,9 @@ print "Starting ".date("c")."\n";
 
 
 $actuallySend = isset($argv[1]) && strtolower($argv[1]) == 'yes';
-print "Actually Send: ". ($actuallySend ? "YES":"nah")."\n";
-
+if (!$actuallySend) {
+	die("Flag not set, exiting with no work done\n");
+}
 
 use repositories\GroupRepository;
 use repositories\SiteRepository;
@@ -33,6 +34,7 @@ use repositories\EventHistoryRepository;
 use repositories\GroupHistoryRepository;
 use repositories\AreaHistoryRepository;
 use repositories\VenueHistoryRepository;
+use repositories\UserNotificationRepository;
 
 $userRepo = new UserAccountRepository();
 $groupRepo = new GroupRepository();
@@ -44,6 +46,9 @@ $eventHistoryRepository =  new EventHistoryRepository;
 $groupHistoryRepository = new GroupHistoryRepository;
 $areaHistoryRepository = new AreaHistoryRepository;
 $venueHistoryRepository = new VenueHistoryRepository;
+$userNotificationRepo = new UserNotificationRepository();
+
+$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesGroupNotify');
 
 $b = new UserWatchesGroupRepositoryBuilder();
 foreach($b->fetchAll() as $userWatchesGroup) {
@@ -91,6 +96,14 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 			
 			print " ... found data\n";
 			
+			///// Notification Class 
+			$userNotification = $userNotificationType->getNewNotification($user, $site, true);
+			$userNotification->setGroup($group);
+			
+			////// Save Notification Class
+			$userNotificationRepo->create($userNotification);
+			
+			////// Send Email
 			configureAppForSite($site);
 			configureAppForUser($user);
 			
@@ -135,6 +148,7 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 					$app['mailer']->send($message);	
 				}
 				$userWatchesGroupRepository->markNotifyEmailSent($userWatchesGroup, $checkTime);
+				$userNotificationRepo->markEmailed($userNotification);
 			}
 		}
 		

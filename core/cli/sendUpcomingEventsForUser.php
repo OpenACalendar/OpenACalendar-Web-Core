@@ -17,13 +17,20 @@ print "Starting ".date("c")."\n";
 
 
 $actuallySend = isset($argv[1]) && strtolower($argv[1]) == 'yes';
-print "Actually Send: ". ($actuallySend ? "YES":"nah")."\n";
+if (!$actuallySend) {
+	die("Flag not set, exiting with no work done\n");
+}
 
 use repositories\builders\UserAccountRepositoryBuilder;
 use repositories\UserAccountGeneralSecurityKeyRepository;
+use repositories\UserNotificationRepository;
 
 $userRepoBuilder = new UserAccountRepositoryBuilder();
 $userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
+$userNotificationRepo = new UserNotificationRepository();
+
+/** @var usernotifications/UpcomingEventsUserNotificationType **/
+$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UpcomingEvents');
 
 foreach($userRepoBuilder->fetchAll() as $user) {
 	
@@ -38,6 +45,16 @@ foreach($userRepoBuilder->fetchAll() as $user) {
 		if ($flag) {
 			print " ... found data\n";
 			
+			/**  Notification Class 
+			 * @var usernotifications/UpcomingEventsUserNotificationModel **/
+			$userNotification = $userNotificationType->getNewNotification($user, null, true);
+			$userNotification->setUpcomingEvents($upcomingEvents);
+			$userNotification->setAllEvents($allEvents);
+			
+			////// Save Notification Class
+			$userNotificationRepo->create($userNotification);
+			
+			////// Send Email
 			configureAppForUser($user);
 			
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
@@ -80,6 +97,7 @@ foreach($userRepoBuilder->fetchAll() as $user) {
 				if (!$CONFIG->isDebug) {
 					$app['mailer']->send($message);	
 				}
+				$userNotificationRepo->markEmailed($userNotification);
 			}
 			
 		}

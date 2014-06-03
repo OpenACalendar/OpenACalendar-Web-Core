@@ -17,7 +17,10 @@ print "Starting ".date("c")."\n";
 
 
 $actuallySend = isset($argv[1]) && strtolower($argv[1]) == 'yes';
-print "Actually Send: ". ($actuallySend ? "YES":"nah")."\n";
+if (!$actuallySend) {
+	die("Flag not set, exiting with no work done\n");
+}
+
 
 
 use repositories\SiteRepository;
@@ -32,6 +35,7 @@ use repositories\builders\UserWatchesGroupRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\UserAccountGeneralSecurityKeyRepository;
+use repositories\UserNotificationRepository;
 
 $userRepo = new UserAccountRepository();
 $siteRepo = new SiteRepository();
@@ -40,6 +44,10 @@ $eventRepo = new EventRepository();
 $userWatchesGroupRepository = new UserWatchesGroupRepository();
 $userWatchesGroupStopRepository = new UserWatchesGroupStopRepository();
 $userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
+$userNotificationRepo = new UserNotificationRepository();
+
+/** @var usernotifications/UserWatchesGroupPromptNotificationType **/
+$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesGroupPrompt');
 
 $b = new UserWatchesGroupRepositoryBuilder();
 foreach($b->fetchAll() as $userWatchesGroup) {
@@ -67,6 +75,14 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 	
 			print " ... found data\n";
 			
+			///// Notification Class 
+			$userNotification = $userNotificationType->getNewNotification($user, $site, true);
+			$userNotification->setGroup($group);
+			
+			////// Save Notification Class
+			$userNotificationRepo->create($userNotification);
+			
+			////// Send Email
 			$userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($user, $group);
 			
 			configureAppForSite($site);
@@ -121,9 +137,8 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 					$app['mailer']->send($message);	
 				}
 				$userWatchesGroupRepository->markPromptEmailSent($userWatchesGroup, $data['checkTime']);
+				$userNotificationRepo->markEmailed($userNotification);
 			}
-			
-			
 			
 		}
 		

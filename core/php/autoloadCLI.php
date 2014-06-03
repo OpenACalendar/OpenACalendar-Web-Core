@@ -14,7 +14,7 @@ use models\UserAccountModel;
 ///////////////////////// App
 $app = new Silex\Application(); 
 $app['debug'] = $CONFIG->isDebug;
-$app['extensions'] = new ExtensionManager();
+$app['extensions'] = new ExtensionManager($app);
 foreach($CONFIG->extensions as $extensionName) {
 	require APP_ROOT_DIR.'/extension/'.$extensionName.'/extension.php';
 }

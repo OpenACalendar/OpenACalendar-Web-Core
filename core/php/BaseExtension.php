@@ -33,7 +33,13 @@ abstract class BaseExtension {
 		
 	}
 	
+	public function getUserNotificationTypes() {
+		return array();
+	}
 	
+	public function getUserNotificationType($type) {
+		return null;
+	}
 	
 }
 

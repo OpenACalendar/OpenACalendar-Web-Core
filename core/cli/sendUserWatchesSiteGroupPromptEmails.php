@@ -16,8 +16,9 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
 print "Starting ".date("c")."\n";
 
 $actuallySend = isset($argv[1]) && strtolower($argv[1]) == 'yes';
-print "Actually Send: ". ($actuallySend ? "YES":"nah")."\n";
-
+if (!$actuallySend) {
+	die("Flag not set, exiting with no work done\n");
+}
 
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
@@ -29,6 +30,7 @@ use repositories\builders\UserWatchesSiteRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
+use repositories\UserNotificationRepository;
 
 $userRepo = new UserAccountRepository();
 $siteRepo = new SiteRepository();
@@ -36,6 +38,10 @@ $eventRepo = new EventRepository();
 $userWatchesSiteRepository = new UserWatchesSiteRepository();
 $userWatchesSiteStopRepository = new UserWatchesSiteStopRepository();
 $userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
+$userNotificationRepo = new UserNotificationRepository();
+
+/** @var usernotifications/UserWatchesSiteGroupPromptNotificationType **/
+$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSiteGroupPrompt');
 
 $b = new UserWatchesSiteRepositoryBuilder();
 foreach($b->fetchAll() as $userWatchesSite) {
@@ -65,7 +71,14 @@ foreach($b->fetchAll() as $userWatchesSite) {
 
 
 					print " ... found data \n";
+					///// Notification Class 
+					$userNotification = $userNotificationType->getNewNotification($user, $site, true);
+					$userNotification->setGroup($group);
 
+					////// Save Notification Class
+					$userNotificationRepo->create($userNotification);
+
+					////// Send Email
 					$userWatchesSiteStop = $userWatchesSiteStopRepository->getForUserAndSite($user, $site);
 
 					configureAppForSite($site);
@@ -121,6 +134,7 @@ foreach($b->fetchAll() as $userWatchesSite) {
 							$app['mailer']->send($message);	
 						}
 						$userWatchesSiteRepository->markGroupPromptEmailSent($userWatchesSite, $group, $data['checkTime']);
+						$userNotificationRepo->markEmailed($userNotification);
 					}
 					
 					$anyGroupEmailsSent = true;

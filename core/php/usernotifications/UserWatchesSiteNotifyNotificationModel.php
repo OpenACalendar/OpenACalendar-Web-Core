@@ -1,5 +1,10 @@
 <?php
 
+
+namespace usernotifications;
+
+use models\GroupModel;
+
 /**
  *
  * @package Core
@@ -8,8 +13,12 @@
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-
-
-// In other modules, there is a line here to load the extension into the extension manager. 
-// We don't need this in core at the moment.
+class UserWatchesSiteNotifyNotificationModel extends \BaseUserNotificationModel {
+	
+	function __construct() {
+		$this->from_extension_id = 'org.openacalendar';
+		$this->from_user_notification_type = 'UserWatchesSiteNotify';
+	}
+	
+}
 

@@ -1,0 +1,46 @@
+<?php
+
+/**
+ *
+ * @package Core
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+ */
+class ExtensionCore extends BaseExtension {
+		
+	public function getId() {
+		return 'org.openacalendar';
+	}
+
+	public function getTitle() {
+		return 'Core';
+	}	
+	
+	
+	
+	public function getUserNotificationTypes() {
+		return array('UpcomingEvents','UserWatchesGroupPrompt','UserWatchesGroupNotify',
+			'UserWatchesSiteNotify','UserWatchesSiteGroupPrompt','UserWatchesSitePrompt');
+	}
+	
+	public function getUserNotificationType($type) {
+		if ($type == 'UpcomingEvents') {
+			return new usernotifications\UpcomingEventsUserNotificationType();
+		} else if ($type == 'UserWatchesGroupPrompt') {
+			return new usernotifications\UserWatchesGroupPromptNotificationType();
+		} else if ($type == 'UserWatchesGroupNotify') {
+			return new usernotifications\UserWatchesGroupNotifyNotificationType();
+		} else if ($type == 'UserWatchesSiteNotify') {
+			return new usernotifications\UserWatchesSiteNotifyNotificationType();
+		} else if ($type == 'UserWatchesSiteGroupPrompt') {
+			return new usernotifications\UserWatchesSiteGroupPromptNotificationType();
+		} else if ($type == 'UserWatchesSitePrompt') {
+			return new usernotifications\UserWatchesSitePromptNotificationType();
+		} else {
+			return null;
+		}
+	}
+	
+}
