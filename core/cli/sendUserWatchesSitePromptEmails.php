@@ -108,8 +108,7 @@ foreach($b->fetchAll() as $userWatchesSite) {
 			if ($actuallySend) {
 				print " ... sending\n";
 				if (!$CONFIG->isDebug) {
-					$mailer = getSwiftMailer();
-					$mailer->send($message);	
+					$app['mailer']->send($message);	
 				}
 				$userWatchesSiteRepository->markPromptEmailSent($userWatchesSite, $data['checkTime']);
 			}

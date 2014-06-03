@@ -160,7 +160,7 @@ $message->setFrom(array($thisconfig->get('FromEmail') => $thisconfig->get('FromN
 $message->setTo($thisconfig->get('To'));
 $message->setBody($messageText);
 $message->addPart($messageHTML,'text/html');
-getSwiftMailer()->send($message);
+$app['mailer']->send($message);
 
 print "Done, Sent To: ".$thisconfig->get('To')."\n\n\n";
 

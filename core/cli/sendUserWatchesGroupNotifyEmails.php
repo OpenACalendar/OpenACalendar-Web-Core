@@ -132,8 +132,7 @@ foreach($b->fetchAll() as $userWatchesGroup) {
 			if ($actuallySend) {
 				print " ... sending\n";
 				if (!$CONFIG->isDebug) {
-					$mailer = getSwiftMailer();
-					$mailer->send($message);	
+					$app['mailer']->send($message);	
 				}
 				$userWatchesGroupRepository->markNotifyEmailSent($userWatchesGroup, $checkTime);
 			}

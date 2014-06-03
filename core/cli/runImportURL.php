@@ -89,8 +89,7 @@ foreach($iurlBuilder->fetchAll() as $importURL) {
 				$message->addPart($messageHTML,'text/html');
 
 				if (!$CONFIG->isDebug) {
-					$mailer = getSwiftMailer();
-					$mailer->send($message);
+					$app['mailer']->send($message);
 				}		
 			}
 		}

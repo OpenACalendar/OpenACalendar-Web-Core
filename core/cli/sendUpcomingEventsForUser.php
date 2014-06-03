@@ -78,8 +78,7 @@ foreach($userRepoBuilder->fetchAll() as $user) {
 			if ($actuallySend) {
 				print " ... sending\n";
 				if (!$CONFIG->isDebug) {
-					$mailer = getSwiftMailer();
-					$mailer->send($message);	
+					$app['mailer']->send($message);	
 				}
 			}
 			
