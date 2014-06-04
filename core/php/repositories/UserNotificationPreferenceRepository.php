@@ -36,7 +36,8 @@ class UserNotificationPreferenceRepository {
 			if (($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchPrompt') || 
 				($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchNotify') ||
 				($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchImportExpired') ||
-				($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'UpcomingEvents')) {
+				($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'UpcomingEvents') || 
+				($extensionId == 'org.openacalendar.newsletter' && $userNotificationPreferenceType == 'Newsletter')) {
 				
 				$stat = $DB->prepare("SELECT user_account_information.* FROM user_account_information WHERE id = :id");
 				$stat->execute(array('id'=>$user->getId()));
@@ -53,6 +54,9 @@ class UserNotificationPreferenceRepository {
 				}
 				if ($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'UpcomingEvents' && isset($oldData['email_upcoming_events'])) {
 					$pm->setIsEmail($oldData['email_upcoming_events'] != 'n');
+				}				
+				if ($extensionId == 'org.openacalendar.newsletter' && $userNotificationPreferenceType == 'Newsletter' && isset($oldData['is_email_newsletter'])) {
+					$pm->setIsEmail($oldData['is_email_newsletter']);
 				}				
 			}
 		}

@@ -57,16 +57,6 @@ class UserEmailsForm  extends AbstractType {
 					)
 			    );
 		
-		
-		$builder->add("is_email_newsletter",
-				"checkbox",
-					array(
-						'required'=>false,
-						'label'=>'Send newsletters (never more than one per month)'
-					)
-			    );
-		
-		
 		$repo = new \repositories\UserNotificationPreferenceRepository();
 		
 		foreach($this->preferences as $key=>$preference) {
