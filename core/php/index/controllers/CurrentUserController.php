@@ -99,8 +99,9 @@ class CurrentUserController {
 	
 	function emails(Request $request, Application $app) {
 		global $FLASHMESSAGES;
-		
-		$form = $app['form.factory']->create(new UserEmailsForm(), userGetCurrent());
+
+		$ourForm = new UserEmailsForm($app['extensions'], userGetCurrent());
+		$form = $app['form.factory']->create($ourForm, userGetCurrent());
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -108,6 +109,7 @@ class CurrentUserController {
 			if ($form->isValid()) {
 				$userRepo = new UserAccountRepository;
 				$userRepo->editEmailsOptions(userGetCurrent());
+				$ourForm->savePreferences($form);
 				$FLASHMESSAGES->addMessage("Options Changed.");
 				return $app->redirect("/me/");
 			}

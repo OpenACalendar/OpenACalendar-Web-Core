@@ -58,7 +58,7 @@ class SendUserWatchesSiteNotifyEmailsTask {
 			if ($verbose) print date("c")." User ".$user->getEmail()." Site ".$site->getTitle()."\n";
 
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
-			if ($userWatchesSite->getIsWatching() && $user->getIsCanSendNormalEmails() && $user->getIsEmailWatchNotify()) {
+			if ($userWatchesSite->getIsWatching()) {
 
 				if ($verbose) print " ... searching for data\n";
 
@@ -94,53 +94,54 @@ class SendUserWatchesSiteNotifyEmailsTask {
 					if ($verbose) print " ... found data\n";
 
 					///// Notification Class 
-					$userNotification = $userNotificationType->getNewNotification($user, $site, true);
+					$userNotification = $userNotificationType->getNewNotification($user, $site);
 
 					////// Save Notification Class
 					$userNotificationRepo->create($userNotification);
 
 					////// Send Email
-					configureAppForSite($site);
-					configureAppForUser($user);
+					if ($userNotification->getIsEmail()) {
+						configureAppForSite($site);
+						configureAppForUser($user);
 
-					$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
-					$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+						$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
+						$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
-					$message = \Swift_Message::newInstance();
-					$message->setSubject("Changes on ".$site->getTitle());
-					$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
-					$message->setTo($user->getEmail());
+						$message = \Swift_Message::newInstance();
+						$message->setSubject("Changes on ".$site->getTitle());
+						$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+						$message->setTo($user->getEmail());
 
-					$messageText = $app['twig']->render('email/userWatchesSiteNotifyEmail.txt.twig', array(
-						'user'=>$user,
-						'histories'=>$histories,
-						'stopCode'=>$userWatchesSiteStop->getAccessKey(),
-						'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-						'unsubscribeURL'=>$unsubscribeURL,
-					));
-					if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteNotifyEmail.txt', $messageText);
-					$message->setBody($messageText);
+						$messageText = $app['twig']->render('email/userWatchesSiteNotifyEmail.txt.twig', array(
+							'user'=>$user,
+							'histories'=>$histories,
+							'stopCode'=>$userWatchesSiteStop->getAccessKey(),
+							'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+							'unsubscribeURL'=>$unsubscribeURL,
+						));
+						if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteNotifyEmail.txt', $messageText);
+						$message->setBody($messageText);
 
-					$messageHTML = $app['twig']->render('email/userWatchesSiteNotifyEmail.html.twig', array(
-						'user'=>$user,
-						'histories'=>$histories,
-						'stopCode'=>$userWatchesSiteStop->getAccessKey(),
-						'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-						'unsubscribeURL'=>$unsubscribeURL,
-					));
-					if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteNotifyEmail.html', $messageHTML);
-					$message->addPart($messageHTML,'text/html');
+						$messageHTML = $app['twig']->render('email/userWatchesSiteNotifyEmail.html.twig', array(
+							'user'=>$user,
+							'histories'=>$histories,
+							'stopCode'=>$userWatchesSiteStop->getAccessKey(),
+							'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+							'unsubscribeURL'=>$unsubscribeURL,
+						));
+						if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteNotifyEmail.html', $messageHTML);
+						$message->addPart($messageHTML,'text/html');
 
-					$headers = $message->getHeaders();
-					$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
+						$headers = $message->getHeaders();
+						$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
 
-					if ($verbose) print " ... sending\n";
-					if (!$CONFIG->isDebug) {
-						$app['mailer']->send($message);	
+						if ($verbose) print " ... sending\n";
+						if (!$CONFIG->isDebug) {
+							$app['mailer']->send($message);	
+						}
+						$userNotificationRepo->markEmailed($userNotification);
 					}
 					$userWatchesSiteRepository->markNotifyEmailSent($userWatchesSite, $checkTime);
-					$userNotificationRepo->markEmailed($userNotification);
-					
 				}
 
 			}

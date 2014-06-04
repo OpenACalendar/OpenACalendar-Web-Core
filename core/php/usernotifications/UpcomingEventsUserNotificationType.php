@@ -15,11 +15,13 @@ use models\SiteModel;
  */
 class UpcomingEventsUserNotificationType extends \BaseUserNotificationType {
 		
-		public function getNewNotification(UserAccountModel $user, SiteModel $site=null,  $toEmail=false) {
+		public function getNewNotification(UserAccountModel $user, SiteModel $site=null) {
 			$r =  new UpcomingEventsUserNotificationModel();
-			$r->setUserSiteAndIsEmail($user->getId(), ($site?$site->getId():null), $toEmail);
+			$r->setUserSiteAndIsEmail($user, $site, $this->getEmailPreference($user));
 			return $r;
 		}
+		
+	public function getUserNotificationPreferenceType() { return 'UpcomingEvents';  }
 	
 }
 

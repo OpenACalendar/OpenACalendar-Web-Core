@@ -50,18 +50,6 @@
 			</tr>
 		{% endif %}		
 		<tr>
-			<th>Email Watch Prompt</th>
-			<td>{% if user.getIsEmailWatchPrompt %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>
-		<tr>
-			<th>Email Watch Notify</th>
-			<td>{% if user.getIsEmailWatchNotify %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>
-		<tr>
-			<th>Email Watch Import Expired</th>
-			<td>{% if user.getIsEmailWatchImportExpired %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>
-		<tr>
 			<th>Email Upcoming Events</th>
 			<td>{{ user.getEmailUpcomingEvents }}</td>
 		</tr>

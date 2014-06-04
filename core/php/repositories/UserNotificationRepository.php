@@ -23,7 +23,7 @@ class UserNotificationRepository {
 				'site_id'=>$userNotification->getSiteId(),
 				'from_extension_id'=>$userNotification->getFromExtensionId(),
 				'from_user_notification_type'=>$userNotification->getFromUserNotificationType(),
-				'is_email'=>$userNotification->getIsEmail(),
+				'is_email'=>$userNotification->getIsEmail()?1:0,
 				'data_json'=>json_encode($userNotification->getData()),
 				'created_at'=>\TimeSource::getFormattedForDataBase(),
 			));

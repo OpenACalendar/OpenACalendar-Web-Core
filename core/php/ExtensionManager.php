@@ -31,6 +31,10 @@ class ExtensionManager {
 		return $this->extensions;
 	}
 	
+	public function getExtensionsIncludingCore() {
+		return array_merge(array($this->coreExtension), $this->extensions);
+	}
+	
 	public function getExtensionByDir($dir) {
 		return $this->extensions[$dir];
 	}

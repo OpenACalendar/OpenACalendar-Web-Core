@@ -15,11 +15,13 @@ use models\SiteModel;
  */
 class UserWatchesSiteNotifyNotificationType extends \BaseUserNotificationType {
 		
-		public function getNewNotification(UserAccountModel $user, SiteModel $site=null, $toEmail=false) {
+		public function getNewNotification(UserAccountModel $user, SiteModel $site=null) {
 			$r =  new UserWatchesSiteNotifyNotificationModel();
-			$r->setUserSiteAndIsEmail($user->getId(), $site->getId(), $toEmail);
+			$r->setUserSiteAndIsEmail($user, $site, $this->getEmailPreference($user));
 			return $r;
 		}
+	
+	public function getUserNotificationPreferenceType() { return 'WatchNotify';  }
 	
 }
 

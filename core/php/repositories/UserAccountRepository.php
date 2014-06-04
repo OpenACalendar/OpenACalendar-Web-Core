@@ -180,16 +180,13 @@ class UserAccountRepository {
 	public function editEmailsOptions(UserAccountModel $user) {
 		global $DB;
 	
-		$stat = $DB->prepare("UPDATE user_account_information SET  is_email_watch_notify=:is_email_watch_notify, ".
-				"is_email_watch_prompt=:is_email_watch_prompt, email_upcoming_events=:email_upcoming_events, ".
+		$stat = $DB->prepare("UPDATE user_account_information SET  email_upcoming_events=:email_upcoming_events, ".
 				"is_email_watch_import_expired=:is_email_watch_import_expired, ".
 				"is_email_newsletter=:is_email_newsletter, ".
 				"email_upcoming_events_days_notice=:email_upcoming_events_days_notice ".
 				"WHERE id =:id");
 		$stat->execute(array( 
 				'id'=>$user->getId() ,
-				'is_email_watch_notify'=>$user->getIsEmailWatchNotify()?1:0,
-				'is_email_watch_prompt'=>$user->getIsEmailWatchPrompt()?1:0,
 				'is_email_watch_import_expired'=>$user->getIsEmailWatchImportExpired()?1:0,
 				'is_email_newsletter'=>$user->getIsEmailNewsletter()?1:0,
 				'email_upcoming_events'=>$user->getEmailUpcomingEvents(),

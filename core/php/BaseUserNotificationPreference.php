@@ -3,7 +3,6 @@
 
 use models\UserAccountModel;
 use models\SiteModel;
-use repositories\UserNotificationPreferenceRepository;
 
 /**
  *
@@ -13,20 +12,13 @@ use repositories\UserNotificationPreferenceRepository;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-abstract class BaseUserNotificationType {
-	
-	public abstract function getNewNotification(UserAccountModel $user, SiteModel $site=null);
-	
+abstract class BaseUserNotificationPreference {
+
 	public function getUserNotificationPreferenceExtensionID() {
 		return 'org.openacalendar';
 	}
 	public abstract function getUserNotificationPreferenceType();
 
-	public function getEmailPreference(UserAccountModel $user) {
-		$repo = new UserNotificationPreferenceRepository();
-		$pref = $repo->load($user, $this->getUserNotificationPreferenceExtensionID(), $this->getUserNotificationPreferenceType());
-		return $pref->getIsEmail();
-	}
+	public abstract function getLabel();
 	
 }
-

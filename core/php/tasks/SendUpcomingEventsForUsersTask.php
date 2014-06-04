@@ -33,26 +33,24 @@ class SendUpcomingEventsForUsersTask {
 		foreach($userRepoBuilder->fetchAll() as $user) {
 
 			if ($verbose) print date("c")." User ".$user->getEmail()."\n";
-			if (!$user->getIsCanSendNormalEmails()) {
-				if ($verbose) print " ... can't send normal emails for some reason\n";
-			} else if ($user->getEmailUpcomingEvents() == 'n') {
-				if ($verbose) print " ... email turned off\n";
-			} else {
-				if ($verbose) print " ... searching\n";
-				list($upcomingEvents, $allEvents, $userAtEvent, $flag) = $user->getDataForUpcomingEventsEmail();
-				if ($flag) {
-					if ($verbose) print " ... found data\n";
+						
+			if ($verbose) print " ... searching\n";
+			list($upcomingEvents, $allEvents, $userAtEvent, $flag) = $user->getDataForUpcomingEventsEmail();
+			if ($flag) {
+				if ($verbose) print " ... found data\n";
 
-					/**  Notification Class 
-					 * @var usernotifications/UpcomingEventsUserNotificationModel **/
-					$userNotification = $userNotificationType->getNewNotification($user, null, true);
-					$userNotification->setUpcomingEvents($upcomingEvents);
-					$userNotification->setAllEvents($allEvents);
+				/**  Notification Class 
+				 * @var usernotifications/UpcomingEventsUserNotificationModel **/
+				$userNotification = $userNotificationType->getNewNotification($user, null);
+				$userNotification->setUpcomingEvents($upcomingEvents);
+				$userNotification->setAllEvents($allEvents);
 
-					////// Save Notification Class
-					$userNotificationRepo->create($userNotification);
+				////// Save Notification Class
+				$userNotificationRepo->create($userNotification);
 
-					////// Send Email
+				////// Send Email
+				if ($userNotification->getIsEmail()) {
+					
 					configureAppForUser($user);
 
 					$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
@@ -95,7 +93,7 @@ class SendUpcomingEventsForUsersTask {
 						$app['mailer']->send($message);	
 					}
 					$userNotificationRepo->markEmailed($userNotification);
-
+					
 				}
 			}
 

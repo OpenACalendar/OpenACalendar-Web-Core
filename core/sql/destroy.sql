@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS user_notification_preference CASCADE;
 DROP TABLE IF EXISTS user_notification CASCADE;
 DROP TABLE IF EXISTS api2_application_user_authorisation_token CASCADE;
 DROP TABLE IF EXISTS api2_application_user_token_information CASCADE;

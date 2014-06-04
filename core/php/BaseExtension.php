@@ -41,5 +41,13 @@ abstract class BaseExtension {
 		return null;
 	}
 	
+	public function getUserNotificationPreferenceTypes() {
+		return array();
+	}
+	
+	public function getUserNotificationPreference($type) {
+		return null;
+	}
+	
 }
 

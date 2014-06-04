@@ -312,13 +312,15 @@ class UserController {
 		}
 		
 		
-		$form = $app['form.factory']->create(new UserEmailsForm(), $user);
+		$ourForm = new UserEmailsForm($app['extensions'], $user);
+		$form = $app['form.factory']->create($ourForm, $user);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
 				$userRepository->editEmailsOptions($user);
+				$ourForm->savePreferences($form);
 				$FLASHMESSAGES->addMessage("Options Changed.");
 				return $app->redirect("/");
 			}

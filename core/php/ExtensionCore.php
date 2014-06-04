@@ -18,8 +18,6 @@ class ExtensionCore extends BaseExtension {
 		return 'Core';
 	}	
 	
-	
-	
 	public function getUserNotificationTypes() {
 		return array('UpcomingEvents','UserWatchesGroupPrompt','UserWatchesGroupNotify',
 			'UserWatchesSiteNotify','UserWatchesSiteGroupPrompt','UserWatchesSitePrompt');
@@ -41,6 +39,25 @@ class ExtensionCore extends BaseExtension {
 		} else {
 			return null;
 		}
+	}
+	
+	
+	public function getUserNotificationPreferenceTypes() {
+		return array('WatchPrompt','WatchNotify','UpcomingEvents');
+		// WatchImportExpired left out for now as that is using the old flag.
+	}
+	
+	public function getUserNotificationPreference($type) {
+		if ($type == 'WatchPrompt') {
+			return new usernotifications\preferences\WatchPromptNotificationPreference();
+		} else if ($type == 'WatchNotify') {
+			return new usernotifications\preferences\WatchNotifyNotificationPreference();
+		} else if ($type == 'WatchImportExpired') {
+			return new usernotifications\preferences\WatchImportExpiredNotificationPreference();
+		} else if ($type == 'UpcomingEvents') {
+			return new usernotifications\preferences\UpcomingEventsNotificationPreference();
+		}
+		return null;
 	}
 	
 }

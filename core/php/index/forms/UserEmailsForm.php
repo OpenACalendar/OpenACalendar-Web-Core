@@ -10,6 +10,10 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 
+use \ExtensionManager;
+use repositories\UserNotificationPreferenceRepository;
+use models\UserAccountModel;
+
 /**
  *
  * @package Core
@@ -20,25 +24,24 @@ use Symfony\Component\Form\FormError;
  */
 class UserEmailsForm  extends AbstractType {
 	
+	protected $preferences;
+	protected $user;
+
+	public function __construct(\ExtensionManager $extensionManager, UserAccountModel $user) {
+		foreach($extensionManager->getExtensionsIncludingCore() as $extension) {
+			$extID = $extension->getId();
+			foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+				$key = str_replace(".", "_", $extID.'.'.$type);
+				$this->preferences[$key] = $extension->getUserNotificationPreference($type);
+			}
+		}
+		$this->user = $user;
+	}
+	
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add("is_email_watch_prompt",
-				"checkbox",
-					array(
-						'required'=>false,
-						'label'=>'Send emails when something I watch changes'
-					)
-			    );
-		
-		
-		$builder->add("is_email_watch_notify",
-				"checkbox",
-					array(
-						'required'=>false,
-						'label'=>'Send emails when something I watch is running out of future events'
-					)
-			    );
+
 		
 		$builder->add("is_email_watch_import_expired",
 				"checkbox",
@@ -52,9 +55,8 @@ class UserEmailsForm  extends AbstractType {
 				'a'=>'You are attending',
 				'm'=>'You are or might be attending',
 				'w'=>'You are or might be attending, or you watch the event',
-				'n'=>'Don\'t send',
 			);
-		$builder->add('email_upcoming_events', 'choice', array('label'=>'Email you upcoming events','required'=>true,'choices'=>$choices,'expanded'=>true));
+		$builder->add('email_upcoming_events', 'choice', array('label'=>'Notify you of upcoming events','required'=>true,'choices'=>$choices,'expanded'=>true));
 	
 		$builder->add("email_upcoming_events_days_notice",
 				"number",
@@ -75,6 +77,25 @@ class UserEmailsForm  extends AbstractType {
 			    );
 		
 		
+		$repo = new \repositories\UserNotificationPreferenceRepository();
+		
+		foreach($this->preferences as $key=>$preference) {
+			
+			$userPref = $repo->load($this->user, $preference->getUserNotificationPreferenceExtensionID(), 
+					$preference->getUserNotificationPreferenceType());
+			
+			$builder->add($key,
+					"checkbox",
+						array(
+							'required'=>false,
+							'label'=>$preference->getLabel(),
+							'mapped'=>false,
+							'data'=>$userPref->getIsEmail(),
+						)
+					);
+		}
+
+		
 	}
 	
 	public function getName() {
@@ -85,6 +106,15 @@ class UserEmailsForm  extends AbstractType {
 		return array(
 		);
 	}
+	
+	public function savePreferences($form) {
+		$repo = new \repositories\UserNotificationPreferenceRepository();
+		foreach($this->preferences as $key=>$preference) {
+			$repo->editEmailPreference($this->user, $preference->getUserNotificationPreferenceExtensionID(), 
+					$preference->getUserNotificationPreferenceType(), $form->get($key)->getData());
+		}
+	}
+	
 	
 }
 

@@ -1,6 +1,8 @@
 <?php
 
 
+use models\UserAccountModel;
+use models\SiteModel;
 
 /**
  *
@@ -57,10 +59,10 @@ abstract class BaseUserNotificationModel {
 		$this->id = $id;
 	}
 
-	public function setUserSiteAndIsEmail($user_id, $site_id=null, $isEmail=false) {
-		$this->user_id = $user_id;
-		$this->site_id = $site_id;
-		$this->is_email = $isEmail;
+	public function setUserSiteAndIsEmail(UserAccountModel $user, SiteModel $site=null, $isEmail=false) {
+		$this->user_id = $user->getId();
+		$this->site_id = $site ? $site->getId() : null;
+		$this->is_email = $isEmail && $user->getIsCanSendNormalEmails();
 	}
 
 }

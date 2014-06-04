@@ -47,18 +47,18 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 			$user = $userRepo->loadByID($userWatchesSite->getUserAccountId());
 			$site = $siteRepo->loadById($userWatchesSite->getSiteId());
 			// to avoid flooding user we only send one group email per run
-			$anyGroupEmailsSent = false;	
+			$anyGroupNotificationsSent = false;	
 
 			if ($verbose) print date("c")." User ".$user->getEmail()." Site ".$site->getTitle()."\n";
 
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
-			if ($userWatchesSite->getIsWatching() && $user->getIsCanSendNormalEmails() && $user->getIsEmailWatchPrompt()) {
+			if ($userWatchesSite->getIsWatching()) {
 
 				$groupRepoBuilder = new GroupRepositoryBuilder();
 				$groupRepoBuilder->setSite($site);
 				foreach($groupRepoBuilder->fetchAll() as $group) {
 
-					if (!$anyGroupEmailsSent) {
+					if (!$anyGroupNotificationsSent) {
 
 						if ($verbose) print " ... searching group ".$group->getSlug()." for data\n";
 
@@ -70,71 +70,73 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 
 							print " ... found data \n";
 							///// Notification Class 
-							$userNotification = $userNotificationType->getNewNotification($user, $site, true);
+							$userNotification = $userNotificationType->getNewNotification($user, $site);
 							$userNotification->setGroup($group);
 
 							////// Save Notification Class
 							$userNotificationRepo->create($userNotification);
 
 							////// Send Email
-							$userWatchesSiteStop = $userWatchesSiteStopRepository->getForUserAndSite($user, $site);
+							if ($userNotification->getIsEmail()) {
+								$userWatchesSiteStop = $userWatchesSiteStopRepository->getForUserAndSite($user, $site);
 
-							configureAppForSite($site);
-							configureAppForUser($user);
+								configureAppForSite($site);
+								configureAppForUser($user);
 
-							$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
-							$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+								$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
+								$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
-							$lastEventsBuilder = new EventRepositoryBuilder();
-							$lastEventsBuilder->setSite($site);
-							$lastEventsBuilder->setGroup($group);
-							$lastEventsBuilder->setOrderByStartAt(true);
-							$lastEventsBuilder->setIncludeDeleted(false);
-							$lastEventsBuilder->setIncludeImported(false);
-							$lastEventsBuilder->setLimit($CONFIG->userWatchesSiteGroupPromptEmailShowEvents);
-							$lastEvents = $lastEventsBuilder->fetchAll();
+								$lastEventsBuilder = new EventRepositoryBuilder();
+								$lastEventsBuilder->setSite($site);
+								$lastEventsBuilder->setGroup($group);
+								$lastEventsBuilder->setOrderByStartAt(true);
+								$lastEventsBuilder->setIncludeDeleted(false);
+								$lastEventsBuilder->setIncludeImported(false);
+								$lastEventsBuilder->setLimit($CONFIG->userWatchesSiteGroupPromptEmailShowEvents);
+								$lastEvents = $lastEventsBuilder->fetchAll();
 
-							$message = \Swift_Message::newInstance();
-							$message->setSubject("Any news about ".$group->getTitle()."?");
-							$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
-							$message->setTo($user->getEmail());
+								$message = \Swift_Message::newInstance();
+								$message->setSubject("Any news about ".$group->getTitle()."?");
+								$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+								$message->setTo($user->getEmail());
 
-							$messageText = $app['twig']->render('email/userWatchesSiteGroupPromptEmail.txt.twig', array(
-								'user'=>$user,
-								'group'=>$group,
-								'lastEvents'=>$lastEvents,
-								'stopCode'=>$userWatchesSiteStop->getAccessKey(),
-								'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-								'unsubscribeURL'=>$unsubscribeURL,
-							));
-							if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.txt', $messageText);
-							$message->setBody($messageText);
+								$messageText = $app['twig']->render('email/userWatchesSiteGroupPromptEmail.txt.twig', array(
+									'user'=>$user,
+									'group'=>$group,
+									'lastEvents'=>$lastEvents,
+									'stopCode'=>$userWatchesSiteStop->getAccessKey(),
+									'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+									'unsubscribeURL'=>$unsubscribeURL,
+								));
+								if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.txt', $messageText);
+								$message->setBody($messageText);
 
-							$messageHTML = $app['twig']->render('email/userWatchesSiteGroupPromptEmail.html.twig', array(
-								'user'=>$user,
-								'group'=>$group,
-								'lastEvents'=>$lastEvents,
-								'stopCode'=>$userWatchesSiteStop->getAccessKey(),
-								'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-								'unsubscribeURL'=>$unsubscribeURL,
-							));
-							if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.html', $messageHTML);
-							$message->addPart($messageHTML,'text/html');
+								$messageHTML = $app['twig']->render('email/userWatchesSiteGroupPromptEmail.html.twig', array(
+									'user'=>$user,
+									'group'=>$group,
+									'lastEvents'=>$lastEvents,
+									'stopCode'=>$userWatchesSiteStop->getAccessKey(),
+									'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+									'unsubscribeURL'=>$unsubscribeURL,
+								));
+								if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.html', $messageHTML);
+								$message->addPart($messageHTML,'text/html');
 
-							$headers = $message->getHeaders();
-							$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
+								$headers = $message->getHeaders();
+								$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
 
 
-							if ($verbose) print " ... sending\n";
-							if (!$CONFIG->isDebug) {
-								$app['mailer']->send($message);	
+								if ($verbose) print " ... sending\n";
+								if (!$CONFIG->isDebug) {
+									$app['mailer']->send($message);	
+								}
+								
+								$userNotificationRepo->markEmailed($userNotification);
 							}
-							$userWatchesSiteRepository->markGroupPromptEmailSent($userWatchesSite, $group, $data['checkTime']);
-							$userNotificationRepo->markEmailed($userNotification);
 							
-
-							$anyGroupEmailsSent = true;
-
+							$userWatchesSiteRepository->markGroupPromptEmailSent($userWatchesSite, $group, $data['checkTime']);
+							$anyGroupNotificationsSent = true;
+							
 						}
 
 					}
