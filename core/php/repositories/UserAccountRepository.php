@@ -181,13 +181,11 @@ class UserAccountRepository {
 		global $DB;
 	
 		$stat = $DB->prepare("UPDATE user_account_information SET  email_upcoming_events=:email_upcoming_events, ".
-				"is_email_watch_import_expired=:is_email_watch_import_expired, ".
 				"is_email_newsletter=:is_email_newsletter, ".
 				"email_upcoming_events_days_notice=:email_upcoming_events_days_notice ".
 				"WHERE id =:id");
 		$stat->execute(array( 
 				'id'=>$user->getId() ,
-				'is_email_watch_import_expired'=>$user->getIsEmailWatchImportExpired()?1:0,
 				'is_email_newsletter'=>$user->getIsEmailNewsletter()?1:0,
 				'email_upcoming_events'=>$user->getEmailUpcomingEvents(),
 				'email_upcoming_events_days_notice'=>$user->getEmailUpcomingEventsDaysNotice(),

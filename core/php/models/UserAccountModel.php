@@ -31,7 +31,6 @@ class UserAccountModel {
 		protected $email_verify_code;
 		protected $is_editor;
 		protected $is_system_admin;
-		protected $is_email_watch_import_expired = false;
 		protected $email_upcoming_events_days_notice = 1;
 		/**
 		* options 
@@ -67,7 +66,6 @@ class UserAccountModel {
 			$this->is_site_owner = isset($data['is_site_owner']) ? $data['is_site_owner'] : false;
 			$this->is_site_administrator = isset($data['is_site_administrator']) ? $data['is_site_administrator'] : false;
 			$this->is_site_editor = isset($data['is_site_editor']) ? $data['is_site_editor'] : false;
-			$this->is_email_watch_import_expired = (boolean)$data['is_email_watch_import_expired'] ;
 			$this->email_upcoming_events = $data['email_upcoming_events'];
 			$this->email_upcoming_events_days_notice = $data['email_upcoming_events_days_notice'];
 			$this->is_email_newsletter = (boolean)$data['is_email_newsletter'] ;
@@ -173,15 +171,6 @@ class UserAccountModel {
 
 		public function setEmailUpcomingEvents($email_upcoming_events) {
 			$this->email_upcoming_events = $email_upcoming_events;
-			return $this;
-		}
-
-		public function getIsEmailWatchImportExpired() {
-			return $this->is_email_watch_import_expired;
-		}
-
-		public function setIsEmailWatchImportExpired($is_email_watch_import_expired) {
-			$this->is_email_watch_import_expired = $is_email_watch_import_expired;
 			return $this;
 		}
 

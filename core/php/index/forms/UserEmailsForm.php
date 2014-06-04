@@ -41,16 +41,6 @@ class UserEmailsForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-
-		
-		$builder->add("is_email_watch_import_expired",
-				"checkbox",
-					array(
-						'required'=>false,
-						'label'=>'Send emails when something I watch has an importer that expires'
-					)
-			    );
-		
 		$choices = array(
 				'a'=>'You are attending',
 				'm'=>'You are or might be attending',

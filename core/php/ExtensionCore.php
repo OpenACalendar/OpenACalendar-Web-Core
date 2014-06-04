@@ -20,7 +20,8 @@ class ExtensionCore extends BaseExtension {
 	
 	public function getUserNotificationTypes() {
 		return array('UpcomingEvents','UserWatchesGroupPrompt','UserWatchesGroupNotify',
-			'UserWatchesSiteNotify','UserWatchesSiteGroupPrompt','UserWatchesSitePrompt');
+			'UserWatchesSiteNotify','UserWatchesSiteGroupPrompt','UserWatchesSitePrompt',
+			'ImportURLExpired');
 	}
 	
 	public function getUserNotificationType($type) {
@@ -36,6 +37,8 @@ class ExtensionCore extends BaseExtension {
 			return new usernotifications\UserWatchesSiteGroupPromptNotificationType();
 		} else if ($type == 'UserWatchesSitePrompt') {
 			return new usernotifications\UserWatchesSitePromptNotificationType();
+		} else if ($type == 'ImportURLExpired') {
+			return new usernotifications\ImportURLExpiredUserNotificationType();
 		} else {
 			return null;
 		}
@@ -43,8 +46,7 @@ class ExtensionCore extends BaseExtension {
 	
 	
 	public function getUserNotificationPreferenceTypes() {
-		return array('WatchPrompt','WatchNotify','UpcomingEvents');
-		// WatchImportExpired left out for now as that is using the old flag.
+		return array('WatchPrompt','WatchNotify','UpcomingEvents','WatchImportExpired');
 	}
 	
 	public function getUserNotificationPreference($type) {
