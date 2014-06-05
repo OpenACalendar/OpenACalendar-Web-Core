@@ -1,7 +1,7 @@
 <?php
 
 
-namespace usernotifications;
+namespace usernotifications\models;
 
 /**
  *

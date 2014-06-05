@@ -26,19 +26,19 @@ class ExtensionCore extends BaseExtension {
 	
 	public function getUserNotificationType($type) {
 		if ($type == 'UpcomingEvents') {
-			return new usernotifications\UpcomingEventsUserNotificationType();
+			return new usernotifications\types\UpcomingEventsUserNotificationType();
 		} else if ($type == 'UserWatchesGroupPrompt') {
-			return new usernotifications\UserWatchesGroupPromptNotificationType();
+			return new usernotifications\types\UserWatchesGroupPromptNotificationType();
 		} else if ($type == 'UserWatchesGroupNotify') {
-			return new usernotifications\UserWatchesGroupNotifyNotificationType();
+			return new usernotifications\types\UserWatchesGroupNotifyNotificationType();
 		} else if ($type == 'UserWatchesSiteNotify') {
-			return new usernotifications\UserWatchesSiteNotifyNotificationType();
+			return new usernotifications\types\UserWatchesSiteNotifyNotificationType();
 		} else if ($type == 'UserWatchesSiteGroupPrompt') {
-			return new usernotifications\UserWatchesSiteGroupPromptNotificationType();
+			return new usernotifications\types\UserWatchesSiteGroupPromptNotificationType();
 		} else if ($type == 'UserWatchesSitePrompt') {
-			return new usernotifications\UserWatchesSitePromptNotificationType();
+			return new usernotifications\types\UserWatchesSitePromptNotificationType();
 		} else if ($type == 'ImportURLExpired') {
-			return new usernotifications\ImportURLExpiredUserNotificationType();
+			return new usernotifications\types\ImportURLExpiredUserNotificationType();
 		} else {
 			return null;
 		}

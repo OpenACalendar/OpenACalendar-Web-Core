@@ -1,9 +1,11 @@
 <?php
 
-namespace usernotifications;
+namespace usernotifications\types;
 
 use models\UserAccountModel;
 use models\SiteModel;
+use usernotifications\models\UserWatchesSitePromptNotificationModel;
+
 
 /**
  *
@@ -13,22 +15,20 @@ use models\SiteModel;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserWatchesGroupPromptNotificationType extends \BaseUserNotificationType {
+class UserWatchesSitePromptNotificationType extends \BaseUserNotificationType {
 		
 		public function getNewNotification(UserAccountModel $user, SiteModel $site=null) {
-			$r =  new UserWatchesGroupPromptNotificationModel();
+			$r =  new UserWatchesSitePromptNotificationModel();
 			$r->setUserSiteAndIsEmail($user, $site, $this->getEmailPreference($user));
 			return $r;
 		}
 	
 	public function getNotificationFromData($data, UserAccountModel $user=null, SiteModel $site=null) {
-		$r =  new UserWatchesGroupPromptNotificationModel();
-		$r->setFromDataBaseRow($data);
+		$r =  new UserWatchesSitePromptNotificationModel();
+		$r->setFromData($data, $user, $site);
 		$r->setSite($site);
 		return $r;		
 	}	
-		
-		
 		
 	public function getUserNotificationPreferenceType() { return 'WatchPrompt';  }
 	

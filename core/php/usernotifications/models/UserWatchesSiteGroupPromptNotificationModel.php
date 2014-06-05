@@ -1,10 +1,9 @@
 <?php
 
 
-namespace usernotifications;
+namespace usernotifications\models;
 
 use models\GroupModel;
-use repositories\GroupRepository;
 
 /**
  *
@@ -14,11 +13,11 @@ use repositories\GroupRepository;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserWatchesGroupNotifyNotificationModel extends \BaseUserNotificationModel {
+class UserWatchesSiteGroupPromptNotificationModel extends \BaseUserNotificationModel {
 	
 	function __construct() {
 		$this->from_extension_id = 'org.openacalendar';
-		$this->from_user_notification_type = 'UserWatchesGroupNotify';
+		$this->from_user_notification_type = 'UserWatchesSiteGroupPrompt';
 	}
 	
 	function setGroup(GroupModel $group) {
@@ -37,13 +36,13 @@ class UserWatchesGroupNotifyNotificationModel extends \BaseUserNotificationModel
 	
 	public function getNotificationText() {
 		$this->loadGroupIfNeeded();
-		return "There in changes in the group: ".$this->group->getTitle();
+		return "There will soon be no more events in the group: ".$this->group->getTitle();
 	}
 	
 	public function getNotificationURL() {
 		global $CONFIG;
 		$this->loadGroupIfNeeded();
-		return $CONFIG->getWebSiteDomainSecure($this->site->getSlug()).'/group/'.$this->group->getSlugForUrl().'/history';		
+		return $CONFIG->getWebSiteDomainSecure($this->site->getSlug()).'/group/'.$this->group->getSlugForUrl();		
 	}
 }
 

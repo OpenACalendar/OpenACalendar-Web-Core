@@ -1,9 +1,10 @@
 <?php
 
-namespace usernotifications;
+namespace usernotifications\types;
 
 use models\UserAccountModel;
 use models\SiteModel;
+use usernotifications\models\UpcomingEventsUserNotificationModel;
 
 /**
  *
@@ -13,22 +14,22 @@ use models\SiteModel;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ImportURLExpiredUserNotificationType extends \BaseUserNotificationType {
+class UpcomingEventsUserNotificationType extends \BaseUserNotificationType {
 		
 		public function getNewNotification(UserAccountModel $user, SiteModel $site=null) {
-			$r =  new ImportURLExpiredUserNotificationModel();
+			$r =  new UpcomingEventsUserNotificationModel();
 			$r->setUserSiteAndIsEmail($user, $site, $this->getEmailPreference($user));
 			return $r;
 		}
-	
+		
 	public function getNotificationFromData($data, UserAccountModel $user=null, SiteModel $site=null) {
-		$r =  new ImportURLExpiredUserNotificationModel();
+		$r =  new UpcomingEventsUserNotificationModel();
 		$r->setFromDataBaseRow($data);
 		$r->setSite($site);
 		return $r;
-	}		
+	}	
 		
-	public function getUserNotificationPreferenceType() { return 'WatchImportExpired';  }
+	public function getUserNotificationPreferenceType() { return 'UpcomingEvents';  }
 	
 }
 

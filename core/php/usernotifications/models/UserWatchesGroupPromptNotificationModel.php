@@ -1,7 +1,7 @@
 <?php
 
 
-namespace usernotifications;
+namespace usernotifications\models;
 
 use models\GroupModel;
 
@@ -13,17 +13,18 @@ use models\GroupModel;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserWatchesSiteGroupPromptNotificationModel extends \BaseUserNotificationModel {
+class UserWatchesGroupPromptNotificationModel extends \BaseUserNotificationModel {
 	
 	function __construct() {
 		$this->from_extension_id = 'org.openacalendar';
-		$this->from_user_notification_type = 'UserWatchesSiteGroupPrompt';
+		$this->from_user_notification_type = 'UserWatchesGroupPrompt';
 	}
 	
 	function setGroup(GroupModel $group) {
 		$this->data['group'] = $group->getId();
 	}
 
+	
 	/** @var GroupModel  **/
 	var $group;
 	
