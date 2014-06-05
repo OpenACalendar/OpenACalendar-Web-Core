@@ -76,10 +76,11 @@ function loadNotifications() {
 			var html = '';
 			var rootNotificationURL = (config.hasSSL ? 'https://'+config.httpsDomainIndex : 'http://'+config.httpDomainIndex) + '/me/notification/';
 			var count = 0;
+			var countUnread = 0;
 			for(i in data.notifications) {
 				var notification = data.notifications[i];
 				if (!notification.read) {
-					++count;
+					++countUnread;
 					html += '<li class="unread">';
 				} else {
 					html += '<li class="read">';
@@ -88,10 +89,14 @@ function loadNotifications() {
 				html += '<a href="'+rootNotificationURL+notification.id+'" class="title">'+escapeHTML(notification.text)+'</a>';
 				html += '<div class="timesince">'+escapeHTML(notification.timesince)+'</div>'
 				html += '</li>';
-				
+				++count;
 			}
-			$('#NotificationSubMenu').empty().append(html);
-			$('#NotificationMenuLink').html('notifications ('+count+')');
+			if (count > 0) {
+				$('#NotificationSubMenu').empty().append(html);
+				$('#NotificationMenuLink').show().html(countUnread > 0 ? 'notifications ('+countUnread+')' : 'notifications');
+			} else {
+				$('#NotificationMenuLink').hide();
+			}
 		}
 	});
 }

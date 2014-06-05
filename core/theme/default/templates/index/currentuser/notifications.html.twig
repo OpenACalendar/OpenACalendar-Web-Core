@@ -22,6 +22,8 @@
 				<a href="/me/notification/{{ notification.id }}" class="title">{{ notification.notificationText }}</a>
 				<div class="timesince">{{ notification.createdAt | timesinceinwords }}</div>
 			</li>
+		{% else %}
+			<li>You have no notifications</li>
 		{% endfor %}
 	</ul>
 {% endblock %}
