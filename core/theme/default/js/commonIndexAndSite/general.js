@@ -75,13 +75,23 @@ function loadNotifications() {
 		success: function(data) {
 			var html = '';
 			var rootNotificationURL = (config.hasSSL ? 'https://'+config.httpsDomainIndex : 'http://'+config.httpDomainIndex) + '/me/notification/';
+			var count = 0;
 			for(i in data.notifications) {
 				var notification = data.notifications[i];
-				html += '<li>';
+				if (!notification.read) {
+					++count;
+					html += '<li class="unread">';
+				} else {
+					html += '<li class="read">';
+				}
+				
 				html += '<a href="'+rootNotificationURL+notification.id+'" class="title">'+escapeHTML(notification.text)+'</a>';
+				html += '<div class="timesince">'+escapeHTML(notification.timesince)+'</div>'
 				html += '</li>';
+				
 			}
 			$('#NotificationSubMenu').empty().append(html);
+			$('#NotificationMenuLink').html('notifications ('+count+')');
 		}
 	});
 }

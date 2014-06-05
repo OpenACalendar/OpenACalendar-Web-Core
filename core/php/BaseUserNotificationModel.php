@@ -37,9 +37,10 @@ abstract class BaseUserNotificationModel {
 		$this->from_user_notification_type = $data['from_user_notification_type'];
 		$this->is_email = $data['is_email'];
 		$this->data = json_decode($data['data_json']);
-		$this->created_at = $data['created_at'];
-		$this->emailed_at = $data['emailed_at'];
-		$this->read_at = $data['read_at'];
+		$utc = new \DateTimeZone("UTC");
+		$this->created_at = new \DateTime($data['created_at'], $utc);
+		$this->emailed_at = $data['emailed_at'] ? new \DateTime($data['emailed_at'], $utc) : null;
+		$this->read_at = $data['read_at'] ? new \DateTime($data['read_at'], $utc) : null;
 	}
 	
 	public function getId() {
@@ -73,12 +74,19 @@ abstract class BaseUserNotificationModel {
 	public function getIsEmail() {
 		return $this->is_email;
 	}
+	
+	public function getIsRead() {
+		return (boolean)$this->read_at;
+	}
 
 	public function getData() {
 		return $this->data;
 	}
 	
-	
+	public function getCreatedAt() {
+		return $this->created_at;
+	}
+		
 	public function setId($id) {
 		$this->id = $id;
 	}

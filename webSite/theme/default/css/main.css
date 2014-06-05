@@ -144,6 +144,19 @@ body {
   padding: 0;
   margin: 0;
 }
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.read a {
+  font-size: 10pt;
+  color: #999;
+}
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.unread a {
+  font-size: 12pt;
+  color: #333;
+}
+#header ul.menu li#NotificationMenu li .timesince {
+  font-size: 8pt;
+  color: #999;
+  padding: 5px;
+}
 #header ul.menu li {
   list-style-type: none;
   display: inline-block;
@@ -1690,4 +1703,29 @@ p.errorPageText a {
 }
 p.errorPageText a:hover {
   color: black;
+}
+ul.usernotifications li.usernotificationunread,
+ul.usernotifications li.usernotificationread {
+  padding: 10px;
+  border-bottom: 2px solid #ccc;
+}
+ul.usernotifications li.usernotificationunread a.title,
+ul.usernotifications li.usernotificationread a.title {
+  color: #333;
+}
+ul.usernotifications li.usernotificationunread a.title:hover,
+ul.usernotifications li.usernotificationread a.title:hover {
+  color: black;
+}
+ul.usernotifications li.usernotificationunread div.timesince,
+ul.usernotifications li.usernotificationread div.timesince {
+  color: #999;
+  font-size: 0.8em;
+  padding: 5px 0;
+}
+ul.usernotifications li.usernotificationunread a.title {
+  font-size: 1.4em;
+}
+ul.usernotifications li.usernotificationunread a.title {
+  font-size: 1.1em;
 }
