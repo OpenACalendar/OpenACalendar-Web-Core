@@ -24,6 +24,10 @@ $(document).ready(function() {
 			event.preventDefault();
 		}
 	});
+	if (config.currentUser) {
+		loadNotifications();
+		setInterval(loadNotifications,300000);
+	}
 });
 
 //////////////////////////////////////////////////////////////////////////////// General Popup
@@ -60,6 +64,26 @@ function showHelpPopup(html) {
 		div.show();
 	}
 	showPopup();
+}
+
+//////////////////////////////////////////////////////////////////////////////// Notifications
+
+function loadNotifications() {
+	$.ajax({
+		dataType: "json",
+		url: '/me/notification.json',
+		success: function(data) {
+			var html = '';
+			var rootNotificationURL = (config.hasSSL ? 'https://'+config.httpsDomainIndex : 'http://'+config.httpDomainIndex) + '/me/notification/';
+			for(i in data.notifications) {
+				var notification = data.notifications[i];
+				html += '<li>';
+				html += '<a href="'+rootNotificationURL+notification.id+'" class="title">'+escapeHTML(notification.text)+'</a>';
+				html += '</li>';
+			}
+			$('#NotificationSubMenu').empty().append(html);
+		}
+	});
 }
 
 //////////////////////////////////////////////////////////////////////////////// General

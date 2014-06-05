@@ -109,6 +109,8 @@ $app->match('/me/calendar/{year}/{month}/', "index\controllers\CurrentUserContro
 		->before($appUserRequired) ; 
 $app->match('/me/notification', "index\controllers\CurrentUserController::listNotifications") 
 		->before($appUserRequired); 
+$app->match('/me/notification.json', "index\controllers\CurrentUserController::listNotificationsJson") 
+		->before($appUserRequired); 
 $app->match('/me/notification/{id}', "index\controllers\CurrentUserController::showNotification") 
 		->assert('id', '\d+')
 		->before($appUserRequired); 

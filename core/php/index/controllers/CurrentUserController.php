@@ -226,6 +226,7 @@ class CurrentUserController {
 	function listNotifications(Application $app) {
 	
 		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb->setLimit(20);
 		$rb->setUser(userGetCurrent());
 		
 		$notifications = $rb->fetchAll();
@@ -234,6 +235,26 @@ class CurrentUserController {
 			return $app['twig']->render('/index/currentuser/notifications.html.twig', array(
 				'notifications'=>$notifications,
 			));
+	}
+	
+	function listNotificationsJson(Application $app) {
+	
+		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb->setLimit(20);
+		$rb->setUser(userGetCurrent());
+		
+		$notifications = $rb->fetchAll();
+		
+		$out = array();
+		foreach($notifications as $notification) {
+			$out[] = array(
+				'id'=>$notification->getId(),
+				'text'=>$notification->getNotificationText(),
+			);
+		}
+		
+		return json_encode(array('notifications'=>$out));
+		
 	}
 	
 	function showNotification($id, Application $app) {

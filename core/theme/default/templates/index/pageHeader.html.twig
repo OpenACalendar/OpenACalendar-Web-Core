@@ -36,6 +36,14 @@
 				</ul>				
 			{% endif %}
 		</li>
+		{% if currentUser %}
+			<li id="NotificationMenu" class="user">
+				<a href="/me/notification">Notifications</a>
+				<ul id="NotificationSubMenu" class="submenu">
+					<li><a href="/me/notification">Loading ...</a></li>
+				</ul>
+			</li>
+		{% endif %}
 	</ul>
 	<div class="afterMenu"></div>
 </div>

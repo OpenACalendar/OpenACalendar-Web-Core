@@ -490,5 +490,8 @@ $app->match('/stopWatchingFromEmail/{userid}/{code}', "site\controllers\IndexCon
 		->assert('userid', '\d+')
 		->before($canChangeSite); 
 
+// This route is duplicated from the index site so that JavaScript on the Site domain can get to it.
+$app->match('/me/notification.json', "index\controllers\CurrentUserController::listNotificationsJson") 
+		->before($appUserRequired); 
 
 

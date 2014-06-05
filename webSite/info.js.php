@@ -2,6 +2,7 @@
 require 'localConfig.php';
 require_once (defined('COMPOSER_ROOT_DIR') ? COMPOSER_ROOT_DIR : APP_ROOT_DIR).'/vendor/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoload.php';
+require_once APP_ROOT_DIR.'/core/php/autoloadWebApp.php';
 
 use repositories\SiteRepository;
 
@@ -27,15 +28,26 @@ if (!$site) {
 	print "";
 } else {
 	$data  = array();
+	// TODO would like to depreceate httpDomain and get scripts to just use httpDomainIndex & httpDomainSite for clarity
 	$data['httpDomain'] = $site->getSlug().".".$CONFIG->webSiteDomain;
+	$data['httpDomainIndex'] = $CONFIG->webIndexDomain;
 	if ($CONFIG->hasSSL) {
 		$data['hasSSL'] = true;
 		$data['httpsDomain'] = $site->getSlug().".".$CONFIG->webSiteDomainSSL;
+		$data['httpsDomainIndex'] = $CONFIG->webIndexDomainSSL;
 	} else {
 		$data['hasSSL'] = false;
 	}
 	$data['twitter'] = $CONFIG->contactTwitter;
 	$data['isSingleSiteMode'] = false;
+	$user = userGetCurrent();
+	if ($user) {
+		$data['currentUser'] = array(
+			'username'=> $user->getUsername(),
+		);
+	} else {
+		$data['currentUser'] = false;
+	}
 	
 	print "var config = ".json_encode($data);
 	
