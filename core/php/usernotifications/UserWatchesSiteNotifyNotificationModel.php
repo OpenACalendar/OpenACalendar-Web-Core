@@ -20,5 +20,13 @@ class UserWatchesSiteNotifyNotificationModel extends \BaseUserNotificationModel 
 		$this->from_user_notification_type = 'UserWatchesSiteNotify';
 	}
 	
+	public function getNotificationText() {
+		return "There are changes to ".$this->site->getTitle();
+	}
+	
+	public function getNotificationURL() {
+		global $CONFIG;
+		return $CONFIG->getWebSiteDomainSecure($this->site->getSlug()).'/history';		
+	}
 }
 

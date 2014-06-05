@@ -72,6 +72,7 @@ class RunImportURLsTask {
 						
 						/// Notification Class 
 						$userNotification = $userNotificationType->getNewNotification($user, $site);
+						$userNotification->setImportURL($importURL);
 
 						////// Save Notification Class
 						$userNotificationRepo->create($userNotification);

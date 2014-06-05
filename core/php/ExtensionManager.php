@@ -42,6 +42,17 @@ class ExtensionManager {
 	public function getCoreExtension() {
 		return $this->coreExtension;
 	}
+	
+	public function getExtensionById($id) {
+		if ($this->coreExtension->getId() == $id) {
+			return $this->coreExtension;
+		}
+		foreach($this->extensions as $extension) {
+			if ($extension->getId() == $id) {
+				return $extension;
+			}
+		}
+	}
 
 }
 

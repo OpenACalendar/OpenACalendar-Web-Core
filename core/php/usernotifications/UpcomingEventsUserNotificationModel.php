@@ -32,6 +32,14 @@ class UpcomingEventsUserNotificationModel extends \BaseUserNotificationModel {
 		}
 	}
 	
+	public function getNotificationText() {
+		return "You have upcoming events";
+	}
+	
+	public function getNotificationURL() {
+		global $CONFIG;
+		return $CONFIG->getWebIndexDomainSecure().'/me/agenda';
+	}
 	
 }
 

@@ -107,6 +107,11 @@ $app->match('/me/calendar/{year}/{month}/', "index\controllers\CurrentUserContro
 		->assert('year', '\d+')
 		->assert('month', '\d+')
 		->before($appUserRequired) ; 
+$app->match('/me/notification', "index\controllers\CurrentUserController::listNotifications") 
+		->before($appUserRequired); 
+$app->match('/me/notification/{id}', "index\controllers\CurrentUserController::showNotification") 
+		->assert('id', '\d+')
+		->before($appUserRequired); 
 
 $app->match("/site/{siteSlug}/event/{eventSlug}/myAttendance.json", "index\controllers\SiteController::eventMyAttendanceJson");
 

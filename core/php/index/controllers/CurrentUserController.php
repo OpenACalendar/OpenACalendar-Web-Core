@@ -20,6 +20,8 @@ use repositories\UserAccountResetRepository;
 use index\forms\UserChangePasswordForm;
 use repositories\builders\filterparams\EventFilterParams;
 use repositories\UserAccountVerifyEmailRepository;
+use repositories\UserNotificationRepository;
+use repositories\builders\UserNotificationRepositoryBuilder;
 
 /**
  *
@@ -220,5 +222,34 @@ class CurrentUserController {
 				'showCurrentUserOptions' => true,
 			));
 	}
+	
+	function listNotifications(Application $app) {
+	
+		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb->setUser(userGetCurrent());
+		
+		$notifications = $rb->fetchAll();
+		
+		
+			return $app['twig']->render('/index/currentuser/notifications.html.twig', array(
+				'notifications'=>$notifications,
+			));
+	}
+	
+	function showNotification($id, Application $app) {
+
+		// get
+		$repo = new UserNotificationRepository();
+		$notification = $repo->loadByIdForUser($id, userGetCurrent());
+
+		// Mark read
+		$repo->markRead($notification);
+		
+		// Redirect
+		$url = $notification->getNotificationURL();
+		return $app->redirect($url);
+		
+	}
+	
 }
 

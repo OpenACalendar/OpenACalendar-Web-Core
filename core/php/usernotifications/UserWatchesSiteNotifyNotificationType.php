@@ -21,6 +21,15 @@ class UserWatchesSiteNotifyNotificationType extends \BaseUserNotificationType {
 			return $r;
 		}
 	
+	public function getNotificationFromData($data, UserAccountModel $user=null, SiteModel $site=null) {
+		$r =  new UserWatchesSiteNotifyNotificationModel();
+		$r->setFromDataBaseRow($data);
+		$r->setSite($site);
+		return $r;		
+	}	
+		
+		
+		
 	public function getUserNotificationPreferenceType() { return 'WatchNotify';  }
 	
 }

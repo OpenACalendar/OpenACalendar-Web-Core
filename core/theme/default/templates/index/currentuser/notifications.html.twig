@@ -1,0 +1,28 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'index/page.html.twig' %}
+
+{% block pageTitle %}Notifications - {% endblock %} 
+
+{% block breadcrumbs %}
+	<li><a href="/me/">your account</a></li>
+	<li class="current"><a href="/me/notification">notifications</a></li>
+{% endblock %}
+
+
+{% block content %}
+	<ul class="usernotifications">
+		{% for notification in notifications  %}
+			<li class="usernotification">
+				<a href="/me/notification/{{ notification.id }}">{{ notification.notificationText }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+

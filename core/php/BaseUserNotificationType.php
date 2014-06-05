@@ -17,6 +17,8 @@ abstract class BaseUserNotificationType {
 	
 	public abstract function getNewNotification(UserAccountModel $user, SiteModel $site=null);
 	
+	public abstract function getNotificationFromData($data, UserAccountModel $user=null, SiteModel $site=null);
+	
 	public function getUserNotificationPreferenceExtensionID() {
 		return 'org.openacalendar';
 	}

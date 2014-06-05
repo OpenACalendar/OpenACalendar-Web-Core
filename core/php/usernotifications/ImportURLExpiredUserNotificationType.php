@@ -20,6 +20,13 @@ class ImportURLExpiredUserNotificationType extends \BaseUserNotificationType {
 			$r->setUserSiteAndIsEmail($user, $site, $this->getEmailPreference($user));
 			return $r;
 		}
+	
+	public function getNotificationFromData($data, UserAccountModel $user=null, SiteModel $site=null) {
+		$r =  new ImportURLExpiredUserNotificationModel();
+		$r->setFromDataBaseRow($data);
+		$r->setSite($site);
+		return $r;
+	}		
 		
 	public function getUserNotificationPreferenceType() { return 'WatchImportExpired';  }
 	

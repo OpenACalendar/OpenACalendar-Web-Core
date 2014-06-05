@@ -21,6 +21,13 @@ class UpcomingEventsUserNotificationType extends \BaseUserNotificationType {
 			return $r;
 		}
 		
+	public function getNotificationFromData($data, UserAccountModel $user=null, SiteModel $site=null) {
+		$r =  new UpcomingEventsUserNotificationModel();
+		$r->setFromDataBaseRow($data);
+		$r->setSite($site);
+		return $r;
+	}	
+		
 	public function getUserNotificationPreferenceType() { return 'UpcomingEvents';  }
 	
 }

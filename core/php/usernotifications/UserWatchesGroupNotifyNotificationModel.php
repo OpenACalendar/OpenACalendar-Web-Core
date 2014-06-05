@@ -4,6 +4,7 @@
 namespace usernotifications;
 
 use models\GroupModel;
+use repositories\GroupRepository;
 
 /**
  *
@@ -24,5 +25,25 @@ class UserWatchesGroupNotifyNotificationModel extends \BaseUserNotificationModel
 		$this->data['group'] = $group->getId();
 	}
 
+	/** @var GroupModel  **/
+	var $group;
+	
+	private function loadGroupIfNeeded() {
+		if (!$this->group && property_exists($this->data, 'group') && $this->data->group) {
+			$repo = new GroupRepository;
+			$this->group = $repo->loadById($this->data->group);
+		}
+	}
+	
+	public function getNotificationText() {
+		$this->loadGroupIfNeeded();
+		return "There in changes in the group: ".$this->group->getTitle();
+	}
+	
+	public function getNotificationURL() {
+		global $CONFIG;
+		$this->loadGroupIfNeeded();
+		return $CONFIG->getWebSiteDomainSecure($this->site->getSlug()).'/group/'.$this->group->getSlugForUrl().'/history';		
+	}
 }
 

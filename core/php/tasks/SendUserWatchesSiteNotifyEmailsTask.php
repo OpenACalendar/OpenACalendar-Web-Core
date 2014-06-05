@@ -47,7 +47,7 @@ class SendUserWatchesSiteNotifyEmailsTask {
 		$venueHistoryRepository = new VenueHistoryRepository;
 		$userNotificationRepo = new UserNotificationRepository();
 
-		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesGroupNotify');
+		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSiteNotify');
 
 		$b = new UserWatchesSiteRepositoryBuilder();
 		foreach($b->fetchAll() as $userWatchesSite) {
