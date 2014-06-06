@@ -160,7 +160,7 @@ class GroupController {
 						$mediaInGroupRepo = new MediaInGroupRepository();
 						$mediaInGroupRepo->add($media, $this->parameters['group'], userGetCurrent());
 						
-						$FLASHMESSAGES->addMessage('Picuture added!');
+						$FLASHMESSAGES->addMessage('Picture added!');
 						return $app->redirect("/group/".$this->parameters['group']->getSlug());
 						
 					}
