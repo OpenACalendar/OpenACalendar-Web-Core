@@ -248,7 +248,7 @@ class VenueController {
 						$mediaInVenueRepo = new MediaInVenueRepository();
 						$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
 						
-						$FLASHMESSAGES->addMessage('Picuture added!');
+						$FLASHMESSAGES->addMessage('Picture added!');
 						return $app->redirect("/venue/".$this->parameters['venue']->getSlug());
 						
 					}
