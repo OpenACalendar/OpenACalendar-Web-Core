@@ -166,7 +166,7 @@ function listVenues(venueList) {
 	html += '<input type="radio" name="venue_id" value="no">Exact Venue not known.';
 	html += '</label></li>'
 	$('#ChangeEventVenueList').empty().html(html);
-	$('#ChangeEventVenueList li.newvenue input[name="newVenueTitle"]').keyup(function () {
+	$('#ChangeEventVenueList li.newvenue input[name="newVenueTitle"], #ChangeEventVenueList li.newvenue input[name="newVenueAddress"], #ChangeEventVenueList li.newvenue input[name="newVenueAddressCode"]').keyup(function (e) {
 		if ($(this).val().trim() != "") {
 			$('#ChangeEventVenueList li.newvenue input[type="radio"]').prop('checked',true);
 		}
