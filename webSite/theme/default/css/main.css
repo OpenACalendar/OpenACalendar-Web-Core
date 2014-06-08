@@ -144,18 +144,26 @@ body {
   padding: 0;
   margin: 0;
 }
-#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.read a {
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+}
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .title a {
+  display: block;
   font-size: 10pt;
   color: #999;
+  padding: 0;
 }
-#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.unread a {
-  font-size: 12pt;
-  color: #333;
-}
-#header ul.menu li#NotificationMenu li .timesince {
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .timesince,
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .site {
+  display: inline;
   font-size: 8pt;
   color: #999;
-  padding: 5px;
+  padding: 2px;
+}
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.unread .title a {
+  font-size: 12pt;
+  color: #333;
 }
 #header ul.menu li {
   list-style-type: none;
@@ -1711,6 +1719,7 @@ ul.usernotifications li.usernotificationread {
 }
 ul.usernotifications li.usernotificationunread a.title,
 ul.usernotifications li.usernotificationread a.title {
+  display: block;
   color: #333;
 }
 ul.usernotifications li.usernotificationunread a.title:hover,
@@ -1718,7 +1727,10 @@ ul.usernotifications li.usernotificationread a.title:hover {
   color: black;
 }
 ul.usernotifications li.usernotificationunread div.timesince,
-ul.usernotifications li.usernotificationread div.timesince {
+ul.usernotifications li.usernotificationunread div.site,
+ul.usernotifications li.usernotificationread div.timesince,
+ul.usernotifications li.usernotificationread div.site {
+  display: inline;
   color: #999;
   font-size: 0.8em;
   padding: 5px 0;

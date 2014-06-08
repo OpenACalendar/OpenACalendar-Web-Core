@@ -38,6 +38,12 @@ class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->user = $user;
 	}
 	
+	protected $isOpenBySysAdminsOnly = true;
+	
+	public function setIsOpenBySysAdminsOnly($value) {
+		$this->isOpenBySysAdminsOnly = $value;
+	}
+	
 	protected function build() {
 
 		$this->joins[] = " LEFT JOIN site_information ON site_information.id = user_notification.site_id  ";
@@ -52,6 +58,10 @@ class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->params['user_id'] = $this->user->getId();
 		}
 
+		if ($this->isOpenBySysAdminsOnly) {
+			$this->where[] = "   ( site_information.is_closed_by_sys_admin = '0' OR site_information.is_closed_by_sys_admin is null ) ";
+		}
+		
 	}
 	
 	protected function buildStat() {

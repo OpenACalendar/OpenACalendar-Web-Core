@@ -21,7 +21,7 @@ class ExtensionCore extends BaseExtension {
 	public function getUserNotificationTypes() {
 		return array('UpcomingEvents','UserWatchesGroupPrompt','UserWatchesGroupNotify',
 			'UserWatchesSiteNotify','UserWatchesSiteGroupPrompt','UserWatchesSitePrompt',
-			'ImportURLExpired');
+			'ImportURLExpired','UserRequestsAccessNotifyAdmin');
 	}
 	
 	public function getUserNotificationType($type) {
@@ -39,6 +39,8 @@ class ExtensionCore extends BaseExtension {
 			return new usernotifications\types\UserWatchesSitePromptNotificationType();
 		} else if ($type == 'ImportURLExpired') {
 			return new usernotifications\types\ImportURLExpiredUserNotificationType();
+		} else if ($type == 'UserRequestsAccessNotifyAdmin') {
+			return new usernotifications\types\UserRequestsAccessNotifyAdminNotificationType();
 		} else {
 			return null;
 		}

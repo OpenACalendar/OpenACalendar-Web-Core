@@ -40,19 +40,26 @@ body {
 		margin: 0;
 		li#NotificationMenu {
 			ul.submenu#NotificationSubMenu {
-				li.read a {
-					font-size: 10pt;
-					color: #999;
+				li {
+					padding: 5px 0;
+					border-bottom: 1px solid #ccc;
+					.title a {
+						display: block;
+						font-size: 10pt;
+						color: #999;
+						padding: 0;
+					}
+					.timesince, .site {
+						display: inline;
+						font-size: 8pt;
+						color: #999;
+						padding: 2px;
+					}
 				}
-				li.unread a {
+				li.unread .title a {
 					font-size: 12pt;
 					color: #333;
 				}
-			}
-			li .timesince {
-				font-size: 8pt;
-				color: #999;
-				padding: 5px;
 			}
 		}
 		li {

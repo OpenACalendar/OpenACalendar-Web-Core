@@ -86,8 +86,11 @@ function loadNotifications() {
 					html += '<li class="read">';
 				}
 				
-				html += '<a href="'+rootNotificationURL+notification.id+'" class="title">'+escapeHTML(notification.text)+'</a>';
+				html += '<div class="title"><a href="'+rootNotificationURL+notification.id+'">'+escapeHTML(notification.text)+'</a></div>';
 				html += '<div class="timesince">'+escapeHTML(notification.timesince)+'</div>'
+				if (!config.isSingleSiteMode) {
+					html += '<div class="site">'+escapeHTML(notification.site.title)+'</div>'
+				}
 				html += '</li>';
 				++count;
 			}

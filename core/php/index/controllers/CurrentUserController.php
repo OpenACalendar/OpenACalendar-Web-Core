@@ -241,6 +241,7 @@ class CurrentUserController {
 	function listNotificationsJson(Application $app) {
 	
 		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb->setIsOpenBySysAdminsOnly(true);
 		$rb->setLimit(20);
 		$rb->setUser(userGetCurrent());
 		
@@ -255,6 +256,10 @@ class CurrentUserController {
 				'text'=>$notification->getNotificationText(),
 				'read'=>$notification->getIsRead(),
 				'timesince'=>$timeSinceInWordsExtension->timeSinceInWords($notification->getCreatedAt()),
+				'site'=>array(
+					'slug'=>$notification->getSite()->getSlug(),
+					'title'=>$notification->getSite()->getTitle(),
+				),
 			);
 		}
 		

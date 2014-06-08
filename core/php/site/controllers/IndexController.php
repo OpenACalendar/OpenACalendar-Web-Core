@@ -15,6 +15,7 @@ use repositories\UserWatchesSiteRepository;
 use repositories\UserWatchesSiteStopRepository;
 use repositories\SiteAccessRequestRepository;
 use repositories\builders\UserAccountRepositoryBuilder;
+use repositories\UserNotificationRepository;
 
 /**
  *
@@ -122,9 +123,16 @@ class IndexController {
 			
 			if (!$isCurrentRequestExistsForSiteAndUser) {
 				
+				$userNotificationRepo = new UserNotificationRepository();
+				$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserRequestsAccessNotifyAdmin');
+				
 				$urb = new UserAccountRepositoryBuilder();
 				$urb->setCanAdministrateSite($app['currentSite']);
 				foreach($urb->fetchAll() as $admin) {
+					
+					$userNotification = $userNotificationType->getNewNotification($admin, $app['currentSite']);
+					$userNotification->setRequestingUser(userGetCurrent());
+					$userNotificationRepo->create($userNotification);
 					
 					$message = \Swift_Message::newInstance();
 					$message->setSubject("A request to access ". $app['currentSite']->getTitle());
@@ -148,6 +156,7 @@ class IndexController {
 					$message->addPart($messageHTML,'text/html');
 
 					if (!$CONFIG->isDebug) $app['mailer']->send($message);
+					$userNotificationRepo->markEmailed($userNotification);
 				}
 				
 			}
