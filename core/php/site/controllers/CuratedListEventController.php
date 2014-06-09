@@ -59,7 +59,12 @@ class CuratedListEventController {
 			$curatedlistRepository->removeEventFromCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());
 		}
 		
-		return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getId());
+		if ($request->request->get('returnTo','event') == 'event') {
+			return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
+		} elseif ($request->request->get('returnTo','event') == 'curatedlist') {
+			return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getSlug());
+		}
+		
 	}
 	
 	function add($slug,$eslug,Request $request, Application $app) {
@@ -74,7 +79,11 @@ class CuratedListEventController {
 			$curatedlistRepository->addEventtoCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());			
 		}
 		
-		return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getId());
+		if ($request->request->get('returnTo','event') == 'event') {
+			return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
+		} elseif ($request->request->get('returnTo','event') == 'curatedlist') {
+			return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getSlug());
+		}
 		
 	}
 	

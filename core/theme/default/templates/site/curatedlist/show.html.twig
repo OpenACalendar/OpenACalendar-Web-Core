@@ -46,6 +46,7 @@
 				<li>				
 					<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
 						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="returnTo" value="curatedlist">
 						<input type="submit" value="Remove">
 					</form>
 				</li>
