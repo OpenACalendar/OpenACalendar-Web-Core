@@ -370,6 +370,33 @@ ul.history li.venue {
 ul.history li.deleted {
   text-color: #999;
 }
+ul.usernotifications li.usernotificationunread,
+ul.usernotifications li.usernotificationread {
+  padding: 10px;
+  border-bottom: 2px solid #ccc;
+}
+ul.usernotifications li.usernotificationunread div.title,
+ul.usernotifications li.usernotificationread div.title {
+  display: block;
+  color: #333;
+}
+ul.usernotifications li.usernotificationunread div.timesince,
+ul.usernotifications li.usernotificationunread div.site,
+ul.usernotifications li.usernotificationunread div.id,
+ul.usernotifications li.usernotificationread div.timesince,
+ul.usernotifications li.usernotificationread div.site,
+ul.usernotifications li.usernotificationread div.id {
+  display: inline;
+  color: #999;
+  font-size: 0.8em;
+  padding: 5px 0;
+}
+ul.usernotifications li.usernotificationunread div.title {
+  font-size: 1.4em;
+}
+ul.usernotifications li.usernotificationunread div.title {
+  font-size: 1.1em;
+}
 #footer {
   padding: 10px 5px;
   text-align: center;

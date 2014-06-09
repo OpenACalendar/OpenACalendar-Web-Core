@@ -126,6 +126,8 @@ $app->match('/sysadmin/user/{id}/watchesSiteNotifyEmail', "sysadmin\controllers\
 		->assert('id', '\d+'); 
 $app->match('/sysadmin/user/{id}/watchesGroupNotifyEmail', "sysadmin\controllers\UserController::watchesGroupNotifyEmail")
 		->assert('id', '\d+'); 
+$app->match('/sysadmin/user/{id}/notification', "sysadmin\controllers\UserController::listNotifications")
+		->assert('id', '\d+'); 
 
 $app->match('/sysadmin/history', "sysadmin\controllers\HistoryController::index"); 
 $app->match('/sysadmin/history/', "sysadmin\controllers\HistoryController::index"); 

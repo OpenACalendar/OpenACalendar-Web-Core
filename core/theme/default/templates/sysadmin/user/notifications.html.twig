@@ -1,0 +1,27 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	<ul class="usernotifications">
+		{% for notification in notifications  %}
+			<li class="usernotification{% if notification.isRead %}read{% else %}unread{% endif %}">
+				<div class="title">{{ notification.notificationText }}</div>
+				<div class="id">ID={{ notification.id }}</div>
+				<div class="timesince">{{ notification.createdAt |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }} -  {{ notification.createdAt | timesinceinwords }}</div>
+				{% if not config.isSingleSiteMode %}
+					<div class="site"> {{ notification.site.title }} - {{ config.getWebSiteDomainSecure(notification.site.slug) }}</div>
+				{% endif %}
+			</li>
+		{% else %}
+			<li>You have no notifications</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}

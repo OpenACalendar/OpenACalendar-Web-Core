@@ -18,7 +18,7 @@ use repositories\builders\UserWatchesSitePromptEmailRepositoryBuilder;
 use sysadmin\forms\ActionForm;
 use sysadmin\ActionParser;
 use repositories\UserAccountVerifyEmailRepository;
-
+use repositories\builders\UserNotificationRepositoryBuilder;
 
 /**
  *
@@ -196,6 +196,20 @@ class UserController {
 		return $app['twig']->render('sysadmin/user/watchesGroupNotifyEmail.html.twig', $this->parameters);
 	}
 	
+	function listNotifications($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+	
+		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb->setLimit(40);
+		$rb->setUser($this->parameters['user']);
+		
+		$notifications = $rb->fetchAll();
+		
+		
+			return $app['twig']->render('/sysadmin/user/notifications.html.twig', array(
+				'notifications'=>$notifications,
+			));
+	}
 }
 
 
