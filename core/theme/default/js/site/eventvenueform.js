@@ -139,18 +139,30 @@ function loadNextArea(areaSlug, includeCurrentArea) {
 
 function listVenues(venueList) {
 	var html = '';
-	for(i in venueList) {
-		hasMapPos = venueList[i].lat && venueList[i].lng;
+	var venueListArray = $.map(venueList, function(value, index) {
+		return [value];
+	});
+	venueListArray.sort(function(a,b) {
+		if (a.title > b.title) {
+			return 1;
+		} else if (a.title < b.title) {
+			return -1;
+		} else {
+			return 0;
+		}
+	});
+	for(i in venueListArray) {
+		hasMapPos = venueListArray[i].lat && venueListArray[i].lng;
 		html += '<li class="venue"><label>';
-		html += '<input type="radio" name="venue_id" value="'+venueList[i].slug+'" '+(venueList[i].slug==currentVenueSlug?'checked="checked" ':'')+'>'+escapeHTML(venueList[i].title);
+		html += '<input type="radio" name="venue_id" value="'+venueListArray[i].slug+'" '+(venueListArray[i].slug==currentVenueSlug?'checked="checked" ':'')+'>'+escapeHTML(venueListArray[i].title);
 		html += '</label>';
-		if (hasMapPos) html += ' <span class="mapLink">(<a href="#" onclick="showMarkerOnMap('+venueList[i].slug+');">map</a>)</span>';
+		if (hasMapPos) html += ' <span class="mapLink">(<a href="#" onclick="showMarkerOnMap('+venueListArray[i].slug+');">map</a>)</span>';
 		html += '</li>';
 		
-		if (!(venueList[i].slug in venueMarkers) && hasMapPos) {
-			venueMarkers[venueList[i].slug] = L.marker([venueList[i].lat,venueList[i].lng]);
-			venueMarkers[venueList[i].slug].bindPopup(escapeHTML(venueList[i].title)+'<br><a href="#" onclick="useVenue('+venueList[i].slug+'); return false">At this venue</a>');
-			markerGroup.addLayer(venueMarkers[venueList[i].slug]);
+		if (!(venueListArray[i].slug in venueMarkers) && hasMapPos) {
+			venueMarkers[venueList[i].slug] = L.marker([venueListArray[i].lat,venueListArray[i].lng]);
+			venueMarkers[venueList[i].slug].bindPopup(escapeHTML(venueListArray[i].title)+'<br><a href="#" onclick="useVenue('+venueListArray[i].slug+'); return false">At this venue</a>');
+			markerGroup.addLayer(venueMarkers[venueListArray[i].slug]);
 		}
 		
 		
