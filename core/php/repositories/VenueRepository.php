@@ -32,8 +32,10 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, title,description,lat,lng,country_id,area_id,created_at,address,address_code) ".
-					"VALUES (:site_id, :slug, :title, :description, :lat, :lng,:country_id, :area_id,:created_at,:address,:address_code) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, title,".
+					"description,lat,lng,country_id,area_id,created_at,approved_at,address,address_code) ".
+					"VALUES (:site_id, :slug, :title, ".
+					":description, :lat, :lng,:country_id, :area_id,:created_at,:approved_at,:address,:address_code) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$venue->getSlug(),
@@ -45,13 +47,14 @@ class VenueRepository {
 					'address_code'=>$venue->getAddressCode(),
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase()
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			$data = $stat->fetch();
 			$venue->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,address,address_code, is_new) VALUES ".
-					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:address,:address_code, '1')");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new) VALUES ".
+					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1')");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -64,6 +67,7 @@ class VenueRepository {
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			$data = $stat->fetch();
 			
@@ -124,8 +128,10 @@ class VenueRepository {
 					'area_id'=>$venue->getAreaId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, area_id, description, user_account_id  , created_at,address,address_code) VALUES ".
-					"(:venue_id, :title, :lat, :lng, :country_id,:area_id,:description,  :user_account_id  , :created_at,:address,:address_code)");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
+					"area_id, description, user_account_id  , created_at,approved_at,address,address_code) VALUES ".
+					"(:venue_id, :title, :lat, :lng, :country_id,".
+					":area_id,:description,  :user_account_id  , :created_at,:approved_at,:address,:address_code)");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>$venue->getTitle(),
@@ -138,6 +144,7 @@ class VenueRepository {
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 			
@@ -157,8 +164,10 @@ class VenueRepository {
 					'id'=>$venue->getId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, description, user_account_id  , created_at, is_deleted) VALUES ".
-					"(:venue_id, :title, :lat, :lng, :country_id,:description,  :user_account_id  , :created_at, '1')");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
+					"description, user_account_id  , created_at,approved_at, is_deleted) VALUES ".
+					"(:venue_id, :title, :lat, :lng, :country_id,".
+					":description,  :user_account_id  , :created_at, :approved_at, '1')");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>$venue->getTitle(),
@@ -168,6 +177,7 @@ class VenueRepository {
 					'user_account_id'=>$creator->getId(),				
 					'country_id'=>$venue->getCountryId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 			

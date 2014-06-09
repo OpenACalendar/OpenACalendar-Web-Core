@@ -33,8 +33,8 @@ class AreaRepository {
 			
 			if ($parentArea) $area->setParentAreaId($parentArea->getId());
 			
-			$stat = $DB->prepare("INSERT INTO area_information (site_id, slug, title,description,country_id,parent_area_id,created_at,cache_area_has_parent_generated) ".
-					"VALUES (:site_id, :slug, :title,:description,:country_id,:parent_area_id,:created_at,:cache_area_has_parent_generated) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO area_information (site_id, slug, title,description,country_id,parent_area_id,created_at,approved_at,cache_area_has_parent_generated) ".
+					"VALUES (:site_id, :slug, :title,:description,:country_id,:parent_area_id,:created_at,:approved_at,:cache_area_has_parent_generated) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$area->getSlug(),
@@ -43,13 +43,14 @@ class AreaRepository {
 					'country_id'=>$country->getId(),
 					'parent_area_id'=>($parentArea ? $parentArea->getId() : null),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'cache_area_has_parent_generated'=>  ( $parentArea ? '0' : '1' ),
 				));
 			$data = $stat->fetch();
 			$area->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, is_new) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,'1')");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_new) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at,'1')");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -58,6 +59,7 @@ class AreaRepository {
 					'parent_area_id'=>($parentArea ? $parentArea->getId() : null),
 					'user_account_id'=>$creator->getId(),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 			$DB->commit();
@@ -175,8 +177,8 @@ class AreaRepository {
 					'description'=>$area->getDescription(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, api2_application_id) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :api2_application_id)");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, api2_application_id) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :approved_at, :api2_application_id)");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -186,6 +188,7 @@ class AreaRepository {
 					'user_account_id'=>$creator->getId(),				
 					'api2_application_id'=>($USERAGENT->hasApi2ApplicationId()?$USERAGENT->getApi2ApplicationId():null),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 			
@@ -211,8 +214,8 @@ class AreaRepository {
 					'parent_area_id'=>$area->getParentAreaId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at)");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :approved_at)");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -221,6 +224,7 @@ class AreaRepository {
 					'parent_area_id'=>$area->getParentAreaId(),
 					'user_account_id'=>$creator->getId(),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 			// new must clear caches
@@ -250,8 +254,8 @@ class AreaRepository {
 					
 				));
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, is_deleted) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,'1')");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_deleted) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at, '1')");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -260,6 +264,7 @@ class AreaRepository {
 					'parent_area_id'=>$area->getParentAreaId(),
 					'user_account_id'=>$creator->getId(),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 			

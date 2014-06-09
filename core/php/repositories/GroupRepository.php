@@ -30,8 +30,8 @@ class GroupRepository {
 			$data = $stat->fetch();
 			$group->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO group_information (site_id, slug, title,url,description,created_at,twitter_username) ".
-					"VALUES (:site_id, :slug, :title, :url, :description, :created_at, :twitter_username) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO group_information (site_id, slug, title,url,description,created_at,twitter_username,approved_at) ".
+					"VALUES (:site_id, :slug, :title, :url, :description, :created_at, :twitter_username,:approved_at) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$group->getSlug(),
@@ -39,13 +39,14 @@ class GroupRepository {
 					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$group->getDescription(),
-					'created_at'=>\TimeSource::getFormattedForDataBase()
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			$data = $stat->fetch();
 			$group->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, twitter_username, is_new) VALUES ".
-					"(:group_id, :title, :url, :description, :user_account_id  , :created_at, :twitter_username, '1')");
+			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, approved_at, twitter_username, is_new) VALUES ".
+					"(:group_id, :title, :url, :description, :user_account_id  , :created_at, :approved_at, :twitter_username, '1')");
 			$stat->execute(array(
 					'group_id'=>$group->getId(),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -54,6 +55,7 @@ class GroupRepository {
 					'description'=>$group->getDescription(),
 					'user_account_id'=>$creator->getId(),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			$data = $stat->fetch();
 			
@@ -107,8 +109,8 @@ class GroupRepository {
 					'description'=>$group->getDescription(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, twitter_username) VALUES ".
-					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :twitter_username)");
+			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at,approved_at, twitter_username) VALUES ".
+					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username)");
 			$stat->execute(array(
 					'group_id'=>$group->getId(),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -117,6 +119,7 @@ class GroupRepository {
 					'user_account_id'=>$creator->getId(),	
 					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),			
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 
@@ -140,8 +143,8 @@ class GroupRepository {
 					'id'=>$group->getId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, twitter_username, is_deleted) VALUES ".
-					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :twitter_username, '1')");
+			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, approved_at, twitter_username, is_deleted) VALUES ".
+					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username, '1')");
 			$stat->execute(array(
 					'group_id'=>$group->getId(),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -150,6 +153,7 @@ class GroupRepository {
 					'user_account_id'=>$creator->getId(),	
 					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),			
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
 			
 
@@ -189,14 +193,15 @@ class GroupRepository {
 			
 			
 			// Add!
-			$stat = $DB->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,is_main_group) ".
-					"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,:is_main_group)");
+			$stat = $DB->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,addition_approved_at,is_main_group) ".
+					"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,:addition_approved_at,:is_main_group)");
 			$stat->execute(array(
 				'group_id'=>$group->getId(),
 				'event_id'=>$event->getId(),
 				'is_main_group'=>$isMainGroup?1:0,
 				'added_by_user_account_id'=>($user?$user->getId():null),
 				'added_at'=>  \TimeSource::getFormattedForDataBase(),
+				'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
 			));
 			
 			$DB->commit();
@@ -213,12 +218,13 @@ class GroupRepository {
 			$DB->beginTransaction();
 			
 			$stat = $DB->prepare("UPDATE event_in_group SET removed_by_user_account_id=:removed_by_user_account_id,".
-					" removed_at=:removed_at WHERE ".
+					" removed_at=:removed_at, removal_approved_at=:removal_approved_at WHERE ".
 					" event_id=:event_id AND group_id=:group_id AND removed_at IS NULL ");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'group_id'=>$group->getId(),
 					'removed_at'=>  \TimeSource::getFormattedForDataBase(),
+					'removal_approved_at'=>  \TimeSource::getFormattedForDataBase(),
 					'removed_by_user_account_id'=>($user?$user->getId():null),
 			));
 			

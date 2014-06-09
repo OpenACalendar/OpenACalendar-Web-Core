@@ -36,10 +36,10 @@ class EventRepository {
 
 			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, summary,description,start_at,end_at,".
 				" created_at, event_recur_set_id,venue_id,country_id,timezone, ".
-				" url, is_physical, is_virtual, area_id) ".
+				" url, is_physical, is_virtual, area_id, approved_at) ".
 					" VALUES (:site_id, :slug, :summary, :description, :start_at, :end_at, ".
 						" :created_at, :event_recur_set_id,:venue_id,:country_id,:timezone, ".
-						" :url, :is_physical, :is_virtual, :area_id) RETURNING id");
+						" :url, :is_physical, :is_virtual, :area_id, :approved_at) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$event->getSlug(),
@@ -48,6 +48,7 @@ class EventRepository {
 					'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
 					'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'event_recur_set_id'=>$event->getEventRecurSetId(),
 					'country_id'=>$event->getCountryId(),
 					'venue_id'=>$event->getVenueId(),
@@ -62,10 +63,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
 				" user_account_id  , created_at,venue_id,country_id,timezone,".
-				" url, is_physical, is_virtual, area_id, is_new) VALUES ".
+				" url, is_physical, is_virtual, area_id, is_new, approved_at) VALUES ".
 					" (:event_id, :summary, :description, :start_at, :end_at, ".
 						" :user_account_id  , :created_at,:venue_id,:country_id,:timezone,".
-						" :url, :is_physical, :is_virtual, :area_id, '1')");
+						" :url, :is_physical, :is_virtual, :area_id, '1', :approved_at)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -74,6 +75,7 @@ class EventRepository {
 					'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
 					'user_account_id'=>($creator ? $creator->getId(): null),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'country_id'=>$event->getCountryId(),
 					'venue_id'=>$event->getVenueId(),
 					'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
@@ -84,14 +86,15 @@ class EventRepository {
 				));
 			
 			if ($group || $additionalGroups) {
-				$stat = $DB->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,is_main_group) ".
-						"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,:is_main_group)");
+				$stat = $DB->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,is_main_group,addition_approved_at) ".
+						"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,:is_main_group,:addition_approved_at)");
 				if ($group) {
 					$stat->execute(array(
 							'group_id'=>$group->getId(),
 							'event_id'=>$event->getId(),
 							'added_by_user_account_id'=>($creator ? $creator->getId(): null),
 							'added_at'=>\TimeSource::getFormattedForDataBase(),
+							'addition_approved_at'=>\TimeSource::getFormattedForDataBase(),
 							'is_main_group'=>1,
 						));
 				}
@@ -103,6 +106,7 @@ class EventRepository {
 									'event_id'=>$event->getId(),
 									'added_by_user_account_id'=>($creator ? $creator->getId(): null),
 									'added_at'=>\TimeSource::getFormattedForDataBase(),
+									'addition_approved_at'=>\TimeSource::getFormattedForDataBase(),
 									'is_main_group'=>0,
 								));
 						}
@@ -201,10 +205,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
 					"created_at, reverted_from_created_at,venue_id,country_id,timezone,".
-					"url, is_physical, is_virtual, area_id) VALUES ".
+					"url, is_physical, is_virtual, area_id, approved_at) VALUES ".
 					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
 					":created_at, :reverted_from_created_at,:venue_id,:country_id,:timezone,"."
-						:url, :is_physical, :is_virtual, :area_id)");
+						:url, :is_physical, :is_virtual, :area_id, :approved_at)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -217,6 +221,7 @@ class EventRepository {
 					'timezone'=>$event->getTimezone(),
 					'user_account_id'=>($creator ? $creator->getId(): null),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'reverted_from_created_at'=> ($fromHistory ? date("Y-m-d H:i:s",$fromHistory->getCreatedAtTimeStamp()):null),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
@@ -252,10 +257,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
 					"created_at,venue_id,country_id,timezone,".
-					"url, is_physical, is_virtual, is_deleted) VALUES ".
+					"url, is_physical, is_virtual, is_deleted, approved_at) VALUES ".
 					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
 					":created_at,:venue_id,:country_id,:timezone,"."
-						:url, :is_physical, :is_virtual, '1')");
+						:url, :is_physical, :is_virtual, '1', :approved_at)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -267,6 +272,7 @@ class EventRepository {
 					'timezone'=>$event->getTimezone(),
 					'user_account_id'=>($creator ? $creator->getId(): null),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
