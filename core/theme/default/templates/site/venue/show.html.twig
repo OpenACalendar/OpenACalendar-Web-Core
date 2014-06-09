@@ -63,9 +63,12 @@
 					<input type="hidden" name="submitted" value="yes">
 					<ul class="areas">
 						{% for childArea in childAreas %}
-							<li class="area">{% spaceless %}<span class="content"><label>
-								<input type="radio" name="area" value="{{ childArea.slug }}">{{ childArea.title }}
-							</label></span>{% endspaceless %}</li>
+							<li class="area">
+								{% spaceless %}<span class="content"><label>
+									<input type="radio" name="area" value="{{ childArea.slug }}">{{ childArea.title }}
+								</label></span>{% endspaceless %}
+								<span class="aftercontent">&nbsp;</span>
+							</li>
 						{% endfor %}
 						<li class="newarea"><label><input type="radio" name="area" value="new">Create new:</label> <input type="text" name="newAreaTitle"></li>
 					</ul>
