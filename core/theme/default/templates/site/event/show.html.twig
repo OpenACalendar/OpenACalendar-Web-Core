@@ -118,7 +118,7 @@
 		{% if childAreas and currentUserCanEditSite and event.isPhysical and currentSite.isFeaturePhysicalEvents and not event.isDeleted %}
 			<div id="userCanPushToChildAreaWrapper">
 				<p>Is {% if venue %}"{{ venue.title }}"{% else %}this{% endif %} in one of these places?</p>
-				<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post"  class="styled">
+				<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					<input type="hidden" name="submitted" value="yes">
 					<ul class="areas">

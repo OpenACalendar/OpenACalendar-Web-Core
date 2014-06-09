@@ -24,5 +24,14 @@ $(document).ready(function() {
 		$('#Map').hide();
 	}
 
+	var PushToChildAreaForm = $('form#PushToChildAreaForm');
+	if (PushToChildAreaForm.length) {
+		$('form#PushToChildAreaForm input[name="newAreaTitle"]').keyup(function() {
+			if ($(this).val() != '') {
+				$('form#PushToChildAreaForm li.newarea input[name="area"]').prop("checked", true);
+			}
+		});
+	}
+
 });
 

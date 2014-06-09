@@ -58,7 +58,7 @@
 		{% if childAreas and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
 			<div id="userCanPushToChildAreaWrapper">
 				<p>Is {{ venue.title }} in one of these places?</p>
-				<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post"  class="styled">
+				<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					<input type="hidden" name="submitted" value="yes">
 					<ul class="areas">
@@ -70,7 +70,7 @@
 								<span class="aftercontent">&nbsp;</span>
 							</li>
 						{% endfor %}
-						<li class="newarea"><label><input type="radio" name="area" value="new">Create new:</label> <input type="text" name="newAreaTitle"></li>
+						<li class="newarea"><label><input type="radio" name="area" value="new">Other:</label> <input type="text" name="newAreaTitle"></li>
 					</ul>
 					<input type="submit" value="Save">
 				</form>
