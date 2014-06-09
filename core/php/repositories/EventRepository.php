@@ -9,6 +9,7 @@ use models\SiteModel;
 use models\GroupModel;
 use models\VenueModel;
 use models\UserAccountModel;
+use \models\ImportedEventModel;
 use repositories\UserWatchesGroupRepository;
 
 /**
@@ -22,7 +23,8 @@ use repositories\UserWatchesGroupRepository;
 class EventRepository {
 	
 	
-	public function create(EventModel $event, SiteModel $site, UserAccountModel $creator = null, GroupModel $group = null, $additionalGroups = null) {
+	public function create(EventModel $event, SiteModel $site, UserAccountModel $creator = null, 
+			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
@@ -33,10 +35,10 @@ class EventRepository {
 			$event->setSlug($data['c'] + 1);
 
 			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, summary,description,start_at,end_at,".
-				" created_at, event_recur_set_id,venue_id,country_id,timezone,import_url_id,import_id, ".
+				" created_at, event_recur_set_id,venue_id,country_id,timezone, ".
 				" url, is_physical, is_virtual, area_id) ".
 					" VALUES (:site_id, :slug, :summary, :description, :start_at, :end_at, ".
-						" :created_at, :event_recur_set_id,:venue_id,:country_id,:timezone,:import_url_id,:import_id, ".
+						" :created_at, :event_recur_set_id,:venue_id,:country_id,:timezone, ".
 						" :url, :is_physical, :is_virtual, :area_id) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
@@ -51,8 +53,6 @@ class EventRepository {
 					'venue_id'=>$event->getVenueId(),
 					'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
 					'timezone'=>$event->getTimezone(),
-					'import_url_id'=>$event->getImportUrlId(),
-					'import_id'=>$event->getImportId(),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
@@ -119,7 +119,16 @@ class EventRepository {
 					// TODO watch site?
 				}
 			}
-
+			
+			if ($importedEvent) {
+				$stat = $DB->prepare("INSERT INTO imported_event_is_event (imported_event_id, event_id, created_at) ".
+						"VALUES (:imported_event_id, :event_id, :created_at)");
+				$stat->execute(array(
+					'imported_event_id'=>$importedEvent->getId(),
+					'event_id'=>$event->getId(),
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+				));
+			}
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -138,6 +147,17 @@ class EventRepository {
 		if ($stat->rowCount() > 0) {
 			$event = new EventModel();
 			$event->setFromDataBaseRow($stat->fetch());
+			// Now, we currently have 2 ways of linking imported events to events
+			// old way - flags on event
+			// new way - seperate models
+			// The below code checks the new way of linking and adds it if it finds anything
+			$repo = new \repositories\ImportedEventRepository();
+			$importedEvent = $repo->loadByEvent($event);
+			if ($importedEvent) {
+				$event->setImportId($importedEvent->getImportId());
+				$event->setImportUrlId($importedEvent->getImportUrlId());
+			}
+			// ... and return
 			return $event;
 		}
 	}
@@ -302,6 +322,31 @@ class EventRepository {
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 				"WHERE event_information.import_url_id =:import_url_id AND event_information.import_id =:import_id");
 		$stat->execute(array( 'import_id'=>$importID, 'import_url_id'=>$importURLID ));
+		if ($stat->rowCount() > 0) {
+			$event = new EventModel();
+			$event->setFromDataBaseRow($stat->fetch());
+			return $event;
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * This is a bit broken - in theory this could return multiple events (in the case of a imported event with recurrence) 
+	 * But for now that can't happen so just return one event.
+	 * 
+	 * @global \repositories\type $DB
+	 * @param \models\ImportedEventModel $importedEvent
+	 * @return \models\EventModel
+	 */
+	public function loadByImportedEvent(\models\ImportedEventModel $importedEvent) {
+			global $DB;
+		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
+				" JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id ".
+				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
+				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
+				" WHERE imported_event_is_event.imported_event_id = :id");
+		$stat->execute(array( 'id'=>$importedEvent->getId() ));
 		if ($stat->rowCount() > 0) {
 			$event = new EventModel();
 			$event->setFromDataBaseRow($stat->fetch());

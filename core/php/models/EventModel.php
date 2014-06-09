@@ -113,6 +113,31 @@ class EventModel {
 		$this->is_deleted = false;
 	}
 	
+	public function setFromImportedEventModel(ImportedEventModel $importedEvent) {
+		$changesToSave = false;
+		if ($importedEvent->getTitle() != $this->getSummary()) {
+			$this->setSummary($importedEvent->getTitle());
+			$changesToSave = true;
+		}
+		if ($importedEvent->getDescription() != $this->getDescription()) {
+			$this->setDescription($importedEvent->getDescription());
+			$changesToSave = true;
+		}
+		if (!$this->getStartAt() || $importedEvent->getStartAtInUTC()->getTimeStamp() != $this->getStartAtInUTC()->getTimeStamp()) {
+			$this->setStartAt(clone $importedEvent->getStartAt());
+			$changesToSave = true;
+		}
+		if (!$this->getEndAt() || $importedEvent->getEndAtInUTC()->getTimeStamp() != $this->getEndAtInUTC()->getTimeStamp()) {
+			$this->setEndAt(clone $importedEvent->getEndAt());
+			$changesToSave = true;
+		}
+		if ($importedEvent->getUrl() != $this->getUrl()) {
+			$this->setUrl($importedEvent->getUrl());
+			$changesToSave = true;
+		}			
+		return $changesToSave;
+	}
+	
 	public function getId() {
 		return $this->id;
 	}
