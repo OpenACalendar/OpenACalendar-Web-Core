@@ -215,11 +215,13 @@
 						{% if curatedlist.isEventInlist %}
 							<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
 								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+								<input type="hidden" name="returnTo" value="event">
 								<input type="submit" value="Remove">
 							</form>
 						{% else %}
 							<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/add" method="post">
 								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+								<input type="hidden" name="returnTo" value="event">
 								<input type="submit" value="Add">
 							</form>					
 						{% endif %}
