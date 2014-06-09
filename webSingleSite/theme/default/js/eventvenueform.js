@@ -160,8 +160,8 @@ function listVenues(venueList) {
 		html += '</li>';
 		
 		if (!(venueListArray[i].slug in venueMarkers) && hasMapPos) {
-			venueMarkers[venueList[i].slug] = L.marker([venueListArray[i].lat,venueListArray[i].lng]);
-			venueMarkers[venueList[i].slug].bindPopup(escapeHTML(venueListArray[i].title)+'<br><a href="#" onclick="useVenue('+venueListArray[i].slug+'); return false">At this venue</a>');
+			venueMarkers[venueListArray[i].slug] = L.marker([venueListArray[i].lat,venueListArray[i].lng]);
+			venueMarkers[venueListArray[i].slug].bindPopup(escapeHTML(venueListArray[i].title)+'<br><a href="#" onclick="useVenue('+venueListArray[i].slug+'); return false">At this venue</a>');
 			markerGroup.addLayer(venueMarkers[venueListArray[i].slug]);
 		}
 		
