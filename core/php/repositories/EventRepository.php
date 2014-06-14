@@ -368,10 +368,10 @@ class EventRepository {
 			$statFetch = $DB->prepare("SELECT event_information.* FROM event_information WHERE venue_id = :venue_id AND start_at > :start_at AND is_deleted='0'");
 			$statUpdateEvent = $DB->prepare("UPDATE event_information  SET venue_id=null, area_id=:area_id WHERE id=:id");	
 			$statAddHistory = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
-					"created_at,venue_id,country_id,timezone,".
+					"created_at, approved_at, venue_id,country_id,timezone,".
 					"url, is_physical, is_virtual, is_deleted) VALUES ".
 					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
-					":created_at,:venue_id,:country_id,:timezone,"."
+					":created_at, :approved_at, :venue_id,:country_id,:timezone,"."
 						:url, :is_physical, :is_virtual, '0')");
 			$statFetch->execute(array('venue_id'=>$venue->getId(), 'start_at'=>\TimeSource::getFormattedForDataBase()));
 			while($data = $statFetch->fetch()) {
@@ -398,7 +398,8 @@ class EventRepository {
 											'country_id'=>$event->getCountryId(),
 											'timezone'=>$event->getTimezone(),
 											'user_account_id'=>($user ? $user->getId(): null),				
-											'created_at'=>\TimeSource::getFormattedForDataBase(),
+											'created_at'=>\TimeSource::getFormattedForDataBase(),		
+											'approved_at'=>\TimeSource::getFormattedForDataBase(),
 											'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 											'is_physical'=>$event->getIsPhysical()?1:0,
 											'is_virtual'=>$event->getIsVirtual()?1:0,
