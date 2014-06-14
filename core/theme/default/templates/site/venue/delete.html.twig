@@ -20,6 +20,24 @@
 
 		{{ form_errors(form) }}
 
+		{{ form_row(form.agree) }}
+
+		{% if events %}
+			<div class="rowWrapper">
+				<div class="labelWrapper">&nbsp;</div>
+				<div class="widgetWrapperPlacementOnly">
+					{% if area is defined and area is not null %}
+						Future Events will be changed to an unspecified venue in {{ area.title }}.
+					{% elseif country is defined and country is not null%}
+						Future Events will be changed to an unspecified venue in {{ country.title }}.
+					{% else %}
+						Future Events will be changed to an unspecified venue.
+					{% endif %} 
+				</div>
+				<div class="after"></div>
+			</div>
+		{% endif %}
+
 		{{ form_rest(form) }}
 
 		<input type="submit"  value="Delete" />	

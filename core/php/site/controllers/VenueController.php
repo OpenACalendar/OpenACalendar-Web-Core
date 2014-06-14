@@ -95,7 +95,7 @@ class VenueController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		if (userGetCurrent()) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
-		}	
+		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
 		
@@ -392,6 +392,13 @@ class VenueController {
 				
 			}
 		}
+		
+		
+		$rb = new EventRepositoryBuilder();
+		$rb->setVenue($this->parameters['venue']);
+		$rb->setAfterNow(true);
+		$rb->setIncludeDeleted(false);
+		$this->parameters['events'] = $rb->fetchAll();
 		
 		$this->parameters['form'] = $form->createView();
 		
