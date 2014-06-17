@@ -113,6 +113,52 @@ class EventModel {
 		$this->is_deleted = false;
 	}
 	
+	protected $validateErrors = array();
+	
+	public function getValidateErrors() {
+		return $this->validateErrors;
+	}
+	
+	public function validate() {
+		$this->validateErrors = array();
+		if (!$this->start_at) {
+			$this->validateErrors[] = 'Start not set!';
+		}
+		if (!$this->end_at) {
+			$this->validateErrors[] = 'End not set!';
+		}
+		if ($this->start_at && $this->end_at && $this->start_at->getTimestamp() > $this->end_at->getTimestamp()) {
+			$this->validateErrors[] = 'The Start can not be after the end!';
+		}
+		return $this->validateErrors ? false : true;
+	}
+	
+	public function setFromImportedEventModel(ImportedEventModel $importedEvent) {
+		$changesToSave = false;
+		if ($importedEvent->getTitle() != $this->getSummary()) {
+			$this->setSummary($importedEvent->getTitle());
+			$changesToSave = true;
+		}
+		if ($importedEvent->getDescription() != $this->getDescription()) {
+			$this->setDescription($importedEvent->getDescription());
+			$changesToSave = true;
+		}
+		if (!$this->getStartAt() || $importedEvent->getStartAtInUTC()->getTimeStamp() != $this->getStartAtInUTC()->getTimeStamp()) {
+			$this->setStartAt(clone $importedEvent->getStartAt());
+			$changesToSave = true;
+		}
+		if (!$this->getEndAt() || $importedEvent->getEndAtInUTC()->getTimeStamp() != $this->getEndAtInUTC()->getTimeStamp()) {
+			$this->setEndAt(clone $importedEvent->getEndAt());
+			$changesToSave = true;
+		}
+		if ($importedEvent->getUrl() != $this->getUrl()) {
+			$this->setUrl($importedEvent->getUrl());
+			$changesToSave = true;
+		}			
+		return $changesToSave;
+	}
+	
+		
 	public function getId() {
 		return $this->id;
 	}

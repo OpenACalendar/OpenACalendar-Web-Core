@@ -76,3 +76,10 @@ function addCountriesToTestDB() {
 
 
 
+function getUTCDateTime($year=2012, $month=1, $day=1, $hour=0, $minute=0, $second=0) {
+	$dt = new \DateTime('', new \DateTimeZone('UTC'));
+	$dt->setTime($hour, $minute, $second);
+	$dt->setDate($year, $month, $day);
+	return $dt;
+}
+

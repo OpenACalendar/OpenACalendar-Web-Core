@@ -158,6 +158,8 @@ class Config {
 	public $SMTPEncyption = null;
 	public $SMTPAuthMode = null;
 	
+	public $CLIAPI1Enabled = false;
+	
 	function getWebIndexDomainSecure() {
 		return $this->hasSSL ? "https://".$this->webIndexDomainSSL : "http://".$this->webIndexDomain;
 	}
