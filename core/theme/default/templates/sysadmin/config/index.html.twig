@@ -628,6 +628,10 @@
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'recurEventForDaysInFutureWhenMonthly'} %}
 			</td>
 		</tr>
+		<tr>
+			<th>CLIAPI1Enabled</th>
+			<td>{% if config.CLIAPI1Enabled %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'CLIAPI1Enabled'} %}</td>
 		</tr>
 	</table>
 
