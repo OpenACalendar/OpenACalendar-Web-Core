@@ -68,6 +68,7 @@
 		Edited at 
 		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
 			{{ historyItem.getCreatedAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+			({{ historyItem.getCreatedAt | timesinceinwords }})
 		</time>	
 		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
 	</div>
