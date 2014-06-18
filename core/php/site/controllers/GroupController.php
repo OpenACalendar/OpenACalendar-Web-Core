@@ -479,7 +479,7 @@ class GroupController {
 		$importurl->setSiteId($app['currentSite']->getId());
 		$importurl->setGroupId($this->parameters['group']->getId());
 		
-		$form = $app['form.factory']->create(new ImportURLNewForm($app['currentSite']), $importurl);
+		$form = $app['form.factory']->create(new ImportURLNewForm($app['currentSite'], $app['currentTimeZone']), $importurl);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

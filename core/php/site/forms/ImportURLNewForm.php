@@ -21,11 +21,13 @@ use models\SiteModel;
  */
 class ImportURLNewForm extends AbstractType{
 	
+	protected $timeZoneName;
 	/** @var SiteModel **/
 	protected $site;
 	
-	function __construct(SiteModel $site) {
+	function __construct(SiteModel $site, $timeZoneName) {
 		$this->site = $site;
+		$this->timeZoneName = $timeZoneName;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
@@ -45,14 +47,19 @@ class ImportURLNewForm extends AbstractType{
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);
 		$countries = array();
+		$defaultCountry = null;
 		foreach($crb->fetchAll() as $country) {
 			$countries[$country->getId()] = $country->getTitle();
+			if ($defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
+				$defaultCountry = $country->getId();
+			}	
 		}
 		// TODO if current country not in list add it now
 		$builder->add('country_id', 'choice', array(
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
+			'data' => $defaultCountry,
 		));
 		
 	}
