@@ -71,6 +71,10 @@
 			<p class="description">More details at <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></p>
 		{% endif %}
 		
+		{% if event.ticketUrl %}
+			<p class="description">Get your tickets at <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></p>
+		{% endif %}
+		
 		{% if groups|length > 0 %}
 			{% for group in groups %}
 				<p class="groupTitle">About <a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></p>

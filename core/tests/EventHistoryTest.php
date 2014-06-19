@@ -37,6 +37,7 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 				'timezone'=>'Europe/London',
 				'venue_id'=>45,
 				'url'=>'',
+				'ticket_url'=>'',
 				'is_virtual'=>0,
 				'is_physical'=>0,
 				'area_id'=>'',
@@ -65,6 +66,7 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true,  $eventHistory->getTimezoneChanged());
 		$this->assertEquals(true,  $eventHistory->getVenueIdChanged());
 		$this->assertEquals(false,  $eventHistory->getUrlChanged());
+		$this->assertEquals(false,  $eventHistory->getTicketUrlChanged());
 		$this->assertEquals(true,  $eventHistory->getIsVirtualChanged());
 		$this->assertEquals(true,  $eventHistory->getIsPhysicalChanged());
 		$this->assertEquals(false,  $eventHistory->getAreaIdChanged());
@@ -87,6 +89,7 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 				'timezone'=>'',
 				'venue_id'=>45,
 				'url'=>'',
+				'ticket_url'=>'',
 				'is_virtual'=>0,
 				'is_physical'=>0,
 				'area_id'=>'',
@@ -117,6 +120,7 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 				'timezone'=>'',
 				'venue_id'=>null,
 				'url'=>'',
+				'ticket_url'=>'',
 				'is_virtual'=>0,
 				'is_physical'=>0,
 				'area_id'=>56,
@@ -144,6 +148,7 @@ class EventHistoryTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false,  $eventHistory->getTimezoneChanged());
 		$this->assertEquals(true,  $eventHistory->getVenueIdChanged());
 		$this->assertEquals(false,  $eventHistory->getUrlChanged());
+		$this->assertEquals(false,  $eventHistory->getTicketUrlChanged());
 		$this->assertEquals(false,  $eventHistory->getIsVirtualChanged());
 		$this->assertEquals(false,  $eventHistory->getIsPhysicalChanged());
 		$this->assertEquals(true,  $eventHistory->getAreaIdChanged());	

@@ -31,6 +31,7 @@ class EventHistoryModel extends EventModel {
 	protected $timezone_changed   = 0;
 	protected $venue_id_changed   = 0;
 	protected $url_changed   = 0;
+	protected $ticket_url_changed   = 0;
 	protected $is_virtual_changed   = 0;
 	protected $is_physical_changed   = 0;
 	protected $area_id_changed   = 0;
@@ -56,6 +57,7 @@ class EventHistoryModel extends EventModel {
 		$this->timezone  = $data['timezone'];
 		$this->venue_id  = $data['venue_id'];
 		$this->url  = $data['url'];
+		$this->ticket_url  = $data['ticket_url'];
 		$this->is_virtual  = $data['is_virtual'];
 		$this->is_physical  = $data['is_physical'];
 		$this->area_id  = $data['area_id'];
@@ -70,6 +72,7 @@ class EventHistoryModel extends EventModel {
 		$this->timezone_changed  = isset($data['timezone_changed']) ? $data['timezone_changed'] : 0;
 		$this->venue_id_changed  = isset($data['venue_id_changed']) ? $data['venue_id_changed'] : 0;
 		$this->url_changed  = isset($data['url_changed']) ? $data['url_changed'] : 0;
+		$this->ticket_url_changed  = isset($data['ticket_url_changed']) ? $data['ticket_url_changed'] : 0;
 		$this->is_virtual_changed  = isset($data['is_virtual_changed']) ? $data['is_virtual_changed'] : 0;
 		$this->is_physical_changed  = isset($data['is_physical_changed']) ? $data['is_physical_changed'] : 0;
 		$this->area_id_changed  = isset($data['area_id_changed']) ? $data['area_id_changed'] : 0;
@@ -86,6 +89,7 @@ class EventHistoryModel extends EventModel {
 			$this->timezone_changed == 0 ||
 			$this->venue_id_changed == 0 ||
 			$this->url_changed == 0 ||
+			$this->ticket_url_changed == 0 ||
 			$this->is_virtual_changed == 0 ||
 			$this->is_physical_changed == 0 ||
 			$this->area_id_changed == 0;
@@ -101,6 +105,7 @@ class EventHistoryModel extends EventModel {
 		$this->timezone_changed = $this->timezone ? 1 : -1;
 		$this->venue_id_changed = $this->venue_id ? 1 : -1;
 		$this->url_changed = $this->url ? 1 : -1;
+		$this->ticket_url_changed = $this->ticket_url ? 1 : -1;
 		$this->is_virtual_changed = 1;
 		$this->is_physical_changed = 1;
 		$this->area_id_changed = $this->area_id ? 1 : -1;
@@ -117,6 +122,7 @@ class EventHistoryModel extends EventModel {
 		$this->timezone_changed  = ($this->timezone  != $last->timezone  )? 1 : -1;
 		$this->venue_id_changed  = ($this->venue_id  != $last->venue_id  )? 1 : -1;
 		$this->url_changed = ($this->url  != $last->url  )? 1 : -1;
+		$this->ticket_url_changed = ($this->ticket_url  != $last->ticket_url  )? 1 : -1;
 		$this->is_virtual_changed  = ($this->is_virtual  != $last->is_virtual  )? 1 : -1;
 		$this->is_physical_changed  = ($this->is_physical  != $last->is_physical  )? 1 : -1;
 		$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
@@ -194,6 +200,10 @@ class EventHistoryModel extends EventModel {
 		return ($this->url_changed != -1);
 	}
 
+	public function getTicketUrlChanged() {
+		return ($this->ticket_url_changed != -1);
+	}
+		
 	public function getIsVirtualChanged() {
 		return ($this->is_virtual_changed != -1);
 	}

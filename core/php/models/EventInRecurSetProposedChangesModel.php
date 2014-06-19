@@ -24,6 +24,8 @@ class EventInRecurSetProposedChangesModel {
 	protected $country_area_venue_id_change_selected = false;
 	protected $url_change_possible = false;
 	protected $url_change_selected = false;
+	protected $ticket_url_change_possible = false;
+	protected $ticket_url_change_selected = false;
 	protected $is_virtual_change_possible = false;
 	protected $is_virtual_change_selected = false;
 	protected $is_physical_change_possible = false;
@@ -118,6 +120,22 @@ class EventInRecurSetProposedChangesModel {
 		$this->url_change_selected = $url_change_selected;
 	}
 
+	public function getTicketUrlChangePossible() {
+		return $this->ticket_url_change_possible;
+	}
+
+	public function setTicketUrlChangePossible($ticket_url_change_possible) {
+		$this->ticket_url_change_possible = $ticket_url_change_possible;
+	}
+
+	public function getTicketUrlChangeSelected() {
+		return $this->ticket_url_change_selected;
+	}
+
+	public function setTicketUrlChangeSelected($ticket_url_change_selected) {
+		$this->ticket_url_change_selected = $ticket_url_change_selected;
+	}
+	
 	public function getIsVirtualChangePossible() {
 		return $this->is_virtual_change_possible;
 	}
@@ -172,6 +190,7 @@ class EventInRecurSetProposedChangesModel {
 				$this->timezone_change_possible ||
 				$this->country_area_venue_id_change_possible ||
 				$this->url_change_possible ||
+				$this->ticket_url_change_possible ||
 				$this->is_virtual_change_possible ||
 				$this->is_physical_change_possible ||
 				$this->start_end_at_change_possible;
@@ -224,6 +243,10 @@ class EventInRecurSetProposedChangesModel {
 		}
 		if ($this->url_change_possible && $this->url_change_selected) {
 			$event->setUrl($originalEvent->getUrl());
+			$changes = true;
+		}
+		if ($this->ticket_url_change_possible && $this->ticket_url_change_selected) {
+			$event->setTicketUrl($originalEvent->getTicketUrl());
 			$changes = true;
 		}
 		if ($this->is_virtual_change_possible && $this->is_virtual_change_selected) {

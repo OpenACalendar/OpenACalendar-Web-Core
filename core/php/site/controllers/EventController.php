@@ -525,6 +525,10 @@ class EventController {
 						$proposedChanges->setUrlChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldUrl']) 
 								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldUrl'] == 1);
 					} 
+					if ($proposedChanges->getTicketUrlChangePossible()) {
+						$proposedChanges->setTicketUrlChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldTicketUrl']) 
+								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldTicketUrl'] == 1);
+					} 
 					if ($proposedChanges->getIsVirtualChangePossible()) {
 						$proposedChanges->setIsVirtualChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldIsVirtual']) 
 								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldIsVirtual'] == 1);

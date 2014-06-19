@@ -53,16 +53,19 @@ class EventCreateTest extends \PHPUnit_Framework_TestCase {
 		$event->setDescription("test test");
 		$event->setStartAt($this->mktime(2014,5,10,19,0,0,'Europe/London'));
 		$event->setEndAt($this->mktime(2014,5,10,21,0,0,'Europe/London'));
+		$event->setUrl("http://www.info.com");
+		$event->setTicketUrl("http://www.tickets.com");
 
 		$eventRepository = new EventRepository();
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());
-
 		
 		$this->assertEquals("test test", $event->getDescription());
 		$this->assertEquals("test", $event->getSummary());
-		
+		$this->assertEquals("http://www.info.com", $event->getUrl());
+		$this->assertEquals("http://www.tickets.com", $event->getTicketUrl());
+				
 		$startAtShouldBe = $this->mktime(2014,5,10,18,0,0,'UTC'); // Not summer time so London is +1 UTC!
 		$startAtIs = clone $event->getStartAt();
 		$startAtIs->setTimezone(new \DateTimeZone('UTC'));

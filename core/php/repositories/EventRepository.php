@@ -36,10 +36,10 @@ class EventRepository {
 
 			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, summary,description,start_at,end_at,".
 				" created_at, event_recur_set_id,venue_id,country_id,timezone, ".
-				" url, is_physical, is_virtual, area_id, approved_at) ".
+				" url, ticket_url, is_physical, is_virtual, area_id, approved_at) ".
 					" VALUES (:site_id, :slug, :summary, :description, :start_at, :end_at, ".
 						" :created_at, :event_recur_set_id,:venue_id,:country_id,:timezone, ".
-						" :url, :is_physical, :is_virtual, :area_id, :approved_at) RETURNING id");
+						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$event->getSlug(),
@@ -55,6 +55,7 @@ class EventRepository {
 					'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
 					'timezone'=>$event->getTimezone(),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
 				));
@@ -63,10 +64,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
 				" user_account_id  , created_at,venue_id,country_id,timezone,".
-				" url, is_physical, is_virtual, area_id, is_new, approved_at) VALUES ".
+				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at) VALUES ".
 					" (:event_id, :summary, :description, :start_at, :end_at, ".
 						" :user_account_id  , :created_at,:venue_id,:country_id,:timezone,".
-						" :url, :is_physical, :is_virtual, :area_id, '1', :approved_at)");
+						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, '1', :approved_at)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -81,6 +82,7 @@ class EventRepository {
 					'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
 					'timezone'=>$event->getTimezone(),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
 				));
@@ -186,7 +188,7 @@ class EventRepository {
 			$stat = $DB->prepare("UPDATE event_information  SET summary=:summary, description=:description, ".
 					"start_at=:start_at, end_at=:end_at, is_deleted='0', area_id=:area_id, ".
 					" venue_id=:venue_id, country_id=:country_id, timezone=:timezone, ".
-					"url=:url, is_physical=:is_physical, is_virtual=:is_virtual ".
+					"url=:url, ticket_url=:ticket_url, is_physical=:is_physical, is_virtual=:is_virtual ".
 					"WHERE id=:id");
 			$stat->execute(array(
 					'id'=>$event->getId(),
@@ -199,16 +201,17 @@ class EventRepository {
 					'country_id'=>$event->getCountryId(),
 					'timezone'=>$event->getTimezone(),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
 				));
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
 					"created_at, reverted_from_created_at,venue_id,country_id,timezone,".
-					"url, is_physical, is_virtual, area_id, approved_at) VALUES ".
+					"url, ticket_url, is_physical, is_virtual, area_id, approved_at) VALUES ".
 					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
 					":created_at, :reverted_from_created_at,:venue_id,:country_id,:timezone,"."
-						:url, :is_physical, :is_virtual, :area_id, :approved_at)");
+						:url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -224,6 +227,7 @@ class EventRepository {
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'reverted_from_created_at'=> ($fromHistory ? date("Y-m-d H:i:s",$fromHistory->getCreatedAtTimeStamp()):null),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
 				));
@@ -257,10 +261,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
 					"created_at,venue_id,country_id,timezone,".
-					"url, is_physical, is_virtual, is_deleted, approved_at) VALUES ".
+					"url, ticket_url, is_physical, is_virtual, is_deleted, approved_at) VALUES ".
 					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
 					":created_at,:venue_id,:country_id,:timezone,"."
-						:url, :is_physical, :is_virtual, '1', :approved_at)");
+						:url, :ticket_url,  :is_physical, :is_virtual, '1', :approved_at)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -274,6 +278,7 @@ class EventRepository {
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
 				));
@@ -369,10 +374,10 @@ class EventRepository {
 			$statUpdateEvent = $DB->prepare("UPDATE event_information  SET venue_id=null, area_id=:area_id WHERE id=:id");	
 			$statAddHistory = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
 					"created_at, approved_at, venue_id,area_id,country_id,timezone,".
-					"url, is_physical, is_virtual, is_deleted) VALUES ".
+					"url, ticket_url, is_physical, is_virtual, is_deleted) VALUES ".
 					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
 					":created_at, :approved_at, :venue_id,:area_id,:country_id,:timezone,"."
-						:url, :is_physical, :is_virtual, '0')");
+						:url, :ticket_url, :is_physical, :is_virtual, '0')");
 			$statFetch->execute(array('venue_id'=>$venue->getId(), 'start_at'=>\TimeSource::getFormattedForDataBase()));
 			while($data = $statFetch->fetch()) {
 				$event = new EventModel();
@@ -402,6 +407,7 @@ class EventRepository {
 											'created_at'=>\TimeSource::getFormattedForDataBase(),		
 											'approved_at'=>\TimeSource::getFormattedForDataBase(),
 											'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+											'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 											'is_physical'=>$event->getIsPhysical()?1:0,
 											'is_virtual'=>$event->getIsVirtual()?1:0,
 										));

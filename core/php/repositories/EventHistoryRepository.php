@@ -60,6 +60,7 @@ class EventHistoryRepository {
 				" timezone_changed = :timezone_changed   , ".
 				" venue_id_changed = :venue_id_changed   , ".
 				" url_changed = :url_changed  , ".
+				" ticket_url_changed = :ticket_url_changed  , ".
 				" is_virtual_changed = :is_virtual_changed   , ".
 				" is_physical_changed = :is_physical_changed   , ".
 				" area_id_changed = :area_id_changed    ".
@@ -77,6 +78,7 @@ class EventHistoryRepository {
 				'timezone_changed'=> $eventhistory->getTimezoneChanged() ? 1 : -1,
 				'venue_id_changed'=> $eventhistory->getVenueIdChanged() ? 1 : -1,
 				'url_changed'=> $eventhistory->getUrlChanged() ? 1 : -1,
+				'ticket_url_changed'=> $eventhistory->getTicketUrlChanged() ? 1 : -1,
 				'is_virtual_changed'=> $eventhistory->getIsVirtualChanged() ? 1 : -1,
 				'is_physical_changed'=> $eventhistory->getIsPhysicalChanged() ? 1 : -1,
 				'area_id_changed'=> $eventhistory->getAreaIdChanged() ? 1 : -1,

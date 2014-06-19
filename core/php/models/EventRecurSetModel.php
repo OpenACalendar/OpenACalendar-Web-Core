@@ -422,6 +422,12 @@ class EventRecurSetModel {
 					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setUrlChangeSelected(true);
 				}
 			}
+			if ($this->initalEventLastChange->getTicketUrlChanged() && $this->initalEvent->getTicketUrl() != $futureEvent->getTicketUrl()) {
+				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setTicketUrlChangePossible(true);
+				if ($this->initialEventJustBeforeLastChange->getTicketUrl() == $futureEvent->getTicketUrl()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setTicketUrlChangeSelected(true);
+				}
+			}
 			if ($this->initalEventLastChange->getTimezoneChanged() && $this->initalEvent->getTimezone() != $futureEvent->getTimezone()) {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setTimezoneChangePossible(true);
 				if ($this->initialEventJustBeforeLastChange->getTimezone() == $futureEvent->getTimezone()) {

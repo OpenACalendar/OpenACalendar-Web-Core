@@ -74,7 +74,15 @@
 							<li>
 								<label>
 									<input type="checkbox" name="eventSlug{{ event.slug }}fieldUrl" value="1" {% if futureEventsProposedChanges[event.slug].getUrlChangeSelected %}checked="checked"{% endif %}>
-									Change Url
+									Change Information Url
+								</label>
+							</li>
+						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].getTicketUrlChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldTicketUrl" value="1" {% if futureEventsProposedChanges[event.slug].getTicketUrlChangeSelected %}checked="checked"{% endif %}>
+									Change Ticket Url
 								</label>
 							</li>
 						{% endif %}

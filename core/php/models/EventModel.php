@@ -31,6 +31,7 @@ class EventModel {
 	protected $import_url_id;
 	protected $import_id;
 	protected $url;
+	protected $ticket_url;
 	protected $is_virtual = false;
 	protected $is_physical = true;
 
@@ -83,6 +84,7 @@ class EventModel {
 		$this->import_id = $data['import_id'];
 		$this->import_url_id = $data['import_url_id'];
 		$this->url = $data['url'];
+		$this->ticket_url = $data['ticket_url'];
 		if (isset($data['venue_slug'])) {
 			$this->venue = new VenueModel();
 			$this->venue->setTitle($data['venue_title']);
@@ -382,6 +384,15 @@ class EventModel {
 		return $this;
 	}
 	
+	public function getTicketUrl() {
+		return $this->ticket_url;
+	}
+
+	public function setTicketUrl($ticket_url) {
+		$this->ticket_url = $ticket_url;
+	}
+
+		
 	/**
 	 * @return VenueModel
 	 */

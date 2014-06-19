@@ -47,7 +47,12 @@ class EventEditForm extends AbstractType{
 		));
 		
 		$builder->add('url', 'url', array(
-			'label'=>'Web Page URL',
+			'label'=>'Information Web Page URL',
+			'required'=>false
+		));
+		
+		$builder->add('ticket_url', 'url', array(
+			'label'=>'Tickets Web Page URL',
 			'required'=>false
 		));
 		
