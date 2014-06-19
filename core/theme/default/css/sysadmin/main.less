@@ -307,6 +307,33 @@ ul.areasAdmin {
 	}
 }
 
+ul.breadcrumbs {
+	padding: 10px;
+	text-transform:lowercase;
+	li {
+		display: inline;
+		@media screen and (max-width: 800px) {
+			display:block;
+		}
+		font-size: 0.8em;
+		padding: 5px 10px 5px 15px;
+		background: url('/theme/default/imgsysadmin/breadcrumbsDivider.png') left center no-repeat;
+		a {
+			text-decoration: none;
+			color: black;
+		}
+		a:hover {
+			text-decoration: underline;
+			color: black;
+		}
+	}
+	li.current {
+		a, a:hover {
+			text-decoration: none;
+			color: #555;
+		}
+	}
+}
 
 #footer {
 	padding: 10px 5px;

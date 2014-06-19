@@ -7,6 +7,14 @@
  #}
 {% extends 'sysadmin/page.html.twig' %}
 
+
+{% block breadcrumbs %}
+	<li><a href="/sysadmin/site/{{ site.id }}/">{{ site.title }}</a></li>
+	<li><a href="/sysadmin/site/{{ site.id }}/country">countries</a></li>
+	<li class="current"><a href="/sysadmin/site/{{ site.id }}/country/{{ country.twoCharCode }}">{{ country.title }}</a></li>
+{% endblock %}
+
+
 {% block content %}
 
 	<ul class="areasAdmin">

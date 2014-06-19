@@ -440,6 +440,34 @@ ul.areasAdmin li.area span.contentNew a {
   color: white;
   text-decoration: none;
 }
+ul.breadcrumbs {
+  padding: 10px;
+  text-transform: lowercase;
+}
+ul.breadcrumbs li {
+  display: inline;
+  font-size: 0.8em;
+  padding: 5px 10px 5px 15px;
+  background: url('/theme/default/imgsysadmin/breadcrumbsDivider.png') left center no-repeat;
+}
+@media screen and (max-width: 800px) {
+  ul.breadcrumbs li {
+    display: block;
+  }
+}
+ul.breadcrumbs li a {
+  text-decoration: none;
+  color: black;
+}
+ul.breadcrumbs li a:hover {
+  text-decoration: underline;
+  color: black;
+}
+ul.breadcrumbs li.current a,
+ul.breadcrumbs li.current a:hover {
+  text-decoration: none;
+  color: #555;
+}
 #footer {
   padding: 10px 5px;
   text-align: center;

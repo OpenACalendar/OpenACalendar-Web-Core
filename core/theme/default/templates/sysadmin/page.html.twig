@@ -61,7 +61,8 @@
 			{% endfor %}
 			{% for msg in getAndClearFlashMessages() %}
 				<div class="flash-notice">{{ msg }}</div>
-			{% endfor %}					
+			{% endfor %}	
+			<ul class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</ul>				
 			{% block content %}{% endblock %}
 		</div>
 		<div id="footer">
