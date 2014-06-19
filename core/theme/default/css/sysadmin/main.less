@@ -272,6 +272,42 @@ ul.usernotifications {
 	}
 }
 
+
+ul.areasAdmin {
+	padding: 10px 5px 10px 20px;
+	font-weight: 200;
+	li.area {
+		padding: 2px;
+		span.content {
+			font-size: 13pt;
+			background: url('/theme/default/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentWithEvents {
+			font-size: 13pt;
+			background: url('/theme/default/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentWithNoEvents {
+			font-size: 10pt;
+			background: url('/theme/default/img/areaBackground.png') no-repeat #0DA20D;
+		}
+		span.contentNew {
+			font-size: 10pt;
+			background: url('/theme/default/img/areaBackground.png') no-repeat #676767;
+		}
+		span.content, span.contentWithEvents, span.contentWithNoEvents, span.contentNew {
+			white-space: nowrap;
+			.rounded-corners(2px);
+			padding: 2px 2px 2px 20px;
+			color: white;
+			a {
+				color: white;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+
 #footer {
 	padding: 10px 5px;
 	text-align: center;

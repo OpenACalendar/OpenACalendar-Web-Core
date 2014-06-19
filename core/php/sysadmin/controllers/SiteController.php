@@ -7,11 +7,14 @@ use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use models\EventModel;
+use models\AreaModel;
 use repositories\SiteRepository;
 use repositories\SiteQuotaRepository;
 use repositories\UserAccountRepository;
 use repositories\UserInSiteRepository;
-use repositories\builders\SiteRepositoryBuilder;
+use repositories\CountryRepository;
+use repositories\builders\CountryRepositoryBuilder;
+use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
 use sysadmin\forms\ActionForm;
 use sysadmin\ActionParser;
@@ -201,6 +204,54 @@ class SiteController {
 
 		return $app['twig']->render('sysadmin/site/watchers.html.twig', $this->parameters);		
 	}
+	
+	function listCountries($siteid, Request $request, Application $app) {
+		$this->build($siteid, $request, $app);
+		
+		$crb = new CountryRepositoryBuilder();
+		$crb->setSiteIn($this->parameters['site']);
+		$this->parameters['countries'] = $crb->fetchAll();
+		
+		return $app['twig']->render('sysadmin/site/countries.html.twig', $this->parameters);		
+
+	}
+	
+	protected function buildTree(SiteModel $site, AreaModel $parentArea = null) {
+		$data = array(
+				'area'=>$parentArea,
+				'children'=>array()
+			);
+		
+		$areaRepoBuilder = new AreaRepositoryBuilder();
+		$areaRepoBuilder->setSite($site);
+		$areaRepoBuilder->setCountry($this->parameters['country']);
+		if ($parentArea) {
+			$areaRepoBuilder->setParentArea($parentArea);
+		} else {
+			$areaRepoBuilder->setNoParentArea(true);
+		}
+		
+		foreach($areaRepoBuilder->fetchAll() as $area) {
+			$data['children'][] = $this->buildTree($site, $area);
+		}
+		
+		return $data;
+	}
+	
+	function showCountry($siteid, $countrycode, Request $request, Application $app) {
+		$this->build($siteid, $request, $app);
+		
+		$cr = new CountryRepository();
+		$this->parameters['country'] = $cr->loadByTwoCharCode($countrycode);
+		if (!$this->parameters['country']) {
+			die("No Country");
+		}
+		
+		$this->parameters['areaTree'] = $this->buildTree($this->parameters['site']);
+		
+		return $app['twig']->render('sysadmin/site/country.html.twig', $this->parameters);	
+	}
+	
 }
 
 
