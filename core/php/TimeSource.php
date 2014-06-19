@@ -2,6 +2,12 @@
 
 
 /**
+ * 
+ * A central time source for the app. 
+ * 
+ * This is done so the current time can be set to specific values (mocked) 
+ * for automated testing.
+ * 
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
@@ -42,3 +48,4 @@ class TimeSource {
 		TimeSource::$now = null;
 	}
 }
+

@@ -8,6 +8,11 @@ use cliapi1\CreateEvent;
 
 /**
  *
+ * Creates an event.
+ * 
+ * JSON Mode:
+ * pass in a JSON blob as Standard Input.
+ * 
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD

@@ -11,7 +11,11 @@ use repositories\SiteQuotaRepository;
 use models\SiteModel;
 
 /**
- *
+ * Creates a site.
+ * 
+ * This shouldn't really be here; but at the moment it's used by the install process.
+ * It should be in cliapi1 and there should be a seperate explicit installer (web, cli, or both)
+ * 
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD

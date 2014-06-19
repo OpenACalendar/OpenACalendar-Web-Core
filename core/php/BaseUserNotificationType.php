@@ -7,6 +7,8 @@ use repositories\UserNotificationPreferenceRepository;
 
 /**
  *
+ * Each User Notification has a seperate type. Types should be represented by classes that extend this.
+ * 
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD

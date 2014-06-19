@@ -6,6 +6,14 @@ use models\SiteModel;
 
 /**
  *
+ * Users can choose whether to have user notifications emailed to them.
+ * 
+ * They turn on or off several different categories of notification (a Preference),
+ * each category is represented by a class that extends this.
+ *
+ * This is done seperately from BaseUserNotificationType because several 
+ * types of notification may be turned on or off by one category or Preference.
+ * 
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
