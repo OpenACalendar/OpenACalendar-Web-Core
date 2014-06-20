@@ -36,7 +36,13 @@ fclose( $f );
 ######### Create
 $createEvent = new CreateEvent();
 $json = json_decode(trim($stdin));
-$createEvent->setFromJSON($json);
+if ($json) {
+	$createEvent->setFromJSON($json);
+} else {
+	print "ERRORS!\n\n";
+	print "Could not parse JSON\n";
+	die();
+}
 
 
 ######### Go
