@@ -20,7 +20,10 @@
 				<li><a href="/event/calendar">Calendar</a></li>
 				{% if currentSite.isFeatureCuratedList %}
 					<li><a href="/curatedlist">Lists</a></li>
-				{% endif %}					
+				{% endif %}		
+				{% if currentSite.isFeatureTag %}
+					<li><a href="/tag">Tags</a></li>
+				{% endif %}			
 				{% if currentSite.isFeatureImporter %}
 					<li><a href="/importurl">Import</a></li>
 				{% endif %}		

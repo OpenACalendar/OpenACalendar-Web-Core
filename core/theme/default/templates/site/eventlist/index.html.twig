@@ -36,6 +36,10 @@
 			{# lists link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
 			{% if currentSite.isFeatureCuratedList %}
 				<li class="action"><a href="/curatedlist"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> Lists</a></li>
+			{% endif %}	
+			{# tags link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
+			{% if currentSite.isFeatureTag %}
+				<li class="action"><a href="/tag"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> Tags</a></li>
 			{% endif %}									
 			<li class="action">
 				<a href="/api1/events.ical" onclick="showExportPopup(); return false;">
