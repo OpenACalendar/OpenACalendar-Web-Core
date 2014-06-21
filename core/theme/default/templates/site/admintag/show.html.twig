@@ -15,9 +15,18 @@
 {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
-	
+
+
+
 {% block actions %}
+	{% if currentSite.isFeatureTag and not tag.isDeleted %}
+		<li class="action">
+			<a href="/admin/tag/{{ tag.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+		</li>
+	{% endif %}
 {% endblock %}
+
+
 
 
 {% block innerContentLeft %}

@@ -406,6 +406,10 @@ $app->match('/admin/tag/new', "site\controllers\AdminController::newTag")
 $app->match('/admin/tag/{slug}', "site\controllers\AdminTagController::show")
 		->before($appVerifiedAdminUserRequired)
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
+$app->match('/admin/tag/{slug}/edit', "site\controllers\AdminTagController::edit")
+		->before($appVerifiedAdminUserRequired)
+		->before($canChangeSite)
+		->assert('slug', FRIENDLY_SLUG_REGEX); 
 		
 		
 		

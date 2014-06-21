@@ -6,6 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use repositories\TagRepository;
 use repositories\builders\filterparams\EventFilterParams;
+use site\forms\AdminTagEditForm;
 
 /**
  *
@@ -58,6 +59,36 @@ class AdminTagController {
 		
 		
 		return $app['twig']->render('site/admintag/show.html.twig', $this->parameters);
+	}
+	
+	
+	function edit($slug, Request $request, Application $app) {
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Tag does not exist.");
+		}
+		
+				
+		$form = $app['form.factory']->create(new AdminTagEditForm(), $this->parameters['tag']);
+		
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+
+			if ($form->isValid()) {
+				
+				$tagRepository = new TagRepository();
+				$tagRepository->edit($this->parameters['tag'], userGetCurrent());
+				
+				return $app->redirect("/admin/tag/".$this->parameters['tag']->getSlugForUrl());
+				
+			}
+		}
+		
+		
+		$this->parameters['form'] = $form->createView();
+			
+		
+		return $app['twig']->render('site/admintag/edit.html.twig', $this->parameters);
 	}
 	
 	
