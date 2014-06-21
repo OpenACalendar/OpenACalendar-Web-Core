@@ -5,6 +5,7 @@ namespace repositories;
 
 use models\TagModel;
 use models\SiteModel;
+use models\EventModel;
 use models\UserAccountModel;
 
 /**
@@ -71,6 +72,64 @@ class TagRepository {
 	}
 	
 	
+	
+	public function loadById($id) {
+		global $DB;
+		$stat = $DB->prepare("SELECT tag_information.* FROM tag_information WHERE id = :id");
+		$stat->execute(array( 'id'=>$id ));
+		if ($stat->rowCount() > 0) {
+			$tag = new TagModel();
+			$tag->setFromDataBaseRow($stat->fetch());
+			return $tag;
+		}
+	}
+	
+	public function addTagToEvent(TagModel $tag, EventModel $event, UserAccountModel $user=null) {
+		global $DB;
+		
+		// check event not already in list
+		$stat = $DB->prepare("SELECT * FROM event_has_tag WHERE tag_id=:tag_id AND ".
+				" event_id=:event_id AND removed_at IS NULL ");
+		$stat->execute(array(
+			'tag_id'=>$tag->getId(),
+			'event_id'=>$event->getId(),
+		));
+		if ($stat->rowCount() > 0) {
+			return;
+		}
+			
+		// Add!
+		$stat = $DB->prepare("INSERT INTO event_has_tag (tag_id,event_id,added_by_user_account_id,added_at,addition_approved_at) ".
+				"VALUES (:tag_id,:event_id,:added_by_user_account_id,:added_at,:addition_approved_at)");
+		$stat->execute(array(
+			'tag_id'=>$tag->getId(),
+			'event_id'=>$event->getId(),
+			'added_by_user_account_id'=>($user?$user->getId():null),
+			'added_at'=>  \TimeSource::getFormattedForDataBase(),
+			'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+		));
+		
+	}
+
+	
+	
+	
+	public function removeTagFromEvent(TagModel $tag, EventModel $event, UserAccountModel $user=null) {
+		global $DB;
+
+		
+		$stat = $DB->prepare("UPDATE event_has_tag SET removed_by_user_account_id=:removed_by_user_account_id,".
+				" removed_at=:removed_at, removal_approved_at=:removal_approved_at WHERE ".
+				" event_id=:event_id AND tag_id=:tag_id AND removed_at IS NULL ");
+		$stat->execute(array(
+				'event_id'=>$event->getId(),
+				'tag_id'=>$tag->getId(),
+				'removed_at'=>  \TimeSource::getFormattedForDataBase(),
+				'removal_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+				'removed_by_user_account_id'=>($user?$user->getId():null),
+		));
+	}
+
 	
 }
 

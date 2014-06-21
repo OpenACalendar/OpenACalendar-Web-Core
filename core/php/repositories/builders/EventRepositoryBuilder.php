@@ -5,6 +5,7 @@ namespace repositories\builders;
 use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
+use models\TagModel;
 use models\VenueModel;
 use models\UserAccountModel;
 use models\CountryModel;
@@ -112,6 +113,14 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	
 	public function setCuratedList(CuratedListModel $curatedList) {
 		$this->curatedList = $curatedList;
+	}
+	
+	
+	/** @var TagModel **/
+	protected $tag;
+	
+	public function setTag(TagModel $tag) {
+		$this->tag = $tag;
 	}
 	
 	
@@ -362,7 +371,13 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		if ($this->event_recur_set_id) {
 			$this->where[] =  " event_information.event_recur_set_id = :event_recur_set_id ";
 			$this->params['event_recur_set_id'] = $this->event_recur_set_id;
+		}	
+		
+		if ($this->tag) {
+			$this->joins[] = "  JOIN event_has_tag ON event_has_tag.event_id = event_information.id AND  event_has_tag.tag_id = :tag_id AND event_has_tag.removed_at IS NULL";
+			$this->params['tag_id'] = $this->tag->getId();	
 		}
+		
 	}
 	
 	protected function buildStat() {

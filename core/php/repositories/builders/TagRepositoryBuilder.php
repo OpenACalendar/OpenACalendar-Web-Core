@@ -25,6 +25,24 @@ class TagRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	
+	/** @var EventModel **/
+	protected $tagsForEvent;
+	
+	public function setTagsForEvent(EventModel $event) {
+		$this->tagsForEvent = $event;
+	}
+	
+	
+	/** @var EventModel **/
+	protected $tagsNotForEvent;
+	
+	public function setTagsNotForEvent(EventModel $event) {
+		$this->tagsNotForEvent = $event;
+	}
+	
+	
+	
+	
 	protected $include_deleted = true;
 
 	public function setIncludeDeleted($value) {
@@ -38,6 +56,14 @@ class TagRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->params['site_id'] = $this->site->getId();
 		}
 		
+		if ($this->tagsForEvent) {
+			$this->joins[] = "  JOIN event_has_tag ON event_has_tag.tag_id = tag_information.id AND  event_has_tag.event_id = :event_id AND event_has_tag.removed_at IS NULL";
+			$this->params['event_id'] = $this->tagsForEvent->getId();
+		} else if ($this->tagsNotForEvent) {
+			$this->joins[] = " LEFT JOIN event_has_tag ON event_has_tag.tag_id = tag_information.id AND  event_has_tag.event_id = :event_id AND event_has_tag.removed_at IS NULL";
+			$this->params['event_id'] = $this->tagsNotForEvent->getId();
+			$this->where[] = ' event_has_tag.event_id IS NULL ';
+		}
 	
 		
 		if (!$this->include_deleted) {
