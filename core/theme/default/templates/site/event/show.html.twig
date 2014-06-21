@@ -66,6 +66,16 @@
 	{% endif %}
 
 		<p class="description">{{ event.description | nl2br  | linkify }}</p>
+	
+		{% if tags %}
+			<ul class="tags">
+				{% for tag in tags %}
+					<li class="tags">
+						<a href="/tag/{{ tag.slug }}">{{ tag.title }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
 
 		{% if event.url %}
 			<p class="description">More details at <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></p>

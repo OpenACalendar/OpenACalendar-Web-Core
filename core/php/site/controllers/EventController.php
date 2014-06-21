@@ -182,6 +182,16 @@ class EventController {
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
 		
+		if ($app['currentSite']->getIsFeatureTag()) {
+			$trb = new TagRepositoryBuilder();
+			$trb->setSite($app['currentSite']);
+			$trb->setIncludeDeleted(false);
+			$trb->setTagsForEvent($this->parameters['event']);
+			$this->parameters['tags'] = $trb->fetchAll();
+		} else {
+			$this->parameters['tags'] = array();
+		}
+		
 		if ($this->parameters['country']) {
 			$areaRepoBuilder = new AreaRepositoryBuilder();
 			$areaRepoBuilder->setSite($app['currentSite']);
