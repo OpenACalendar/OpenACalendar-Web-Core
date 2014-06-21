@@ -5,6 +5,7 @@ namespace site\controllers;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use repositories\TagRepository;
+use repositories\builders\filterparams\EventFilterParams;
 
 /**
  *
@@ -41,6 +42,19 @@ class AdminTagController {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Tag does not exist.");
 		}
+		
+			
+		$this->parameters['eventListFilterParams'] = new EventFilterParams();
+		$this->parameters['eventListFilterParams']->set($_GET);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
+		if (userGetCurrent()) {
+			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		}
+		
+		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
 		
 		
 		return $app['twig']->render('site/admintag/show.html.twig', $this->parameters);
