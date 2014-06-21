@@ -389,7 +389,17 @@ $app->match('/admin/areas/{countryslug}/action', "site\controllers\AdminAreasCon
 		->before($appVerifiedAdminUserRequired)
 		->before($canChangeSite);
 
-
+$app->match('/admin/tag/', "site\controllers\AdminController::listTags")
+		->before($appVerifiedAdminUserRequired);
+$app->match('/admin/tag/new', "site\controllers\AdminController::newTag")
+		->before($appVerifiedAdminUserRequired)
+		->before($canChangeSite);
+$app->match('/admin/tag/{slug}', "site\controllers\AdminTagController::show")
+		->before($appVerifiedAdminUserRequired)
+		->assert('slug', FRIENDLY_SLUG_REGEX); 
+		
+		
+		
 $app->match('/map', "site\controllers\MapController::index");
 $app->match('/map/', "site\controllers\MapController::index");
 

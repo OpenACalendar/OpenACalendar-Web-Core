@@ -4,18 +4,22 @@ namespace site\controllers;
 
 use Silex\Application;
 use site\forms\SiteEditProfileForm;
+use site\forms\AdminTagNewForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use models\MediaModel;
+use models\TagModel;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
 use repositories\UserInSiteRepository;
 use repositories\CountryInSiteRepository;
 use repositories\MediaRepository;
 use repositories\SiteProfileMediaRepository;
+use repositories\TagRepository;
 use repositories\builders\UserAccountRepositoryBuilder;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
+use repositories\builders\TagRepositoryBuilder;
 use site\forms\AdminVisibilityPublicForm;
 use site\forms\AdminUsersAddForm;
 
@@ -329,6 +333,46 @@ class AdminController {
 		return $app['twig']->render('site/admin/areas.html.twig', array(
 				'countries'=>$countries,
 			));
+	}
+	
+	function listTags(Application $app) {
+		
+		$trb = new TagRepositoryBuilder();
+		$trb->setSite($app['currentSite']);
+		$tags = $trb->fetchAll();
+		
+		return $app['twig']->render('site/admin/listTags.html.twig', array(	
+				'tags'=>$tags,
+			));
+	}
+	
+	function newTag(Request $request, Application $app) {
+
+
+		$tag = new TagModel();
+
+		$form = $app['form.factory']->create(new AdminTagNewForm(), $tag);
+		
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+
+			if ($form->isValid()) {
+
+				$tagRepo = new TagRepository();
+				$tagRepo->create($tag, $app['currentSite'], userGetCurrent());
+				
+				return $app->redirect('/admin/tag/'.$tag->getSlugForUrl());
+				
+			}
+		}
+
+
+
+		return $app['twig']->render('site/admin/newTag.html.twig', array(
+				'form' => $form->createView(),	
+			));
+
+
 	}
 		
 	

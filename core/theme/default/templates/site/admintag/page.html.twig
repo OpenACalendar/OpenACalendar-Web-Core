@@ -1,0 +1,47 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li><a href="/admin/tag">tags</a></li>
+	<li class="current"><a href="/admin/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+	{% if not currentSite.isFeatureTag %}
+		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+	{% endif %}
+		
+	<h2>{{  tag.title }}</h2>
+	
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% block actions %}{% endblock %}
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/admin/tag/{{ tag.slugForUrl }}">Details</a></li>
+		</ul>
+		<div id="innerPage">
+
+			{% block innerContent %}{% endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	<script type="text/javascript">var exportData = { tag:{{ tag.slug }}, tagSlugURL:"{{ tag.slugForURL|e('js') }}", tagTitle:"{{ tag.title|e('js') }}" }</script>
+{% endblock %}
+

@@ -5,6 +5,7 @@ use models\AreaModel;
 use models\CuratedListModel;
 use models\EventModel;
 use models\VenueModel;
+use models\TagModel;
 
 /**
  *
@@ -76,6 +77,16 @@ class SlugForUrlTest extends \PHPUnit_Framework_TestCase {
 		$curatedlist->setSlug($slug);
 		$curatedlist->setTitle($text);
 		$this->assertEquals($result, $curatedlist->getSlugForUrl());
+	}
+	
+	/**
+     * @dataProvider dataForTestSet
+     */
+	function testSet6($slug, $text, $result) {
+		$tag = new TagModel();
+		$tag->setSlug($slug);
+		$tag->setTitle($text);
+		$this->assertEquals($result, $tag->getSlugForUrl());
 	}
 	
 }
