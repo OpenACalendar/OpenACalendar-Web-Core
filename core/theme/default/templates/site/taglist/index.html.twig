@@ -1,0 +1,44 @@
+
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}Tags - {% endblock %} 
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/tag">tags</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<h2>Events</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			<li class="action">
+				<li class="tab currentTab"><a href="/tag">Tags</a></li>
+			</li>
+		</ul>
+		<div id="innerPage">
+
+			<ul class="tags">
+				{% for tag in tags %}
+					<li class="tags"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></li>
+				{% else %}
+					<li>
+						No tags found.
+					</li>					
+				{% endfor %}
+			</ul>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+		
+{% endblock %}

@@ -330,6 +330,11 @@ $app->match('/watch/', "site\controllers\IndexController::watch")
 		->before($canChangeSite);
 
 
+$app->match('/tag', "site\controllers\TagListController::index"); 
+$app->match('/tag/', "site\controllers\TagListController::index"); 
+
+$app->match('/tag/{slug}', "site\controllers\TagController::show"); 
+$app->match('/tag/{slug}/', "site\controllers\TagController::show"); 
 
 $app->match('/admin', "site\controllers\AdminController::index")
 		->before($appVerifiedAdminUserRequired);
