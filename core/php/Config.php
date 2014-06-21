@@ -115,6 +115,7 @@ class Config {
 	public $newSiteHasFeatureGroup = true;
 	public $newSiteHasFeatureVirtualEvents = false;
 	public $newSiteHasFeaturePhysicalEvents = true;
+	public $newSiteHasFeatureTag = false;
 	public $newSitePromptEmailsDaysInAdvance = 10;
 	public $newSiteHasQuotaCode = 'BASIC';
 	

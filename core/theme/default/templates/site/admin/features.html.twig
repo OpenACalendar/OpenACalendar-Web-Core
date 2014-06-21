@@ -93,6 +93,16 @@
 			<div class="after"></div>
 		</div>
 		
+		<div class="rowWrapper">
+			<div class="labelWrapper">Tags</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<label><input type="checkbox" name="isFeatureTag" value="1" {% if currentSite.getIsFeatureTag %}checked="checked"{% endif %}>Use Tag Feature</label>
+				<p class="information">
+					Events can be tagged for easy filtering.
+				</p>
+			</div>
+			<div class="after"></div>
+		</div>
 		<input type="submit"  value="Save" />	
 
 	</form>

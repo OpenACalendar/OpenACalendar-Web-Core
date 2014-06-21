@@ -32,6 +32,7 @@ class SiteHistoryModel extends SiteModel {
 	protected $is_feature_virtual_events_changed = 0;
 	protected $is_feature_physical_events_changed = 0;
 	protected $is_feature_group_changed = 0;
+	protected $is_feature_tag_changed =  0;
 
 	protected $is_new = 0;
 
@@ -57,6 +58,7 @@ class SiteHistoryModel extends SiteModel {
 		$this->is_feature_virtual_events = isset($data['is_feature_virtual_events']) ? $data['is_feature_virtual_events'] : null;
 		$this->is_feature_physical_events = isset($data['is_feature_physical_events']) ? $data['is_feature_physical_events'] : null;
 		$this->is_feature_group = isset($data['is_feature_group']) ? $data['is_feature_group'] : null;
+		$this->is_feature_tag = isset($data['is_feature_tag']) ? $data['is_feature_tag'] : null;
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->title_changed  = isset($data['title_changed']) ? $data['title_changed'] : 0;
@@ -77,6 +79,7 @@ class SiteHistoryModel extends SiteModel {
 		$this->is_feature_virtual_events_changed  = isset($data['is_feature_virtual_events_changed']) ? $data['is_feature_virtual_events_changed'] : 0;
 		$this->is_feature_physical_events_changed  = isset($data['is_feature_physical_events_changed']) ? $data['is_feature_physical_events_changed'] : 0;
 		$this->is_feature_group_changed  = isset($data['is_feature_group_changed']) ? $data['is_feature_group_changed'] : 0;
+		$this->is_feature_tag_changed  = isset($data['is_feature_tag_changed']) ? $data['is_feature_tag_changed'] : 0;
 		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 		
 	}
@@ -100,6 +103,7 @@ class SiteHistoryModel extends SiteModel {
 			$this->is_feature_virtual_events_changed == 0 || 
 			$this->is_feature_virtual_events_changed == 0 || 
 			$this->is_feature_physical_events_changed == 0 || 
+			$this->is_feature_tag_changed == 0 || 
 			$this->is_feature_group_changed == 0;
 	}
 	
@@ -121,6 +125,7 @@ class SiteHistoryModel extends SiteModel {
 		$this->prompt_emails_days_in_advance_changed  =  1;
 		$this->is_feature_virtual_events_changed  = 1;
 		$this->is_feature_physical_events_changed  = 1;
+		$this->is_feature_tag_changed  = 1;
 		$this->is_feature_group_changed  = 1;
 		$this->is_new = 1;
 	}
@@ -143,6 +148,7 @@ class SiteHistoryModel extends SiteModel {
 		$this->prompt_emails_days_in_advance_changed   =  ($this->prompt_emails_days_in_advance  != $last->prompt_emails_days_in_advance  )? 1 : -1;
 		$this->is_feature_virtual_events_changed   = ($this->is_feature_virtual_events  != $last->is_feature_virtual_events  )? 1 : -1;
 		$this->is_feature_physical_events_changed   = ($this->is_feature_physical_events  != $last->is_feature_physical_events  )? 1 : -1;
+		$this->is_feature_tag_changed   = ($this->is_feature_tag  != $last->is_feature_tag  )? 1 : -1;
 		$this->is_feature_group_changed   = ($this->is_feature_group  != $last->is_feature_group  )? 1 : -1;
 		$this->is_new = 0;
 	}
@@ -219,6 +225,9 @@ class SiteHistoryModel extends SiteModel {
 		return ($this->is_feature_group_changed != -1);
 	}
 
+	public function getIsFeatureTagChanged() {
+		return ($this->is_feature_tag_changed != -1);
+	}
 	public function getIsNew() {
 		return ($this->is_new == 1);
 	}

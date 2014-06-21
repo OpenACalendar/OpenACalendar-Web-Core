@@ -89,6 +89,7 @@ class AdminController {
 			$app['currentSite']->setisFeatureVirtualEvents(isset($_POST['isFeatureVirtualEvents']) && $_POST['isFeatureVirtualEvents'] == '1');
 			$app['currentSite']->setisFeaturePhysicalEvents(isset($_POST['isFeaturePhysicalEvents']) && $_POST['isFeaturePhysicalEvents'] == '1');
 			$app['currentSite']->setIsFeatureImporter(isset($_POST['isFeatureImporter']) && $_POST['isFeatureImporter'] == '1');
+			$app['currentSite']->setIsFeatureTag(isset($_POST['isFeatureTag']) && $_POST['isFeatureTag'] == '1');
 
 			$siteRepository = new SiteRepository();
 			$siteRepository->edit($app['currentSite'], userGetCurrent());

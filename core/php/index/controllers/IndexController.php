@@ -108,6 +108,7 @@ class IndexController {
 				$site->setIsFeaturePhysicalEvents($CONFIG->newSiteHasFeaturePhysicalEvents);
 				$site->setIsFeatureGroup($CONFIG->newSiteHasFeatureGroup);
 				$site->setPromptEmailsDaysInAdvance($CONFIG->newSitePromptEmailsDaysInAdvance);
+				$site->setIsFeatureTag($CONFIG->newSiteHasFeatureTag);
 				
 				$countryRepository = new CountryRepository();
 				$siteQuotaRepository = new SiteQuotaRepository();

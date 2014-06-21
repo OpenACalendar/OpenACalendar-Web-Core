@@ -36,6 +36,7 @@ class SiteModel {
 	protected $is_feature_virtual_events =  false;
 	protected $is_feature_physical_events =  true;
 	protected $is_feature_group =  true;
+	protected $is_feature_tag =  false;
 	protected $prompt_emails_days_in_advance = 30;
 
 	protected $cached_is_multiple_timezones = false;
@@ -74,6 +75,7 @@ class SiteModel {
 		$this->is_feature_virtual_events = (boolean)$data['is_feature_virtual_events'];
 		$this->is_feature_physical_events = (boolean)$data['is_feature_physical_events'];
 		$this->is_feature_group = (boolean)$data['is_feature_group'];
+		$this->is_feature_tag = (boolean)$data['is_feature_tag'];
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);		
 	}
@@ -286,6 +288,17 @@ class SiteModel {
 		$this->is_feature_group = $is_feature_group;
 		return $this;
 	}
+	
+	
+	public function getIsFeatureTag() {
+		return $this->is_feature_tag;
+	}
+
+	public function setIsFeatureTag($is_feature_tag) {
+		$this->is_feature_tag = $is_feature_tag;
+		return $this;
+	}
+	
 	
 	public function getSiteQuotaId() {
 		return $this->site_quota_id;

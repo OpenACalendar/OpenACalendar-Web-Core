@@ -55,7 +55,8 @@ class SiteHistoryRepository {
 				" prompt_emails_days_in_advance_changed = :prompt_emails_days_in_advance_changed,  ".
 				" is_feature_virtual_events_changed = :is_feature_virtual_events_changed,  ".
 				" is_feature_physical_events_changed = :is_feature_physical_events_changed,  ".
-				" is_feature_group_changed = :is_feature_group_changed  ".
+				" is_feature_group_changed = :is_feature_group_changed,  ".
+				" is_feature_tag_changed = :is_feature_tag_changed  ".
 				"WHERE site_id = :id AND created_at = :created_at");
 		$statUpdate->execute(array(
 				'id'=>$sitehistory->getId(),
@@ -79,6 +80,7 @@ class SiteHistoryRepository {
 				'is_feature_virtual_events_changed'=> $sitehistory->getIsFeatureVirtualEventsChanged() ? 1 : -1,
 				'is_feature_physical_events_changed'=> $sitehistory->getIsFeaturePhysicalEventsChanged() ? 1 : -1,
 				'is_feature_group_changed'=> $sitehistory->getIsFeatureGroupChanged() ? 1 : -1,
+				'is_feature_tag_changed'=> $sitehistory->getIsFeatureTagChanged() ? 1 : -1,
 			));
 	}
 	

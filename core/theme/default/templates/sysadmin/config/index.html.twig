@@ -348,6 +348,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th>newSiteHasFeatureTag</th>
+			<td>{% if config.newSiteHasFeatureTag %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureTag'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>newSitePromptEmailsDaysInAdvance</th>
 			<td>{{ config.newSitePromptEmailsDaysInAdvance }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSitePromptEmailsDaysInAdvance'} %}
