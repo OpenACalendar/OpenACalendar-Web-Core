@@ -40,12 +40,14 @@ class SiteRepository {
 						"created_at,cached_is_multiple_timezones,cached_is_multiple_countries,".
 						"cached_timezones,is_feature_map,is_feature_importer,is_feature_curated_list,".
 						"is_listed_in_index,is_web_robots_allowed, is_all_users_editors, ".
-						"is_request_access_allowed, prompt_emails_days_in_advance,site_quota_id,is_feature_tag) ".
+						"is_request_access_allowed, prompt_emails_days_in_advance,site_quota_id, ".
+						"is_feature_tag,is_feature_physical_events,is_feature_virtual_events) ".
 					"VALUES (:title, :slug, :slug_canonical, ".
 						" :created_at,:cached_is_multiple_timezones,:cached_is_multiple_countries,".
 						":cached_timezones,:is_feature_map,:is_feature_importer,:is_feature_curated_list,".
 						":is_listed_in_index,:is_web_robots_allowed, :is_all_users_editors, ".
-						":is_request_access_allowed, :prompt_emails_days_in_advance, :site_quota_id, :is_feature_tag) RETURNING id");
+						":is_request_access_allowed, :prompt_emails_days_in_advance, :site_quota_id, ".
+						":is_feature_tag,:is_feature_physical_events,:is_feature_virtual_events) RETURNING id");
 			$stat->execute(array(
 					'title'=>substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED), 
 					'slug'=> $site->getSlug(), 
@@ -58,6 +60,8 @@ class SiteRepository {
 					'is_feature_importer'=>$site->getIsFeatureImporter() ? 1 : 0,
 					'is_feature_map'=>$site->getIsFeatureMap() ? 1 : 0,
 					'is_feature_tag'=>$site->getIsFeatureTag() ? 1 : 0,
+					'is_feature_virtual_events'=>$site->getIsFeatureVirtualEvents() ? 1 : 0,
+					'is_feature_physical_events'=>$site->getIsFeaturePhysicalEvents() ? 1 : 0,
 					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
 					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
 					'is_all_users_editors'=>$site->getIsAllUsersEditors() ? 1 : 0,
@@ -71,11 +75,13 @@ class SiteRepository {
 			$stat = $DB->prepare("INSERT INTO site_history (site_id, user_account_id, ".
 						"title, slug, slug_canonical, created_at,is_feature_map,is_feature_importer,".
 						"is_feature_curated_list,is_listed_in_index,is_web_robots_allowed, ".
-						"is_all_users_editors, is_request_access_allowed, prompt_emails_days_in_advance, is_new, is_feature_tag) ".
+						"is_all_users_editors, is_request_access_allowed, prompt_emails_days_in_advance, is_new,".
+						"is_feature_tag,is_feature_physical_events,is_feature_virtual_events) ".
 					"VALUES (:site_id, :user_account_id, :title, ".
 						":slug, :slug_canonical,  :created_at,:is_feature_map,:is_feature_importer,".
 						":is_feature_curated_list,:is_listed_in_index,:is_web_robots_allowed, ".
-						":is_all_users_editors, :is_request_access_allowed, :prompt_emails_days_in_advance, '1', :is_feature_tag)");
+						":is_all_users_editors, :is_request_access_allowed, :prompt_emails_days_in_advance, '1', ".
+						":is_feature_tag,:is_feature_physical_events,:is_feature_virtual_events)");
 			$stat->execute(array(
 					'site_id'=>$site->getId(),
 					'user_account_id'=>$owner->getId(),
@@ -87,6 +93,8 @@ class SiteRepository {
 					'is_feature_importer'=>$site->getIsFeatureImporter() ? 1 : 0,
 					'is_feature_map'=>$site->getIsFeatureMap() ? 1 : 0,
 					'is_feature_tag'=>$site->getIsFeatureTag() ? 1 : 0,
+					'is_feature_virtual_events'=>$site->getIsFeatureVirtualEvents() ? 1 : 0,
+					'is_feature_physical_events'=>$site->getIsFeaturePhysicalEvents() ? 1 : 0,
 					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
 					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
 					'is_all_users_editors'=>$site->getIsAllUsersEditors() ? 1 : 0,
