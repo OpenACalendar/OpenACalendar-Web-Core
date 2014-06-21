@@ -108,7 +108,11 @@ $app->match('/event/{slug}/moveToArea', "site\controllers\EventController::moveT
 		->before($appVerifiedEditorUserRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite); 
-
+$app->match('/event/{slug}/edit/tags', "site\controllers\EventController::editTags")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite); 
+		
 $app->match('/group', "site\controllers\GroupListController::index"); 
 $app->match('/group/', "site\controllers\GroupListController::index"); 
 

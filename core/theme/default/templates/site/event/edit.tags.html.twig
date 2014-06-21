@@ -1,0 +1,58 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+
+
+{% block pageTitle %}Edit Tags for {{ event.summaryDisplay }} - {% endblock %} 
+
+
+{% block innerContent %}
+
+	<h3>Tags</h3>
+	
+	
+	<ul class="tags">
+		{% for tag in tags %}
+			<li class="tags">
+				<form method="post">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="removeTag" value="{{ tag.slug }}">
+					{{ tag.title }}
+					<input type="submit" value="Remove Tag">
+				</form>
+			</li>
+		{% else %}
+			<li>
+				No tags found.
+			</li>					
+		{% endfor %}
+	</ul>
+	
+	<h3>Add other Tags</h3>
+
+	<ul class="tags">
+		{% for tag in tagsToAdd %}
+			<li class="tags">
+				<form method="post">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="addTag" value="{{ tag.slug }}">
+					{{ tag.title }}
+					<input type="submit" value="Add Tag">
+				</form>
+			</li>
+		{% else %}
+			<li>
+				No tags found to add.
+			</li>					
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+

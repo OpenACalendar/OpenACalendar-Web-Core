@@ -25,6 +25,7 @@ use repositories\EventRecurSetRepository;
 use repositories\UserAtEventRepository;
 use repositories\ImportURLRepository;
 use repositories\AreaRepository;
+use repositories\TagRepository;
 use repositories\UserWatchesGroupRepository;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\EventHistoryRepositoryBuilder;
@@ -32,6 +33,7 @@ use repositories\builders\CuratedListRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
 use repositories\builders\UserAtEventRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
+use repositories\builders\TagRepositoryBuilder;
 
 /**
  *
@@ -949,6 +951,50 @@ class EventController {
 		}
 
 	}
+	
+	
+	function editTags($slug, Request $request, Application $app) {
+		global $WEBSESSION;
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+		
+		$tagRepo = new TagRepository();
+			
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			
+			if ($request->request->get('addTag')) {
+				$tag = $tagRepo->loadBySlug($app['currentSite'], $request->request->get('addTag'));
+				if ($tag) {
+					$tagRepo->addTagToEvent($tag, $this->parameters['event'], userGetCurrent());
+				}
+			} elseif ($request->request->get('removeTag')) {
+				$tag = $tagRepo->loadBySlug($app['currentSite'], $request->request->get('removeTag'));
+				if ($tag) {
+					$tagRepo->removeTagFromEvent($tag, $this->parameters['event'], userGetCurrent());
+				}
+				
+			}
+		
+		
+		}
+		
+		$trb = new TagRepositoryBuilder();
+		$trb->setSite($app['currentSite']);
+		$trb->setIncludeDeleted(false);
+		$trb->setTagsForEvent($this->parameters['event']);
+		$this->parameters['tags'] = $trb->fetchAll();
+		
+		$trb = new TagRepositoryBuilder();
+		$trb->setSite($app['currentSite']);
+		$trb->setIncludeDeleted(false);
+		$trb->setTagsNotForEvent($this->parameters['event']);
+		$this->parameters['tagsToAdd'] = $trb->fetchAll();
+
+		return $app['twig']->render('site/event/edit.tags.html.twig', $this->parameters);
+	}
+	
 	
 }
 
