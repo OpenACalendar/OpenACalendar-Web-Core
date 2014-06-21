@@ -339,6 +339,7 @@ class AdminController {
 		
 		$trb = new TagRepositoryBuilder();
 		$trb->setSite($app['currentSite']);
+		$trb->setIncludeDeleted(true);
 		$tags = $trb->fetchAll();
 		
 		return $app['twig']->render('site/admin/listTags.html.twig', array(	

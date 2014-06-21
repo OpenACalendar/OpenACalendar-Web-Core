@@ -21,6 +21,7 @@ class TagListController {
 		
 		$trb = new TagRepositoryBuilder();
 		$trb->setSite($app['currentSite']);
+		$trb->setIncludeDeleted(false);
 		$tags = $trb->fetchAll();
 		
 		return $app['twig']->render('site/taglist/index.html.twig', array(	

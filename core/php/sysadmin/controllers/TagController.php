@@ -49,16 +49,30 @@ class TagController {
 	function index($siteid, $slug, Request $request, Application $app) {
 
 		$this->build($siteid, $slug, $request, $app);
-		
-				
+			
 		$form = $app['form.factory']->create(new ActionForm());
 		
-		
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+			if ($form->isValid()) {
+				$data = $form->getData();
+				$action = new ActionParser($data['action']);
+			
+				if ($action->getCommand() == 'delete' && !$this->parameters['tag']->getIsDeleted()) {
+					$tr = new TagRepository();
+					$tr->delete($this->parameters['tag'],  userGetCurrent());
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
+				} else if ($action->getCommand() == 'undelete' && $this->parameters['tag']->getIsDeleted()) {
+					$this->parameters['tag']->setIsDeleted(false);
+					$tr = new TagRepository();
+					$tr->edit($this->parameters['tag'],  userGetCurrent());
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
+				}
+			}
+		}
 		
 		$this->parameters['form'] = $form->createView();
 			
-		
-		
 		return $app['twig']->render('sysadmin/tag/index.html.twig', $this->parameters);		
 	
 	}

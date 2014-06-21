@@ -101,8 +101,8 @@ class TagRepository {
 					'description'=>$tag->getDescription(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_new) VALUES ".
-					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1')");
+			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_deleted, is_new) VALUES ".
+					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '0', '0')");
 			$stat->execute(array(
 					'tag_id'=>$tag->getId(),
 					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -117,6 +117,35 @@ class TagRepository {
 			$DB->rollBack();
 		}
 	}
+	
+	
+	public function delete(TagModel $tag, UserAccountModel $creator) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$stat = $DB->prepare("UPDATE tag_information  SET is_deleted='1' WHERE id=:id");
+			$stat->execute(array(
+					'id'=>$tag->getId(),
+				));
+			
+			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at,is_deleted, is_new) VALUES ".
+					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1','0')");
+			$stat->execute(array(
+					'tag_id'=>$tag->getId(),
+					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'description'=>$tag->getDescription(),
+					'user_account_id'=>$creator->getId(),				
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+				));
+			
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+	
 	
 	public function addTagToEvent(TagModel $tag, EventModel $event, UserAccountModel $user=null) {
 		global $DB;
