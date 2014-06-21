@@ -84,6 +84,40 @@ class TagRepository {
 		}
 	}
 	
+	
+	
+	public function edit(TagModel $tag, UserAccountModel $creator) {
+		global $DB;
+		if ($tag->getIsDeleted()) {
+			throw new \Exception("Can't edit deleted tag!");
+		}
+		try {
+			$DB->beginTransaction();
+
+			$stat = $DB->prepare("UPDATE tag_information  SET title=:title, description=:description, is_deleted='0' WHERE id=:id");
+			$stat->execute(array(
+					'id'=>$tag->getId(),
+					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'description'=>$tag->getDescription(),
+				));
+			
+			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_new) VALUES ".
+					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1')");
+			$stat->execute(array(
+					'tag_id'=>$tag->getId(),
+					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'description'=>$tag->getDescription(),
+					'user_account_id'=>$creator->getId(),				
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+				));
+			
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+	
 	public function addTagToEvent(TagModel $tag, EventModel $event, UserAccountModel $user=null) {
 		global $DB;
 		

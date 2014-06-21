@@ -7,11 +7,13 @@ use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
 use models\VenueModel;
+use models\TagModel;
 use models\UserAccountModel;
 use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
+use models\TagHistoryModel;
 use models\API2ApplicationModel;
 
 /**
@@ -24,6 +26,7 @@ use models\API2ApplicationModel;
  */
 class HistoryRepositoryBuilder {
 
+	protected $includeTagHistory = true;
 	protected $includeEventHistory = true;
 	protected $includeGroupHistory = true;
 	protected $includeVenueHistory = true;
@@ -43,6 +46,14 @@ class HistoryRepositoryBuilder {
 
 	public function setIncludeGroupHistory($includeGroupHistory) {
 		$this->includeGroupHistory = $includeGroupHistory;
+	}
+
+	public function getIncludeTagHistory() {
+		return $this->includeTagHistory;
+	}
+
+	public function setIncludeTagHistory($includeTagHistory) {
+		$this->includeTagHistory = $includeTagHistory;
 	}
 
 	public function getIncludeVenueHistory() {
@@ -77,6 +88,7 @@ class HistoryRepositoryBuilder {
 		$this->includeGroupHistory = true;
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = true;
+		$this->includeTagHistory = true;
 	}
 
 
@@ -89,6 +101,7 @@ class HistoryRepositoryBuilder {
 		$this->includeGroupHistory = true;
 		$this->includeVenueHistory = false;
 		$this->includeAreaHistory = false;
+		$this->includeTagHistory = false;
 	}
 
 	/** @var EventModel **/
@@ -100,6 +113,7 @@ class HistoryRepositoryBuilder {
 		$this->includeGroupHistory = true;
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = false;
+		$this->includeTagHistory = false;
 	}
 
 	/** @var VenueModel **/
@@ -111,7 +125,21 @@ class HistoryRepositoryBuilder {
 		$this->includeGroupHistory = false;
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = false;
+		$this->includeTagHistory = false;
 	}
+	
+	/** @var TagModel **/
+	protected $tag;
+	
+	public function setTag(TagModel $tag) {
+		$this->tag = $tag;
+		$this->includeEventHistory = false;
+		$this->includeGroupHistory = false;
+		$this->includeVenueHistory = false;
+		$this->includeAreaHistory = false;
+		$this->includeTagHistory = true;
+	}
+	
 	
 	protected $venueVirtualOnly = false;
 	
@@ -376,6 +404,51 @@ class HistoryRepositoryBuilder {
 			
 		}
 		
+		/////////////////////////// Tags History
+
+		if ($this->includeTagHistory) {
+			$where = array();
+			$params = array();
+			
+
+			if ($this->site) {
+				$where[] = 'tag_information.site_id =:site';
+				$params['site'] = $this->site->getId();
+			}
+			
+			if ($this->since) {
+				$where[] = ' tag_history.created_at >= :since ';
+				$params['since'] = $this->since->format("Y-m-d H:i:s");
+			}
+			
+			if ($this->notUser) {
+				$where[] = 'tag_history.user_account_id != :userid ';
+				$params['userid'] = $this->notUser->getId();
+			}
+			
+			if ($this->api2app) {
+				$where[] = 'tag_history.api2_application_id  = :api2app';
+				$params['api2app'] = $this->api2app->getId();
+			}
+			
+			$sql = "SELECT tag_history.*, tag_information.slug AS tag_slug, user_account_information.username AS user_account_username FROM tag_history ".
+					" LEFT JOIN user_account_information ON user_account_information.id = tag_history.user_account_id ".
+					" LEFT JOIN tag_information ON tag_information.id = tag_history.tag_id ".
+					($where ? " WHERE ".implode(" AND ", $where) : "").
+					" ORDER BY tag_history.created_at DESC LIMIT ".$this->limit;
+
+			//var_dump($sql); var_dump($params);
+			
+			$stat = $DB->prepare($sql);
+			$stat->execute($params);
+			
+			while($data = $stat->fetch()) {
+				$tagHistory = new TagHistoryModel();
+				$tagHistory->setFromDataBaseRow($data);
+				$results[] = $tagHistory;
+			}
+			
+		}
 		////////////////////// Finally sort & truncate
 
 		$usort = function($a, $b) {

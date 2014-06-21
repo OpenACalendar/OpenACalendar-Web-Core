@@ -8,11 +8,13 @@ use repositories\AreaHistoryRepository;
 use repositories\VenueHistoryRepository;
 use repositories\SiteHistoryRepository;
 use repositories\EventHistoryRepository;
+use repositories\TagHistoryRepository;
 use models\GroupHistoryModel;
 use models\AreaHistoryModel;
 use models\VenueHistoryModel;
 use models\SiteHistoryModel;
 use models\EventHistoryModel;
+use models\TagHistoryModel;
 
 
 /**
@@ -110,11 +112,24 @@ class UpdateHistoryChangedFlags {
 		if ($verbose) print "\n\n";
 
 
+		################################################################################
+
+		if ($verbose) print "Tags ";
+		$tagHistoryRepo = new TagHistoryRepository();
+		$stat = $DB->prepare("SELECT * FROM tag_history");
+		$stat->execute();
+		while($data = $stat->fetch()) {
+			$tagHistory = new TagHistoryModel();
+			$tagHistory->setFromDataBaseRow($data);
+
+			$tagHistoryRepo->ensureChangedFlagsAreSet($tagHistory);
+			if ($verbose) print ".";
+		}
+		if ($verbose) print "\n\n";
+
 
 		if ($verbose) print "Finished ".date("c")."\n";
 
-		
-		
 	}
 
 	
