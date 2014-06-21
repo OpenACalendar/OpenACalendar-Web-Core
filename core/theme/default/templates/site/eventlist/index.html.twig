@@ -33,7 +33,7 @@
 					<a href="/event/new"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new</a>
 				</li>
 			{% endif %}
-			{# lists link is needed: if we have user we can't use menus for some reason, this is their way to find that page  #}
+			{# lists link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
 			{% if currentSite.isFeatureCuratedList %}
 				<li class="action"><a href="/curatedlist"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> Lists</a></li>
 			{% endif %}									
