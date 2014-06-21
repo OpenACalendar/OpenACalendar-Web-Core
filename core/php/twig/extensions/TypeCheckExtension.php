@@ -7,6 +7,7 @@ use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
+use models\TagHistoryModel;
 
 
 /**
@@ -31,6 +32,7 @@ class TypeCheckExtension extends \Twig_Extension
 			new \Twig_SimpleTest('grouphistory',function($item) {  return $item instanceof GroupHistoryModel; }),
 			new \Twig_SimpleTest('venuehistory',function($item) {  return $item instanceof VenueHistoryModel; }),
 			new \Twig_SimpleTest('areahistory',function($item) {  return $item instanceof AreaHistoryModel; }),
+			new \Twig_SimpleTest('taghistory',function($item) {  return $item instanceof TagHistoryModel; }),
 		);
 	}
 

@@ -31,6 +31,8 @@
 				{% include 'site/common/venueHistoryItem.html.twig' %}
 			{% elseif historyItem is areahistory %}
 				{% include 'site/common/areaHistoryItem.html.twig' %}
+			{% elseif historyItem is taghistory %}
+				{% include 'site/common/tagHistoryItem.html.twig' %}
 			{% endif %}
 		{% endfor %}
 	</ul>

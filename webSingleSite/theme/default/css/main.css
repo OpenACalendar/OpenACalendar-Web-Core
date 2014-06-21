@@ -512,7 +512,8 @@ table.data a.button:hover {
 }
 ul.history li.event,
 ul.history li.group,
-ul.history li.venue {
+ul.history li.venue,
+ul.history li.tag {
   padding: 5px;
   margin: 5px 0 5px 0;
   -webkit-border-radius: 5px;
@@ -523,7 +524,8 @@ ul.history li.venue {
 }
 ul.history li.event div.dateTimeIcon,
 ul.history li.group div.dateTimeIcon,
-ul.history li.venue div.dateTimeIcon {
+ul.history li.venue div.dateTimeIcon,
+ul.history li.tag div.dateTimeIcon {
   float: left;
   width: 60px;
   height: 80px;
@@ -539,7 +541,8 @@ ul.history li.venue div.dateTimeIcon {
 }
 ul.history li.event div.dateTimeIcon div.dateIcon,
 ul.history li.group div.dateTimeIcon div.dateIcon,
-ul.history li.venue div.dateTimeIcon div.dateIcon {
+ul.history li.venue div.dateTimeIcon div.dateIcon,
+ul.history li.tag div.dateTimeIcon div.dateIcon {
   width: 60px;
   height: 60px;
   text-align: center;
@@ -557,20 +560,23 @@ ul.history li.venue div.dateTimeIcon div.dateIcon {
 }
 ul.history li.event div.dateTimeIcon div.timeIcon,
 ul.history li.group div.dateTimeIcon div.timeIcon,
-ul.history li.venue div.dateTimeIcon div.timeIcon {
+ul.history li.venue div.dateTimeIcon div.timeIcon,
+ul.history li.tag div.dateTimeIcon div.timeIcon {
   padding: 1px;
   text-align: center;
 }
 ul.history li.event div.dateTimeIcon span.deleted,
 ul.history li.group div.dateTimeIcon span.deleted,
-ul.history li.venue div.dateTimeIcon span.deleted {
+ul.history li.venue div.dateTimeIcon span.deleted,
+ul.history li.tag div.dateTimeIcon span.deleted {
   padding-top: 5px;
   display: block;
   color: white;
 }
 ul.history li.event div.dateTimeIcon span.startDay,
 ul.history li.group div.dateTimeIcon span.startDay,
-ul.history li.venue div.dateTimeIcon span.startDay {
+ul.history li.venue div.dateTimeIcon span.startDay,
+ul.history li.tag div.dateTimeIcon span.startDay {
   font-weight: 200;
   padding-top: 5px;
   display: block;
@@ -578,7 +584,8 @@ ul.history li.venue div.dateTimeIcon span.startDay {
 }
 ul.history li.event div.dateTimeIcon span.startDate,
 ul.history li.group div.dateTimeIcon span.startDate,
-ul.history li.venue div.dateTimeIcon span.startDate {
+ul.history li.venue div.dateTimeIcon span.startDate,
+ul.history li.tag div.dateTimeIcon span.startDate {
   font-size: 16pt;
   font-weight: 400;
   display: block;
@@ -586,7 +593,8 @@ ul.history li.venue div.dateTimeIcon span.startDate {
 }
 ul.history li.event div.dateTimeIcon span.startMonthYear,
 ul.history li.group div.dateTimeIcon span.startMonthYear,
-ul.history li.venue div.dateTimeIcon span.startMonthYear {
+ul.history li.venue div.dateTimeIcon span.startMonthYear,
+ul.history li.tag div.dateTimeIcon span.startMonthYear {
   font-weight: 200;
   display: block;
   font-size: 0.75em;
@@ -594,38 +602,45 @@ ul.history li.venue div.dateTimeIcon span.startMonthYear {
 }
 ul.history li.event div.dateTimeIcon span.startTime,
 ul.history li.group div.dateTimeIcon span.startTime,
-ul.history li.venue div.dateTimeIcon span.startTime {
+ul.history li.venue div.dateTimeIcon span.startTime,
+ul.history li.tag div.dateTimeIcon span.startTime {
   font-size: 11pt;
   color: black;
 }
 ul.history li.event div.dateTimeIcon a,
 ul.history li.group div.dateTimeIcon a,
-ul.history li.venue div.dateTimeIcon a {
+ul.history li.venue div.dateTimeIcon a,
+ul.history li.tag div.dateTimeIcon a {
   text-decoration: none;
 }
 ul.history li.event div.dateTimeIcon a span.startDay,
 ul.history li.group div.dateTimeIcon a span.startDay,
-ul.history li.venue div.dateTimeIcon a span.startDay {
+ul.history li.venue div.dateTimeIcon a span.startDay,
+ul.history li.tag div.dateTimeIcon a span.startDay {
   color: white;
 }
 ul.history li.event div.dateTimeIcon a span.startDate,
 ul.history li.group div.dateTimeIcon a span.startDate,
-ul.history li.venue div.dateTimeIcon a span.startDate {
+ul.history li.venue div.dateTimeIcon a span.startDate,
+ul.history li.tag div.dateTimeIcon a span.startDate {
   color: white;
 }
 ul.history li.event div.dateTimeIcon a span.startMonthYear,
 ul.history li.group div.dateTimeIcon a span.startMonthYear,
-ul.history li.venue div.dateTimeIcon a span.startMonthYear {
+ul.history li.venue div.dateTimeIcon a span.startMonthYear,
+ul.history li.tag div.dateTimeIcon a span.startMonthYear {
   color: white;
 }
 ul.history li.event div.dateTimeIcon a span.startTime,
 ul.history li.group div.dateTimeIcon a span.startTime,
-ul.history li.venue div.dateTimeIcon a span.startTime {
+ul.history li.venue div.dateTimeIcon a span.startTime,
+ul.history li.tag div.dateTimeIcon a span.startTime {
   color: black;
 }
 ul.history li.event div.icon,
 ul.history li.group div.icon,
-ul.history li.venue div.icon {
+ul.history li.venue div.icon,
+ul.history li.tag div.icon {
   float: left;
   width: 60px;
   height: 60px;
@@ -642,23 +657,27 @@ ul.history li.venue div.icon {
 }
 ul.history li.event div.icon img,
 ul.history li.group div.icon img,
-ul.history li.venue div.icon img {
+ul.history li.venue div.icon img,
+ul.history li.tag div.icon img {
   padding: 10px;
 }
 ul.history li.event .title,
 ul.history li.group .title,
-ul.history li.venue .title {
+ul.history li.venue .title,
+ul.history li.tag .title {
   font-weight: bold;
 }
 ul.history li.event .title a,
 ul.history li.group .title a,
-ul.history li.venue .title a {
+ul.history li.venue .title a,
+ul.history li.tag .title a {
   color: black;
   text-decoration: none;
 }
 ul.history li.event .created,
 ul.history li.group .created,
-ul.history li.venue .created {
+ul.history li.venue .created,
+ul.history li.tag .created {
   padding: 5px 0 0 0;
   clear: both;
   font-style: italic;
@@ -666,13 +685,15 @@ ul.history li.venue .created {
 }
 ul.history li.event .fieldChanged .field,
 ul.history li.group .fieldChanged .field,
-ul.history li.venue .fieldChanged .field {
+ul.history li.venue .fieldChanged .field,
+ul.history li.tag .fieldChanged .field {
   display: inline;
   font-style: italic;
 }
 ul.history li.event .fieldChanged .value,
 ul.history li.group .fieldChanged .value,
-ul.history li.venue .fieldChanged .value {
+ul.history li.venue .fieldChanged .value,
+ul.history li.tag .fieldChanged .value {
   display: inline;
 }
 ul.history li.event {
@@ -683,6 +704,9 @@ ul.history li.group {
 }
 ul.history li.venue {
   background: #8ac4bc;
+}
+ul.history li.tag {
+  background: #eefcbc;
 }
 ul.history li.deleted {
   text-color: #999;
