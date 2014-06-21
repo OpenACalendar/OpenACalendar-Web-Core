@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS event_has_tag CASCADE;
+DROP TABLE IF EXISTS tag_history CASCADE;
+DROP TABLE IF EXISTS tag_information CASCADE;
 DROP TABLE IF EXISTS user_notification_preference CASCADE;
 DROP TABLE IF EXISTS user_notification CASCADE;
 DROP TABLE IF EXISTS api2_application_user_authorisation_token CASCADE;
