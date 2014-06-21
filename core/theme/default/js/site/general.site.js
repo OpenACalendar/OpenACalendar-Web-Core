@@ -15,7 +15,7 @@ function showExportPopup() {
 		var html = '<div id="ExportPopup" class="PopupBox">';
 		html +=	'<div id="ExportPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
 		html += '<div id="ExportPopupIntroText">Export your data.';
-		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
+		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label>';
 			if (exportData.hasOwnProperty("country") ) {
 				html += '<label><input type="radio" name="ExportWhat" id="ExportCountry"> all events from ';
@@ -35,6 +35,11 @@ function showExportPopup() {
 			if (exportData.hasOwnProperty("group") ) {
 				html += '<label><input type="radio" name="ExportWhat" id="ExportGroup"> all events from ';
 				html += (exportData.hasOwnProperty("groupTitle") ? 'group: '+ escapeHTML(exportData.groupTitle) : 'this group' );
+				html += '</label>';
+			}
+			if (exportData.hasOwnProperty("tag") ) {
+				html += '<label><input type="radio" name="ExportWhat" id="ExportTag"> all events from ';
+				html += (exportData.hasOwnProperty("tagTitle") ? 'tag: '+ escapeHTML(exportData.tagTitle) : 'this tag' );
 				html += '</label>';
 			}
 			if (exportData.hasOwnProperty("curatedlist") ) {
@@ -79,7 +84,7 @@ function showExportPopup() {
 		div = $('#ExportPopup');
 		div.find('#ExportToGoogleCalendar input.exportlink').focus(function() { $(this).select(); } );
 		var showLinksForTab = "all";
-		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country")  || exportData.hasOwnProperty("venue")  || exportData.hasOwnProperty("curatedlist") ) {
+		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country")  || exportData.hasOwnProperty("venue")  || exportData.hasOwnProperty("curatedlist") ) {
 			$('#ExportAll').change(function() {
 				if ($(this).is(':checked')) {
 					showLinksFor("all");
@@ -120,6 +125,15 @@ function showExportPopup() {
 				});
 				showLinksForTab = "group";
 				$('#ExportGroup').prop('checked', true)
+			}
+			if (exportData.hasOwnProperty("tag") ) {
+				$('#ExportTag').change(function() {
+					if ($(this).is(':checked')) {
+						showLinksFor("tag");
+					}
+				});
+				showLinksForTab = "tag";
+				$('#ExportTag').prop('checked', true)
 			}
 			if (exportData.hasOwnProperty("curatedlist") ) {
 				$('#ExportCuratedList').change(function() {
@@ -180,6 +194,12 @@ function showLinksFor(showFor) {
 		jsonpURL += "/area/"+exportData.area+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/area/"+exportData.area+"/events.create.atom";
 		atomBeforeURL += "/area/"+exportData.area+"/events.before.atom?days="+atomBeforeDays;		
+	} else if (exportData.hasOwnProperty("tag") && showFor == "tag") {
+		icalURL += "/tag/"+exportData.tag+"/events.ical";
+		jsonURL += "/tag/"+exportData.tag+"/events.json";
+		jsonpURL += "/tag/"+exportData.tag+"/events.jsonp?callback=myfunc";
+		atomCreateURL += "/tag/"+exportData.tag+"/events.create.atom";
+		atomBeforeURL += "/tag/"+exportData.tag+"/events.before.atom?days="+atomBeforeDays;			
 	} else if (exportData.hasOwnProperty("country") && showFor == "country") {
 		icalURL += "/country/"+exportData.country+"/events.ical";
 		jsonURL += "/country/"+exportData.country+"/events.json";
@@ -262,6 +282,9 @@ function showSharePopup() {
 		} else if (exportData.hasOwnProperty("venue")) {
 			url +=  exportData.hasOwnProperty("venueSlugURL") ? "/venue/"+exportData.venueSlugURL : "/venue/"+exportData.venue;
 			text += exportData.venueTitle;	
+		} else if (exportData.hasOwnProperty("tag")) {
+			url +=  exportData.hasOwnProperty("tagSlugURL") ? "/tag/"+exportData.tagSlugURL : "/tag/"+exportData.tag;
+			text += exportData.tagTitle;	
 		} else if (exportData.hasOwnProperty("country")) {
 			url += "/country/"+exportData.country;
 		} else if (exportData.hasOwnProperty("curatedlist")) {

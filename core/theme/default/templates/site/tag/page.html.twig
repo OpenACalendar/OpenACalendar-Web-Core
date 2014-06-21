@@ -26,6 +26,18 @@
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
+			<li class="action">
+				<a href="/api1/tag/{{ tag.slug }}/events.ical" onclick="showExportPopup(); return false;">
+					<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+				</a>
+			</li>
+			{% if currentSite.getIsWebRobotsAllowed %}
+				<li class="action">
+					<a href="#" onclick="showSharePopup(); return false;">
+						<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+					</a>
+				</li>
+			{% endif %}	
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/admin/tag/{{ tag.slugForUrl }}">Details</a></li>
 		</ul>
 		<div id="innerPage">
