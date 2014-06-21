@@ -142,6 +142,12 @@
 							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
 						</form>
 					</li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/tag">Tags</a>
+						<form id="GoToTag" onsubmit="goToTag(); return false;">
+							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
+						</form>
+					</li>
 				</ul>
 			</td>
 		</tr>
@@ -203,6 +209,12 @@
 			var slug = parseInt($('#GoToArea input[name="slug"]').val());
 			if (!isNaN(slug)) {
 				window.location.href = '/sysadmin/site/{{ site.id }}/area/'+slug;
+			}
+		}
+		function goToTag() {
+			var slug = parseInt($('#GoToTag input[name="slug"]').val());
+			if (!isNaN(slug)) {
+				window.location.href = '/sysadmin/site/{{ site.id }}/tag/'+slug;
 			}
 		}
 		function goToMedia() {

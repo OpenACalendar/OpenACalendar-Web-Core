@@ -1,0 +1,35 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block breadcrumbs %}
+	<li><a href="/sysadmin/site/{{ site.id }}/">{{ site.title }}</a></li>
+	<li class="current"><a href="/sysadmin/site/{{ site.id }}/tag">tags</a></li>
+{% endblock %}
+		
+{% block content %}
+
+	<table class="data">
+		<tr>
+			<th>Slug</th>
+			<th>Title</th>
+			<th>&nbsp;</th>
+		</tr>
+		{% for tag in tags %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %} >
+				<td>{{ tag.slug }}</td>
+				<td>{{ tag.title }}</td>
+				<td>
+					<a href="/sysadmin/site/{{ site.id }}/tag/{{ tag.slug }}" class="button">Show</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}
+

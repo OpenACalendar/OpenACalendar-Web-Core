@@ -107,6 +107,17 @@ $app->match('/sysadmin/site/{siteid}/curatedlist/{slug}/', "sysadmin\controllers
 		->assert('slug', '\d+'); 
 
 
+$app->match('/sysadmin/site/{siteid}/tag', "sysadmin\controllers\TagListController::index")
+		->assert('siteid', '\d+'); 
+$app->match('/sysadmin/site/{siteid}/tag/', "sysadmin\controllers\TagListController::index")
+		->assert('siteid', '\d+'); 
+$app->match('/sysadmin/site/{siteid}/tag/{slug}', "sysadmin\controllers\TagController::index")
+		->assert('siteid', '\d+')
+		->assert('slug', '\d+'); 
+$app->match('/sysadmin/site/{siteid}/tag/{slug}/', "sysadmin\controllers\TagController::index")
+		->assert('siteid', '\d+')
+		->assert('slug', '\d+'); 
+
 $app->match('/sysadmin/site/{siteid}/country', "sysadmin\controllers\SiteController::listCountries")
 		->assert('siteid', '\d+'); 
 $app->match('/sysadmin/site/{siteid}/country/', "sysadmin\controllers\SiteController::listCountries")
