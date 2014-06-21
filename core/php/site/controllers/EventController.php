@@ -306,8 +306,16 @@ class EventController {
 		return $app['twig']->render('site/event/history.html.twig', $this->parameters);
 	}
 	
+	function editSplash($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+
+		return $app['twig']->render('site/event/edit.splash.html.twig', $this->parameters);
+
+	}
 	
-	function edit($slug, Request $request, Application $app) {
+	function editDetails($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -345,9 +353,9 @@ class EventController {
 		$this->parameters['form'] = $form->createView();
 		
 		if ($this->parameters['event']->getIsImported()) {
-			return $app['twig']->render('site/event/edit.imported.html.twig', $this->parameters);
+			return $app['twig']->render('site/event/edit.details.imported.html.twig', $this->parameters);
 		} else {
-			return $app['twig']->render('site/event/edit.html.twig', $this->parameters);
+			return $app['twig']->render('site/event/edit.details.html.twig', $this->parameters);
 		}
 		
 	}

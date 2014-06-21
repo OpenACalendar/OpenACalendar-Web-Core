@@ -22,9 +22,6 @@
 	{% if currentUserCanEditSite %}
 		{% if not event.isDeleted %}
 			<li class="action"><a href="/event/{{ event.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a></li>
-			{% if currentSite.isFeaturePhysicalEvents %}
-				<li class="action"><a href="/event/{{ event.slugForUrl }}/edit/venue"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit venue</a></li>
-			{% endif %}
 		{% endif %}
 		{% if not event.isImported %}
 			{% if not event.isDeleted %}

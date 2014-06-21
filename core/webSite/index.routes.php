@@ -62,7 +62,11 @@ $app->match('/event/{slug}/userAttendance.html', "site\controllers\EventControll
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/event/{slug}/history', "site\controllers\EventController::history")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/event/{slug}/edit', "site\controllers\EventController::edit")
+$app->match('/event/{slug}/edit', "site\controllers\EventController::editSplash")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite); 
+$app->match('/event/{slug}/edit/details', "site\controllers\EventController::editDetails")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)
 		->before($canChangeSite); 
