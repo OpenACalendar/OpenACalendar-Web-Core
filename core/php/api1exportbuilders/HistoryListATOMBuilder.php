@@ -8,6 +8,7 @@ use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
+use models\TagHistoryModel;
 use repositories\builders\HistoryRepositoryBuilder;
 
 
@@ -148,6 +149,44 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 			}
 			if ($history->getTwitterUsernameChanged()) {
 				$txt .= 'Twitter Changed. ';
+			}
+			if ($history->getIsDeletedChanged()) {
+				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
+			}
+		}
+		$txt .= '</summary>';
+		
+		$txt .= '<updated>'.$history->getCreatedAt()->format("Y-m-d")."T".$history->getCreatedAt()->format("H:i:s")."Z</updated>";
+		
+		$txt .= '<author><name>'.$CONFIG->siteTitle.'</name></author></entry>'." \r\n";
+		
+		$this->histories[] = $txt;
+	}
+	
+	
+	public function addTagHistory(TagHistoryModel $history) {
+		global $CONFIG;
+		
+		$siteSlug = $this->site ? $this->site->getSlug() : $history->getSiteSlug();		
+		$ourUrl = $CONFIG->isSingleSiteMode ? 
+				'http://'.$CONFIG->webSiteDomain.'/tag/'.$history->getTagSlug() : 
+				'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/tag/'.$history->getTagSlug() ;
+		
+		$txt = '<entry>';
+		$txt .= '<id>'.$ourUrl.'/history/'.$history->getCreatedAtTimeStamp().'</id>';
+		$txt .= '<link href="'.$ourUrl.'"/>';
+		
+		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
+
+		$txt .= '<summary>';
+		if ($history->isAnyChangeFlagsUnknown()) {
+			$txt .= $this->getBigData($history->getDescription());
+		} else {
+			if ($history->getTitleChanged()) {
+				$txt .= 'Title Changed. ';
+			}	
+			if ($history->getDescriptionChanged()) {
+				$txt .= 'Description Changed. ';
 			}
 			if ($history->getIsDeletedChanged()) {
 				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";

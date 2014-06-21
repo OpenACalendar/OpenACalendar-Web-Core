@@ -6,6 +6,8 @@ use models\SiteModel;
 use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
+use models\AreaHistoryModel;
+use models\TagHistoryModel;
 
 /**
  *
@@ -40,6 +42,8 @@ abstract class BaseHistoryListBuilder extends BaseBuilder {
 			$this->addVenueHistory($history);
 		} else if (is_a($history,'models\AreaHistoryModel')) {
 			$this->addAreaHistory($history);
+		} else if (is_a($history,'models\TagHistoryModel')) {
+			$this->addTagHistory($history);
 		} else {
 			die(get_class($history));
 		}
@@ -51,6 +55,11 @@ abstract class BaseHistoryListBuilder extends BaseBuilder {
 	public abstract function addGroupHistory(GroupHistoryModel $history) ;
 	
 	public abstract function addVenueHistory(VenueHistoryModel $history) ;
+	
+	public abstract function addAreaHistory(AreaHistoryModel $history) ;
+	
+	public abstract function addTagHistory(TagHistoryModel $history) ;
+	
 	
 	public function build() {	
 		foreach($this->historyRepositoryBuilder->fetchAll() as $event) {
