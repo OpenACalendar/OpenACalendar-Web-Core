@@ -396,6 +396,50 @@ ul.curatedlists {
 }
 
 
+ul.tags {
+	li.tag {
+		border-bottom: 2px solid #E9E9E9;
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+div.inlineTags {
+	ul.inlineTags {
+		display: inline;
+		padding: 20px 0;
+		font-weight: 200;
+		li.tag {
+			padding: 2px;
+			display: inline;
+			line-height: 1.8em;
+			span.content {
+				font-size: 13pt;
+				background: url('/theme/default/img/tagBackground.png') no-repeat left center #4F4F4F;
+				white-space: nowrap;
+				.rounded-corners-right(2px);
+				padding: 2px 5px 2px 20px;
+				color: white;
+				a {
+					color: white;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}
+
 table.data {
 	margin: 10px 20px;
 	tr th {

@@ -467,6 +467,53 @@ ul.curatedlists li.curatedlist .title a:hover {
   color: black;
   text-decoration: underline;
 }
+ul.tags li.tag {
+  border-bottom: 2px solid #E9E9E9;
+}
+ul.tags li.tag .title {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 2px 0;
+}
+ul.tags li.tag .title a {
+  color: #333;
+  text-decoration: none;
+}
+ul.tags li.tag .title a:hover {
+  color: black;
+  text-decoration: underline;
+}
+div.inlineTags ul.inlineTags {
+  display: inline;
+  padding: 20px 0;
+  font-weight: 200;
+}
+div.inlineTags ul.inlineTags li.tag {
+  padding: 2px;
+  display: inline;
+  line-height: 1.8em;
+}
+div.inlineTags ul.inlineTags li.tag span.content {
+  font-size: 13pt;
+  background: url('/theme/default/img/tagBackground.png') no-repeat left center #4F4F4F;
+  white-space: nowrap;
+  -webkit-border-bottom-right-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -ms-border-radius-bottomright: 2px;
+  -o-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  -webkit-border-top-right-radius: 2px;
+  -moz-border-radius-topright: 2px;
+  -ms-border-radius-topright: 2px;
+  -o-border-top-right-radius: 2px;
+  border-top-right-radius: 2px;
+  padding: 2px 5px 2px 20px;
+  color: white;
+}
+div.inlineTags ul.inlineTags li.tag span.content a {
+  color: white;
+  text-decoration: none;
+}
 table.data {
   margin: 10px 20px;
 }
