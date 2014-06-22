@@ -1,0 +1,60 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+
+
+{% block pageTitle %}Edit Groups for {{ event.summaryDisplay }} - {% endblock %} 
+
+
+{% block innerContent %}
+
+	<h3>Groups</h3>
+	
+	<ul class="groups">
+		{% for group in groups %}
+			<li class="group">
+				<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
+				{{ group.description | nl2br }}
+				<form method="post">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="removeGroup" value="{{ group.slug }}">
+					<input type="submit" value="Remove From Group">
+				</form>
+			</li>
+		{% else %}
+			<li>
+				There are no groups.
+			</li>								
+		{% endfor %}
+	</ul>
+	
+	<h3>Add to other Groups</h3>
+
+
+	<ul class="groups">
+		{% for group in groupsToAdd %}
+			<li class="group">
+				<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
+				{{ group.description | nl2br }}
+				<form method="post">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="addGroup" value="{{ group.slug }}">
+					<input type="submit" value="Add To Group">
+				</form>
+			</li>
+		{% else %}
+			<li>
+				There are no groups.
+			</li>								
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+
