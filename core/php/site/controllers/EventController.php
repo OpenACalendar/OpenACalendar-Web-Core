@@ -1013,6 +1013,43 @@ class EventController {
 		return $app['twig']->render('site/event/edit.tags.html.twig', $this->parameters);
 	}
 	
+	function editGroups($slug, Request $request, Application $app) {
+		global $WEBSESSION;
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+		
+		$groupRepo = new GroupRepository();
+			
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			
+			if ($request->request->get('addGroup')) {
+				$group = $groupRepo->loadBySlug($app['currentSite'], $request->request->get('addGroup'));
+				if ($group) {
+					$groupRepo->addEventToGroup($this->parameters['event'], $group, userGetCurrent());
+					// Need to redirect here so other parts of page are correct when shown
+					return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/edit/groups');
+				}
+			} elseif ($request->request->get('removeGroup')) {
+				$group = $groupRepo->loadBySlug($app['currentSite'], $request->request->get('removeGroup'));
+				if ($group) {
+					$groupRepo->removeEventFromGroup($this->parameters['event'], $group, userGetCurrent());
+					// Need to redirect here so other parts of page are correct when shown
+					return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/edit/groups');
+				}
+				
+			}
+		
+		}
+		
+		$grb = new GRoupRepositoryBuilder();
+		$grb->setSite($app['currentSite']);
+		$grb->setIncludeDeleted(false);
+		$this->parameters['groupsToAdd'] = $grb->fetchAll();
+
+		return $app['twig']->render('site/event/edit.groups.html.twig', $this->parameters);
+	}
 	
 }
 
