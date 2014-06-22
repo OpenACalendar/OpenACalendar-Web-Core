@@ -13,6 +13,7 @@
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/" />
 	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -20,33 +21,38 @@
 	<li class="current"><a href="/country">countries</a></li>
 {% endblock %}
 
+
 {% block content %}
 
-	<h2>Countries</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
-			<li class="tab currentTab">List</li>
-		</ul>
-		<div id="innerPage">
-
-			<ul class="countries">
-				{% for country in countries %}
-					<li class="country">
-						<div class="title"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
-					</li>
-				{% else %}
-					<li>
-						There are no countries.
-					</li>								
-				{% endfor %}
-			</ul>
-
-			<div id="afterInnerPageContent"></div>
+	<div id="bodyLeft">
+		<div id="MapWrapper">
+			<div id="Map" class="leftColumnFullWidth"></div>
+			{% if currentSite.isFeatureMap %}
+				<p class="largerMapLink"><a href="/map">View larger map</a></p>
+			{% endif %}
 		</div>
+	</div>
+				
+	<div id="bodyRight">
+		<ul class="countries">
+			{% for country in countries %}
+				<li class="country">
+					<div class="title"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+				</li>
+			{% else %}
+				<li>
+					There are no countries.
+				</li>								
+			{% endfor %}
+		</ul>
 	</div>
 
 
+{% endblock %}
 
+{% block scripts %}
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script src="/theme/default/js/countrieslist.js?v={{ config.assetsVersion }}" type="text/javascript"></script>	
 {% endblock %}
 

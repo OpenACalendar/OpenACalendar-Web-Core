@@ -343,6 +343,10 @@ form.styled .actionWrapperBig input[type="submit"]:hover {
   color: black;
   text-decoration: underline;
 }
+#Map.leftColumnFullWidth {
+  width: 99%;
+  height: 300px;
+}
 h2 {
   font-weight: bold;
   font-size: 1.5em;
