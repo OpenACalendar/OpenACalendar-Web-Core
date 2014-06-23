@@ -48,10 +48,26 @@
 		</ul>
 	</div>
 
+	<div id="afterPage2Col"></div>
 
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		var countries = [];
+		{% for country in countries %}
+			{% if country.minlat and country.minlng and country.maxlat and country.maxlng %}
+				countries.push({
+					'title':'{{ country.title | e('js') }}',
+					'code':'{{ country.twoCharCode | e('js') }}',
+					'minLat':{{country.minlat }},
+					'minLng':{{country.minlng }},
+					'maxLat':{{country.maxlat }},
+					'maxLng':{{country.maxlng }}
+				});
+			{% endif %}
+		{% endfor %}
+	</script>
 	{% include 'site/common/mapLibrary.js.html.twig' %}
 	<script src="/theme/default/js/countrieslist.js?v={{ config.assetsVersion }}" type="text/javascript"></script>	
 {% endblock %}
