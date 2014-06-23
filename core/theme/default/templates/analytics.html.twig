@@ -6,6 +6,8 @@
 {% endif %}
 {% if currentUser is defined and currentUser is not null %} _paq.push(['setCustomVariable', 2, 'CurrentUserID', '{{ currentUser.id }}', 'page']); 
 {% endif %}
+{% if area is defined and area is not null %} _paq.push(['setCustomVariable', 2, 'area', '{{ area.slugForURL }}', 'page']); 
+{% endif %}
   _paq.push(['trackPageView']);
   _paq.push(['setDocumentTitle', document.domain + "/" + document.title]);
   _paq.push(['setCookieDomain', '*.{{ config.webCommonSessionDomain  }}']);
