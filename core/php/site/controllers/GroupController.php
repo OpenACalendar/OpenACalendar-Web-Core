@@ -191,7 +191,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		if (isset($_POST) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('CSFRToken')) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
@@ -211,9 +211,9 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 			
-		if (isset($_POST) && isset($_POST['addMedia']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('CSFRToken')) {
 			$mediaRepository = new MediaRepository();
-			$media = $mediaRepository->loadBySlug($app['currentSite'], $_POST['addMedia']);
+			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
 				$mediaInGroupRepo = new MediaInGroupRepository();
 				$mediaInGroupRepo->add($media, $this->parameters['group'], userGetCurrent());
@@ -407,12 +407,12 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		if (isset($_POST['action'])  && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$repo = new UserWatchesGroupRepository();
-			if ($_POST['action'] == 'watch') {
+			if ($request->request->get('action') == 'watch') {
 				$repo->startUserWatchingGroup(userGetCurrent(), $this->parameters['group']);
 				$FLASHMESSAGES->addMessage("Watching!");
-			} else if ($_POST['action'] == 'unwatch') {
+			} else if ($request->request->get('action') == 'unwatch') {
 				$repo->stopUserWatchingGroup(userGetCurrent(), $this->parameters['group']);
 				$FLASHMESSAGES->addMessage("No longer watching");
 			}
@@ -452,7 +452,7 @@ class GroupController {
 			die("You don't watch this group"); // TODO
 		}
 		
-		if (isset($_POST['action']) && $_POST['action'] == 'unwatch' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('action') == 'unwatch' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$userWatchesGroupRepo->stopUserWatchingGroup($user, $this->parameters['group']);
 			// redirect here because if we didn't the twig global and $app vars would be wrong (the old state)
 			// this is an easy way to get round that.
@@ -498,8 +498,9 @@ class GroupController {
 				
 				$area = null;
 				$areaRepository = new AreaRepository();
-				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
-					foreach ($_POST['areas'] as $areaCode) {
+				$areasPost = $request->request->get('areas');
+				if (is_array($areasPost)) {
+					foreach ($areasPost as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
 						}

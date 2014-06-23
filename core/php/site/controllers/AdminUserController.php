@@ -42,13 +42,13 @@ class AdminUserController {
 			$app->abort(404, "User does not exist.");
 		}
 				
-		if (isset($_POST['action']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('action') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$repo = new SiteAccessRequestRepository();
-			if ($_POST['action'] == 'grant') {
+			if ($request->request->get('action') == 'grant') {
 				$repo->grantForSiteAndUser($app['currentSite'], $this->parameters['user'], userGetCurrent());
 				$this->sendGrantRequestActionEmail($this->parameters['user'], $app['currentSite'], $app);
 				$FLASHMESSAGES->addMessage("Request granted.");
-			} else if ($_POST['action'] == 'deny') {
+			} else if ($request->request->get('action') == 'deny') {
 				$repo->rejectForSiteAndUser($app['currentSite'], $this->parameters['user'], userGetCurrent());
 				$FLASHMESSAGES->addMessage("Request refused.");
 			}

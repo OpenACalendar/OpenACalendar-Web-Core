@@ -140,9 +140,9 @@ class EventNewController {
 			$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone']), $event);
 			$form->bind($request);
 
-			if (isset($_POST['group_slug']) && $_POST['group_slug']) {
+			if ($request->request->get('group_slug')) {
 				$gr = new GroupRepository();
-				$group = $gr->loadBySlug($app['currentSite'], $_POST['group_slug']);
+				$group = $gr->loadBySlug($app['currentSite'], $request->request->get('group_slug'));
 				if ($group) {
 					$event->setGroup($group);
 				}

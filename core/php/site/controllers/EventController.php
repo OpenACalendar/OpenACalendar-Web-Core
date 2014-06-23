@@ -260,21 +260,21 @@ class EventController {
 
 		$data = array();
 		
-		if (isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken() && !$this->parameters['event']->isInPast()) {
+		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() && !$this->parameters['event']->isInPast()) {
 			
-			if (isset($_POST['privacy']) && $_POST['privacy'] == 'public') {
+			if ($request->request->get('privacy') == 'public') {
 				$userAtEvent->setIsPlanPublic(true);
-			} else if (isset($_POST['privacy']) && $_POST['privacy'] == 'private') {
+			} else if ($request->request->get('privacy') == 'private') {
 				$userAtEvent->setIsPlanPublic(false);
 			}
 			
-			if (isset($_POST['attending']) && $_POST['attending'] == 'no') {
+			if ($request->request->get('attending') == 'no') {
 				$userAtEvent->setIsPlanAttending(false);
 				$userAtEvent->setIsPlanMaybeAttending(false);
-			} else if (isset($_POST['attending']) && $_POST['attending'] == 'maybe') {
+			} else if ($request->request->get('attending') == 'maybe') {
 				$userAtEvent->setIsPlanAttending(false);
 				$userAtEvent->setIsPlanMaybeAttending(true);
-			} else if (isset($_POST['attending']) && $_POST['attending'] == 'yes') {
+			} else if ($request->request->get('attending') == 'yes') {
 				$userAtEvent->setIsPlanAttending(true);
 				$userAtEvent->setIsPlanMaybeAttending(false);
 			}
@@ -374,7 +374,7 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		if ('POST' == $request->getMethod() && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
 			$gotResult = false;
 			
@@ -382,11 +382,12 @@ class EventController {
 			$areaRepository = new AreaRepository();
 			$countryRepository = new CountryRepository();
 
-			if (isset($_POST['venue_id']) && $_POST['venue_id'] == 'new' && trim($_POST['newVenueTitle'])) {
+			if ($request->request->get('venue_id') == 'new' && trim($request->request->get('newVenueTitle'))) {
 				
 				$area = null;
-				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
-					foreach ($_POST['areas'] as $areaCode) {
+				$areasPost = $request->request->get('areas');
+				if (is_array($areasPost)) {
+					foreach ($areasPost as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
 						} else if (substr($areaCode, 0, 4) == 'NEW:') {
@@ -400,9 +401,9 @@ class EventController {
 				}
 
 				$venue = new VenueModel();
-				$venue->setTitle($_POST['newVenueTitle']);
-				$venue->setAddress($_POST['newVenueAddress']);
-				$venue->setAddressCode($_POST['newVenueAddressCode']);
+				$venue->setTitle($request->request->get('newVenueTitle'));
+				$venue->setAddress($request->request->get('newVenueAddress'));
+				$venue->setAddressCode($request->request->get('newVenueAddressCode'));
 				$venue->setCountryId($this->parameters['country']->getId());
 				if ($area) $venue->setAreaId($area->getId());
 				
@@ -413,11 +414,12 @@ class EventController {
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
 				$gotResult = true;
 				
-			} if (isset($_POST['venue_id']) && $_POST['venue_id'] == 'no') {
+			} if ($request->request->get('venue_id') == 'no') {
 				
 				$area = null;
-				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
-					foreach ($_POST['areas'] as $areaCode) {
+				$areasPost = $request->request->get('areas');
+				if (is_array($areasPost)) {
+					foreach ($areasPost as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
 						} else if (substr($areaCode, 0, 4) == 'NEW:') {
@@ -440,8 +442,8 @@ class EventController {
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
 				$gotResult = true;
 				
-			} else if (isset($_POST['venue_id']) && intval($_POST['venue_id'])) {
-				$venue = $venueRepository->loadBySlug($app['currentSite'], $_POST['venue_id']);
+			} else if ($request->request->get('venue_id')) {
+				$venue = $venueRepository->loadBySlug($app['currentSite'], $request->request->get('venue_id'));
 				if ($venue) {
 					$this->parameters['event']->setVenueId($venue->getId());
 					$eventRepository = new EventRepository();
@@ -512,11 +514,11 @@ class EventController {
 		
 		if ($this->parameters['eventRecurSet']->isAnyProposedChangesPossible()) {
 		
-			if (isset($_POST['submitted']) && $_POST['submitted'] == 'cancel' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('submitted') == 'cancel' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 			}
 			
-			if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 				
 				$eventRepo = new EventRepository();
 				
@@ -525,41 +527,32 @@ class EventController {
 					
 					$proposedChanges = $this->parameters['eventRecurSet']->getFutureEventsProposedChangesForEventSlug($futureEvent->getSlug());
 					if ($proposedChanges->getSummaryChangePossible()) {
-						$proposedChanges->setSummaryChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldSummary']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldSummary'] == 1);
+						$proposedChanges->setSummaryChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldSummary') == 1);
 					} 
 					
 					if ($proposedChanges->getDescriptionChangePossible()) {
-						$proposedChanges->setDescriptionChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldDescription']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldDescription'] == 1);
+						$proposedChanges->setDescriptionChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldDescription') == 1);
 					} 
 					if ($proposedChanges->getCountryAreaVenueIdChangePossible()) {
-						$proposedChanges->setCountryAreaVenueIdChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldCountryAreaVenue']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldCountryAreaVenue'] == 1);
+						$proposedChanges->setCountryAreaVenueIdChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldCountryAreaVenue') == 1);
 					} 
 					if ($proposedChanges->getTimezoneChangePossible()) {
-						$proposedChanges->setTimezoneChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldTimezone']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldTimezone'] == 1);
+						$proposedChanges->setTimezoneChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldTimezone') == 1);
 					} 
 					if ($proposedChanges->getUrlChangePossible()) {
-						$proposedChanges->setUrlChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldUrl']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldUrl'] == 1);
+						$proposedChanges->setUrlChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldUrl') == 1);
 					} 
 					if ($proposedChanges->getTicketUrlChangePossible()) {
-						$proposedChanges->setTicketUrlChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldTicketUrl']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldTicketUrl'] == 1);
+						$proposedChanges->setTicketUrlChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldTicketUrl') == 1);
 					} 
 					if ($proposedChanges->getIsVirtualChangePossible()) {
-						$proposedChanges->setIsVirtualChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldIsVirtual']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldIsVirtual'] == 1);
+						$proposedChanges->setIsVirtualChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldIsVirtual') == 1);
 					} 
 					if ($proposedChanges->getIsPhysicalChangePossible()) {
-						$proposedChanges->setIsPhysicalChangeSelected(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldIsPhysical']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldIsPhysical'] == 1);
+						$proposedChanges->setIsPhysicalChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldIsPhysical') == 1);
 					} 
 					if ($proposedChanges->getStartEndAtChangePossible()) {
-						$proposedChanges->setStartEndAtChangePossible(isset($_POST["eventSlug".$futureEvent->getSlug().'fieldStartEnd']) 
-								&& $_POST["eventSlug".$futureEvent->getSlug().'fieldStartEnd'] == 1);
+						$proposedChanges->setStartEndAtChangePossible($request->request->get("eventSlug".$futureEvent->getSlug().'fieldStartEnd') == 1);
 					} 
 					if ($proposedChanges->applyToEvent($futureEvent, $this->parameters['event'])) {
 						$eventRepo->edit($futureEvent, userGetCurrent(), $this->parameters['eventHistory']);
@@ -614,9 +607,9 @@ class EventController {
 			
 			// Existing Group
 			// TODO csfr
-			if (isset($_POST['intoGroupSlug']) && $_POST['intoGroupSlug']) {
+			if ($request->request->get('intoGroupSlug')) {
 				$groupRepo = new GroupRepository();
-				$group = $groupRepo->loadBySlug($app['currentSite'], $_POST['intoGroupSlug']);
+				$group = $groupRepo->loadBySlug($app['currentSite'], $request->request->get('intoGroupSlug'));
 				if ($group) {
 					$groupRepo->addEventToGroup($this->parameters['event'], $group);
 					$repo = new UserWatchesGroupRepository();
@@ -626,9 +619,9 @@ class EventController {
 			}
 			
 			// New group
-			if (isset($_POST['NewGroupTitle']) && $_POST['NewGroupTitle'] && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('NewGroupTitle') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 				$group = new GroupModel();
-				$group->setTitle($_POST['NewGroupTitle']);
+				$group->setTitle($request->request->get('NewGroupTitle'));
 				$groupRepo = new GroupRepository();
 				$groupRepo->create($group, $app['currentSite'], userGetCurrent());
 				$groupRepo->addEventToGroup($this->parameters['event'], $group);
@@ -682,9 +675,9 @@ class EventController {
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$this->parameters['newEvents'] = $eventRecurSet->getNewWeeklyEventsFilteredForExisting($this->parameters['event'], $CONFIG->recurEventForDaysInFutureWhenWeekly);
 		
-		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $WEBSESSION->getCSFRToken()) {
 			
-			$data = is_array($_POST['new']) ? $_POST['new'] : array();
+			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
 			$eventRepository = new EventRepository();
 			$count = 0;
@@ -729,9 +722,9 @@ class EventController {
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnSetDayInWeekFilteredForExisting($this->parameters['event'], $CONFIG->recurEventForDaysInFutureWhenMonthly);
 		
-		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
-			$data = is_array($_POST['new']) ? $_POST['new'] : array();
+			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
 			$eventRepository = new EventRepository();
 			$count = 0;
@@ -778,9 +771,9 @@ class EventController {
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnLastDayInWeekFilteredForExisting($this->parameters['event'], $CONFIG->recurEventForDaysInFutureWhenMonthly);
 		
-		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
-			$data = is_array($_POST['new']) ? $_POST['new'] : array();
+			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
 			$eventRepository = new EventRepository();
 			$count = 0;
@@ -910,12 +903,12 @@ class EventController {
 		
 		$gotResult = false;
 		
-		if (isset($_POST) && isset($_POST['area']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('area') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
-			if ($_POST['area'] == 'new' && trim($_POST['newAreaTitle']) && $this->parameters['country']) {
+			if ($request->request->get('area') == 'new' && trim($request->request->get('newAreaTitle')) && $this->parameters['country']) {
 				
 				$area = new AreaModel();
-				$area->setTitle(trim($_POST['newAreaTitle']));
+				$area->setTitle(trim($request->request->get('newAreaTitle')));
 				
 				$areaRepository = new AreaRepository();
 				$areaRepository->create($area, $this->parameters['area'], $app['currentSite'], $this->parameters['country'], userGetCurrent());
@@ -935,10 +928,10 @@ class EventController {
 				$FLASHMESSAGES->addMessage('Thank you; event updated!');
 				$gotResult = true;
 				
-			} elseif (intval($_POST['area'])) {
+			} elseif (intval($request->request->get('area'))) {
 				
 				$areaRepository = new AreaRepository();
-				$area = $areaRepository->loadBySlug($app['currentSite'], $_POST['area']);
+				$area = $areaRepository->loadBySlug($app['currentSite'], $request->request->get('area'));
 				if ($area) {
 					if ($this->parameters['venue']) {
 						$this->parameters['venue']->setAreaId($area->getId());

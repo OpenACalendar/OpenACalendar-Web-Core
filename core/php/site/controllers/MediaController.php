@@ -47,8 +47,8 @@ class MediaController {
 			$app->abort(404, "Media does not exist.");
 		}
 		
-		if (isset($_POST) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
-			if ($_POST['action'] == 'makeSiteLogo' && $app['currentUserCanAdminSite']) {
+		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('action') == 'makeSiteLogo' && $app['currentUserCanAdminSite']) {
 				$app['currentSite']->setLogoMediaId($this->parameters['media']->getId());
 				$siteProfileMediaRepository = new SiteProfileMediaRepository();
 				$siteProfileMediaRepository->createOrEdit($app['currentSite'], userGetCurrent());

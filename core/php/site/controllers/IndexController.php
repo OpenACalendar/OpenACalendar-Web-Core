@@ -54,14 +54,14 @@ class IndexController {
 	
 	
 	
-	function watch(Application $app) {
+	function watch(Request $request, Application $app) {
 		global $CONFIG, $WEBSESSION;
 		
-		if (isset($_POST['action'])  && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$repo = new UserWatchesSiteRepository();
-			if ($_POST['action'] == 'watch') {
+			if ($request->request->get('action') == 'watch') {
 				$repo->startUserWatchingSite(userGetCurrent(), $app['currentSite']);
-			} else if ($_POST['action'] == 'unwatch') {
+			} else if ($request->request->get('action') == 'unwatch') {
 				$repo->stopUserWatchingSite(userGetCurrent(), $app['currentSite']);
 			}
 			// redirect here because if we didn't the twig global and $app vars would be wrong (the old state)
@@ -73,7 +73,7 @@ class IndexController {
 			));
 	}
 	
-	function stopWatchingFromEmail($userid, $code, Application $app) {
+	function stopWatchingFromEmail($userid, $code, Request $request, Application $app) {
 		global $FLASHMESSAGES, $WEBSESSION;
 		
 		$userRepo = new UserAccountRepository();
@@ -97,7 +97,7 @@ class IndexController {
 			die("You don't watch this site"); // TODO
 		}
 		
-		if (isset($_POST['action']) && $_POST['action'] == 'unwatch' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('action') == 'unwatch' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$userWatchesSiteRepo->stopUserWatchingSite($user, $app['currentSite']);
 			// redirect here because if we didn't the twig global and $app vars would be wrong (the old state)
 			// this is an easy way to get round that.
@@ -112,14 +112,14 @@ class IndexController {
 	}
 	
 	
-	function requestAccess(Application $app) {
+	function requestAccess(Request $request, Application $app) {
 		global $CONFIG, $WEBSESSION, $FLASHMESSAGES;
 		
-		if (isset($_POST['CSFRToken'])  && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
 			$repo = new SiteAccessRequestRepository();
 			$isCurrentRequestExistsForSiteAndUser = $repo->isCurrentRequestExistsForSiteAndUser($app['currentSite'], userGetCurrent());
-			$repo->create($app['currentSite'], userGetCurrent(), $_POST['answer']);
+			$repo->create($app['currentSite'], userGetCurrent(), $request->request->get('answer'));
 			
 			if (!$isCurrentRequestExistsForSiteAndUser) {
 				
@@ -142,7 +142,7 @@ class IndexController {
 					$messageText = $app['twig']->render('email/requestAccess.txt.twig', array(
 						'user'=>  userGetCurrent(),
 						'admin'=>  $admin,
-						'answer'=>  $_POST['answer'],
+						'answer'=>  $request->request->get('answer'),
 					));
 					if ($CONFIG->isDebug) file_put_contents('/tmp/requestAccess.txt', $messageText);
 					$message->setBody($messageText);
@@ -150,7 +150,7 @@ class IndexController {
 					$messageHTML = $app['twig']->render('email/requestAccess.html.twig', array(
 						'user'=>userGetCurrent(),
 						'admin'=>  $admin,
-						'answer'=>  $_POST['answer'],
+						'answer'=>  $request->request->get('answer'),
 					));
 					if ($CONFIG->isDebug) file_put_contents('/tmp/requestAccess.html', $messageHTML);
 					$message->addPart($messageHTML,'text/html');

@@ -150,7 +150,7 @@ class IndexController {
 				}
 				$contact->setIp($_SERVER['REMOTE_ADDR']);
 				$contact->setBrowser($_SERVER['HTTP_USER_AGENT']);			
-				if (isset($_POST['url']) && $_POST['url']) {
+				if ($request->request->get('url')) {
 					$contact->setIsSpamHoneypotFieldDetected(true);
 				}
 

@@ -92,10 +92,10 @@ class AdminAreasController {
 			$app->abort(404, "country does not exist.");
 		}	
 	
-		if (isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
-			$areaSlugs = is_array($_POST['area']) ? $_POST['area'] : array();
+		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			$areaSlugs = is_array($request->request->get('area')) ? $request->request->get('area') : array();
 			$areaRepository = new AreaRepository();
-			if ($_POST['action'] == 'delete') {
+			if ($request->request->get('action') == 'delete') {
 				foreach($areaSlugs as $areaSlug) {
 					$area = $areaRepository->loadBySlugAndCountry($app['currentSite'], $areaSlug, $this->parameters['country']);
 					if ($area && !$area->getIsDeleted()) {
@@ -103,7 +103,7 @@ class AdminAreasController {
 					}
 					$FLASHMESSAGES->addMessage("Deleted!");
 				}
-			} else if ($_POST['action'] == 'undelete') {
+			} else if ($request->request->get('action') == 'undelete') {
 				foreach($areaSlugs as $areaSlug) {
 					$area = $areaRepository->loadBySlugAndCountry($app['currentSite'], $areaSlug, $this->parameters['country']);
 					if ($area) {

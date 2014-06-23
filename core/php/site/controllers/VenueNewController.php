@@ -72,10 +72,11 @@ class VenueNewController {
 
 			if ($form->isValid()) {
 				
-				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
+				$postAreas = $request->request->get('areas');
+				if (is_array($postAreas)) {
 					
 					$area = null;
-					foreach ($_POST['areas'] as $areaCode) {
+					foreach ($postAreas as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
 						} else if (substr($areaCode, 0, 4) == 'NEW:') {
@@ -113,12 +114,12 @@ class VenueNewController {
 		
 		$data = array();
 		if ('POST' == $request->getMethod()) {
-			if ($_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
-				$venue->setTitle($_POST['title']);
-				$venue->setDescription($_POST['description']);
-				if (isset($_POST['country']) && intval($_POST['country'])) {
-					$venue->setCountryId(intval($_POST['country']));
+				$venue->setTitle($request->request->get('title'));
+				$venue->setDescription($request->request->get('description'));
+				if (intval($request->request->get('country'))) {
+					$venue->setCountryId(intval($request->request->get('country')));
 				}
 				
 				$venueRepository = new VenueRepository();

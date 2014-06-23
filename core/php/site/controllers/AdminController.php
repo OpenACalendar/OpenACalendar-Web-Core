@@ -85,15 +85,15 @@ class AdminController {
 	function features(Request $request, Application $app) {
 		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
 		
-		if ('POST' == $request->getMethod() && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 				
-			$app['currentSite']->setIsFeatureGroup(isset($_POST['isFeatureGroup']) && $_POST['isFeatureGroup'] == '1');
-			$app['currentSite']->setIsFeatureMap(isset($_POST['isFeatureMap']) && $_POST['isFeatureMap'] == '1');
-			$app['currentSite']->setIsFeatureCuratedList(isset($_POST['isFeatureCuratedList']) && $_POST['isFeatureCuratedList'] == '1');
-			$app['currentSite']->setisFeatureVirtualEvents(isset($_POST['isFeatureVirtualEvents']) && $_POST['isFeatureVirtualEvents'] == '1');
-			$app['currentSite']->setisFeaturePhysicalEvents(isset($_POST['isFeaturePhysicalEvents']) && $_POST['isFeaturePhysicalEvents'] == '1');
-			$app['currentSite']->setIsFeatureImporter(isset($_POST['isFeatureImporter']) && $_POST['isFeatureImporter'] == '1');
-			$app['currentSite']->setIsFeatureTag(isset($_POST['isFeatureTag']) && $_POST['isFeatureTag'] == '1');
+			$app['currentSite']->setIsFeatureGroup($request->request->get('isFeatureGroup') == '1');
+			$app['currentSite']->setIsFeatureMap($request->request->get('isFeatureMap') == '1');
+			$app['currentSite']->setIsFeatureCuratedList($request->request->get('isFeatureCuratedList')== '1');
+			$app['currentSite']->setisFeatureVirtualEvents($request->request->get('isFeatureVirtualEvents') == '1');
+			$app['currentSite']->setisFeaturePhysicalEvents($request->request->get('isFeaturePhysicalEvents') == '1');
+			$app['currentSite']->setIsFeatureImporter($request->request->get('isFeatureImporter') == '1');
+			$app['currentSite']->setIsFeatureTag($request->request->get('isFeatureTag') == '1');
 
 			$siteRepository = new SiteRepository();
 			$siteRepository->edit($app['currentSite'], userGetCurrent());
@@ -110,9 +110,9 @@ class AdminController {
 	function settings(Request $request, Application $app) {
 		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
 		
-		if ('POST' == $request->getMethod() && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 				
-			$app['currentSite']->setPromptEmailsDaysInAdvance($_POST['PromptEmailsDaysInAdvance']);
+			$app['currentSite']->setPromptEmailsDaysInAdvance($request->request->get('PromptEmailsDaysInAdvance'));
 
 			$siteRepository = new SiteRepository();
 			$siteRepository->edit($app['currentSite'], userGetCurrent());
@@ -155,17 +155,17 @@ class AdminController {
 	function users(Request $request, Application $app) {
 		global $WEBSESSION;
 		
-		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
-			if (isset($_POST['isAllUsersEditors']) && $_POST['isAllUsersEditors'] == 'yes') {
+			if ($request->request->get('isAllUsersEditors') == 'yes') {
 				$app['currentSite']->setIsAllUsersEditors(true);
 				// if all users can edit no need for request acces
 				$app['currentSite']->setIsRequestAccessAllowed(false);
 			} else {
 				$app['currentSite']->setIsAllUsersEditors(false);
-				if (isset($_POST['isRequestAccessAllowed']) && $_POST['isRequestAccessAllowed'] == 'yes') {
+				if ($request->request->get('isRequestAccessAllowed') == 'yes') {
 					$app['currentSite']->setIsRequestAccessAllowed(true);
-					$app['currentSite']->setRequestAccessQuestion($_POST['requestAccessQuestion']);
+					$app['currentSite']->setRequestAccessQuestion($request->request->get('requestAccessQuestion'));
 				} else {
 					$app['currentSite']->setIsRequestAccessAllowed(false);
 				}				
@@ -195,26 +195,26 @@ class AdminController {
 	function usersActions(Request $request, Application $app) {
 		global $WEBSESSION;
 		
-		if (isset($_POST['userID']) && is_array($_POST['userID'])  && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('userID')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$uisr = new UserInSiteRepository();
 			$uar = new UserAccountRepository();
-			if (isset($_POST['actionRemove'])) {
-				foreach($_POST['userID'] as $uid) {
+			if ($request->request->get('actionRemove')) {
+				foreach($request->request->get('userID') as $uid) {
 					$user = $uar->loadByID($uid);
 					if ($user) {
 						$uisr->removeUserAdministratesSite($user, $app['currentSite']);
 						$uisr->removeUserEditsSite($user, $app['currentSite']);
 					}
 				}
-			} else if (isset($_POST['actionAdministrator'])) {
-				foreach($_POST['userID'] as $uid) {
+			} else if ($request->request->get('actionAdministrator')) {
+				foreach($request->request->get('userID') as $uid) {
 					$user = $uar->loadByID($uid);
 					if ($user) {
 						$uisr->markUserAdministratesSite($user, $app['currentSite']);
 					}
 				}
-			} else if (isset($_POST['actionEditor'])) {
-				foreach($_POST['userID'] as $uid) {
+			} else if ($request->request->get('actionEditor')) {
+				foreach($request->request->get('userID') as $uid) {
 					$user = $uar->loadByID($uid);
 					if ($user) {
 						$uisr->removeUserAdministratesSite($user, $app['currentSite']);
@@ -263,15 +263,15 @@ class AdminController {
 	}
 	
 	
-	function countries(Application $app) {		
+	function countries(Request $request, Application $app) {		
 		global $WEBSESSION;
 		
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteInformation($app['currentSite']);
 		$countries = $crb->fetchAll();
 		
-		if (isset($_POST['submitted']) && $_POST['submitted'] == 'yes' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
-			$in = is_array($_POST['country']) ? $_POST['country'] : null;
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			$in = is_array($request->request->get('country')) ? $request->request->get('country') : null;
 			$cisr = new CountryInSiteRepository;
 			$countriesCount = 0;
 			$timezones = array();

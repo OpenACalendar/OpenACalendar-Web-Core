@@ -38,7 +38,8 @@ class SendEmailNewController {
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
-			$sendemail->setSendTo($_POST['send_to'] == 'other' ? $_POST['send_to_other'] : $_POST['send_to']);
+			$sendemail->setSendTo($request->request->get('send_to') == 'other' ? 
+					$request->request->get('send_to_other') : $request->request->get('send_to'));
 			
 			if (!filter_var($sendemail->getSendTo(), FILTER_VALIDATE_EMAIL)) {
 				$form->addError(new FormError('Please enter an email address'));

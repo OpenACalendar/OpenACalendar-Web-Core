@@ -128,11 +128,11 @@ class VenueController {
 
 			if ($form->isValid()) {
 				
-				if (isset($_POST['areas']) && is_array($_POST['areas'])) {
+				if (is_array($request->request->get('areas'))) {
 					$areaRepository = new AreaRepository();
 					$countryRepository = new CountryRepository();
 					$area = null;
-					foreach ($_POST['areas'] as $areaCode) {
+					foreach ($request->request->get('areas') as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
 						} else if (substr($areaCode, 0, 4) == 'NEW:') {
@@ -276,7 +276,7 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		if (isset($_POST) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
@@ -296,9 +296,9 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 			
-		if (isset($_POST) && isset($_POST['addMedia']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('addMedia') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
-			$media = $mediaRepository->loadBySlug($app['currentSite'], $_POST['addMedia']);
+			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
 				$mediaInVenueRepo = new MediaInVenueRepository();
 				$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
@@ -324,12 +324,12 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		if (isset($_POST) && isset($_POST['area']) && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('area') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
-			if ($_POST['area'] == 'new' && trim($_POST['newAreaTitle']) && $this->parameters['country']) {
+			if ($request->request->get('area') == 'new' && trim($request->request->get('newAreaTitle')) && $this->parameters['country']) {
 				
 				$area = new AreaModel();
-				$area->setTitle(trim($_POST['newAreaTitle']));
+				$area->setTitle(trim($request->request->get('newAreaTitle')));
 				
 				$areaRepository = new AreaRepository();
 				$areaRepository->create($area, $this->parameters['area'], $app['currentSite'], $this->parameters['country'], userGetCurrent());
@@ -342,10 +342,10 @@ class VenueController {
 				
 				$FLASHMESSAGES->addMessage('Thank you; venue updated!');
 				
-			} elseif (intval($_POST['area'])) {
+			} elseif (intval($request->request->get('area'))) {
 				
 				$areaRepository = new AreaRepository();
-				$area = $areaRepository->loadBySlug($app['currentSite'], $_POST['area']);
+				$area = $areaRepository->loadBySlug($app['currentSite'], $request->request->get('area'));
 				if ($area) {
 
 					$this->parameters['venue']->setAreaId($area->getId());

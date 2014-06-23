@@ -76,8 +76,8 @@ class CuratedListController {
 		$userAccountRepository = new UserAccountRepository();
 		$this->parameters['curatedlistOwner'] = $userAccountRepository->loadByOwnerOfCuratedList($this->parameters['curatedlist']);
 		
-		if (isset($_POST['submitted']) && $_POST['submitted'] == 'add' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
-			$newUser = $userAccountRepository->loadByUserName($_POST['userdetails']);
+		if ($request->request->get('submitted') == 'add' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			$newUser = $userAccountRepository->loadByUserName($request->request->get('userdetails'));
 			if ($newUser){
 				$curatedListRepo = new CuratedListRepository();
 				$curatedListRepo->addEditorToCuratedList($newUser, $this->parameters['curatedlist'], userGetCurrent());
@@ -86,8 +86,8 @@ class CuratedListController {
 				$FLASHMESSAGES->addError("Could not find that user");
 				// TODO put error in form instead, in usual field error place
 			}
-		} else if (isset($_POST['submitted']) && $_POST['submitted'] == 'remove' && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
-			$oldUser = $userAccountRepository->loadByUserName($_POST['username']);
+		} else if ($request->request->get('submitted') == 'remove' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			$oldUser = $userAccountRepository->loadByUserName($request->request->get('username'));
 			if ($oldUser) {
 				$curatedListRepo = new CuratedListRepository();
 				$curatedListRepo->removeEditorFromCuratedList($oldUser, $this->parameters['curatedlist'], userGetCurrent());

@@ -59,21 +59,21 @@ class SiteController {
 
 		$data = array();
 		
-		if (isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken() && !$this->parameters['event']->isInPast()) {
+		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() && !$this->parameters['event']->isInPast()) {
 			
-			if (isset($_POST['privacy']) && $_POST['privacy'] == 'public') {
+			if ($request->request->get('privacy') == 'public') {
 				$userAtEvent->setIsPlanPublic(true);
-			} else if (isset($_POST['privacy']) && $_POST['privacy'] == 'private') {
+			} else if ($request->request->get('privacy') == 'private') {
 				$userAtEvent->setIsPlanPublic(false);
 			}
 			
-			if (isset($_POST['attending']) && $_POST['attending'] == 'no') {
+			if ($request->request->get('attending') == 'no') {
 				$userAtEvent->setIsPlanAttending(false);
 				$userAtEvent->setIsPlanMaybeAttending(false);
-			} else if (isset($_POST['attending']) && $_POST['attending'] == 'maybe') {
+			} else if ($request->request->get('attending') == 'maybe') {
 				$userAtEvent->setIsPlanAttending(false);
 				$userAtEvent->setIsPlanMaybeAttending(true);
-			} else if (isset($_POST['attending']) && $_POST['attending'] == 'yes') {
+			} else if ($request->request->get('attending') == 'yes') {
 				$userAtEvent->setIsPlanAttending(true);
 				$userAtEvent->setIsPlanMaybeAttending(false);
 			}

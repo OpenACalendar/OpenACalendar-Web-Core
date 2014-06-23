@@ -41,7 +41,7 @@ class SendEmailController {
 			$app->abort(404, "Email does not exist.");
 		}
 		
-		if (isset($_POST['actionSend'])  && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {	
+		if ($request->request->get('actionSend')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {	
 			$this->parameters['sendemail']->send($app, userGetCurrent());
 			$sec = new SendEmailRepository();
 			$sec->markSent($this->parameters['sendemail'], userGetCurrent());
@@ -49,7 +49,7 @@ class SendEmailController {
 			return $app->redirect("/admin/sendemail/".$this->parameters['sendemail']->getSlug());
 		}
 		
-		if (isset($_POST['actionDiscard'])  && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {	
+		if ($request->request->get('actionDiscard')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {	
 			// TODO
 		}
 		

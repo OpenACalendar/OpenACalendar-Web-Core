@@ -54,7 +54,7 @@ class CuratedListEventController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		if ($this->parameters['currentUserCanEditCuratedList'] && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
 			$curatedlistRepository->removeEventFromCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());
 		}
@@ -74,7 +74,7 @@ class CuratedListEventController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		if ($this->parameters['currentUserCanEditCuratedList'] && isset($_POST['CSFRToken']) && $_POST['CSFRToken'] == $WEBSESSION->getCSFRToken()) {
+		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
 			$curatedlistRepository->addEventtoCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());			
 		}
