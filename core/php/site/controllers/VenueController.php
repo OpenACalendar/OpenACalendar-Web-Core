@@ -128,10 +128,11 @@ class VenueController {
 
 			if ($form->isValid()) {
 				
+				$area = null;
+				
 				if (is_array($request->request->get('areas'))) {
 					$areaRepository = new AreaRepository();
 					$countryRepository = new CountryRepository();
-					$area = null;
 					foreach ($request->request->get('areas') as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
@@ -143,9 +144,12 @@ class VenueController {
 							$area = $newArea;
 						}
 					}
-					if ($area) {
-						$this->parameters['venue']->setAreaId($area->getId());
-					}
+				}
+				
+				if ($area) {
+					$this->parameters['venue']->setAreaId($area->getId());
+				} else {
+					$this->parameters['venue']->setAreaId(null);
 				}
 				
 				$venueRepository = new VenueRepository();
