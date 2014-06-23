@@ -17,7 +17,11 @@
 
 {% block content %}
 
-	<h2>Events</h2>
+	{% if not currentSite.isFeatureTag %}
+		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+	{% endif %}
+	
+	<h2>Tags</h2>
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
