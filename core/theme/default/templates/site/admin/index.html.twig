@@ -36,7 +36,9 @@
 		
 		<li><a href="/admin/countries"><img src="/theme/default/img/actionPlacesIcon.png">Countries</a></li>
 		
-		<li><a href="/admin/areas"><img src="/theme/default/img/actionPlacesIcon.png">Areas in a country</a></li>
+		{% if currentSite.isFeaturePhysicalEvents %}
+			<li><a href="/admin/areas"><img src="/theme/default/img/actionPlacesIcon.png">Areas in a country</a></li>
+		{% endif %}
 		
 		{% if currentSite.getIsFeatureTag %}
 			<li><a href="/admin/tag"><img src="/theme/default/img/actionIcon.png">Tags</a></li>
