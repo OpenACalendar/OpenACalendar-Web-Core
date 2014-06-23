@@ -5,24 +5,31 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/event/page.html.twig' %}
+{% extends 'site/event/page2col.html.twig' %}
 
 
 {% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
 
-{% block innerContent %}
+{% block innerContentLeft %}
+	What would you like to edit?	
+{% endblock %}
+
+{% block innerContentRight %}
 	
 	
-	<p><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></p>
+	<ul class="actionList">
 	
-	{% if currentSite.isFeaturePhysicalEvents %}
-		<p><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></p>
-	{% endif %}
+		<li><img src="/theme/default/img/actionIcon.png"><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
+	
+		{% if currentSite.isFeaturePhysicalEvents %}
+			<li><img src="/theme/default/img/actionIcon.png"><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></li>
+		{% endif %}
 
 
-	{% if currentSite.isFeatureTag %}
-		<p><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></p>
-	{% endif %}
+		{% if currentSite.isFeatureTag %}
+			<li><img src="/theme/default/img/actionIcon.png"><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></li>
+		{% endif %}
 
+	</ul>
 
 {% endblock %}
