@@ -181,6 +181,13 @@ $featureGroupRequired = function(Request $request)  use ($app) {
 	}
 };
 
+$featureTagRequired = function(Request $request)  use ($app) {
+	global $CONFIG;
+	if (!$app['currentSite']->getIsFeatureTag()) {
+		return new RedirectResponse('/tag');
+	}
+};
+
 $featureImporterRequired = function(Request $request)  use ($app) {
 	global $CONFIG;
 	if (!$app['currentSite']->getIsFeatureImporter()) {
