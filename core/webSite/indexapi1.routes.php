@@ -100,3 +100,9 @@ $app->match('/api1/country/{slug}/events.before.atom', "siteapi1\controllers\Cou
 
 
 $app->match('/api1/histories.atom', "siteapi1\controllers\HistoryListController::atom"); 
+
+
+$app->match("/api1/person/{username}/events.ical", "siteapi1\controllers\PublicUserController::ical");
+$app->match("/api1/person/{username}/events.json", "siteapi1\controllers\PublicUserController::json");
+$app->match("/api1/person/{username}/events.jsonp", "siteapi1\controllers\PublicUserController::jsonp");
+

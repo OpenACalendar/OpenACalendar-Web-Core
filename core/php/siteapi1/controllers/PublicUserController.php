@@ -1,6 +1,6 @@
 <?php 
 
-namespace index\controllers;
+namespace siteapi1\controllers;
 
 use Silex\Application;
 use index\forms\CreateForm;
@@ -44,25 +44,6 @@ class PublicUserController {
 
 	}
 	
-	
-	function index($username, Request $request,Application $app) {
-		
-		if (!$this->build($username, $request, $app)) {
-			$app->abort(404, "User does not exist.");
-		}
-		
-		
-		$erb = new EventRepositoryBuilder();
-		$erb->setAfterNow();
-		$erb->setUserAccount($this->parameters['user'], false, false, true, false);
-		$this->parameters['events'] = $erb->fetchAll();
-				
-		return $app['twig']->render('index/publicuser/index.html.twig', $this->parameters);
-		
-	}
-	
-	
-	
 	function ical($username, Request $request,Application $app) {
 		
 		if (!$this->build($username, $request, $app)) {
@@ -71,6 +52,7 @@ class PublicUserController {
 				
 		// TODO should we be passing a better timeZone here?
 		$ical = new EventListICalBuilder(null, "UTC", $this->parameters['user']->getUserName());
+		$ical->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$ical->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$ical->build();
 		return $ical->getResponse();
@@ -83,7 +65,8 @@ class PublicUserController {
 			$app->abort(404, "User does not exist.");
 		}
 		
-		$json = new EventListJSONBuilder(null, $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$json->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$json->build();
 		return $json->getResponse();
@@ -96,7 +79,8 @@ class PublicUserController {
 			$app->abort(404, "User does not exist.");
 		}
 		
-		$jsonp = new EventListJSONPBuilder(null, $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$jsonp->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);

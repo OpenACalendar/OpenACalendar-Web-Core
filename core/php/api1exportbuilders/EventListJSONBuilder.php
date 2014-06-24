@@ -62,7 +62,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 		
 		$out['siteurl'] = $CONFIG->isSingleSiteMode ?
 				'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() :
-				'http://'.$this->site->getSlug().".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl();
+				'http://'.($this->site?$this->site->getSlug():$event->getSiteSlug()).".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl();
 		$out['url'] = $event->getUrl() && filter_var($event->getUrl(), FILTER_VALIDATE_URL) ? $event->getUrl() : $out['siteurl'];
 		$out['ticket_url'] = $event->getTicketUrl() && filter_var($event->getTicketUrl(), FILTER_VALIDATE_URL) ? $event->getTicketUrl() : null;
 		$out['timezone'] = $event->getTimezone();
