@@ -195,15 +195,23 @@ class TagRepository {
 
 	public function purge(TagModel $tag) {
 		global $DB;
+		try {
+			$DB->beginTransaction();
+			
+			$stat = $DB->prepare("DELETE FROM event_has_tag WHERE tag_id=:id");
+			$stat->execute(array('id'=>$tag->getId()));
+
+			$stat = $DB->prepare("DELETE FROM tag_history WHERE tag_id=:id");
+			$stat->execute(array('id'=>$tag->getId()));
+
+			$stat = $DB->prepare("DELETE FROM tag_information WHERE id=:id");
+			$stat->execute(array('id'=>$tag->getId()));
 		
-		$stat = $DB->prepare("DELETE FROM event_has_tag WHERE tag_id=:id");
-		$stat->execute(array('id'=>$tag->getId()));
-		
-		$stat = $DB->prepare("DELETE FROM tag_history WHERE tag_id=:id");
-		$stat->execute(array('id'=>$tag->getId()));
-		
-		$stat = $DB->prepare("DELETE FROM tag_information WHERE id=:id");
-		$stat->execute(array('id'=>$tag->getId()));
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+			throw $e;
+		}
 		
 	}
 				
