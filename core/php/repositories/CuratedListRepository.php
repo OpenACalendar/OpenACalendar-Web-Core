@@ -193,18 +193,26 @@ class CuratedListRepository {
 	
 	public function purge(CuratedListModel $curatedList) {
 		global $DB;
+		try {
+			$DB->beginTransaction();
+			
+			$stat = $DB->prepare("DELETE FROM event_in_curated_list WHERE curated_list_id=:id");
+			$stat->execute(array('id'=>$curatedList->getId()));
+
+			$stat = $DB->prepare("DELETE FROM user_in_curated_list_information WHERE curated_list_id=:id");
+			$stat->execute(array('id'=>$curatedList->getId()));
+
+			$stat = $DB->prepare("DELETE FROM curated_list_history WHERE curated_list_id=:id");
+			$stat->execute(array('id'=>$curatedList->getId()));
+
+			$stat = $DB->prepare("DELETE FROM curated_list_information WHERE id=:id");
+			$stat->execute(array('id'=>$curatedList->getId()));
 		
-		$stat = $DB->prepare("DELETE FROM event_in_curated_list WHERE curated_list_id=:id");
-		$stat->execute(array('id'=>$curatedList->getId()));
-		
-		$stat = $DB->prepare("DELETE FROM user_in_curated_list_information WHERE curated_list_id=:id");
-		$stat->execute(array('id'=>$curatedList->getId()));
-		
-		$stat = $DB->prepare("DELETE FROM curated_list_history WHERE curated_list_id=:id");
-		$stat->execute(array('id'=>$curatedList->getId()));
-		
-		$stat = $DB->prepare("DELETE FROM curated_list_information WHERE id=:id");
-		$stat->execute(array('id'=>$curatedList->getId()));
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+			throw $e;
+		}
 
 	}
 	
