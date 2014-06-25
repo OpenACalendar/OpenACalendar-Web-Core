@@ -29,54 +29,6 @@ class EventInGroupCreateTest extends \PHPUnit_Framework_TestCase {
 		return $dt;
 	}
 	
-	function test1() {
-		$DB = getNewTestDB();
-
-		TimeSource::mock(2013,7,1,7,0,0);
-		
-		$user = new UserAccountModel();
-		$user->setEmail("test@jarofgreen.co.uk");
-		$user->setUsername("test");
-		$user->setPassword("password");
-		
-		$userRepo = new UserAccountRepository();
-		$userRepo->create($user);
-		
-		$site = new SiteModel();
-		$site->setTitle("Test");
-		$site->setSlug("test");
-		
-		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
-		
-		$group = new GroupModel();
-		$group->setTitle("test");
-		$group->setDescription("test test");
-		$group->setUrl("http://www.group.com");
-		
-		$groupRepo = new GroupRepository();
-		$groupRepo->create($group, $site, $user);
-		
-		$event = new EventModel();
-		$event->setSummary("test");
-		$event->setDescription("test test");
-		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
-		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
-		$event->setGroup($group);
-
-		$eventRepository = new EventRepository();
-		$eventRepository->create($event, $site, $user);
-		
-		$this->checkEventInTest1($eventRepository->loadBySlug($site, $event->getSlug()));
-		
-	}
-	
-	protected function checkEventInTest1(EventModel $event) {
-		$this->assertEquals("test test", $event->getDescription());
-		$this->assertEquals("test", $event->getSummary());
-		// TODO start end
-	}
-	
 	function testMultiple() {
 		$DB = getNewTestDB();
 
