@@ -327,5 +327,42 @@ class GroupRepository {
 		return 2;
 	}
 	
+	
+	public function purge(GroupModel $group) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+			
+			$stat = $DB->prepare("DELETE FROM user_watches_group_notify_email WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("DELETE FROM user_watches_group_prompt_email WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("DELETE FROM user_watches_group_stop WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("DELETE FROM user_watches_group_information WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("DELETE FROM user_watches_group_notify_email WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("DELETE FROM event_in_group WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("DELETE FROM group_history WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("DELETE FROM group_information WHERE id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+		
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+			throw $e;
+		}
+	}
+	
 }
 
