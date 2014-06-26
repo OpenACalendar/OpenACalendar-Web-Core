@@ -447,5 +447,35 @@ class EventRepository {
 		
 		return $eventOut;
 	}
+	
+	
+	
+	public function purge(EventModel $event) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+			
+			$stat = $DB->prepare("DELETE FROM event_in_group WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+			
+			$stat = $DB->prepare("DELETE FROM event_in_curated_list WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+			
+			$stat = $DB->prepare("DELETE FROM event_has_tag WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+
+			$stat = $DB->prepare("DELETE FROM event_history WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+
+			$stat = $DB->prepare("DELETE FROM event_information WHERE id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+		
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+			throw $e;
+		}
+	}
+	
 }
 
