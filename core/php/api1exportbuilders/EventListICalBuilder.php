@@ -88,7 +88,9 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			//if ($event->getUrl()) $descriptionHTML .= '<p>More info: <a href="'.$event->getUrl().'">'.$event->getUrl().'</a></p>';
 			$descriptionHTML .= '<p>More info: <a href="'.$url.'">'.$url.'</a></p>';
 			$descriptionHTML .= '<p style="font-style:italic;font-size:80%">Powered by <a href="'.$url.'">'.$CONFIG->siteTitle.'</a>';
-			if ($CONFIG->sponsor1Html && $CONFIG->sponsor1Link) {
+			if ($CONFIG->sponsor1Html && $CONFIG->sponsor1Link && $CONFIG->sponsor2Html && $CONFIG->sponsor2Link) {
+				$descriptionHTML .= ', Sponsored by <a href="'.$CONFIG->sponsor1Link.'">'.$CONFIG->sponsor1Html.'</a> and <a href="'.$CONFIG->sponsor2Link.'">'.$CONFIG->sponsor2Html.'</a>';
+			} else if ($CONFIG->sponsor1Html && $CONFIG->sponsor1Link) {
 				$descriptionHTML .= ', Sponsored by <a href="'.$CONFIG->sponsor1Link.'">'.$CONFIG->sponsor1Html.'</a>';
 			}
 			$descriptionHTML .= '</p>';

@@ -146,6 +146,12 @@ class Config {
 	public $sponsor1Link = null;
 	public $sponsor1Image = null;
 
+	public $sponsor2MightExist = false;
+	public $sponsor2Text = null;
+	public $sponsor2Html = null;
+	public $sponsor2Link = null;
+	public $sponsor2Image = null;
+
 	public $apiExtraHeader1Html = null;
 	public $apiExtraHeader1Text = null;
 	
