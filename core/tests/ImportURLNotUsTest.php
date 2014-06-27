@@ -46,7 +46,8 @@ class ImportURLNotUsTest  extends \PHPUnit_Framework_TestCase  {
 		$site = new SiteModel();
 		$importRun = new ImportURLRun($import, $site);
 		
-		$handler = new ImportURLNotUsHandler($importRun);
+		$handler = new ImportURLNotUsHandler();
+		$handler->setImportURLRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 	}
 	

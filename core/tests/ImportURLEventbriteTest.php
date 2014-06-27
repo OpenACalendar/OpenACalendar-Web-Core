@@ -37,7 +37,8 @@ class ImportURLEventbriteTest extends \PHPUnit_Framework_TestCase {
 		$importRun = new ImportURLRun($import, $site);
 		
 		
-		$handler = new ImportURLEventbriteHandler($importRun);
+		$handler = new ImportURLEventbriteHandler();
+		$handler->setImportURLRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 		if ($result) {
 			$this->assertEquals($newURL, $handler->getNewFeedURL());

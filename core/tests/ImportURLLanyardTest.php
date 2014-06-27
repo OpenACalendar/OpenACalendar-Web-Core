@@ -36,7 +36,8 @@ class ImportURLLanyardTest extends \PHPUnit_Framework_TestCase {
 		$importRun = new ImportURLRun($import, $site);
 		
 		
-		$handler = new ImportURLLanyardHandler($importRun);
+		$handler = new ImportURLLanyardHandler();
+		$handler->setImportURLRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 		if ($result) {
 			$this->assertEquals($newURL, $handler->getNewFeedURL());

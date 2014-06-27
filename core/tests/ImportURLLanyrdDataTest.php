@@ -72,7 +72,8 @@ class ImportURLLanyrdDataTest extends \PHPUnit_Framework_TestCase {
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/Lanyrd1.ical');	
 		$importURLRun->setFlag(ImportURLRun::$FLAG_ADD_UIDS);
-		$i = new ImportURLICalHandler($importURLRun);
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 

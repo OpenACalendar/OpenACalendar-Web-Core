@@ -87,7 +87,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		// Import
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICAL.ical');		
-		$i = new ImportURLICalHandler($importURLRun);
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -112,7 +113,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICALDeleted.ical');		
-		$i = new ImportURLICalHandler($importURLRun);
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 		
@@ -174,7 +176,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		// Import
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart1.ical');		
-		$i = new ImportURLICalHandler($importURLRun);
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -196,7 +199,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart2.ical');		
-		$i = new ImportURLICalHandler($importURLRun);
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 		
@@ -263,7 +267,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		// Import
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALNotValid.ical');		
-		$i = new ImportURLICalHandler($importURLRun);
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -322,7 +327,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		// Import
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALManyEvents.ical');		
-		$i = new ImportURLICalHandler($importURLRun);
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
 		$i->setLimitToSaveOnEachRun(2);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
