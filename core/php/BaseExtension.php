@@ -49,5 +49,10 @@ abstract class BaseExtension {
 		return null;
 	}
 	
+	public function getAppConfigurationDefinitions() {
+		return array();
+	}
+	
+	
 }
 
