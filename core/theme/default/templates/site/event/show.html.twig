@@ -39,30 +39,31 @@
 
 {% block innerContent %}
 
-	<div class="event">
+	<div class="event" itemscope itemtype="http://schema.org/Event">
+		<meta itemprop="name" content="{{ event.summaryDisplay|e('html_attr') }}" />
 
-	{% if event.isdeleted %}
-		<div class="dateTimeIcon">
-			<div class="dateIcon">
-				<span class="deleted">Deleted!</span>
-			</div>
-		</div>
-	{% else %}
-		<div class="dateTimeIcon">
-			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+		{% if event.isdeleted %}
+			<div class="dateTimeIcon">
 				<div class="dateIcon">
-					<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
-					<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
-					<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+					<span class="deleted">Deleted!</span>
 				</div>
-				<div class="timeIcon">
-					<span class="startTime">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
-				</div>
-			</time>				
-		</div>
-	{% endif %}
+			</div>
+		{% else %}
+			<div class="dateTimeIcon">
+				<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+					<div class="dateIcon">
+						<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
+						<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+						<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+					</div>
+					<div class="timeIcon">
+						<span class="startTime">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+					</div>
+				</time>				
+			</div>
+		{% endif %}
 
-		<p class="description">{{ event.description | nl2br  | linkify }}</p>
+		<p class="description" itemprop="description">{{ event.description | nl2br  | linkify }}</p>
 	
 		{% if tags %}
 			<div class="inlineTags">
@@ -159,7 +160,7 @@
 				<div class="dateAndLocationWrapper"><div class="location"><a href="/venue/virtual">This event is Virtual</a></div></div>
 			{% endif %}			
 			{% if country or venue%}
-				<div class="location">
+				<div class="location" itemprop="location">
 					{% if event.isPhysical and venue %}
 						<div class="venue"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></div>
 					{% endif %}

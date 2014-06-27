@@ -14,7 +14,7 @@
 				<p>
 					Attending: 
 					{% for userAtEvent in userAtEventYesPublic %}
-						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}" itemprop="attendee">{{ userAtEvent.userUsername }}</a>
 					{% endfor %}
 					and {{ userAtEventYesPrivate|length }} {% if userAtEventYesPrivate|length > 1 %}others{% else %}other{% endif %}.	
 				</p>
@@ -22,7 +22,7 @@
 				<p>
 					Attending: 
 					{% for userAtEvent in userAtEventYesPublic %}
-						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}" itemprop="attendee">{{ userAtEvent.userUsername }}</a>
 					{% endfor %}
 				</p>
 			{% elseif userAtEventYesPrivate|length > 0 %}
@@ -33,7 +33,7 @@
 				<p>
 					Maybe attending: 
 					{% for userAtEvent in userAtEventMaybePublic %}
-						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}" itemprop="attendee">{{ userAtEvent.userUsername }}</a>
 					{% endfor %}
 					and {{ userAtEventMaybePrivate|length }} {% if userAtEventMaybePrivate|length > 1 %}others{% else %}other{% endif %}.	
 				</p>
@@ -41,7 +41,7 @@
 				<p>
 					Maybe attending: 
 					{% for userAtEvent in userAtEventMaybePublic %}
-						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}">{{ userAtEvent.userUsername }}</a>
+						<a href="{{ config.getWebIndexDomainSecure() }}/person/{{ userAtEvent.userUsername }}" itemprop="attendee">{{ userAtEvent.userUsername }}</a>
 					{% endfor %}
 				</p>
 			{% elseif userAtEventMaybePrivate|length > 0 %}

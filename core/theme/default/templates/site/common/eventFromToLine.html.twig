@@ -6,7 +6,7 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="date">
-	<time datetime="{{ startAt|tolocaltimeformatted('c', timezone) }}">
+	<time datetime="{{ startAt|tolocaltimeformatted('c', timezone) }}" itemprop="startDate">
 		<span class="startDay">{{ startAt|tolocaltimeformatted('D jS', timezone) }}</span>
 		<span class="startMonthYear">{{ startAt|tolocaltimeformatted('M Y', timezone) }}</span>
 		<span class="startTime">
@@ -15,13 +15,13 @@
 	</time>
 	<span class="to">to</span>
 	{% if sameday(startAt,endAt) %}
-		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}">
+		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}" itemprop="endDate">
 			<span class="end">
 				{{ endAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
 			</span>
 		</time>
 	{% else %}
-		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}">
+		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}" itemprop="endDate">
 			<span class="end">
 				{{ endAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, timezone) }}
 			</span>
