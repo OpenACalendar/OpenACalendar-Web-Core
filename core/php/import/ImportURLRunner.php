@@ -1,5 +1,7 @@
 <?php
 namespace import;
+
+
 use models\ImportURLModel;
 use models\ImportURLResultModel;
 use repositories\ImportURLResultRepository;
@@ -15,26 +17,40 @@ use repositories\ImportURLResultRepository;
 class ImportURLRunner {
 	
 	public function go(ImportURLModel $importURL) {				
-		global $CONFIG;
+		global $app;
 		
 		$importURLRun = new ImportURLRun($importURL);
+		$handlers = array();
 		
-		$i = new ImportURLNotUsHandler($importURLRun);
-		if ($i->canHandle()) return $i->handle();
+		// Get
+		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+			foreach($extension->getImportURLHandlers() as $handler) {
+				$handlers[] = $handler;
+			}
+		}
+		
+		// Sort
+		usort($handlers, function($a, $b) {
+			if ($a->getSortOrder() == $b->getSortOrder()) {
+				return 0;
+			} else if ($a->getSortOrder() > $b->getSortOrder()) {
+				return 1;
+			} else if ($a->getSortOrder() < $b->getSortOrder()) {
+				return -1;
+			}
+		});
 
-		// URL Rewriting handlers
-		$i = new ImportURLMeetupHandler($importURLRun);
-		if ($i->canHandle()) $i->handle();
-		
-		$i = new ImportURLEventbriteHandler($importURLRun);
-		if ($i->canHandle()) $i->handle();
-		
-		$i = new ImportURLLanyardHandler($importURLRun);
-		if ($i->canHandle()) $i->handle();
-		
-		// actual importer handlers
-		$i = new ImportURLICalHandler($importURLRun);
-		if ($i->canHandle()) return $i->handle();
+		// Run
+		foreach($handlers as $handler) {
+			$handler->setImportURLRun($importURLRun);
+			if ($handler->canHandle()) {
+				if ($handler->isStopAfterHandling()) {
+					return $handler->handle();
+				} else {
+					$handler->handle();
+				}
+			}
+		}
 		
 		// Log that couldn't handle feed	
 		$iurlr = new ImportURLResultModel();

@@ -1,5 +1,11 @@
 <?php
 
+use import\ImportURLNotUsHandler;
+use import\ImportURLMeetupHandler;
+use import\ImportURLEventbriteHandler;
+use import\ImportURLLanyardHandler;
+use import\ImportURLICalHandler;
+
 /**
  *
  * @package Core
@@ -62,6 +68,19 @@ class ExtensionCore extends BaseExtension {
 			return new usernotifications\preferences\UpcomingEventsNotificationPreference();
 		}
 		return null;
+	}
+	
+	public function getImportURLHandlers() {
+		return array(
+			// Common Sense Handler
+			new ImportURLNotUsHandler(),
+			// rewrite URL to ICAL handlers
+			new ImportURLMeetupHandler(),
+			new ImportURLEventbriteHandler(),
+			new ImportURLLanyardHandler(),
+			// handlers!
+			new ImportURLICalHandler(),
+		);
 	}
 	
 }

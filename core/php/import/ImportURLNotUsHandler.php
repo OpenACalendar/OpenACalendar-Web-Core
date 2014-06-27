@@ -14,7 +14,11 @@ use import\ImportURLHandlerBase;
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class ImportURLNotUsHandler extends ImportURLHandlerBase {
-
+	
+	public function getSortOrder() {
+		return -1000000;
+	}
+	
 	public function canHandle() {
 		global $CONFIG;
 		

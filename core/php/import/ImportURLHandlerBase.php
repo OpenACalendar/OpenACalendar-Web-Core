@@ -1,8 +1,8 @@
 <?php
 
 namespace import;
-use models\ImportURLModel;
 
+use models\ImportURLModel;
 
 /**
  *
@@ -24,7 +24,7 @@ abstract class ImportURLHandlerBase {
 	/** @var ImportURLRun **/
 	protected $importURLRun;
 	
-	public function __construct(ImportURLRun $importURLRun) {
+	public function setImportURLRun(ImportURLRun $importURLRun) {
 		$this->importURLRun = $importURLRun;
 	}
 	
@@ -32,5 +32,29 @@ abstract class ImportURLHandlerBase {
 	
 	public abstract function handle();
 		
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * @return boolean
+	 */
+	public function isStopAfterHandling() { 
+		return true;
+	}
+	
+	
+	/**
+	 * 
+	 * Handlers are sorted into order before running.
+	 * 
+	 * Lower values are run first.
+	 * 
+	 * @return int
+	 */
+	public function getSortOrder() { 
+		return 0;
+	}
+	
 }
 

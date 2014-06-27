@@ -53,6 +53,9 @@ abstract class BaseExtension {
 		return array();
 	}
 	
+	public function getImportURLHandlers() {
+		return array();
+	}
 	
 }
 

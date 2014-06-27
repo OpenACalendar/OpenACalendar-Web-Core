@@ -14,6 +14,14 @@ use TimeSource;
  */
 class ImportURLLanyardHandler extends ImportURLHandlerBase {
 
+	public function getSortOrder() {
+		return 100000;
+	}
+	
+	public function isStopAfterHandling() { 
+		return false;
+	}
+	
 	protected $newFeedURL;
 	
 	public function canHandle() {

@@ -20,6 +20,10 @@ use repositories\ImportURLResultRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLICalHandler extends ImportURLHandlerBase {
+		
+	public function getSortOrder() {
+		return 1000000;
+	}
 	
 	protected $icalParser;
 	
