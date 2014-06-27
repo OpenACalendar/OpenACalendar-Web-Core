@@ -53,6 +53,15 @@ abstract class BaseExtension {
 		return array();
 	}
 	
+	
+	public function getAppConfigurationDefinition($key) {
+		foreach($this->getAppConfigurationDefinitions() as $def) {
+			if ($def->getKey() == $key) {
+				return $def;
+			}
+		}
+	}
+	
 	public function getImportURLHandlers() {
 		return array();
 	}

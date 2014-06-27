@@ -29,6 +29,7 @@ $app['extensions'] = new ExtensionManager($app);
 foreach($CONFIG->extensions as $extensionName) {
 	require APP_ROOT_DIR.'/extension/'.$extensionName.'/extension.php';
 }
+$app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
 
 ///////////////////////// Sessions
 
