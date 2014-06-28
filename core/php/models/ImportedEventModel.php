@@ -19,7 +19,9 @@ class ImportedEventModel {
 	protected $import_id;
 	protected $title;
 	protected $description;
+	/** @var \DateTime **/
 	protected $start_at;
+	/** @var \DateTime **/
 	protected $end_at;
 	protected $is_deleted;
 	protected $url;

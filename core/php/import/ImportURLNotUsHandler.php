@@ -46,7 +46,10 @@ class ImportURLNotUsHandler extends ImportURLHandlerBase {
 	 * We handle this be disabling the feed 
 	 */
 	public function handle() {
-		
+		$iurlr = new ImportURLResultModel();
+		$iurlr->setIsSuccess(false);
+		$iurlr->setMessage("You can't import from the same site!");
+		return $iurlr;	
 	}
 
 	

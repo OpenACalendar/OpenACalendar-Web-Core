@@ -19,6 +19,7 @@ class ImportURLRunner {
 	public function go(ImportURLModel $importURL) {				
 		global $app;
 		
+		$iurlrRepo = new ImportURLResultRepository();
 		$importURLRun = new ImportURLRun($importURL);
 		$handlers = array();
 		
@@ -45,20 +46,22 @@ class ImportURLRunner {
 			$handler->setImportURLRun($importURLRun);
 			if ($handler->canHandle()) {
 				if ($handler->isStopAfterHandling()) {
-					return $handler->handle();
+					$iurlr = $handler->handle();
+					$iurlr->setImportUrlId($importURL->getId());
+					$iurlrRepo->create($iurlr);
+					return;
 				} else {
 					$handler->handle();
 				}
 			}
 		}
-		
+
 		// Log that couldn't handle feed	
 		$iurlr = new ImportURLResultModel();
 		$iurlr->setImportUrlId($importURL->getId());
 		$iurlr->setIsSuccess(false);
 		$iurlr->setMessage("Did not recognise data");
-		$iurlrRepo = new ImportURLResultRepository();
-		$iurlrRepo->create($iurlr);
+		$iurlrRepo->create($iurlr);			
 	}
 	
 	

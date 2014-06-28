@@ -121,7 +121,6 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 		$importedEventsToEvents->run();
 		
 		$iurlr = new ImportURLResultModel();
-		$iurlr->setImportUrlId($this->importURLRun->getimportURL()->getId());
 		$iurlr->setIsSuccess(true);
 		$iurlr->setNewCount($new);
 		$iurlr->setExistingCount($existing);
@@ -130,8 +129,7 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 		$iurlr->setToFarInFutureCount($tofarinfuture);
 		$iurlr->setNotValidCount($notvalid);
 		$iurlr->setMessage("ICAL Feed found");
-		$iurlrRepo = new ImportURLResultRepository();
-		$iurlrRepo->create($iurlr);	
+		return $iurlr;	
 	}
 
 	protected function setOurEventFromIcalEvent(ImportedEventModel $importedEvent, ICalParserEvent $icalevent) {
