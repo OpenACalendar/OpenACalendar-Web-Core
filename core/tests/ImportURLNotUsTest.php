@@ -18,6 +18,7 @@ class ImportURLNotUsTest  extends \PHPUnit_Framework_TestCase  {
 	
 	function dataForTestIsValid() {
 		return array(
+				# without ports
 				array('ican.hasacalendar.co.uk','hasacalendar.co.uk',true,'ican.hasacalendar.co.uk','hasacalendar.co.uk',
 					'http://madlab.org.uk/?ical',false),
 				array('ican.hasacalendar.co.uk','hasacalendar.co.uk',true,'ican.hasacalendar.co.uk','hasacalendar.co.uk',
@@ -26,6 +27,11 @@ class ImportURLNotUsTest  extends \PHPUnit_Framework_TestCase  {
 					'http://demo.hasacalendar.co.uk/index.php/event/ical/',true),
 				array('ican.hasacalendar.co.uk','hasacalendar.co.uk',true,'ican.hasacalendar.co.uk','hasacalendar.co.uk',
 					'http://ican.hasacalendar.co.uk/index.php/event/ical/',true),
+				# With ports
+				array('hasadevcalendar.co.uk:20150','hasadevcalendar.co.uk:20151',true,'hasadevcalendar.co.uk:40300','hasadevcalendar.co.uk:40302',
+					'http://www.facebook.com/events/1435905404p890489089045',false),
+				array('hasadevcalendar.co.uk:20150','hasadevcalendar.co.uk:20151',true,'hasadevcalendar.co.uk:40300','hasadevcalendar.co.uk:40302',
+					'http://test1.hhasadevcalendar.co.uk:20151/index.php/event/ical/',true),
 			);
 	}
 	

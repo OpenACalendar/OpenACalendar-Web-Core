@@ -26,10 +26,10 @@ class ImportURLNotUsHandler extends ImportURLHandlerBase {
 		$host = isset($data['host']) ? $data['host'] : '';
 		
 		
-		$checks = array($CONFIG->webIndexDomain,$CONFIG->webSiteDomain);
+		$checks = array($this->getDomainMinusPort($CONFIG->webIndexDomain),$this->getDomainMinusPort($CONFIG->webSiteDomain));
 		if ($CONFIG->hasSSL) {
-			$checks[] = $CONFIG->webSiteDomain;
-			$checks[] = $CONFIG->webSiteDomainSSL;
+			$checks[] = $this->getDomainMinusPort($CONFIG->webSiteDomain);
+			$checks[] = $this->getDomainMinusPort($CONFIG->webSiteDomainSSL);
 		}
 		foreach($checks as $check) {
 			if (strpos(strtolower($host), strtolower($check)) !== false) {
@@ -42,9 +42,15 @@ class ImportURLNotUsHandler extends ImportURLHandlerBase {
 		
 	}
 	
-	/**
-	 * We handle this be disabling the feed 
-	 */
+	public function getDomainMinusPort($in) {
+		if (strpos($in, ":")) {
+			$bits = explode(":", $in);
+			return $bits[0];
+		} else {
+			return $in;
+		}
+	}
+	
 	public function handle() {
 		$iurlr = new ImportURLResultModel();
 		$iurlr->setIsSuccess(false);
