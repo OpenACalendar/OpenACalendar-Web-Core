@@ -3,6 +3,7 @@
 namespace import;
 use JarOfGreen\WikiCalendarBundle\Entity\ImportURL;
 use import\ImportURLHandlerBase;
+use models\ImportURLResultModel;
 
 
 /**
