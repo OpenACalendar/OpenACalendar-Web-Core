@@ -117,17 +117,24 @@ class ImportURLFacebookHandler extends ImportURLHandlerBase {
 		$request = new FacebookRequest($session, 'GET', $url);
 		$response = $request->execute();
 		$graphObject = $response->getGraphObject();
+
+		// This tests 2 things
+		// 1) Can some events not have a start and a end time set? Saw comments that suggested this.
+		// 2) How do we know this FB event is an event? It could be group or a page. 
+		if ($graphObject->getProperty('start_time') && $graphObject->getProperty('end_time')) {
 		
-		return array(
-			'name' => $graphObject->getProperty('name'),
-			'description' => $graphObject->getProperty('description'),
-			'ticket_uri' => $graphObject->getProperty('ticket_uri'),
-			'start_time' => $graphObject->getProperty('start_time'),
-			'end_time' => $graphObject->getProperty('end_time'),
-			'timezone' => $graphObject->getProperty('timezone'),
-			'is_date_only' => $graphObject->getProperty('is_date_only'),
-			'url' => 'https://www.facebook.com/events/'.$id,
-		);
+			return array(
+				'name' => $graphObject->getProperty('name'),
+				'description' => $graphObject->getProperty('description'),
+				'ticket_uri' => $graphObject->getProperty('ticket_uri'),
+				'start_time' => $graphObject->getProperty('start_time'),
+				'end_time' => $graphObject->getProperty('end_time'),
+				'timezone' => $graphObject->getProperty('timezone'),
+				'is_date_only' => $graphObject->getProperty('is_date_only'),
+				'url' => 'https://www.facebook.com/events/'.$id,
+			);
+		
+		}
 		
 	}
 	
