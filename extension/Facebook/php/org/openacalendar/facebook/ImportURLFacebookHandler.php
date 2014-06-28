@@ -139,44 +139,53 @@ class ImportURLFacebookHandler extends ImportURLHandlerBase {
 	}
 	
 	protected function processFBData($id, $fbData) {
+		global $CONFIG;
+		$start = new \DateTime($fbData['start_time'], new \DateTimeZone('UTC'));
+		$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
+		if ($start && $end && $start <= $end) { 
+			if ($end->getTimeStamp() < \TimeSource::time()) {
+				$this->countInPast++;
+			} else if ($start->getTimeStamp() > \TimeSource::time()+$CONFIG->importURLAllowEventsSecondsIntoFuture) {
+				$this->countToFarInFuture++;
+			} else {
 		
-		$importedEventRepo = new \repositories\ImportedEventRepository();
-		$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importURLRun->getImportURL()->getId() ,$id);
-		
-		$changesToSave = false;
-		if (!$importedEvent) {
-			++$this->countNew;
-			$importedEvent = new ImportedEventModel();						
-			$importedEvent->setImportId($id);
-			$importedEvent->setImportUrlId($this->importURLRun->getImportURL()->getId());
-			$this->setImportedEventFromFBData($importedEvent, $fbData);							
-			$changesToSave = true;
-		} else {
-			++$this->countExisting;
-			$changesToSave = $this->setImportedEventFromFBData($importedEvent, $fbData);
-			// if was deleted, undelete
-			if ($importedEvent->getIsDeleted()) {
-				$importedEvent->setIsDeleted(false);
-				$changesToSave = true;
+				$importedEventRepo = new \repositories\ImportedEventRepository();
+				$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importURLRun->getImportURL()->getId() ,$id);
+
+				$changesToSave = false;
+				if (!$importedEvent) {
+					++$this->countNew;
+					$importedEvent = new ImportedEventModel();						
+					$importedEvent->setImportId($id);
+					$importedEvent->setImportUrlId($this->importURLRun->getImportURL()->getId());
+					$this->setImportedEventFromFBData($importedEvent, $fbData);							
+					$changesToSave = true;
+				} else {
+					++$this->countExisting;
+					$changesToSave = $this->setImportedEventFromFBData($importedEvent, $fbData);
+					// if was deleted, undelete
+					if ($importedEvent->getIsDeleted()) {
+						$importedEvent->setIsDeleted(false);
+						$changesToSave = true;
+					}
+				}
+				if ($changesToSave && $this->countSaved < $this->limitToSaveOnEachRun) {
+					++$this->countSaved;
+					$this->importedEventsToEvents->addImportedEvent($importedEvent);
+
+					if ($importedEvent->getId()) {
+						if ($importedEvent->getIsDeleted()) {
+							$importedEventRepo->delete($importedEvent);
+						} else {
+							$importedEventRepo->edit($importedEvent);
+						}
+					} else {
+						$importedEventRepo->create($importedEvent);
+					}
+				}		
+
 			}
 		}
-		if ($changesToSave && $this->countSaved < $this->limitToSaveOnEachRun) {
-			++$this->countSaved;
-			$this->importedEventsToEvents->addImportedEvent($importedEvent);
-
-			if ($importedEvent->getId()) {
-				if ($importedEvent->getIsDeleted()) {
-					$importedEventRepo->delete($importedEvent);
-				} else {
-					$importedEventRepo->edit($importedEvent);
-				}
-			} else {
-				$importedEventRepo->create($importedEvent);
-			}
-
-		}		
-		
-		
 	}
 	
 	protected function setImportedEventFromFBData(ImportedEventModel $importedEvent, $fbData) {
