@@ -25,38 +25,9 @@
 		
 		
 		<div class="rowWrapper">
-			<div class="labelWrapper">&nbsp;</div>
+			<div class="labelWrapper">Are all events in one place?</div>
 			<div class="widgetWrapperPlacementOnly">
 				<ul id="ChangeEventAreaList">
-					{% if parentAreas is defined %}
-						{% for parentArea in parentAreas %}
-							<li class="selectedarea">
-								<span class="content">
-									<span class="title">{{ parentArea.title }}</span>
-									<a href="#" onclick="removeArea(this); return false;" class="remove">X</a>
-								</span>
-								<input type="hidden" name="areas[]" value="EXISTING:{{ parentArea.slug }}">
-							</li>
-						{% endfor %}
-					{% endif %}
-					{% if area is defined and area %}
-						<li class="selectedarea">
-							<span class="content">
-								<span class="title">{{ area.title }}</span>
-								<a href="#" onclick="removeArea(this); return false;" class="remove">X</a>
-							</span>
-							<input type="hidden" name="areas[]" value="EXISTING:{{ area.slug }}">
-						</li>
-					{% endif %}
-					{% if childAreas is defined and childAreas %}
-						<li class="selectArea">
-							<ul class="areas">
-								{% for childArea in childAreas %}
-									<li class="area"><span class="content"><a href="#" onclick="existingAreaChoosen({{ childArea.slug }}); return false;">{{ childArea.title }}</a></span><span class="aftercontent">&nbsp;</span></li>
-								{% endfor %}
-							</ul>
-						</li>
-					{% endif %}
 				</ul>
 			</div>
 			<div class="after"></div>
@@ -74,6 +45,11 @@
 
 {% block scripts %}
 	<script type="text/javascript" src="/theme/default/js/importurlform.js?v={{ config.assetsVersion }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			onCountryChange();
+		});		
+	</script>
 {% endblock %}
 
 
