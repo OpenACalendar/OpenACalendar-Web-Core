@@ -92,6 +92,43 @@ class AdminTagController {
 	}
 	
 	
+	function delete($slug, Request $request, Application $app) {
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Tag does not exist.");
+		}
+		
+		if ($this->parameters['tag']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+		
+		$tagRepository = new TagRepository();
+		$tagRepository->delete($this->parameters['tag'], userGetCurrent());
+
+		return $app->redirect("/admin/tag/".$this->parameters['tag']->getSlugForUrl());
+		
+	}
+	
+	
+	function undelete($slug, Request $request, Application $app) {
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Tag does not exist.");
+		}
+	
+		if (!$this->parameters['tag']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+		
+		$this->parameters['tag']->setIsDeleted(false);
+		$tagRepository = new TagRepository();
+		$tagRepository->edit($this->parameters['tag'], userGetCurrent());
+
+		return $app->redirect("/admin/tag/".$this->parameters['tag']->getSlugForUrl());
+		
+	}
+	
+	
 		
 }
 

@@ -427,6 +427,14 @@ $app->match('/admin/tag/{slug}/edit', "site\controllers\AdminTagController::edit
 		->before($appVerifiedAdminUserRequired)
 		->before($canChangeSite)
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
+$app->match('/admin/tag/{slug}/delete', "site\controllers\AdminTagController::delete")
+		->before($appVerifiedAdminUserRequired)
+		->before($canChangeSite)
+		->assert('slug', FRIENDLY_SLUG_REGEX); 
+$app->match('/admin/tag/{slug}/undelete', "site\controllers\AdminTagController::undelete")
+		->before($appVerifiedAdminUserRequired)
+		->before($canChangeSite)
+		->assert('slug', FRIENDLY_SLUG_REGEX); 
 		
 		
 		
