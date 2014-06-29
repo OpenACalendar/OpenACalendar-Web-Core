@@ -139,15 +139,18 @@ $app->match('/group/{slug}/history', "site\controllers\GroupController::history"
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/group/{slug}/media', "site\controllers\GroupController::media")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appFileStoreRequired)
 		->before($canChangeSite); 
 $app->match('/group/{slug}/media/add/existing', "site\controllers\GroupController::mediaAddExisting")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)
+		->before($appFileStoreRequired)
 		->before($canChangeSite);
 $app->match('/group/{slug}/media/{mediaslug}/remove', "site\controllers\GroupController::mediaRemove")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('mediaslug', '\d+')
 		->before($appVerifiedEditorUserRequired)
+		->before($appFileStoreRequired)
 		->before($canChangeSite); 
 $app->match('/group/{slug}/edit', "site\controllers\GroupController::edit")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
@@ -263,14 +266,17 @@ $app->match('/venue/{slug}/history', "site\controllers\VenueController::history"
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/venue/{slug}/media', "site\controllers\VenueController::media")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appFileStoreRequired)
 		->before($canChangeSite);
 $app->match('/venue/{slug}/media/add/existing', "site\controllers\VenueController::mediaAddExisting")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appFileStoreRequired)
 		->before($appVerifiedEditorUserRequired)
 		->before($canChangeSite);
 $app->match('/venue/{slug}/media/{mediaslug}/remove', "site\controllers\VenueController::mediaRemove")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('mediaslug', '\d+')
+		->before($appFileStoreRequired)
 		->before($appVerifiedEditorUserRequired)
 		->before($canChangeSite); 
 
@@ -377,6 +383,7 @@ $app->match('/admin/countries', "site\controllers\AdminController::countries")
 		->before($appVerifiedAdminUserRequired)
 		->before($canChangeSite);
 $app->match('/admin/media', "site\controllers\AdminController::media")
+		->before($appFileStoreRequired)
 		->before($appVerifiedAdminUserRequired)
 		->before($canChangeSite);
 $app->match('/admin/sendemail', "site\controllers\SendEmailNewController::index")
@@ -504,19 +511,26 @@ $app->match('/curatedlist/{slug}/event/{eslug}/add', "site\controllers\CuratedLi
 		->before($appVerifiedEditorUserRequired)
 		->before($featureCuratedListRequired);
 
-$app->match('/media', "site\controllers\MediaListController::index"); 
-$app->match('/media/', "site\controllers\MediaListController::index"); 
+$app->match('/media', "site\controllers\MediaListController::index")
+		->before($appFileStoreRequired); 
+$app->match('/media/', "site\controllers\MediaListController::index")
+		->before($appFileStoreRequired); 
 
 $app->match('/media/{slug}', "site\controllers\MediaController::show")
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
 $app->match('/media/{slug}/', "site\controllers\MediaController::show")
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
 $app->match('/media/{slug}/thumbnail', "site\controllers\MediaController::imageThumbnail")
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
 $app->match('/media/{slug}/normal', "site\controllers\MediaController::imageNormal")
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
 $app->match('/media/{slug}/full', "site\controllers\MediaController::imageFull")
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
 
 
 $app->match('/stopWatchingFromEmail/{userid}/{code}', "site\controllers\IndexController::stopWatchingFromEmail")

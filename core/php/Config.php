@@ -180,6 +180,9 @@ class Config {
 			return $this->hasSSL ? "https://".$siteslug.".".$this->webSiteDomainSSL : "http://".$siteslug.".".$this->webSiteDomain;
 		}
 	}
+	function isFileStore() {
+		return (boolean)$this->fileStoreLocation;
+	}
 }
 	
 

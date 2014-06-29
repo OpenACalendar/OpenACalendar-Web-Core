@@ -22,9 +22,11 @@
 		<li class="action">
 			<a href="/venue/{{ venue.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
 		</li>
-		<li class="action">
-			<a href="/venue/{{ venue.slugForUrl }}/media"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
-		</li>		
+		{% if config.isFileStore %}
+			<li class="action">
+				<a href="/venue/{{ venue.slugForUrl }}/media"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
+			</li>		
+		{% endif %}
 	{% endif %}
 {% endblock %}
 

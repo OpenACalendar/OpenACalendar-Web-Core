@@ -49,8 +49,8 @@ class AdminController {
 	function profile(Request $request, Application $app) {
 		global $CONFIG, $FLASHMESSAGES;
 		
-		$form = $app['form.factory']->create(new SiteEditProfileForm(), $app['currentSite']);
-		
+		$form = $app['form.factory']->create(new SiteEditProfileForm($CONFIG), $app['currentSite']);
+				
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 			
@@ -59,14 +59,16 @@ class AdminController {
 				$siteRepository = new SiteRepository();
 				$siteRepository->edit($app['currentSite'], userGetCurrent());
 
-				$newLogo = $form['logo']->getData();
-				if ($newLogo) {
-					$mediaRepository = new MediaRepository();
-					$media = $mediaRepository->createFromFile($newLogo, $app['currentSite'], userGetCurrent());
-					if ($media) {
-						$app['currentSite']->setLogoMediaId($media->getId());
-						$siteProfileMediaRepository = new SiteProfileMediaRepository();
-						$siteProfileMediaRepository->createOrEdit($app['currentSite'], userGetCurrent());
+				if ($CONFIG->isFileStore()) {
+					$newLogo = $form['logo']->getData();
+					if ($newLogo) {
+						$mediaRepository = new MediaRepository();
+						$media = $mediaRepository->createFromFile($newLogo, $app['currentSite'], userGetCurrent());
+						if ($media) {
+							$app['currentSite']->setLogoMediaId($media->getId());
+							$siteProfileMediaRepository = new SiteProfileMediaRepository();
+							$siteProfileMediaRepository->createOrEdit($app['currentSite'], userGetCurrent());
+						}
 					}
 				}
 				

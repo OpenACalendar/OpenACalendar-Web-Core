@@ -203,6 +203,13 @@ $featurePhysicalEventsRequired = function(Request $request)  use ($app) {
 	}
 };
 
+$appFileStoreRequired = function(Request $request)  use ($app) {
+	global $CONFIG;
+	if (!$CONFIG->isFileStore()) {
+		return new RedirectResponse('/');
+	}
+};
+
 $canChangeSite = function(Request $request) use ($app) {
 	global  $CONFIG;
 	if ($CONFIG->siteReadOnly) {

@@ -27,15 +27,16 @@
 		{{ form_row(form.description_text) }}
 		{{ form_row(form.footer_text) }}
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Existing Logo</div>
-			<div class="widgetWrapper">
-				<img src="/getLogo.php?t={{ "now"|date('U') }}" class="logo" alt="Logo">
+		{% if config.isFileStore %}
+			<div class="rowWrapper">
+				<div class="labelWrapper">Existing Logo</div>
+				<div class="widgetWrapper">
+					<img src="/getLogo.php?t={{ "now"|date('U') }}" class="logo" alt="Logo">
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
-
-		{{ form_row(form.logo) }}
+			{{ form_row(form.logo) }}
+		{% endif %}
 
 		{{ form_rest(form) }}
 
