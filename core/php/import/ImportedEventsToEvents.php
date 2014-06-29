@@ -111,9 +111,11 @@ class ImportedEventsToEvents {
 
 			// country is set on importer.
 			$event->setCountryId($this->country->getId());
-			// take first timezone in that country at random :-/
 			$timezones = $this->country->getTimezonesAsList();
-			if ($timezones) {
+			if ($importedEvent->getTimezone() && in_array($importedEvent->getTimezone(), $timezones)) {
+				$event->setTimezone($importedEvent->getTimezone());
+			} else if ($timezones) {
+				// take first timezone in that country at random :-/
 				$event->setTimezone($timezones[0]);
 			}
 
@@ -130,14 +132,16 @@ class ImportedEventsToEvents {
 			if (count($countries) > 0) {
 				$country = $countries[0];
 				$event->setCountryId($country->getId());
-				// take first timezone in that country at random :-/
 				$timezones = $country->getTimezonesAsList();
-				if ($timezones) {
+				if ($importedEvent->getTimezone() && in_array($importedEvent->getTimezone(), $timezones)) {
+					$event->setTimezone($importedEvent->getTimezone());
+				} else if ($timezones) {
+					// take first timezone in that country at random :-/
 					$event->setTimezone($timezones[0]);
 				}
 			}
 		}		
-
+		
 		return $event;
 	}
 }

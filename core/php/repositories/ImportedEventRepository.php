@@ -45,9 +45,9 @@ class ImportedEventRepository {
 	public function create(ImportedEventModel $importedEvent) {
 		global $DB;
 		$stat = $DB->prepare("INSERT INTO imported_event ( import_url_id, import_id, title, ".
-				"description, start_at, end_at, is_deleted, url, created_at) ".
+				"description, start_at, end_at, timezone, is_deleted, url, ticket_url, created_at) ".
 				" VALUES (  :import_url_id, :import_id, :title, ".
-				":description, :start_at, :end_at, '0', :url, :created_at) RETURNING id");
+				":description, :start_at, :end_at, :timezone,  '0', :url, :ticket_url, :created_at) RETURNING id");
 		$stat->execute(array(
 				'import_url_id'=>$importedEvent->getImportUrlId(), 
 				'import_id'=>$importedEvent->getImportId(),
@@ -55,7 +55,9 @@ class ImportedEventRepository {
 				'description'=>$importedEvent->getDescription(),
 				'start_at'=>$importedEvent->getStartAtInUTC()->format("Y-m-d H:i:s"),
 				'end_at'=>$importedEvent->getEndAtInUTC()->format("Y-m-d H:i:s"),
+				'timezone'=>$importedEvent->getTimezone(),				
 				'url'=>$importedEvent->getUrl(),				
+				'ticket_url'=>$importedEvent->getTicketUrl(),				
 				'created_at'=>\TimeSource::getFormattedForDataBase(),
 			));
 		$data = $stat->fetch();
@@ -65,14 +67,17 @@ class ImportedEventRepository {
 	public function edit(ImportedEventModel $importedEvent) {
 		global $DB;
 		$stat = $DB->prepare("UPDATE imported_event SET title=:title, description=:description, ".
-				"start_at=:start_at, end_at=:end_at,  is_deleted='1', url = :url WHERE id=:id");
+				"start_at=:start_at, end_at=:end_at, timezone=:timezone,  is_deleted='1', url = :url, ".
+				"ticket_url = :ticket_url WHERE id=:id");
 		$stat->execute(array(
 			'id'=>$importedEvent->getId(),
 			'title'=>substr($importedEvent->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 			'description'=>$importedEvent->getDescription(),
 			'start_at'=>$importedEvent->getStartAtInUTC()->format("Y-m-d H:i:s"),
 			'end_at'=>$importedEvent->getEndAtInUTC()->format("Y-m-d H:i:s"),
+			'timezone'=>$importedEvent->getTimezone(),				
 			'url'=>$importedEvent->getUrl(),				
+			'ticket_url'=>$importedEvent->getTicketUrl(),				
 		));
 	}
 	

@@ -121,7 +121,7 @@ class ImportURLFacebookHandler extends ImportURLHandlerBase {
 		// This tests 2 things
 		// 1) Can some events not have a start and a end time set? Saw comments that suggested this.
 		// 2) How do we know this FB event is an event? It could be group or a page. 
-		if ($graphObject->getProperty('start_time') && $graphObject->getProperty('end_time')) {
+		if ($graphObject->getProperty('start_time')) {
 		
 			return array(
 				'name' => $graphObject->getProperty('name'),
@@ -141,7 +141,11 @@ class ImportURLFacebookHandler extends ImportURLHandlerBase {
 	protected function processFBData($id, $fbData) {
 		global $CONFIG;
 		$start = new \DateTime($fbData['start_time'], new \DateTimeZone('UTC'));
-		$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
+		if ($fbData['end_time']) {
+			$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
+		} else {
+			$end = clone $start;
+		}
 		if ($start && $end && $start <= $end) { 
 			if ($end->getTimeStamp() < \TimeSource::time()) {
 				$this->countInPast++;
@@ -195,7 +199,11 @@ class ImportURLFacebookHandler extends ImportURLHandlerBase {
 			$changesToSave = true;
 		}
 		$start = new \DateTime($fbData['start_time'], new \DateTimeZone('UTC'));
-		$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
+		if ($fbData['end_time']) {
+			$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
+		} else {
+			$end = clone $start;
+		}
 		if ($fbData['is_date_only']) {
 			$start->setTime(0,0,0);
 			$end->setTime(23, 59, 59);
@@ -216,8 +224,14 @@ class ImportURLFacebookHandler extends ImportURLHandlerBase {
 			$importedEvent->setUrl($fbData['url']);
 			$changesToSave = true;
 		}
-		// TODO Timezone
-		// TODO Ticket URL
+		if ($importedEvent->getTimezone() != $fbData['timezone']) {
+			$importedEvent->setTimezone($fbData['timezone']);
+			$changesToSave = true;
+		}
+		if ($importedEvent->getTicketUrl() != $fbData['ticket_uri']) {
+			$importedEvent->setTicketUrl($fbData['ticket_uri']);
+			$changesToSave = true;
+		}
 		return $changesToSave;
 	}
 	

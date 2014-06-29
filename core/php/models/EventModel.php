@@ -157,6 +157,10 @@ class EventModel {
 			$this->setUrl($importedEvent->getUrl());
 			$changesToSave = true;
 		}			
+		if ($importedEvent->getTicketUrl() != $this->getTicketUrl()) {
+			$this->setTicketUrl($importedEvent->getTicketUrl());
+			$changesToSave = true;
+		}			
 		return $changesToSave;
 	}
 	

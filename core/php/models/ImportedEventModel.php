@@ -23,9 +23,11 @@ class ImportedEventModel {
 	protected $start_at;
 	/** @var \DateTime **/
 	protected $end_at;
+	protected $timezone;
 	protected $is_deleted;
 	protected $url;
-	
+	protected $ticket_url;
+		
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
 		$this->import_url_id = $data['import_url_id'];
@@ -38,6 +40,8 @@ class ImportedEventModel {
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->is_deleted = $data['is_deleted'];
 		$this->url = $data['url'];
+		$this->ticket_url = $data['ticket_url'];
+		$this->timezone = $data['timezone'];
 	}
 	
 
@@ -133,8 +137,22 @@ class ImportedEventModel {
 	public function setUrl($url) {
 		$this->url = $url;
 	}
-
-
 	
+	public function getTimezone() {
+		return $this->timezone;
+	}
+
+	public function setTimezone($timezone) {
+		$this->timezone = $timezone;
+	}
+
+	public function getTicketUrl() {
+		return $this->ticket_url;
+	}
+
+	public function setTicketUrl($ticket_url) {
+		$this->ticket_url = $ticket_url;
+	}
+
 }
 
