@@ -21,6 +21,7 @@ class CuratedListModel {
 	protected $title;
 	protected $description;
 	protected $created_at;
+	protected $is_deleted;
 
 	/** secondary attributes **/
 	protected $is_event_in_list;
@@ -34,6 +35,7 @@ class CuratedListModel {
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);	
 		$this->is_event_in_list = isset($data['is_event_in_list']) ? $data['is_event_in_list'] : false;
+		$this->is_deleted = $data['is_deleted'];
 	}
 	
 	
@@ -126,6 +128,14 @@ class CuratedListModel {
 	}
 
 
+
+	public function getIsDeleted() {
+		return $this->is_deleted;
+	}
+
+	public function setIsDeleted($is_deleted) {
+		$this->is_deleted = $is_deleted;
+	}
 	
 }
 
