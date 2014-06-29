@@ -3,7 +3,7 @@
 
 use models\ImportURLModel;
 use models\SiteModel;
-use import\ImportURLLanyardHandler;
+use import\ImportURLLanyrdHandler;
 use import\ImportURLRun;
 
 /**
@@ -13,7 +13,7 @@ use import\ImportURLRun;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ImportURLLanyardTest extends \PHPUnit_Framework_TestCase {
+class ImportURLLanyrdTest extends \PHPUnit_Framework_TestCase {
 	
 	function dataForTestIsValid() {
 		return array(
@@ -36,7 +36,7 @@ class ImportURLLanyardTest extends \PHPUnit_Framework_TestCase {
 		$importRun = new ImportURLRun($import, $site);
 		
 		
-		$handler = new ImportURLLanyardHandler();
+		$handler = new ImportURLLanyrdHandler();
 		$handler->setImportURLRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 		if ($result) {

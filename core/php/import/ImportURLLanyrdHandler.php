@@ -12,7 +12,7 @@ use TimeSource;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ImportURLLanyardHandler extends ImportURLHandlerBase {
+class ImportURLLanyrdHandler extends ImportURLHandlerBase {
 
 	public function getSortOrder() {
 		return 100000;

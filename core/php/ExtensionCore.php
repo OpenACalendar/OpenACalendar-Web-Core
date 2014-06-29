@@ -3,7 +3,7 @@
 use import\ImportURLNotUsHandler;
 use import\ImportURLMeetupHandler;
 use import\ImportURLEventbriteHandler;
-use import\ImportURLLanyardHandler;
+use import\ImportURLLanyrdHandler;
 use import\ImportURLICalHandler;
 
 /**
@@ -77,7 +77,7 @@ class ExtensionCore extends BaseExtension {
 			// rewrite URL to ICAL handlers
 			new ImportURLMeetupHandler(),
 			new ImportURLEventbriteHandler(),
-			new ImportURLLanyardHandler(),
+			new ImportURLLanyrdHandler(),
 			// handlers!
 			new ImportURLICalHandler(),
 		);
