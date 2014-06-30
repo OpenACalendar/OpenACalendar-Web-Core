@@ -22,6 +22,8 @@
 			{% include 'email/common/venueHistoryItem.html.twig' %}
 		{% elseif historyItem is importurlhistory %}
 			{% include 'email/common/importURLHistoryItem.html.twig' %}
+		{% elseif historyItem is areahistory %}
+			{% include 'email/common/areaHistoryItem.html.twig' %}
 		{% endif %}		
 	{% endfor %}
 	

@@ -67,6 +67,8 @@ class SendUserWatchesSiteNotifyEmailsTask {
 				$historyRepositoryBuilder->setSite($site);
 				$historyRepositoryBuilder->setSince($dateSince);
 				$historyRepositoryBuilder->setNotUser($user);
+				// Only admins can change tags at the moment so don't include
+				$historyRepositoryBuilder->setIncludeTagHistory(false);
 
 				$histories = $historyRepositoryBuilder->fetchAll();
 
