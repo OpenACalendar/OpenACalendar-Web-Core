@@ -11,13 +11,13 @@
 	
 	<p>Hello {{ user.username }}</p>
 
-	<p>You watch the {{ site.title }}, and changes have been made.</p>
+	<p>You watch {{ site.title }}, and changes have been made.</p>
 	
 	{% for historyItem in histories %}
 		{% if historyItem is eventhistory %}
 			{% include 'email/common/eventHistoryItem.html.twig' %}
 		{% elseif historyItem is grouphistory %}
-			{% include 'email/common/groupHistoryItem.html.twig' %}</li>
+			{% include 'email/common/groupHistoryItem.html.twig' %}
 		{% elseif historyItem is venuehistory %}
 			{% include 'email/common/venueHistoryItem.html.twig' %}
 		{% elseif historyItem is importurlhistory %}
