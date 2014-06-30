@@ -17,6 +17,7 @@ use repositories\GroupHistoryRepository;
 use repositories\AreaHistoryRepository;
 use repositories\VenueHistoryRepository;
 use repositories\UserNotificationRepository;
+use repositories\ImportURLHistoryRepository;
 
 /**
  *
@@ -43,6 +44,7 @@ class SendUserWatchesGroupNotifyEmailsTask {
 		$groupHistoryRepository = new GroupHistoryRepository;
 		$areaHistoryRepository = new AreaHistoryRepository;
 		$venueHistoryRepository = new VenueHistoryRepository;
+		$importURLHistoryRepository = new ImportURLHistoryRepository;
 		$userNotificationRepo = new UserNotificationRepository();
 
 		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesGroupNotify');
@@ -87,6 +89,8 @@ class SendUserWatchesGroupNotifyEmailsTask {
 							$venueHistoryRepository->ensureChangedFlagsAreSet($history);
 						} elseif ($history instanceof models\AreaHistoryModel) {
 							$areaHistoryRepository->ensureChangedFlagsAreSet($history);
+						} elseif ($history instanceof models\ImportURLHistoryModel) {
+							$importURLHistoryRepository->ensureChangedFlagsAreSet($history);
 						}
 					}
 					$userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($user, $group);

@@ -33,6 +33,8 @@
 				{% include 'site/common/areaHistoryItem.html.twig' %}
 			{% elseif historyItem is taghistory %}
 				{% include 'site/common/tagHistoryItem.html.twig' %}
+			{% elseif historyItem is importurlhistory %}
+				{% include 'site/common/importURLHistoryItem.html.twig' %}
 			{% endif %}
 		{% endfor %}
 	</ul>

@@ -17,6 +17,9 @@ use repositories\ImportURLRepository;
 class ImportURLHistoryModel extends ImportURLModel {
 	
 	
+	protected $import_url_slug;
+	protected $user_account_id;
+	protected $user_account_username;
 	
 	protected $title_changed = 0;
 	protected $is_enabled_changed  = 0;
@@ -41,6 +44,12 @@ class ImportURLHistoryModel extends ImportURLModel {
 		$this->country_id_changed  = isset($data['country_id_changed']) ? $data['country_id_changed'] : 0;
 		$this->area_id_changed  = isset($data['area_id_changed']) ? $data['area_id_changed'] : 0;
 		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;	
+		
+		$this->user_account_id = $data['user_account_id'];
+		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
+		
+		$this->import_url_slug = isset($data['import_url_slug']) ? $data['import_url_slug'] : null;
+		$this->slug = isset($data['import_url_slug']) ? $data['import_url_slug'] : null;
 	}
 
 	public function isAnyChangeFlagsUnknown() {
@@ -69,6 +78,16 @@ class ImportURLHistoryModel extends ImportURLModel {
 		$this->is_new = 0;
 	}
 	
+	
+	public function getCreatedAt() {
+		return $this->created_at;
+	}
+
+
+	public function getCreatedAtTimeStamp() {
+		return $this->created_at->getTimestamp();
+	}
+	
 	public function getTitleChanged() {
 		return ($this->title_changed != -1);
 	}
@@ -93,6 +112,18 @@ class ImportURLHistoryModel extends ImportURLModel {
 		return $this->is_new;
 	}
 
+	public function getUserAccountId() {
+		return $this->user_account_id;
+	}
+
+	public function getUserAccountUsername() {
+		return $this->user_account_username;
+	}
+
+
+	public function getImportURLSlug() {
+		return $this->import_url_slug;
+	}
 
 }
 

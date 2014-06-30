@@ -8,12 +8,14 @@ use models\EventModel;
 use models\GroupModel;
 use models\VenueModel;
 use models\TagModel;
+use models\ImportURLModel;
 use models\UserAccountModel;
 use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
+use models\ImportURLHistoryModel;
 use models\API2ApplicationModel;
 
 /**
@@ -31,7 +33,9 @@ class HistoryRepositoryBuilder {
 	protected $includeGroupHistory = true;
 	protected $includeVenueHistory = true;
 	protected $includeAreaHistory = true;
-	
+	protected $includeImportURLHistory = true;
+
+
 	public function getIncludeEventHistory() {
 		return $this->includeEventHistory;
 	}
@@ -72,7 +76,15 @@ class HistoryRepositoryBuilder {
 		$this->includeAreaHistory = $includeAreaHistory;
 	}
 
-		
+	public function getIncludeImportURLHistory() {
+		return $this->includeImportURLHistory;
+	}
+
+	public function setIncludeImportURLHistory($includeImportURLHistory) {
+		$this->includeImportURLHistory = $includeImportURLHistory;
+	}
+
+			
 	protected $since;
 	
 	public function setSince($since) {
@@ -89,6 +101,7 @@ class HistoryRepositoryBuilder {
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = true;
 		$this->includeTagHistory = true;
+		$this->includeImportURLHistory = true;
 	}
 
 
@@ -102,6 +115,7 @@ class HistoryRepositoryBuilder {
 		$this->includeVenueHistory = false;
 		$this->includeAreaHistory = false;
 		$this->includeTagHistory = false;
+		$this->includeImportURLHistory = true;
 	}
 
 	/** @var EventModel **/
@@ -114,6 +128,7 @@ class HistoryRepositoryBuilder {
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = false;
 		$this->includeTagHistory = false;
+		$this->includeImportURLHistory = false;
 	}
 
 	/** @var VenueModel **/
@@ -126,6 +141,7 @@ class HistoryRepositoryBuilder {
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = false;
 		$this->includeTagHistory = false;
+		$this->includeImportURLHistory = false;
 	}
 	
 	/** @var TagModel **/
@@ -138,6 +154,7 @@ class HistoryRepositoryBuilder {
 		$this->includeVenueHistory = false;
 		$this->includeAreaHistory = false;
 		$this->includeTagHistory = true;
+		$this->includeImportURLHistory = false;
 	}
 	
 	
@@ -151,6 +168,8 @@ class HistoryRepositoryBuilder {
 			$this->includeGroupHistory = false;
 			$this->includeVenueHistory = false;
 			$this->includeAreaHistory = false;
+			$this->includeTagHistory = false;
+			$this->includeImportURLHistory = false;
 		}
 	}
 	
@@ -449,6 +468,69 @@ class HistoryRepositoryBuilder {
 			}
 			
 		}
+		
+		
+		
+		/////////////////////////// Import URL History
+
+		if ($this->includeImportURLHistory) {
+			$where = array();
+			$params = array();
+			
+
+			if ($this->site) {
+				$where[] = 'import_url_information.site_id =:site';
+				$params['site'] = $this->site->getId();
+			}
+			
+			
+
+			if ($this->group) {
+				$where[] = 'import_url_information.group_id =:group';
+				$params['group'] = $this->group->getId();
+			}
+			
+			
+			
+			if ($this->since) {
+				$where[] = ' import_url_history.created_at >= :since ';
+				$params['since'] = $this->since->format("Y-m-d H:i:s");
+			}
+			
+			if ($this->notUser) {
+				$where[] = 'import_url_history.user_account_id != :userid ';
+				$params['userid'] = $this->notUser->getId();
+			}
+			
+			if ($this->api2app) {
+				$where[] = 'import_url_history.api2_application_id  = :api2app';
+				$params['api2app'] = $this->api2app->getId();
+			}
+			
+			$sql = "SELECT import_url_history.*, import_url_information.slug AS import_url_slug, ".
+					"user_account_information.username AS user_account_username ".
+					" FROM import_url_history ".
+					" LEFT JOIN user_account_information ON user_account_information.id = import_url_history.user_account_id ".
+					" LEFT JOIN import_url_information ON import_url_information.id = import_url_history.import_url_id ".
+					($where ? " WHERE ".implode(" AND ", $where) : "").
+					" ORDER BY import_url_history.created_at DESC LIMIT ".$this->limit;
+
+			//var_dump($sql); var_dump($params);
+			
+			$stat = $DB->prepare($sql);
+			$stat->execute($params);
+			
+			while($data = $stat->fetch()) {
+				$tagHistory = new ImportURLHistoryModel();
+				$tagHistory->setFromDataBaseRow($data);
+				$results[] = $tagHistory;
+			}
+			
+		}
+		
+		
+		
+		
 		////////////////////// Finally sort & truncate
 
 		$usort = function($a, $b) {

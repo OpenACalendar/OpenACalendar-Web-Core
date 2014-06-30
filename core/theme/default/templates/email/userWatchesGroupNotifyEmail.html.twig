@@ -20,6 +20,8 @@
 			{% include 'email/common/groupHistoryItem.html.twig' %}</li>
 		{% elseif historyItem is venuehistory %}
 			{% include 'email/common/venueHistoryItem.html.twig' %}
+		{% elseif historyItem is importurlhistory %}
+			{% include 'email/common/importURLHistoryItem.html.twig' %}
 		{% endif %}		
 	{% endfor %}
 	

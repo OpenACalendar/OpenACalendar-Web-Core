@@ -25,6 +25,8 @@
 				{% include 'site/common/eventHistoryItem.html.twig' with { 'historyItem': historyItem} %}
 			{% elseif historyItem is grouphistory %}
 				{% include 'site/common/groupHistoryItem.html.twig' with { 'historyItem': historyItem} %}
+			{% elseif historyItem is importurlhistory %}
+				{% include 'site/common/importURLHistoryItem.html.twig' with { 'historyItem': historyItem} %}
 			{% endif %}
 		{% endfor %}
 	</ul>

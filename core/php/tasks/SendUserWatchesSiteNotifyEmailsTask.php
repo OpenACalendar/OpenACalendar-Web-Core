@@ -11,15 +11,12 @@ use repositories\UserWatchesSiteStopRepository;
 use repositories\UserAccountGeneralSecurityKeyRepository;
 use repositories\builders\UserWatchesSiteRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
-use models\EventHistoryModel;
-use models\GroupHistoryModel;
-use models\AreaHistoryModel;
-use models\VenueHistoryModel;
 use repositories\EventHistoryRepository;
 use repositories\GroupHistoryRepository;
 use repositories\AreaHistoryRepository;
 use repositories\VenueHistoryRepository;
 use repositories\UserNotificationRepository;
+use repositories\ImportURLHistoryRepository;
 
 /**
  *
@@ -45,6 +42,7 @@ class SendUserWatchesSiteNotifyEmailsTask {
 		$groupHistoryRepository = new GroupHistoryRepository;
 		$areaHistoryRepository = new AreaHistoryRepository;
 		$venueHistoryRepository = new VenueHistoryRepository;
+		$importURLHistoryRepository = new ImportURLHistoryRepository;
 		$userNotificationRepo = new UserNotificationRepository();
 
 		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSiteNotify');
@@ -86,6 +84,8 @@ class SendUserWatchesSiteNotifyEmailsTask {
 							$venueHistoryRepository->ensureChangedFlagsAreSet($history);
 						} elseif ($history instanceof models\AreaHistoryModel) {
 							$areaHistoryRepository->ensureChangedFlagsAreSet($history);
+						} elseif ($history instanceof models\ImportURLHistoryModel) {
+							$importURLHistoryRepository->ensureChangedFlagsAreSet($history);
 						}
 					}
 

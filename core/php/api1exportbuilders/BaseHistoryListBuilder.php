@@ -8,6 +8,7 @@ use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
+use models\ImportURLHistoryModel;
 
 /**
  *
@@ -44,6 +45,8 @@ abstract class BaseHistoryListBuilder extends BaseBuilder {
 			$this->addAreaHistory($history);
 		} else if (is_a($history,'models\TagHistoryModel')) {
 			$this->addTagHistory($history);
+		} else if (is_a($history,'models\ImportURLHistoryModel')) {
+			$this->addImportURLHistory($history);
 		} else {
 			die(get_class($history));
 		}
@@ -60,7 +63,8 @@ abstract class BaseHistoryListBuilder extends BaseBuilder {
 	
 	public abstract function addTagHistory(TagHistoryModel $history) ;
 	
-	
+	public abstract function addImportURLHistory(ImportURLHistoryModel $history) ;
+		
 	public function build() {	
 		foreach($this->historyRepositoryBuilder->fetchAll() as $event) {
 			$this->addHistory($event);

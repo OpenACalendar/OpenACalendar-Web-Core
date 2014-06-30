@@ -9,6 +9,7 @@ use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
+use models\ImportURLHistoryModel;
 use repositories\builders\HistoryRepositoryBuilder;
 
 
@@ -262,7 +263,7 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 				'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/area/'.$history->getSlug() ;
 		
 		$txt = '<entry>';
-		$txt .= '<id>'.$ourUrl.'/area/'.$history->getCreatedAtTimeStamp().'</id>';
+		$txt .= '<id>'.$ourUrl.'/history/'.$history->getCreatedAtTimeStamp().'</id>';
 		$txt .= '<link href="'.$ourUrl.'"/>';
 		
 		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
@@ -285,6 +286,49 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 			}
 			if ($history->getIsDeletedChanged()) {
 				$txt .= 'Deleted Changed: '.($history->getIsDeleted() ? "Deleted":"Restored")."\n\n";
+			}
+		}
+		$txt .= '</summary>';
+		
+		$txt .= '<updated>'.$history->getCreatedAt()->format("Y-m-d")."T".$history->getCreatedAt()->format("H:i:s")."Z</updated>";
+		
+		$txt .= '<author><name>'.$CONFIG->siteTitle.'</name></author></entry>'." \r\n";
+		
+		$this->histories[] = $txt;		
+	}
+	
+	public function addImportURLHistory(ImportURLHistoryModel $history) {
+		global $CONFIG;
+		
+		$siteSlug = $this->site ? $this->site->getSlug() : $history->getSiteSlug();		
+		$ourUrl = $CONFIG->isSingleSiteMode ? 
+				'http://'.$CONFIG->webSiteDomain.'/importurl/'.$history->getSlug() : 
+				'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/importurl/'.$history->getSlug() ;
+		
+		$txt = '<entry>';
+		$txt .= '<id>'.$ourUrl.'/history/'.$history->getCreatedAtTimeStamp().'</id>';
+		$txt .= '<link href="'.$ourUrl.'"/>';
+		
+		$txt .= '<title>'.  $this->getData($history->getTitle()).'</title>';
+
+		$txt .= '<summary>';
+		if ($history->isAnyChangeFlagsUnknown()) {
+			$txt .= $this->getBigData($history->getTitle());
+		} else {
+			if ($history->getTitleChanged()) {
+				$txt .= 'Title Changed. ';
+			}
+			if ($history->getCountryIdChanged()) {
+				$txt .= 'Country Changed. ';
+			}
+			if ($history->getAreaIdChanged()) {
+				$txt .= 'Area Changed. ';
+			}
+			if ($history->getIsEnabledChanged()) {
+				$txt .= 'Enabled Changed: '.($history->getIsEnabled() ? "Enabled":"Disabled")."\n\n";
+			}
+			if ($history->getExpiredAtChanged()) {
+				$txt .= 'Exprired Changed: '.($history->getExpiredAt() ? "Expired":"Not Expired")."\n\n";
 			}
 		}
 		$txt .= '</summary>';
