@@ -1,0 +1,31 @@
+
+
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/admintag/page.html.twig' %}
+
+{% block pageTitle %}Delete {{ tag.title }} - {% endblock %} 
+
+{% block htmlHeader %}
+{% endblock %}
+
+{% block actions %}
+{% endblock %}
+
+{% block innerContent %}
+
+	<p>Are you sure you want to delete this tag?</p>
+
+	<form action="#" method="post" class="styled">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="delete" value="yes">
+
+		<input type="submit"  value="Delete" />	
+	</form>
+
+{% endblock %}
