@@ -105,6 +105,7 @@ function userLogIn(UserAccountModel $user) {
 function userLogOut() {
 	global $USER_CURRENT, $USER_CURRENT_LOADED, $CONFIG, $WEBSESSION;
 	$WEBSESSION->set('userID',null);
+	$WEBSESSION->set('sysAdminLastActive',null);
 	if (isset($_COOKIE['userID']) && isset($_COOKIE['userKey'])) {
 		setcookie("userID","",null,'/',$CONFIG->webCommonSessionDomain,false,true);
 		setcookie("userKey","",null,'/',$CONFIG->webCommonSessionDomain,false,true);
