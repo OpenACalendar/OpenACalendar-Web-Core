@@ -48,8 +48,6 @@ class UserController {
 	
 	
 	function show($id, Request $request, Application $app) {
-		global $FLASHMESSAGES;
-		
 		
 		$this->build($id, $request, $app);
 		
@@ -88,7 +86,7 @@ class UserController {
 					$repo = new UserAccountVerifyEmailRepository();
 					$verify = $repo->create($this->parameters['user']);
 					$verify->sendEmail($app, $this->parameters['user']);
-					$FLASHMESSAGES->addMessage('Sent');
+					$app['flashmessages']->addMessage('Sent');
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());	
 				} else if ($action->getCommand() == 'close') {
 					$uar->systemAdminShuts($this->parameters['user'], userGetCurrent(), $action->getParam(0));

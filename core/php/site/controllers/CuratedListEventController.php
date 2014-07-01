@@ -47,14 +47,12 @@ class CuratedListEventController {
 	}
 	
 	function remove($slug,$eslug,Request $request, Application $app) {
-		global $WEBSESSION;
-
 
 		if (!$this->build($slug,$eslug, $request, $app)) {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
 			$curatedlistRepository->removeEventFromCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());
 		}
@@ -67,14 +65,12 @@ class CuratedListEventController {
 		
 	}
 	
-	function add($slug,$eslug,Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function add($slug,$eslug,Request $request, Application $app) {		
 		if (!$this->build($slug,$eslug, $request, $app)) {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
 			$curatedlistRepository->addEventtoCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());			
 		}

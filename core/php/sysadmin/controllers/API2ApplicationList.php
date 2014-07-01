@@ -20,9 +20,7 @@ use sysadmin\forms\NewAPI2ApplicationForm;
 class API2ApplicationList {
 	
 	
-	function index(Request $request, Application $app) {
-		global $FLASHMESSAGES;
-				
+	function index(Request $request, Application $app) {				
 		$form = $app['form.factory']->create(new NewAPI2ApplicationForm());
 		
 		if ('POST' == $request->getMethod()) {
@@ -37,7 +35,7 @@ class API2ApplicationList {
 					$apiapp = $appRepo->create($user, $data['title']);
 					return $app->redirect("/sysadmin/api2app/".$apiapp->getId());
 				} else {
-					$FLASHMESSAGES->addError('Existing user not found!');
+					$app['flashmessages']->addError('Existing user not found!');
 				}
 				
 			}

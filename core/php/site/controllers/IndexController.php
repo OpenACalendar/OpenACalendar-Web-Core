@@ -52,10 +52,8 @@ class IndexController {
 	
 	
 	
-	function watch(Request $request, Application $app) {
-		global $WEBSESSION;
-		
-		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+	function watch(Request $request, Application $app) {		
+		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$repo = new UserWatchesSiteRepository();
 			if ($request->request->get('action') == 'watch') {
 				$repo->startUserWatchingSite(userGetCurrent(), $app['currentSite']);
@@ -71,9 +69,7 @@ class IndexController {
 			));
 	}
 	
-	function stopWatchingFromEmail($userid, $code, Request $request, Application $app) {
-		global $FLASHMESSAGES, $WEBSESSION;
-		
+	function stopWatchingFromEmail($userid, $code, Request $request, Application $app) {		
 		$userRepo = new UserAccountRepository();
 		$user = $userRepo->loadByID($userid);
 		if (!$user) {
@@ -95,11 +91,11 @@ class IndexController {
 			die("You don't watch this site"); // TODO
 		}
 		
-		if ($request->request->get('action') == 'unwatch' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('action') == 'unwatch' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$userWatchesSiteRepo->stopUserWatchingSite($user, $app['currentSite']);
 			// redirect here because if we didn't the twig global and $app vars would be wrong (the old state)
 			// this is an easy way to get round that.
-			$FLASHMESSAGES->addMessage("You have stopped watching this.");
+			$app['flashmessages']->addMessage("You have stopped watching this.");
 			return $app->redirect('/');
 		}
 		
@@ -110,10 +106,8 @@ class IndexController {
 	}
 	
 	
-	function requestAccess(Request $request, Application $app) {
-		global  $WEBSESSION, $FLASHMESSAGES;
-		
-		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+	function requestAccess(Request $request, Application $app) {		
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			$repo = new SiteAccessRequestRepository();
 			$isCurrentRequestExistsForSiteAndUser = $repo->isCurrentRequestExistsForSiteAndUser($app['currentSite'], userGetCurrent());

@@ -149,8 +149,6 @@ class ImportURLController {
 	}
 
 	function enable($slug,Request $request, Application $app) {
-		global $WEBSESSION;
-
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Import does not exist.");
 		}
@@ -165,7 +163,7 @@ class ImportURLController {
 			return $app['twig']->render('site/importurl/enable.clash.html.twig',$this->parameters);
 		}
 		
-		if ($request->request->get('enable') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('enable') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				$iRepository->enable($this->parameters['importurl'], userGetCurrent());
 				return $app->redirect("/importurl/".$this->parameters['importurl']->getSlug());
 		}
@@ -173,9 +171,7 @@ class ImportURLController {
 		return $app['twig']->render('site/importurl/enable.html.twig',$this->parameters);
 	}
 
-	function disable($slug,Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function disable($slug,Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Import does not exist.");
 		}
@@ -184,7 +180,7 @@ class ImportURLController {
 			die ('NO'); // TODO
 		}
 		
-		if ($request->request->get('disable') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('disable') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				$iRepository = new ImportURLRepository();
 				$iRepository->disable($this->parameters['importurl'], userGetCurrent());
 				

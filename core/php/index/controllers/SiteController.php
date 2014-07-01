@@ -40,9 +40,7 @@ class SiteController {
 	}
 	
 	
-	function eventMyAttendanceJson($siteSlug, $eventSlug, Request $request,Application $app) {
-		global $WEBSESSION;
-		
+	function eventMyAttendanceJson($siteSlug, $eventSlug, Request $request,Application $app) {		
 		if (!$this->build($siteSlug, $request, $app)) {
 			$app->abort(404, "Site does not exist.");
 		}
@@ -59,7 +57,7 @@ class SiteController {
 
 		$data = array();
 		
-		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() && !$this->parameters['event']->isInPast()) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && !$this->parameters['event']->isInPast()) {
 			
 			if ($request->request->get('privacy') == 'public') {
 				$userAtEvent->setIsPlanPublic(true);
@@ -84,7 +82,7 @@ class SiteController {
 		$data['attending'] = ($userAtEvent->getIsPlanAttending() ? 'yes' : ($userAtEvent->getIsPlanMaybeAttending()?'maybe':'no'));
 		$data['privacy'] = ($userAtEvent->getIsPlanPublic() ? 'public' : 'private');
 		$data['inPast'] = $this->parameters['event']->isInPast() ? 1 : 0;
-		$data['CSFRToken'] = $WEBSESSION->getCSFRToken();
+		$data['CSFRToken'] = $app['websession']->getCSFRToken();
 		
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');

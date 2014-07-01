@@ -66,9 +66,7 @@ class CuratedListController {
 	}
 	
 
-	function curators($slug,Request $request, Application $app) {
-		global $FLASHMESSAGES, $WEBSESSION;
-		
+	function curators($slug,Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "curatedlist does not exist.");
 		}
@@ -76,22 +74,22 @@ class CuratedListController {
 		$userAccountRepository = new UserAccountRepository();
 		$this->parameters['curatedlistOwner'] = $userAccountRepository->loadByOwnerOfCuratedList($this->parameters['curatedlist']);
 		
-		if ($request->request->get('submitted') == 'add' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'add' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$newUser = $userAccountRepository->loadByUserName($request->request->get('userdetails'));
 			if ($newUser){
 				$curatedListRepo = new CuratedListRepository();
 				$curatedListRepo->addEditorToCuratedList($newUser, $this->parameters['curatedlist'], userGetCurrent());
-				$FLASHMESSAGES->addMessage("Added");
+				$app['flashmessages']->addMessage("Added");
 			} else {
-				$FLASHMESSAGES->addError("Could not find that user");
+				$app['flashmessages']->addError("Could not find that user");
 				// TODO put error in form instead, in usual field error place
 			}
-		} else if ($request->request->get('submitted') == 'remove' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		} else if ($request->request->get('submitted') == 'remove' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$oldUser = $userAccountRepository->loadByUserName($request->request->get('username'));
 			if ($oldUser) {
 				$curatedListRepo = new CuratedListRepository();
 				$curatedListRepo->removeEditorFromCuratedList($oldUser, $this->parameters['curatedlist'], userGetCurrent());
-				$FLASHMESSAGES->addMessage("Removed");
+				$app['flashmessages']->addMessage("Removed");
 			}
 		}
 

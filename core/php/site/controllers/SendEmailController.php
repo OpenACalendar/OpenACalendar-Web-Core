@@ -34,14 +34,12 @@ class SendEmailController {
 		return true;
 	}
 	
-	function show($slug, Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function show($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Email does not exist.");
 		}
 		
-		if ($request->request->get('actionSend')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {	
+		if ($request->request->get('actionSend')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {	
 			$this->parameters['sendemail']->send($app, userGetCurrent());
 			$sec = new SendEmailRepository();
 			$sec->markSent($this->parameters['sendemail'], userGetCurrent());
@@ -49,7 +47,7 @@ class SendEmailController {
 			return $app->redirect("/admin/sendemail/".$this->parameters['sendemail']->getSlug());
 		}
 		
-		if ($request->request->get('actionDiscard')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {	
+		if ($request->request->get('actionDiscard')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {	
 			// TODO
 		}
 		

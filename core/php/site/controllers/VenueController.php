@@ -225,9 +225,7 @@ class VenueController {
 	}
 	
 	
-	function media($slug, Request $request, Application $app) {
-		global $FLASHMESSAGES;
-		
+	function media($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
@@ -252,7 +250,7 @@ class VenueController {
 						$mediaInVenueRepo = new MediaInVenueRepository();
 						$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
 						
-						$FLASHMESSAGES->addMessage('Picture added!');
+						$app['flashmessages']->addMessage('Picture added!');
 						return $app->redirect("/venue/".$this->parameters['venue']->getSlug());
 						
 					}
@@ -273,40 +271,36 @@ class VenueController {
 		return $app['twig']->render('site/venue/media.html.twig', $this->parameters);
 	}
 	
-	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {
-		global $FLASHMESSAGES, $WEBSESSION;
-		
+	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
 				$mediaInVenueRepo = new MediaInVenueRepository();
 				$mediaInVenueRepo->remove($media, $this->parameters['venue'], userGetCurrent());
-				$FLASHMESSAGES->addMessage('Removed!');
+				$app['flashmessages']->addMessage('Removed!');
 			}
 		}
 		
 		return $app->redirect("/venue/".$this->parameters['venue']->getSlug().'/media');
 	}
 	
-	function mediaAddExisting($slug, Request $request, Application $app) {
-		global  $FLASHMESSAGES, $WEBSESSION;
-		
+	function mediaAddExisting($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
 			
-		if ($request->request->get('addMedia') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('addMedia') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
 				$mediaInVenueRepo = new MediaInVenueRepository();
 				$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
-				$FLASHMESSAGES->addMessage('Added!');
+				$app['flashmessages']->addMessage('Added!');
 				return $app->redirect("/venue/".$this->parameters['venue']->getSlug().'/');
 			}
 		}
@@ -320,15 +314,13 @@ class VenueController {
 		return $app['twig']->render('site/venue/media.add.existing.html.twig', $this->parameters);
 	}
 	
-	function moveToArea($slug, Request $request, Application $app) {
-		global $FLASHMESSAGES, $WEBSESSION;
-	
+	function moveToArea($slug, Request $request, Application $app) {	
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		if ($request->request->get('area') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('area') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			if ($request->request->get('area') == 'new' && trim($request->request->get('newAreaTitle')) && $this->parameters['country']) {
 				
@@ -344,7 +336,7 @@ class VenueController {
 				
 				$areaRepository->buildCacheAreaHasParent($area);
 				
-				$FLASHMESSAGES->addMessage('Thank you; venue updated!');
+				$app['flashmessages']->addMessage('Thank you; venue updated!');
 				
 			} elseif (intval($request->request->get('area'))) {
 				
@@ -355,7 +347,7 @@ class VenueController {
 					$this->parameters['venue']->setAreaId($area->getId());
 					$venueRepository = new VenueRepository();
 					$venueRepository->edit($this->parameters['venue'], userGetCurrent());
-					$FLASHMESSAGES->addMessage('Thank you; venue updated!');
+					$app['flashmessages']->addMessage('Thank you; venue updated!');
 				}
 			
 			}

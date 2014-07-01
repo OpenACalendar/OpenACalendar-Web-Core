@@ -255,9 +255,7 @@ class EventController {
 	}
 	
 	 /** This can be used by Js for both getting and setting values **/
-	function myAttendanceJson($slug, Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function myAttendanceJson($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -267,7 +265,7 @@ class EventController {
 
 		$data = array();
 		
-		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() && !$this->parameters['event']->isInPast()) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && !$this->parameters['event']->isInPast()) {
 			
 			if ($request->request->get('privacy') == 'public') {
 				$userAtEvent->setIsPlanPublic(true);
@@ -292,7 +290,7 @@ class EventController {
 		$data['attending'] = ($userAtEvent->getIsPlanAttending() ? 'yes' : ($userAtEvent->getIsPlanMaybeAttending()?'maybe':'no'));
 		$data['privacy'] = ($userAtEvent->getIsPlanPublic() ? 'public' : 'private');
 		$data['inPast'] = $this->parameters['event']->isInPast() ? 1 : 0;
-		$data['CSFRToken'] = $WEBSESSION->getCSFRToken();
+		$data['CSFRToken'] = $app['websession']->getCSFRToken();
 		
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
@@ -368,9 +366,7 @@ class EventController {
 	}
 	
 	
-	function editVenue($slug, Request $request, Application $app) {
-		global  $WEBSESSION;
-		
+	function editVenue($slug, Request $request, Application $app) {		
 		//var_dump($_POST); die();
 		
 		if (!$this->build($slug, $request, $app)) {
@@ -381,7 +377,7 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			$gotResult = false;
 			
@@ -478,9 +474,7 @@ class EventController {
 	}
 	
 	
-	function editFuture($slug, Request $request, Application $app) {
-		global $WEBSESSION, $FLASHMESSAGES;
-		
+	function editFuture($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -521,11 +515,11 @@ class EventController {
 		
 		if ($this->parameters['eventRecurSet']->isAnyProposedChangesPossible()) {
 		
-			if ($request->request->get('submitted') == 'cancel' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('submitted') == 'cancel' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 			}
 			
-			if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				
 				$eventRepo = new EventRepository();
 				
@@ -568,7 +562,7 @@ class EventController {
 				}
 
 				if ($countEvents > 0) {
-					$FLASHMESSAGES->addMessage($countEvents > 1 ? $countEvents . " future events edited." : "Future event edited.");
+					$app['flashmessages']->addMessage($countEvents > 1 ? $countEvents . " future events edited." : "Future event edited.");
 					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 				}
 				
@@ -594,9 +588,7 @@ class EventController {
 	}
 	
 	
-	function recur($slug, Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function recur($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -626,7 +618,7 @@ class EventController {
 			}
 			
 			// New group
-			if ($request->request->get('NewGroupTitle') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('NewGroupTitle') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				$group = new GroupModel();
 				$group->setTitle($request->request->get('NewGroupTitle'));
 				$groupRepo = new GroupRepository();
@@ -659,7 +651,6 @@ class EventController {
 	}
 	
 	function recurWeekly($slug, Request $request, Application $app) {
-		global $WEBSESSION;
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -682,7 +673,7 @@ class EventController {
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$this->parameters['newEvents'] = $eventRecurSet->getNewWeeklyEventsFilteredForExisting($this->parameters['event'], $app['config']->recurEventForDaysInFutureWhenWeekly);
 		
-		if ($request->request->get('submitted') == 'yes' && $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $app['websession']->getCSFRToken()) {
 			
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
@@ -709,7 +700,6 @@ class EventController {
 	
 	
 	function recurMonthly($slug, Request $request, Application $app) {
-		global $WEBSESSION;
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -732,7 +722,7 @@ class EventController {
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnSetDayInWeekFilteredForExisting($this->parameters['event'], $app['config']->recurEventForDaysInFutureWhenMonthly);
 		
-		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
@@ -761,7 +751,6 @@ class EventController {
 	
 	
 	function recurMonthlyLast($slug, Request $request, Application $app) {
-		global $WEBSESSION;
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -784,7 +773,7 @@ class EventController {
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnLastDayInWeekFilteredForExisting($this->parameters['event'], $app['config']->recurEventForDaysInFutureWhenMonthly);
 		
-		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
@@ -906,9 +895,7 @@ class EventController {
 	}
 	
 	
-	function moveToArea($slug, Request $request, Application $app) {
-		global  $FLASHMESSAGES, $WEBSESSION;
-	
+	function moveToArea($slug, Request $request, Application $app) {	
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
@@ -916,7 +903,7 @@ class EventController {
 		
 		$gotResult = false;
 		
-		if ($request->request->get('area') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('area') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			if ($request->request->get('area') == 'new' && trim($request->request->get('newAreaTitle')) && $this->parameters['country']) {
 				
@@ -938,7 +925,7 @@ class EventController {
 				
 				$areaRepository->buildCacheAreaHasParent($area);
 				
-				$FLASHMESSAGES->addMessage('Thank you; event updated!');
+				$app['flashmessages']->addMessage('Thank you; event updated!');
 				$gotResult = true;
 				
 			} elseif (intval($request->request->get('area'))) {
@@ -955,7 +942,7 @@ class EventController {
 						$eventRepository = new EventRepository();
 						$eventRepository->edit($this->parameters['event'], userGetCurrent());
 					}
-					$FLASHMESSAGES->addMessage('Thank you; event updated!');
+					$app['flashmessages']->addMessage('Thank you; event updated!');
 					$gotResult = true;
 				}
 							
@@ -977,16 +964,14 @@ class EventController {
 	}
 	
 	
-	function editTags($slug, Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function editTags($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
 		
 		$tagRepo = new TagRepository();
 			
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			if ($request->request->get('addTag')) {
 				$tag = $tagRepo->loadBySlug($app['currentSite'], $request->request->get('addTag'));
@@ -1019,16 +1004,14 @@ class EventController {
 		return $app['twig']->render('site/event/edit.tags.html.twig', $this->parameters);
 	}
 	
-	function editGroups($slug, Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function editGroups($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
 		
 		$groupRepo = new GroupRepository();
 			
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			if ($request->request->get('addGroup')) {
 				$group = $groupRepo->loadBySlug($app['currentSite'], $request->request->get('addGroup'));

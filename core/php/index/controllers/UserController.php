@@ -279,9 +279,7 @@ class UserController {
 	}
 	
 	
-	function emails($id, $code, Request $request, Application $app) {
-		global $FLASHMESSAGES;
-		
+	function emails($id, $code, Request $request, Application $app) {		
 		$userRepository = new UserAccountRepository();
 		
 		if (userGetCurrent() && userGetCurrent()->getId() == $id) {
@@ -315,7 +313,7 @@ class UserController {
 			if ($form->isValid()) {
 				$userRepository->editEmailsOptions($user);
 				$ourForm->savePreferences($form);
-				$FLASHMESSAGES->addMessage("Options Changed.");
+				$app['flashmessages']->addMessage("Options Changed.");
 				return $app->redirect("/");
 			}
 		}

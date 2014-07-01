@@ -16,15 +16,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserController {
 		
-	function index(Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function index(Request $request, Application $app) {		
 		$extension = $app['extensions']->getExtensionById('org.openacalendar.facebook');
 		$appID = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_id'));
 		$appSecret = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_secret'));
 		$userToken = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('user_token'));
 
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() 
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() 
 			&& $request->request->get('submitted') == 'appdetails') {
 
 			$appID = $request->request->get('app_id');
@@ -38,7 +36,7 @@ class UserController {
 			
 		}
 
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() 
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() 
 			&& $request->request->get('submitted') == 'userdetails') {
 
 			// Convert this short lived into long lived

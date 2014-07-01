@@ -25,9 +25,7 @@ use repositories\SiteQuotaRepository;
  */
 class IndexController {
 	
-	function index(Application $app) {
-		global $WEBSESSION;
-		
+	function index(Application $app) {		
 		$sites = array();
 		$repo  = new SiteRepository();
 		if (isset($_COOKIE['sitesSeen'])) {
@@ -128,9 +126,7 @@ class IndexController {
 		
 	}
 	
-	function contact(Application $app, Request $request) {
-		global $FLASHMESSAGES;
-		
+	function contact(Application $app, Request $request) {		
 		$form = $app['form.factory']->create(new ContactForm());
 		
 		if ('POST' == $request->getMethod()) {
@@ -158,7 +154,7 @@ class IndexController {
 					$contact->sendEmailToSupport($app, userGetCurrent());
 				}
 
-				$FLASHMESSAGES->addMessage('Your message has been sent');
+				$app['flashmessages']->addMessage('Your message has been sent');
 				return $app->redirect('/contact');		
 			}
 		}

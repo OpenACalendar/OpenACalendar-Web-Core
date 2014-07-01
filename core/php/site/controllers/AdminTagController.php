@@ -92,9 +92,7 @@ class AdminTagController {
 	}
 	
 	
-	function delete($slug, Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function delete($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Tag does not exist.");
 		}
@@ -103,7 +101,7 @@ class AdminTagController {
 			die("No"); // TODO
 		}
 		
-		if ($request->request->get('delete') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('delete') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$tagRepository = new TagRepository();
 			$tagRepository->delete($this->parameters['tag'], userGetCurrent());
 			return $app->redirect("/admin/tag/".$this->parameters['tag']->getSlugForUrl());
@@ -114,9 +112,7 @@ class AdminTagController {
 	}
 	
 	
-	function undelete($slug, Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function undelete($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Tag does not exist.");
 		}
@@ -125,7 +121,7 @@ class AdminTagController {
 			die("No"); // TODO
 		}
 		
-		if ($request->request->get('undelete') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('undelete') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['tag']->setIsDeleted(false);
 			$tagRepository = new TagRepository();
 			$tagRepository->edit($this->parameters['tag'], userGetCurrent());

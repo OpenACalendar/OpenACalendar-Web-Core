@@ -48,21 +48,19 @@ class CurrentUserController {
 	}
 	
 	
-	function resendVerifyEmail(Request $request, Application $app) {
-		global $FLASHMESSAGES;
-		
+	function resendVerifyEmail(Request $request, Application $app) {		
 		$repo = new UserAccountVerifyEmailRepository();
 		
 		$date = $repo->getLastSentForUserAccount(userGetCurrent());
 		if ($date && $date->getTimestamp() > (\TimeSource::time() - $app['config']->userAccountVerificationSecondsBetweenAllowedSends)) {
-			$FLASHMESSAGES->addMessage("Sorry, but the email was sent to recently. Please try again soon.");
+			$app['flashmessages']->addMessage("Sorry, but the email was sent to recently. Please try again soon.");
 		}  else {
 			
 			$verifyEmail = $repo->create(userGetCurrent());
 			$verifyEmail->sendEmail($app, userGetCurrent());
 
 
-			$FLASHMESSAGES->addMessage("Verification email resent.");
+			$app['flashmessages']->addMessage("Verification email resent.");
 		
 		}
 		
@@ -70,9 +68,7 @@ class CurrentUserController {
 		
 	}
 	
-	function changePassword(Request $request, Application $app) {
-		global $FLASHMESSAGES;
-		
+	function changePassword(Request $request, Application $app) {		
 		$form = $app['form.factory']->create(new UserChangePasswordForm());
 		
 		if ('POST' == $request->getMethod()) {
@@ -87,7 +83,7 @@ class CurrentUserController {
 					userGetCurrent()->setPassword($data['password1']);
 					$userAccountRepository = new UserAccountRepository();
 					$userAccountRepository->editPassword(userGetCurrent());
-					$FLASHMESSAGES->addMessage("Password Changed.");
+					$app['flashmessages']->addMessage("Password Changed.");
 					return $app['twig']->render('index/currentuser/changePasswordDone.html.twig', array());
 				}
 								
@@ -101,8 +97,6 @@ class CurrentUserController {
 	}
 	
 	function emails(Request $request, Application $app) {
-		global $FLASHMESSAGES;
-
 		$ourForm = new UserEmailsForm($app['extensions'], userGetCurrent());
 		$form = $app['form.factory']->create($ourForm, userGetCurrent());
 		
@@ -113,7 +107,7 @@ class CurrentUserController {
 				$userRepo = new UserAccountRepository;
 				$userRepo->editEmailsOptions(userGetCurrent());
 				$ourForm->savePreferences($form);
-				$FLASHMESSAGES->addMessage("Options Changed.");
+				$app['flashmessages']->addMessage("Options Changed.");
 				return $app->redirect("/me/");
 			}
 		}
@@ -124,9 +118,7 @@ class CurrentUserController {
 	}
 	
 	
-	function prefs(Request $request, Application $app) {
-		global $FLASHMESSAGES;
-		
+	function prefs(Request $request, Application $app) {		
 		$form = $app['form.factory']->create(new UserPrefsForm(), userGetCurrent());
 		
 		if ('POST' == $request->getMethod()) {
@@ -135,7 +127,7 @@ class CurrentUserController {
 			if ($form->isValid()) {
 				$userRepo = new UserAccountRepository;
 				$userRepo->editPreferences(userGetCurrent());
-				$FLASHMESSAGES->addMessage("Options Changed.");
+				$app['flashmessages']->addMessage("Options Changed.");
 				return $app->redirect("/me/");
 			}
 		}

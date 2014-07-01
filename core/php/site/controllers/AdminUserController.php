@@ -35,22 +35,20 @@ class AdminUserController {
 
 	}
 
-	function request($username, Request $request, Application $app) {
-		global $WEBSESSION, $FLASHMESSAGES;
-		
+	function request($username, Request $request, Application $app) {		
 		if (!$this->build($username, $request, $app)) {
 			$app->abort(404, "User does not exist.");
 		}
 				
-		if ($request->request->get('action') && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('action') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$repo = new SiteAccessRequestRepository();
 			if ($request->request->get('action') == 'grant') {
 				$repo->grantForSiteAndUser($app['currentSite'], $this->parameters['user'], userGetCurrent());
 				$this->sendGrantRequestActionEmail($this->parameters['user'], $app['currentSite'], $app);
-				$FLASHMESSAGES->addMessage("Request granted.");
+				$app['flashmessages']->addMessage("Request granted.");
 			} else if ($request->request->get('action') == 'deny') {
 				$repo->rejectForSiteAndUser($app['currentSite'], $this->parameters['user'], userGetCurrent());
-				$FLASHMESSAGES->addMessage("Request refused.");
+				$app['flashmessages']->addMessage("Request refused.");
 			}
 			return $app->redirect("/admin/users");
 		}

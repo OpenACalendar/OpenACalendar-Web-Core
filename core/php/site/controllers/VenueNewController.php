@@ -107,14 +107,12 @@ class VenueNewController {
 	
 	
 	
-	function newVenueJSON(Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function newVenueJSON(Request $request, Application $app) {		
 		$venue = new VenueModel();
 		
 		$data = array();
 		if ('POST' == $request->getMethod()) {
-			if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+			if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 				$venue->setTitle($request->request->get('title'));
 				$venue->setDescription($request->request->get('description'));

@@ -46,9 +46,7 @@ class AdminController {
 			));
 	}
 		
-	function profile(Request $request, Application $app) {
-		global  $FLASHMESSAGES;
-		
+	function profile(Request $request, Application $app) {		
 		$form = $app['form.factory']->create(new SiteEditProfileForm($app['config']), $app['currentSite']);
 				
 		if ('POST' == $request->getMethod()) {
@@ -72,7 +70,7 @@ class AdminController {
 					}
 				}
 				
-				$FLASHMESSAGES->addMessage("Details saved.");
+				$app['flashmessages']->addMessage("Details saved.");
 				return $app->redirect("/admin/");
 				
 			}
@@ -84,10 +82,8 @@ class AdminController {
 			));
 	}
 		
-	function features(Request $request, Application $app) {
-		global $FLASHMESSAGES, $WEBSESSION;
-		
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+	function features(Request $request, Application $app) {		
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				
 			$app['currentSite']->setIsFeatureGroup($request->request->get('isFeatureGroup') == '1');
 			$app['currentSite']->setIsFeatureMap($request->request->get('isFeatureMap') == '1');
@@ -100,7 +96,7 @@ class AdminController {
 			$siteRepository = new SiteRepository();
 			$siteRepository->edit($app['currentSite'], userGetCurrent());
 
-			$FLASHMESSAGES->addMessage("Details saved.");
+			$app['flashmessages']->addMessage("Details saved.");
 			return $app->redirect("/admin/");
 			
 		}
@@ -109,17 +105,15 @@ class AdminController {
 			));
 	}
 		
-	function settings(Request $request, Application $app) {
-		global $FLASHMESSAGES, $WEBSESSION;
-		
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+	function settings(Request $request, Application $app) {		
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				
 			$app['currentSite']->setPromptEmailsDaysInAdvance($request->request->get('PromptEmailsDaysInAdvance'));
 
 			$siteRepository = new SiteRepository();
 			$siteRepository->edit($app['currentSite'], userGetCurrent());
 
-			$FLASHMESSAGES->addMessage("Details saved.");
+			$app['flashmessages']->addMessage("Details saved.");
 			return $app->redirect("/admin/");
 			
 		}
@@ -130,10 +124,7 @@ class AdminController {
 	
 	
 	function visibility(Request $request, Application $app) {
-
-
 		$form = $app['form.factory']->create(new AdminVisibilityPublicForm(), $app['currentSite']);
-		
 				
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -148,16 +139,13 @@ class AdminController {
 			}
 		}
 		
-		
 		return $app['twig']->render('site/admin/visibilityPublic.html.twig', array(
 				'form' => $form->createView(),
 			));
 	}
 	
-	function users(Request $request, Application $app) {
-		global $WEBSESSION;
-		
-		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+	function users(Request $request, Application $app) {		
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			if ($request->request->get('isAllUsersEditors') == 'yes') {
 				$app['currentSite']->setIsAllUsersEditors(true);
@@ -194,10 +182,8 @@ class AdminController {
 		
 	}
 	
-	function usersActions(Request $request, Application $app) {
-		global $WEBSESSION;
-		
-		if ($request->request->get('userID')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+	function usersActions(Request $request, Application $app) {		
+		if ($request->request->get('userID')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$uisr = new UserInSiteRepository();
 			$uar = new UserAccountRepository();
 			if ($request->request->get('actionRemove')) {
@@ -266,13 +252,12 @@ class AdminController {
 	
 	
 	function countries(Request $request, Application $app) {		
-		global $WEBSESSION;
 		
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteInformation($app['currentSite']);
 		$countries = $crb->fetchAll();
 		
-		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$in = is_array($request->request->get('country')) ? $request->request->get('country') : null;
 			$cisr = new CountryInSiteRepository;
 			$countriesCount = 0;

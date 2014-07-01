@@ -26,8 +26,10 @@ if (!$parseDomain->isCoveredByCookies()) {
 
 /** @var WebSession **/
 $WEBSESSION = new WebSession();
+$app['websession'] = $WEBSESSION;
 /** @var FlashMessages **/
 $FLASHMESSAGES = new FlashMessages($WEBSESSION);
+$app['flashmessages'] = $FLASHMESSAGES;
 /** @var UserAgent **/
 $USERAGENT = new \UserAgent();
 $app['userAgent'] = $USERAGENT;

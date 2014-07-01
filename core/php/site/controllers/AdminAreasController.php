@@ -85,14 +85,12 @@ class AdminAreasController {
 	}
 	
 	
-	function action($countryslug, Request $request, Application $app) {
-		global $WEBSESSION, $FLASHMESSAGES;
-		
+	function action($countryslug, Request $request, Application $app) {		
 		if (!$this->build($countryslug, $request, $app)) {
 			$app->abort(404, "country does not exist.");
 		}	
 	
-		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$areaSlugs = is_array($request->request->get('area')) ? $request->request->get('area') : array();
 			$areaRepository = new AreaRepository();
 			if ($request->request->get('action') == 'delete') {
@@ -101,7 +99,7 @@ class AdminAreasController {
 					if ($area && !$area->getIsDeleted()) {
 						$areaRepository->delete($area, userGetCurrent());
 					}
-					$FLASHMESSAGES->addMessage("Deleted!");
+					$app['flashmessages']->addMessage("Deleted!");
 				}
 			} else if ($request->request->get('action') == 'undelete') {
 				foreach($areaSlugs as $areaSlug) {
@@ -109,7 +107,7 @@ class AdminAreasController {
 					if ($area) {
 						$areaRepository->edit($area, userGetCurrent());
 					}
-					$FLASHMESSAGES->addMessage("Undeleted!");
+					$app['flashmessages']->addMessage("Undeleted!");
 				}
 			}
 			

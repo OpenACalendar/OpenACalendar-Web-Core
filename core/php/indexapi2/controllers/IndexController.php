@@ -93,9 +93,7 @@ class IndexController {
 		));
 	}
 	
-	function login(Request $request, Application $app) {
-		global $WEBSESSION;
-		
+	function login(Request $request, Application $app) {		
 		$appRepo = new API2ApplicationRepository();
 		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository();
 		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository();
@@ -105,8 +103,8 @@ class IndexController {
 		
 		// Load and check request token!
 		$data = array();
-		if ($WEBSESSION->has('api2appToken')) $data['app_token'] = $WEBSESSION->get('api2appToken');
-		if ($WEBSESSION->has('api2requestToken')) $data['request_token'] = $WEBSESSION->get('api2requestToken');
+		if ($app['websession']->has('api2appToken')) $data['app_token'] = $app['websession']->get('api2appToken');
+		if ($app['websession']->has('api2requestToken')) $data['request_token'] = $app['websession']->get('api2requestToken');
 		$data = array_merge($data, $_GET, $_POST);
 		
 		$apiapp = $data['app_token'] ? $appRepo->loadByAppToken($data['app_token']) : null;
@@ -121,8 +119,8 @@ class IndexController {
 		$userAuthorisationToken = null;
 		$permissionsGranted = new API2ApplicationUserPermissionsModel();
 
-		$WEBSESSION->set('api2appToken', $apiapp->getAppToken());
-		$WEBSESSION->set('api2requestToken', $requestToken->getRequestToken());
+		$app['websession']->set('api2appToken', $apiapp->getAppToken());
+		$app['websession']->set('api2requestToken', $requestToken->getRequestToken());
 
 		
 		######################################## User Workflow

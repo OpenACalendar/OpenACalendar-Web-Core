@@ -40,19 +40,17 @@ class MediaController {
 		return true;
 	}
 	
-	function show($slug, Request $request, Application $app) {
-		global $WEBSESSION, $FLASHMESSAGES;
-		
+	function show($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Media does not exist.");
 		}
 		
-		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			if ($request->request->get('action') == 'makeSiteLogo' && $app['currentUserCanAdminSite']) {
 				$app['currentSite']->setLogoMediaId($this->parameters['media']->getId());
 				$siteProfileMediaRepository = new SiteProfileMediaRepository();
 				$siteProfileMediaRepository->createOrEdit($app['currentSite'], userGetCurrent());
-				$FLASHMESSAGES->addMessage("Saved.");
+				$app['flashmessages']->addMessage("Saved.");
 				return $app->redirect("/media/".$this->parameters['media']->getSlug());
 			}
 		}
