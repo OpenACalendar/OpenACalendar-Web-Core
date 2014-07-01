@@ -17,10 +17,19 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController {
 		
 	function index(Request $request, Application $app) {
+		global $WEBSESSION;
 		
 		$extension = $app['extensions']->getExtensionById('org.openacalendar.meetup');
 		$appKey = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_key'));
 		
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() 
+			&& $request->request->get('submitted') == 'appdetails') {
+
+			$appKey = $request->request->get('app_key');
+			
+			$app['appconfig']->setValue($extension->getAppConfigurationDefinition('app_key'), $appKey);
+			
+		}
 		return $app['twig']->render('meetup/sysadmin/user/index.html.twig', array(
 			'app_key'=>($appKey?substr($appKey,0,3)."XXXXXXX":''),
 		));
