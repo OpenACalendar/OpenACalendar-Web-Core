@@ -113,21 +113,23 @@
 		{% endif %}
 				
 		{% if venue is not null %}
-			<p class="venueTitle">About <a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></p>
-			{% if venue.description %}
-				<p class="venueDescription">{{ venue.description | nl2br  | linkify }}</p>
-			{% else %}
-				<p class="venueDescription">No details known.</p>
-			{% endif %}
-			<div id="Map" class="map"></div>
-			{% if mediasForVenue %}
-				<ul class="mediaGrid">
-					{% for media in mediasForVenue %}
-						<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
-					{% endfor %}
-				</ul>
-				<div class="afterMediaGrid"></div>
-			{% endif %}
+			<div itemprop="location" itemscope itemtype="http://schema.org/Place">
+				<p class="venueTitle">About <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
+				{% if venue.description %}
+					<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
+				{% else %}
+					<p class="venueDescription">No details known.</p>
+				{% endif %}
+				<div id="Map" class="map"></div>
+				{% if mediasForVenue %}
+					<ul class="mediaGrid">
+						{% for media in mediasForVenue %}
+							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
+						{% endfor %}
+					</ul>
+					<div class="afterMediaGrid"></div>
+				{% endif %}
+			</div>
 		{% endif %}
 
 		
@@ -160,7 +162,7 @@
 				<div class="dateAndLocationWrapper"><div class="location"><a href="/venue/virtual">This event is Virtual</a></div></div>
 			{% endif %}			
 			{% if country or venue%}
-				<div class="location" itemprop="location">
+				<div class="location" itemprop="location" itemscope itemtype="http://schema.org/PostalAddress">
 					{% if event.isPhysical and venue %}
 						<div class="venue"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></div>
 					{% endif %}
@@ -171,9 +173,9 @@
 					{% for parentArea in parentAreas|reverse %}
 						<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
 					{% endfor %}
-					{% if venue and venue.addressCode %}<div class="addressCode">{{ venue.addressCode  }}</div>{% endif %}
+					{% if venue and venue.addressCode %}<div class="addressCode" itemprop="postalCode">{{ venue.addressCode  }}</div>{% endif %}
 					{% if country %}
-						<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+						<div class="country" itemprop="addressCountry"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
 					{% endif %}
 				</div>
 			{% endif %}

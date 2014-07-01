@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<li class="event">
+<li class="event" itemprop="event" itemscope itemtype="http://schema.org/Event">
 	{% if event.isdeleted %}
 		<div class="dateTimeIcon">
 			<div class="dateIcon">
@@ -14,7 +14,7 @@
 		</div>
 	{% else %}
 		<div class="dateTimeIcon">
-			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}" itemprop="startDate">
 				<a href="/event/{{ event.slugForUrl }}">
 					<div class="dateIcon">
 						<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
@@ -28,15 +28,15 @@
 			</time>				
 		</div>
 	{% endif %}
-	<div class="title">
-		<a href="/event/{{ event.slugForUrl }}">
+	<div class="title" itemprop="name">
+		<a href="/event/{{ event.slugForUrl }}" itemprop="url">
 			{{ event.summaryDisplay}}
 		</a>
 	</div>
-	<p class="description">{{ event.description |  nl2br  | linkify }}</p>	
+	<p class="description" itemprop="description">{{ event.description |  nl2br  | linkify }}</p>	
 	{% if showVenueAndArea is defined and showVenueAndArea and event.isPhysical and ( event.venue or event.area )%}
 		<div class="dateAndLocationWrapper">
-			<div class="location">
+			<div class="location" itemprop="location">
 				{% if event.venue %}
 					<div class="venue"><a href="/event/{{ event.slugForUrl }}">{{ event.venue.title }}</a></div>
 				{% endif %}
