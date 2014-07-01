@@ -117,6 +117,21 @@ class EventController {
 
 	}
 
+	protected function addTagsToParameters(Application $app) {
+		if (!isset($this->parameters['tags'])) {
+			if ($app['currentSite']->getIsFeatureTag()) {
+				$trb = new TagRepositoryBuilder();
+				$trb->setSite($app['currentSite']);
+				$trb->setIncludeDeleted(false);
+				$trb->setTagsForEvent($this->parameters['event']);
+				$this->parameters['tags'] = $trb->fetchAll();
+			} else {
+				$this->parameters['tags'] = array();
+			}
+		}		
+	}
+	
+
 	function show($slug, Request $request, Application $app) {
 		
 		if (!$this->build($slug, $request, $app)) {
@@ -182,15 +197,7 @@ class EventController {
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
 		
-		if ($app['currentSite']->getIsFeatureTag()) {
-			$trb = new TagRepositoryBuilder();
-			$trb->setSite($app['currentSite']);
-			$trb->setIncludeDeleted(false);
-			$trb->setTagsForEvent($this->parameters['event']);
-			$this->parameters['tags'] = $trb->fetchAll();
-		} else {
-			$this->parameters['tags'] = array();
-		}
+		$this->addTagsToParameters($app);
 		
 		if ($this->parameters['country']) {
 			$areaRepoBuilder = new AreaRepositoryBuilder();
@@ -679,11 +686,14 @@ class EventController {
 			
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
+			$this->addTagsToParameters($app);
+			
 			$eventRepository = new EventRepository();
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], $this->parameters['groups']);
+					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], 
+							$this->parameters['groups'], null, $this->parameters['tags']);
 					++$count;
 				}
 			}
@@ -726,11 +736,14 @@ class EventController {
 			
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
+			$this->addTagsToParameters($app);
+			
 			$eventRepository = new EventRepository();
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], $this->parameters['groups']);
+					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], 
+							$this->parameters['groups'], null, $this->parameters['tags']);
 					++$count;
 				}
 			}

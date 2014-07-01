@@ -24,7 +24,7 @@ class EventRepository {
 	
 	
 	public function create(EventModel $event, SiteModel $site, UserAccountModel $creator = null, 
-			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null) {
+			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null, $tags=array()) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
@@ -134,6 +134,20 @@ class EventRepository {
 					'event_id'=>$event->getId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 				));
+			}
+			
+			if ($tags) {	
+				$stat = $DB->prepare("INSERT INTO event_has_tag (tag_id,event_id,added_by_user_account_id,added_at,addition_approved_at) ".
+					"VALUES (:tag_id,:event_id,:added_by_user_account_id,:added_at,:addition_approved_at)");
+				foreach($tags as $tag) {
+						$stat->execute(array(
+							'tag_id'=>$tag->getId(),
+							'event_id'=>$event->getId(),
+							'added_by_user_account_id'=>($creator?$creator->getId():null),
+							'added_at'=>  \TimeSource::getFormattedForDataBase(),
+							'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+						));
+				}
 			}
 			
 			$DB->commit();
