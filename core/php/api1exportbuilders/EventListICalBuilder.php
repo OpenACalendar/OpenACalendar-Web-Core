@@ -97,11 +97,17 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			$descriptionHTML .= '</body></html>';
 			$txt .= $this->getIcalLine("X-ALT-DESC;FMTTYPE=text/html", $descriptionHTML);
 			
-			//$locationDetails = '';
-			//if ($event->getAddress()) $locationDetails .= $event->getAddress();
-			//if ($event->getPostcode()) $locationDetails .= " ". $event->getPostcode();
-			//if ($event->getLocation()) $locationDetails .= " ".$event->getLocation()->getTitle();
-			//$txt .= $this->getIcalLine('LOCATION',$locationDetails);
+			$locationDetails = array();
+			if ($event->getVenue() && $event->getVenue()->getTitle()) $locationDetails[] = $event->getVenue()->getTitle();
+			if ($event->getVenue() && $event->getVenue()->getAddress()) $locationDetails[] = $event->getVenue()->getAddress();
+			if ($event->getArea() && $event->getArea()->getTitle()) $locationDetails[] = $event->getArea()->getTitle();
+			if ($event->getVenue() && $event->getVenue()->getAddressCode()) $locationDetails[] = $event->getVenue()->getAddressCode();
+			if ($locationDetails) {
+				$txt .= $this->getIcalLine('LOCATION',implode(", ", $locationDetails));
+			}
+			if ($event->getVenue() && $event->getVenue()->getLat() && $event->getVenue()->getLng()) {
+				$txt .= $this->getIcalLine('GEO',$event->getVenue()->getLat().";".$event->getVenue()->getLng());
+			}
 		}
 		
 		$txt .= $this->getIcalLine('DTSTART',$event->getStartAt()->format("Ymd")."T".$event->getStartAt()->format("His")."Z");
