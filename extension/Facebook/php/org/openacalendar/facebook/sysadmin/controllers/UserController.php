@@ -17,15 +17,29 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController {
 		
 	function index(Request $request, Application $app) {
-		
+		global $WEBSESSION;
 		
 		$extension = $app['extensions']->getExtensionById('org.openacalendar.facebook');
 		$appID = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_id'));
 		$appSecret = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_secret'));
 		$userToken = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('user_token'));
 
-		// TODO CSFR Tokens
-		if ($request->get('newfacebookaccesstoken')) {
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() 
+			&& $request->request->get('submitted') == 'appdetails') {
+
+			$appID = $request->request->get('app_id');
+			$appSecret = $request->request->get('app_secret');
+			// Beacuse we are using a different app, we'll need a different user token to.
+			$userToken = '';
+			
+			$app['appconfig']->setValue($extension->getAppConfigurationDefinition('app_id'), $appID);
+			$app['appconfig']->setValue($extension->getAppConfigurationDefinition('app_secret'), $appSecret);
+			$app['appconfig']->setValue($extension->getAppConfigurationDefinition('user_token'), $userToken);
+			
+		}
+
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken() 
+			&& $request->request->get('submitted') == 'userdetails') {
 
 			// Convert this short lived into long lived
 			$url = "https://graph.facebook.com/oauth/access_token?client_id=".$appID.

@@ -9,6 +9,7 @@
 
 {% block content %}
 
+	<h2>Current Details</h2>
 
 	<table class="oneData">
 		<tr>
@@ -25,12 +26,49 @@
 		</tr>
 	</table>
 
+	<h2>New App Details</h2>
+	
+	<form action="#" method="post"  class="styled">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="submitted" value="appdetails">
+		
+		<div class="rowWrapper">
+			<label>
+			<div class="labelWrapper">New App ID</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<input type="text" name="app_id">
+			</div>
+			</label>
+			<div class="after"></div>
+		</div>
+		
+		
+		<div class="rowWrapper">
+			<label>
+			<div class="labelWrapper">New App Secret</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">
+				<input type="text" name="app_secret">
+			</div>
+			</label>
+			<div class="after"></div>
+		</div>
+		
+		<input type="submit"  value="Save" />	
+		
+		
+	</form>
+
+
+	<h2>New User Details</h2>
+
 	<p>
 	Login to Facebook:
 	<fb:login-button show-faces="false" width="200" max-rows="1"></fb:login-button>
 	</p>
 
 	<form action="#" method="POST" class="touristsdataform" name="newfacebookaccesstokenform">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="submitted" value="userdetails">
 		<input type="hidden" name="newfacebookaccesstoken" id="accesstoken">
 	</form>
 	
@@ -91,3 +129,4 @@
 
 
 {% endblock %}
+
