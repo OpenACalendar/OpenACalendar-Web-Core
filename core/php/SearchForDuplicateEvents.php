@@ -111,7 +111,10 @@ class SearchForDuplicateEvents {
 		if ($this->event->getGroupId() && $this->event->getGroupId() == $event->getGroupId()) {
 			$score++;
 		}
-		if ($this->event->getUrl() && $this->event->getUrl() == $event->getUrl()) {
+		if ($this->event->getUrl() && $this->getCanonicalURL($this->event->getUrl()) == $this->getCanonicalURL($event->getUrl())) {
+			$score++;
+		}
+		if ($this->event->getTicketUrl() && $this->getCanonicalURL($this->event->getTicketUrl()) == $this->getCanonicalURL($event->getTicketUrl())) {
 			$score++;
 		}
 		if ($this->event->getSummary()) {
@@ -139,6 +142,20 @@ class SearchForDuplicateEvents {
 		return $score;
 	}
 	
+	public function getCanonicalURL($url) {
+		$data = parse_url($url);
+		
+		// For this purposes we're gonna treat http and https as the same.
+		if (strtolower($data['scheme']) == 'http') { $data['scheme'] = 'https'; }
+		
+		$url = ($data['scheme'] ? strtolower($data['scheme']).":":'http:') . '//';
+		if ((isset($data['username']) && $data['username']) || (isset($data['password']) && $data['password'])) {
+			$url .= $data['username'] . ":" . $data['password'] . "@";
+		}
+		$url .= strtolower($data['host']).(isset($data['path'])?$data['path']:'/').'?'.(isset($data['query']) ? $data['query'] : '');
+		
+		return $url;
+	}
 	
 	
 }

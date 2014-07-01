@@ -82,26 +82,65 @@ class SearchForDuplicateEventsTest  extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(0, $score);
 	}
 
-	function testScoreURLSame() {
+
+	function dataForTestScoreURLSame() {
+		return array(
+				array('http://www.greatevent.com','http://www.terribleevent.com',0),
+				array('http://www.greatevent.com','http://www.greatevent.com',1),
+				array('http://www.greatevent.com','http://www.GREATEVENT.com',1),
+				array('http://www.greatevent.com','http://www.greatevent.com/',1),
+				array('http://www.greatevent.com','http://www.GREATEVENT.com?',1),
+				array('http://www.greatevent.com','http://www.greatevent.com/?',1),
+				array('http://www.greatevent.com','https://www.greatevent.com',1),
+				array('http://www.greatevent.com','HTTP://www.greatevent.com',1),
+			);
+	}
+
+
+	/**
+     * @dataProvider dataForTestScoreURLSame
+     */
+	function testScoreURLSame($url1, $url2, $score) {
 		$site = new SiteModel();
 		
 		$eventNew = new models\EventModel();
 		$eventNew->setStartAt(new \DateTime("12th Feb 2012 10:00:00"));
 		$eventNew->setEndAt(new \DateTime("12th Feb 2012 13:00:00"));
-		$eventNew->setUrl("http://www.greatevent.com");
+		$eventNew->setUrl($url1);
 		
 		$eventExisting = new models\EventModel();
 		$eventExisting->setStartAt(new \DateTime("12th March 2012 10:00:00"));
 		$eventExisting->setEndAt(new \DateTime("12th March 2012 13:00:00"));
-		$eventExisting->setUrl("http://www.greatevent.com");
+		$eventExisting->setUrl($url2);
+		
+		$sfde = new SearchForDuplicateEvents($eventNew, $site);
+		$this->assertEquals($score, $sfde->getScoreForConsideredEvent($eventExisting));
+	}
+	
+
+
+	/**
+	 * We're going to use the same data provider.
+     * @dataProvider dataForTestScoreURLSame
+     */
+	function testScoreTicketURLSame($url1, $url2, $score) {
+		$site = new SiteModel();
+		
+		$eventNew = new models\EventModel();
+		$eventNew->setStartAt(new \DateTime("12th Feb 2012 10:00:00"));
+		$eventNew->setEndAt(new \DateTime("12th Feb 2012 13:00:00"));
+		$eventNew->setTicketUrl($url1);
+		
+		$eventExisting = new models\EventModel();
+		$eventExisting->setStartAt(new \DateTime("12th March 2012 10:00:00"));
+		$eventExisting->setEndAt(new \DateTime("12th March 2012 13:00:00"));
+		$eventExisting->setTicketUrl($url2);
 		
 		$sfde = new SearchForDuplicateEvents($eventNew, $site);
 		
-		$score = $sfde->getScoreForConsideredEvent($eventExisting);
-		
-		$this->assertEquals(1, $score);
+		$sfde = new SearchForDuplicateEvents($eventNew, $site);
+		$this->assertEquals($score, $sfde->getScoreForConsideredEvent($eventExisting));
 	}
-	
 
 	function testScoreStartSame() {
 		$site = new SiteModel();
