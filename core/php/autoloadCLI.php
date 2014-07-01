@@ -10,27 +10,6 @@
 use models\SiteModel;
 use models\UserAccountModel;
 
-	
-///////////////////////// App
-$app = new Silex\Application(); 
-$app['debug'] = $CONFIG->isDebug;
-$app['extensions'] = new ExtensionManager($app);
-foreach($CONFIG->extensions as $extensionName) {
-	require APP_ROOT_DIR.'/extension/'.$extensionName.'/extension.php';
-}
-$app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
-
-///////////////////////// LOGGING
-if ($CONFIG->logFile) {
-	$app->register(new Silex\Provider\MonologServiceProvider(), array(
-		'monolog.logfile' => $CONFIG->logFile,
-		'monolog.name'=>$CONFIG->siteTitle,
-		'monolog.level'=>  \Symfony\Bridge\Monolog\Logger::ERROR,
-	));
-	if ($CONFIG->logToStdError) {
-		$app['monolog']->pushHandler(new Monolog\Handler\StreamHandler('php://stderr', Monolog\Logger::ERROR));
-	}
-}
 
 ///////////////////////// TWIG
 $dirs = array();
