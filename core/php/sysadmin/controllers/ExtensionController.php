@@ -18,8 +18,6 @@ class ExtensionController {
 	
 	
 	function index(Request $request, Application $app) {
-		global $CONFIG;
-				
 		return $app['twig']->render('sysadmin/extension/index.html.twig', array(
 				'extensions'=>$app['extensions']->getExtensions(),
 			));

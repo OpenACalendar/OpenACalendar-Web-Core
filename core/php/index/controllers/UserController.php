@@ -38,10 +38,8 @@ class UserController {
 	}
 	
 	
-	function register(Request $request, Application $app) {
-		global $CONFIG;
-		
-		if (!$CONFIG->allowNewUsersToRegister) {
+	function register(Request $request, Application $app) {		
+		if (!$app['config']->allowNewUsersToRegister) {
 			return $app['twig']->render('index/user/register.notallowed.html.twig', array(
 			));
 		}
@@ -90,9 +88,7 @@ class UserController {
 		
 	}
 	
-	function login(Request $request, Application $app) {
-		global $CONFIG;
-				
+	function login(Request $request, Application $app) {				
 		$form = $app['form.factory']->create(new LogInUserForm());
 		
 		if ('POST' == $request->getMethod()) {
@@ -186,9 +182,7 @@ class UserController {
 	}
 	
 	
-	function forgot(Request $request, Application $app) {
-		global $CONFIG;
-		
+	function forgot(Request $request, Application $app) {		
 		$form = $app['form.factory']->create(new ForgotUserForm());
 		
 		if ('POST' == $request->getMethod()) {
@@ -208,7 +202,7 @@ class UserController {
 						$form->addError(new FormError('There was a problem with this account and it has been closed: '.$user->getClosedBySysAdminReason()));
 					} else {
 						$aurr = new UserAccountResetRepository();
-						$uarLast = $aurr->loadRecentlyUnusedSentForUserAccountId($user->getId(), $CONFIG->resetEmailsGapBetweenInSeconds);
+						$uarLast = $aurr->loadRecentlyUnusedSentForUserAccountId($user->getId(), $app['config']->resetEmailsGapBetweenInSeconds);
 						if ($uarLast) {
 							$form->addError(new FormError('An email was sent recently; please try again soon'));
 						} else {

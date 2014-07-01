@@ -46,8 +46,6 @@ class IndexController {
 	}
 	
 	function myTimeZone(Application $app) {
-		global $CONFIG;
-		
 		return $app['twig']->render('site/index/myTimeZone.html.twig', array(
 			));
 	}
@@ -55,7 +53,7 @@ class IndexController {
 	
 	
 	function watch(Request $request, Application $app) {
-		global $CONFIG, $WEBSESSION;
+		global $WEBSESSION;
 		
 		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			$repo = new UserWatchesSiteRepository();
@@ -113,7 +111,7 @@ class IndexController {
 	
 	
 	function requestAccess(Request $request, Application $app) {
-		global $CONFIG, $WEBSESSION, $FLASHMESSAGES;
+		global  $WEBSESSION, $FLASHMESSAGES;
 		
 		if ($request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 			
@@ -136,7 +134,7 @@ class IndexController {
 					
 					$message = \Swift_Message::newInstance();
 					$message->setSubject("A request to access ". $app['currentSite']->getTitle());
-					$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+					$message->setFrom(array($app['config']->emailFrom => $app['config']->emailFromName));
 					$message->setTo($admin->getEmail());
 
 					$messageText = $app['twig']->render('email/requestAccess.txt.twig', array(
@@ -144,7 +142,7 @@ class IndexController {
 						'admin'=>  $admin,
 						'answer'=>  $request->request->get('answer'),
 					));
-					if ($CONFIG->isDebug) file_put_contents('/tmp/requestAccess.txt', $messageText);
+					if ($app['config']->isDebug) file_put_contents('/tmp/requestAccess.txt', $messageText);
 					$message->setBody($messageText);
 
 					$messageHTML = $app['twig']->render('email/requestAccess.html.twig', array(
@@ -152,10 +150,10 @@ class IndexController {
 						'admin'=>  $admin,
 						'answer'=>  $request->request->get('answer'),
 					));
-					if ($CONFIG->isDebug) file_put_contents('/tmp/requestAccess.html', $messageHTML);
+					if ($app['config']->isDebug) file_put_contents('/tmp/requestAccess.html', $messageHTML);
 					$message->addPart($messageHTML,'text/html');
 
-					if (!$CONFIG->isDebug) $app['mailer']->send($message);
+					if (!$app['config']->isDebug) $app['mailer']->send($message);
 					$userNotificationRepo->markEmailed($userNotification);
 				}
 				
@@ -170,17 +168,13 @@ class IndexController {
 	}
 
 	
-	function places(Application $app) {
-		global $CONFIG;
-		
+	function places(Application $app) {		
 		return $app['twig']->render('site/index/places.html.twig', array(
 			));
 	}
 	
 	
-	function currentUser(Application $app) {
-		global $CONFIG;
-		
+	function currentUser(Application $app) {		
 		if (userGetCurrent()) {
 			return $app['twig']->render('site/index/currentUser.user.html.twig', array(
 				));

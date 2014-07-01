@@ -62,36 +62,27 @@ class MediaController {
 	}
 	
 	function imageThumbnail($slug, Request $request, Application $app) {
-		global $CONFIG;
-		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Media does not exist.");
 		}
 		
-		return $this->parameters['media']->getThumbnailResponse($CONFIG->mediaBrowserCacheExpiresInseconds);
-		
+		return $this->parameters['media']->getThumbnailResponse($app['config']->mediaBrowserCacheExpiresInseconds);
 	}
 	
 	function imageNormal($slug, Request $request, Application $app) {
-		global $CONFIG;
-		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Media does not exist.");
 		}
 		
-		return $this->parameters['media']->getNormalResponse($CONFIG->mediaBrowserCacheExpiresInseconds);
-		
+		return $this->parameters['media']->getNormalResponse($app['config']->mediaBrowserCacheExpiresInseconds);
 	}
 	
 	function imageFull($slug, Request $request, Application $app) {
-		global $CONFIG;
-		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Media does not exist.");
 		}
 		
-		return $this->parameters['media']->getResponse($CONFIG->mediaBrowserCacheExpiresInseconds);
-		
+		return $this->parameters['media']->getResponse($app['config']->mediaBrowserCacheExpiresInseconds);		
 	}
 	
 }

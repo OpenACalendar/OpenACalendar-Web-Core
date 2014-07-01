@@ -17,13 +17,10 @@ use Symfony\Component\HttpFoundation\Request;
 class ConfigController {
 	
 	
-	function index(Request $request, Application $app) {
-		global $CONFIG;
-		
+	function index(Request $request, Application $app) {		
 		return $app['twig']->render('sysadmin/config/index.html.twig', array(
-				'configCheck'=>new \ConfigCheck($CONFIG),
+				'configCheck'=>new \ConfigCheck($app['config']),
 			));
-		
 	}
 	
 }

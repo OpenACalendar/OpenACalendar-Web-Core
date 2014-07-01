@@ -24,7 +24,7 @@ class LogInController {
 	
 	function index(Request $request, Application $app) {
 		
-		global $CONFIG, $WEBSESSION;
+		global $WEBSESSION;
 				
 		$form = $app['form.factory']->create(new LogInUserForm());
 		
@@ -34,7 +34,7 @@ class LogInController {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				
-				if (userGetCurrent()->checkPassword($data['password']) && $data['extrapassword'] == $CONFIG->sysAdminExtraPassword) {
+				if (userGetCurrent()->checkPassword($data['password']) && $data['extrapassword'] == $app['config']->sysAdminExtraPassword) {
 					$_SESSION['sysAdminLastActive'] = \TimeSource::time();
 					return $app->redirect("/sysadmin");
 				} else {

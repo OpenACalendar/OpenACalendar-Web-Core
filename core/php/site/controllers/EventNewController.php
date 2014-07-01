@@ -51,9 +51,7 @@ class EventNewController {
 		
 	}
 	
-	function newEventGo(Request $request, Application $app) {
-		global $CONFIG;
-		
+	function newEventGo(Request $request, Application $app) {		
 		$parseResult = null;
 		
 
@@ -92,11 +90,11 @@ class EventNewController {
 				$eventRepository = new EventRepository();
 				$eventRepository->create($event, $app['currentSite'], userGetCurrent());
 				
-				if ($parseResult && $CONFIG->logFileParseDateTimeRange && 
+				if ($parseResult && $app['config']->logFileParseDateTimeRange && 
 						($parseResult->getStart()->getTimestamp() != $event->getStartAt()->getTimestamp() 
 						|| $parseResult->getEnd()->getTimestamp() != $event->getEndAt()->getTimestamp())) {
 					
-					$handle = fopen($CONFIG->logFileParseDateTimeRange, "a");
+					$handle = fopen($app['config']->logFileParseDateTimeRange, "a");
 					$now = \TimeSource::getDateTime();
 					fwrite($handle, 'Site, '.$app['currentSite']->getId()." ,". $app['currentSite']->getSlug()." ,".
 							'Event,'.$event->getSlug()." ,".
@@ -126,14 +124,12 @@ class EventNewController {
 	}
 	
 	
-	public function creatingThisNewEvent(Request $request, Application $app) {
-		global $CONFIG;
-		
+	public function creatingThisNewEvent(Request $request, Application $app) {		
 		$notDuplicateSlugs = isset($_GET['notDuplicateSlugs']) ? explode(",", $_GET['notDuplicateSlugs']) : array();
 		
 		$data = array('duplicates'=>array());
 
-		if ($CONFIG->findDuplicateEventsShow > 0) {
+		if ($app['config']->findDuplicateEventsShow > 0) {
 
 			$event = new EventModel();
 			$event->setDefaultOptionsFromSite($app['currentSite']);
@@ -149,7 +145,7 @@ class EventNewController {
 			}
 
 			$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite'], 
-					$CONFIG->findDuplicateEventsShow, $CONFIG->findDuplicateEventsThreshhold);
+					$app['config']->findDuplicateEventsShow, $app['config']->findDuplicateEventsThreshhold);
 			$searchForDuplicateEvents->setNotDuplicateSlugs($notDuplicateSlugs);
 
 			$timeZone = new \DateTimeZone($event->getTimezone());

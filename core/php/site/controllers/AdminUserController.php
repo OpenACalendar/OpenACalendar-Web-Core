@@ -69,29 +69,27 @@ class AdminUserController {
 		return $app['twig']->render('site/adminuser/request.html.twig', $this->parameters);
 	}
 	
-	protected function sendGrantRequestActionEmail($user, $site, Application $app) {
-		global $CONFIG;
-		
+	protected function sendGrantRequestActionEmail($user, $site, Application $app) {		
 		$message = \Swift_Message::newInstance();
 		$message->setSubject("You can now edit ".$site->getTitle());
-		$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+		$message->setFrom(array($app['config']->emailFrom => $app['config']->emailFromName));
 		$message->setTo($user->getEmail());
 
 		$messageText = $app['twig']->render('email/siteAccessRequestGranted.txt.twig', array(
 			'user'=>$user,
 			'site'=>$site,
 		));
-		if ($CONFIG->isDebug) file_put_contents('/tmp/siteAccessRequestGranted.txt', $messageText);
+		if ($app['config']->isDebug) file_put_contents('/tmp/siteAccessRequestGranted.txt', $messageText);
 		$message->setBody($messageText);
 
 		$messageHTML = $app['twig']->render('email/siteAccessRequestGranted.html.twig', array(
 			'user'=>$user,
 			'site'=>$site,
 		));
-		if ($CONFIG->isDebug) file_put_contents('/tmp/siteAccessRequestGranted.html', $messageHTML);
+		if ($app['config']->isDebug) file_put_contents('/tmp/siteAccessRequestGranted.html', $messageHTML);
 		$message->addPart($messageHTML,'text/html');
 
-		if (!$CONFIG->isDebug) $app['mailer']->send($message);
+		if (!$app['config']->isDebug) $app['mailer']->send($message);
 	
 	}
 	

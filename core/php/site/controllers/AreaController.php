@@ -207,9 +207,7 @@ class AreaController {
 	}
 	
 	
-	function infoJson($slug, Request $request, Application $app) {
-		global $CONFIG;
-		
+	function infoJson($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Country does not exist.");
 		}	
@@ -256,7 +254,7 @@ class AreaController {
 		$response = new Response(json_encode($data));
 		$response->headers->set('Content-Type', 'application/json');
 		$response->setPublic();
-		$response->setMaxAge($CONFIG->cacheFeedsInSeconds);
+		$response->setMaxAge($app['config']->cacheFeedsInSeconds);
 		return $response;
 	
 	}

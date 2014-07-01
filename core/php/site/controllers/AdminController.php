@@ -47,9 +47,9 @@ class AdminController {
 	}
 		
 	function profile(Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES;
+		global  $FLASHMESSAGES;
 		
-		$form = $app['form.factory']->create(new SiteEditProfileForm($CONFIG), $app['currentSite']);
+		$form = $app['form.factory']->create(new SiteEditProfileForm($app['config']), $app['currentSite']);
 				
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -59,7 +59,7 @@ class AdminController {
 				$siteRepository = new SiteRepository();
 				$siteRepository->edit($app['currentSite'], userGetCurrent());
 
-				if ($CONFIG->isFileStore()) {
+				if ($app['config']->isFileStore()) {
 					$newLogo = $form['logo']->getData();
 					if ($newLogo) {
 						$mediaRepository = new MediaRepository();
@@ -85,7 +85,7 @@ class AdminController {
 	}
 		
 	function features(Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+		global $FLASHMESSAGES, $WEBSESSION;
 		
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 				
@@ -110,7 +110,7 @@ class AdminController {
 	}
 		
 	function settings(Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+		global $FLASHMESSAGES, $WEBSESSION;
 		
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $WEBSESSION->getCSFRToken()) {
 				

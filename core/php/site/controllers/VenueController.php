@@ -226,7 +226,7 @@ class VenueController {
 	
 	
 	function media($slug, Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES;
+		global $FLASHMESSAGES;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
@@ -274,7 +274,7 @@ class VenueController {
 	}
 	
 	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+		global $FLASHMESSAGES, $WEBSESSION;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
@@ -294,7 +294,7 @@ class VenueController {
 	}
 	
 	function mediaAddExisting($slug, Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+		global  $FLASHMESSAGES, $WEBSESSION;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
@@ -321,7 +321,7 @@ class VenueController {
 	}
 	
 	function moveToArea($slug, Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+		global $FLASHMESSAGES, $WEBSESSION;
 	
 		
 		if (!$this->build($slug, $request, $app)) {

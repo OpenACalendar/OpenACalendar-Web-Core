@@ -137,7 +137,7 @@ class GroupController {
 	
 	
 	function media($slug, Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES;
+		global $FLASHMESSAGES;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
@@ -185,7 +185,7 @@ class GroupController {
 	}
 	
 	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+		global  $FLASHMESSAGES, $WEBSESSION;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
@@ -205,7 +205,7 @@ class GroupController {
 	}
 	
 	function mediaAddExisting($slug, Request $request, Application $app) {
-		global $CONFIG, $FLASHMESSAGES, $WEBSESSION;
+		global  $FLASHMESSAGES, $WEBSESSION;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
@@ -278,7 +278,6 @@ class GroupController {
 	}
 	
 	function newEventGo($slug, Request $request, Application $app) {
-		global $CONFIG;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
@@ -325,11 +324,11 @@ class GroupController {
 				$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group']);
 				
 				
-				if ($parseResult && $CONFIG->logFileParseDateTimeRange && 
+				if ($parseResult && $app['config']->logFileParseDateTimeRange && 
 						($parseResult->getStart()->getTimestamp() != $event->getStartAt()->getTimestamp() 
 						|| $parseResult->getEnd()->getTimestamp() != $event->getEndAt()->getTimestamp())) {
 					
-					$handle = fopen($CONFIG->logFileParseDateTimeRange, "a");
+					$handle = fopen($app['config']->logFileParseDateTimeRange, "a");
 					$now = \TimeSource::getDateTime();
 					fwrite($handle, 'Site, '.$app['currentSite']->getId()." ,". $app['currentSite']->getSlug()." ,".
 							'Event,'.$event->getSlug()." ,".
@@ -401,7 +400,7 @@ class GroupController {
 	
 	
 	function watch($slug, Request $request, Application $app) {
-		global $CONFIG, $WEBSESSION, $FLASHMESSAGES;
+		global $WEBSESSION, $FLASHMESSAGES;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
@@ -467,7 +466,7 @@ class GroupController {
 	}
 		
 	function newImportURL($slug, Request $request, Application $app) {
-		global $CONFIG, $WEBSESSION, $FLASHMESSAGES;
+		global $WEBSESSION, $FLASHMESSAGES;
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");

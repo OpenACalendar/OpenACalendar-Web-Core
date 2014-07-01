@@ -49,12 +49,12 @@ class CurrentUserController {
 	
 	
 	function resendVerifyEmail(Request $request, Application $app) {
-		global $FLASHMESSAGES, $CONFIG;
+		global $FLASHMESSAGES;
 		
 		$repo = new UserAccountVerifyEmailRepository();
 		
 		$date = $repo->getLastSentForUserAccount(userGetCurrent());
-		if ($date && $date->getTimestamp() > (\TimeSource::time() - $CONFIG->userAccountVerificationSecondsBetweenAllowedSends)) {
+		if ($date && $date->getTimestamp() > (\TimeSource::time() - $app['config']->userAccountVerificationSecondsBetweenAllowedSends)) {
 			$FLASHMESSAGES->addMessage("Sorry, but the email was sent to recently. Please try again soon.");
 		}  else {
 			

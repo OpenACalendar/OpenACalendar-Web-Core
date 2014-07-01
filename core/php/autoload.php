@@ -63,7 +63,7 @@ foreach($CONFIG->extensions as $extensionName) {
 	require APP_ROOT_DIR.'/extension/'.$extensionName.'/extension.php';
 }
 $app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
-
+$app['config'] = $CONFIG;
 	
 ///////////////////////// LOGGING
 if ($CONFIG->logFile) {
