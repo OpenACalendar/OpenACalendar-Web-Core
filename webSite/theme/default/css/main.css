@@ -145,7 +145,7 @@ body {
   margin: 0;
 }
 #header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li {
-  padding: 5px 0;
+  padding: 5px;
   border-bottom: 1px solid #ccc;
 }
 #header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .title a {
