@@ -96,7 +96,7 @@ function loadNotifications() {
 			}
 			if (count > 0) {
 				$('#NotificationSubMenu').empty().append(html);
-				$('#NotificationMenuLink').show().html(countUnread > 0 ? 'notifications ('+countUnread+')' : 'notifications');
+				$('#NotificationMenuLinkCount').show().html(countUnread > 0 ? '('+countUnread+')' : '');
 			} else {
 				$('#NotificationMenuLink').hide();
 			}
