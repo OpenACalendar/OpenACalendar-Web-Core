@@ -16,7 +16,6 @@
 
 {% block innerContentRight %}
 	
-	
 	<ul class="actionList">
 	
 		<li><img src="/theme/default/img/actionIcon.png"><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
@@ -25,9 +24,12 @@
 			<li><img src="/theme/default/img/actionIcon.png"><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></li>
 		{% endif %}
 
-
 		{% if currentSite.isFeatureTag %}
 			<li><img src="/theme/default/img/actionIcon.png"><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></li>
+		{% endif %}
+
+		{% if currentSite.isFeatureGroup %}
+			<li><img src="/theme/default/img/actionIcon.png"><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
 		{% endif %}
 
 	</ul>

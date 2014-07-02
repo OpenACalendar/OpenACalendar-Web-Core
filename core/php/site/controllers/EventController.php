@@ -34,6 +34,7 @@ use repositories\builders\MediaRepositoryBuilder;
 use repositories\builders\UserAtEventRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\TagRepositoryBuilder;
+use repositories\builders\filterparams\GroupFilterParams;
 
 /**
  *
@@ -1032,10 +1033,13 @@ class EventController {
 		
 		}
 		
-		$grb = new GRoupRepositoryBuilder();
-		$grb->setSite($app['currentSite']);
-		$grb->setIncludeDeleted(false);
-		$this->parameters['groupsToAdd'] = $grb->fetchAll();
+		// TODO not ones already added.
+		$this->parameters['groupListFilterParams'] = new GroupFilterParams();
+		$this->parameters['groupListFilterParams']->set($_GET);
+		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setSite($app['currentSite']);
+		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setIncludeDeleted(false);
+		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setLimit(30);
+		$this->parameters['groupsToAdd'] = $this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->fetchAll();
 
 		return $app['twig']->render('site/event/edit.groups.html.twig', $this->parameters);
 	}
