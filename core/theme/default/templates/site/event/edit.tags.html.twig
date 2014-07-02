@@ -20,13 +20,14 @@
 	
 	<ul class="tags">
 		{% for tag in tags %}
-			<li class="tags">
+			<li class="tag">
 				<form method="post">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					<input type="hidden" name="removeTag" value="{{ tag.slug }}">
-					{{ tag.title }}
+					<span class="tagTitleWrapper">{{ tag.title }}</a></span>
 					<input type="submit" value="Remove Tag">
 				</form>
+				<p>{{ tag.description | nl2br | linkify }}</p>
 			</li>
 		{% else %}
 			<li>
@@ -39,13 +40,14 @@
 
 	<ul class="tags">
 		{% for tag in tagsToAdd %}
-			<li class="tags">
+			<li class="tag">
 				<form method="post">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					<input type="hidden" name="addTag" value="{{ tag.slug }}">
-					{{ tag.title }}
+					<span class="tagTitleWrapper">{{ tag.title }}</span>
 					<input type="submit" value="Add Tag">
 				</form>
+				<p>{{ tag.description | nl2br | linkify }}</p>
 			</li>
 		{% else %}
 			<li>

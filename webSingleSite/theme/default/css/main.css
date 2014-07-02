@@ -487,6 +487,27 @@ ul.tags li.tag .title a:hover {
   color: black;
   text-decoration: underline;
 }
+ul.tags li.tag span.tagTitleWrapper {
+  font-size: 13pt;
+  background: url('/theme/default/img/tagBackground.png') no-repeat left center #4F4F4F;
+  white-space: nowrap;
+  -webkit-border-bottom-right-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -ms-border-radius-bottomright: 2px;
+  -o-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  -webkit-border-top-right-radius: 2px;
+  -moz-border-radius-topright: 2px;
+  -ms-border-radius-topright: 2px;
+  -o-border-top-right-radius: 2px;
+  border-top-right-radius: 2px;
+  padding: 2px 5px 2px 20px;
+  color: white;
+}
+ul.tags li.tag span.tagTitleWrapper a {
+  color: white;
+  text-decoration: none;
+}
 div.inlineTags ul.inlineTags {
   display: inline;
   padding: 20px 0;
