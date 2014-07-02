@@ -385,7 +385,12 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		}
 		
 		if ($this->freeTextSearch) {
-			$this->where[] =  ' lower(event_information.summary || event_information.description || group_information.title) LIKE :free_text_search ';
+			$this->where[] =  '(CASE WHEN event_information.summary IS NULL THEN \'\' ELSE event_information.summary END)   || '.
+					'\' \' || '.
+					'(CASE WHEN event_information.description IS NULL THEN \'\' ELSE event_information.description END) || '.
+					'\' \' || '.
+					'(CASE WHEN group_information.title IS NULL THEN \'\' ELSE group_information.title END)'.
+					' ILIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
 		}
 	}

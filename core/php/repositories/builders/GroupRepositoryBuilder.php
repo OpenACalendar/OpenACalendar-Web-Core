@@ -58,7 +58,9 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		}
 		
 		if ($this->freeTextSearch) {
-			$this->where[] =  ' lower(group_information.title || group_information.description) LIKE :free_text_search ';
+			$this->where[] =  '(CASE WHEN group_information.title IS NULL THEN \'\' ELSE group_information.title END )  || \' \' || '.
+					'(CASE WHEN group_information.description IS NULL THEN \'\' ELSE group_information.description END )'.
+					' ILIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
 		}
 		
