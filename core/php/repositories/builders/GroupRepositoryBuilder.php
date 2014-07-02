@@ -58,7 +58,7 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		}
 		
 		if ($this->freeTextSearch) {
-			$this->where[] =  ' lower(group_information.title) LIKE :free_text_search ';
+			$this->where[] =  ' lower(group_information.title || group_information.description) LIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
 		}
 		
