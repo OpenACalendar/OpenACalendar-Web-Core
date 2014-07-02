@@ -35,12 +35,18 @@ class TruncateExtension extends \Twig_Extension
     public function truncate($data, $width=75)
     {
 		if (mb_strlen($data) > $width) {
-			return mb_substr($data, 0, $width)."...";
+			$pos = $width;
+			while(!in_array(mb_substr($data, $pos, 1),array(" ","\n","\r","\t")) && $pos < mb_strlen($data)) {
+				$pos++;
+			}
+			if ($pos < mb_strlen($data)) {
+				return mb_substr($data, 0, $pos)." ...";
+			} else {
+				return $data;
+			}
 		} else {
 			return $data;
 		}
-		
-		return wordwrap($data, $width, $break, $cut);
     }
 
     public function getName()

@@ -33,7 +33,7 @@
 			{{ event.summaryDisplay}}
 		</a>
 	</div>
-	<p class="description" itemprop="description">{{ event.description |  nl2br  | linkify }}</p>	
+	<p class="description" itemprop="description">{{ event.description |  truncate(1000) | nl2br  | linkify }}</p>	
 	{% if showVenueAndArea is defined and showVenueAndArea and event.isPhysical and ( event.venue or event.area )%}
 		<div class="dateAndLocationWrapper">
 			<div class="location" itemprop="location">
