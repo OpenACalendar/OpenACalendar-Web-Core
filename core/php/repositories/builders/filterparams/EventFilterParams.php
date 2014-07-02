@@ -32,6 +32,7 @@ class EventFilterParams {
 
 	// ############################### optional controls; turn on and off
 	
+	protected $freeTextSearch = null;
 	protected $hasDateControls = true;
 	
 	public function getDateControls() {
@@ -107,6 +108,13 @@ class EventFilterParams {
 				$this->include_deleted = true;
 			}
 			
+			
+			// Free Text Search
+			if (isset($data['freeTextSearch']) && trim($data['freeTextSearch'])) {
+				$this->freeTextSearch = $data['freeTextSearch'];
+			}
+			
+			
 		}
 		
 		// apply to search
@@ -120,7 +128,9 @@ class EventFilterParams {
 			$this->eventRepositoryBuilder->setUserAccount($this->hasSpecifiedUser, false,
 					$this->hasSpecifiedUserIncludePrivate, $this->includeSpecifiedUserAttending, $this->includeSpecifiedUserWatching);
 		}
-		
+		if ($this->freeTextSearch) {
+			$this->eventRepositoryBuilder->setFreeTextsearch($this->freeTextSearch);
+		}
 	}
 	
 	public function getFrom() {
@@ -139,6 +149,11 @@ class EventFilterParams {
 	public function getIncludeSpecifiedUserWatching() {
 		return $this->includeSpecifiedUserWatching;
 	}
+
+	public function getFreeTextSearch() {
+		return $this->freeTextSearch;
+	}
+
 
 
 

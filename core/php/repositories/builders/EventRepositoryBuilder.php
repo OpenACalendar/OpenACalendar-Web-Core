@@ -36,6 +36,12 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		$this->orderDirection = ($newestFirst ? " DESC " : " ASC ");
 	}
 
+	protected $freeTextSearch;
+
+	public function setFreeTextsearch($freeTextSearch) {
+		$this->freeTextSearch = $freeTextSearch;
+	}
+	
 
 
 	/** @var UserAccountModel **/
@@ -378,6 +384,10 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->params['tag_id'] = $this->tag->getId();	
 		}
 		
+		if ($this->freeTextSearch) {
+			$this->where[] =  ' lower(event_information.summary || event_information.description || group_information.title) LIKE :free_text_search ';
+			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
+		}
 	}
 	
 	protected function buildStat() {
