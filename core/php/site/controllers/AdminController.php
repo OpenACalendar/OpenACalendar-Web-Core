@@ -124,7 +124,7 @@ class AdminController {
 	
 	
 	function visibility(Request $request, Application $app) {
-		$form = $app['form.factory']->create(new AdminVisibilityPublicForm(), $app['currentSite']);
+		$form = $app['form.factory']->create(new AdminVisibilityPublicForm($app['config']), $app['currentSite']);
 				
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

@@ -25,13 +25,12 @@
 	
 		<li><a href="/admin/profile"><img src="/theme/default/img/actionProfileIcon.png">Profile</a></li>
 
-		{% if not config.isSingleSiteMode %}
-			<li><a href="/admin/visibility"><img src="/theme/default/img/actionVisibilityIcon.png">Visiblity</a></li>
-			{% if currentUserOwnsSite %}
-				<li><a href="/admin/owner"><img src="/theme/default/img/actionOwnerIcon.png">Owner</a></li>
-			{% endif %}
+		<li><a href="/admin/visibility"><img src="/theme/default/img/actionVisibilityIcon.png">Visiblity</a></li>
+		
+		{% if not config.isSingleSiteMode and currentUserOwnsSite %}
+			<li><a href="/admin/owner"><img src="/theme/default/img/actionOwnerIcon.png">Owner</a></li>
 		{% endif %}
-					
+		
 		<li><a href="/admin/users"><img src="/theme/default/img/actionUsersIcon.png">Users (Administrators & Editors)</a></li>
 		
 		<li><a href="/admin/countries"><img src="/theme/default/img/actionPlacesIcon.png">Countries</a></li>
