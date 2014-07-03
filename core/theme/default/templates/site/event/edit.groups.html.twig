@@ -17,6 +17,8 @@
 
 	<h3>Groups</h3>
 	
+	<p>An event can be in more than one group at once.</p>
+		
 	<ul class="groups">
 		{% for group in groups %}
 			<li class="group">
@@ -30,10 +32,14 @@
 			</li>
 		{% else %}
 			<li>
-				There are no groups.
+				This event is not in any groups.
 			</li>								
 		{% endfor %}
 	</ul>
+	
+	<form method="get" action="/event/{{ event.slugForURL }}">
+		<input type="submit" value="OK, Finished editing!">
+	</form>
 
 {% endblock %}
 	
