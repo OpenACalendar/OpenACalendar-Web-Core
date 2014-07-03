@@ -38,7 +38,10 @@
 		</li>
 		{% if currentUser %}
 			<li id="NotificationMenu" class="user">
-				<a href="/me/notification" id="NotificationMenuLink">Notifications <span id="NotificationMenuLinkCount"></span></a>
+				<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink">
+					<img src="/theme/default/img/notifications.png" class="notificationicon" alt="Notifications" title="Notifications"> 
+					<span id="NotificationMenuLinkCount"></span>
+				</a>
 				<ul id="NotificationSubMenu" class="submenu">
 					<li><a href="/me/notification">Loading ...</a></li>
 				</ul>

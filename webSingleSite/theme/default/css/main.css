@@ -144,6 +144,10 @@ body {
   padding: 0;
   margin: 0;
 }
+#header ul.menu li#NotificationMenu img.notificationicon {
+  width: 16px;
+  height: 16px;
+}
 #header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li {
   padding: 5px;
   border-bottom: 1px solid #ccc;
