@@ -84,7 +84,11 @@ function loadCountry(countryID) {
 					map.fitBounds(bounds);
 				}
 				
-				listVenues(data.venues);
+				if (data.childAreas.length > 0) {
+					hideVenues();
+				} else {
+					listVenues(data.venues);
+				}
 			}
 		});
 }
@@ -130,11 +134,20 @@ function loadNextArea(areaSlug, includeCurrentArea) {
 					}
 				}
 				
-				listVenues(data.venues);
+				if (data.childAreas.length > 0) {
+					hideVenues();
+				} else {
+					listVenues(data.venues);
+				}
 			}
 		});	
 	
 	
+}
+
+function hideVenues() {
+	$('#ChangeEventVenueField').hide();
+	$('#ChangeEventVenueList').html('<input type="hidden" name="venue_id" value="no">')
 }
 
 function listVenues(venueList) {
@@ -175,14 +188,15 @@ function listVenues(venueList) {
 	html += '<label>Postcode: <input type="text" name="newVenueAddressCode" class=""></label>';
 	html += '</div></li>'
 	html += '<li class="novenue"><label>';
-	html += '<input type="radio" name="venue_id" value="no">Exact Venue not known.';
+	html += '<input type="radio" name="venue_id" value="no" checked="checked">Exact Venue not known.';
 	html += '</label></li>'
 	$('#ChangeEventVenueList').empty().html(html);
+	$('#ChangeEventVenueField').show();
 	$('#ChangeEventVenueList li.newvenue input[name="newVenueTitle"], #ChangeEventVenueList li.newvenue input[name="newVenueAddress"], #ChangeEventVenueList li.newvenue input[name="newVenueAddressCode"]').keyup(function (e) {
 		if ($(this).val().trim() != "") {
 			$('#ChangeEventVenueList li.newvenue input[type="radio"]').prop('checked',true);
 		}
-	});
+	});	
 }
 
 function useVenue(venueSlug) {
