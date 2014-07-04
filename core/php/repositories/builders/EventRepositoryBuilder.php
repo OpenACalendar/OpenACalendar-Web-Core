@@ -217,7 +217,14 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	public function setInSameRecurEventSet(EventModel $event) {
 		$this->event_recur_set_id = $event->getEventRecurSetId();
 	}
+	
+	protected $includeEventsFromClosedSites = false;
+	
+	public function setIncludeEventsFromClosedSites($includeEventsFromClosedSites) {
+		$this->includeEventsFromClosedSites = $includeEventsFromClosedSites;
+	}
 
+	
 	protected function build() {
 		global $DB;
 
@@ -280,6 +287,9 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		if (!$this->site && !$this->group) {
 			$this->joins[] = " JOIN site_information ON event_information.site_id = site_information.id ";
 			$this->select[] = " site_information.slug AS site_slug ";
+			if (!$this->includeEventsFromClosedSites) {
+				$this->where[] = " site_information.is_closed_by_sys_admin = '0' ";
+			}
 		}
 		
 		if ($this->curatedList) {
