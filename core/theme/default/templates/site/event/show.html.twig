@@ -144,7 +144,8 @@
 							<li class="area">
 								{% spaceless %}<span class="content"><label>
 									<input type="radio" name="area" value="{{ childArea.slug }}">{{ childArea.title }}
-								</label></span>{% endspaceless %}
+								</label>&nbsp;</span>{% endspaceless %}
+								{# The &nbsp; between the </label> and the span </span> is needed or IE will draw all of these in one long line. #}
 								<span class="aftercontent">&nbsp;</span>
 							</li>
 						{% endfor %}
