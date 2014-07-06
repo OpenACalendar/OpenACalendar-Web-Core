@@ -79,9 +79,13 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->where[] =  " venue_information.area_id IN (".  implode(",", $areaids).")";
 			
 		}
-		
+
 		if ($this->freeTextSearch) {
-			$this->where[] =  ' lower(venue_information.title) LIKE :free_text_search ';
+			$this->where[] =  '(CASE WHEN venue_information.title IS NULL THEN \'\' ELSE venue_information.title END )  || \' \' || '.
+					'(CASE WHEN venue_information.description IS NULL THEN \'\' ELSE venue_information.description END ) || \' \' || '.
+					'(CASE WHEN venue_information.address IS NULL THEN \'\' ELSE venue_information.address END ) || \' \' || '.
+					'(CASE WHEN venue_information.address_code IS NULL THEN \'\' ELSE venue_information.address_code END ) '.
+					' ILIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
 		}
 		
