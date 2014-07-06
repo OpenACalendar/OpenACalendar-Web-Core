@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/country/page2col.html.twig' %}
+{% extends 'site/country/page.html.twig' %}
 
 
 {% block pageTitle %}{{ country.title }} - {% endblock %} 
@@ -28,38 +28,42 @@
 {% endblock %}
 	
 	
-{% block innerContentLeft %}
+{% block innerContent %}
 
-	<div class="country">
-	
-		<div id="MapWrapper">
-			<div id="Map" class="map"></div>
-			{% if currentSite.isFeatureMap %}
-				<p class="largerMapLink"><a href="/map?country={{ country.twoCharCode }}">View larger map</a></p>
-			{% endif %}
+
+	<div itemscope itemtype="http://schema.org/Place">
+		<meta itemprop="name" content="{{ country.title|e('html_attr') }}" />
+
+		<div  id="innerPageLeft" class="country">
+
+			<div id="MapWrapper">
+				<div id="Map" class="map"></div>
+				{% if currentSite.isFeatureMap %}
+					<p class="largerMapLink"><a href="/map?country={{ country.twoCharCode }}">View larger map</a></p>
+				{% endif %}
+			</div>
+
+			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+
 		</div>
-	
-		{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
-		
+
+		<div  id="innerPageRight">
+
+			{% include '/site/eventListFilterParams.html.twig' %}
+
+			<ul class="events">
+				{% for event in events %}
+					{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
+				{% else %}
+					<li>
+						No events found.
+						{% if currentUserCanEditSite %}Why not <a href="/event/new">add one</a>?{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+
+		</div>
 	</div>
-	
-{% endblock %}
-
-
-{% block innerContentRight %}
-
-	{% include '/site/eventListFilterParams.html.twig' %}
-
-	<ul class="events">
-		{% for event in events %}
-			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-		{% else %}
-			<li>
-				No events found.
-				{% if currentUserCanEditSite %}Why not <a href="/event/new">add one</a>?{% endif %}
-			</li>		
-		{% endfor %}
-	</ul>
 
 {% endblock %}
 

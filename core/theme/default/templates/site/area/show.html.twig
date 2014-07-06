@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/area/page2col.html.twig' %}
+{% extends 'site/area/page.html.twig' %}
 
 {% block pageTitle %}{{ area.title }} - {% endblock %} 
 
@@ -31,49 +31,53 @@
 
 {% block tabDetails %}currentTab{% endblock %}
 		
-{% block innerContentLeft %}
-		
-	<div class="venue">
-		<p>{{ area.description | nl2br  | linkify }}</p>
-		
-		<div id="MapWrapper">
-			<div id="Map" class="map"></div>
-			{% if currentSite.isFeatureMap %}
-				<p class="largerMapLink"><a href="/map?area={{ area.slug }}">View larger map</a></p>
-			{% endif %}
-		</div>
-		
-		{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
-		
-		<div class="locationWrapper">
-			<div class="location">
-				<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>	
-				{% for parentArea in parentAreas|reverse %}
-					<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
-				{% endfor %}
-				<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+{% block innerContent %}
+
+
+	<div itemscope itemtype="http://schema.org/Place">
+		<meta itemprop="name" content="{{ area.title|e('html_attr') }}" />
+
+
+		<div  id="innerPageLeft" class="venue">
+			<p>{{ area.description | nl2br  | linkify }}</p>
+
+			<div id="MapWrapper">
+				<div id="Map" class="map"></div>
+				{% if currentSite.isFeatureMap %}
+					<p class="largerMapLink"><a href="/map?area={{ area.slug }}">View larger map</a></p>
+				{% endif %}
 			</div>
+
+			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+
+			<div class="locationWrapper">
+				<div class="location">
+					<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
+					{% for parentArea in parentAreas|reverse %}
+						<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
+					{% endfor %}
+					<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+				</div>
+			</div>
+
 		</div>
 		
+		<div  id="innerPageRight">
+
+			{% include '/site/eventListFilterParams.html.twig' %}
+
+			<ul class="events">
+				{% for event in events %}
+					{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
+				{% else %}
+					<li>
+						No events found.
+					</li>
+				{% endfor %}
+			</ul>
+
+		</div>
 	</div>
-		
-		
-{% endblock %}
-
-
-{% block innerContentRight %}
-
-	{% include '/site/eventListFilterParams.html.twig' %}
-
-	<ul class="events">
-		{% for event in events %}
-			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-		{% else %}
-			<li>
-				No events found.
-			</li>		
-		{% endfor %}
-	</ul>
 
 {% endblock %}
 
