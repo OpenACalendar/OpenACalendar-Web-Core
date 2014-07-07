@@ -8,7 +8,7 @@ use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\EventRepository;
-
+use repositories\builders\EventRepositoryBuilder;
 
 /**
  *
@@ -71,6 +71,13 @@ class EventCreateTest extends \PHPUnit_Framework_TestCase {
 		$startAtIs->setTimezone(new \DateTimeZone('UTC'));
 		$this->assertEquals($startAtShouldBe->format("c"), $startAtIs->format("c"));
 		
+		$erb = new EventRepositoryBuilder();
+		$erb->setFreeTextsearch('cat');
+		$this->assertEquals(0, count($erb->fetchAll()));	
+		
+		$erb = new EventRepositoryBuilder();
+		$erb->setFreeTextsearch('test');
+		$this->assertEquals(1, count($erb->fetchAll()));	
 		
 	}
 	
