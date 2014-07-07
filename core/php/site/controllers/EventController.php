@@ -418,7 +418,7 @@ class EventController {
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
 				$gotResult = true;
 				
-			} if ($request->request->get('venue_id') == 'no') {
+			} else if ($request->request->get('venue_id') == 'no') {
 				
 				$area = null;
 				$areasPost = $request->request->get('areas');
@@ -446,8 +446,9 @@ class EventController {
 				$eventRepository->edit($this->parameters['event'], userGetCurrent());
 				$gotResult = true;
 				
-			} else if ($request->request->get('venue_id')) {
-				$venue = $venueRepository->loadBySlug($app['currentSite'], $request->request->get('venue_id'));
+			} else if ($request->request->get('venue_id') && intval($request->request->get('venue_id'))) {
+				// Intval() check here to make sure we have a int passed and not "no" or "new" - this is a bug fix!
+				$venue = $venueRepository->loadBySlug($app['currentSite'], intval($request->request->get('venue_id')));
 				if ($venue) {
 					$this->parameters['event']->setVenueId($venue->getId());
 					$eventRepository = new EventRepository();
