@@ -4,6 +4,7 @@
 namespace usernotifications\models;
 
 use models\GroupModel;
+use repositories\GroupRepository;
 
 /**
  *
