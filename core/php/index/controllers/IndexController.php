@@ -114,8 +114,12 @@ class IndexController {
 							array( $countryRepository->loadByTwoCharCode("GB") ), 
 							$siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode)
 						);
-				
-				return $app->redirect("http://".$site->getSlug().".".$app['config']->webSiteDomain);
+
+				if ($app['config']->hasSSL){
+					return $app->redirect("https://".$site->getSlug().".".$app['config']->webSiteDomainSSL);
+				} else {
+					return $app->redirect("http://".$site->getSlug().".".$app['config']->webSiteDomain);
+				}
 			}
 		}
 		
