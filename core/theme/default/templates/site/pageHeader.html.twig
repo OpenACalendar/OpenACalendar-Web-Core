@@ -96,7 +96,7 @@
 					</li>
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
 					{% if currentUserCanAdminSite %}
-						<li><a href="/admin">Calendar Admin</a></li>
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/admin">Calendar Admin</a></li>
 					{% endif %}
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/logout">Logout</a></li>
 				</ul>		
