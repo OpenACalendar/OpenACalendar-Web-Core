@@ -48,6 +48,13 @@ class MediaRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->venue = $venue;
 	}
 
+	/** @var EventModel **/
+	protected $eventNotIn;
+
+	public function setNotInEvent(EventModel $event) {
+		$this->eventNotIn = $event;
+	}
+
 	/** @var GroupModel **/
 	protected $groupNotIn;
 	
@@ -96,9 +103,16 @@ class MediaRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->where[] = " media_in_venue.added_at IS NULL ";
 			$this->params['venue_id'] = $this->venueNotIn->getId();
 		}
-		
+
 		if ($this->event) {
-			// TODO
+			$this->joins[] =  " JOIN media_in_event AS media_in_event ON media_in_event.media_id = media_information.id ".
+				"AND media_in_event.removed_at IS NULL AND media_in_event.event_id = :event_id ";
+			$this->params['event_id'] = $this->event->getId();
+		} else if ($this->eventNotIn) {
+			$this->joins[] =  " LEFT JOIN media_in_event AS media_in_event ON media_in_event.media_id = media_information.id ".
+				"AND media_in_event.removed_at IS NULL AND media_in_event.event_id = :event_id ";
+			$this->where[] = " media_in_event.added_at IS NULL ";
+			$this->params['event_id'] = $this->eventNotIn->getId();
 		}
 		
 		if (!$this->include_deleted) {

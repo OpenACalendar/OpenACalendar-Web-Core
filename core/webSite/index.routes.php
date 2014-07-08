@@ -121,8 +121,24 @@ $app->match('/event/{slug}/edit/groups', "site\controllers\EventController::edit
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)
 		->before($featureGroupRequired)
-		->before($canChangeSite); 
-		
+		->before($canChangeSite);
+$app->match('/event/{slug}/media', "site\controllers\EventController::media")
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appFileStoreRequired)
+	->before($canChangeSite);
+$app->match('/event/{slug}/media/add/existing', "site\controllers\EventController::mediaAddExisting")
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($appFileStoreRequired)
+	->before($canChangeSite);
+$app->match('/event/{slug}/media/{mediaslug}/remove', "site\controllers\EventController::mediaRemove")
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->assert('mediaslug', '\d+')
+	->before($appVerifiedEditorUserRequired)
+	->before($appFileStoreRequired)
+	->before($canChangeSite);
+
+
 $app->match('/group', "site\controllers\GroupListController::index"); 
 $app->match('/group/', "site\controllers\GroupListController::index"); 
 

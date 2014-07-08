@@ -127,7 +127,17 @@ class MediaRepository {
 				'removal_approved_at'=>  \TimeSource::getFormattedForDataBase(),
 				'removed_by_user_account_id'=>$user->getId(),
 			));
-			
+
+			$stat = $DB->prepare("UPDATE media_in_event SET removed_by_user_account_id=:removed_by_user_account_id,".
+				" removed_at=:removed_at , removal_approved_at= :removal_approved_at WHERE ".
+				" media_id=:media_id AND removed_at IS NULL ");
+			$stat->execute(array(
+				'media_id'=>$media->getId(),
+				'removed_at'=>  \TimeSource::getFormattedForDataBase(),
+				'removal_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+				'removed_by_user_account_id'=>$user->getId(),
+			));
+
 			$stat = $DB->prepare("UPDATE media_information SET deleted_by_user_account_id=:deleted_by_user_account_id,".
 				" deleted_at=:deleted_at WHERE ".
 				" id=:id AND deleted_at IS NULL ");

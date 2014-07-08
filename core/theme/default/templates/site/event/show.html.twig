@@ -22,6 +22,11 @@
 	{% if currentUserCanEditSite %}
 		{% if not event.isDeleted %}
 			<li class="action"><a href="/event/{{ event.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a></li>
+			{% if config.isFileStore %}
+				<li class="action">
+					<a href="/event/{{ event.slugForUrl }}/media"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
+				</li>
+			{% endif %}
 		{% endif %}
 		{% if not event.isImported %}
 			{% if not event.isDeleted %}
@@ -86,7 +91,16 @@
 		{% if event.ticketUrl %}
 			<p class="description">Get your tickets at <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></p>
 		{% endif %}
-		
+
+		{% if mediasForEvent %}
+			<ul class="mediaGrid">
+				{% for media in mediasForEvent %}
+					<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+				{% endfor %}
+			</ul>
+			<div class="afterMediaGrid"></div>
+		{% endif %}
+
 		{% if groups|length > 0 %}
 			{% for group in groups %}
 				<p class="groupTitle">About <a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></p>

@@ -7,6 +7,7 @@ use site\forms\EventNewForm;
 use site\forms\EventEditForm;
 use site\forms\EventImportedEditForm;
 use site\forms\EventDeleteForm;
+use site\forms\UploadNewMediaForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use models\SiteModel;
@@ -27,6 +28,8 @@ use repositories\ImportURLRepository;
 use repositories\AreaRepository;
 use repositories\TagRepository;
 use repositories\UserWatchesGroupRepository;
+use repositories\MediaInEventRepository;
+use repositories\MediaRepository;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\EventHistoryRepositoryBuilder;
 use repositories\builders\CuratedListRepositoryBuilder;
@@ -153,27 +156,38 @@ class EventController {
 		} else {
 			$this->parameters['curatedListsUserCanEdit'] = array();
 		}
-		
+
 		$this->parameters['mediasForGroup'] = array();
+		$this->parameters['mediasForVenue'] = array();
+		$this->parameters['mediasForEvent'] = array();
 		$this->parameters['medias'] = array();
-		foreach($this->parameters['groups'] as $group) {
+		if ($app['config']->isFileStore()) {
+			foreach($this->parameters['groups'] as $group) {
+				$mrb = new MediaRepositoryBuilder();
+				$mrb->setIncludeDeleted(false);
+				$mrb->setSite($app['currentSite']);
+				$mrb->setGroup($group);
+				$this->parameters['mediasForGroup'][$group->getSlug()] = $mrb->fetchAll();
+				$this->parameters['medias'] = array_merge($this->parameters['medias'],$this->parameters['mediasForGroup'][$group->getSlug()]);
+			}
+
+			if ($this->parameters['venue']) {
+				$mrb = new MediaRepositoryBuilder();
+				$mrb->setIncludeDeleted(false);
+				$mrb->setSite($app['currentSite']);
+				$mrb->setVenue($this->parameters['venue']);
+				$this->parameters['mediasForVenue'] = $mrb->fetchAll();
+				$this->parameters['medias'] = array_merge($this->parameters['medias'],$this->parameters['mediasForVenue']);
+			}
+
 			$mrb = new MediaRepositoryBuilder();
 			$mrb->setIncludeDeleted(false);
 			$mrb->setSite($app['currentSite']);
-			$mrb->setGroup($group);
-			$this->parameters['mediasForGroup'][$group->getSlug()] = $mrb->fetchAll();
-			$this->parameters['medias'] = array_merge($this->parameters['medias'],$this->parameters['mediasForGroup'][$group->getSlug()]);
+			$mrb->setEvent($this->parameters['event']);
+			$this->parameters['mediasForEvent'] = $mrb->fetchAll();
+			$this->parameters['medias'] = array_merge($this->parameters['medias'],$this->parameters['mediasForEvent']);
 		}
-		
-		if ($this->parameters['venue']) {
-			$mrb = new MediaRepositoryBuilder();
-			$mrb->setIncludeDeleted(false);
-			$mrb->setSite($app['currentSite']);
-			$mrb->setVenue($this->parameters['venue']);
-			$this->parameters['mediasForVenue'] = $mrb->fetchAll();
-			$this->parameters['medias'] = array_merge($this->parameters['medias'],$this->parameters['mediasForVenue']);
-		}
-		
+
 		$uaerb = new UserAtEventRepositoryBuilder();
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingYesOnly(true);
@@ -1044,6 +1058,97 @@ class EventController {
 
 		return $app['twig']->render('site/event/edit.groups.html.twig', $this->parameters);
 	}
+	
+	
+	function media($slug, Request $request, Application $app) {		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+		
+		if ($app['currentUserCanEditSite']) {
+			
+			
+			$form = $app['form.factory']->create(new UploadNewMediaForm());
+		
+			
+			if ('POST' == $request->getMethod()) {
+				$form->bind($request);
+
+				if ($form->isValid()) {
+
+					$mediaRepository = new MediaRepository();
+					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], userGetCurrent(),
+							$form['title']->getData(),$form['source_text']->getData(),$form['sorce_url']->getData());
+					
+					if ($media) {
+
+						$mediaInEventRepo = new MediaInEventRepository();
+						$mediaInEventRepo->add($media, $this->parameters['event'], userGetCurrent());
+						
+						$app['flashmessages']->addMessage('Picture added!');
+						return $app->redirect("/event/".$this->parameters['event']->getSlug());
+						
+					}
+					
+				}
+			}
+			$this->parameters['uploadNewMediaForm'] = $form->createView();
+			
+		}
+		
+		
+		$mrb = new MediaRepositoryBuilder();
+		$mrb->setIncludeDeleted(false);
+		$mrb->setSite($app['currentSite']);
+		$mrb->setEvent($this->parameters['event']);
+		$this->parameters['medias'] = $mrb->fetchAll();
+		
+		return $app['twig']->render('site/event/media.html.twig', $this->parameters);
+	}
+	
+	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+		
+		if ($request->request->get('CSFRToken')) {
+			$mediaRepository = new MediaRepository();
+			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
+			if ($media) {
+				$mediaInEventRepo = new MediaInEventRepository();
+				$mediaInEventRepo->remove($media, $this->parameters['event'], userGetCurrent());
+				$app['flashmessages']->addMessage('Removed!');
+			}
+		}
+		
+		return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/media');
+	}
+	
+	function mediaAddExisting($slug, Request $request, Application $app) {		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+			
+		if ($request->request->get('CSFRToken')) {
+			$mediaRepository = new MediaRepository();
+			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
+			if ($media) {
+				$mediaInEventRepo = new MediaInEventRepository();
+				$mediaInEventRepo->add($media, $this->parameters['event'], userGetCurrent());
+				$app['flashmessages']->addMessage('Added!');
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/');
+			}
+		}
+		
+		$mrb = new MediaRepositoryBuilder();
+		$mrb->setIncludeDeleted(false);
+		$mrb->setSite($app['currentSite']);
+		$mrb->setNotInEvent($this->parameters['event']);
+		$this->parameters['medias'] = $mrb->fetchAll();
+		
+		return $app['twig']->render('site/event/media.add.existing.html.twig', $this->parameters);
+	}
+	
 	
 }
 
