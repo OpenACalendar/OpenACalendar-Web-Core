@@ -2,11 +2,12 @@
 
 use models\UserAccountModel;
 use models\SiteModel;
-use models\GroupModel;
+use models\VenueModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
-use repositories\GroupRepository;
-use repositories\builders\GroupRepositoryBuilder;
+use repositories\VenueRepository;
+use repositories\CountryRepository;
+use repositories\builders\VenueRepositoryBuilder;
 
 /**
  *
@@ -16,10 +17,11 @@ use repositories\builders\GroupRepositoryBuilder;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class GroupCreateTest extends \PHPUnit_Framework_TestCase {
+class VenueCreateTest extends \PHPUnit_Framework_TestCase {
 	
 	function test1() {
 		$DB = getNewTestDB();
+		addCountriesToTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -36,31 +38,34 @@ class GroupCreateTest extends \PHPUnit_Framework_TestCase {
 		$siteRepo = new SiteRepository();
 		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
 		
-		$group = new GroupModel();
-		$group->setTitle("test");
-		$group->setDescription("test test");
-		$group->setUrl("http://www.group.com");
+		$countryRepo = new CountryRepository();
+		$gb = $countryRepo->loadByTwoCharCode('GB');
+
+		$venue = new VenueModel();
+		$venue->setTitle("test");
+		$venue->setDescription("test test");
+		$venue->setCountryId($gb->getId());
+
+		$venueRepo = new VenueRepository();
+		$venueRepo->create($venue, $site, $user);
 		
-		$groupRepo = new GroupRepository();
-		$groupRepo->create($group, $site, $user);
+		$this->checkVenueInTest1($venueRepo->loadById($venue->getId()));
+		$this->checkVenueInTest1($venueRepo->loadBySlug($site, $venue->getSlug()));
 		
-		$this->checkGroupInTest1($groupRepo->loadById($group->getId()));
-		$this->checkGroupInTest1($groupRepo->loadBySlug($site, $group->getSlug()));
-		
-		$grb = new GroupRepositoryBuilder();
+		$grb = new VenueRepositoryBuilder();
 		$grb->setFreeTextsearch('test');
 		$this->assertEquals(1, count($grb->fetchAll()));	
 		
-		$grb = new GroupRepositoryBuilder();
+		$grb = new VenueRepositoryBuilder();
 		$grb->setFreeTextsearch('cats');
 		$this->assertEquals(0, count($grb->fetchAll()));	
 
 	}
 	
-	protected function checkGroupInTest1(GroupModel $group) {
-		$this->assertEquals("test test", $group->getDescription());
-		$this->assertEquals("test", $group->getTitle());
-		$this->assertEquals("http://www.group.com", $group->getUrl());
+	protected function checkVenueInTest1(VenueModel $venue) {
+		$this->assertEquals("test test", $venue->getDescription());
+		$this->assertEquals("test", $venue->getTitle());
+		$this->assertNotNull($venue->getCountryId());
 	}
 	
 }
