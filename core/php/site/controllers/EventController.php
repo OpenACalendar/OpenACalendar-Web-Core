@@ -689,7 +689,7 @@ class EventController {
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$this->parameters['newEvents'] = $eventRecurSet->getNewWeeklyEventsFilteredForExisting($this->parameters['event'], $app['config']->recurEventForDaysInFutureWhenWeekly);
 		
-		if ($request->request->get('submitted') == 'yes' && $app['websession']->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'yes' && $app['websession']->getCSFRToken() == $app['websession']->getCSFRToken()) {
 			
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
@@ -1111,7 +1111,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		if ($request->request->get('CSFRToken')) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
@@ -1129,7 +1129,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 			
-		if ($request->request->get('CSFRToken')) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {

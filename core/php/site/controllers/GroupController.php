@@ -187,7 +187,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		if ($request->request->get('CSFRToken')) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
@@ -205,7 +205,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 			
-		if ($request->request->get('CSFRToken')) {
+		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$mediaRepository = new MediaRepository();
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
