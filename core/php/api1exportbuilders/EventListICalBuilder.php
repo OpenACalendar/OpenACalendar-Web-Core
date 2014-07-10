@@ -4,6 +4,10 @@ namespace api1exportbuilders;
 use Symfony\Component\HttpFoundation\Response;
 use models\EventModel;
 use models\SiteModel;
+use models\GroupModel;
+use models\VenueModel;
+use models\AreaModel;
+use models\CountryModel;
 
 /**
  *
