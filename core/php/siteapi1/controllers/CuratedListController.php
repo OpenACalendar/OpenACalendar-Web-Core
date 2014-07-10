@@ -64,7 +64,9 @@ class CuratedListController {
 	}
 
 	function json($slug, Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "curatedlist does not exist.");
 		}
@@ -72,13 +74,16 @@ class CuratedListController {
 		
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
 		return $json->getResponse();
 				
 	}	
 
 	function jsonp($slug, Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "curatedlist does not exist.");
 		}
@@ -86,6 +91,7 @@ class CuratedListController {
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();

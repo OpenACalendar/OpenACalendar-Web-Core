@@ -64,7 +64,10 @@ class VenueController {
 	}
 
 	function json($slug, Request $request, Application $app) {
-		
+
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
@@ -73,13 +76,17 @@ class VenueController {
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$json->addOtherDataVenue($this->parameters['venue']);
+		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
 		return $json->getResponse();
 				
 	}	
 
 	function jsonp($slug, Request $request, Application $app) {
-		
+
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
@@ -88,6 +95,7 @@ class VenueController {
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$jsonp->addOtherDataVenue($this->parameters['venue']);
+		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();

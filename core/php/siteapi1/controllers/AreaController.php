@@ -52,7 +52,9 @@ class AreaController {
 	}
 
 	function json($slug, Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Area does not exist.");
 		}
@@ -60,13 +62,16 @@ class AreaController {
 		
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setArea($this->parameters['area']);
+		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
 		return $json->getResponse();
 				
 	}	
 
 	function jsonp($slug, Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Area does not exist.");
 		}
@@ -74,6 +79,7 @@ class AreaController {
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setArea($this->parameters['area']);
+		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();

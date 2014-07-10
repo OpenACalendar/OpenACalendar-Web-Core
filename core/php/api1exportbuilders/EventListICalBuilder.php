@@ -52,7 +52,8 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		return $response;				
 	}
 	
-	public function addEvent(EventModel $event) {
+	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
+							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
 		global $CONFIG;
 		
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();

@@ -65,7 +65,10 @@ class CountryController {
 	}
 
 	function eventsJson($slug, Request $request, Application $app) {
-		
+
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Country does not exist.");
 		}
@@ -74,13 +77,16 @@ class CountryController {
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$json->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
 		return $json->getResponse();
 				
 	}	
 
 	function eventsJsonp($slug, Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Country does not exist.");
 		}
@@ -89,6 +95,7 @@ class CountryController {
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$jsonp->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();

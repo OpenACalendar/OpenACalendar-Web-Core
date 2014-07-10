@@ -60,7 +60,10 @@ class PublicUserController {
 	}
 	
 	function json($username, Request $request,Application $app) {
-		
+
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($username, $request, $app)) {
 			$app->abort(404, "User does not exist.");
 		}
@@ -68,13 +71,17 @@ class PublicUserController {
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$json->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
+		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
 		return $json->getResponse();
 			
 	}
 	
 	function jsonp($username, Request $request,Application $app) {
-		
+
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($username, $request, $app)) {
 			$app->abort(404, "User does not exist.");
 		}
@@ -82,6 +89,7 @@ class PublicUserController {
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$jsonp->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
+		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();

@@ -64,13 +64,16 @@ class GroupController {
 	}
 
 	function json($slug, Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
 		}
 
 		
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$json->build();
 		return $json->getResponse();
@@ -78,7 +81,9 @@ class GroupController {
 	}	
 
 	function jsonp($slug, Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
 		}
@@ -86,6 +91,7 @@ class GroupController {
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
+		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();

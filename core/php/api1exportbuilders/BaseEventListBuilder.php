@@ -4,6 +4,10 @@ namespace api1exportbuilders;
 use repositories\builders\EventRepositoryBuilder;
 use models\SiteModel;
 use models\EventModel;
+use models\VenueModel;
+use models\AreaModel;
+use models\CountryModel;
+use repositories\builders\MediaRepositoryBuilder;
 
 /**
  *
@@ -19,7 +23,27 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 	
 	protected $events = array();
 
-	
+
+	protected $includeEventMedias = false;
+
+	/**
+	 * @param boolean $includeEventMedias
+	 */
+	public function setIncludeEventMedias($includeEventMedias)
+	{
+		$this->includeEventMedias = $includeEventMedias;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIncludeEventMedias()
+	{
+		return $this->includeEventMedias;
+	}
+
+
+
 	public function __construct(SiteModel $site = null, $timeZone = null, $title = null) {
 		parent::__construct($site, $timeZone, $title);
 		$this->eventRepositoryBuilder = new EventRepositoryBuilder();
@@ -28,12 +52,20 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 		if ($site) $this->eventRepositoryBuilder->setSite($site);
 	}
 
-	abstract public function addEvent(EventModel $event);
+	abstract public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
+									  AreaModel $area = null, CountryModel $country = null, $eventMedias = array());
 
 	
-	public function build() {	
+	public function build() {
 		foreach($this->eventRepositoryBuilder->fetchAll() as $event) {
-			$this->addEvent($event, null, $event->getVenue(), $event->getArea());
+			$eventMedias = null;
+			if ($this->includeEventMedias) {
+				$mrb = new MediaRepositoryBuilder();
+				$mrb->setEvent($event);
+				$mrb->setIncludeDeleted(false);
+				$eventMedias = $mrb->fetchAll();
+			}
+			$this->addEvent($event, null, $event->getVenue(), $event->getArea(), null, $eventMedias);
 		}
 	}
 		

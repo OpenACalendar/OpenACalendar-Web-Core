@@ -49,19 +49,25 @@ class VenueVirtualController {
 	}
 
 	function json(Request $request, Application $app) {
-		
+
+
+		$ourRequest = new \Request($request);
+
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
 		return $json->getResponse();
 				
 	}	
 
 	function jsonp(Request $request, Application $app) {
-		
+
+		$ourRequest = new \Request($request);
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();

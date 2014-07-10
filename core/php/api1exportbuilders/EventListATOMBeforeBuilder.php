@@ -4,6 +4,10 @@ namespace api1exportbuilders;
 
 use models\SiteModel;
 use models\EventModel;
+use models\VenueModel;
+use models\AreaModel;
+use models\CountryModel;
+
 
 /**
  *
@@ -74,7 +78,8 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 	}
 	
 	
-	public function addEvent(EventModel $event) {
+	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
+							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
 		global $CONFIG;
 		
 		if ($event->getIsDeleted()) return false;
