@@ -12,7 +12,7 @@
 		<span style="display: block; font-size: 12pt; color: white;">{{ event.getStartAt|tolocaltimeformatted('M \'y', event.timeZone ) }}</span>
 	</div>
 	<p style="font-weight: bold;">{{ event.summaryDisplay }}</p>
-	<p style="clear:both; padding: 5px 0;">{{ event.description }}</p>
+	<p style="clear:both; padding: 5px 0;">{{ event.description | nl2br }}</p>
 	<p style="padding: 5px 10px 5px 20px; color: #ec2327; background: url('{{  config.getWebSiteDomainSecure(site.slug)  }}/theme/default/img/eventFooterCalendarIcon.png') no-repeat;">{{ event.startAt |tolocaltimeformatted12or24hourclock('g:ia D M Y', 'H:i D M Y', currentUserClock12Hour, currentTimeZone )}} ({{ event.timeZone }})</p>
 	<p style="padding: 5px 0;">
 		<a href="{{  config.getWebSiteDomainSecure(site.slug)  }}/event/{{ event.slugForUrl }}/recur">Recurs Weekly or Monthly</a>
