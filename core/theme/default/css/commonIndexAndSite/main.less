@@ -265,7 +265,7 @@ div.filterListEventWrapper {
 	#innerPageActions {
 		padding: 10px 0 6px 0;
 		border-bottom: 1px solid #666;
-		li.action {
+		li.action, li.actionWithSubMenu {
 			padding: 0px 5px;
 			display: inline;
 			float: right;
@@ -281,6 +281,32 @@ div.filterListEventWrapper {
 				display:block;
 				float: none;
 				margin: 15px 0;
+			}
+		}
+		li.actionWithSubMenu ul.submenu {
+			padding:0;
+			margin: 0;
+			display:none;
+			position: absolute;
+			background: #FFF;
+			border-bottom: #4d3e04 2px solid;
+			border-left: #4d3e04 2px solid;
+			border-right: #4d3e04 2px solid;
+			z-index: 999;
+			li {
+				list-style-type: none;
+				display: block;
+				a {
+					text-decoration: none;
+					color: #333;
+					font-size: 12pt;
+					padding: 5px;
+					display:inline-block;
+				}
+				a:hover {
+					color: black;
+					text-decoration: underline;
+				}
 			}
 		}
 		li.tab {

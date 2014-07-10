@@ -783,25 +783,55 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   padding: 10px 0 6px 0;
   border-bottom: 1px solid #666;
 }
-#innerPageWrapper #innerPageActions li.action {
+#innerPageWrapper #innerPageActions li.action,
+#innerPageWrapper #innerPageActions li.actionWithSubMenu {
   padding: 0px 5px;
   display: inline;
   float: right;
 }
-#innerPageWrapper #innerPageActions li.action a {
+#innerPageWrapper #innerPageActions li.action a,
+#innerPageWrapper #innerPageActions li.actionWithSubMenu a {
   color: #333;
   text-decoration: none;
 }
-#innerPageWrapper #innerPageActions li.action a:hover {
+#innerPageWrapper #innerPageActions li.action a:hover,
+#innerPageWrapper #innerPageActions li.actionWithSubMenu a:hover {
   color: black;
   text-decoration: underline;
 }
 @media screen and (max-width: 500px) {
-  #innerPageWrapper #innerPageActions li.action {
+  #innerPageWrapper #innerPageActions li.action,
+  #innerPageWrapper #innerPageActions li.actionWithSubMenu {
     display: block;
     float: none;
     margin: 15px 0;
   }
+}
+#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu {
+  padding: 0;
+  margin: 0;
+  display: none;
+  position: absolute;
+  background: #FFF;
+  border-bottom: #4d3e04 2px solid;
+  border-left: #4d3e04 2px solid;
+  border-right: #4d3e04 2px solid;
+  z-index: 999;
+}
+#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li {
+  list-style-type: none;
+  display: block;
+}
+#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 12pt;
+  padding: 5px;
+  display: inline-block;
+}
+#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a:hover {
+  color: black;
+  text-decoration: underline;
 }
 #innerPageWrapper #innerPageActions li.tab {
   -webkit-border-top-right-radius: 3px;

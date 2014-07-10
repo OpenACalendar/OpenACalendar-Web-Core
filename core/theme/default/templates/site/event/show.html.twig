@@ -21,7 +21,27 @@
 {% block actions %}
 	{% if currentUserCanEditSite %}
 		{% if not event.isDeleted %}
-			<li class="action"><a href="/event/{{ event.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a></li>
+			{%  if currentSite.isFeaturePhysicalEvents or currentSite.isFeatureTag or currentSite.isFeatureGroup %}
+				<li class="actionWithSubMenu">
+					<a href="/event/{{ event.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+					<ul class="submenu">
+						<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
+						{% if currentSite.isFeaturePhysicalEvents %}
+							<li><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></li>
+						{% endif %}
+						{% if currentSite.isFeatureTag %}
+							<li><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></li>
+						{% endif %}
+						{% if currentSite.isFeatureGroup %}
+							<li><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
+						{% endif %}
+					</ul>
+				</li>
+			{%  else %}
+				<li class="action">
+					<a href="/event/{{ event.slugForUrl }}/edit/details"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+				</li>
+			{% endif %}
 			{% if config.isFileStore %}
 				<li class="action">
 					<a href="/event/{{ event.slugForUrl }}/media"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>

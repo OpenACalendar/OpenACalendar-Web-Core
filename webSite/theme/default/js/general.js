@@ -17,9 +17,28 @@ $(document).ready(function() {
 			}
 			if (submenu.css("display") == 'none') {
 				$('#header ul.menu ul.submenu').hide();
+				$('ul#innerPageActions ul.submenu').hide();
 				submenu.show();
 			} else {
 				$('#header ul.menu ul.submenu').hide();
+				$('ul#innerPageActions ul.submenu').hide();
+			}
+			event.preventDefault();
+		}
+	});
+	$('ul#innerPageActions > li.actionWithSubMenu a').click(function( event ) {
+		var submenuLI = $(this).parent();
+		var submenu = submenuLI.children('ul.submenu');
+		if (submenu.size() > 0) {
+			var left = submenuLI.position().left + submenuLI.width() - submenu.width();
+			submenu.css({left:left});
+			if (submenu.css("display") == 'none') {
+				$('#header ul.menu ul.submenu').hide();
+				$('ul#innerPageActions ul.submenu').hide();
+				submenu.show();
+			} else {
+				$('#header ul.menu ul.submenu').hide();
+				$('ul#innerPageActions ul.submenu').hide();
 			}
 			event.preventDefault();
 		}
