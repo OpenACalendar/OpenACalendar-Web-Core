@@ -70,7 +70,8 @@
 					{% endif %}
 				</ul>
 			</li>
-		{% endif %}	
+		{% endif %}
+		{#  the class user is used by JS to move the menu to the left #}
 		<li class="user">
 			{% if currentUser is null %}
 				<a href="/currentuser">Your details</a>
@@ -103,6 +104,7 @@
 			{% endif %}
 		</li>
 		{% if currentUser %}
+			{#  the class user is used by JS to move the menu to the left #}
 			<li id="NotificationMenu" class="user">
 				<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink">
 					<img src="/theme/default/img/notifications.png" class="notificationicon" alt="Notifications" title="Notifications"> 

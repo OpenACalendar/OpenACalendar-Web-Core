@@ -13,7 +13,7 @@ $(document).ready(function() {
 		if (submenu.size() > 0) {
 			if (submenuLI.hasClass("user")) {
 				var left = submenuLI.position().left + submenuLI.width() - submenu.width();
-				submenu.css({left:left});				
+				submenu.css({left:Math.max(0,left)});
 			}
 			if (submenu.css("display") == 'none') {
 				$('#header ul.menu ul.submenu').hide();
@@ -31,7 +31,7 @@ $(document).ready(function() {
 		var submenu = submenuLI.children('ul.submenu');
 		if (submenu.size() > 0) {
 			var left = submenuLI.position().left + submenuLI.width() - submenu.width();
-			submenu.css({left:left});
+			submenu.css({left:Math.max(0,left)});
 			if (submenu.css("display") == 'none') {
 				$('#header ul.menu ul.submenu').hide();
 				$('ul#innerPageActions ul.submenu').hide();
