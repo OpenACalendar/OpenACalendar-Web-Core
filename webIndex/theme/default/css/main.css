@@ -443,6 +443,24 @@ table.pricing tr td.parameterValue {
     display: block;
   }
 }
+.iconKeyLarge {
+  background-image: url('/theme/default/img/key32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconBellOLarge {
+  background-image: url('/theme/default/img/bello32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconCalendarOLarge {
+  background-image: url('/theme/default/img/calendaro32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
 .PopupBox #EventPopupContent {
   padding: 5px;
 }
@@ -1042,7 +1060,7 @@ ul.breadcrumbs li {
   display: inline;
   font-size: 0.8em;
   padding: 5px 10px 5px 15px;
-  background: url('/theme/default/img/breadcrumbsDivider.png') left center no-repeat;
+  background: url('/theme/default/img/angleright16.png') left center no-repeat;
 }
 @media screen and (max-width: 500px) {
   ul.breadcrumbs li {
@@ -1126,4 +1144,46 @@ ul.usernotifications li.usernotificationunread a.title {
 }
 ul.usernotifications li.usernotificationunread a.title {
   font-size: 1.1em;
+}
+.iconDownloadSmall {
+  background-image: url('/theme/default/img/download16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconDownloadLarge {
+  background-image: url('/theme/default/img/download32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconBellOSmall {
+  background-image: url('/theme/default/img/bello16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconAppleSmall {
+  background-image: url('/theme/default/img/apple16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconQuestionCircleSmall {
+  background-image: url('/theme/default/img/questioncircle16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconEnvelopeOLarge {
+  background-image: url('/theme/default/img/envelopeo32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconGearsLarge {
+  background-image: url('/theme/default/img/gears32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
 }

@@ -23,33 +23,33 @@
 
 	<ul class="actionList">
 	
-		<li><a href="/admin/profile"><img src="/theme/default/img/actionProfileIcon.png">Profile</a></li>
+		<li><a href="/admin/profile"><div class="iconUserLarge"></div> Profile</a></li>
 
-		<li><a href="/admin/visibility"><img src="/theme/default/img/actionVisibilityIcon.png">Visiblity</a></li>
+		<li><a href="/admin/visibility"><div class="iconEyeLarge"></div> Visiblity</a></li>
 		
 		{% if not config.isSingleSiteMode and currentUserOwnsSite %}
-			<li><a href="/admin/owner"><img src="/theme/default/img/actionOwnerIcon.png">Owner</a></li>
+			<li><a href="/admin/owner"><div class="iconUserLarge"></div> Owner</a></li>
 		{% endif %}
 		
-		<li><a href="/admin/users"><img src="/theme/default/img/actionUsersIcon.png">Users (Administrators & Editors)</a></li>
+		<li><a href="/admin/users"><div class="iconUsersLarge"></div> Users (Administrators & Editors)</a></li>
 		
-		<li><a href="/admin/countries"><img src="/theme/default/img/actionPlacesIcon.png">Countries</a></li>
+		<li><a href="/admin/countries"><div class="iconGlobeLarge"></div> Countries</a></li>
 		
 		{% if currentSite.isFeaturePhysicalEvents %}
-			<li><a href="/admin/areas"><img src="/theme/default/img/actionPlacesIcon.png">Areas in a country</a></li>
+			<li><a href="/admin/areas"><div class="iconGlobeLarge"></div> Areas in a country</a></li>
 		{% endif %}
 		
 		{% if currentSite.getIsFeatureTag %}
-			<li><a href="/admin/tag"><img src="/theme/default/img/actionTagsIcon.png">Tags</a></li>
+			<li><a href="/admin/tag"><div class="iconTagsLarge"></div> Tags</a></li>
 		{% endif %}
 		
-		<li><a href="/admin/sendemail"><img src="/theme/default/img/actionEmailIcon.png">Send Email with Events</a></li>
+		<li><a href="/admin/sendemail"><div class="iconEnvelopeOLarge"></div> Send Email with Events</a></li>
 		
-		<li><a href="/admin/features"><img src="/theme/default/img/actionFeaturesIcon.png">Features</a></li>
+		<li><a href="/admin/features"><div class="iconGearsLarge"></div> Features</a></li>
 		
-		<li><a href="/admin/settings"><img src="/theme/default/img/actionFeaturesIcon.png">Settings</a></li>
+		<li><a href="/admin/settings"><div class="iconGearsLarge"></div> Settings</a></li>
 
-		<li><a href="/admin/media"><img src="/theme/default/img/actionMediaIcon.png">Media Storage</a></li>
+		<li><a href="/admin/media"><div class="iconFileImageOLarge"></div> Media Storage</a></li>
 
 	</ul>
 

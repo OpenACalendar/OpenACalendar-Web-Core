@@ -39,6 +39,11 @@ Note this software includes some static data.
 * Time Zone data http://www.iana.org/time-zones
 * Country Bound Data http://wiki.openstreetmap.org/wiki/User:Ewmjc/Country_bounds
 
+Note this software includes other assets.
+
+* FamFam Flags http://www.famfamfam.com/lab/icons/flags/
+* Font Awesome
+
 Note this software includes other libraries.
 
 * password-compat
@@ -49,7 +54,6 @@ Note this software includes other libraries.
 * Swiftmailer
 * Symfony
 * Twig
-* FamFam Flags http://www.famfamfam.com/lab/icons/flags/
 * JQuery
 * JQueryUI
 * Leaflet
@@ -59,4 +63,3 @@ The build scripts will install (via composer):
 
 * assetic
 * lessphp
-

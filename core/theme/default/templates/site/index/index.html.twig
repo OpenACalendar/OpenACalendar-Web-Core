@@ -66,11 +66,11 @@
 	<ul class="events">
 		<li class="export">
 			<a href="/api1/events.ical" onclick="showExportPopup(); return false;">
-				<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+				<div class="iconDownloadSmall"></div> export
 			</a>
 			{% if currentSite.getIsWebRobotsAllowed %}
 				<a href="#" onclick="showSharePopup(); return false;">
-					<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+					<div class="iconShareSmall"></div> share
 				</a>
 			{% endif %}				
 		</li>

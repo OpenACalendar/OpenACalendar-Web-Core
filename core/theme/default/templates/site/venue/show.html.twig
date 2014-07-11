@@ -18,25 +18,23 @@
 
 {% block actions %}
 	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
-		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> delete</a></li>
-		<li class="action">
-			<a href="/venue/{{ venue.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
-		</li>
+		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
+		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a></li>
 		{% if config.isFileStore %}
 			<li class="action">
-				<a href="/venue/{{ venue.slugForUrl }}/media"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
+				<a href="/venue/{{ venue.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
 			</li>		
 		{% endif %}
 	{% endif %}
 	<li class="action">
 		<a href="/api1/venue/{{ venue.slug }}/events.ical" onclick="showExportPopup(); return false;">
-			<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+			<div class="iconDownloadSmall"></div> export
 		</a>
 	</li>
 	{% if currentSite.getIsWebRobotsAllowed %}
 		<li class="action">
 			<a href="#" onclick="showSharePopup(); return false;">
-				<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+				<div class="iconShareSmall"></div> share
 			</a>
 		</li>
 	{% endif %}

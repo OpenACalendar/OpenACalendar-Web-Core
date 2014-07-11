@@ -55,7 +55,7 @@ function showExportPopup() {
 		html += '<ul id="ExportPopupMenu">';
 		// space needed at start, then no spaces in tag. So can get wrap to work.
 		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;">Google Calendar</a></span></li>';
-		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><img src="/theme/default/img/apple.png" alt="Apple">iCal/iPhone/iPad</a></span></li>';
+		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="iconAppleSmall"></div> iCal/iPhone/iPad</a></span></li>';
 		html += ' <li class="ical" id="ExportToATOMTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToATOM\'); return false;">News reader (ATOM/RSS)</a></span></li>';
 		html += ' <li class="ical" id="ExportToICALTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToICAL\'); return false;">ics/ical file</a></span></li>';
 		html += ' <li class="ical" id="ExportToJSONTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToJSON\'); return false;">JSON</a></span></li>';
@@ -300,9 +300,9 @@ function showSharePopup() {
 		
 		html += '<ul class="SharePopupOptions">'
 		
-		html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><img src="/theme/default/img/logoTwitter.png" alt="Twitter"></a></li>';
-		html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><img src="/theme/default/img/logoFacebook.png" alt="Facebook"></a></li>';
-		html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><img src="/theme/default/img/logoGooglePlus.png" alt="Google Plus"></a></li>';
+		html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><div class="iconTwitterLarge" title="Twitter"></div></li>';
+		html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><div class="iconFacebookSquareLarge" title="Facebook"></div></a></li>';
+		html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><div class="iconGoogleLarge" title="Google Plus"></div></a></li>';
 		
 		html += '</ul>'
 		

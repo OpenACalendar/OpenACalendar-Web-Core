@@ -22,23 +22,23 @@
 			<div id="headerOptions">
 				<div id="actions">
 					<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
-						<img src="/theme/default/img/calendarExport.png" alt="Export" title="Export">
+						<div class="iconDownloadLarge" title="Export"></div>
 					</a>
 					{% if prevYear %}
 						<a href="/me/calendar/{{ prevYear }}/{{ prevMonth }}">
-							<img src="/theme/default/img/calendarPrev.png" alt="Previous" title="Previous">
+							<div class="iconArrowLeftLarge" title="Previous"></div>
 						</a>
 					{% endif %}
 					<a href="/me/calendar/">
-						<img src="/theme/default/img/calendarToday.png" alt="Today" title="Today">
+						<div class="iconClockOLarge" title="Today"></div>
 					</a>
 					{% if nextYear %}
 						<a href="/me/calendar/{{ nextYear }}/{{ nextMonth }}">
-							<img src="/theme/default/img/calendarNext.png" alt="Next" title="Next">
+							<div class="iconArrowRightLarge" title="Next"></div>
 						</a>
 					{% endif %}
 					<a href="/me/">
-						<img src="/theme/default/img/calendarClose.png" alt="Close" title="Close">
+						<div class="iconTimesCircleOLarge" title="Close"></div>
 					</a>
 				</div>
 				<div id="calendarPosition">

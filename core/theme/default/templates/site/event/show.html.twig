@@ -23,7 +23,7 @@
 		{% if not event.isDeleted %}
 			{%  if currentSite.isFeaturePhysicalEvents or currentSite.isFeatureTag or currentSite.isFeatureGroup %}
 				<li class="actionWithSubMenu">
-					<a href="/event/{{ event.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+					<a href="/event/{{ event.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 					<ul class="submenu">
 						<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
 						{% if currentSite.isFeaturePhysicalEvents %}
@@ -39,12 +39,12 @@
 				</li>
 			{%  else %}
 				<li class="action">
-					<a href="/event/{{ event.slugForUrl }}/edit/details"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+					<a href="/event/{{ event.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> edit</a>
 				</li>
 			{% endif %}
 			{% if config.isFileStore %}
 				<li class="action">
-					<a href="/event/{{ event.slugForUrl }}/media"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> media</a>
+					<a href="/event/{{ event.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
 				</li>
 			{% endif %}
 		{% endif %}
@@ -53,7 +53,7 @@
 				{% if group is not null or currentSite.isFeatureGroup %}
 					<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> recur</a></li>
 				{% endif %}
-				<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> delete</a></li>
+				<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
 			{% else %}
 				<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> undelete</a></li>
 			{% endif %}
@@ -61,13 +61,13 @@
 	{% endif %}
 	<li class="action">
 		<a href="/api1/event/{{ event.slug }}/info.ical" onclick="showExportPopup(); return false;">
-			<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+			<div class="iconDownloadSmall"></div> export
 		</a>
 	</li>
 	{% if currentSite.getIsWebRobotsAllowed %}
 		<li class="action">
 			<a href="#" onclick="showSharePopup(); return false;">
-				<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+				<div class="iconShareSmall"></div>  share
 			</a>
 		</li>
 	{% endif %}

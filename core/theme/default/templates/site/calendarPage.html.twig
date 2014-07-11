@@ -82,19 +82,19 @@
 				<div id="actions">
 
 					<a href="#" onclick="showExportPopup(); return false;">
-						<img src="/theme/default/img/calendarExport.png" alt="Export" title="Export">
+						<div class="iconDownloadLarge" title="Export"></div>
 					</a>
 					{% if prevYear %}
 						<a href="{{ calURL }}/{{ prevYear }}/{{ prevMonth }}">
-							<img src="/theme/default/img/calendarPrev.png" alt="Previous" title="Previous">
+							<div class="iconArrowLeftLarge" title="Previous"></div>
 						</a>
 					{% endif %}
 					<a href="{{ calURL }}">
-						<img src="/theme/default/img/calendarToday.png" alt="Today" title="Today">
+						<div class="iconClockOLarge" title="Today"></div>
 					</a>
 					{% if nextYear %}
 						<a href="{{ calURL }}/{{ nextYear }}/{{ nextMonth }}">
-							<img src="/theme/default/img/calendarNext.png" alt="Next" title="Next">
+							<div class="iconArrowRightLarge" title="Next"></div>
 						</a>
 					{% endif %}
 
@@ -115,7 +115,7 @@
 					{% else %}
 						<a href="/event/">
 					{% endif %}
-						<img src="/theme/default/img/calendarClose.png" alt="Close" title="Close">
+						<div class="iconTimesCircleOLarge" title="Close"></div>
 					</a>							
 				</div>
 				<div id="calendarPosition">

@@ -1211,6 +1211,84 @@ ul.areasAdmin li.area span.contentNew a {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
+.iconTagsLarge {
+  background-image: url('/theme/default/img/tags32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconFileImageOSmall {
+  background-image: url('/theme/default/img/fileimageo16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconFileImageOLarge {
+  background-image: url('/theme/default/img/fileimageo32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconUsersLarge {
+  background-image: url('/theme/default/img/users32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconUserLarge {
+  background-image: url('/theme/default/img/user32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconGlobeLarge {
+  background-image: url('/theme/default/img/globe32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconEyeLarge {
+  background-image: url('/theme/default/img/eye32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconFacebookSquareLarge {
+  background-image: url('/theme/default/img/facebooksquare32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconTwitterLarge {
+  background-image: url('/theme/default/img/twitter32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconGoogleLarge {
+  background-image: url('/theme/default/img/google32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconShareSmall {
+  background-image: url('/theme/default/img/share16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconPencilSmall {
+  background-image: url('/theme/default/img/pencil16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconTrashOSmall {
+  background-image: url('/theme/default/img/trasho16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
 .PopupBox #EventPopupContent {
   padding: 5px;
 }
@@ -1810,7 +1888,7 @@ ul.breadcrumbs li {
   display: inline;
   font-size: 0.8em;
   padding: 5px 10px 5px 15px;
-  background: url('/theme/default/img/breadcrumbsDivider.png') left center no-repeat;
+  background: url('/theme/default/img/angleright16.png') left center no-repeat;
 }
 @media screen and (max-width: 500px) {
   ul.breadcrumbs li {
@@ -1894,4 +1972,46 @@ ul.usernotifications li.usernotificationunread a.title {
 }
 ul.usernotifications li.usernotificationunread a.title {
   font-size: 1.1em;
+}
+.iconDownloadSmall {
+  background-image: url('/theme/default/img/download16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconDownloadLarge {
+  background-image: url('/theme/default/img/download32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconBellOSmall {
+  background-image: url('/theme/default/img/bello16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconAppleSmall {
+  background-image: url('/theme/default/img/apple16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconQuestionCircleSmall {
+  background-image: url('/theme/default/img/questioncircle16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconEnvelopeOLarge {
+  background-image: url('/theme/default/img/envelopeo32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.iconGearsLarge {
+  background-image: url('/theme/default/img/gears32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
 }

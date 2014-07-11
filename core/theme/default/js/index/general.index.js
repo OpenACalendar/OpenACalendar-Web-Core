@@ -24,7 +24,7 @@ function showExportPopup() {
 		html += '<ul id="ExportPopupMenu">';
 		// space needed at start, then no spaces in tag. So can get wrap to work.
 		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;">Google Calendar</a></span></li>';
-		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><img src="/theme/default/img/apple.png" alt="Apple">iCal/iPhone/iPad</a></span></li>';
+		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="iconAppleSmall"></div> iCal/iPhone/iPad</a></span></li>';
 		html += ' <li class="ical" id="ExportToICALTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToICAL\'); return false;">ics/ical file</a></span></li>';
 		html += '</ul>';
 		html += '<div class="content" id="ExportToGoogleCalendar">';
