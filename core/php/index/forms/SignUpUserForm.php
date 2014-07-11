@@ -24,7 +24,7 @@ class SignUpUserForm  extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		global $CONFIG;
 		
-		$builder->add('email', 'text', array(
+		$builder->add('email', 'email', array(
 			'label'=>'Email',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
