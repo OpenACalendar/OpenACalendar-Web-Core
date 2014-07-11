@@ -28,6 +28,18 @@
 			</li>		
 		{% endif %}
 	{% endif %}
+	<li class="action">
+		<a href="/api1/venue/{{ venue.slug }}/events.ical" onclick="showExportPopup(); return false;">
+			<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+		</a>
+	</li>
+	{% if currentSite.getIsWebRobotsAllowed %}
+		<li class="action">
+			<a href="#" onclick="showSharePopup(); return false;">
+				<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+			</a>
+		</li>
+	{% endif %}
 {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}

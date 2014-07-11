@@ -59,6 +59,18 @@
 			{% endif %}
 		{% endif %}
 	{% endif %}
+	<li class="action">
+		<a href="/api1/event/{{ event.slug }}/info.ical" onclick="showExportPopup(); return false;">
+			<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+		</a>
+	</li>
+	{% if currentSite.getIsWebRobotsAllowed %}
+		<li class="action">
+			<a href="#" onclick="showSharePopup(); return false;">
+				<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+			</a>
+		</li>
+	{% endif %}
 {% endblock %}
 
 

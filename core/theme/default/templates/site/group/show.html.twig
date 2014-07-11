@@ -31,6 +31,27 @@
 			<a href="/group/{{ group.slugForUrl }}/newevent"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new event</a>
 		</li>
 	{% endif %}
+	<li class="action">
+		<a href="/api1/group/{{ group.slug }}/events.ical" onclick="showExportPopup(); return false;">
+			<img src="/theme/default/img/actionExportIcon.png?v={{ config.assetsVersion }}" class="icon"> export
+		</a>
+	</li>
+	{% if currentSite.getIsWebRobotsAllowed %}
+		<li class="action">
+			<a href="#" onclick="showSharePopup(); return false;">
+				<img src="/theme/default/img/actionShareIcon.png?v={{ config.assetsVersion }}" class="icon"> share
+			</a>
+		</li>
+	{% endif %}
+	{% if currentUser is not null and not currentUserWatchesSite %}
+		<li class="action">
+			{% if currentUserWatchesGroup %}
+				<a href="/group/{{ group.slugForUrl }}/watch/">Watching!</a>
+			{% else %}
+				<a href="/group/{{ group.slugForUrl }}/watch/">Watch?</a>
+			{% endif %}
+		</li>
+	{% endif %}
 {% endblock %}
 
 
