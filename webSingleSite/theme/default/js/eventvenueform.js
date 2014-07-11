@@ -84,11 +84,8 @@ function loadCountry(countryID) {
 					map.fitBounds(bounds);
 				}
 				
-				if (data.childAreas.length > 0) {
-					hideVenues();
-				} else {
-					listVenues(data.venues);
-				}
+
+				listVenues(data.venues);
 			}
 		});
 }
@@ -134,20 +131,11 @@ function loadNextArea(areaSlug, includeCurrentArea) {
 					}
 				}
 				
-				if (data.childAreas.length > 0) {
-					hideVenues();
-				} else {
-					listVenues(data.venues);
-				}
+				listVenues(data.venues);
 			}
 		});	
 	
 	
-}
-
-function hideVenues() {
-	$('#ChangeEventVenueField').hide();
-	$('#ChangeEventVenueList').html('<input type="hidden" name="venue_id" value="no">')
 }
 
 function listVenues(venueList) {
