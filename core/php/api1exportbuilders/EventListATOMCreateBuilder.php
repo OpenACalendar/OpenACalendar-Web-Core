@@ -109,9 +109,9 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 		$content .= '<a href="'.htmlentities($ourUrl).'">More details at '.htmlentities($ourUrl).'</a><br>';
 		$content .= '<p style="font-style:italic;font-size:80%">'.
 					'Powered by <a href="'.$ourUrl.'">'.$CONFIG->siteTitle.'</a>';
-		if ($CONFIG->sponsor1Html && $CONFIG->sponsor1Link) {
-			$content .= ', Sponsored by <a href="'.$CONFIG->sponsor1Link.'">'.$CONFIG->sponsor1Html.'</a>';
-		}		
+		foreach($this->extraFooters as $extraFooter) {
+			$content .= "<br>".$extraFooter->getHtml();
+		}
 		$content .='</p>';
 		
 		$txt .= '<content type="html">'.$this->getBigData($content).'</content>';

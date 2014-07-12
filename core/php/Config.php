@@ -138,23 +138,13 @@ class Config {
 	public $mediaQualityJpeg = 90;
 	public $mediaQualityPng = 2;
 	public $mediaBrowserCacheExpiresInseconds = 7776000; // 90 days
-		
-	/** if sponsor1MightExist is true,but there is no sponsor1, blank placeholders will be sent at certain points **/
-	public $sponsor1MightExist = false;
-	public $sponsor1Text = null;
-	public $sponsor1Html = null;
-	public $sponsor1Link = null;
-	public $sponsor1Image = null;
-
-	public $sponsor2MightExist = false;
-	public $sponsor2Text = null;
-	public $sponsor2Html = null;
-	public $sponsor2Link = null;
-	public $sponsor2Image = null;
 
 	public $apiExtraHeader1Html = null;
 	public $apiExtraHeader1Text = null;
-	
+
+	public $apiExtraFooter1Html = null;
+	public $apiExtraFooter1Text = null;
+
 	public $findDuplicateEventsShow = 3;
 	public $findDuplicateEventsThreshhold = 2;
 	

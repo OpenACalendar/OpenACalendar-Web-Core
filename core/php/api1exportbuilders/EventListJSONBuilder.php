@@ -35,13 +35,6 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 			'data'=>$this->events , 
 			'localtimezone'=>$this->localTimeZone->getName(),
 		));
-		if ($CONFIG->sponsor1Text && $CONFIG->sponsor1Html && $CONFIG->sponsor1Link) {
-			$out['sponsorsHTML'] = '<a href="'.$CONFIG->sponsor1Link.'">'.$CONFIG->sponsor1Html.'</a>';
-			$out['sponsorsText'] = $CONFIG->sponsor1Text.' '.$CONFIG->sponsor1Link;
-		} else if ($CONFIG->sponsor1MightExist) {
-			$out['sponsorsHTML'] = '';
-			$out['sponsorsText'] = '';			
-		}
 		return json_encode($out);
 	}
 	

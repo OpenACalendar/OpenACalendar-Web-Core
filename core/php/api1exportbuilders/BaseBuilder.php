@@ -29,8 +29,11 @@ abstract class BaseBuilder {
 		$this->site = $site;
 		$this->localTimeZone = new \DateTimeZone($timeZone ? $timeZone : "UTC");
 		$this->title = $title;
-		if ($CONFIG->apiExtraHeader1Html && $CONFIG->apiExtraHeader1Text) {
-			$this->addExtraHeadar($CONFIG->apiExtraHeader1Html, $CONFIG->apiExtraHeader1Text);
+		if ($CONFIG->apiExtraHeader1Html || $CONFIG->apiExtraHeader1Text) {
+			$this->addExtraHeader($CONFIG->apiExtraHeader1Html, $CONFIG->apiExtraHeader1Text);
+		}
+		if ($CONFIG->apiExtraFooter1Html || $CONFIG->apiExtraFooter1Text) {
+			$this->addExtraFooter($CONFIG->apiExtraFooter1Html, $CONFIG->apiExtraFooter1Text);
 		}
 	}
 
@@ -46,14 +49,19 @@ abstract class BaseBuilder {
 
 	protected $extraHeaders = array();
 	
-	public function addExtraHeadar($html, $text) {
-		$this->extraHeaders[] = new ExportBuilderExtraHeader($html,$text);
+	public function addExtraHeader($html, $text) {
+		$this->extraHeaders[] = new ExportBuilderExtraHeaderOrFooter($html,$text);
 	}
 
+	protected $extraFooters = array();
+
+	public function addExtraFooter($html, $text) {
+		$this->extraFooters[] = new ExportBuilderExtraHeaderOrFooter($html,$text);
+	}
 	
 }
 
-class ExportBuilderExtraHeader {
+class ExportBuilderExtraHeaderOrFooter {
 	protected $html;
 	protected $text;
 	function __construct($html, $text) {
