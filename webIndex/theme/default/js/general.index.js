@@ -23,15 +23,15 @@ function showExportPopup() {
 		html += '</div>';
 		html += '<ul id="ExportPopupMenu">';
 		// space needed at start, then no spaces in tag. So can get wrap to work.
-		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;">Google Calendar</a></span></li>';
-		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="iconAppleSmall"></div> iCal/iPhone/iPad</a></span></li>';
+		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;"><div class="iconGoogleSmall"></div> Google Calendar</a></span></li>';
+		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="iconAppleSmall"></div> Mac/iPhone/iPad</a></span></li>';
 		html += ' <li class="ical" id="ExportToICALTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToICAL\'); return false;">ics/ical file</a></span></li>';
 		html += '</ul>';
 		html += '<div class="content" id="ExportToGoogleCalendar">';
 			html += '<p>In Google Calendar, click the drop down menu next to "Other calendars". Select "Add by URL" and copy and paste this in:</p><input type="text" class="exportlink"></p>';
 		html += '</div>'
 		html += '<div class="content" id="ExportToAppleCalendar">';
-			html += '<p>For Apple iPhone/iPad <a href="#" target="_blank" class="exportlink">click here to subscribe</a>.</p>';
+			html += '<p>For Apple Mac/iPhone/iPad <a href="#" target="_blank" class="exportlink">click here to subscribe</a>.</p>';
 		html += '</div>'
 		html += '<div class="content" id="ExportToICAL">';
 			html += '<p>For ical <a href="#" target="_blank" class="exportlink">click here</a>.</p>';

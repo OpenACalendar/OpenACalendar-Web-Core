@@ -1997,6 +1997,12 @@ ul.usernotifications li.usernotificationunread a.title {
   height: 16px;
   display: inline-block;
 }
+.iconGoogleSmall {
+  background-image: url('/theme/default/img/google16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
 .iconQuestionCircleSmall {
   background-image: url('/theme/default/img/questioncircle16.png');
   width: 16px;

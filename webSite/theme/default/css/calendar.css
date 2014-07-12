@@ -484,6 +484,12 @@ table.calendar .deleted {
   height: 16px;
   display: inline-block;
 }
+.iconGoogleSmall {
+  background-image: url('/theme/default/img/google16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
 #footer {
   padding: 10px 5px;
   text-align: center;
