@@ -84,7 +84,7 @@
 									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug |e('js')}}' }); return false;">
 										{{ event.getSummaryDisplay()  }} 
 									</a>
-									<div class="before"></div>
+									<div class="below"></div>
 								</div>
 							{% endfor %}
 							{% for event in data.events %}
@@ -100,7 +100,7 @@
 									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug }}' }); return false;">
 										{{ event.getSummaryDisplay() }}
 									</a>
-									<div class="before"></div>
+									<div class="below"></div>
 								</div>
 							{% endfor %}
 						</div>

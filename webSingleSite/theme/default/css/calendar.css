@@ -319,6 +319,9 @@ table.calendar .event div.currentUserAttendance {
 table.calendar .event div.currentUserAttendance a {
   text-decoration: none;
 }
+table.calendar .event .below {
+  clear: both;
+}
 table.calendar .deleted {
   background: url('/theme/default/img/deletedBackground.png');
 }
