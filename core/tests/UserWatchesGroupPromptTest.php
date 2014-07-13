@@ -29,15 +29,380 @@ class UserWatchesGroupPromptTest extends \PHPUnit_Framework_TestCase {
 	}
 
 
-	// TODO test1 from UserWatchesSitePromptTest
+	/**
+	 * No events. Don't send email.
+	 * @global type $CONFIG
+	 */
+	function test1() {
+		global $CONFIG;
 
-	// TODO test2 from UserWatchesSitePromptTest
+		\TimeSource::mock(2013, 1, 1, 0, 0, 0);
+		$CONFIG->userWatchesPromptEmailSafeGapDays = 30;
 
-	// TODO test3 from UserWatchesSitePromptTest
+		$DB = getNewTestDB();
 
-	// TODO test4 from UserWatchesSitePromptTest
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
 
-	// TODO test5 from UserWatchesSitePromptTest
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("Group");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		$eventRepo = new EventRepository();
+
+		// User will watch site automatically in site->create()
+		// We don't want that, we want the group instead
+		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
+		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
+
+
+		# Test
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$data = $userWatchesGroup->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInGroupId($group->getId()));
+		$this->assertFalse($data['moreEventsNeeded']);
+
+	}
+
+	/**
+	 * One event, months ago. Def send email.
+	 * @global type $CONFIG
+	 */
+	function test2() {
+		global $CONFIG;
+
+		\TimeSource::mock(2013, 1, 1, 0, 0, 0);
+		$CONFIG->userWatchesPromptEmailSafeGapDays = 30;
+
+		$DB = getNewTestDB();
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("Group");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		$event = new EventModel();
+		$start = \TimeSource::getDateTime();
+		$start->setDate(2013, 5, 1);
+		$start->setTime(0,0,0);
+		$event->setStartAt($start);
+		$end = \TimeSource::getDateTime();
+		$end->setDate(2013, 5, 1);
+		$end->setTime(1,0,0);
+		$event->setEndAt($end);
+
+		$eventRepo = new EventRepository();
+		$eventRepo->create($event, $site, $user, $group);
+
+		// User will watch site automatically in site->create()
+		// We don't want that, we want the group instead
+		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
+		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
+
+		# Test
+		\TimeSource::mock(2013, 9, 1, 0, 0, 0);
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$data = $userWatchesGroup->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInGroupId($group->getId()));
+		$this->assertTrue($data['moreEventsNeeded']);
+
+
+	}
+
+	/**
+	 * One event, months in future. Don't Send email.
+	 * @global type $CONFIG
+	 */
+	function test3() {
+		global $CONFIG;
+
+		\TimeSource::mock(2013, 1, 1, 0, 0, 0);
+		$CONFIG->userWatchesPromptEmailSafeGapDays = 30;
+
+		$DB = getNewTestDB();
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("Group");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		$event = new EventModel();
+		$start = \TimeSource::getDateTime();
+		$start->setDate(2013, 12, 1);
+		$start->setTime(0,0,0);
+		$event->setStartAt($start);
+		$end = \TimeSource::getDateTime();
+		$end->setDate(2013, 12, 1);
+		$end->setTime(1,0,0);
+		$event->setEndAt($end);
+
+		$eventRepo = new EventRepository();
+		$eventRepo->create($event, $site, $user, $group);
+
+
+		// User will watch site automatically in site->create()
+		// We don't want that, we want the group instead
+		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
+		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
+
+
+		# Test
+		\TimeSource::mock(2013, 6, 1, 0, 0, 0);
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$data = $userWatchesGroup->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInGroupId($group->getId()));
+		$this->assertFalse($data['moreEventsNeeded']);
+
+
+	}
+
+	/**
+	 * One event, week from now, send email.
+	 * @global type $CONFIG
+	 */
+	function test4() {
+		global $CONFIG;
+
+		\TimeSource::mock(2013, 1, 1, 0, 0, 0);
+		$CONFIG->userWatchesPromptEmailSafeGapDays = 30;
+
+		$DB = getNewTestDB();
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("Group");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		$event = new EventModel();
+		$start = \TimeSource::getDateTime();
+		$start->setDate(2013, 6, 7);
+		$start->setTime(0,0,0);
+		$event->setStartAt($start);
+		$end = \TimeSource::getDateTime();
+		$end->setDate(2013, 6, 7);
+		$end->setTime(1,0,0);
+		$event->setEndAt($end);
+
+		$eventRepo = new EventRepository();
+		$eventRepo->create($event, $site, $user, $group);
+
+
+		// User will watch site automatically in site->create()
+		// We don't want that, we want the group instead
+		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
+		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
+
+
+		# Test
+		\TimeSource::mock(2013, 6, 1, 0, 0, 0);
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$data = $userWatchesGroup->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInGroupId($group->getId()));
+		$this->assertTrue($data['moreEventsNeeded']);
+
+
+	}
+
+	/**
+	 * One event, week from now, but email sent 29 days ago. Don't send email.
+	 * This tests $CONFIG->userWatchesPromptEmailSafeGapDays works.
+	 * @global type $CONFIG
+	 */
+	function test4a() {
+
+		global $CONFIG;
+		$CONFIG->userWatchesPromptEmailSafeGapDays = 30;
+
+		\TimeSource::mock(2013, 1, 1, 0, 0, 0);
+
+		$DB = getNewTestDB();
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("Group");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		$event = new EventModel();
+		$start = \TimeSource::getDateTime();
+		$start->setDate(2013, 6, 7);
+		$start->setTime(0,0,0);
+		$event->setStartAt($start);
+		$end = \TimeSource::getDateTime();
+		$end->setDate(2013, 6, 7);
+		$end->setTime(1,0,0);
+		$event->setEndAt($end);
+
+		$eventRepo = new EventRepository();
+		$eventRepo->create($event, $site, $user, $group);
+
+		// User will watch site automatically in site->create()
+		// We don't want that, we want the group instead
+		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
+		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
+
+		\TimeSource::mock(2013, 5, 2, 0, 0, 0);
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$userWatchesGroupRepo->markPromptEmailSent($userWatchesGroup, \TimeSource::getDateTime());
+
+		# Test
+		\TimeSource::mock(2013, 6, 1, 0, 0, 0);
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$data = $userWatchesGroup->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInGroupId($group->getId()));
+		$this->assertFalse($data['moreEventsNeeded']);
+
+
+	}
+
+	/**
+	 * One event, week from now, but emailed yesterday, dont send email.
+	 * @global type $CONFIG
+	 */
+	function test5() {
+		global $CONFIG;
+		$CONFIG->userWatchesPromptEmailSafeGapDays = 30;
+
+		\TimeSource::mock(2013, 1, 1, 0, 0, 0);
+
+		$DB = getNewTestDB();
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("Group");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		$event = new EventModel();
+		$start = \TimeSource::getDateTime();
+		$start->setDate(2013, 6, 7);
+		$start->setTime(0,0,0);
+		$event->setStartAt($start);
+		$end = \TimeSource::getDateTime();
+		$end->setDate(2013, 6, 7);
+		$end->setTime(1,0,0);
+		$event->setEndAt($end);
+
+		$eventRepo = new EventRepository();
+		$eventRepo->create($event, $site, $user, $group);
+
+		// User will watch site automatically in site->create()
+		// We don't want that, we want the group instead
+		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
+		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
+
+
+		\TimeSource::mock(2013, 6, 1, 0, 0, 0);
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$userWatchesGroupRepo->markPromptEmailSent($userWatchesGroup, \TimeSource::getDateTime());
+
+		# Test
+		\TimeSource::mock(2013, 6, 2, 0, 0, 0);
+		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $group);
+		$data = $userWatchesGroup->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInGroupId($group->getId()));
+		$this->assertFalse($data['moreEventsNeeded']);
+
+
+	}
 
 	/**
 	 * One event, 31 days from now, then 30 days, then 29 days, etc, only 1 email sent
@@ -89,7 +454,6 @@ class UserWatchesGroupPromptTest extends \PHPUnit_Framework_TestCase {
 		// We don't want that, we want the group instead
 		$userWatchesSiteRepo = new UserWatchesSiteRepository();
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-
 		$userWatchesGroupRepo = new UserWatchesGroupRepository();
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 		
