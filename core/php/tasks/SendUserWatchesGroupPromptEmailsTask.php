@@ -29,7 +29,8 @@ use repositories\UserNotificationRepository;
 class SendUserWatchesGroupPromptEmailsTask {
 
 	public static function run(Application $app, $verbose = false) {
-		
+		global $CONFIG;
+
 		if ($verbose) print "Starting ".date("c")."\n";
 		
 		$userRepo = new UserAccountRepository();
