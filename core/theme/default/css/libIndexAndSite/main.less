@@ -6,11 +6,179 @@
  * @author James Baster <james@jarofgreen.co.uk>
 */
 
-@import("../reset.less");
-@import("../mixins.less");
-@import("../vars.less");
-@import("calendarAndSite.less");
+html {
+	background-color: #B7CFB7;
+}
 
+body {
+	padding: 0;
+	margin: 0;
+	font-family: arial, sans-serif;
+	background-color: #B7CFB7;
+}
+
+#page {
+	max-width: 1000px;
+	margin: 0 auto;
+	background: white;
+}
+
+
+#header {
+	background: #0DA20D;
+	border-bottom: #075007 2px solid;
+	padding: 5px;
+	ul.menu {
+		padding:0;
+		margin: 0;
+		li#NotificationMenu {
+			img.notificationicon {
+				width: 16px;
+				height: 16px;
+			}
+			ul.submenu#NotificationSubMenu {
+				li {
+					padding: 5px;
+					border-bottom: 1px solid #ccc;
+					.title a {
+						display: block;
+						font-size: 10pt;
+						color: #999;
+						padding: 0;
+					}
+					.timesince, .site {
+						display: inline;
+						font-size: 8pt;
+						color: #999;
+						padding: 2px;
+					}
+				}
+				li.unread .title a {
+					font-size: 12pt;
+					color: #333;
+				}
+			}
+		}
+		li {
+			list-style-type: none;
+			display: inline-block;
+			font-size: 1.4em;
+			a {
+				text-decoration: none;
+				color: #333;
+				padding: 5px;
+				display:inline-block;
+			}
+			ul.submenu {
+				padding:0;
+				margin: 0;
+				display:none;
+				position: absolute;
+				background: #FFF;
+				border-bottom: #4d3e04 2px solid;
+				border-left: #4d3e04 2px solid;
+				border-right: #4d3e04 2px solid;
+				z-index: 999;
+				li {
+					list-style-type: none;
+					display: block;
+					a {
+						text-decoration: none;
+						color: #333;
+						font-size: 14pt;
+						padding: 5px;
+						display:inline-block;
+					}
+					a:hover {
+						color: black;
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+		li.title {
+			img {
+				max-width: 30px;
+				max-height: 30px;
+			}
+			h1 {
+				color: black;
+				display: inline;
+				font-weight: bold;
+				font-size: 1.6em;
+			}
+		}
+		li.user {
+			float: right;
+		}
+	}
+	.afterMenu {
+		clear: both;
+	}
+}
+
+#body {
+	min-height: 400px;
+	padding: 5px ;
+	p {
+		padding: 5px 0;
+	}
+}
+
+h2 {
+	font-weight: bold;
+	font-size: 1.5em;
+	padding: 10px 0;
+}
+
+h3 {
+	font-weight: bold;
+	font-size: 1.2em;
+	padding: 10px 0;
+}
+
+#bodyLeft, #bodyRight {
+	padding: 10px 2px;
+	img {
+		max-width: 100%;
+	}
+	p {
+		padding: 5px 0;
+	}
+}
+/** on wide screens have 2 columns here **/
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	#bodyLeft{
+		width: 47%;
+		float: left;
+	}
+	#bodyRight{
+		width: 47%;
+		float: right;
+	}
+	#afterPage2Col {
+		clear: both;
+	}
+}
+
+
+
+.flash-notice {
+	margin: 10px 5px;
+	padding: 10px 5px;
+	text-align: center;
+	background: #cadeea;
+	border: 2px solid #A8C7DB;
+}
+
+
+.flash-error {
+	margin: 10px 5px;
+	padding: 10px 5px;
+	text-align: center;
+	background: #eb6c6c;
+	border: 2px solid #6f1818;
+}
 
 p {
 	margin: 10px 0;
@@ -608,3 +776,30 @@ ul.usernotifications {
 	}
 }
 
+
+#footer {
+	padding: 10px 5px;
+	text-align: center;
+	font-style: italic;
+	font-size: 0.8em;
+	color: #333;
+	a {
+		color: #333;
+	}
+	a:hover {
+		color: black;
+	}
+	ul {
+		li {
+			display: inline;
+			padding: 0 5px;
+		}
+	}
+}
+
+@media screen and (max-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	#footer ul li {
+		padding: 5px 0;
+		display: block;
+	}
+}

@@ -289,43 +289,6 @@ table {
   height: 32px;
   display: inline-block;
 }
-.PopupBox #EventPopupContent {
-  padding: 5px;
-}
-.PopupBox #EventPopupTitle {
-  padding: 5px 0;
-  font-weight: bold;
-  font-size: 110%;
-}
-.PopupBox #EventPopupDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupTimes {
-  color: #ec2327;
-  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
-  padding: 5px 10px 5px 20px;
-}
-.PopupBox .EventPopupLink {
-  padding: 5px 0;
-  text-align: right;
-}
-.PopupBox #EventPopupGroupsWrapper .groupTitle {
-  padding: 5px 0;
-  font-weight: bold;
-}
-.PopupBox #EventPopupGroupsWrapper .groupDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupVenueWrapper .venueTitle {
-  padding: 5px 0;
-  font-weight: bold;
-}
-.PopupBox #EventPopupVenueWrapper .venueDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupVenueWrapper .venueAddress {
-  padding: 5px 0;
-}
 html {
   background-color: #eeeeee;
 }
@@ -624,4 +587,41 @@ table.calendar .deleted {
   text-align: center;
   font-style: italic;
   font-size: 0.8em;
+}
+.PopupBox #EventPopupContent {
+  padding: 5px;
+}
+.PopupBox #EventPopupTitle {
+  padding: 5px 0;
+  font-weight: bold;
+  font-size: 110%;
+}
+.PopupBox #EventPopupDescription {
+  padding: 5px 0;
+}
+.PopupBox #EventPopupTimes {
+  color: #ec2327;
+  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+.PopupBox .EventPopupLink {
+  padding: 5px 0;
+  text-align: right;
+}
+.PopupBox #EventPopupGroupsWrapper .groupTitle {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.PopupBox #EventPopupGroupsWrapper .groupDescription {
+  padding: 5px 0;
+}
+.PopupBox #EventPopupVenueWrapper .venueTitle {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.PopupBox #EventPopupVenueWrapper .venueDescription {
+  padding: 5px 0;
+}
+.PopupBox #EventPopupVenueWrapper .venueAddress {
+  padding: 5px 0;
 }

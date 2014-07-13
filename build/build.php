@@ -45,7 +45,7 @@ if ($runCSS) {
 
 	$cssFiles = array();
 
-	foreach(array('index','site','sysadmin','widget') as $type) {
+	foreach(array('index','site','singleSite','sysadmin','widget') as $type) {
 		$cssFiles[$type] = array();
 		foreach ($extensions as $extension) {
 			$dir = APP_ROOT_DIR.$extension.'/theme/default/css/'.$type.DIRECTORY_SEPARATOR;
@@ -69,30 +69,34 @@ if ($runCSS) {
 			$fa->setTargetPath(substr($nameonly,0,-5).'.css');
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
-		if (APP_WED_INDEX_DIR) {
-			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/css/');
-			$writer->writeManagerAssets($am);
-		}
+		$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/css/');
+		$writer->writeManagerAssets($am);
 	}
 	
 	# Site
-	if (APP_WED_SITE_DIR || APP_WED_SINGLE_SITE_DIR) {
+	if (APP_WED_SITE_DIR) {
 		$am = new AssetManager();
 		foreach($cssFiles['site'] as $nameonly=>$filename) {
 			$fa = new FileAsset($filename,$cssFilters);
 			$fa->setTargetPath(substr($nameonly,0,-5).'.css');
 			$am->set(str_replace('.','_',$nameonly),$fa);
 		}
-		if (APP_WED_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SITE_DIR.'/theme/default/css/');
-			$writer->writeManagerAssets($am);
-		}
-		if (APP_WED_SINGLE_SITE_DIR) {
-			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/css/');
-			$writer->writeManagerAssets($am);
-		}
+		$writer = new AssetWriter(APP_WED_SITE_DIR.'/theme/default/css/');
+		$writer->writeManagerAssets($am);
 	}
-	
+
+	# SingleSite
+	if (APP_WED_SINGLE_SITE_DIR) {
+		$am = new AssetManager();
+		foreach($cssFiles['singleSite'] as $nameonly=>$filename) {
+			$fa = new FileAsset($filename,$cssFilters);
+			$fa->setTargetPath(substr($nameonly,0,-5).'.css');
+			$am->set(str_replace('.','_',$nameonly),$fa);
+		}
+		$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/css/');
+		$writer->writeManagerAssets($am);
+	}
+
 	# Sysadmin
 	if (APP_WED_SYSADMIN_DIR || APP_WED_SINGLE_SITE_DIR) {
 		$am = new AssetManager();

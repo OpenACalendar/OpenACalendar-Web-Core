@@ -289,161 +289,6 @@ table {
   height: 32px;
   display: inline-block;
 }
-html {
-  background-color: #B7CFB7;
-}
-body {
-  padding: 0;
-  margin: 0;
-  font-family: arial, sans-serif;
-  background-color: #B7CFB7;
-}
-#page {
-  max-width: 1000px;
-  margin: 0 auto;
-  background: white;
-}
-#header {
-  background: #0DA20D;
-  border-bottom: #075007 2px solid;
-  padding: 5px;
-}
-#header ul.menu {
-  padding: 0;
-  margin: 0;
-}
-#header ul.menu li#NotificationMenu img.notificationicon {
-  width: 16px;
-  height: 16px;
-}
-#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li {
-  padding: 5px;
-  border-bottom: 1px solid #ccc;
-}
-#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .title a {
-  display: block;
-  font-size: 10pt;
-  color: #999;
-  padding: 0;
-}
-#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .timesince,
-#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .site {
-  display: inline;
-  font-size: 8pt;
-  color: #999;
-  padding: 2px;
-}
-#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.unread .title a {
-  font-size: 12pt;
-  color: #333;
-}
-#header ul.menu li {
-  list-style-type: none;
-  display: inline-block;
-  font-size: 1.4em;
-}
-#header ul.menu li a {
-  text-decoration: none;
-  color: #333;
-  padding: 5px;
-  display: inline-block;
-}
-#header ul.menu li ul.submenu {
-  padding: 0;
-  margin: 0;
-  display: none;
-  position: absolute;
-  background: #FFF;
-  border-bottom: #4d3e04 2px solid;
-  border-left: #4d3e04 2px solid;
-  border-right: #4d3e04 2px solid;
-  z-index: 999;
-}
-#header ul.menu li ul.submenu li {
-  list-style-type: none;
-  display: block;
-}
-#header ul.menu li ul.submenu li a {
-  text-decoration: none;
-  color: #333;
-  font-size: 14pt;
-  padding: 5px;
-  display: inline-block;
-}
-#header ul.menu li ul.submenu li a:hover {
-  color: black;
-  text-decoration: underline;
-}
-#header ul.menu li.title img {
-  max-width: 30px;
-  max-height: 30px;
-}
-#header ul.menu li.title h1 {
-  color: black;
-  display: inline;
-  font-weight: bold;
-  font-size: 1.6em;
-}
-#header ul.menu li.user {
-  float: right;
-}
-#header .afterMenu {
-  clear: both;
-}
-#body {
-  min-height: 400px;
-  padding: 5px;
-}
-#body h2 {
-  font-size: 1.3em;
-  padding: 10px 0;
-}
-#body h3 {
-  font-size: 1.1em;
-  padding: 10px 0;
-}
-#body p {
-  padding: 5px 0;
-}
-#bodyLeft,
-#bodyRight {
-  padding: 10px 2px;
-}
-#bodyLeft img,
-#bodyRight img {
-  max-width: 100%;
-}
-#bodyLeft p,
-#bodyRight p {
-  padding: 5px 0;
-}
-@media screen and (min-width: 750px) {
-  #bodyLeft {
-    width: 47%;
-    float: left;
-  }
-  #bodyRight {
-    width: 47%;
-    float: right;
-  }
-  #afterPage2Col {
-    clear: both;
-  }
-}
-.flash-notice {
-  margin: 10px 5px;
-  padding: 10px 5px;
-  text-align: center;
-  background: #cadeea;
-  border: 2px solid #A8C7DB;
-}
-.flash-error {
-  margin: 10px 5px;
-  padding: 10px 5px;
-  text-align: center;
-  background: #eb6c6c;
-  border: 2px solid #6f1818;
-}
 p.FrontPage {
   font-size: 16pt;
   margin-bottom: 20px;
@@ -588,65 +433,162 @@ table.pricing tr td.parameterValueCost {
 table.pricing tr td.parameterValue {
   text-align: center;
 }
-#footer {
-  padding: 10px 5px;
-  text-align: center;
-  font-style: italic;
-  font-size: 0.8em;
-  color: #333;
+html {
+  background-color: #B7CFB7;
 }
-#footer a {
-  color: #333;
+body {
+  padding: 0;
+  margin: 0;
+  font-family: arial, sans-serif;
+  background-color: #B7CFB7;
 }
-#footer a:hover {
-  color: black;
+#page {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
 }
-#footer ul li {
-  display: inline;
-  padding: 0 5px;
-}
-@media screen and (max-width: 750px) {
-  #footer ul li {
-    padding: 5px 0;
-    display: block;
-  }
-}
-.PopupBox #EventPopupContent {
+#header {
+  background: #0DA20D;
+  border-bottom: #075007 2px solid;
   padding: 5px;
 }
-.PopupBox #EventPopupTitle {
-  padding: 5px 0;
+#header ul.menu {
+  padding: 0;
+  margin: 0;
+}
+#header ul.menu li#NotificationMenu img.notificationicon {
+  width: 16px;
+  height: 16px;
+}
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li {
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+}
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .title a {
+  display: block;
+  font-size: 10pt;
+  color: #999;
+  padding: 0;
+}
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .timesince,
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .site {
+  display: inline;
+  font-size: 8pt;
+  color: #999;
+  padding: 2px;
+}
+#header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.unread .title a {
+  font-size: 12pt;
+  color: #333;
+}
+#header ul.menu li {
+  list-style-type: none;
+  display: inline-block;
+  font-size: 1.4em;
+}
+#header ul.menu li a {
+  text-decoration: none;
+  color: #333;
+  padding: 5px;
+  display: inline-block;
+}
+#header ul.menu li ul.submenu {
+  padding: 0;
+  margin: 0;
+  display: none;
+  position: absolute;
+  background: #FFF;
+  border-bottom: #4d3e04 2px solid;
+  border-left: #4d3e04 2px solid;
+  border-right: #4d3e04 2px solid;
+  z-index: 999;
+}
+#header ul.menu li ul.submenu li {
+  list-style-type: none;
+  display: block;
+}
+#header ul.menu li ul.submenu li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14pt;
+  padding: 5px;
+  display: inline-block;
+}
+#header ul.menu li ul.submenu li a:hover {
+  color: black;
+  text-decoration: underline;
+}
+#header ul.menu li.title img {
+  max-width: 30px;
+  max-height: 30px;
+}
+#header ul.menu li.title h1 {
+  color: black;
+  display: inline;
   font-weight: bold;
-  font-size: 110%;
+  font-size: 1.6em;
 }
-.PopupBox #EventPopupDescription {
+#header ul.menu li.user {
+  float: right;
+}
+#header .afterMenu {
+  clear: both;
+}
+#body {
+  min-height: 400px;
+  padding: 5px;
+}
+#body p {
   padding: 5px 0;
 }
-.PopupBox #EventPopupTimes {
-  color: #ec2327;
-  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
-  padding: 5px 10px 5px 20px;
-}
-.PopupBox .EventPopupLink {
-  padding: 5px 0;
-  text-align: right;
-}
-.PopupBox #EventPopupGroupsWrapper .groupTitle {
-  padding: 5px 0;
+h2 {
   font-weight: bold;
+  font-size: 1.5em;
+  padding: 10px 0;
 }
-.PopupBox #EventPopupGroupsWrapper .groupDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupVenueWrapper .venueTitle {
-  padding: 5px 0;
+h3 {
   font-weight: bold;
+  font-size: 1.2em;
+  padding: 10px 0;
 }
-.PopupBox #EventPopupVenueWrapper .venueDescription {
+#bodyLeft,
+#bodyRight {
+  padding: 10px 2px;
+}
+#bodyLeft img,
+#bodyRight img {
+  max-width: 100%;
+}
+#bodyLeft p,
+#bodyRight p {
   padding: 5px 0;
 }
-.PopupBox #EventPopupVenueWrapper .venueAddress {
-  padding: 5px 0;
+@media screen and (min-width: 750px) {
+  #bodyLeft {
+    width: 47%;
+    float: left;
+  }
+  #bodyRight {
+    width: 47%;
+    float: right;
+  }
+  #afterPage2Col {
+    clear: both;
+  }
+}
+.flash-notice {
+  margin: 10px 5px;
+  padding: 10px 5px;
+  text-align: center;
+  background: #cadeea;
+  border: 2px solid #A8C7DB;
+}
+.flash-error {
+  margin: 10px 5px;
+  padding: 10px 5px;
+  text-align: center;
+  background: #eb6c6c;
+  border: 2px solid #6f1818;
 }
 p {
   margin: 10px 0;
@@ -1294,4 +1236,27 @@ ul.usernotifications li.usernotificationunread a.title {
 }
 ul.usernotifications li.usernotificationunread a.title {
   font-size: 1.1em;
+}
+#footer {
+  padding: 10px 5px;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.8em;
+  color: #333;
+}
+#footer a {
+  color: #333;
+}
+#footer a:hover {
+  color: black;
+}
+#footer ul li {
+  display: inline;
+  padding: 0 5px;
+}
+@media screen and (max-width: 750px) {
+  #footer ul li {
+    padding: 5px 0;
+    display: block;
+  }
 }

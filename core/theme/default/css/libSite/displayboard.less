@@ -1,0 +1,144 @@
+/**
+ * @package Core
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+*/
+
+body, html {
+	padding: 0;
+	margin: 0;
+	background: #0DA20D;
+	font-family: arial, sans-serif;
+}
+
+
+#headerAndBodyWrapper {
+	padding: 10px;
+	background: #0DA20D;
+}
+
+#pageWrapper.displayBoard {
+	width: 100%;
+	max-width: 100%;
+	#headerAndBodyWrapper {
+		background-image: none;
+		#headerWrapper {
+			min-height: 30px;
+			img.logo {
+				max-width: 20px;
+				max-height: 20px;
+				display: inline;
+			}
+			h1 {
+				display: inline;
+				font-size: 1.3em;
+				a {
+					text-decoration: none;
+					color: black;
+				}
+			}
+			h2 {
+				display: inline;
+				font-size: 1.0em;
+				a {
+					text-decoration: none;
+					color: black;
+				}
+			}
+			h1 a, h2 a {
+				text-decoration: none;
+				color: #fff;
+			}
+		}
+		.displayBoardSegment {
+			min-height: 50px;	
+			background: white;
+			padding: 10px;
+			margin-bottom: 10px;
+			.rounded-corners(3px);
+			h3 {
+				font-size: 2em;
+			}
+			ul.displayBoardEvents {
+				margin-top: 15px;
+				li {
+					display: block;
+					float: left;
+					width: 250px;
+					min-height: 100px;
+					div.dateIcon {
+						float: left;
+						width: 60px;
+						height: 60px;
+						text-align: center;
+						background: #231f20;
+						.rounded-corners(4px);
+						position: relative;
+						z-index: 100;
+						a {
+							text-decoration: none;
+							color: white;
+							span.deleted {
+								padding-top: 5px;
+								display: block;
+								color: white;
+							}
+							span.startDay {
+								font-weight: 200;
+								padding-top: 5px;
+								display: block;
+							}
+							span.startDate {
+								font-size: 16pt;
+								font-weight: 400;
+								display: block;
+							}
+							span.startMonthYear {
+								font-weight: 200;
+								display: block;
+								font-size: 0.75em;
+							}
+							span.startTime1 {
+								font-size: 16pt;
+								font-weight: 400;
+								display: block;
+								padding-top: 5px;
+							}
+							span.startTime2 {
+								font-size: 16pt;
+								font-weight: 400;
+								display: block;
+							}
+						}
+						margin-right: 5px;
+					}
+					div.title {
+						font-size: 16pt;
+						font-weight: bold;
+						line-height: 1.25em;
+						padding: 2px 0 10px 70px;
+						position: relative;
+						top: -5px;
+						a {
+							color: #70601f;
+							text-decoration: none;
+						}
+					}
+				}
+			}
+		}
+		.afterDisplayBoardSegment {
+			clear: both;
+		}
+	}
+}
+
+#footer {
+	padding: 10px 5px;
+	text-align: center;
+	font-style: italic;
+	font-size: 0.8em;
+}
+
