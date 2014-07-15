@@ -157,7 +157,7 @@ table {
 }
 @media (-webkit-min-device-pixel-ratio: 2) {
   .iconArrowRightLarge {
-    background-image: url('/theme/default/img/arrowright32.png');
+    background-image: url('/theme/default/img/arrowright64.png');
     background-size: 32px 32px;
     -webkit-background-size: 32px 32px;
     -moz-background-size: 32px 32px;
@@ -326,9 +326,9 @@ table {
 @media (-webkit-min-device-pixel-ratio: 2) {
   .iconGearsLarge {
     background-image: url('/theme/default/img/gears64.png');
-    background-size: 16px 16px;
-    -webkit-background-size: 16px 16px;
-    -moz-background-size: 16px 16px;
+    background-size: 32px 32px;
+    -webkit-background-size: 32px 32px;
+    -moz-background-size: 32px 32px;
   }
 }
 .iconGlobeLarge {
@@ -522,9 +522,9 @@ table {
 @media (-webkit-min-device-pixel-ratio: 2) {
   .iconUserLarge {
     background-image: url('/theme/default/img/user64.png');
-    background-size: 16px 16px;
-    -webkit-background-size: 16px 16px;
-    -moz-background-size: 16px 16px;
+    background-size: 32px 32px;
+    -webkit-background-size: 32px 32px;
+    -moz-background-size: 32px 32px;
   }
 }
 .iconUserAttendingSmall {
