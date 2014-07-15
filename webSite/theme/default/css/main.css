@@ -193,6 +193,12 @@ table {
   height: 32px;
   display: inline-block;
 }
+@media (-webkit-min-device-pixel-ratio: 2),(min-resolution: 192dpi) {
+  .iconFacebookSquareLarge {
+    background-image: url('/theme/default/img/facebooksquare64.png');
+    background-size: 32px 32px;
+  }
+}
 .iconFileImageOSmall {
   background-image: url('/theme/default/img/fileimageo16.png');
   width: 16px;
