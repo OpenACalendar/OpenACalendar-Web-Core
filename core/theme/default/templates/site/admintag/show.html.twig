@@ -22,14 +22,14 @@
 	{% if currentSite.isFeatureTag %}
 		{% if not tag.isDeleted %}
 			<li class="action">
-				<a href="/admin/tag/{{ tag.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+				<a href="/admin/tag/{{ tag.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 			</li>
 			<li class="action">
-				<a href="/admin/tag/{{ tag.slugForUrl }}/delete"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> delete</a>
+				<a href="/admin/tag/{{ tag.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a>
 			</li>
 		{% else %}
 			<li class="action">
-				<a href="/admin/tag/{{ tag.slugForUrl }}/undelete"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> undelete</a>
+				<a href="/admin/tag/{{ tag.slugForUrl }}/undelete"><div class="iconPencilSmall"></div> undelete</a>
 			</li>
 		{% endif %}
 	{% endif %}

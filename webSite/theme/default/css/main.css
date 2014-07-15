@@ -205,6 +205,20 @@ table {
     -moz-background-size: 32px 32px;
   }
 }
+.iconCircleONotchSmall {
+  background-image: url('/theme/default/img/circleonotch16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconCircleONotchSmall {
+    background-image: url('/theme/default/img/circleonotch32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconClockOLarge {
   background-image: url('/theme/default/img/clocko32.png');
   width: 32px;
@@ -217,6 +231,34 @@ table {
     background-size: 32px 32px;
     -webkit-background-size: 32px 32px;
     -moz-background-size: 32px 32px;
+  }
+}
+.iconCloundDownloadSmall {
+  background-image: url('/theme/default/img/clouddownload16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconCloundDownloadSmall {
+    background-image: url('/theme/default/img/clouddownload32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
+.iconDesktopSmall {
+  background-image: url('/theme/default/img/desktop16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconDesktopSmall {
+    background-image: url('/theme/default/img/desktop32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
   }
 }
 .iconDownloadSmall {
@@ -401,6 +443,20 @@ table {
     -moz-background-size: 32px 32px;
   }
 }
+.iconListSmall {
+  background-image: url('/theme/default/img/list16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconListSmall {
+    background-image: url('/theme/default/img/list32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconShareSmall {
   background-image: url('/theme/default/img/share16.png');
   width: 16px;
@@ -410,6 +466,20 @@ table {
 @media (-webkit-min-device-pixel-ratio: 2) {
   .iconShareSmall {
     background-image: url('/theme/default/img/share32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
+.iconTagsSmall {
+  background-image: url('/theme/default/img/tags16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconTagsSmall {
+    background-image: url('/theme/default/img/tags32.png');
     background-size: 16px 16px;
     -webkit-background-size: 16px 16px;
     -moz-background-size: 16px 16px;

@@ -28,7 +28,7 @@
 			</li>
 		{% endif %}
 		<li class="action">
-			<a href="/group/{{ group.slugForUrl }}/newevent"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new event</a>
+			<a href="/group/{{ group.slugForUrl }}/newevent"><div class="iconPencilSmall"></div> new event</a>
 		</li>
 	{% endif %}
 	<li class="action">
@@ -79,7 +79,7 @@
 				
 			{% if importurls %}
 				<ul class="actionList">
-					<li><p><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"><a href="/group/{{ group.slugForUrl }}/importers">List importers</a></p></li>
+					<li><p><a href="/group/{{ group.slugForUrl }}/importers"><div class="iconCloundDownloadSmall"></div> List importers</a></p></li>
 				</ul>
 			{% endif %}
 				

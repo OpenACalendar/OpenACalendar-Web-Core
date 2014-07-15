@@ -51,11 +51,11 @@
 		{% if not event.isImported %}
 			{% if not event.isDeleted %}
 				{% if group is not null or currentSite.isFeatureGroup %}
-					<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> recur</a></li>
+					<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><div class="iconCircleONotchSmall"></div> recur</a></li>
 				{% endif %}
 				<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
 			{% else %}
-				<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> undelete</a></li>
+				<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
 			{% endif %}
 		{% endif %}
 	{% endif %}

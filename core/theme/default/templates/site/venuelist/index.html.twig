@@ -34,13 +34,13 @@
 		<ul id="innerPageActions">
 			{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents %}
 				<li class="action">
-					<a href="/venue/new"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new</a>
+					<a href="/venue/new"><div class="iconPencilSmall"></div> new</a>
 				</li>
 			{% endif %}
 			
 			{% if currentSite.isFeatureVirtualEvents %}
 				<li class="action">
-					<a href="/venue/virtual"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> Virtual</a>
+					<a href="/venue/virtual"><div class="iconDesktopSmall"></div> Virtual</a>
 				</li>
 			{% endif %}
 		

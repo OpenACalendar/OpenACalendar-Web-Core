@@ -30,17 +30,17 @@
 		<ul id="innerPageActions">
 			{% if currentUserCanEditSite %}
 				<li class="action">
-					<a href="/event/new"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new</a>
+					<a href="/event/new"><div class="iconPencilSmall"></div> new</a>
 				</li>
 			{% endif %}
 			{# lists link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
 			{% if currentSite.isFeatureCuratedList %}
-				<li class="action"><a href="/curatedlist"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> Lists</a></li>
+				<li class="action"><a href="/curatedlist"><div class="iconListSmall"></div> Lists</a></li>
 			{% endif %}	
 			{# tags link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
 			{% if currentSite.isFeatureTag %}
-				<li class="action"><a href="/tag"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> Tags</a></li>
-			{% endif %}									
+				<li class="action"><a href="/tag"><div class="iconTagsSmall"></div> Tags</a></li>
+			{% endif %}
 			<li class="action">
 				<a href="/api1/events.ical" onclick="showExportPopup(); return false;">
 					<div class="iconDownloadSmall"></div> export

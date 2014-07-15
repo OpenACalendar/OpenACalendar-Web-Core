@@ -19,12 +19,10 @@
 {% block actions %}
 	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not area.isDeleted %}
 		<li class="action">
-			<a href="/area/{{ area.slugForUrl }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+			<a href="/area/{{ area.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 		</li>		
 		<li class="action">
-			<a href="/area/{{ area.slugForUrl }}/new">
-				<img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> new
-			</a>
+			<a href="/area/{{ area.slugForUrl }}/new"><div class="iconPencilSmall"></div> new</a>
 		</li>
 	{% endif %}
 {% endblock %}

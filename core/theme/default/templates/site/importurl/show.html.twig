@@ -14,15 +14,15 @@
 {% block actions %}
 	{% if currentUserCanEditSite and currentSite.isFeatureImporter %}
 		<li class="action">
-			<a href="/importurl/{{ importurl.slug }}/edit"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> edit</a>
+			<a href="/importurl/{{ importurl.slug }}/edit"><div class="iconPencilSmall"></div> edit</a>
 		</li>
 		{% if not importurl.isEnabled or importurl.expiredat  %}
 			<li class="action">
-				<a href="/importurl/{{ importurl.slug }}/enable"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> enable</a>
+				<a href="/importurl/{{ importurl.slug }}/enable"><div class="iconPencilSmall"></div> enable</a>
 			</li>
 		{% else %}
 			<li class="action">
-				<a href="/importurl/{{ importurl.slug }}/disable"><img src="/theme/default/img/actionIcon.png?v={{ config.assetsVersion }}" class="icon"> disable</a>
+				<a href="/importurl/{{ importurl.slug }}/disable"><div class="iconTrashOSmall"></div> disable</a>
 			</li>			
 		{% endif %}
 	{% endif %}
