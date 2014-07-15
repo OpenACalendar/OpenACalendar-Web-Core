@@ -688,31 +688,6 @@ ul.sites li .link {
 .alternativeToFormAction {
   text-align: right;
 }
-table.pricing {
-  margin: 10px;
-  border: 2px solid black;
-}
-table.pricing tr {
-  border-bottom: 1px solid black;
-}
-table.pricing tr td {
-  padding: 10px;
-  border-right: 1px solid black;
-}
-table.pricing tr td.parameterLabel {
-  color: #555;
-}
-table.pricing tr td.packageName {
-  font-weight: bold;
-  text-align: center;
-}
-table.pricing tr td.parameterValueCost {
-  font-weight: bold;
-  text-align: center;
-}
-table.pricing tr td.parameterValue {
-  text-align: center;
-}
 html {
   background-color: #B7CFB7;
 }
