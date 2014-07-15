@@ -54,11 +54,11 @@
 	{% if showOtherUserOptions is defined and showOtherUserOptions %}
 		<div class="currentUserAttendance">
 			{% if event.userIsPlanAttending %}
-				<img src="/theme/default/img/actionUserAttendingIcon.png" alt="They are attending" title="They are attending">
+				<div class="iconUserAttendingSmall" title="You are attending"></div>
 			{% elseif event.userIsPlanMaybeAttending %}
-				<img src="/theme/default/img/actionUserMaybeAttendingIcon.png" alt="They are maybe attending" title="They are maybe attending">
+				<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>
 			{% else %}
-				<img src="/theme/default/img/actionUserNotAttendingIcon.png" alt="They are not attending" title="They are not attending">
+				<div class="iconUserNotAttendingSmall" title="You are not attending"></div>
 			{% endif %}
 		</div>	
 	{% endif %}

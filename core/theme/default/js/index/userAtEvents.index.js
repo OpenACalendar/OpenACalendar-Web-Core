@@ -76,11 +76,11 @@ function showCurrentUserAttendanceForEvent(data) {
 				}
 				var imageDiv = formObj.parent().parent().children('.activationLinkWrapper');
 				if (attendingObj.val() == 'yes') {
-					imageDiv.html('<img src="/theme/default/img/actionUserAttendingIcon.png" alt="You are attending" title="You are attending">');
+					imageDiv.html('<div class="iconUserAttendingSmall" title="You are attending"></div>');
 				} else if (attendingObj.val() == 'maybe') {
-					imageDiv.html('<img src="/theme/default/img/actionUserMaybeAttendingIcon.png" alt="You are maybe attending" title="You are maybe attending">');
+					imageDiv.html('<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>');
 				} else {
-					imageDiv.html('<img src="/theme/default/img/actionUserNotAttendingIcon.png" alt="You are not attending" title="You are not attending">');
+					imageDiv.html('<div class="iconUserNotAttendingSmall" title="You are not attending"></div>');
 				}
 
 			});

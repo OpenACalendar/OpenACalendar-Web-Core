@@ -235,6 +235,12 @@ table {
   height: 32px;
   display: inline-block;
 }
+.iconHistoryLarge {
+  background-image: url('/theme/default/img/history32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
 .iconKeyLarge {
   background-image: url('/theme/default/img/key32.png');
   width: 32px;
@@ -293,6 +299,24 @@ table {
   background-image: url('/theme/default/img/user32.png');
   width: 32px;
   height: 32px;
+  display: inline-block;
+}
+.iconUserAttendingSmall {
+  background-image: url('/theme/default/img/userattending16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconUserNotAttendingSmall {
+  background-image: url('/theme/default/img/usernotattending16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+.iconUserMaybeAttendingSmall {
+  background-image: url('/theme/default/img/usermaybeattending16.png');
+  width: 16px;
+  height: 16px;
   display: inline-block;
 }
 html,

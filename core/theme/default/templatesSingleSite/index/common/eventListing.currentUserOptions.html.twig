@@ -8,11 +8,11 @@
 <div class="currentUserAttendance" id="currentUserAttendanceForEvent{{ event.slug }}">
 	<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showCurrentUserAttendanceForEvent({{ event.slug }}); return false;" class="activationLinkWrapper">
 		{% if event.userIsPlanAttending %}
-			<img src="/theme/default/img/actionUserAttendingIcon.png" alt="You are attending" title="You are attending">
+			<div class="iconUserAttendingSmall" title="You are attending"></div>
 		{% elseif event.userIsPlanMaybeAttending %}
-			<img src="/theme/default/img/actionUserMaybeAttendingIcon.png" alt="You are maybe attending" title="You are maybe attending">
+			<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>
 		{% else %}
-			<img src="/theme/default/img/actionUserNotAttendingIcon.png" alt="You are not attending" title="You are not attending">
+			<div class="iconUserNotAttendingSmall" title="You are not attending"></div>
 		{% endif %}
 	</a>
 	<div class="formWrapper"></div>
