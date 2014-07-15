@@ -37,7 +37,7 @@ class UserWatchesGroupNotifyNotificationModel extends \BaseUserNotificationModel
 	
 	public function getNotificationText() {
 		$this->loadGroupIfNeeded();
-		return "There is changes in the group: ".$this->group->getTitle();
+		return "There are changes in the group: ".$this->group->getTitle();
 	}
 	
 	public function getNotificationURL() {
