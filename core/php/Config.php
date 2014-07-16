@@ -170,6 +170,9 @@ class Config {
 			return $this->hasSSL ? "https://".$siteslug.".".$this->webSiteDomainSSL : "http://".$siteslug.".".$this->webSiteDomain;
 		}
 	}
+	function getWebSysAdminDomainSecure() {
+		return $this->hasSSL ? "https://".$this->webSysAdminDomainSSL : "http://".$this->webSysAdminDomain;
+	}
 	function isFileStore() {
 		return (boolean)$this->fileStoreLocation;
 	}
