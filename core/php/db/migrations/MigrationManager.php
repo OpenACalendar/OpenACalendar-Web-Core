@@ -32,7 +32,7 @@ class MigrationManager {
 		$migrations = array();
 		$dirs = array(dirname(__FILE__).'/../../../sql/migrations/');
 		foreach($CONFIG->extensions as $extensionName) {
-			$dirs[] = dirname(__FILE__).'/../../../../extension/	'.$extensionName.'/sql/migrations/';
+			$dirs[] = dirname(__FILE__).'/../../../../extension/'.$extensionName.'/sql/migrations/';
 		}
 		foreach($dirs as $dir) {
 			if (is_dir($dir)) {
