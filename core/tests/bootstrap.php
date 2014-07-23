@@ -18,11 +18,19 @@ date_default_timezone_set('UTC');
 define('VARCHAR_COLUMN_LENGTH_USED', 255);
 
 function autoload($class) {
-	$file = __DIR__. DIRECTORY_SEPARATOR. "..". DIRECTORY_SEPARATOR."php". DIRECTORY_SEPARATOR.
-				str_replace("\\", DIRECTORY_SEPARATOR, $class).'.php';
-	if (file_exists($file)) {
-		require_once $file;
+	global $CONFIG;
+	if (isset($CONFIG)) {
+		foreach($CONFIG->extensions as $extensionName) {
+			$f = APP_ROOT_DIR.DIRECTORY_SEPARATOR.'extension'.DIRECTORY_SEPARATOR.$extensionName.DIRECTORY_SEPARATOR.
+				'php'.DIRECTORY_SEPARATOR.str_replace("\\", DIRECTORY_SEPARATOR, $class).'.php';
+			if (file_exists($f)) {
+				require_once $f;
+				return;
+			}
+		}
 	}
+	require_once APP_ROOT_DIR. DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.
+		'php'.DIRECTORY_SEPARATOR.str_replace("\\", DIRECTORY_SEPARATOR, $class).'.php';
 }
 spl_autoload_register('autoload'); 
 
