@@ -21,7 +21,9 @@
 
 {% block actions %}
 	<li class="action">
-		<a href="/country/{{ country.twoCharCode }}/new"><div class="iconPencilSmall"></div> new</a>
+		{% if currentUserCanEditSite %}
+			<a href="/country/{{ country.twoCharCode }}/new"><div class="iconPencilSmall"></div> new</a>
+		{%  endif  %}
 	</li>
 {% endblock %}
 	
