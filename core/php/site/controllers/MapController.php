@@ -23,7 +23,7 @@ class MapController {
 	protected $parameters = array();
 	
 	protected function build($countryCode, $areaSlug, Request $request, Application $app) {
-		$this->parameters = array('country'=>null,'area'=>array());
+		$this->parameters = array('country'=>null,'area'=>null);
 		
 		if ($areaSlug) {
 			$ar = new AreaRepository();
