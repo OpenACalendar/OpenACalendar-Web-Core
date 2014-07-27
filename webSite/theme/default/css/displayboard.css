@@ -125,12 +125,12 @@ body,
 html {
   padding: 0;
   margin: 0;
-  background: #0DA20D;
+  background: #007900;
   font-family: arial, sans-serif;
 }
 #headerAndBodyWrapper {
   padding: 10px;
-  background: #0DA20D;
+  background: #007900;
 }
 #pageWrapper.displayBoard {
   width: 100%;
@@ -153,7 +153,7 @@ html {
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h1 a {
   text-decoration: none;
-  color: black;
+  color: white;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 {
   display: inline;
@@ -161,12 +161,7 @@ html {
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 a {
   text-decoration: none;
-  color: black;
-}
-#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h1 a,
-#pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 a {
-  text-decoration: none;
-  color: #fff;
+  color: white;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment {
   min-height: 50px;
@@ -250,7 +245,7 @@ html {
   top: -5px;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.title a {
-  color: #70601f;
+  color: #007900;
   text-decoration: none;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .afterDisplayBoardSegment {

@@ -720,7 +720,7 @@ div.filterListEventWrapper {
   padding: 5px 0;
 }
 div.filterListEventWrapper form.filterListEvent {
-  background: #e9e9e9;
+  background: #72DA72;
   padding: 10px;
 }
 div.filterListEventWrapper form.filterListEvent div.inputField {
@@ -735,9 +735,9 @@ div.filterListEventWrapper form.filterListEvent div.submitField {
   padding: 10px;
 }
 div.filterListEventWrapper form.filterListEvent div.submitField input {
-  background: #009900;
+  background: #004300;
   color: white;
-  border: 2px solid #009900;
+  border: 2px solid #004300;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
@@ -776,8 +776,8 @@ table.calendar .events {
   min-height: 50px;
 }
 table.calendar .event {
-  background: none repeat scroll 0 0 #DBD3AF;
-  border: 1px solid #356C8F;
+  background: none repeat scroll 0 0 #36C036;
+  border: 1px solid #007900;
   border-radius: 3px 3px 3px 3px;
   margin: 5px 15px;
   padding: 5px;
@@ -817,7 +817,7 @@ table.calendar .deleted {
   z-index: 500;
 }
 .PopupBox {
-  border: 4px solid #0DA20D;
+  border: 4px solid #004300;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
@@ -842,7 +842,7 @@ table.calendar .deleted {
 }
 .PopupBox .PopupBoxClose {
   padding: 3px;
-  background: #0DA20D;
+  background: #004300;
   text-align: right;
 }
 .PopupBox .PopupBoxClose a {

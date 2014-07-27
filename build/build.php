@@ -59,7 +59,15 @@ if ($runCSS) {
 		}
 	}
 
-	$cssFilters = array(  new LessphpFilter()  );
+	$cssFilterLess = new LessphpFilter();
+	foreach($CONFIG->extensions as $extension) {
+		$dir = APP_ROOT_DIR.'/extension/'.$extension.'/theme/default/css/';
+		if (is_dir($dir)) {
+			$cssFilterLess->addLoadPath($dir);
+		}
+	}
+	$cssFilterLess->addLoadPath(APP_ROOT_DIR.'/core/theme/default/css/');
+	$cssFilters = array(  $cssFilterLess  );
 
 	# Index
 	if (APP_WED_INDEX_DIR) {
