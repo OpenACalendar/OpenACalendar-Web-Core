@@ -29,9 +29,7 @@
 		<div id="MapInfo">
 			<h1><a href="/">{{ currentSite.title }}</a></h1>
 			{% if not config.isSingleSiteMode %}<h2><a href="/">{{ config.siteTitle }}</a></h2>{% endif %}
-			<a href="/">
-				<img src="/theme/default/img/calendarClose.png" alt="Close" title="Close">
-			</a>	
+			<a href="/"><div class="iconTimesCircleOLarge" title="Close"></div></a>
 		</div>
 		<script type="text/javascript">
 			var mapData = [ {% for vd in venueData  %}
