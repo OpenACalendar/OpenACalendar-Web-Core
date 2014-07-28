@@ -42,9 +42,13 @@ class SearchForDuplicateEvents {
 	}
 	
 	function getPossibleDuplicates() {
-	
+
+		/**
+		 * If no Start or End time on event then we aren't even going to try to look for dupes.
+		 * There would be to many options and not enought to search on.
+		 */
 		if (!$this->event->getStartAt() || !$this->event->getEndAt()) {
-			$this->eventsToConsider  = array();
+			return array();
 		}
 		
 		## Get events
