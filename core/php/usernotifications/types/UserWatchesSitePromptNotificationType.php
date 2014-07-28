@@ -25,7 +25,7 @@ class UserWatchesSitePromptNotificationType extends \BaseUserNotificationType {
 	
 	public function getNotificationFromData($data, UserAccountModel $user=null, SiteModel $site=null) {
 		$r =  new UserWatchesSitePromptNotificationModel();
-		$r->setFromData($data, $user, $site);
+		$r->setFromDataBaseRow($data);
 		$r->setSite($site);
 		return $r;		
 	}	
