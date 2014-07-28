@@ -93,6 +93,10 @@ class SearchForDuplicateEventsTest  extends \PHPUnit_Framework_TestCase {
 				array('http://www.greatevent.com','http://www.greatevent.com/?',1),
 				array('http://www.greatevent.com','https://www.greatevent.com',1),
 				array('http://www.greatevent.com','HTTP://www.greatevent.com',1),
+				// These tests are just to make sure the code catches the bad input fine
+				array('greatevent','http://www.terribleevent.com',0),
+				array('greatevent.com','http://www.terribleevent.com',0),
+				array('greatevent.com/fantastic','http://www.terribleevent.com',0),
 			);
 	}
 

@@ -148,16 +148,17 @@ class SearchForDuplicateEvents {
 	
 	public function getCanonicalURL($url) {
 		$data = parse_url($url);
-		
+
 		// For this purposes we're gonna treat http and https as the same.
-		if (strtolower($data['scheme']) == 'http') { $data['scheme'] = 'https'; }
-		
-		$url = ($data['scheme'] ? strtolower($data['scheme']).":":'http:') . '//';
+		if (isset($data['scheme']) && strtolower($data['scheme']) == 'http') { $data['scheme'] = 'https'; }
+
+		$url = (isset($data['scheme']) && $data['scheme'] ? strtolower($data['scheme']).":":'http:') . '//';
 		if ((isset($data['username']) && $data['username']) || (isset($data['password']) && $data['password'])) {
 			$url .= $data['username'] . ":" . $data['password'] . "@";
 		}
-		$url .= strtolower($data['host']).(isset($data['path'])?$data['path']:'/').'?'.(isset($data['query']) ? $data['query'] : '');
-		
+		$url .= (isset($data['host']) && $data['host'] ? strtolower($data['host']) : '').
+			(isset($data['path']) && $data['path'] ? $data['path'] : '/')
+			.'?'.(isset($data['query']) ? $data['query'] : '');
 		return $url;
 	}
 	
