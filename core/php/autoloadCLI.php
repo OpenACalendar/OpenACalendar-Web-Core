@@ -68,8 +68,11 @@ function configureAppForSite(SiteModel $site) {
 	}
 	$app['twig']->addGlobal('currentTimeZone', $timezone);	
 	$app['currentTimeZone'] = $timezone;
-	
+
+	# ////////////// Theme Vars
+	configureAppForThemeVariables($site);
 }
+
 
 function configureAppForUser(UserAccountModel $user = null) {
 	global $app;

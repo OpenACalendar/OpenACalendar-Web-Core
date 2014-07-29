@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<div style="padding: 5px; margin: 5px 0 5px 0; background: #ccc; border-radius: 5px;">
+<div style="padding: 5px; margin: 5px 0 5px 0; background:  {{ themeVariables.colourHistoryVenueBackground  }}; border-radius: 5px;">
 	<div style="font-weight: bold;">Venue: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/venue/{{ historyItem.venueSlug }}">{{ historyItem.title }}</a></div>
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.description | nl2br  }}</div>

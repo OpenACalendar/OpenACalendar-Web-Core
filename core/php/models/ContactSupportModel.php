@@ -133,6 +133,8 @@ class ContactSupportModel {
 			$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 			$message->setTo($CONFIG->contactEmail);
 
+			configureAppForThemeVariables();
+
 			$messageText = $app['twig']->render('email/contactSupport.txt.twig', array(
 				'contact'=>$this,
 				'userFrom'=>$userFrom,

@@ -67,6 +67,8 @@ class UserAccountResetModel {
 		$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 		$message->setTo($user->getEmail());
 
+		configureAppForThemeVariables();
+
 		$messageText = $app['twig']->render('email/userResetEmail.txt.twig', array(
 			'user'=>$user,
 			'code'=>$this->access_key,

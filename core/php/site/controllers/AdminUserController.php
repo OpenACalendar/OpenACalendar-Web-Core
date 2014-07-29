@@ -73,6 +73,8 @@ class AdminUserController {
 		$message->setFrom(array($app['config']->emailFrom => $app['config']->emailFromName));
 		$message->setTo($user->getEmail());
 
+		configureAppForThemeVariables($site);
+
 		$messageText = $app['twig']->render('email/siteAccessRequestGranted.txt.twig', array(
 			'user'=>$user,
 			'site'=>$site,

@@ -131,6 +131,8 @@ class IndexController {
 					$message->setFrom(array($app['config']->emailFrom => $app['config']->emailFromName));
 					$message->setTo($admin->getEmail());
 
+					configureAppForThemeVariables($app['currentSite']);
+
 					$messageText = $app['twig']->render('email/requestAccess.txt.twig', array(
 						'user'=>  userGetCurrent(),
 						'admin'=>  $admin,

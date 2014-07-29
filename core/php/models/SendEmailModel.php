@@ -188,6 +188,8 @@ class SendEmailModel {
 		$message->setFrom(array($CONFIG->emailFrom => $this->getSendFromName($sentBy)));
 		$message->setTo($this->send_to);
 
+		configureAppForThemeVariables();
+
 		$messageText = $app['twig']->render('email/sendemail.txt.twig', array(
 			'currentTimeZone'=>$this->timezone,
 			'sendemail'=>$this,
