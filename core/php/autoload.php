@@ -78,7 +78,7 @@ if ($CONFIG->logFile) {
 }
 
 
-function configureAppForThemeVariables(models\SiteModel $site  = null) {
+function configureAppForThemeVariables(\models\SiteModel $site  = null) {
 	global $app;
 	$vars = parse_ini_file(APP_ROOT_DIR.'/core/theme/default/variables.ini', false);
 	foreach($app['extensions']->getExtensions() as $dir=>$ext) {
@@ -86,6 +86,7 @@ function configureAppForThemeVariables(models\SiteModel $site  = null) {
 		if (file_exists($file)) {
 			$vars = array_merge($vars, parse_ini_file($file, false));
 		}
+		$vars = array_merge($vars, $ext->getTemplateVariables($site));
 	}
 	$app['twig']->addGlobal('themeVariables', $vars);
 }

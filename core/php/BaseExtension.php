@@ -71,5 +71,17 @@ abstract class BaseExtension {
 	 */
 	public function clearCache() {   }
 
+	/**
+	 * Called to get template variables.
+	 *
+	 * Note this in only called in specific situations; when the system is about to send an email.
+	 *
+	 * @param \models\SiteModel $siteModel
+	 * @return array
+	 */
+	public function getTemplateVariables(\models\SiteModel $siteModel = null) {
+		return array();
+	}
+
 }
 
