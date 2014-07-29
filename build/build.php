@@ -60,6 +60,14 @@ if ($runCSS) {
 	}
 
 	$cssFilterLess = new LessphpFilter();
+	$vars = array();
+	foreach($extensions as $extensionDir) {
+		$file = APP_ROOT_DIR.$extensionDir.'/theme/default/variables.ini';
+		if (file_exists($file)) {
+			$vars = array_merge($vars, parse_ini_file($file, false));
+		}
+	}
+	$cssFilterLess->setPresets($vars);
 	foreach($CONFIG->extensions as $extension) {
 		$dir = APP_ROOT_DIR.'/extension/'.$extension.'/theme/default/css/';
 		if (is_dir($dir)) {
