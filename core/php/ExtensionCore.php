@@ -82,5 +82,16 @@ class ExtensionCore extends BaseExtension {
 			new ImportURLICalHandler(),
 		);
 	}
-	
+
+	public function clearCache() {
+		global $CONFIG;
+		$cacheDir = APP_ROOT_DIR."/cache/";
+		foreach(glob($cacheDir."/templates.cli/*/*/*.php") as $file) {
+			unlink($file);
+		}
+		foreach(glob($cacheDir."/templates.web/*/*/*.php") as $file) {
+			unlink($file);
+		}
+	}
+
 }

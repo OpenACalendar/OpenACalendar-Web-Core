@@ -65,6 +65,11 @@ abstract class BaseExtension {
 	public function getImportURLHandlers() {
 		return array();
 	}
-	
+
+	/**
+	 * This should be called on code update, config change or extension activated/deactivated
+	 */
+	public function clearCache() {   }
+
 }
 
