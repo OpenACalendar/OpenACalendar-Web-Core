@@ -159,7 +159,9 @@ class Config {
 	public $recurEventForDaysInFutureWhenMonthly = 186; // 6 * 31
 	
 	public $CLIAPI1Enabled = false;
-	
+
+	public $canCreateSitesVerifiedEditorUsers = true;
+
 	function getWebIndexDomainSecure() {
 		return $this->hasSSL ? "https://".$this->webIndexDomainSSL : "http://".$this->webIndexDomain;
 	}

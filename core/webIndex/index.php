@@ -34,7 +34,13 @@ $app->before(function (Request $request) use ($app) {
 	}
 	$app['twig']->addGlobal('currentTimeZone', $timezone);	
 	$app['twig']->addGlobal('allowedTimeZones', $timezones);	
-	$app['currentTimeZone'] = $timezone;	
+	$app['currentTimeZone'] = $timezone;
+
+	# ////////////// Permissions
+	$user = userGetCurrent();
+	$app['twig']->addGlobal('canUserCreateSites', ($CONFIG->canCreateSitesVerifiedEditorUsers
+			&& $user && $user->getIsEmailVerified() && $user->getIsEditor()));
+
 });
 
 
