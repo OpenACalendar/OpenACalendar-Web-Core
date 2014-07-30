@@ -3,11 +3,13 @@
 
 namespace cliapi1;
 
+use models\CountryModel;
 use models\EventModel;
 use models\SiteModel;
 use models\GroupModel;
 use models\VenueModel;
 use models\UserAccountModel;
+use repositories\CountryRepository;
 use repositories\EventRepository;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
@@ -36,9 +38,12 @@ class CreateEvent {
 	protected $summary;
 	protected $description;
 	protected $group_id;
-	protected $timezone = 'Europe/London';
+	protected $timezone;
 	protected $venue_id;
-	protected $country_id;
+
+	/** @var  CountryModel */
+	protected $country;
+
 	protected $area_id;
 	protected $url;
 	protected $is_virtual = false;
@@ -57,6 +62,10 @@ class CreateEvent {
 			$siteRepo = new SiteRepository();
 			$this->site = $siteRepo->loadById($CONFIG->singleSiteID);
 		}
+		$countryRepo = new CountryRepository();
+		// TODO if we have $this->site, should set $this->country_id & $this->timezone from countries which are enabled
+		$this->country = $countryRepo->loadByTwoCharCode("GB");
+		$this->timezone = 'Europe/London';
 	}
 	
 	public function setFromJSON($json) {
@@ -67,9 +76,6 @@ class CreateEvent {
 			if (isset($json->event->description)) {
 				$this->description = $json->event->description;
 			}
-			if (isset($json->event->timezone)) {
-				$this->timezone = $json->event->timezone;
-			}
 			if (isset($json->event->url)) {
 				$this->url = $json->event->url;
 			}
@@ -79,6 +85,16 @@ class CreateEvent {
 			}
 			if (isset($json->event->end->str)) {
 				$this->end_at = new \DateTime($json->event->end->str, $timezone);
+			}
+			if (isset($json->event->country) && isset($json->event->country->code) && $json->event->country->code) {
+				$countryRepo = new CountryRepository();
+				// Delibrately setting NULL on failure so user gets an error message.
+				$this->country = $countryRepo->loadByTwoCharCode($json->event->country->code);
+				// TODO check allowed in this site
+			}
+			if (isset($json->event->timezone)) {
+				// Delibrately setting NULL on failure so user gets an error message.
+				$this->timezone = $this->country && in_array($json->event->timezone, $this->country->getTimezonesAsList()) ? $json->event->timezone : null ;
 			}
 		}
 		if (isset($json->site)) {
@@ -115,6 +131,12 @@ class CreateEvent {
 	}
 
 	public function canGo() {
+		if (!$this->country) {
+			$this->errorMessages[] = 'Country not set!';
+		}
+		if (!$this->timezone) {
+			$this->errorMessages[] = 'Timezone not set!';
+		}
 		if (!$this->site) {
 			$this->errorMessages[] = 'Site not set!';
 		}
@@ -133,6 +155,7 @@ class CreateEvent {
 			$event->setTimezone($this->timezone);
 			$event->setStartAt($this->start_at);
 			$event->setEndAt($this->end_at);
+			$event->setCountryId($this->country ? $this->country->getId() : null);
 
 			$event->validate();
 			$this->errorMessages = array_merge($this->errorMessages, $event->getValidateErrors());
@@ -150,6 +173,7 @@ class CreateEvent {
 		$event->setTimezone($this->timezone);
 		$event->setStartAt($this->start_at);
 		$event->setEndAt($this->end_at);
+		$event->setCountryId($this->country->getId());
 		
 		$eventRepo = new EventRepository();
 		$eventRepo->create($event, $this->site, $this->user, $this->group);
