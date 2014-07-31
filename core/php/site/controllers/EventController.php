@@ -380,8 +380,23 @@ class EventController {
 		}
 		
 	}
-	
-	
+
+	/**
+	 * Event Edit Venue - remove "the" from start of search words to get more matches
+	 * eg "Pear Tree" exists, user searches for "The Pear Tree"
+	 *
+	 * @param $in
+	 * @return string
+	 */
+	protected function removeSearchPrefixWords($in) {
+		if (strtolower(substr(trim($in),0,4)) == "the ") {
+			return substr(trim($in), 4);
+		} else {
+			return $in;
+		}
+	}
+
+
 	function editVenue($slug, Request $request, Application $app) {		
 		//var_dump($_POST); die();
 		
@@ -397,7 +412,7 @@ class EventController {
 
 		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 		$this->parameters['searchAddressCode'] = $request->query->get('searchAddressCode');
-		$this->parameters['searchArea'] = $request->query->get('searchArea');
+		$this->parameters['searchArea'] = $this->removeSearchPrefixWords($request->query->get('searchArea'));
 		$this->parameters['searchAreaSlug'] = $request->query->get('searchAreaSlug');
 		$this->parameters['searchAreaObject'] = $request->query->get('searchAreaObject');
 		$this->parameters['searchAddress'] = $request->query->get('searchAddress');
@@ -451,7 +466,7 @@ class EventController {
 
 		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 		$this->parameters['searchAddressCode'] = $request->query->get('searchAddressCode');
-		$this->parameters['searchArea'] = $request->query->get('searchArea');
+		$this->parameters['searchArea'] = $this->removeSearchPrefixWords($request->query->get('searchArea'));
 		$this->parameters['searchAreaSlug'] = $request->query->get('searchAreaSlug');
 		$this->parameters['searchAreaObject'] = $request->query->get('searchAreaObject');
 		$this->parameters['searchAddress'] = $request->query->get('searchAddress');
@@ -562,7 +577,7 @@ class EventController {
 		}
 
 		// There are areas. Continue with the workflow
-		$this->parameters['search'] = $request->query->get('search');
+		$this->parameters['search'] = $this->removeSearchPrefixWords($request->query->get('search'));
 
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 
@@ -602,7 +617,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 
-		$this->parameters['search'] = $request->query->get('search');
+		$this->parameters['search'] = $this->removeSearchPrefixWords($request->query->get('search'));
 
 		$this->editAreaGetDataIntoParameters($app);
 
