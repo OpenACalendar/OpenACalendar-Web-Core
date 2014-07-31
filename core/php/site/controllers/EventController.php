@@ -630,6 +630,10 @@ class EventController {
 				'slug'=>$area->getSlug(),
 				'title'=>$area->getTitle(),
 				'parent1title'=>$area->getParent1Title(),
+				'minLat'=>$area->getMinLat(),
+				'maxLat'=>$area->getMaxLat(),
+				'minLng'=>$area->getMinLng(),
+				'maxLng'=>$area->getMaxLng(),
 			);
 		}
 

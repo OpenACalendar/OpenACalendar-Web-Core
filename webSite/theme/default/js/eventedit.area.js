@@ -6,10 +6,19 @@
  * @author James Baster <james@jarofgreen.co.uk>
 */
 
+var map;
 
 $(document).ready(function() {
 	$('#SearchField').change(onSearchFormChanged).keyup(onSearchFormKeyUp);
 	$('#EditEventAreaForm input[type="submit"]').hide();
+
+	map = L.map('Map');
+
+	mapToBounds(countryMinLat, countryMaxLat, countryMinLng, countryMaxLng );
+
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
 });
 
 var keyUpTimer;
@@ -58,7 +67,11 @@ function loadSearchResults() {
 				});
 				var html = '';
 				for(i in areas) {
-					html += '<li class="area">';
+					if (areas[i].minLat) {
+						html += '<li class="area" onmouseover="mapToBounds('+areas[i].minLat+', '+areas[i].maxLat+', '+areas[i].minLng+', '+areas[i].maxLng+')">';
+					} else {
+						html += '<li class="area">';
+					}
 					html += '<form action="/event/'+currentEventSlug+'/edit/area" method="post" class="oneActionFormRight">';
 					html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
 					html += '<input type="hidden" name="area_slug" value="' + escapeHTML(areas[i].slug)+'">';
@@ -77,3 +90,13 @@ function loadSearchResults() {
 
 }
 
+function mapToBounds(minLat, maxLat, minLng, maxLng) {
+	if (minLat == maxLat || minLng == maxLng) {
+		map.setView([minLat,minLng], 13);
+	} else {
+		var southWest = L.latLng(minLat, minLng),
+			northEast = L.latLng(maxLat, maxLng),
+			bounds = L.latLngBounds(southWest, northEast);
+		map.fitBounds(bounds);
+	}
+}
