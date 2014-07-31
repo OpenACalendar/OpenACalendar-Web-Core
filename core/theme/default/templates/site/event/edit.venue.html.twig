@@ -10,92 +10,98 @@
 
 {% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
 
-{% block htmlHeader %}
-	{% include 'site/common/mapLibrary.css.html.twig' %}
-{% endblock %}
-
 {% block innerContent %}
-	
-	<p>Please set a Venue.</p>
 
-	<form id="CountriesForm" action="" method="post" class="styled">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="submitted" value="yes">
+	<p>Current Venue:</p>
 
-		<div id="Map" class="fullWidth"></div>
-		
+	<div class="dateAndLocationWrapper">
+		{% include 'site/common/eventLocationLine.html.twig' %}
+	</div>
+
+	<p>Filter list of venues.</p>
+
+	<form action="" method="get" class="styled" id="EditEventVenueForm">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Name</div>
+			<div class="widgetWrapperPlacementOnly"><input type="text" name="searchTitle"  id="TitleField" value="{{ searchTitle | e('html_attr') }}" autocomplete="off"></div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Address</div>
+			<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddress"  id="AddressField" value="{{ searchAddress | e('html_attr')  }}" autocomplete="off"></div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">City/Area</div>
+			<div class="widgetWrapperPlacementOnly">
+				<input type="text" name="searchArea"  id="AreaField" value="{{ searchArea | e('html_attr') }}" autocomplete="off">
+				<ul id="AreaList">
+					{%  for area in areas %}
+						<li><label><input type="radio" name="searchAreaSlug" value="{{  area.slug  }}" {% if searchAreaObject and searchAreaObject.slug == area.slug %}checked="checked"{%  endif %}>{{  area.title }}</label></li>
+					{%  endfor %}
+				</ul>
+			</div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Post Code</div>
+			<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddressCode"  id="AddressCodeField" value="{{ searchAddressCode | e('html_attr')  }}" autocomplete="off"></div>
+			<div class="after"></div>
+		</div>
+
 		<div class="rowWrapper">
 			<div class="labelWrapper">Country</div>
 			<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
 			<div class="after"></div>
 		</div>
-		
-		<div class="rowWrapper">
-			<div class="labelWrapper">&nbsp;</div>
-			<div class="widgetWrapperPlacementOnly">
-				<ul id="ChangeEventAreaList">
-					{% if parentAreas is defined %}
-						{% for parentArea in parentAreas %}
-							<li class="selectedarea">
-								<span class="content">
-									<span class="title">{{ parentArea.title }}</span>
-									<a href="#" onclick="removeArea(this); return false;" class="remove">X</a>
-								</span>
-								<input type="hidden" name="areas[]" value="EXISTING:{{ parentArea.slug }}">
-							</li>
-						{% endfor %}
-					{% endif %}
-					{% if area is defined and area %}
-						<li class="selectedarea">
-							<span class="content">
-								<span class="title">{{ area.title }}</span>
-								<a href="#" onclick="removeArea(this); return false;" class="remove">X</a>
-							</span>
-							<input type="hidden" name="areas[]" value="EXISTING:{{ area.slug }}">
-						</li>
-					{% endif %}
-					{% if childAreas is defined and childAreas %}
-						<li class="selectArea">
-							<ul class="areas">
-								{% for childArea in childAreas %}
-									<li class="area"><span class="content"><a href="#" onclick="existingAreaChoosen({{ childArea.slug }}); return false;">{{ childArea.title }}</a></span><span class="aftercontent">&nbsp;</span></li>
-								{% endfor %}
-								<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Create new</a></span><span class="aftercontent">&nbsp;</span></li>
-							</ul>
-						</li>
-					{% endif %}
-				</ul>
-			</div>
-			<div class="after"></div>
-		</div>
 
-		<div class="rowWrapper" id="ChangeEventVenueField" style="display: none;">
-			<div class="labelWrapper">Venues</div>
-			<div class="widgetWrapperPlacementOnly">
-				<ul id="ChangeEventVenueList" class="selectvenue">
-					
-				</ul>
-			</div>
-			<div class="after"></div>
-		</div>
-		
-		<input type="submit"  value="Save" />	
+		<div class="actionWrapperBig"><input type="submit" value="Search"></div>
 	</form>
+
+	<ul class="venues" id="EditEventVenueSearchResults">
+		{% for venue in venues %}
+			<li class="venue result">
+				<div class="title">{{ venue.title }}</div>
+				{%  if venue.address %}<div>{{  venue.address | nl2br }}</div>{%  endif %}
+				{%  if venue.addressCode %}<div>{{  venue.addressCode }}</div>{%  endif %}
+				<form action="/event/{{  event.slugForURL }}/edit/venue" method="post" class="styled">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
+					<div class="actionWrapperBig"><input type="submit" value="Select {{ venue.title }}"></div>
+				</form>
+			</li>
+		{% endfor %}
+		<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
+			<div class="title">This is a new venue</div>
+			<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="styled">
+				<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
+				<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
+				<input type="hidden" name="fieldArea" value="{{ searchArea | e('html_attr') }}">
+				<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
+				<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
+				<div class="actionWrapperBig"><input type="submit" value="New"></div>
+			</form>
+		</li>
+		<li class="venue">
+			<div class="title">The exact venue is not known</div>
+			<form action="/event/{{  event.slugForURL }}/edit/area" class="styled">
+				<div class="actionWrapperBig"><input type="submit" value="Not Known"></div>
+			</form>
+		</li>
+	</ul>
 
 {% endblock %}
 
 
 {% block scripts %}
 	<script type="text/javascript">
-		{% if area and area.cachedMinLat and area.cachedMaxLat and area.cachedMinLng and area.cachedMaxLng %}
-			var mapData = { lat: null, lng:null, min_lat:{{ area.cachedMinLat }}, max_lat:{{ area.cachedMaxLat }}, min_lng: {{ area.cachedMinLng }}, max_lng:{{ area.cachedMaxLng }} };
-		{% else %}
-			var mapData = { lat: null, lng:null, min_lat:null, max_lat:null, min_lng: null, max_lng:null };
-		{% endif %}
-		var currentCountryID = "{{ country.twoCharCode}}";
-		var currentVenueSlug = {% if venue %}{{ venue.slug }}{% else %}null{% endif %};
+		var currentEventSlug = "{{  event.slug }}";
+		var CSFRToken = "{{ getCSFRToken() }}";
 	</script>
-	{% include 'site/common/mapLibrary.js.html.twig' %}
-	<script type="text/javascript" src="/theme/default/js/eventvenueform.js?v={{ config.assetsVersion }}"></script>
+	<script type="text/javascript" src="/theme/default/js/eventedit.venue.js?v={{ config.assetsVersion }}"></script>
 {% endblock %}
 

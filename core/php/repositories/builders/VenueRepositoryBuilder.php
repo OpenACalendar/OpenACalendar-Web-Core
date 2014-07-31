@@ -46,6 +46,36 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->freeTextSearch = $freeTextSearch;
 	}
 
+	protected $freeTextSearchTitle;
+	protected $freeTextSearchAddress;
+	protected $freeTextSearchAddressCode;
+
+	/**
+	 * @param mixed $freeTextSearchAddress
+	 */
+	public function setFreeTextSearchAddress($freeTextSearchAddress)
+	{
+		$this->freeTextSearchAddress = $freeTextSearchAddress;
+	}
+
+	/**
+	 * @param mixed $freeTextSearchAddressCode
+	 */
+	public function setFreeTextSearchAddressCode($freeTextSearchAddressCode)
+	{
+		$this->freeTextSearchAddressCode = $freeTextSearchAddressCode;
+	}
+
+	/**
+	 * @param mixed $freeTextSearchTitle
+	 */
+	public function setFreeTextSearchTitle($freeTextSearchTitle)
+	{
+		$this->freeTextSearchTitle = $freeTextSearchTitle;
+	}
+
+
+
 	protected $include_deleted = true;
 
 	public function setIncludeDeleted($value) {
@@ -88,7 +118,22 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 					' ILIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
 		}
-		
+
+		if ($this->freeTextSearchAddressCode) {
+			$this->where[] =  ' venue_information.address_code ILIKE :free_text_search_address_code ';
+			$this->params['free_text_search_address_code'] = "%".strtolower($this->freeTextSearchAddressCode)."%";
+		}
+
+		if ($this->freeTextSearchAddress) {
+			$this->where[] =  'venue_information.address ILIKE :free_text_search_address ';
+			$this->params['free_text_search_address'] = "%".strtolower($this->freeTextSearchAddress)."%";
+		}
+
+		if ($this->freeTextSearchTitle) {
+			$this->where[] =  'venue_information.title ILIKE :free_text_search_title ';
+			$this->params['free_text_search_title'] = "%".strtolower($this->freeTextSearchTitle)."%";
+		}
+
 		if (!$this->include_deleted) {
 			$this->where[] = " venue_information.is_deleted = '0' ";
 		}

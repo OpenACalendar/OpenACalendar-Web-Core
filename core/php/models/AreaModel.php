@@ -30,6 +30,8 @@ class AreaModel {
 	protected $cached_min_lng;
 	protected $cached_max_lng;
 
+	protected $parent_1_title;
+
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
@@ -47,6 +49,7 @@ class AreaModel {
 		$this->cached_max_lat = $data['cached_max_lat'];
 		$this->cached_min_lng = $data['cached_min_lng'];
 		$this->cached_max_lng = $data['cached_max_lng'];
+		$this->parent_1_title = isset($data['parent_1_title']) ? $data['parent_1_title'] : null;
 	}
 	
 	public function getId() {
@@ -187,5 +190,15 @@ class AreaModel {
 	public function getHasBounds() {
 		return (boolean)$this->cached_max_lat;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getParent1Title()
+	{
+		return $this->parent_1_title;
+	}
+
+
 }
 

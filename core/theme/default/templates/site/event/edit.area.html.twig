@@ -1,0 +1,52 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %}
+
+{% block innerContent %}
+
+
+	<p>Please set a rough area or city. This helps people find the event.</p>
+
+	<form id="EditEventAreaForm" action="" method="get" class="styled">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Area or city</div>
+			<div class="widgetWrapperPlacementOnly"><input type="text" name="search"  id="SearchField" value="{{ search | e('html_attr') }}" autocomplete="off"></div>
+			<div class="after"></div>
+		</div>
+
+		<div class="actionWrapperBig"><input type="submit" value="Search"></div>
+	</form>
+
+	<ul class="areas" id="EditEventAreaResults">
+		{% for area in areas %}
+			<li class="area">
+				<span class="content">{{ area.title }}{%  if area.parent1Title %}, {{ area.parent1Title }}{% endif %}</span>
+				<form action="/event/{{  event.slugForURL }}/edit/area" method="post" class="styled">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="area_slug" value="{{  area.slug }}">
+					<div class="actionWrapperBig"><input type="submit" value="Select {{ area.title }}"></div>
+				</form>
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script type="text/javascript">
+		var currentEventSlug = "{{  event.slug }}";
+		var CSFRToken = "{{ getCSFRToken() }}";
+	</script>
+	<script type="text/javascript" src="/theme/default/js/eventedit.area.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+

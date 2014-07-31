@@ -41,6 +41,9 @@ class AreaCreateTest extends \PHPUnit_Framework_TestCase {
 		$siteRepo = new SiteRepository();
 		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
 
+		### No areas
+		$this->assertFalse($areaRepo->doesCountryHaveAnyNotDeletedAreas($site, $countryRepo->loadByTwoCharCode('GB') ));
+
 		### Area 1
 		$area = new AreaModel();
 		$area->setTitle("test");
@@ -57,6 +60,7 @@ class AreaCreateTest extends \PHPUnit_Framework_TestCase {
 		$stat->execute();
 		$this->assertEquals(0, $stat->rowCount());
 
+		$this->assertTrue($areaRepo->doesCountryHaveAnyNotDeletedAreas($site, $countryRepo->loadByTwoCharCode('GB') ));
 		
 		### Area child
 		$areaChild = new AreaModel();

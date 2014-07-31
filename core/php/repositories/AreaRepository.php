@@ -324,5 +324,15 @@ class AreaRepository {
 				));
 		
 	}
+
+	public function doesCountryHaveAnyNotDeletedAreas(SiteModel $site, CountryModel $country) {
+		global $DB;
+		$stat = $DB->prepare("SELECT id FROM area_information WHERE site_id=:site_id AND country_id=:country_id AND is_deleted='0'");
+		$stat->execute(array(
+			'site_id'=>$site->getId(),
+			'country_id'=>$country->getId(),
+		));
+		return ($stat->rowCount() > 0);
+	}
 	
 }

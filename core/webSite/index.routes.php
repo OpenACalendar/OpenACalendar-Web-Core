@@ -73,7 +73,23 @@ $app->match('/event/{slug}/edit/details', "site\controllers\EventController::edi
 $app->match('/event/{slug}/edit/venue', "site\controllers\EventController::editVenue")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)
-		->before($canChangeSite); 
+		->before($canChangeSite);
+$app->match('/event/{slug}/edit/venue.json', "site\controllers\EventController::editVenueJson")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite);
+$app->match('/event/{slug}/edit/venue/new', "site\controllers\EventController::editVenueNew")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite);
+$app->match('/event/{slug}/edit/area', "site\controllers\EventController::editArea")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite);
+$app->match('/event/{slug}/edit/area.json', "site\controllers\EventController::editAreaJson")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite);
 $app->match('/event/{slug}/edit/future', "site\controllers\EventController::editFuture")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)

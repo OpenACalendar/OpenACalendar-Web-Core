@@ -54,6 +54,12 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 
 		
 
+	protected $freeTextSearch;
+
+	public function setFreeTextSearch($freeTextSearch) {
+		$this->freeTextSearch = $freeTextSearch;
+	}
+
 
 
 	protected $include_deleted = true;
@@ -61,9 +67,24 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 	public function setIncludeDeleted($value) {
 		$this->include_deleted = $value;
 	}
-	
+
+
+	public $include_parent_levels = 0;
+
+	/**
+	 * @param int $include_parent_levels
+	 */
+	public function setIncludeParentLevels($include_parent_levels)
+	{
+		$this->include_parent_levels = $include_parent_levels;
+	}
+
+
+
 	protected function build() {
-		
+
+		$this->select[] = 'area_information.*';
+
 		if ($this->site) {
 			$this->where[] =  " area_information.site_id = :site_id ";
 			$this->params['site_id'] = $this->site->getId();
@@ -88,14 +109,24 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 		if ($this->cacheNeedsBuildingOnly) {
 			$this->where[] = " area_information.cache_area_has_parent_generated = '0'";
 		}
-		
+
+		if ($this->freeTextSearch) {
+			$this->where[] =  ' area_information.title ILIKE :free_text_search ';
+			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
+		}
+
+		if ($this->include_parent_levels > 0) {
+			$this->joins[] = " LEFT JOIN area_information AS area_information_parent_1 ON area_information.parent_area_id = area_information_parent_1.id ";
+			$this->select[] = " area_information_parent_1.title AS parent_1_title";
+		}
 	}
 	
 	protected function buildStat() {
 		global $DB;
 		
 		
-		$sql = "SELECT area_information.* FROM area_information ".
+		$sql = "SELECT " . implode(", ",$this->select) . " FROM area_information ".
+				implode(" ",$this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 				" ORDER BY area_information.title ASC ";
 	
