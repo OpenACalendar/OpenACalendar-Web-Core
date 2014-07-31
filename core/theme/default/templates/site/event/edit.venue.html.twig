@@ -10,6 +10,10 @@
 
 {% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
 
+{% block htmlHeader %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
 {% block innerContent %}
 
 	<p>Current Venue:</p>
@@ -64,49 +68,65 @@
 		<div class="actionWrapperBig"><input type="submit" value="Search"></div>
 	</form>
 
-	<ul class="venues" id="EditEventVenueSearchResults">
-		{% for venue in venues %}
-			<li class="venue result">
-				<form action="/event/{{  event.slugForURL }}/edit/venue" method="post" class="oneActionFormRight">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
-					<input type="submit" value="Select {{ venue.title }}">
+
+	<div id="innerPageLeft" class="hideIfOneCol">
+		<div id="MapWrapper">
+			<div id="Map" class="leftColumnFullWidth"></div>
+		</div>
+	</div>
+
+
+	<div id="innerPageRight">
+		<ul class="venues" id="EditEventVenueSearchResults">
+			{% for venue in venues %}
+				<li class="venue result">
+					<form action="/event/{{  event.slugForURL }}/edit/venue" method="post" class="oneActionFormRight">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
+						<input type="submit" value="Select {{ venue.title }}">
+					</form>
+					<div class="title">{{ venue.title }}</div>
+					{%  if venue.address %}<div>{{  venue.address | nl2br }}</div>{%  endif %}
+					{%  if venue.addressCode %}<div>{{  venue.addressCode }}</div>{%  endif %}
+					<div class="afterOneActionFormRight"></div>
+				</li>
+			{% endfor %}
+			<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
+				<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="oneActionFormRight">
+					<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
+					<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
+					<input type="hidden" name="fieldArea" value="{{ searchArea | e('html_attr') }}">
+					<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
+					<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
+					<input type="submit" value="New">
 				</form>
-				<div class="title">{{ venue.title }}</div>
-				{%  if venue.address %}<div>{{  venue.address | nl2br }}</div>{%  endif %}
-				{%  if venue.addressCode %}<div>{{  venue.addressCode }}</div>{%  endif %}
+				<div class="title">This is a new venue</div>
 				<div class="afterOneActionFormRight"></div>
 			</li>
-		{% endfor %}
-		<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
-			<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="oneActionFormRight">
-				<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
-				<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
-				<input type="hidden" name="fieldArea" value="{{ searchArea | e('html_attr') }}">
-				<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
-				<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
-				<input type="submit" value="New">
-			</form>
-			<div class="title">This is a new venue</div>
-			<div class="afterOneActionFormRight"></div>
-		</li>
-		<li class="venue">
-			<form action="/event/{{  event.slugForURL }}/edit/area" class="oneActionFormRight">
-				<input type="submit" value="Not Known">
-			</form>
-			<div class="title">The exact venue is not known</div>
-			<div class="afterOneActionFormRight"></div>
-		</li>
-	</ul>
+			<li class="venue">
+				<form action="/event/{{  event.slugForURL }}/edit/area" class="oneActionFormRight">
+					<input type="submit" value="Not Known">
+				</form>
+				<div class="title">The exact venue is not known</div>
+				<div class="afterOneActionFormRight"></div>
+			</li>
+		</ul>
+	</div>
 
 {% endblock %}
 
 
 {% block scripts %}
 	<script type="text/javascript">
+		var countryMaxLat = {{  country.maxLat }};
+		var countryMinLat = {{  country.minLat }};
+		var countryMaxLng = {{  country.maxLng }};
+		var countryMinLng = {{  country.minLng }};
+		var countryID = "{{ country.twoCharCode}}";
 		var currentEventSlug = "{{  event.slug }}";
 		var CSFRToken = "{{ getCSFRToken() }}";
 	</script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
 	<script type="text/javascript" src="/theme/default/js/eventedit.venue.js?v={{ config.assetsVersion }}"></script>
 {% endblock %}
 

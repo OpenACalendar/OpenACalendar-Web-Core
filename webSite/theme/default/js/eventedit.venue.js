@@ -6,9 +6,41 @@
  * @author James Baster <james@jarofgreen.co.uk>
 */
 
+var map;
+var markerGroup;
+var venueMarkers = {};
+
+
 $(document).ready(function() {
 	$('#TitleField, #AddressField, #AreaField, #AddressCodeField').change(onSearchFormChanged).keyup(onSearchFormKeyUp);
 	$('#EditEventVenueForm input[type="submit"]').hide();
+
+	map = L.map('Map');
+
+	mapToBounds(countryMinLat, countryMaxLat, countryMinLng, countryMaxLng );
+
+	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+
+	markerGroup = new L.MarkerClusterGroup();
+	map.addLayer(markerGroup);
+
+	// We want all venues to be on map so if user scrolls down manually they see all of them and don't think one isn't missing.
+	// For now load all venues in country and put on map. We could probably do this more intelligently later.
+	$.ajax({
+		dataType: "json",
+		url: '/country/'+countryID+'/info.json?includeVenues=1',
+		success: function(data) {
+			for(i in data.venues) {
+				if (!(data.venues[i].slug in venueMarkers) && data.venues[i].lat && data.venues[i].lng) {
+					venueMarkers[data.venues[i].slug] = L.marker([data.venues[i].lat,data.venues[i].lng]);
+					venueMarkers[data.venues[i].slug].bindPopup(escapeHTML(data.venues[i].title)+'<br><a href="#" onclick="useVenue('+data.venues[i].slug+'); return false">At this venue</a>');
+					markerGroup.addLayer(venueMarkers[data.venues[i].slug]);
+				}
+			}
+		}
+	});
 });
 
 var keyUpTimer;
@@ -57,7 +89,11 @@ function loadSearchResults() {
 						}
 					});
 					for(i in venues) {
-						html += '<li class="venue result">';
+						if (venues[i].lat && venues[i].lng) {
+							html += '<li class="venue result" onmouseover="mapToLatLng('+venues[i].lat+','+venues[i].lng+')">';
+						} else {
+							html += '<li class="venue result">';
+						}
 						html += '<form action="/event/'+currentEventSlug+'/edit/venue" method="post" class="oneActionFormRight">';
 						html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
 						html += '<input type="hidden" name="venue_slug" value="' + escapeHTML(venues[i].slug)+'">';
@@ -71,6 +107,13 @@ function loadSearchResults() {
 							html += '<div>' + escapeHTML(venues[i].addresscode)+'</div>';
 						}
 						html += '<div class="afterOneActionFormRight"></div></li>';
+						// Ensure this venue is on the map.
+						// (We may have all venues on may already but if we are doing smart loading we may not.
+						if (!(venues[i].slug in venueMarkers) && venues[i].lat && venues[i].lng) {
+							venueMarkers[venues[i].slug] = L.marker([venues[i].lat,venues[i].lng]);
+							venueMarkers[venues[i].slug].bindPopup(escapeHTML(venues[i].title)+'<br><a href="#" onclick="useVenue('+venues[i].slug+'); return false">At this venue</a>');
+							markerGroup.addLayer(venueMarkers[venues[i].slug]);
+						}
 					}
 				} else {
 					html += '<li class="information">Sorry, nothing found.</li>'
@@ -109,5 +152,29 @@ function loadSearchResults() {
 	});
 
 
+}
+
+function mapToLatLng(lat, lng) {
+	map.setView([lat,lng], 15);
+}
+
+function mapToBounds(minLat, maxLat, minLng, maxLng) {
+	if (minLat == maxLat || minLng == maxLng) {
+		map.setView([minLat,minLng], 13);
+	} else {
+		var southWest = L.latLng(minLat, minLng),
+			northEast = L.latLng(maxLat, maxLng),
+			bounds = L.latLngBounds(southWest, northEast);
+		map.fitBounds(bounds);
+	}
+}
+
+function useVenue(slug) {
+	var html = '<form action="/event/'+currentEventSlug+'/edit/venue" method="post" id="UseVenueFunctionForm">';
+	html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
+	html += '<input type="hidden" name="venue_slug" value="' + slug+'">';
+	html += '</form>';
+	$('body').append(html);
+	$('#UseVenueFunctionForm').submit();
 }
 
