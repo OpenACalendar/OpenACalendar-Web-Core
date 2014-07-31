@@ -7,9 +7,8 @@
 */
 
 $(document).ready(function() {
-
 	$('#TitleField, #AddressField, #AreaField, #AddressCodeField').change(onSearchFormChanged).keyup(onSearchFormKeyUp);
-
+	$('#EditEventVenueForm input[type="submit"]').hide();
 });
 
 var keyUpTimer;

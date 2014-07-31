@@ -8,9 +8,8 @@
 
 
 $(document).ready(function() {
-
 	$('#SearchField').change(onSearchFormChanged).keyup(onSearchFormKeyUp);
-
+	$('#EditEventAreaForm input[type="submit"]').hide();
 });
 
 var keyUpTimer;
