@@ -34,18 +34,20 @@
 			<div class="after"></div>
 		</div>
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">City/Area</div>
-			<div class="widgetWrapperPlacementOnly">
-				<input type="text" name="searchArea"  id="AreaField" value="{{ searchArea | e('html_attr') }}" autocomplete="off">
-				<ul id="AreaList">
-					{%  for area in areas %}
-						<li><label><input type="radio" name="searchAreaSlug" value="{{  area.slug  }}" {% if searchAreaObject and searchAreaObject.slug == area.slug %}checked="checked"{%  endif %}>{{  area.title }}</label></li>
-					{%  endfor %}
-				</ul>
+		{% if  doesCountryHaveAnyNotDeletedAreas %}
+			<div class="rowWrapper">
+				<div class="labelWrapper">City/Area</div>
+				<div class="widgetWrapperPlacementOnly">
+					<input type="text" name="searchArea"  id="AreaField" value="{{ searchArea | e('html_attr') }}" autocomplete="off">
+					<ul id="AreaList">
+						{%  for area in areas %}
+							<li><label><input type="radio" name="searchAreaSlug" value="{{  area.slug  }}" {% if searchAreaObject and searchAreaObject.slug == area.slug %}checked="checked"{%  endif %}>{{  area.title }}</label></li>
+						{%  endfor %}
+					</ul>
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
+		{% endif %}
 
 		<div class="rowWrapper">
 			<div class="labelWrapper">Post Code</div>

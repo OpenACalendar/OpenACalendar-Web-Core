@@ -30,41 +30,43 @@
 			<div class="after"></div>
 		</div>
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">City/Area</div>
-			<div class="widgetWrapperPlacementOnly" id="AreaFieldsWrapper">
-				{% if fieldAreaObject is null %}
-					<input type="text" name="fieldArea"  id="AreaField" value="{{ fieldArea | e('html_attr') }}">
-					{% if areaSearchRequired and areas %}
+		{% if  doesCountryHaveAnyNotDeletedAreas %}
+			<div class="rowWrapper">
+				<div class="labelWrapper">City/Area</div>
+				<div class="widgetWrapperPlacementOnly" id="AreaFieldsWrapper">
+					{% if fieldAreaObject is null %}
+						<input type="text" name="fieldArea"  id="AreaField" value="{{ fieldArea | e('html_attr') }}">
+						{% if areaSearchRequired and areas %}
+							<ul class="formErrors">
+								<li>Did you mean?</li>
+							</ul>
+							<ul>
+								{%  for area in areas %}
+									<li><label><input type="radio" name="fieldAreaSlug" value="{{  area.slug  }}">{{  area.title }}</label></li>
+								{%  endfor %}
+								<li><label><input type="radio" name="fieldAreaSlug" value="-1">None of the above</label></li>
+							</ul>
+						{%  endif %}
+					{% else %}
+						{{  fieldAreaObject.title }}
+						<a href="#" onclick="clearArea(); return false;">Clear</a>
+						<input type="hidden" name="fieldAreaSlug" value="{{ fieldAreaObject.slug  }}">
+					{%  endif %}
+					{% if areaSearchRequired and childAreas %}
 						<ul class="formErrors">
-							<li>Did you mean?</li>
+							<li>Can you be more exact? This helps people find events.</li>
 						</ul>
 						<ul>
-							{%  for area in areas %}
-								<li><label><input type="radio" name="fieldAreaSlug" value="{{  area.slug  }}">{{  area.title }}</label></li>
+							{%  for area in childAreas %}
+								<li><label><input type="radio" name="fieldChildAreaSlug" value="{{  area.slug  }}">{{  area.title }}</label></li>
 							{%  endfor %}
-							<li><label><input type="radio" name="fieldAreaSlug" value="-1">None of the above</label></li>
+							<li><label><input type="radio" name="fieldChildAreaSlug" value="-1">None of the above</label></li>
 						</ul>
 					{%  endif %}
-				{% else %}
-					{{  fieldAreaObject.title }}
-					<a href="#" onclick="clearArea(); return false;">Clear</a>
-					<input type="hidden" name="fieldAreaSlug" value="{{ fieldAreaObject.slug  }}">
-				{%  endif %}
-				{% if areaSearchRequired and childAreas %}
-					<ul class="formErrors">
-						<li>Can you be more exact? This helps people find events.</li>
-					</ul>
-					<ul>
-						{%  for area in childAreas %}
-							<li><label><input type="radio" name="fieldChildAreaSlug" value="{{  area.slug  }}">{{  area.title }}</label></li>
-						{%  endfor %}
-						<li><label><input type="radio" name="fieldChildAreaSlug" value="-1">None of the above</label></li>
-					</ul>
-				{%  endif %}
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
+		{%  endif %}
 
 		<div class="rowWrapper">
 			<div class="labelWrapper">Post Code</div>

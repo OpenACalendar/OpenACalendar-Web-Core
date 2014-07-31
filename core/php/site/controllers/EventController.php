@@ -393,6 +393,9 @@ class EventController {
 			die("No"); // TODO
 		}
 
+		$areaRepository = new AreaRepository();
+
+		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 		$this->parameters['searchAddressCode'] = $request->query->get('searchAddressCode');
 		$this->parameters['searchArea'] = $request->query->get('searchArea');
 		$this->parameters['searchAreaSlug'] = $request->query->get('searchAreaSlug');
@@ -444,6 +447,9 @@ class EventController {
 			die("No"); // TODO
 		}
 
+		$areaRepository = new AreaRepository();
+
+		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 		$this->parameters['searchAddressCode'] = $request->query->get('searchAddressCode');
 		$this->parameters['searchArea'] = $request->query->get('searchArea');
 		$this->parameters['searchAreaSlug'] = $request->query->get('searchAreaSlug');
@@ -491,26 +497,27 @@ class EventController {
 		$this->parameters['venueSearchDone'] = false;
 
 
+		if ($this->parameters['doesCountryHaveAnyNotDeletedAreas']) {
+			// Area search
+			if ($this->parameters['searchArea']) {
+				$arb = new AreaRepositoryBuilder();
+				$arb->setIncludeDeleted(false);
+				$arb->setSite($app['currentSite']);
+				$arb->setCountry($this->parameters['country']);
+				$arb->setFreeTextSearch($this->parameters['searchArea']);
+				$this->parameters['areas'] = $arb->fetchAll();
+				if (count($this->parameters['areas']) == 1 && !$this->parameters['searchAreaSlug']) {
+					$this->parameters['searchAreaSlug'] = $this->parameters['areas'][0]->getSlug();
+					$this->parameters['searchAreaObject'] = $this->parameters['areas'][0];
+				}
 
-		// Area search
-		if ($this->parameters['searchArea']) {
-			$arb = new AreaRepositoryBuilder();
-			$arb->setIncludeDeleted(false);
-			$arb->setSite($app['currentSite']);
-			$arb->setCountry($this->parameters['country']);
-			$arb->setFreeTextSearch($this->parameters['searchArea']);
-			$this->parameters['areas'] = $arb->fetchAll();
-			if (count($this->parameters['areas']) == 1 && !$this->parameters['searchAreaSlug']) {
-				$this->parameters['searchAreaSlug'] = $this->parameters['areas'][0]->getSlug();
-				$this->parameters['searchAreaObject'] = $this->parameters['areas'][0];
-			}
-
-			// has user selected a area
-			if (!$this->parameters['searchAreaObject'] && $this->parameters['searchAreaSlug'] && intval($this->parameters['searchAreaSlug'])) {
-				$areaRepository = new AreaRepository();
-				$this->parameters['searchAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['searchAreaSlug']);
-				if (!in_array($this->parameters['searchAreaObject'], $this->parameters['areas'])) {
-					$this->parameters['areas'][] = $this->parameters['searchAreaObject'];
+				// has user selected a area
+				if (!$this->parameters['searchAreaObject'] && $this->parameters['searchAreaSlug'] && intval($this->parameters['searchAreaSlug'])) {
+					$areaRepository = new AreaRepository();
+					$this->parameters['searchAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['searchAreaSlug']);
+					if (!in_array($this->parameters['searchAreaObject'], $this->parameters['areas'])) {
+						$this->parameters['areas'][] = $this->parameters['searchAreaObject'];
+					}
 				}
 			}
 		}
@@ -646,6 +653,9 @@ class EventController {
 			die("No"); // TODO
 		}
 
+		$areaRepository = new AreaRepository();
+
+		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 		$this->parameters['fieldAddressCode'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAddressCode') : $request->query->get('fieldAddressCode') ;
 		$this->parameters['fieldArea'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldArea') : $request->query->get('fieldArea');
 		$this->parameters['fieldAreaSlug'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSlug') : $request->query->get('fieldAreaSlug');
@@ -705,55 +715,59 @@ class EventController {
 		$this->parameters['childAreas'] = null;
 
 
-		// did the user select a child area
-		if ($this->parameters['fieldChildAreaSlug'] && intval($this->parameters['fieldChildAreaSlug'])) {
-			$areaRepository = new AreaRepository();
-			$newArea = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldChildAreaSlug']);
+		if ($this->parameters['doesCountryHaveAnyNotDeletedAreas']) {
 
-			if ($newArea) {
-				$this->parameters['fieldAreaObject'] = $newArea;
-			}
-		}
-
-		if (!$this->parameters['fieldAreaObject']) {
-			// Load an area from what we have been given, slug or text search?
-			if ($this->parameters['fieldAreaSlug'] && intval($this->parameters['fieldAreaSlug'])) {
+			// did the user select a child area
+			if ($this->parameters['fieldChildAreaSlug'] && intval($this->parameters['fieldChildAreaSlug'])) {
 				$areaRepository = new AreaRepository();
-				$this->parameters['fieldAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldAreaSlug']);
+				$newArea = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldChildAreaSlug']);
 
-			} else if ($this->parameters['fieldArea']) {
+				if ($newArea) {
+					$this->parameters['fieldAreaObject'] = $newArea;
+				}
+			}
 
-				$arb = new AreaRepositoryBuilder();
-				$arb->setSite($app['currentSite']);
-				$arb->setCountry($this->parameters['country']);
-				$arb->setFreeTextSearch($this->parameters['fieldArea']);
-				$areas = $arb->fetchAll();
-				if (count($areas) == 1) {
-					$this->parameters['fieldAreaObject'] = $areas[0];
+			if (!$this->parameters['fieldAreaObject']) {
+				// Load an area from what we have been given, slug or text search?
+				if ($this->parameters['fieldAreaSlug'] && intval($this->parameters['fieldAreaSlug'])) {
+					$areaRepository = new AreaRepository();
+					$this->parameters['fieldAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldAreaSlug']);
+
+				} else if ($this->parameters['fieldArea']) {
+
+					$arb = new AreaRepositoryBuilder();
+					$arb->setSite($app['currentSite']);
+					$arb->setCountry($this->parameters['country']);
+					$arb->setFreeTextSearch($this->parameters['fieldArea']);
+					$areas = $arb->fetchAll();
+					if (count($areas) == 1) {
+						$this->parameters['fieldAreaObject'] = $areas[0];
+					} else {
+						$this->parameters['areas'] = $areas;
+						$this->parameters['areaSearchRequired'] = true;
+					}
+				}
+			}
+
+			// Child areas?
+			// -1 indicates "none of the above", so don't prompt the user again.
+			if (!$this->parameters['areaSearchRequired'] && $this->parameters['fieldChildAreaSlug'] != '-1') {
+				$areaRepoBuilder = new AreaRepositoryBuilder();
+				$areaRepoBuilder->setSite($app['currentSite']);
+				$areaRepoBuilder->setCountry($this->parameters['country']);
+				$areaRepoBuilder->setIncludeDeleted(false);
+				if ($this->parameters['fieldAreaObject']) {
+					$areaRepoBuilder->setParentArea($this->parameters['fieldAreaObject']);
 				} else {
-					$this->parameters['areas'] = $areas;
+					$areaRepoBuilder->setNoParentArea(true);
+				}
+				$childAreas = $areaRepoBuilder->fetchAll();
+				if ($childAreas) {
+					$this->parameters['childAreas'] = $childAreas;
 					$this->parameters['areaSearchRequired'] = true;
 				}
 			}
-		}
 
-		// Child areas?
-		// -1 indicates "none of the above", so don't prompt the user again.
-		if (!$this->parameters['areaSearchRequired'] && $this->parameters['fieldChildAreaSlug'] != '-1') {
-			$areaRepoBuilder = new AreaRepositoryBuilder();
-			$areaRepoBuilder->setSite($app['currentSite']);
-			$areaRepoBuilder->setCountry($this->parameters['country']);
-			$areaRepoBuilder->setIncludeDeleted(false);
-			if ($this->parameters['fieldAreaObject']) {
-				$areaRepoBuilder->setParentArea($this->parameters['fieldAreaObject']);
-			} else {
-				$areaRepoBuilder->setNoParentArea(true);
-			}
-			$childAreas = $areaRepoBuilder->fetchAll();
-			if ($childAreas) {
-				$this->parameters['childAreas'] = $childAreas;
-				$this->parameters['areaSearchRequired'] = true;
-			}
 		}
 
 	}
