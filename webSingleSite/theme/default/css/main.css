@@ -817,6 +817,12 @@ ul.venues li.venue .title a:hover {
   color: black;
   text-decoration: underline;
 }
+ul.venues li.information {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.3em;
+  line-height: 1.5em;
+}
 ul.selectvenue li.newvenue .newvenueform {
   border: 1px solid #ccc;
   -webkit-border-radius: 2px;
@@ -1525,6 +1531,12 @@ ul.areas li.area span.contentWithEvents a,
 ul.areas li.area span.contentWithNoEvents a {
   color: white;
   text-decoration: none;
+}
+ul.areas li.information {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.3em;
+  line-height: 1.5em;
 }
 ul.areasAdmin {
   padding: 10px 5px 10px 20px;

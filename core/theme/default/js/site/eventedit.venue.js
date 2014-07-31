@@ -34,8 +34,8 @@ function loadSearchResults() {
 		return;
 	}
 	lastFormSerialized = thisFormSerialized;
-	$('#EditEventVenueSearchResults li.result').remove();
-	$("#EditEventVenueSearchResults").prepend('<li class="loading">Loading, please wait ...</li>');
+	$('#EditEventVenueSearchResults li.result, #EditEventVenueSearchResults li.information').remove();
+	$("#EditEventVenueSearchResults").prepend('<li class="information"><img src="/theme/default/img/ajaxLoading.gif"> Loading, please wait ...</li>');
 	loadSearchResultsAJAX = $.ajax({
 		data: $('#EditEventVenueForm').serialize(),
 		dataType: "json",
@@ -43,39 +43,43 @@ function loadSearchResults() {
 		success: function(data) {
 			var html = '';
 			if (data.venueSearchDone) {
-				var venues = $.map(data.venues, function(value, index) {
-					return [value];
-				});;
-				venues.sort(function(a,b) {
-					if (a.title.toLowerCase() > b.title.toLowerCase()) {
-						return 1;
-					} else if (a.title.toLowerCase() < b.title.toLowerCase()) {
-						return -1;
-					} else {
-						return 0;
+				if (data.venues.length > 0) {
+					var venues = $.map(data.venues, function(value, index) {
+						return [value];
+					});;
+					venues.sort(function(a,b) {
+						if (a.title.toLowerCase() > b.title.toLowerCase()) {
+							return 1;
+						} else if (a.title.toLowerCase() < b.title.toLowerCase()) {
+							return -1;
+						} else {
+							return 0;
+						}
+					});
+					for(i in venues) {
+						html += '<li class="venue result">';
+						html += '<form action="/event/'+currentEventSlug+'/edit/venue" method="post" class="oneActionFormRight">';
+						html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
+						html += '<input type="hidden" name="venue_slug" value="' + escapeHTML(venues[i].slug)+'">';
+						html += '<input type="submit" value="Select ' + escapeHTML(venues[i].title)+'">';
+						html += '</form>';
+						html += '<div class="title">' + escapeHTML(venues[i].title)+'</div>';
+						if (data.venues[i].address) {
+							html += '<div>' + escapeHTMLNewLine(venues[i].address)+'</div>';
+						}
+						if (data.venues[i].addresscode) {
+							html += '<div>' + escapeHTML(venues[i].addresscode)+'</div>';
+						}
+						html += '<div class="afterOneActionFormRight"></div></li>';
 					}
-				});
-				for(i in venues) {
-					html += '<li class="venue result">';
-					html += '<form action="/event/'+currentEventSlug+'/edit/venue" method="post" class="oneActionFormRight">';
-					html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
-					html += '<input type="hidden" name="venue_slug" value="' + escapeHTML(venues[i].slug)+'">';
-					html += '<input type="submit" value="Select ' + escapeHTML(venues[i].title)+'">';
-					html += '</form>';
-					html += '<div class="title">' + escapeHTML(venues[i].title)+'</div>';
-					if (data.venues[i].address) {
-						html += '<div>' + escapeHTMLNewLine(venues[i].address)+'</div>';
-					}
-					if (data.venues[i].addresscode) {
-						html += '<div>' + escapeHTML(venues[i].addresscode)+'</div>';
-					}
-					html += '<div class="afterOneActionFormRight"></div></li>';
+				} else {
+					html += '<li class="information">Sorry, nothing found.</li>'
 				}
 				$('#VenueNewWrapper').show();
 			} else {
 				$('#VenueNewWrapper').hide();
 			}
-			$('#EditEventVenueSearchResults li.loading').remove();
+			$('#EditEventVenueSearchResults li.information').remove();
 			$("#EditEventVenueSearchResults").prepend(html);
 
 			var areas = $.map(data.areas, function(value, index) {
