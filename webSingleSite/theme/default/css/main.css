@@ -2295,6 +2295,12 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
     float: left;
   }
 }
+@media screen and (max-width: 750px) {
+  #innerPageWrapper #innerPage #innerPageLeft.hideIfOneCol,
+  #innerPageWrapper #innerPage #innerPageRight.hideIfOneCol {
+    display: none;
+  }
+}
 #innerPageWrapper #innerPage #afterInnerPageContent {
   clear: both;
 }
