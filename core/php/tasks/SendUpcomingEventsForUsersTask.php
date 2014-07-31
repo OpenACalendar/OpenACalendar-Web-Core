@@ -30,6 +30,8 @@ class SendUpcomingEventsForUsersTask {
 		/** @var usernotifications/UpcomingEventsUserNotificationType **/
 		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UpcomingEvents');
 
+		configureAppForThemeVariables(null);
+
 		foreach($userRepoBuilder->fetchAll() as $user) {
 
 			if ($verbose) print date("c")." User ".$user->getEmail()."\n";
