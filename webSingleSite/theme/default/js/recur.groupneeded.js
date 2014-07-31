@@ -34,12 +34,12 @@ function groupSearchChanged() {
 				for(i in data.data) {
 					var group = data.data[i];
 					out += '<li class="group">';
-					out += '<div class="title">'+escapeHTML(group.title)+'</div>';
-					out += '<form action="" method="POST">';
+					out += '<form action="" method="POST" class="oneActionFormRight">';
 					out += '<input type="hidden" name="intoGroupSlug" value="'+group.slug+'">';
-					out += '<div class="bigButtonContainer"><input type="submit" value="Put event in this group" class="button"></div>';
+					out += '<input type="submit" value="Put event in this group" class="button">';
 					out += '</form>';
-					out += '</li>';
+					out += '<div class="title">'+escapeHTML(group.title)+'</div>';
+					out += '<div class="afterOneActionFormRight"></div></li>';
 				}
 				$('#GroupSearchList').empty();
 				$('#GroupSearchList').append(out);

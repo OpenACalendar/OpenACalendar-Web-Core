@@ -35,15 +35,15 @@ function groupSearchChanged() {
 				for(i in data.data) {
 					var group = data.data[i];
 					out += '<li class="group">';
-					out += '<div class="title">'+escapeHTML(group.title)+'</div>';
-					out += '<div class="bigButtonContainer">';
+					out += '<div class="oneActionFormRight">';
 					if (dateForEvent) {
 						out += '<a class="button" href="/group/'+group.slug+'/newevent/go?date='+dateForEvent+'">Create event in this group</a>';
 					} else {
 						out += '<a class="button" href="/group/'+group.slug+'/newevent">Create event in this group</a>';
 					}
 					out += '</div>';
-					out += '</li>';
+					out += '<div class="title">'+escapeHTML(group.title)+'</div>';
+					out += '<div class="afterOneActionFormRight"></div></li>';
 				}
 				$('#GroupSearchList').empty();
 				$('#GroupSearchList').append(out);

@@ -718,6 +718,34 @@ form.styled .actionWrapperBig input[type="submit"]:hover {
   color: black;
   text-decoration: underline;
 }
+.oneActionFormRight {
+  float: right;
+  display: inline;
+  padding: 6px;
+  margin: 0;
+  line-height: 1.8;
+  text-align: right;
+}
+.oneActionFormRight input[type="submit"],
+.oneActionFormRight a.button {
+  display: inline;
+  background: #B7CFB7;
+  padding: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  margin: 1px;
+  color: #333;
+  font-size: 1.20em;
+  text-decoration: none;
+}
+.oneActionFormRight input[type="submit"]:hover,
+.oneActionFormRight a.button:hover {
+  color: black;
+  text-decoration: underline;
+}
+.afterOneActionFormRight {
+  clear: both;
+}
 #Map.leftColumnFullWidth {
   width: 99%;
   height: 300px;

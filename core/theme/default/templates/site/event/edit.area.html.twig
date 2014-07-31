@@ -29,12 +29,13 @@
 	<ul class="areas" id="EditEventAreaResults">
 		{% for area in areas %}
 			<li class="area">
-				<span class="content">{{ area.title }}{%  if area.parent1Title %}, {{ area.parent1Title }}{% endif %}</span>
-				<form action="/event/{{  event.slugForURL }}/edit/area" method="post" class="styled">
+				<form action="/event/{{  event.slugForURL }}/edit/area" method="post" class="oneActionFormRight">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					<input type="hidden" name="area_slug" value="{{  area.slug }}">
-					<div class="actionWrapperBig"><input type="submit" value="Select {{ area.title }}"></div>
+					<input type="submit" value="Select {{ area.title }}">
 				</form>
+				<span class="content">{{ area.title }}{%  if area.parent1Title %}, {{ area.parent1Title }}{% endif %}</span>
+				<div class="afterOneActionFormRight"></div>
 			</li>
 		{% endfor %}
 	</ul>

@@ -58,6 +58,11 @@ function loadSearchResults() {
 				});
 				for(i in venues) {
 					html += '<li class="venue result">';
+					html += '<form action="/event/'+currentEventSlug+'/edit/venue" method="post" class="oneActionFormRight">';
+					html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
+					html += '<input type="hidden" name="venue_slug" value="' + escapeHTML(venues[i].slug)+'">';
+					html += '<input type="submit" value="Select ' + escapeHTML(venues[i].title)+'">';
+					html += '</form>';
 					html += '<div class="title">' + escapeHTML(venues[i].title)+'</div>';
 					if (data.venues[i].address) {
 						html += '<div>' + escapeHTMLNewLine(venues[i].address)+'</div>';
@@ -65,12 +70,7 @@ function loadSearchResults() {
 					if (data.venues[i].addresscode) {
 						html += '<div>' + escapeHTML(venues[i].addresscode)+'</div>';
 					}
-					html += '<form action="/event/'+currentEventSlug+'/edit/venue" method="post" class="styled">';
-					html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
-					html += '<input type="hidden" name="venue_slug" value="' + escapeHTML(venues[i].slug)+'">';
-					html += '<div class="actionWrapperBig"><input type="submit" value="Select ' + escapeHTML(venues[i].title)+'"></div>';
-					html += '</form>';
-					html += '</li>';
+					html += '<div class="afterOneActionFormRight"></div></li>';
 				}
 				$('#VenueNewWrapper').show();
 			} else {

@@ -59,13 +59,13 @@ function loadSearchResults() {
 			var html = '';
 			for(i in areas) {
 				html += '<li class="area">';
-				html += '<span class="content">' + escapeHTML(areas[i].title)+(areas[i].parent1title ? ", "+escapeHTML(areas[i].parent1title):'')+'</span>';
-				html += '<form action="/event/'+currentEventSlug+'/edit/area" method="post" class="styled">';
+				html += '<form action="/event/'+currentEventSlug+'/edit/area" method="post" class="oneActionFormRight">';
 				html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
 				html += '<input type="hidden" name="area_slug" value="' + escapeHTML(areas[i].slug)+'">';
-				html += '<div class="actionWrapperBig"><input type="submit" value="Select ' + escapeHTML(areas[i].title)+'"></div>';
+				html += '<input type="submit" value="Select ' + escapeHTML(areas[i].title)+'">';
 				html += '</form>';
-				html += '</li>';
+				html += '<span class="content">' + escapeHTML(areas[i].title)+(areas[i].parent1title ? ", "+escapeHTML(areas[i].parent1title):'')+'</span>';
+				html += '<div class="afterOneActionFormRight"></div></li>';
 			}
 			$('#EditEventAreaResults li.loading').remove();
 			$("#EditEventAreaResults").prepend(html);

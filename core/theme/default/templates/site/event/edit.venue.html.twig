@@ -65,32 +65,35 @@
 	<ul class="venues" id="EditEventVenueSearchResults">
 		{% for venue in venues %}
 			<li class="venue result">
+				<form action="/event/{{  event.slugForURL }}/edit/venue" method="post" class="oneActionFormRight">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
+					<input type="submit" value="Select {{ venue.title }}">
+				</form>
 				<div class="title">{{ venue.title }}</div>
 				{%  if venue.address %}<div>{{  venue.address | nl2br }}</div>{%  endif %}
 				{%  if venue.addressCode %}<div>{{  venue.addressCode }}</div>{%  endif %}
-				<form action="/event/{{  event.slugForURL }}/edit/venue" method="post" class="styled">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
-					<div class="actionWrapperBig"><input type="submit" value="Select {{ venue.title }}"></div>
-				</form>
+				<div class="afterOneActionFormRight"></div>
 			</li>
 		{% endfor %}
 		<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
-			<div class="title">This is a new venue</div>
-			<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="styled">
+			<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="oneActionFormRight">
 				<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
 				<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
 				<input type="hidden" name="fieldArea" value="{{ searchArea | e('html_attr') }}">
 				<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
 				<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
-				<div class="actionWrapperBig"><input type="submit" value="New"></div>
+				<input type="submit" value="New">
 			</form>
+			<div class="title">This is a new venue</div>
+			<div class="afterOneActionFormRight"></div>
 		</li>
 		<li class="venue">
-			<div class="title">The exact venue is not known</div>
-			<form action="/event/{{  event.slugForURL }}/edit/area" class="styled">
-				<div class="actionWrapperBig"><input type="submit" value="Not Known"></div>
+			<form action="/event/{{  event.slugForURL }}/edit/area" class="oneActionFormRight">
+				<input type="submit" value="Not Known">
 			</form>
+			<div class="title">The exact venue is not known</div>
+			<div class="afterOneActionFormRight"></div>
 		</li>
 	</ul>
 
