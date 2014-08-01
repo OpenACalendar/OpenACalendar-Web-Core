@@ -13,12 +13,9 @@ $(document).ready(function() {
 	$('#EditEventAreaForm input[type="submit"]').hide();
 
 	map = L.map('Map');
-
+	configureBasicMap(map);
+	
 	mapToBounds(countryMinLat, countryMaxLat, countryMinLng, countryMaxLng );
-
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
 });
 
 var keyUpTimer;

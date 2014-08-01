@@ -9,7 +9,9 @@ var map;
 var marker;
 
 $(document).ready(function() {
-	map = L.map('Map')
+	map = L.map('Map');
+	configureBasicMap(map);
+
 	if (mapData.min_lat && mapData.min_lng && mapData.max_lat && mapData.max_lng) {
 					var southWest = L.latLng(mapData.min_lat, mapData.min_lng),
 						northEast = L.latLng(mapData.max_lat, mapData.max_lng),
@@ -20,10 +22,6 @@ $(document).ready(function() {
 	} else {
 		map.setView([55.952035, -3.196807], 4);
 	}
-	
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
 
 	if (mapData.lat && mapData.lng) {
 		marker = L.marker([mapData.lat,mapData.lng]);

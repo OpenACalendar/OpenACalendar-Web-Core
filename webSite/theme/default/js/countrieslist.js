@@ -10,10 +10,8 @@ var map;
 $(document).ready(function() {
 	
 	map = L.map('Map');
-		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);	
-	
+	configureBasicMap(map);
+
 	if (countries.length < 20) {
 		var minLat = countries[0].minLat;
 		var minLng = countries[0].minLng;

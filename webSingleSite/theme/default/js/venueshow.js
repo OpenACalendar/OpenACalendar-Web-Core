@@ -12,11 +12,8 @@ $(document).ready(function() {
 	
 	if (mapData.lat && mapData.lng) {
 		map = L.map('Map')
+		configureBasicMap(map);
 		map.setView([mapData.lat,mapData.lng], 13);
-	
-		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
 
 		marker = L.marker([mapData.lat,mapData.lng]);
 		marker.addTo(map);

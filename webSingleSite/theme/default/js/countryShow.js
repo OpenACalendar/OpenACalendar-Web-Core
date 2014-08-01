@@ -11,9 +11,7 @@ var markerGroup;
 $(document).ready(function() {
 	
 	map = L.map('Map');
-		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);	
+	configureBasicMap(map);
 		
 	markerGroup = new L.MarkerClusterGroup();
 	map.addLayer(markerGroup);
