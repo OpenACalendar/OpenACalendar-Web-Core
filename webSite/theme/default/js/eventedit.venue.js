@@ -96,10 +96,11 @@ function loadSearchResults() {
 						} else {
 							html += '<li class="venue result">';
 						}
+						var title = venues[i].title.split(', ').shift();
 						html += '<form action="/event/'+currentEventSlug+'/edit/venue" method="post" class="oneActionFormRight">';
 						html += '<input type="hidden" name="CSFRToken" value="'+CSFRToken+'">';
 						html += '<input type="hidden" name="venue_slug" value="' + escapeHTML(venues[i].slug)+'">';
-						html += '<input type="submit" value="Select ' + escapeHTML(venues[i].title)+'">';
+						html += '<input type="submit" value="Select ' + escapeHTML(title)+'">';
 						html += '</form>';
 						html += '<div class="title">' + escapeHTML(venues[i].title)+'</div>';
 						if (data.venues[i].address) {
