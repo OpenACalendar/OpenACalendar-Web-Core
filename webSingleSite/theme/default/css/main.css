@@ -705,7 +705,7 @@ form.styled .actionWrapperBig {
 }
 form.styled .actionWrapperBig input[type="submit"] {
   display: inline;
-  background: #B7CFB7;
+  background: #36C036;
   padding: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -729,7 +729,7 @@ form.styled .actionWrapperBig input[type="submit"]:hover {
 .oneActionFormRight input[type="submit"],
 .oneActionFormRight a.button {
   display: inline;
-  background: #B7CFB7;
+  background: #36C036;
   padding: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -1432,7 +1432,7 @@ div.filterListVenueWrapper form.filterListVenue div.submitField input {
 }
 .bigButtonContainer a.button,
 .bigButtonContainer input.button {
-  background: #B7CFB7;
+  background: #36C036;
   padding: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
