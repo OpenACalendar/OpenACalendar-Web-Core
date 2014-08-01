@@ -122,10 +122,30 @@ class IndexController {
 				}
 			}
 		}
-		
-		
+
+		$sites = array();
+		$repo  = new SiteRepository();
+		if (isset($_COOKIE['sitesSeen'])) {
+			foreach(explode(",",$_COOKIE['sitesSeen']) as $siteID) {
+				if (intval($siteID) > 0) {
+					$site = $repo->loadById($siteID);
+					if ($site && !$site->getIsClosedBySysAdmin() && $site->getSlug() != $app['config']->siteSlugDemoSite) {
+						$sites[$site->getId()] = $site;
+					}
+				}
+			}
+		}
+
+		$srb = new SiteRepositoryBuilder();
+		$srb->setIsOpenBySysAdminsOnly(true);
+		$srb->setUserInterestedIn(userGetCurrent());
+		foreach($srb->fetchAll() as $site) {
+			$sites[$site->getId()] = $site;
+		}
+
 		return $app['twig']->render('index/index/create.html.twig', array(
 			'form'=>$form->createView(),
+			'sites'=>$sites,
 		));
 		
 	}

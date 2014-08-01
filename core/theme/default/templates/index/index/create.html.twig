@@ -5,12 +5,36 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'index/page.html.twig' %}
+{% extends 'index/page2col.html.twig' %}
 
 {% block pageTitle %}Create - {% endblock %}
 
-{% block content %}
-	
+{% block contentRight %}
+
+	<h2>Do you want to add an event to an existing calendar?</h2>
+
+	<ul class="sites">
+		{% for site in sites %}
+			<li class="site">
+				<a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/new" class="title">
+					<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
+					<span class="titleWrapper">{{ site.title }}</span>
+				</a>
+				<a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/new" class="link">
+					Add to this calendar!
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+
+
+{% block contentLeft %}
+
+	<h2>Do you want to create a calendar of your own?</h2>
+
+
 	<form action="#" method="post" class="styled">
 		{{ form_errors(form) }}
 
