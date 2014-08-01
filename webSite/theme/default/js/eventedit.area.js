@@ -77,7 +77,10 @@ function loadSearchResults() {
 					html += '<input type="hidden" name="area_slug" value="' + escapeHTML(areas[i].slug)+'">';
 					html += '<input type="submit" value="Select ' + escapeHTML(areas[i].title)+'">';
 					html += '</form>';
-					html += '<span class="content">' + escapeHTML(areas[i].title)+(areas[i].parent1title ? ", "+escapeHTML(areas[i].parent1title):'')+'</span>';
+					html += '<div class="title">' + escapeHTML(areas[i].title)+'</div>';
+					if (areas[i].parent1title) {
+						html += '<div>' + escapeHTML(areas[i].parent1title)+'</div>';
+					}
 					html += '<div class="afterOneActionFormRight"></div></li>';
 				}
 			} else {

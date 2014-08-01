@@ -1493,6 +1493,22 @@ ul.mediaList li.media .title {
 ul.mediaList li.media div.afterMediaListing {
   clear: both;
 }
+ul.areasList {
+  border-bottom: 2px solid #E9E9E9;
+}
+ul.areasList .title {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 2px 0;
+}
+ul.areasList .title a {
+  color: #333;
+  text-decoration: none;
+}
+ul.areasList .title a:hover {
+  color: black;
+  text-decoration: underline;
+}
 ul.areas {
   padding: 20px 0;
   font-weight: 200;
