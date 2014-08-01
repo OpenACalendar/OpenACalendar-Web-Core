@@ -88,6 +88,8 @@ function loadSearchResults() {
 							return 0;
 						}
 					});
+					var resultsBounds;
+					var resultsBoundsValid = false;
 					for(i in venues) {
 						if (venues[i].lat && venues[i].lng) {
 							html += '<li class="venue result" onmouseover="mapToLatLng('+venues[i].lat+','+venues[i].lng+')">';
@@ -107,14 +109,23 @@ function loadSearchResults() {
 							html += '<div>' + escapeHTML(venues[i].addresscode)+'</div>';
 						}
 						html += '<div class="afterOneActionFormRight"></div></li>';
-						// Ensure this venue is on the map.
-						// (We may have all venues on may already but if we are doing smart loading we may not.
-						if (!(venues[i].slug in venueMarkers) && venues[i].lat && venues[i].lng) {
-							venueMarkers[venues[i].slug] = L.marker([venues[i].lat,venues[i].lng]);
-							venueMarkers[venues[i].slug].bindPopup(escapeHTML(venues[i].title)+'<br><a href="#" onclick="useVenue('+venues[i].slug+'); return false">At this venue</a>');
-							markerGroup.addLayer(venueMarkers[venues[i].slug]);
+						if (venues[i].lat && venues[i].lng) {
+							// Ensure this venue is on the map.
+							// (We may have all venues on may already but if we are doing smart loading we may not.
+							if (!(venues[i].slug in venueMarkers)) {
+								venueMarkers[venues[i].slug] = L.marker([venues[i].lat,venues[i].lng]);
+								venueMarkers[venues[i].slug].bindPopup(escapeHTML(venues[i].title)+'<br><a href="#" onclick="useVenue('+venues[i].slug+'); return false">At this venue</a>');
+								markerGroup.addLayer(venueMarkers[venues[i].slug]);
+							}
+							if (resultsBounds) {
+								resultsBounds.extend(venueMarkers[venues[i].slug].getLatLng());
+							} else {
+								resultsBounds = L.latLngBounds(venueMarkers[venues[i].slug].getLatLng(), venueMarkers[venues[i].slug].getLatLng());
+							}
+							resultsBoundsValid = true;
 						}
 					}
+					if (resultsBoundsValid) map.fitBounds(resultsBounds);
 				} else {
 					html += '<li class="information">Sorry, nothing found.</li>'
 				}
