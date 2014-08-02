@@ -760,6 +760,7 @@ class EventController {
 					$arb->setSite($app['currentSite']);
 					$arb->setCountry($this->parameters['country']);
 					$arb->setFreeTextSearch($this->parameters['fieldArea']);
+					$arb->setIncludeParentLevels(1);
 					$areas = $arb->fetchAll();
 					if (count($areas) == 1) {
 						$this->parameters['fieldAreaObject'] = $areas[0];
@@ -777,6 +778,7 @@ class EventController {
 				$areaRepoBuilder->setSite($app['currentSite']);
 				$areaRepoBuilder->setCountry($this->parameters['country']);
 				$areaRepoBuilder->setIncludeDeleted(false);
+				$areaRepoBuilder->setIncludeParentLevels(1);
 				if ($this->parameters['fieldAreaObject']) {
 					$areaRepoBuilder->setParentArea($this->parameters['fieldAreaObject']);
 				} else {

@@ -42,7 +42,7 @@
 							</ul>
 							<ul>
 								{%  for area in areas %}
-									<li><label><input type="radio" name="fieldAreaSlug" value="{{  area.slug  }}">{{  area.title }}</label></li>
+									<li><label><input type="radio" name="fieldAreaSlug" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{%  endif %}</label></li>
 								{%  endfor %}
 								<li><label><input type="radio" name="fieldAreaSlug" value="-1">None of the above</label></li>
 							</ul>
@@ -58,7 +58,7 @@
 						</ul>
 						<ul>
 							{%  for area in childAreas %}
-								<li><label><input type="radio" name="fieldChildAreaSlug" value="{{  area.slug  }}">{{  area.title }}</label></li>
+								<li><label><input type="radio" name="fieldChildAreaSlug" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{% endif %}</label></li>
 							{%  endfor %}
 							<li><label><input type="radio" name="fieldChildAreaSlug" value="-1">None of the above</label></li>
 						</ul>
