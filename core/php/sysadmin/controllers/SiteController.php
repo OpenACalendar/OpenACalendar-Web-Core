@@ -184,7 +184,16 @@ class SiteController {
 	
 	}
 	
-	
+
+	function owner($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+
+		$userRepo = new UserAccountRepository();
+		$this->parameters['owner'] = $userRepo->loadByOwnerOfSite($this->parameters['site']);
+
+		return $app['twig']->render('sysadmin/site/owner.html.twig', $this->parameters);
+	}
+
 	function editors($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 			

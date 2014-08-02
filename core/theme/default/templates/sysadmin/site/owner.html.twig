@@ -1,0 +1,36 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block breadcrumbs %}
+	<li><a href="/sysadmin/site/{{ site.id }}/">{{ site.title }}</a></li>
+	<li class="current"><a href="/sysadmin/site/{{ site.id }}/owner">owner</a></li>
+{% endblock %}
+
+{% block content %}
+
+
+	<p>The owner is:</p>
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td><a href="/sysadmin/user/{{ owner.id }}">{{ owner.id }}</a></td>
+		</tr>
+		<tr>
+			<th>Username</th>
+			<td>{{ owner.username }}</td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td>{{ owner.email }}</td>
+		</tr>
+	</table>
+{% endblock %}
+
