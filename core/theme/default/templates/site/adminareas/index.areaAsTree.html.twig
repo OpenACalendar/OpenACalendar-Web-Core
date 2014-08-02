@@ -13,13 +13,12 @@
 			<span title="{{areaData.area.cachedFutureEvents}} future events"> ({{areaData.area.cachedFutureEvents}})</span>
 		{% endif %}		
 	</span>
+	&nbsp;
+	<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new?parentAreaSlug={{ areaData.area.slug }}">New area inside "{{ areaData.area.title }}"</a></span>
 	<ul class="areasAdmin">
 		{% for areaChild in areaData.children %}
 			{% include 'site/adminareas/index.areaAsTree.html.twig' with {'areaData':areaChild} %}
 		{% endfor %}
-		<li class="area">
-			<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new?parentAreaSlug={{ areaData.area.slug }}">New area inside "{{ areaData.area.title }}"</a></span>
-		</li>
 	</ul>
 </li>
 
