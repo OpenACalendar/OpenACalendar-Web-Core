@@ -133,23 +133,25 @@ function loadSearchResults() {
 			}
 			$('#EditEventVenueSearchResults li.information').remove();
 			$("#EditEventVenueSearchResults").prepend(html);
-
-			var areas = $.map(data.areas, function(value, index) {
-				return [value];
-			});;
-			areas.sort(function(a,b) {
-				if (a.title.toLowerCase() > b.title.toLowerCase()) {
-					return 1;
-				} else if (a.title.toLowerCase() < b.title.toLowerCase()) {
-					return -1;
-				} else {
-					return 0;
-				}
-			});
 			var html = '';
-			for(i in areas) {
-				var htmlS = (areas[i].slug == data.searchAreaSlug) ?  'checked="checked"' : '';
-				html += '<li><label><input name="searchAreaSlug" type="radio" value="'+escapeHTML(areas[i].slug)+'"'+htmlS+' onchange="onSearchFormChanged();">'+escapeHTML(areas[i].title)+'</label></li>'
+			if (data.areas.length > 0) {
+				var areas = $.map(data.areas, function(value, index) {
+					return [value];
+				});
+				areas.sort(function(a,b) {
+					if (a.title.toLowerCase() > b.title.toLowerCase()) {
+						return 1;
+					} else if (a.title.toLowerCase() < b.title.toLowerCase()) {
+						return -1;
+					} else {
+						return 0;
+					}
+				});
+				for(i in areas) {
+					var htmlS = (areas[i].slug == data.searchAreaSlug) ?  'checked="checked"' : '';
+					html += '<li><label><input name="searchAreaSlug" type="radio" value="'+escapeHTML(areas[i].slug)+'"'+htmlS+' onchange="onSearchFormChanged();">';
+					html += escapeHTML(areas[i].title)+( areas[i].parent1title ? ", "+areas[i].parent1title:'' )+'</label></li>'
+				}
 			}
 			$('#AreaList').html(html);
 			$('#VenueNewWrapper form input[name="fieldTitle"]').val($('#TitleField').val());

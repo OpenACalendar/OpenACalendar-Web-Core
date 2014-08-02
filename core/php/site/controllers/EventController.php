@@ -495,6 +495,7 @@ class EventController {
 			$data['areas'][] = array(
 				'slug'=>$area->getSlug(),
 				'title'=>$area->getTitle(),
+				'parent1title'=>$area->getParent1Title(),
 			);
 		}
 
@@ -517,6 +518,7 @@ class EventController {
 			if ($this->parameters['searchArea']) {
 				$arb = new AreaRepositoryBuilder();
 				$arb->setIncludeDeleted(false);
+				$arb->setIncludeParentLevels(1);
 				$arb->setSite($app['currentSite']);
 				$arb->setCountry($this->parameters['country']);
 				$arb->setFreeTextSearch($this->parameters['searchArea']);
@@ -526,19 +528,19 @@ class EventController {
 					$this->parameters['searchAreaObject'] = $this->parameters['areas'][0];
 				}
 
-				// has user selected a area
+				// has user selected a area and is it still in search results? If so select it.
 				if (!$this->parameters['searchAreaObject'] && $this->parameters['searchAreaSlug'] && intval($this->parameters['searchAreaSlug'])) {
-					$areaRepository = new AreaRepository();
-					$this->parameters['searchAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['searchAreaSlug']);
-					if (!in_array($this->parameters['searchAreaObject'], $this->parameters['areas'])) {
-						$this->parameters['areas'][] = $this->parameters['searchAreaObject'];
+					foreach($this->parameters['areas'] as $area) {
+						if ($area->getSlug() == $this->parameters['searchAreaSlug']) {
+							$this->parameters['searchAreaObject'] = $area;
+						}
 					}
 				}
 			}
 		}
 
 		// venue search
-		if ($this->parameters['searchAddressCode'] || $this->parameters['searchAddress'] || $this->parameters['searchTitle']) {
+		if ($this->parameters['searchAddressCode'] || $this->parameters['searchAddress'] || $this->parameters['searchTitle'] || $this->parameters['searchAreaObject']) {
 			$vrb = new VenueRepositoryBuilder();
 			$vrb->setSite($app['currentSite']);
 			$vrb->setCountry($this->parameters['country']);
