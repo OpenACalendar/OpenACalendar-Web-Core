@@ -1493,19 +1493,19 @@ ul.mediaList li.media .title {
 ul.mediaList li.media div.afterMediaListing {
   clear: both;
 }
-ul.areasList {
+ul.areasList li.area {
   border-bottom: 2px solid #E9E9E9;
 }
-ul.areasList .title {
+ul.areasList li.area .title {
   font-size: 1.1em;
   font-weight: bold;
   padding: 2px 0;
 }
-ul.areasList .title a {
+ul.areasList li.area .title a {
   color: #333;
   text-decoration: none;
 }
-ul.areasList .title a:hover {
+ul.areasList li.area .title a:hover {
   color: black;
   text-decoration: underline;
 }
