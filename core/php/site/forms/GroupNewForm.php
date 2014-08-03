@@ -19,13 +19,23 @@ use Symfony\Component\Form\FormError;
  */
 class GroupNewForm extends AbstractType{
 
+	protected $defaultTitle;
+
+	function __construct($defaultTitle=null)
+	{
+		$this->defaultTitle = $defaultTitle;
+	}
+
+
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
 		$builder->add('title', 'text', array(
 			'label'=>'Title',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
+			'attr' => array('autofocus' => 'autofocus'),
+			'data'=>$this->defaultTitle,
+
 		));
 		
 		$builder->add('description', 'textarea', array(
@@ -55,3 +65,5 @@ class GroupNewForm extends AbstractType{
 	}
 	
 }
+
+

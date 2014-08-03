@@ -17,7 +17,7 @@ var groupSearchAJAX;
 
 function groupSearchChanged() {
 	var groupSearchValue = $('#GroupSearchText').val();
-
+	$('#NewGroupLink').attr('href','/group/new?title='+encodeURIComponent(groupSearchValue));
 	if (groupSearchValue == '') {
 		lastGroupSearchValue = '';
 		$('#GroupSearchList').empty();

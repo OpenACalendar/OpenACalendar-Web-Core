@@ -27,8 +27,10 @@ class GroupNewController {
 		
 		$group = new GroupModel();
 		
-		$form = $app['form.factory']->create(new GroupNewForm(), $group);
-		
+		$form = $app['form.factory']->create(new GroupNewForm($request->query->get('title')), $group);
+
+
+
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
