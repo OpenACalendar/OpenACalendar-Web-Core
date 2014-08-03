@@ -1778,6 +1778,11 @@ h3 {
   text-align: center;
   background: #cadeea;
   border: 2px solid #A8C7DB;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
 }
 .flash-error {
   margin: 10px 5px;
@@ -1785,6 +1790,11 @@ h3 {
   text-align: center;
   background: #eb6c6c;
   border: 2px solid #6f1818;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
 }
 p {
   margin: 10px 0;
