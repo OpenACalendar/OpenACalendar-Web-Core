@@ -8,9 +8,8 @@
 //////////////////////////////////////////////////////////////////////////////// Export
 
 function showExportPopup() {
-	var div = $('#ExportPopup');
-	if (div.size() == 0) {
-		var html = '<div id="ExportPopup" class="PopupBox">';
+	if ($('#ExportPopup').size() == 0) {
+		var html = '<div id="ExportPopup" class="PopupBox" style="display: none">';
 		html +=	'<div id="ExportPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
 		html += '<div id="ExportPopupIntroText">Export your data.';
 		if (exportData.hasOwnProperty("user")) {
@@ -64,9 +63,8 @@ function showExportPopup() {
 			showLinksForTab = "userprivateattendingwatching";
 			$('#ExportUserPrivateAW').prop('checked', true)
 		}
-	} else {
-		div.show();
 	}
+	$('#ExportPopup').fadeIn(500);
 	showPopup();
 	showLinksFor(showLinksForTab);
 	exportPopupTabClickNone();	

@@ -6,9 +6,8 @@
  * @author James Baster <james@jarofgreen.co.uk>
 */
 function showEventPopup(data) {
-	var div = $('#EventPopup');
-	if (div.size() == 0) {
-		var html = '<div id="EventPopup" class="PopupBox">';
+	if ($('#EventPopup').size() == 0) {
+		var html = '<div id="EventPopup" class="PopupBox" style="display: none">';
 		html +=	'<div id="EventPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
 		html += '<div class="PopupBoxContent">';
 		html += '<div id="EventPopupContent">';
@@ -18,9 +17,8 @@ function showEventPopup(data) {
 		html += '</div>';		
 		html += '</div>';
 		$('body').append(html);
-	} else {
-		div.show();
 	}
+	$('#EventPopup').fadeIn(500);
 	showPopup();
 
 	$('#EventPopupContent').html('<div id="EventPopupTitle">Loading ...</div>'+
@@ -67,17 +65,15 @@ function escapeHTML(inString) {
 
 
 function showCurrentUserAttendanceForEvent(eventSlug) {
-	var div = $('#EventAttendancePopup');
-	if (div.size() == 0) {
-		var html = '<div id="EventAttendancePopup" class="PopupBox">';
+	if ($('#EventAttendancePopup').size() == 0) {
+		var html = '<div id="EventAttendancePopup" class="PopupBox" style="display: none">';
 		html +=	'<div id="EventAttendancePopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
 		html += '<div id="EventAttendancePopupContent" class="PopupBoxContent">';
 		html += '</div>';
 		html += '</div>';
 		$('body').append(html);
-	} else {
-		div.show();
 	}
+	$('#EventAttendancePopup').fadeIn(500);
 	showPopup();
 	showCurrentUserAttendanceForEventInPopup(eventSlug,'EventAttendancePopupContent');
 }

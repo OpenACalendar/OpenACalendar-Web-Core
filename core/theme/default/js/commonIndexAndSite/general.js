@@ -52,9 +52,9 @@ $(document).ready(function() {
 //////////////////////////////////////////////////////////////////////////////// General Popup
 function showPopup() {
 	if ($('#PopupMask').size() == 0) {
-		$('body').append('<div id="PopupMask"  onclick="closePopup();"></div>');
+		$('body').append('<div id="PopupMask"  onclick="closePopup();" style="display:none;"></div>');
 	}
-	$('#PopupMask').show();
+	$('#PopupMask').fadeIn(500);
 	$(document).on('keyup.close_popup', function(e) {
 		if (e.keyCode == 27) { closePopup() }
 	});
@@ -62,8 +62,8 @@ function showPopup() {
 
 
 function closePopup() {
-	$('.PopupBox').hide(); 
-	$('#PopupMask').hide(); 
+	$('.PopupBox').fadeOut(500);
+	$('#PopupMask').fadeOut(500);
 	$(document).unbind('keyup.close_popup');
 }
 
@@ -71,17 +71,15 @@ function closePopup() {
 //////////////////////////////////////////////////////////////////////////////// Help
 
 function showHelpPopup(html) {
-	var div = $('#HelpPopup');
-	if (div.size() == 0) {
-		var htmlOut = '<div id="HelpPopup" class="PopupBox">';
+	if ($('#HelpPopup').size() == 0) {
+		var htmlOut = '<div id="HelpPopup" class="PopupBox" style="display: none">';
 		htmlOut +=	'<div id="HelpPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
 		htmlOut += '<div id="HelpPopupContents" class="PopupBoxContent">'+html+'</div>';
 		htmlOut += '</div>';
 		$('body').append(htmlOut);
-	} else {
-		$('#HelpPopupContents').html(html);
-		div.show();
 	}
+	$('#HelpPopupContents').html(html);
+	$('#HelpPopup').fadeIn(500);
 	showPopup();
 }
 
