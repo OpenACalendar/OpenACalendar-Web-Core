@@ -16,6 +16,9 @@ class WebSession {
 		ini_set("session.cookie_httponly", "1");
 		ini_set("session.cookie_domain", $CONFIG->webCommonSessionDomain);
 		ini_set("session.gc_maxlifetime", $CONFIG->sessionLastsInSeconds);
+		// We must set this. If we don't, PHP "helpfully" adds big sodding "nocache" headers everywhere -
+		//   and some pages we actually do want cached.
+		ini_set("session.cache_limiter", "");
 	}
 	
 	private function startSessionIfNeededForWriting() {
