@@ -429,6 +429,20 @@ table {
     -moz-background-size: 32px 32px;
   }
 }
+.iconHomeLarge {
+  background-image: url('/theme/default/img/home32.png');
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconHomeLarge {
+    background-image: url('/theme/default/img/home64.png');
+    background-size: 32px 32px;
+    -webkit-background-size: 32px 32px;
+    -moz-background-size: 32px 32px;
+  }
+}
 .iconKeyLarge {
   background-image: url('/theme/default/img/key32.png');
   width: 32px;
@@ -658,6 +672,8 @@ p {
 }
 #header {
   padding: 5px;
+  background: #0DA20D;
+  border-bottom: #007900 2px solid;
 }
 #header #headerOptions {
   float: right;
@@ -671,16 +687,6 @@ p {
   font-size: 1.1em;
   font-weight: bold;
 }
-#header #headerOptions #calendarPosition {
-  padding: 5px 0;
-}
-#header #headerOptions #calendarPosition .date {
-  font-size: 1.2em;
-  font-weight: bold;
-}
-#header #headerOptions #calendarPosition .timezone {
-  font-size: 1.0em;
-}
 #header img.logo {
   max-width: 20px;
   max-height: 20px;
@@ -688,7 +694,8 @@ p {
 }
 #header h1 {
   display: inline;
-  font-size: 1.3em;
+  font-size: 1.6em;
+  font-weight: bold;
 }
 #header h1 a {
   text-decoration: none;
@@ -696,21 +703,35 @@ p {
 }
 #header h2 {
   display: inline;
-  font-size: 1.0em;
+  font-size: 1.4em;
 }
 #header h2 a {
   text-decoration: none;
   color: black;
 }
 #header h3 {
-  padding: 0px 0px 0px 10px;
+  padding: 0px 0px 0px 15px;
   background: url('/theme/default/img/angleright16.png') left center no-repeat;
   display: inline;
-  font-size: 1.1em;
+  font-size: 1.3em;
 }
 #header h3 a {
   text-decoration: none;
   color: black;
+}
+#header #afterHeader {
+  clear: both;
+}
+#calendarPosition {
+  text-align: right;
+  padding: 5px 0 10px 0;
+}
+#calendarPosition .date {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+#calendarPosition .timezone {
+  font-size: 1.0em;
 }
 #page {
   clear: both;

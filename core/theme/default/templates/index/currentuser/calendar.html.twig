@@ -38,15 +38,9 @@
 						</a>
 					{% endif %}
 					<a href="/me/">
-						<div class="iconTimesCircleOLarge" title="Close"></div>
+						<div class="iconHomeLarge" title="Home"></div>
 					</a>
 				</div>
-				<div id="calendarPosition">
-					<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
-					{% if calendar.modeByMonth %}
-						<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
-					{% endif %}
-				</div>	
 			</div>
 				
 			<img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo">
@@ -55,12 +49,19 @@
 			{% if group is defined %}
 				<h3 class="group"><a href="/group/{{ group.slug }}">{{ group.title }}</a></h3>
 			{% endif %}
-			{% if not calendar.isAnyEvents() %}
-				<p>You can watch groups of events or say you are attending them - and 
-				then your personal list of only the events you are interested in will build up here.</p>
-			{% endif %}					
+			<div id="afterHeader"></div>
 		</div>
 		<div id="page">
+			<div id="calendarPosition">
+				<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
+				{% if calendar.modeByMonth %}
+					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+				{% endif %}
+			</div>
+			{% if not calendar.isAnyEvents() %}
+				<p>You can watch groups of events or say you are attending them - and
+					then your personal list of only the events you are interested in will build up here.</p>
+			{% endif %}
 			{% include '/index/eventListFilterParams.html.twig' %}
 			<table class="calendar">
 				<tr>

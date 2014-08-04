@@ -115,17 +115,9 @@
 					{% else %}
 						<a href="/event/">
 					{% endif %}
-						<div class="iconTimesCircleOLarge" title="Close"></div>
+						<div class="iconHomeLarge" title="Home"></div>
 					</a>							
 				</div>
-				<div id="calendarPosition">
-					{% if currentSite.cachedIsMultipleTimezones %}
-						<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
-					{% endif %}
-					{% if calendar.modeByMonth %}
-						<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
-					{% endif %}
-				</div>				
 			</div>
 			{% if config.isSingleSiteMode %}
 				<img src="/theme/default/img/logo.png?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
@@ -156,8 +148,17 @@
 			{% elseif country is defined and country %}
 				<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 			{% endif %}
+			<div id="afterHeader"></div>
 		</div>
 		<div id="page">
+			<div id="calendarPosition">
+				{% if currentSite.cachedIsMultipleTimezones %}
+					<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
+				{% endif %}
+				{% if calendar.modeByMonth %}
+					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+				{% endif %}
+			</div>
 			<table class="calendar">
 				<tr>
 					<th>Mon</th>
