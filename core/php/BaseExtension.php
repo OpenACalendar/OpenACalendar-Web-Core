@@ -83,5 +83,12 @@ abstract class BaseExtension {
 		return array();
 	}
 
+	/**
+	 * @return array SysAdminLink return array of SysAdminLink
+	 */
+	public function getSysAdminLinks() {
+		return array();
+	}
+
 }
 

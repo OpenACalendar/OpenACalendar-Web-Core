@@ -38,11 +38,6 @@
 				<li><a href="/sysadmin/user">Users</a></li>
 				<li><a href="/sysadmin/history">History</a></li>
 				<li><a href="/sysadmin/contactsupport">Contact</a></li>
-				{% if sysadminMenus is defined %}
-					{% for sysadminMenu in sysadminMenus %}
-						<li><a href="{{ sysadminMenu.link }}">{{ sysadminMenu.text }}</a></li>
-					{% endfor %}
-				{% endif %}
 				<li><a href="/sysadmin/config">Config</a></li>
 				<li><a href="/sysadmin/server">Server</a></li>
 				<li><a href="/sysadmin/api2app">API Apps</a></li>

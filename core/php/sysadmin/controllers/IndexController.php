@@ -24,6 +24,7 @@ class IndexController {
 	function index(Request $request, Application $app) {
 		
 		return $app['twig']->render('sysadmin/index/index.html.twig', array(
+				'extensions'=>$app['extensions']->getExtensions(),
 			));
 		
 	}

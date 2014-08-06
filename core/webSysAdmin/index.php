@@ -46,9 +46,6 @@ $app->before(function (Request $request) use ($app) {
 	
 });
 
-
-
-$sysadminMenus = array();
 require APP_ROOT_DIR.'/core/webSysAdmin/index.routes.php';
 
 
@@ -57,11 +54,6 @@ foreach($CONFIG->extensions as $extensionName) {
 		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webSysAdmin/index.routes.php';
 	}
 }
-
-$app->before(function (Request $request) use ($app) {
-	global $sysadminMenus;
-	$app['twig']->addGlobal('sysadminMenus', $sysadminMenus);	
-});
 
 $app->run(); 
 

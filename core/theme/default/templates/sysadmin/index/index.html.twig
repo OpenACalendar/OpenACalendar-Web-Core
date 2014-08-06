@@ -17,5 +17,27 @@
 
 	<p>Get the <a href="http://ican.openacalendar.org/news.html">latest news on our blog</a>.</p>
 
+
+
+	<ul class="menuOnPage">
+		{% if config.isSingleSiteMode %}
+			<li><a href="/sysadmin/site/{{ config.singleSiteID }}">SingleSite</a></li>
+		{% else %}
+			<li><a href="/sysadmin/site">Sites</a></li>
+		{% endif %}
+		<li><a href="/sysadmin/sitequota">Site Quotas</a></li>
+		<li><a href="/sysadmin/user">Users</a></li>
+		<li><a href="/sysadmin/history">History</a></li>
+		<li><a href="/sysadmin/contactsupport">Contact</a></li>
+		<li><a href="/sysadmin/config">Config</a></li>
+		<li><a href="/sysadmin/server">Server</a></li>
+		<li><a href="/sysadmin/api2app">API Apps</a></li>
+		{% for extension in extensions %}
+			{%  for link in extension.sysAdminLinks %}
+				<li><a href="{{  link.url  }}">{{  link.title }}</a></li>
+			{% endfor %}
+		{%  endfor %}
+	</ul>
+
 {% endblock %}
 

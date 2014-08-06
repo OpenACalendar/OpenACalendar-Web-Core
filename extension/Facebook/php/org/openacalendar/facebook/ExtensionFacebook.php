@@ -40,5 +40,12 @@ class ExtensionFacebook extends \BaseExtension {
 			new ImportURLFacebookHandler(),
 		);
 	}
+
+
+	public function getSysAdminLinks() {
+		return array(
+			new \SysAdminLink("Setup Facebook Access",'/sysadmin/facebookuser')
+		);
+	}
 	
 }

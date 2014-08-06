@@ -37,5 +37,10 @@ class ExtensionMeetup extends \BaseExtension {
 			new ImportURLMeetupHandler(),
 		);
 	}
-	
+
+	public function getSysAdminLinks() {
+		return array(
+			new \SysAdminLink("Setup Meetup Access",'/sysadmin/meetupuser')
+		);
+	}
 }
