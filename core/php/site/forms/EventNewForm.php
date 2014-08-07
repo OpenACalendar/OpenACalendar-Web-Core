@@ -178,6 +178,13 @@ class EventNewForm extends AbstractType{
 						($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
 						" in the past."));
 			}
+			// URL validation. We really can't do much except verify ppl haven't put a space in, which they might do if they just type in Google search terms (seen it done)
+			if (strpos($form->get("url")->getData(), " ") !== false) {
+				$form['url']->addError(new FormError("Please enter a URL"));
+			}
+			if (strpos($form->get("ticket_url")->getData(), " ") !== false) {
+				$form['ticket_url']->addError(new FormError("Please enter a URL"));
+			}
 		};
 
 		// adding the validator to the FormBuilderInterface
@@ -194,3 +201,5 @@ class EventNewForm extends AbstractType{
 	}
 	
 }
+
+
