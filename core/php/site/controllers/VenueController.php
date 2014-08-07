@@ -243,7 +243,7 @@ class VenueController {
 
 					$mediaRepository = new MediaRepository();
 					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], userGetCurrent(),
-							$form['title']->getData(),$form['source_text']->getData(),$form['sorce_url']->getData());
+							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
 
