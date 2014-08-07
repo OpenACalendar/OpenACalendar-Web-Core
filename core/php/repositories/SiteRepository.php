@@ -19,7 +19,7 @@ class SiteRepository {
 	
 	
 	public function create(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota) {
-		global $DB, $CONFIG;
+		global $DB, $CONFIG, $EXTENSIONHOOKRUNNER;
 		$createdat = \TimeSource::getFormattedForDataBase();
 		
 		try {
@@ -130,6 +130,8 @@ class SiteRepository {
 				));			
 			
 			$DB->commit();
+
+			$EXTENSIONHOOKRUNNER->afterSiteCreate($site, $owner);
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}

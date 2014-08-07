@@ -1,5 +1,6 @@
 <?php
 
+use models\SiteModel;
 use models\VenueModel;
 use models\UserAccountModel;
 use Silex\Application;
@@ -27,10 +28,18 @@ abstract class BaseExtension {
 		return null;
 	}
 
-	
-	
+
+
 	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user) {
 		
+	}
+
+	/**
+	 * @param SiteModel $site
+	 * @param UserAccountModel $owner User who owns site. This is usually, but may not be, the user who performed the action.
+	 */
+	public function afterSiteCreate(SiteModel $site, UserAccountModel $owner) {
+
 	}
 	
 	public function getUserNotificationTypes() {

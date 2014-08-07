@@ -1,6 +1,7 @@
 <?php
 
 
+use models\SiteModel;
 use models\VenueModel;
 use models\UserAccountModel;
 
@@ -19,6 +20,13 @@ class ExtensionHookRunner {
 		global $app, $CONFIG;
 		foreach($CONFIG->extensions as $extensionDir) {
 			$app['extensions']->getExtensionByDir($extensionDir)->beforeVenueSave($venue, $user);
+		}
+	}
+
+	public function afterSiteCreate(SiteModel $site, UserAccountModel $owner) {
+		global $app, $CONFIG;
+		foreach($CONFIG->extensions as $extensionDir) {
+			$app['extensions']->getExtensionByDir($extensionDir)->afterSiteCreate($site, $owner);
 		}
 	}
 	
