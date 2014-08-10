@@ -13,7 +13,7 @@
 				<h1>{{ currentSite.title }}</h1>
 			</a>
 		</li>
-		<li>
+		<li class="menu">
 			<a href="/event">Events</a>
 			<ul class="submenu">
 				<li><a href="/event">Events</a></li>
@@ -33,7 +33,7 @@
 			</ul>
 		</li>
 		{% if currentSite.isFeatureGroup %}
-			<li>
+			<li class="menu">
 				<a href="/group">Groups</a>	
 				{% if currentUserCanEditSite %}
 					<ul class="submenu">
@@ -48,7 +48,7 @@
 		It'll only have one entry and it will be the same as the main event listings anyway.
 		#}
 		{% if currentSite.cachedIsMultipleCountries  or currentSite.isFeaturePhysicalEvents %}
-			<li>
+			<li class="menu">
 				<a href="/places">Places</a>
 				<ul class="submenu">
 					{% if currentSite.cachedIsMultipleCountries %}
