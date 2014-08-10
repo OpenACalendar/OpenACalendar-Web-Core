@@ -2,9 +2,9 @@
 
 /**
  * Config file. For a full list of options, please see 
- * http://ican.openacalendar.org/docs/configvars.html
+ * http://docs.openacalendar.org/
  * 
- * @link http://ican.openacalendar.org/docs/configvars.html Config File Options
+ * @link http://docs.openacalendar.org/ Config File Options
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
  */
