@@ -7,6 +7,8 @@
  #}
 {% extends 'sysadmin/page.html.twig' %}
 
+{% block pageTitle %}Media {{  media.title }}- {% endblock %}
+
 {% block content %}
 
 	{% if not media.isDeleted %}

@@ -112,10 +112,9 @@ class API2Application {
 		
 		$hrb = new HistoryRepositoryBuilder();
 		$hrb->setAPI2Application($this->parameters['api2Application']);
-		
-		return $app['twig']->render('sysadmin/api2app/history.html.twig', array(
-				'historyItems'=>$hrb->fetchAll(),
-			));
+		$this->parameters['historyItems']= $hrb->fetchAll();
+
+		return $app['twig']->render('sysadmin/api2app/history.html.twig', $this->parameters);
 		
 	}
 

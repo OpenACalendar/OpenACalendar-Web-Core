@@ -7,6 +7,9 @@
  #}
 {% extends 'sysadmin/page.html.twig' %}
 
+
+{% block pageTitle %}Tags - {% endblock %}
+
 {% block breadcrumbs %}
 	<li><a href="/sysadmin/site/{{ site.id }}/">{{ site.title }}</a></li>
 	<li class="current"><a href="/sysadmin/site/{{ site.id }}/tag">tags</a></li>

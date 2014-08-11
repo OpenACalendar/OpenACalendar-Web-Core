@@ -200,13 +200,9 @@ class UserController {
 		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
 		$rb->setLimit(40);
 		$rb->setUser($this->parameters['user']);
-		
-		$notifications = $rb->fetchAll();
-		
-		
-			return $app['twig']->render('/sysadmin/user/notifications.html.twig', array(
-				'notifications'=>$notifications,
-			));
+		$this->parameters['notifications'] = $rb->fetchAll();
+
+		return $app['twig']->render('/sysadmin/user/notifications.html.twig', $this->parameters);
 	}
 }
 
