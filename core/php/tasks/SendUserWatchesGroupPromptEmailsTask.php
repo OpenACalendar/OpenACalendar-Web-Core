@@ -56,8 +56,10 @@ class SendUserWatchesGroupPromptEmailsTask {
 
 			// UserWatchesGroupRepositoryBuilder() should only return instances where site is not also watched
 
+			if ($site->getIsClosedBySysAdmin()) {
+				if ($verbose) print " ... site is closed\n";
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
-			if ($userWatchesGroup->getIsWatching()) {
+			} else if ($userWatchesGroup->getIsWatching()) {
 
 				if ($verbose) print " ... searching for data\n";
 
