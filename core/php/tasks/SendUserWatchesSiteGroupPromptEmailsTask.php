@@ -51,8 +51,10 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 
 			if ($verbose) print date("c")." User ".$user->getEmail()." Site ".$site->getTitle()."\n";
 
+			if ($site->getIsClosedBySysAdmin()) {
+				if ($verbose) print " ... site is closed\n";
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
-			if ($userWatchesSite->getIsWatching()) {
+			} else if ($userWatchesSite->getIsWatching()) {
 
 				$groupRepoBuilder = new GroupRepositoryBuilder();
 				$groupRepoBuilder->setSite($site);
