@@ -62,6 +62,8 @@ class SendUserWatchesGroupNotifyEmailsTask {
 
 			if ($site->getIsClosedBySysAdmin()) {
 				if ($verbose) print " ... site is closed\n";
+			} else if ($group->getIsDeleted()) {
+				if ($verbose) print " ... group is deleted\n";
 			// Technically UserWatchesGroupRepositoryBuilder() should only return getIsWatching() == true but lets double check
 			} else if ($userWatchesGroup->getIsWatching()) {
 

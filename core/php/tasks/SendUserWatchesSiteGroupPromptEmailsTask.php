@@ -58,6 +58,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 
 				$groupRepoBuilder = new GroupRepositoryBuilder();
 				$groupRepoBuilder->setSite($site);
+				$groupRepoBuilder->setIncludeDeleted(false);
 				foreach($groupRepoBuilder->fetchAll() as $group) {
 
 					if (!$anyGroupNotificationsSent) {
