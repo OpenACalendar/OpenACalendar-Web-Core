@@ -25,6 +25,7 @@ class GroupHistoryModel extends GroupModel {
 	protected $url_changed = 0;
 	protected $twitter_username_changed = 0;
 	protected $is_deleted_changed = 0;
+	protected $is_duplicate_of_id_changed = 0;
 
 	protected $is_new = 0;
 
@@ -48,6 +49,7 @@ class GroupHistoryModel extends GroupModel {
 		$this->twitter_username_changed = $data['twitter_username_changed'];
 		$this->is_deleted_changed = $data['is_deleted_changed'];
 		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
+		$this->is_duplicate_of_id_changed = isset($data['is_duplicate_of_id_changed']) ? $data['is_duplicate_of_id_changed'] : 0;
 	}
 	
 	public function getCreatedAt() {
@@ -85,7 +87,8 @@ class GroupHistoryModel extends GroupModel {
 
 	public function isAnyChangeFlagsUnknown() {
 		return $this->title_changed == 0 || $this->description_changed == 0 || $this->url_changed == 0 ||
-				$this->twitter_username_changed == 0 || $this->is_deleted_changed == 0;
+				$this->twitter_username_changed == 0 || $this->is_deleted_changed == 0 ||
+		$this->is_duplicate_of_id_changed == 0;
 	}
 	
 	public function setChangedFlagsFromNothing() {
@@ -94,6 +97,7 @@ class GroupHistoryModel extends GroupModel {
 		$this->url_changed = $this->url ? 1 : -1;
 		$this->twitter_username_changed = $this->twitter_username ? 1 : -1;
 		$this->is_deleted_changed = $this->is_deleted ? 1 : -1;
+		$this->is_duplicate_of_id_changed = $this->is_duplicate_of_id ? 1 : -1;
 		$this->is_new = 1;
 	}
 	
@@ -103,6 +107,7 @@ class GroupHistoryModel extends GroupModel {
 		$this->url_changed  = ($this->url  != $last->url  )? 1 : -1;
 		$this->twitter_username_changed  = ($this->twitter_username  != $last->twitter_username  )? 1 : -1;
 		$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
+		$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
 		$this->is_new = 0;
 	}
 	
@@ -124,6 +129,10 @@ class GroupHistoryModel extends GroupModel {
 
 	public function getIsDeletedChanged() {
 		return ($this->is_deleted_changed != -1);
+	}
+
+	public function getIsDuplicateOfIdChanged() {
+		return ($this->is_duplicate_of_id_changed != -1);
 	}
 
 	public function getIsNew() {

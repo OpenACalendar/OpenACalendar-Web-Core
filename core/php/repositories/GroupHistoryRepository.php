@@ -42,6 +42,7 @@ class GroupHistoryRepository {
 				" description_changed = :description_changed,  ".
 				" url_changed = :url_changed,  ".
 				" twitter_username_changed = :twitter_username_changed,  ".
+				" is_duplicate_of_id_changed = :is_duplicate_of_id_changed, ".
 				" is_deleted_changed = :is_deleted_changed  ".
 				"WHERE group_id = :id AND created_at = :created_at");
 		$statUpdate->execute(array(
@@ -53,6 +54,7 @@ class GroupHistoryRepository {
 				'url_changed'=> $grouphistory->getUrlChanged() ? 1 : -1,
 				'twitter_username_changed'=> $grouphistory->getTwitterUsernameChanged() ? 1 : -1,
 				'is_deleted_changed'=> $grouphistory->getIsDeletedChanged() ? 1 : -1,
+				'is_duplicate_of_id_changed' => $grouphistory->getIsDuplicateOfIdChanged() ? 1:-1,
 			));
 	}
 	

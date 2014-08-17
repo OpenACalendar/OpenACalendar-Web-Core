@@ -23,6 +23,7 @@ class AreaHistoryModel extends AreaModel {
 	protected $country_id_changed = 0;
 	protected $parent_area_id_changed = 0;
 	protected $is_deleted_changed = 0;
+	protected $is_duplicate_of_id_changed = 0;
 
 	protected $is_new = 0;
 
@@ -45,6 +46,7 @@ class AreaHistoryModel extends AreaModel {
 		$this->parent_area_id_changed  = $data['parent_area_id_changed'];
 		$this->is_deleted_changed  = $data['is_deleted_changed'];
 		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
+		$this->is_duplicate_of_id_changed = isset($data['is_duplicate_of_id_changed']) ? $data['is_duplicate_of_id_changed'] : 0;
 	}
 	
 		
@@ -66,7 +68,8 @@ class AreaHistoryModel extends AreaModel {
 	
 	public function isAnyChangeFlagsUnknown() {
 		return $this->title_changed == 0 || $this->description_changed == 0 || $this->country_id_changed == 0 ||
-				$this->parent_area_id_changed == 0 || $this->is_deleted_changed == 0;
+				$this->parent_area_id_changed == 0 || $this->is_deleted_changed == 0 ||
+		$this->is_duplicate_of_id_changed == 0;
 	}
 	
 	public function setChangedFlagsFromNothing() {
@@ -75,6 +78,7 @@ class AreaHistoryModel extends AreaModel {
 		$this->country_id_changed = $this->country_id ? 1 : -1;
 		$this->parent_area_id_changed = $this->parent_area_id ? 1 : -1;
 		$this->is_deleted_changed = $this->is_deleted ? 1 : -1;
+		$this->is_duplicate_of_id_changed = $this->is_duplicate_of_id ? 1 : -1;
 		$this->is_new = 1;
 	}
 	
@@ -84,6 +88,7 @@ class AreaHistoryModel extends AreaModel {
 		$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
 		$this->parent_area_id_changed  = ($this->parent_area_id  != $last->parent_area_id  )? 1 : -1;
 		$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
+		$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
 		$this->is_new = 0;
 	}
 	
@@ -111,6 +116,9 @@ class AreaHistoryModel extends AreaModel {
 		return ($this->is_new == 1);
 	}
 
+	public function getIsDuplicateOfIdChanged() {
+		return ($this->is_duplicate_of_id_changed != -1);
+	}
 
 }
 

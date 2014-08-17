@@ -26,6 +26,7 @@ class VenueModel {
 	protected $country_id;
 	protected $is_deleted;
 	protected $area_id;
+	protected $is_duplicate_of_id;
 
 
 	public function setFromDataBaseRow($data) {
@@ -41,6 +42,7 @@ class VenueModel {
 		$this->country_id = $data['country_id'];
 		$this->is_deleted = $data['is_deleted'];
 		$this->area_id = $data['area_id'];
+		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
 	}
 	
 	public function getId() {
@@ -157,6 +159,16 @@ class VenueModel {
 
 	public function setAreaId($area_id) {
 		$this->area_id = $area_id;
+	}
+
+	public function setIsDuplicateOfId($is_duplicate_of_id)
+	{
+		$this->is_duplicate_of_id = $is_duplicate_of_id;
+	}
+
+	public function getIsDuplicateOfId()
+	{
+		return $this->is_duplicate_of_id;
 	}
 
 

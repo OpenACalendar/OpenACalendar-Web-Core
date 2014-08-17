@@ -42,6 +42,7 @@ class AreaHistoryRepository {
 				" description_changed = :description_changed,  ".
 				" country_id_changed = :country_id_changed,  ".
 				" parent_area_id_changed = :parent_area_id_changed,  ".
+				" is_duplicate_of_id_changed = :is_duplicate_of_id_changed, ".
 				" is_deleted_changed = :is_deleted_changed  ".
 				"WHERE area_id = :id AND created_at = :created_at");
 		$statUpdate->execute(array(
@@ -53,6 +54,7 @@ class AreaHistoryRepository {
 				'country_id_changed'=> $areahistory->getCountryIdChanged() ? 1 : -1,
 				'parent_area_id_changed'=> $areahistory->getParentAreaIdChanged() ? 1 : -1,
 				'is_deleted_changed'=> $areahistory->getIsDeletedChanged() ? 1 : -1,
+				'is_duplicate_of_id_changed' => $areahistory->getIsDuplicateOfIdChanged() ? 1:-1,
 			));
 	}
 	

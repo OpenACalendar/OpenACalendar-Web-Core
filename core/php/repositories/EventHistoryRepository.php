@@ -63,6 +63,7 @@ class EventHistoryRepository {
 				" ticket_url_changed = :ticket_url_changed  , ".
 				" is_virtual_changed = :is_virtual_changed   , ".
 				" is_physical_changed = :is_physical_changed   , ".
+				" is_duplicate_of_id_changed = :is_duplicate_of_id_changed, ".
 				" area_id_changed = :area_id_changed    ".
 				"WHERE event_id = :id AND created_at = :created_at");
 		$statUpdate->execute(array(
@@ -82,6 +83,7 @@ class EventHistoryRepository {
 				'is_virtual_changed'=> $eventhistory->getIsVirtualChanged() ? 1 : -1,
 				'is_physical_changed'=> $eventhistory->getIsPhysicalChanged() ? 1 : -1,
 				'area_id_changed'=> $eventhistory->getAreaIdChanged() ? 1 : -1,
+				'is_duplicate_of_id_changed' => $eventhistory->getIsDuplicateOfIdChanged() ? 1:-1,
 			));
 	}
 	

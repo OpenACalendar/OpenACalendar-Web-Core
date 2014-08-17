@@ -22,6 +22,7 @@ class GroupModel {
 	protected $description;
 	protected $twitter_username;
 	protected $is_deleted;
+	protected $is_duplicate_of_id;
 	
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
@@ -32,6 +33,7 @@ class GroupModel {
 		$this->description = $data['description'];
 		$this->twitter_username = $data['twitter_username'];
 		$this->is_deleted = $data['is_deleted'];
+		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
 	}
 	
 	public function getId() {
@@ -142,6 +144,16 @@ class GroupModel {
 
 	public function setIsDeleted($is_deleted) {
 		$this->is_deleted = $is_deleted;
+	}
+
+	public function setIsDuplicateOfId($is_duplicate_of_id)
+	{
+		$this->is_duplicate_of_id = $is_duplicate_of_id;
+	}
+
+	public function getIsDuplicateOfId()
+	{
+		return $this->is_duplicate_of_id;
 	}
 
 

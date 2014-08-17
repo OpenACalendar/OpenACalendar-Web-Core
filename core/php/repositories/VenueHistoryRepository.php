@@ -46,6 +46,7 @@ class VenueHistoryRepository {
 				" area_id_changed = :area_id_changed,  ".
 				" address_changed = :address_changed,  ".
 				" address_code_changed = :address_code_changed,  ".
+				" is_duplicate_of_id_changed = :is_duplicate_of_id_changed, ".
 				" is_deleted_changed = :is_deleted_changed  ".
 				"WHERE venue_id = :id AND created_at = :created_at");
 		$statUpdate->execute(array(
@@ -61,6 +62,7 @@ class VenueHistoryRepository {
 				'area_id_changed'=> $venuehistory->getAreaIdChanged() ? 1 : -1,
 				'address_changed'=> $venuehistory->getAddressChanged() ? 1 : -1,
 				'address_code_changed'=> $venuehistory->getAddressCodeChanged() ? 1 : -1,
+				'is_duplicate_of_id_changed' => $venuehistory->getIsDuplicateOfIdChanged() ? 1:-1,
 			));
 	}
 	

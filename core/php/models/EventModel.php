@@ -34,6 +34,7 @@ class EventModel {
 	protected $ticket_url;
 	protected $is_virtual = false;
 	protected $is_physical = true;
+	protected $is_duplicate_of_id;
 
 
 	/** @var DateTime **/
@@ -105,6 +106,7 @@ class EventModel {
 		$this->user_is_plan_maybe_attending = isset($data['user_is_plan_maybe_attending']) ? (boolean)$data['user_is_plan_maybe_attending'] : false;
 		$this->is_virtual = (boolean)$data['is_virtual'];
 		$this->is_physical = (boolean)$data['is_physical'];
+		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
 	}
 	
 	public function setFromHistory(EventHistoryModel $ehm) {
@@ -435,6 +437,16 @@ class EventModel {
 	public function setIsPhysical($is_physical) {
 		$this->is_physical = $is_physical;
 		return $this;
+	}
+
+	public function setIsDuplicateOfId($is_duplicate_of_id)
+	{
+		$this->is_duplicate_of_id = $is_duplicate_of_id;
+	}
+
+	public function getIsDuplicateOfId()
+	{
+		return $this->is_duplicate_of_id;
 	}
 
 
