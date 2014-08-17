@@ -49,11 +49,18 @@ class RunImportURLsTask {
 		foreach($iurlBuilder->fetchAll() as $importURL) {
 
 			$site = $siteRepo->loadById($importURL->getSiteID());
+			$group = $groupRepo->loadById($importURL->getGroupId());
 
 			if ($verbose) print date("c")." ImportURL ".$importURL->getId()." ".$importURL->getTitle()." Site ".$site->getTitle()."\n";
 
-			if (!$site->getIsFeatureImporter()) {
+			if ($site->getIsClosedBySysAdmin()) {
+				if ($verbose) print " - site closed by sys admin\n";
+			} else if (!$site->getIsFeatureImporter()) {
 				if ($verbose) print " - site feature disabled\n";
+			} else if (!$group) {
+				if ($verbose) print " - no group - this should be impossible\n";
+			} else if ($group->getIsDeleted()) {
+				if ($verbose) print " - group deleted\n";
 			} else if ($importURL->getExpiredAt()) {
 				if ($verbose) print " - expired\n";
 			} else if (!$importURL->getIsEnabled()) {
@@ -116,59 +123,55 @@ class RunImportURLsTask {
 					}
 				}
 
-				if ($importURL->getGroupId()) {
-					$group = $groupRepo->loadById($importURL->getGroupId());
-					$uwgb = new UserWatchesGroupRepositoryBuilder();
-					$uwgb->setGroup($group);
-					foreach ($uwgb->fetchAll() as $userWatchesGroup) {
-						$user = $userRepo->loadByID($userWatchesGroup->getUserAccountId());
-						if ($userWatchesGroup->getIsWatching()) { 
-							/// Notification Class 
-							$userNotification = $userNotificationType->getNewNotification($user, $site);
-							$userNotification->setGroup($group);
+				$uwgb = new UserWatchesGroupRepositoryBuilder();
+				$uwgb->setGroup($group);
+				foreach ($uwgb->fetchAll() as $userWatchesGroup) {
+					$user = $userRepo->loadByID($userWatchesGroup->getUserAccountId());
+					if ($userWatchesGroup->getIsWatching()) {
+						/// Notification Class
+						$userNotification = $userNotificationType->getNewNotification($user, $site);
+						$userNotification->setGroup($group);
 
-							////// Save Notification Class
-							$userNotificationRepo->create($userNotification);
+						////// Save Notification Class
+						$userNotificationRepo->create($userNotification);
 
-							////// Send Email
-							if ($userNotification->getIsEmail()) {
-								$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
-								$userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($user, $group);
+						////// Send Email
+						if ($userNotification->getIsEmail()) {
+							$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
+							$userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($user, $group);
 
-								$message = \Swift_Message::newInstance();
-								$message->setSubject("Please confirm this is still valid: ".$importURL->getTitle());
-								$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
-								$message->setTo($user->getEmail());
+							$message = \Swift_Message::newInstance();
+							$message->setSubject("Please confirm this is still valid: ".$importURL->getTitle());
+							$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+							$message->setTo($user->getEmail());
 
-								$messageText = $app['twig']->render('email/importURLExpired.watchesGroup.txt.twig', array(
-									'user'=>$user,
-									'importurl'=>$importURL,
-									'stopCode'=>$userWatchesGroupStop->getAccessKey(),
-									'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-									'group'=>$group,
-								));
-								if ($CONFIG->isDebug) file_put_contents('/tmp/importURLExpired.watchesGroup.txt', $messageText);
-								$message->setBody($messageText);
+							$messageText = $app['twig']->render('email/importURLExpired.watchesGroup.txt.twig', array(
+								'user'=>$user,
+								'importurl'=>$importURL,
+								'stopCode'=>$userWatchesGroupStop->getAccessKey(),
+								'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+								'group'=>$group,
+							));
+							if ($CONFIG->isDebug) file_put_contents('/tmp/importURLExpired.watchesGroup.txt', $messageText);
+							$message->setBody($messageText);
 
-								$messageHTML = $app['twig']->render('email/importURLExpired.watchesGroup.html.twig', array(
-									'user'=>$user,
-									'importurl'=>$importURL,
-									'stopCode'=>$userWatchesGroupStop->getAccessKey(),
-									'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-									'group'=>$group,
-								));
-								if ($CONFIG->isDebug) file_put_contents('/tmp/importURLExpired.watchesGroup.html', $messageHTML);
-								$message->addPart($messageHTML,'text/html');
+							$messageHTML = $app['twig']->render('email/importURLExpired.watchesGroup.html.twig', array(
+								'user'=>$user,
+								'importurl'=>$importURL,
+								'stopCode'=>$userWatchesGroupStop->getAccessKey(),
+								'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
+								'group'=>$group,
+							));
+							if ($CONFIG->isDebug) file_put_contents('/tmp/importURLExpired.watchesGroup.html', $messageHTML);
+							$message->addPart($messageHTML,'text/html');
 
-								if (!$CONFIG->isDebug) {
-									$app['mailer']->send($message);
-								}	
-								$userNotificationRepo->markEmailed($userNotification);	
+							if (!$CONFIG->isDebug) {
+								$app['mailer']->send($message);
 							}
+							$userNotificationRepo->markEmailed($userNotification);
 						}
 					}
 				}
-
 
 			} else {
 				$lastRunDate = $importURLRepo->getLastRunDateForImportURL($importURL);
