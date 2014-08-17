@@ -15,6 +15,8 @@ require_once (defined('COMPOSER_ROOT_DIR') ? COMPOSER_ROOT_DIR : APP_ROOT_DIR).'
 
 date_default_timezone_set('UTC');
 
+error_reporting(E_ALL);
+
 define('VARCHAR_COLUMN_LENGTH_USED', 255);
 
 function autoload($class) {
