@@ -109,7 +109,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		sleep(1);
 		
 		$ch = curl_init();      
-		curl_setopt($ch, CURLOPT_URL, "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone");
+		curl_setopt($ch, CURLOPT_URL, "https://api.meetup.com/2/event/".$id."?text_format=plain&sign=true&key=".$appKey."&fields=timezone");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_USERAGENT, 'OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
 		$output = curl_exec($ch);
@@ -145,7 +145,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		
 		$ch = curl_init();      
 		curl_setopt($ch, CURLOPT_URL, "https://api.meetup.com/2/events/?sign=true&key=".$appKey.
-				"&fields=timezone&group_urlname=".
+				"&fields=timezone&text_format=plain&group_urlname=".
 				str_replace(array("&","?"), array("",""),$groupName));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_USERAGENT, 'OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
@@ -243,15 +243,9 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 	
 	protected function setImportedEventFromMeetupData(ImportedEventModel $importedEvent, $meetupData) {
 		$changesToSave = false;
-		if (property_exists($meetupData, 'description')) {
-			$description = str_replace('</p>',"\n\n",$meetupData->description);
-			$description = html_entity_decode(strip_tags($description));
-			if ($importedEvent->getDescription() != $description) {
-				$importedEvent->setDescription($description);
-				$changesToSave = true;
-			}
-		} else {
-			$description = '';
+		if (property_exists($meetupData, 'description') && $importedEvent->getDescription() != $meetupData->description) {
+			$importedEvent->setDescription($meetupData->description);
+			$changesToSave = true;
 		}
 		$start = new \DateTime('', new \DateTimeZone('UTC'));
 		$start->setTimestamp($meetupData->time / 1000);
