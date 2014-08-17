@@ -32,7 +32,8 @@ class ImportURLEventbriteHandler extends ImportURLHandlerBase {
 		if ($urlBits['host']== 'eventbrite.co.uk' || $urlBits['host']== 'www.eventbrite.co.uk') {
 			$bits =  explode("/",$urlBits['path']);
 			if (in_array($bits[1], array('event','e'))) {
-				$slug = array_pop(explode("-", $bits[2]));
+				$slugBits = explode("-", $bits[2]);
+				$slug = array_pop($slugBits);
 				if (intval($slug)) {
 					$this->newFeedURL = 'http://www.eventbrite.co.uk/calendar.ics?eid='.$slug.'&calendar=ical';
 					return true;
@@ -43,7 +44,8 @@ class ImportURLEventbriteHandler extends ImportURLHandlerBase {
 		if ($urlBits['host']== 'eventbrite.com' || $urlBits['host']== 'www.eventbrite.com') {
 			$bits =  explode("/",$urlBits['path']);
 			if (in_array($bits[1], array('event','e')) && intval($bits[2]) > 0) {
-				$slug = array_pop(explode("-", $bits[2]));
+				$slugBits = explode("-", $bits[2]);
+				$slug = array_pop($slugBits);
 				if (intval($slug)) {
 					$this->newFeedURL = 'http://www.eventbrite.com/calendar.ics?eid='.$slug.'&calendar=ical';
 					return true;
