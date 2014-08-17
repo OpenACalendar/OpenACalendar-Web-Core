@@ -23,6 +23,7 @@ class ImportURLEventbriteTest extends \PHPUnit_Framework_TestCase {
 				array('https://nengage5.eventbrite.com/',true,'http://www.eventbrite.com/calendar.ics?eid=4034956664&calendar=ical'),
 				array('http://www.eventbrite.co.uk/event/4787315991/',true,'http://www.eventbrite.co.uk/calendar.ics?eid=4787315991&calendar=ical'),
 				array('http://www.eventbrite.co.uk/event/4787315991/?ref=enivtefor001&invite=MjcyNjcyMS9qYW1lc0BqYXJvZmdyZWVuLmNvLnVrLzA%3D&utm_source=eb_email&utm_medium=email&utm_campaign=inviteformal001&utm_term=eventpage&ebtv=C',true,'http://www.eventbrite.co.uk/calendar.ics?eid=4787315991&calendar=ical'),
+				array('https://www.eventbrite.co.uk/e/the-venue-expo-tickets-7423912121?aff=ehomecard&rank=2',true,'http://www.eventbrite.co.uk/calendar.ics?eid=7423912121&calendar=ical'),
 			);
 	}
 	
