@@ -21,20 +21,7 @@ var countryDataAJAX;
 function onCountryChange() {
 	var currentCountryID = getCurrentCountry();
 	if (lastCountryIDSeen !== currentCountryID) {
-		countryDataAJAX = $.ajax({
-			url: "/country/" + currentCountryID+"/info.json",
-		}).success(function ( data ) {
-			var html = '';
-			if (data.childAreas.length > 0) {
-				html += '<li class="selectArea"><ul class="areas">';
-				for(i in data.childAreas) {
-					// must have space at start so items break over long lines
-					html += ' <li class="area"><span class="content"><a href="#" onclick="existingAreaChoosen('+data.childAreas[i].slug+'); return false;">' + escapeHTML(data.childAreas[i].title) + '</a></span><span class="aftercontent">&nbsp;</span></li>';
-				}
-				html += '</ul></li>';
-			}
-			$('#ChangeEventAreaList').html(html);
-		});
+		loadCountry(currentCountryID);
 	}
 	lastCountryIDSeen = currentCountryID;
 }
@@ -56,6 +43,9 @@ function loadCountry(countryID) {
 					html += ' <li class="area"><span class="content"><a href="#" onclick="existingAreaChoosen('+data.childAreas[i].slug+'); return false;">' + escapeHTML(data.childAreas[i].title) + '</a></span><span class="aftercontent">&nbsp;</span></li>';
 				}
 				html += '</ul></li>';
+				$('#ChangeEventAreaListLabel').show();
+			} else {
+				$('#ChangeEventAreaListLabel').hide();
 			}
 			$('#ChangeEventAreaList').html(html);
 		}
