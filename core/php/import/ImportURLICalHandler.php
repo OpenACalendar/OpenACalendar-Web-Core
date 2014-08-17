@@ -154,6 +154,10 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 			$importedEvent->setUrl($icalevent->getUrl());
 			$changesToSave = true;
 		}
+		if ($this->importURLRun->hasFlag(ImportURLRun::$FLAG_SET_TICKET_URL_AS_URL) && $importedEvent->getTicketUrl() != $icalevent->getUrl()) {
+			$importedEvent->setTicketUrl($icalevent->getUrl());
+			$changesToSave = true;
+		}
 		return $changesToSave;
 	}
 	

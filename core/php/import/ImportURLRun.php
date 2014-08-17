@@ -38,6 +38,7 @@ class ImportURLRun {
 	protected $realurl;
 		
 	public static $FLAG_ADD_UIDS = 1;
+	public static $FLAG_SET_TICKET_URL_AS_URL = 2;
 
 	protected $flags = array();
 

@@ -72,6 +72,7 @@ class ImportURLEventbriteDataTest extends \PHPUnit_Framework_TestCase {
 		$importURLRun = new ImportURLRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/Eventbrite1.ical');	
 		$importURLRun->setFlag(ImportURLRun::$FLAG_ADD_UIDS);
+		$importURLRun->setFlag(ImportURLRun::$FLAG_SET_TICKET_URL_AS_URL);
 		$i = new ImportURLICalHandler();
 		$i->setImportURLRun($importURLRun);
 		$this->assertTrue($i->canHandle());
@@ -89,6 +90,7 @@ class ImportURLEventbriteDataTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('2013-10-26 16:00:00', $event->getEndAt()->format('Y-m-d H:i:s'));		
 		$this->assertEquals('For details, click here: https://casscot13.eventbrite.co.uk',$event->getDescription());
 		$this->assertEquals('https://casscot13.eventbrite.co.uk',$event->getURL());
+		$this->assertEquals('https://casscot13.eventbrite.co.uk',$event->getTicketURL());
 		$this->assertFalse($event->getIsDeleted());
 		
 	}

@@ -95,6 +95,7 @@ class ImportURLEventbriteHandler extends ImportURLHandlerBase {
 		if ($this->newFeedURL) {
 			$this->importURLRun->setRealUrl($this->newFeedURL);
 			$this->importURLRun->setFlag(ImportURLRun::$FLAG_ADD_UIDS);
+			$this->importURLRun->setFlag(ImportURLRun::$FLAG_SET_TICKET_URL_AS_URL);
 		}
 	}
 
