@@ -39,7 +39,7 @@ class GroupNewController {
 				$groupRepository = new GroupRepository();
 				$groupRepository->create($group, $app['currentSite'], userGetCurrent());
 				
-				return $app->redirect("/group/".$group->getSlug());
+				return $app->redirect("/group/".$group->getSlugForUrl());
 				
 			}
 		}
