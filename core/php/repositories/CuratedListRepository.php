@@ -7,6 +7,7 @@ use models\CuratedListModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use models\EventModel;
+use models\GroupModel;
 
 
 /**
@@ -150,6 +151,9 @@ class CuratedListRepository {
 			));
 	}
 
+	/**
+	 * TODO this should be called addEventToCuratedList (Capital T)
+	 */
 	public function addEventtoCuratedList(EventModel $event, CuratedListModel $curatedList, UserAccountModel $user) {
 		global $DB;
 		
@@ -184,6 +188,47 @@ class CuratedListRepository {
 				" event_id=:event_id AND curated_list_id=:curated_list_id AND removed_at IS NULL ");
 		$stat->execute(array(
 				'event_id'=>$event->getId(),
+				'curated_list_id'=>$curatedList->getId(),
+				'removed_at'=>  \TimeSource::getFormattedForDataBase(),
+				'removed_by_user_account_id'=>$user->getId(),
+			));
+	}
+
+	
+	public function addGroupToCuratedList(GroupModel $group, CuratedListModel $curatedList, UserAccountModel $user) {
+		global $DB;
+		
+		// check group not already in list
+		$stat = $DB->prepare("SELECT * FROM group_in_curated_list WHERE curated_list_id=:curated_list_id AND ".
+				" group_id=:group_id AND removed_at IS NULL ");
+		$stat->execute(array(
+			'curated_list_id'=>$curatedList->getId(),
+			'group_id'=>$group->getId(),
+		));
+		if ($stat->rowCount() > 0) {
+			return;
+		}
+		
+		// Add!
+		$stat = $DB->prepare("INSERT INTO group_in_curated_list (curated_list_id,group_id,added_by_user_account_id,added_at) ".
+				"VALUES (:curated_list_id,:group_id,:added_by_user_account_id,:added_at)");
+		$stat->execute(array(
+			'curated_list_id'=>$curatedList->getId(),
+			'group_id'=>$group->getId(),
+			'added_by_user_account_id'=>$user->getId(),
+			'added_at'=>  \TimeSource::getFormattedForDataBase(),
+		));
+		
+	}
+
+
+	public function removeGroupFromCuratedList(GroupModel $group, CuratedListModel $curatedList, UserAccountModel $user) {
+		global $DB;
+		$stat = $DB->prepare("UPDATE group_in_curated_list SET removed_by_user_account_id=:removed_by_user_account_id,".
+				" removed_at=:removed_at WHERE ".
+				" group_id=:group_id AND curated_list_id=:curated_list_id AND removed_at IS NULL ");
+		$stat->execute(array(
+				'group_id'=>$group->getId(),
 				'curated_list_id'=>$curatedList->getId(),
 				'removed_at'=>  \TimeSource::getFormattedForDataBase(),
 				'removed_by_user_account_id'=>$user->getId(),

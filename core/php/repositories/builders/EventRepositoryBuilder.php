@@ -293,8 +293,17 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		}
 		
 		if ($this->curatedList) {
-			$this->joins[] = " JOIN event_in_curated_list ON event_in_curated_list.event_id = event_information.id ".
+			$this->joins[] = " LEFT JOIN event_in_curated_list ON event_in_curated_list.event_id = event_information.id ".
 				" AND event_in_curated_list.removed_at IS NULL AND event_in_curated_list.curated_list_id = :curated_list";
+			// We use a seperate table here so if event is in 2 groups and we select events in 1 group that isn't the main group only,
+			// the normal event_in_group table still shows the main group.
+			$this->joins[] =  " LEFT JOIN event_in_group AS event_in_group_cl ON event_in_group_cl.event_id = event_information.id ".
+					"AND event_in_group_cl.removed_at IS NULL ";
+			$this->joins[] = " LEFT JOIN group_in_curated_list ON group_in_curated_list.group_id = event_in_group_cl.group_id ".
+				" AND group_in_curated_list.removed_at IS NULL AND group_in_curated_list.curated_list_id = :curated_list";
+
+
+			$this->where[] = " ( event_in_curated_list.curated_list_id IS NOT NULL OR group_in_curated_list.curated_list_id IS NOT NULL )";
 			$this->params['curated_list'] = $this->curatedList->getId();
 		}
 		

@@ -550,6 +550,17 @@ $app->match('/curatedlist/{slug}/event/{eslug}/add', "site\controllers\CuratedLi
 		->before($canChangeSite)
 		->before($appVerifiedEditorUserRequired)
 		->before($featureCuratedListRequired);
+$app->match('/curatedlist/{slug}/group/{gslug}/remove', "site\controllers\CuratedListGroupController::remove")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->assert('gslug', '\d+')
+		->before($canChangeSite);
+$app->match('/curatedlist/{slug}/group/{gslug}/add', "site\controllers\CuratedListGroupController::add")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->assert('gslug', '\d+')
+		->before($canChangeSite)
+		->before($appVerifiedEditorUserRequired)
+		->before($featureGroupRequired)
+		->before($featureCuratedListRequired);
 
 $app->match('/media', "site\controllers\MediaListController::index")
 		->before($appFileStoreRequired); 

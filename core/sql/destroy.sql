@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS media_in_group CASCADE;
 DROP TABLE IF EXISTS media_in_event CASCADE;
 DROP TABLE IF EXISTS media_in_venue CASCADE;
 DROP TABLE IF EXISTS event_in_curated_list CASCADE;
+DROP TABLE IF EXISTS group_in_curated_list CASCADE;
 DROP TABLE IF EXISTS user_in_curated_list_information CASCADE;
 DROP TABLE IF EXISTS curated_list_history CASCADE;
 DROP TABLE IF EXISTS curated_list_information CASCADE;
