@@ -61,6 +61,13 @@ class CuratedListEventTest extends \PHPUnit_Framework_TestCase {
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setEventInformation($event);
+		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsWithInfo));
+		$curatedListWithInfo = $curatedListsWithInfo[0];
+		$this->assertEquals(false, $curatedListWithInfo->getIsEventInlist());
+
 
 		// Add event to list
 		TimeSource::mock(2014,5,1,8,0,0);
@@ -73,6 +80,14 @@ class CuratedListEventTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, count($eventRepositoryBuilder->fetchAll()));
 
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setEventInformation($event);
+		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsWithInfo));
+		$curatedListWithInfo = $curatedListsWithInfo[0];
+		$this->assertEquals(true, $curatedListWithInfo->getIsEventInlist());
+
+
 		// Remove event to list
 		TimeSource::mock(2014,5,1,9,0,0);
 		$clRepo->removeEventFromCuratedList($event, $curatedList, $user);
@@ -83,6 +98,12 @@ class CuratedListEventTest extends \PHPUnit_Framework_TestCase {
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setEventInformation($event);
+		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsWithInfo));
+		$curatedListWithInfo = $curatedListsWithInfo[0];
+		$this->assertEquals(false, $curatedListWithInfo->getIsEventInlist());
 	}
 
 	

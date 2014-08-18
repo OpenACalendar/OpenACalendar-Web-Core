@@ -25,7 +25,8 @@ class CuratedListModel {
 
 	/** secondary attributes **/
 	protected $is_event_in_list;
-	
+	protected $is_group_in_list;
+
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
 		$this->site_id = $data['site_id'];
@@ -34,7 +35,8 @@ class CuratedListModel {
 		$this->description = $data['description'];
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);	
-		$this->is_event_in_list = isset($data['is_event_in_list']) ? $data['is_event_in_list'] : false;
+		$this->is_event_in_list = isset($data['is_event_in_list']) ? (boolean)$data['is_event_in_list'] : false;
+		$this->is_group_in_list = isset($data['is_group_in_list']) ? (boolean)$data['is_group_in_list'] : false;
 		$this->is_deleted = $data['is_deleted'];
 	}
 	
@@ -123,8 +125,15 @@ class CuratedListModel {
 		return false;
 	}
 
+	/**
+	 * TODO should be called getIsEventInList (Capital L)
+	 */
 	public function getIsEventInlist() {
 		return $this->is_event_in_list;
+	}
+
+	public function getIsGroupInList() {
+		return $this->is_group_in_list;
 	}
 
 
