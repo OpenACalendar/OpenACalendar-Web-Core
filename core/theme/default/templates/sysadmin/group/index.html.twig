@@ -26,6 +26,10 @@
 			<td>{% if group.isDeleted %}Deleted{% else %}-{% endif %}</td>
 		</tr>
 		<tr>
+			<th>Is Duplicate of</th>
+			<td>{% if group.isDuplicateOfId %}<a href="/sysadmin/site/{{ site.id }}/group/{{ groupisduplicateof.slug }}/">{{  groupisduplicateof.title }}</a>{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
 			<th>Title</th>
 			<td>{{ group.title }}</td>
 		</tr>
@@ -52,6 +56,7 @@
 	<ul class="actionHelp">
 		<li>delete</li>
 		<li>undelete</li>
+		<li>isduplicateof SLUG</li>
 	</ul>
 
 {% endblock %}

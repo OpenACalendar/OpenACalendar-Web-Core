@@ -43,6 +43,8 @@ class GroupController {
 		if (!$this->parameters['group']) {
 			$app->abort(404);
 		}
+
+		$this->parameters['groupisduplicateof'] = $this->parameters['group']->getIsDuplicateOfId() ? $gr->loadById($this->parameters['group']->getIsDuplicateOfId()) : null;
 	
 	}
 	
@@ -68,6 +70,13 @@ class GroupController {
 					$gr = new GroupRepository();
 					$gr->edit($this->parameters['group'],  userGetCurrent());
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
+				} else if ($action->getCommand() == 'isduplicateof') {
+					$gr = new GroupRepository();
+					$originalGroup = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($originalGroup) {
+						$gr->markDuplicate($this->parameters['group'], $originalGroup, userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
+					}
 				}
 			}
 		}
