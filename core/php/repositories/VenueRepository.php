@@ -6,6 +6,7 @@ namespace repositories;
 use models\VenueModel;
 use models\SiteModel;
 use models\UserAccountModel;
+use repositories\builders\EventRepositoryBuilder;
 use repositories\UserInSiteRepository;
 
 /**
@@ -129,9 +130,9 @@ class VenueRepository {
 				));
 			
 			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
-					"area_id, description, user_account_id  , created_at,approved_at,address,address_code) VALUES ".
+					"area_id, description, user_account_id  , created_at,approved_at,address,address_code,is_duplicate_of_id) VALUES ".
 					"(:venue_id, :title, :lat, :lng, :country_id,".
-					":area_id,:description,  :user_account_id  , :created_at,:approved_at,:address,:address_code)");
+					":area_id,:description,  :user_account_id  , :created_at,:approved_at,:address,:address_code,:is_duplicate_of_id)");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>$venue->getTitle(),
@@ -142,6 +143,7 @@ class VenueRepository {
 					'address_code'=>$venue->getAddressCode(),
 					'user_account_id'=>$creator->getId(),				
 					'country_id'=>$venue->getCountryId(),
+					'is_duplicate_of_id'=>$venue->getIsDuplicateOfId(),
 					'area_id'=>$venue->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
@@ -186,7 +188,76 @@ class VenueRepository {
 			$DB->rollBack();
 		}
 	}
-	
+
+	public function markDuplicate(VenueModel $duplicateVenue, VenueModel $originalVenue, UserAccountModel $user=null) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$stat = $DB->prepare("UPDATE venue_information  SET is_deleted='1', is_duplicate_of_id = :is_duplicate_of_id WHERE id=:id");
+			$stat->execute(array(
+					'id'=>$duplicateVenue->getId(),
+					'is_duplicate_of_id'=>$originalVenue->getId(),
+				));
+
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
+					"description, user_account_id  , created_at,approved_at, is_deleted, is_duplicate_of_id) VALUES ".
+					"(:venue_id, :title, :lat, :lng, :country_id,".
+					":description,  :user_account_id  , :created_at, :approved_at, '1', :is_duplicate_of_id)");
+			$stat->execute(array(
+					'venue_id'=>$duplicateVenue->getId(),
+					'is_duplicate_of_id'=>$originalVenue->getId(),
+					'title'=>$duplicateVenue->getTitle(),
+					'lat'=>$duplicateVenue->getLat(),
+					'lng'=>$duplicateVenue->getLng(),
+					'description'=>$duplicateVenue->getDescription(),
+					'user_account_id'=>$user->getId(),
+					'country_id'=>$duplicateVenue->getCountryId(),
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+				));
+
+			// Move any Events
+			$statUpdateInfo = $DB->prepare("UPDATE event_information  SET venue_id=:venue_id WHERE id=:id");
+			$statInsertHistory = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
+					"created_at, reverted_from_created_at,venue_id,country_id,timezone,".
+					"url, ticket_url, is_physical, is_virtual, area_id, approved_at) VALUES ".
+					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
+					":created_at, :reverted_from_created_at,:venue_id,:country_id,:timezone,"."
+						:url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at)");
+			$eventRepoBuilder = new EventRepositoryBuilder();
+			$eventRepoBuilder->setVenue($duplicateVenue);
+			foreach($eventRepoBuilder->fetchAll() as $event) {
+				$statUpdateInfo->execute(array(
+					'id'=>$event->getId(),
+					'venue_id'=>$originalVenue->getId(),
+				));
+				$statInsertHistory->execute(array(
+					'event_id'=>$event->getId(),
+					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'description'=>$event->getDescription(),
+					'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
+					'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
+					'venue_id'=>$originalVenue->getId(),
+					'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
+					'country_id'=>$event->getCountryId(),
+					'timezone'=>$event->getTimezone(),
+					'user_account_id'=>($user ? $user->getId(): null),
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'reverted_from_created_at'=> null,
+					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'is_physical'=>$event->getIsPhysical()?1:0,
+					'is_virtual'=>$event->getIsVirtual()?1:0,
+				));
+			}
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
 	
 }
 
