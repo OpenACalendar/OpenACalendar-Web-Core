@@ -211,7 +211,7 @@ class VenueRepository {
 					'lat'=>$duplicateVenue->getLat(),
 					'lng'=>$duplicateVenue->getLng(),
 					'description'=>$duplicateVenue->getDescription(),
-					'user_account_id'=>$user->getId(),
+					'user_account_id'=>($user ? $user->getId() : null),
 					'country_id'=>$duplicateVenue->getCountryId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),

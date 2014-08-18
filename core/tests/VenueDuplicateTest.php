@@ -18,7 +18,7 @@ use repositories\EventRepository;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class VenueCreateTest extends \PHPUnit_Framework_TestCase {
+class VenueDuplicateTest extends \PHPUnit_Framework_TestCase {
 	
 	function test1() {
 		\TimeSource::mock(2014,1,1,0,0,0);
