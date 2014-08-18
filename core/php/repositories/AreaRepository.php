@@ -177,8 +177,8 @@ class AreaRepository {
 					'description'=>$area->getDescription(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, api2_application_id) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :approved_at, :api2_application_id)");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, api2_application_id,is_duplicate_of_id) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :approved_at, :api2_application_id, :is_duplicate_of_id)");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -189,6 +189,7 @@ class AreaRepository {
 					'api2_application_id'=>($USERAGENT->hasApi2ApplicationId()?$USERAGENT->getApi2ApplicationId():null),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'is_duplicate_of_id'=>$area->getIsDuplicateOfId(),
 				));
 			
 			
@@ -334,5 +335,57 @@ class AreaRepository {
 		));
 		return ($stat->rowCount() > 0);
 	}
-	
+
+
+	public function markDuplicate(AreaModel $duplicateArea, AreaModel $originalArea, UserAccountModel $user=null) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$stat = $DB->prepare("UPDATE area_information  SET ".
+				" is_deleted='1', is_duplicate_of_id= :is_duplicate_of_id ".
+				" WHERE id=:id");
+			$stat->execute(array(
+				'id'=>$duplicateArea->getId(),
+				'is_duplicate_of_id'=>$originalArea->getId(),
+			));
+
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_deleted, is_duplicate_of_id) VALUES ".
+				"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at, '1', :is_duplicate_of_id)");
+			$stat->execute(array(
+				'area_id'=>$duplicateArea->getId(),
+				'title'=>substr($duplicateArea->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'description'=>$duplicateArea->getDescription(),
+				'country_id'=>$duplicateArea->getCountryId(),
+				'parent_area_id'=>$duplicateArea->getParentAreaId(),
+				'user_account_id'=>($user ? $user->getId() : null),
+				'created_at'=>\TimeSource::getFormattedForDataBase(),
+				'approved_at'=>\TimeSource::getFormattedForDataBase(),
+				'is_duplicate_of_id'=>$originalArea->getId(),
+			));
+
+			// Move Venues
+			// TODO
+
+
+
+			// Move Events
+			// TODO
+
+
+
+
+			// Move Child Areas
+			// TODO
+
+
+
+
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+
 }
