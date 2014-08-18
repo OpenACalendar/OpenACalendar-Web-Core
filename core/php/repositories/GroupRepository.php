@@ -111,15 +111,16 @@ class GroupRepository {
 					'description'=>$group->getDescription(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at,approved_at, twitter_username) VALUES ".
-					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username)");
+			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at,approved_at, twitter_username, is_duplicate_of_id) VALUES ".
+					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username, :is_duplicate_of_id)");
 			$stat->execute(array(
 					'group_id'=>$group->getId(),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$group->getDescription(),
 					'user_account_id'=>$creator->getId(),	
-					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),			
+					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'is_duplicate_of_id'=>$group->getIsDuplicateOfId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
@@ -145,15 +146,16 @@ class GroupRepository {
 					'id'=>$group->getId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, approved_at, twitter_username, is_deleted) VALUES ".
-					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username, '1')");
+			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, approved_at, twitter_username, is_deleted, is_duplicate_of_id) VALUES ".
+					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username, '1', :is_duplicate_of_id)");
 			$stat->execute(array(
 					'group_id'=>$group->getId(),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$group->getDescription(),
 					'user_account_id'=>$creator->getId(),	
-					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),			
+					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
+					'is_duplicate_of_id'=>$group->getIsDuplicateOfId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
