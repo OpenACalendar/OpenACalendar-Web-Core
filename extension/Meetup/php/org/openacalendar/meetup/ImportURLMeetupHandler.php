@@ -73,11 +73,11 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 			if ($this->eventId) {
 				$meetupData = $this->getMeetupDataForEventID($this->eventId);
 				if ($meetupData) {
-					$this->processMeetupData($meetupData);
+					$this->processMeetupData($meetupData, true);
 				}
 			} else if ($this->groupName) {
 				foreach($this->getMeetupDatasForGroupname($this->groupName) as $meetupData) {
-					$this->processMeetupData($meetupData);
+					$this->processMeetupData($meetupData, false);
 				}
 			}
 		} catch (ImportURLMeetupHandlerAPIError $err) {
@@ -109,7 +109,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		sleep(1);
 		
 		$ch = curl_init();      
-		curl_setopt($ch, CURLOPT_URL, "https://api.meetup.com/2/event/".$id."?text_format=plain&sign=true&key=".$appKey."&fields=timezone");
+		curl_setopt($ch, CURLOPT_URL, "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_USERAGENT, 'OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
 		$output = curl_exec($ch);
@@ -173,7 +173,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		return array();
 	}
 	
-	protected function processMeetupData($meetupData) {
+	protected function processMeetupData($meetupData, $descriptionIsHTML = false) {
 		global $CONFIG;
 		$start = new \DateTime('', new \DateTimeZone('UTC'));
 		$start->setTimestamp($meetupData->time / 1000);
@@ -203,7 +203,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 						$importedEvent = new ImportedEventModel();						
 						$importedEvent->setImportId($id);
 						$importedEvent->setImportUrlId($this->importURLRun->getImportURL()->getId());
-						$this->setImportedEventFromMeetupData($importedEvent, $meetupData);							
+						$this->setImportedEventFromMeetupData($importedEvent, $meetupData, $descriptionIsHTML);
 						$changesToSave = true;
 					}
 				} else {
@@ -214,7 +214,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 							$changesToSave = true;
 						}
 					} else {
-						$changesToSave = $this->setImportedEventFromMeetupData($importedEvent, $meetupData);
+						$changesToSave = $this->setImportedEventFromMeetupData($importedEvent, $meetupData, $descriptionIsHTML);
 						// if was deleted, undelete
 						if ($importedEvent->getIsDeleted()) {
 							$importedEvent->setIsDeleted(false);
@@ -241,11 +241,18 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		}
 	}
 	
-	protected function setImportedEventFromMeetupData(ImportedEventModel $importedEvent, $meetupData) {
+	protected function setImportedEventFromMeetupData(ImportedEventModel $importedEvent, $meetupData, $descriptionIsHTML = false) {
 		$changesToSave = false;
-		if (property_exists($meetupData, 'description') && $importedEvent->getDescription() != $meetupData->description) {
-			$importedEvent->setDescription($meetupData->description);
-			$changesToSave = true;
+		if (property_exists($meetupData, 'description')) {
+			$description =  $meetupData->description;
+			if ($descriptionIsHTML) {
+				$description = str_replace('</p>',"\n\n",$description);
+				$description = html_entity_decode(strip_tags($description));
+			}
+			if ($importedEvent->getDescription() != $description) {
+				$importedEvent->setDescription($description);
+				$changesToSave = true;
+			}
 		}
 		$start = new \DateTime('', new \DateTimeZone('UTC'));
 		$start->setTimestamp($meetupData->time / 1000);
