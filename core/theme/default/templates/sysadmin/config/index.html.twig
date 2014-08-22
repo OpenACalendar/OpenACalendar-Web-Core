@@ -79,12 +79,6 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomain'} %}</td>
 		</tr>
 		<tr>
-			<th>webSysAdminDomain</th>
-			<td>{{ config.webSysAdminDomain }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSysAdminDomain'} %}
-			</td>
-		</tr>
-		<tr>
 			<th>hasSSL</th>
 			<td>{% if config.hasSSL %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'hasSSL'} %}
@@ -99,11 +93,6 @@
 			<th>webSiteDomainSSL</th>
 			<td>{{ config.webSiteDomainSSL }}
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomainSSL'} %}</td>
-		</tr>
-		<tr>
-			<th>webSysAdminDomainSSL</th>
-			<td>{{ config.webSysAdminDomainSSL }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSysAdminDomainSSL'} %}</td>
 		</tr>
 		<tr>
 			<th>webSiteAlternateDomains</th>

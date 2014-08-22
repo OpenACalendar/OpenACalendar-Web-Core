@@ -46,17 +46,15 @@ $CONFIG->singleSiteID = 1;
  */
 $CONFIG->webIndexDomain = "www.example.co.uk";
 $CONFIG->webSiteDomain = "example.co.uk";
-$CONFIG->webSysAdminDomain = "sysadmin.example.co.uk";
 
 /** Is SSL available? **/ 
 $CONFIG->hasSSL = FALSE;
 $CONFIG->webIndexDomainSSL = "www.example.co.uk";
 $CONFIG->webSiteDomainSSL = "example.co.uk";
-$CONFIG->webSysAdminDomainSSL = "sysadmin.example.co.uk";
 
 /**
  * For single site mode set same as webIndexDomain.
- * In multi site mode, cookies must travel between webIndexDomain, webSiteDomain and webSysAdminDomain.
+ * In multi site mode, cookies must travel between webIndexDomain and webSiteDomain.
  * Set this to be a common root such that cookies with this domain set can travel across all 3.
  */
 $CONFIG->webCommonSessionDomain = "example.co.uk";

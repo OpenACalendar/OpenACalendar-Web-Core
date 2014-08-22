@@ -18,4 +18,6 @@ RewriteRule  ^api1(.*)$ /indexapi1.php/api1$1  [L]
 RewriteRule  ^api2(.*)$ /indexapi2.php/api1$1  [L]
 RewriteRule  ^site(.*)$ /index.php/site$1  [L]
 
+RewriteRule  ^sysadmin(.*)$ /gotosysadmin.php/sysadmin$1  [L]
+
 ErrorDocument 404 /404.php

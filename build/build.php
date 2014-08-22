@@ -114,7 +114,7 @@ if ($runCSS) {
 	}
 
 	# Sysadmin
-	if (APP_WED_SYSADMIN_DIR || APP_WED_SINGLE_SITE_DIR) {
+	if (APP_WED_SYSADMIN_DIR || APP_WED_SINGLE_SITE_DIR || APP_WED_INDEX_DIR) {
 		$am = new AssetManager();
 		foreach($cssFiles['sysadmin'] as $nameonly=>$filename) {
 			$fa = new FileAsset($filename,$cssFilters);
@@ -128,6 +128,10 @@ if ($runCSS) {
 		if (APP_WED_SINGLE_SITE_DIR) {
 			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/csssysadmin/');
 			$writer->writeManagerAssets($am);	
+		}
+		if (APP_WED_INDEX_DIR) {
+			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/csssysadmin/');
+			$writer->writeManagerAssets($am);
 		}
 	}
 }
@@ -302,7 +306,7 @@ if ($runIMG) {
 
 
 	# Sysadmin
-	if (APP_WED_SYSADMIN_DIR || APP_WED_SINGLE_SITE_DIR) {
+	if (APP_WED_SYSADMIN_DIR || APP_WED_SINGLE_SITE_DIR || APP_WED_INDEX_DIR) {
 		$am = new AssetManager();
 		foreach($imgFiles['sysadmin'] as $nameonly=>$filename) {
 			$fa = new FileAsset($filename,$imgFilters);
@@ -315,6 +319,10 @@ if ($runIMG) {
 		}
 		if (APP_WED_SINGLE_SITE_DIR) {
 			$writer = new AssetWriter(APP_WED_SINGLE_SITE_DIR.'/theme/default/imgsysadmin/');
+			$writer->writeManagerAssets($am);
+		}
+		if (APP_WED_INDEX_DIR) {
+			$writer = new AssetWriter(APP_WED_INDEX_DIR.'/theme/default/imgsysadmin/');
 			$writer->writeManagerAssets($am);
 		}
 	}
