@@ -465,6 +465,9 @@ class EventRepository {
 	public function markDuplicate(EventModel $duplicateEvent, EventModel $originalEvent, UserAccountModel $user=null) {
 		global $DB;
 
+		if ($duplicateEvent->getId() == $originalEvent->getId()) return;
+
+
 		die("TODO");
 	}
 	

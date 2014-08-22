@@ -135,7 +135,7 @@ class EventController {
 
 					$er = new EventRepository();
 					$originalEvent = $er->loadBySlug($this->parameters['site'], $action->getParam(0));
-					if ($originalEvent) {
+					if ($originalEvent && $originalEvent->getId() != $this->parameters['event']->getId()) {
 						$er->markDuplicate($this->parameters['event'], $originalEvent, userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					}
