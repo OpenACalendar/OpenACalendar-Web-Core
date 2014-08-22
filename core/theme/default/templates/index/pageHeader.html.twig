@@ -31,7 +31,7 @@
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/calendar">My Personal Calendar</a></li>
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
 					{% if currentUser.isSystemAdmin %}
-						<li><a href="{{  config.getWebSysAdminDomainSecure() }}/sysadmin">Sys Admin</a></li>
+						<li><a href="{{  config.getWebIndexDomainSecure() }}/sysadmin">Sys Admin</a></li>
 					{% endif %}
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/logout">Logout</a></li>
 				</ul>				

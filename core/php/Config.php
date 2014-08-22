@@ -31,13 +31,11 @@ class Config {
 	public $webSiteDomain = "example.com";
 	/** @deprecated **/
 	public $webAPI1Domain = "api1.example.com";
-	public $webSysAdminDomain = "sysadmin.example.com";
-	
+
 	public $hasSSL = true;
 	public $webIndexDomainSSL = "www.example.com";
 	public $webSiteDomainSSL = "example.com";
-	public $webSysAdminDomainSSL = "sysadmin.example.com";
-	
+
 	public $webSiteAlternateDomains = array("example.org");
 
 	public $webCommonSessionDomain = "example.com";
@@ -171,9 +169,6 @@ class Config {
 		} else {
 			return $this->hasSSL ? "https://".$siteslug.".".$this->webSiteDomainSSL : "http://".$siteslug.".".$this->webSiteDomain;
 		}
-	}
-	function getWebSysAdminDomainSecure() {
-		return $this->hasSSL ? "https://".$this->webSysAdminDomainSSL : "http://".$this->webSysAdminDomain;
 	}
 	function isFileStore() {
 		return (boolean)$this->fileStoreLocation;
