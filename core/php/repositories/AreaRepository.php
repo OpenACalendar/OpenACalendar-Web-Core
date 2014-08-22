@@ -339,6 +339,9 @@ class AreaRepository {
 
 	public function markDuplicate(AreaModel $duplicateArea, AreaModel $originalArea, UserAccountModel $user=null) {
 		global $DB;
+
+		if ($duplicateArea->getId() == $originalArea->getId()) return;
+
 		try {
 			$DB->beginTransaction();
 
