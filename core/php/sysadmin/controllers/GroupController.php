@@ -73,7 +73,7 @@ class GroupController {
 				} else if ($action->getCommand() == 'isduplicateof') {
 					$gr = new GroupRepository();
 					$originalGroup = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
-					if ($originalGroup) {
+					if ($originalGroup && $originalGroup->getId() != $this->parameters['group']->getId()) {
 						$gr->markDuplicate($this->parameters['group'], $originalGroup, userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
 					}

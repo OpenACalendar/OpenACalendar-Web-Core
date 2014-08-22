@@ -334,6 +334,8 @@ class GroupRepository {
 	public function markDuplicate(GroupModel $duplicateGroup, GroupModel $originalGroup, UserAccountModel $user=null) {
 		global $DB;
 
+		if ($duplicateGroup->getId() == $originalGroup->getId()) return;
+
 		try {
 			$DB->beginTransaction();
 
