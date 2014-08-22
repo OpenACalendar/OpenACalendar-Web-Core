@@ -19,6 +19,7 @@ $app->match('/sysadmin/', "sysadmin\controllers\IndexController::index");
 
 $app->match('/sysadmin/site', "sysadmin\controllers\SiteListController::index"); 
 $app->match('/sysadmin/site/', "sysadmin\controllers\SiteListController::index"); 
+$app->match('/sysadmin/site/new', "sysadmin\controllers\SiteNewController::index");
 $app->match('/sysadmin/site/{id}', "sysadmin\controllers\SiteController::show")
 		->assert('id', '\d+'); 
 $app->match('/sysadmin/site/{id}/', "sysadmin\controllers\SiteController::show")
