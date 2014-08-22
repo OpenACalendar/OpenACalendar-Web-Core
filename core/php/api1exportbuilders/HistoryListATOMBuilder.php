@@ -328,7 +328,7 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 				$txt .= 'Enabled Changed: '.($history->getIsEnabled() ? "Enabled":"Disabled")."\n\n";
 			}
 			if ($history->getExpiredAtChanged()) {
-				$txt .= 'Exprired Changed: '.($history->getExpiredAt() ? "Expired":"Not Expired")."\n\n";
+				$txt .= 'Expired Changed: '.($history->getExpiredAt() ? "Expired":"Not Expired")."\n\n";
 			}
 		}
 		$txt .= '</summary>';
