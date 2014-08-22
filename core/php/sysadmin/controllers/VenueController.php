@@ -68,7 +68,7 @@ class VenueController {
 				} else if ($action->getCommand() == 'isduplicateof') {
 					$vr = new VenueRepository();
 					$originalVenue = $vr->loadBySlug($this->parameters['site'], $action->getParam(0));
-					if ($originalVenue) {
+					if ($originalVenue && $originalVenue->getId() != $this->parameters['venue']->getId()) {
 						$vr->markDuplicate($this->parameters['venue'], $originalVenue, userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
 					}

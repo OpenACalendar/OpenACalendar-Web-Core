@@ -191,6 +191,9 @@ class VenueRepository {
 
 	public function markDuplicate(VenueModel $duplicateVenue, VenueModel $originalVenue, UserAccountModel $user=null) {
 		global $DB;
+
+		if ($duplicateVenue->getId() == $originalVenue->getId()) return;
+
 		try {
 			$DB->beginTransaction();
 
