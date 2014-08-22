@@ -37,7 +37,9 @@ class VenueController {
 		if (!$this->parameters['venue']) {
 			$app->abort(404);
 		}
-	
+
+		$this->parameters['venueisduplicateof'] = $this->parameters['venue']->getIsDuplicateOfId() ? $vr->loadById($this->parameters['venue']->getIsDuplicateOfId()) : null;
+
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
@@ -56,11 +58,21 @@ class VenueController {
 					$vr = new VenueRepository();
 					$vr->delete($this->parameters['venue'],  userGetCurrent());
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
+
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['venue']->getIsDeleted()) {
 					$this->parameters['venue']->setIsDeleted(false);
 					$vr = new VenueRepository();
 					$vr->edit($this->parameters['venue'],  userGetCurrent());
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
+
+				} else if ($action->getCommand() == 'isduplicateof') {
+					$vr = new VenueRepository();
+					$originalVenue = $vr->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($originalVenue) {
+						$vr->markDuplicate($this->parameters['venue'], $originalVenue, userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
+					}
+
 				}
 			}
 		}

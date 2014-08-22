@@ -26,6 +26,10 @@
 			<td>{% if venue.isDeleted %}Deleted{% else %}-{% endif %}</td>
 		</tr>
 		<tr>
+			<th>Is Duplicate of</th>
+			<td>{% if venue.isDuplicateOfId %}<a href="/sysadmin/site/{{ site.id }}/venue/{{ venueisduplicateof.slug }}/">{{ venueisduplicateof.title }}</a>{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
 			<th>Title</th>
 			<td>{{ venue.title }}</td>
 		</tr>
@@ -57,5 +61,7 @@
 	<ul class="actionHelp">
 		<li>delete</li>
 		<li>undelete</li>
+		<li>isduplicateof <span class="param">SLUG</span></li>
 	</ul>
 {% endblock %}
+
