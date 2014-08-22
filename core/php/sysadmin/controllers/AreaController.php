@@ -39,7 +39,9 @@ class AreaController {
 		
 		$ar = new AreaRepository();
 		$this->parameters['area'] = $ar->loadBySlug($this->parameters['site'], $slug);
-		
+
+		$this->parameters['areaisduplicateof'] = $this->parameters['area']->getIsDuplicateOfId() ? $ar->loadById($this->parameters['area']->getIsDuplicateOfId()) : null;
+
 		if (!$this->parameters['area']) {
 			$app->abort(404);
 		}
@@ -88,6 +90,16 @@ class AreaController {
 						$ar->editParentArea($this->parameters['area'], userGetCurrent());
 					}
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+
+				} else if ($action->getCommand() == 'isduplicateof') {
+
+					$ar = new AreaRepository();
+					$originalArea = $ar->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($originalArea && $originalArea->getId() != $this->parameters['area']->getId()) {
+						$ar->markDuplicate($this->parameters['area'], $originalArea, userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+					}
+
 				}
 			}
 		}

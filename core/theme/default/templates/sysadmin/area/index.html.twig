@@ -38,6 +38,10 @@
 			<td>{% if area.isDeleted %}Deleted{% else %}-{% endif %}</td>
 		</tr>
 		<tr>
+			<th>Is Duplicate of</th>
+			<td>{% if area.isDuplicateOfId %}<a href="/sysadmin/site/{{ site.id }}/area/{{ areaisduplicateof.slug }}/">{{  areaisduplicateof.title }}</a>{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
 			<th>Title</th>
 			<td>{{ area.title }}</td>
 		</tr>
@@ -64,6 +68,7 @@
 		<li>delete</li>
 		<li>undelete</li>
 		<li>parentarea slug</li>
+		<li>isduplicateof <span class="param">SLUG</span></li>
 	</ul>
 
 
