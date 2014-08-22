@@ -1226,56 +1226,36 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		$gotResult = false;
-		
+		$gotResultEditedVenue = false;
+		$gotResultEditedEvent = false;
+
 		if ($request->request->get('area') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
-			if ($request->request->get('area') == 'new' && trim($request->request->get('newAreaTitle')) && $this->parameters['country']) {
-				
-				$area = new AreaModel();
-				$area->setTitle(trim($request->request->get('newAreaTitle')));
-				
-				$areaRepository = new AreaRepository();
-				$areaRepository->create($area, $this->parameters['area'], $app['currentSite'], $this->parameters['country'], userGetCurrent());
-				
-				if ($this->parameters['venue']) {
-					$this->parameters['venue']->setAreaId($area->getId());
-					$venueRepository = new VenueRepository();
-					$venueRepository->edit($this->parameters['venue'], userGetCurrent());
-				} else {
-					$this->parameters['event']->setAreaId($area->getId());
-					$eventRepository = new EventRepository();
-					$eventRepository->edit($this->parameters['event'], userGetCurrent());
-				}
-				
-				$areaRepository->buildCacheAreaHasParent($area);
-				
-				$app['flashmessages']->addMessage('Thank you; event updated!');
-				$gotResult = true;
-				
-			} elseif (intval($request->request->get('area'))) {
+			if (intval($request->request->get('area'))) {
 				
 				$areaRepository = new AreaRepository();
 				$area = $areaRepository->loadBySlug($app['currentSite'], $request->request->get('area'));
-				if ($area) {
+				if ($area && (!$this->parameters['area'] || $area->getId() != $this->parameters['area']->getId())) {
 					if ($this->parameters['venue']) {
 						$this->parameters['venue']->setAreaId($area->getId());
 						$venueRepository = new VenueRepository();
 						$venueRepository->edit($this->parameters['venue'], userGetCurrent());
+						$gotResultEditedVenue = true;
 					} else {
 						$this->parameters['event']->setAreaId($area->getId());
 						$eventRepository = new EventRepository();
 						$eventRepository->edit($this->parameters['event'], userGetCurrent());
+						$gotResultEditedEvent = true;
 					}
 					$app['flashmessages']->addMessage('Thank you; event updated!');
-					$gotResult = true;
+
 				}
 							
 			}
 			
 		}
 		
-		if ($gotResult) {
+		if ($gotResultEditedEvent) {
 			$repo = new EventRecurSetRepository();
 			if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl().'/edit/future');

@@ -5,6 +5,14 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
+
+
+
+{% set pushToChildAreas = false %}
+{% if childAreas and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
+	{% set pushToChildAreas = true %}
+{% endif %}
+
 {% extends 'site/venue/page.html.twig' %}
 
 {% block pageTitle %}{{ venue.title }} - {% endblock %} 
@@ -49,7 +57,17 @@
 		<meta itemprop="name" content="{{ venue.title|e('html_attr') }}" />
 			
 		<div id="innerPageLeft" class="venue">
-			
+
+
+			{% if pushToChildAreas %}
+				<div id="userCanPushToChildAreaWrapper">
+					<p>Is "{{ venue.title }}" in one of these places?</p>
+					<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
+						{%  include 'site/common/pushToChildArea.html.twig' %}
+					</form>
+				</div>
+			{% endif %}
+
 			<p itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
 
 			<div id="Map" class="map"></div>
@@ -71,29 +89,6 @@
 					{% endif %}	
 				</div>
 			</div>
-			
-			{% if childAreas and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
-				<div id="userCanPushToChildAreaWrapper">
-					<p>Is {{ venue.title }} in one of these places?</p>
-					<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
-						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-						<input type="hidden" name="submitted" value="yes">
-						<ul class="areas">
-							{% for childArea in childAreas %}
-								<li class="area">
-									{% spaceless %}<span class="content"><label>
-										<input type="radio" name="area" value="{{ childArea.slug }}">{{ childArea.title }}
-									</label></span>{% endspaceless %}
-									<span class="aftercontent">&nbsp;</span>
-								</li>
-							{% endfor %}
-							<li class="newarea"><label><input type="radio" name="area" value="new">Other:</label> <input type="text" name="newAreaTitle"></li>
-						</ul>
-						<input type="submit" value="Save">
-					</form>
-				</div>
-			{% endif %}
-			
 			
 			{% if medias %}
 				<ul class="mediaGrid">
@@ -145,7 +140,10 @@
 	{% include 'site/common/mapLibrary.js.html.twig' %}
 	<script type="text/javascript" src="/theme/default/js/venueshow.js?v={{ config.assetsVersion }}"></script>
 	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
-	<script src="/theme/default/js/mediaPopup.js?v={{ config.assetsVersion }}" type="text/javascript"></script>	
+	<script src="/theme/default/js/mediaPopup.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{%  if pushToChildAreas %}
+		<script src="/theme/default/js/pushToChildArea.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{%  endif %}
 {% endblock %}
 
 
