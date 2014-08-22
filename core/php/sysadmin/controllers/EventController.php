@@ -41,10 +41,12 @@ class EventController {
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
-		
+
 		$er = new EventRepository();
 		$this->parameters['event'] = $er->loadBySlug($this->parameters['site'], $slug);
-		
+
+		$this->parameters['eventisduplicateof'] = $this->parameters['event']->getIsDuplicateOfId() ? $er->loadById($this->parameters['event']->getIsDuplicateOfId()) : null;
+
 		if (!$this->parameters['event']) {
 			$app->abort(404);
 		}
@@ -128,7 +130,16 @@ class EventController {
 						$clr->removeEventFromCuratedList($this->parameters['event'], $curatedList, userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$curatedList->getSlug());
 					}
-					
+
+				} else if ($action->getCommand() == 'isduplicateof') {
+
+					$er = new EventRepository();
+					$originalEvent = $er->loadBySlug($this->parameters['site'], $action->getParam(0));
+					if ($originalEvent) {
+						$er->markDuplicate($this->parameters['event'], $originalEvent, userGetCurrent());
+						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					}
+
 				}
 		
 			}

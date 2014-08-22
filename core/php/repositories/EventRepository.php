@@ -462,7 +462,11 @@ class EventRepository {
 		return $eventOut;
 	}
 	
-	
+	public function markDuplicate(EventModel $duplicateEvent, EventModel $originalEvent, UserAccountModel $user=null) {
+		global $DB;
+
+		die("TODO");
+	}
 	
 	public function purge(EventModel $event) {
 		global $DB;

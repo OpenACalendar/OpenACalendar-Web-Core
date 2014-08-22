@@ -25,6 +25,10 @@
 			<td>{% if event.isDeleted %}Deleted{% else %}-{% endif %}</td>
 		</tr>
 		<tr>
+			<th>Is Duplicate of</th>
+			<td>{% if event.isDuplicateOfId %}<a href="/sysadmin/site/{{ site.id }}/event/{{ eventisduplicateof.slug }}/">{{ eventisduplicateof.title }}</a>{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
 			<th>Summary</th>
 			<td>{{ event.summary }}</td>
 		</tr>
@@ -114,6 +118,9 @@
 		<li>undelete</li>
 		<li>addcuratedlist  <span class="param">curatedlistslug</a></li>
 		<li>removecuratedlist  <span class="param">curatedlistslug</a></li>
+		<li>isduplicateof SLUG</li>
 	</ul>
 
 {% endblock %}
+
+
