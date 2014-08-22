@@ -1,0 +1,39 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+<input type="hidden" name="submitted" value="yes">
+<input type="hidden" name="area" value="{%  if area %}{{  area.slug  }}{%  endif %}">
+<ul id="ChangeVenueAreaList">
+	{% for parentArea in parentAreas %}
+		<li class="selectedarea">
+			<span class="content">
+				<span class="title">{{ parentArea.title }}</span>
+				<a href="#" onclick="removeArea(this); return false;" class="remove">X</a>
+			</span>
+			<input type="hidden" name="areas[]" value="EXISTING:{{ parentArea.slug }}">
+		</li>
+	{% endfor %}
+	{% if area %}
+		<li class="selectedarea">
+			<span class="content">
+				<span class="title">{{ area.title }}</span>
+				<a href="#" onclick="removeArea(this); return false;" class="remove">X</a>
+			</span>
+			<input type="hidden" name="areas[]" value="EXISTING:{{ area.slug }}">
+		</li>
+	{% endif %}
+	<li class="selectArea">
+		<ul class="areas">
+			{% for childArea in childAreas %}
+				<li class="area"><span class="content"><a href="#" onclick="existingAreaChoosen({{ childArea.slug }}); return false;">{{ childArea.title }}</a></span><span class="aftercontent">&nbsp;</span></li>
+			{% endfor %}
+		</ul>
+	</li>
+</ul>
+<input type="submit" value="Save">
+
