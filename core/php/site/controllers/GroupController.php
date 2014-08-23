@@ -27,6 +27,7 @@ use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
 use repositories\builders\ImportURLRepositoryBuilder;
+use repositories\builders\CuratedListRepositoryBuilder;
 use site\forms\ImportURLNewForm;
 use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 
@@ -98,6 +99,17 @@ class GroupController {
 		
 		$groupRepo = new GroupRepository();
 		$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
+
+
+		if (userGetCurrent()) {
+			$clrb = new CuratedListRepositoryBuilder();
+			$clrb->setSite($app['currentSite']);
+			$clrb->setUserCanEdit(userGetCurrent());
+			$clrb->setGroupInformation($this->parameters['group']);
+			$this->parameters['curatedListsUserCanEdit'] = $clrb->fetchAll();
+		} else {
+			$this->parameters['curatedListsUserCanEdit'] = array();
+		}
 
 		return $app['twig']->render('site/group/show.html.twig', $this->parameters);
 	}
