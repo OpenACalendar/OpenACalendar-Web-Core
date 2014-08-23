@@ -3,11 +3,15 @@
 use models\UserAccountModel;
 use models\SiteModel;
 use models\AreaModel;
+use models\VenueModel;
+use models\EventModel;
 use models\CountryModelModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\CountryRepository;
 use repositories\AreaRepository;
+use repositories\EventRepository;
+use repositories\VenueRepository;
 
 
 /**
@@ -56,9 +60,22 @@ class AreaDuplicateTest extends \PHPUnit_Framework_TestCase {
 		$area1 = $areaRepo->loadById($area1->getId());
 		$area2 = $areaRepo->loadById($area2->getId());
 
+		$countryRepo = new CountryRepository();
+		$gb = $countryRepo->loadByTwoCharCode('GB');
+
+		$venue = new VenueModel();
+		$venue->setTitle("test");
+		$venue->setDescription("test test");
+		$venue->setCountryId($gb->getId());
+		$venue->setAreaId($area2->getId());
+
+		$venueRepo = new VenueRepository();
+		$venueRepo->create($venue, $site, $user);
 
 		// Test before
 
+		$venue = $venueRepo->loadById($venue->getId());
+		$this->assertEquals($area2->getId(), $venue->getAreaId());
 
 
 		// Mark
@@ -68,6 +85,8 @@ class AreaDuplicateTest extends \PHPUnit_Framework_TestCase {
 
 		// Test Duplicate
 
+		$venue = $venueRepo->loadById($venue->getId());
+		$this->assertEquals($area1->getId(), $venue->getAreaId());
 
 	}
 }

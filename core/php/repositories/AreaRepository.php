@@ -368,9 +368,32 @@ class AreaRepository {
 			));
 
 			// Move Venues
-			// TODO
-
-
+			$vrb = new VenueRepositoryBuilder();
+			$vrb->setArea($duplicateArea);
+			$statUpdate = $DB->prepare("UPDATE venue_information SET area_id=:area_id WHERE id=:id");
+			$statInsert = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
+					"area_id, description, user_account_id  , created_at,approved_at,address,address_code,is_duplicate_of_id,is_deleted) VALUES ".
+					"(:venue_id, :title, :lat, :lng, :country_id,".
+					":area_id,:description,  :user_account_id  , :created_at,:approved_at,:address,:address_code,:is_duplicate_of_id,:is_deleted)");
+			foreach($vrb->fetchAll() as $venue) {
+				$statUpdate->execute(array('id'=>$venue->getId(),'area_id'=>$originalArea->getId()));
+				$statInsert->execute(array(
+					'venue_id'=>$venue->getId(),
+					'title'=>$venue->getTitle(),
+					'lat'=>$venue->getLat(),
+					'lng'=>$venue->getLng(),
+					'description'=>$venue->getDescription(),
+					'address'=>$venue->getAddress(),
+					'address_code'=>$venue->getAddressCode(),
+					'user_account_id'=>($user?$user->getId():null),
+					'country_id'=>$venue->getCountryId(),
+					'is_duplicate_of_id'=>$venue->getIsDuplicateOfId(),
+					'area_id'=>$originalArea->getId(),
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'is_deleted'=>($venue->getIsdeleted()?1:0),
+				));
+			}
 
 			// Move Events
 			// TODO
