@@ -26,6 +26,52 @@
 			<directory suffix=".php">../../core/php/autoloadCLI.php</directory>
 			<directory suffix=".php">../../core/php/autoloadWebApp.php</directory>
 		</blacklist>
+		<whitelist>
+			<directory suffix=".php">source/core/php/indexapi2/controllers</directory>
+			<directory suffix=".php">source/core/php/indexapi2/forms</directory>
+			<directory suffix=".php">source/core/php/index/controllers</directory>
+			<directory suffix=".php">source/core/php/index/forms</directory>
+			<directory suffix=".php">source/core/php/site/controllers</directory>
+			<directory suffix=".php">source/core/php/site/forms</directory>
+			<directory suffix=".php">source/core/php/sysadmin/controllers</directory>
+			<directory suffix=".php">source/core/php/sysadmin/forms</directory>
+			<directory suffix=".php">source/core/php/api1exportbuilders</directory>
+			<directory suffix=".php">source/core/php/appconfiguration</directory>
+			<directory suffix=".php">source/core/php/cliapi1</directory>
+			<directory suffix=".php">source/core/php/icalparser</directory>
+			<directory suffix=".php">source/core/php/import</directory>
+			<directory suffix=".php">source/core/php/models</directory>
+			<directory suffix=".php">source/core/php/repositories</directory>
+			<directory suffix=".php">source/core/php/repositories/builders</directory>
+			<directory suffix=".php">source/core/php/repositories/builders/filterparams</directory>
+			<directory suffix=".php">source/core/php/siteapi1/controllers</directory>
+			<directory suffix=".php">source/core/php/siteapi2/controllers</directory>
+			<directory suffix=".php">source/core/php/tasks</directory>
+			<directory suffix=".php">source/core/php/twig/extensions</directory>
+			<directory suffix=".php">source/core/php/usernotifications/models</directory>
+			<directory suffix=".php">source/core/php/usernotifications/preferences</directory>
+			<directory suffix=".php">source/core/php/usernotifications/types</directory>
+			<file>source/core/php/BaseExtension.php</file>
+			<file>source/core/php/BaseUserNotificationModel.php</file>
+			<file>source/core/php/BaseUserNotificationPreference.php</file>
+			<file>source/core/php/BaseUserNotificationType.php</file>
+			<file>source/core/php/ConfigCheck.php</file>
+			<file>source/core/php/Config.php</file>
+			<file>source/core/php/ExtensionCore.php</file>
+			<file>source/core/php/ExtensionHookRunner.php</file>
+			<file>source/core/php/ExtensionManager.php</file>
+			<file>source/core/php/FlashMessages.php</file>
+			<file>source/core/php/IniConfigWithEnvironment.php</file>
+			<file>source/core/php/ParseDomain.php</file>
+			<file>source/core/php/ParseURL.php</file>
+			<file>source/core/php/RenderCalendar.php</file>
+			<file>source/core/php/Request.php</file>
+			<file>source/core/php/SearchForDuplicateEvents.php</file>
+			<file>source/core/php/SysAdminLink.php</file>
+			<file>source/core/php/TimeSource.php</file>
+			<file>source/core/php/UserAgent.php</file>
+			<file>source/core/php/WebSession.php</file>
+		</whitelist>
 	</filter>
 
     <testsuites>
