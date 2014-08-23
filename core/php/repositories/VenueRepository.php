@@ -110,7 +110,7 @@ class VenueRepository {
 		}
 		
 		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$creator);
-		
+
 		try {
 			$DB->beginTransaction();
 
@@ -166,18 +166,22 @@ class VenueRepository {
 					'id'=>$venue->getId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
-					"description, user_account_id  , created_at,approved_at, is_deleted) VALUES ".
-					"(:venue_id, :title, :lat, :lng, :country_id,".
-					":description,  :user_account_id  , :created_at, :approved_at, '1')");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id,area_id, ".
+					"description, user_account_id  , created_at,approved_at,address,address_code,is_duplicate_of_id,  is_deleted) VALUES ".
+					"(:venue_id, :title, :lat, :lng, :country_id,:area_id,".
+					":description,  :user_account_id  , :created_at, :approved_at,:address,:address_code,:is_duplicate_of_id , '1')");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>$venue->getTitle(),
 					'lat'=>$venue->getLat(),
 					'lng'=>$venue->getLng(),
 					'description'=>$venue->getDescription(),
+					'address'=>$venue->getAddress(),
+					'address_code'=>$venue->getAddressCode(),
 					'user_account_id'=>$creator->getId(),				
 					'country_id'=>$venue->getCountryId(),
+					'is_duplicate_of_id'=>$venue->getIsDuplicateOfId(),
+					'area_id'=>$venue->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
