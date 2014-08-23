@@ -144,7 +144,7 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 		global $DB;
 		
 		$sql = "SELECT venue_information.* FROM venue_information ".
-				" WHERE ".implode(" AND ", $this->where).
+			($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 				" ORDER BY venue_information.title ASC ";
 	
 		$this->stat = $DB->prepare($sql);
