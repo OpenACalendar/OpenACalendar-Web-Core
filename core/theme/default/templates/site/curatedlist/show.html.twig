@@ -55,12 +55,21 @@
 		{% for event in events %}
 			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 			{% if currentUserCanEditCuratedList and currentSite.isFeatureCuratedList %}
-				<li>				
-					<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
-						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-						<input type="hidden" name="returnTo" value="curatedlist">
-						<input type="submit" value="Remove">
-					</form>
+				<li>
+					{%  if event.isEventInCuratedList %}
+						<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="returnTo" value="curatedlist">
+							<input type="submit" value="Remove Event">
+						</form>
+					{% endif %}
+					{%  if event.inCuratedListGroupSlug %}
+						<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ event.inCuratedListGroupSlug }}/remove" method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="returnTo" value="curatedlist">
+							<input type="submit" value="Remove Group {{ event.inCuratedListGroupTitle | e('html_attr') }} ">
+						</form>
+					{% endif %}
 				</li>
 			{% endif %}
 		{% else %}

@@ -116,9 +116,12 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	
 	/** @var CuratedListModel **/
 	protected $curatedList;
+
+	protected $curatedListInformation = false;
 	
-	public function setCuratedList(CuratedListModel $curatedList) {
+	public function setCuratedList(CuratedListModel $curatedList, $curatedListInformation = false) {
 		$this->curatedList = $curatedList;
+		$this->curatedListInformation = $curatedListInformation;
 	}
 	
 	
@@ -302,9 +305,16 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->joins[] = " LEFT JOIN group_in_curated_list ON group_in_curated_list.group_id = event_in_group_cl.group_id ".
 				" AND group_in_curated_list.removed_at IS NULL AND group_in_curated_list.curated_list_id = :curated_list";
 
-
 			$this->where[] = " ( event_in_curated_list.curated_list_id IS NOT NULL OR group_in_curated_list.curated_list_id IS NOT NULL )";
 			$this->params['curated_list'] = $this->curatedList->getId();
+
+			if ($this->curatedListInformation) {
+				$this->joins[] = " LEFT JOIN group_information AS group_information_cl ON group_information_cl.id = group_in_curated_list.group_id ";
+				$this->select[] = " (CASE WHEN event_in_curated_list.event_id IS NULL THEN 0 ELSE 1 END) AS is_event_in_curated_list ";
+				$this->select[] = " group_in_curated_list.group_id AS in_curated_list_group_id ";
+				$this->select[] = " group_information_cl.slug AS in_curated_list_group_slug ";
+				$this->select[] = " group_information_cl.title AS in_curated_list_group_title ";
+			}
 		}
 		
 		if ($this->end) {

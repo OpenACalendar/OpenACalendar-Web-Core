@@ -75,10 +75,28 @@ class CuratedListEventTest extends \PHPUnit_Framework_TestCase {
 
 
 		// Test After
+
+		// ... we don't ask for extra info
 		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
 		$eventRepositoryBuilder->setCuratedList($curatedList);
-		$this->assertEquals(1, count($eventRepositoryBuilder->fetchAll()));
+		$events = $eventRepositoryBuilder->fetchAll();
+		$this->assertEquals(1, count($events));
+		$eventWithInfo = $events[0];
+		$this->assertNull($eventWithInfo->getInCuratedListGroupId());
+		$this->assertNull($eventWithInfo->getInCuratedListGroupSlug());
+		$this->assertNull($eventWithInfo->getInCuratedListGroupTitle());
+		$this->assertFalse($eventWithInfo->getIsEventInCuratedList());
 
+		// ... we DO ask for extra info
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder->setCuratedList($curatedList, true);
+		$events = $eventRepositoryBuilder->fetchAll();
+		$this->assertEquals(1, count($events));
+		$eventWithInfo = $events[0];
+		$this->assertNull($eventWithInfo->getInCuratedListGroupId());
+		$this->assertNull($eventWithInfo->getInCuratedListGroupSlug());
+		$this->assertNull($eventWithInfo->getInCuratedListGroupTitle());
+		$this->assertTrue($eventWithInfo->getIsEventInCuratedList());
 
 		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
 		$curatedListRepoBuilder->setEventInformation($event);

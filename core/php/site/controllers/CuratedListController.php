@@ -51,7 +51,7 @@ class CuratedListController {
 		
 		$this->parameters['eventListFilterParams'] = new EventFilterParams();
 		$this->parameters['eventListFilterParams']->set($_GET);
-		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist'], true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		if (userGetCurrent()) {
