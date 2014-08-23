@@ -3,6 +3,7 @@
 
 namespace repositories;
 
+use dbaccess\VenueDBAccess;
 use models\VenueModel;
 use models\SiteModel;
 use models\UserAccountModel;
@@ -18,8 +19,17 @@ use repositories\UserInSiteRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class VenueRepository {
-	
-	
+
+	/** @var  \dbaccess\VenueDBAccess */
+	protected $venueDBAccess;
+
+
+	function __construct()
+	{
+		global $DB;
+		$this->venueDBAccess = new VenueDBAccess($DB, new \TimeSource());
+	}
+
 	public function create(VenueModel $venue, SiteModel $site, UserAccountModel $creator) {
 		global $DB, $EXTENSIONHOOKRUNNER;
 		
@@ -102,95 +112,24 @@ class VenueRepository {
 		}
 	}
 	
-	public function edit(VenueModel $venue, UserAccountModel $creator) {
+	public function edit(VenueModel $venue, UserAccountModel $user) {
 		global $DB, $EXTENSIONHOOKRUNNER;
 		
 		if ($venue->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted venue!");
 		}
 		
-		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$creator);
+		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$user);
 
-		try {
-			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE venue_information  SET title=:title,description=:description,".
-					"lat=:lat,lng=:lng , country_id=:country_id, area_id=:area_id, address=:address, ".
-					"address_code=:address_code, is_deleted='0' WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$venue->getId(),
-					'title'=>$venue->getTitle(),
-					'lat'=>$venue->getLat(),
-					'lng'=>$venue->getLng(),
-					'description'=>$venue->getDescription(),
-					'address'=>$venue->getAddress(),
-					'address_code'=>$venue->getAddressCode(),
-					'country_id'=>$venue->getCountryId(),
-					'area_id'=>$venue->getAreaId(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
-					"area_id, description, user_account_id  , created_at,approved_at,address,address_code,is_duplicate_of_id) VALUES ".
-					"(:venue_id, :title, :lat, :lng, :country_id,".
-					":area_id,:description,  :user_account_id  , :created_at,:approved_at,:address,:address_code,:is_duplicate_of_id)");
-			$stat->execute(array(
-					'venue_id'=>$venue->getId(),
-					'title'=>$venue->getTitle(),
-					'lat'=>$venue->getLat(),
-					'lng'=>$venue->getLng(),
-					'description'=>$venue->getDescription(),
-					'address'=>$venue->getAddress(),
-					'address_code'=>$venue->getAddressCode(),
-					'user_account_id'=>$creator->getId(),				
-					'country_id'=>$venue->getCountryId(),
-					'is_duplicate_of_id'=>$venue->getIsDuplicateOfId(),
-					'area_id'=>$venue->getAreaId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
-			
-			$DB->commit();
-		} catch (Exception $e) {
-			$DB->rollBack();
-		}
+		$fields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_deleted');
+
+		$this->venueDBAccess->update($venue,$fields,$user);
 	}
 	
-	public function delete(VenueModel $venue, UserAccountModel $creator) {
-		global $DB;
-		try {
-			$DB->beginTransaction();
-
-			$stat = $DB->prepare("UPDATE venue_information  SET is_deleted='1' WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$venue->getId(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id,area_id, ".
-					"description, user_account_id  , created_at,approved_at,address,address_code,is_duplicate_of_id,  is_deleted) VALUES ".
-					"(:venue_id, :title, :lat, :lng, :country_id,:area_id,".
-					":description,  :user_account_id  , :created_at, :approved_at,:address,:address_code,:is_duplicate_of_id , '1')");
-			$stat->execute(array(
-					'venue_id'=>$venue->getId(),
-					'title'=>$venue->getTitle(),
-					'lat'=>$venue->getLat(),
-					'lng'=>$venue->getLng(),
-					'description'=>$venue->getDescription(),
-					'address'=>$venue->getAddress(),
-					'address_code'=>$venue->getAddressCode(),
-					'user_account_id'=>$creator->getId(),				
-					'country_id'=>$venue->getCountryId(),
-					'is_duplicate_of_id'=>$venue->getIsDuplicateOfId(),
-					'area_id'=>$venue->getAreaId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
-			
-			$DB->commit();
-		} catch (Exception $e) {
-			$DB->rollBack();
-		}
+	public function delete(VenueModel $venue, UserAccountModel $user) {
+		$venue->setIsDeleted(true);
+		$this->venueDBAccess->update($venue,array('is_deleted'),$user);
 	}
 
 	public function markDuplicate(VenueModel $duplicateVenue, VenueModel $originalVenue, UserAccountModel $user=null) {
@@ -201,28 +140,9 @@ class VenueRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE venue_information  SET is_deleted='1', is_duplicate_of_id = :is_duplicate_of_id WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$duplicateVenue->getId(),
-					'is_duplicate_of_id'=>$originalVenue->getId(),
-				));
-
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
-					"description, user_account_id  , created_at,approved_at, is_deleted, is_duplicate_of_id) VALUES ".
-					"(:venue_id, :title, :lat, :lng, :country_id,".
-					":description,  :user_account_id  , :created_at, :approved_at, '1', :is_duplicate_of_id)");
-			$stat->execute(array(
-					'venue_id'=>$duplicateVenue->getId(),
-					'is_duplicate_of_id'=>$originalVenue->getId(),
-					'title'=>$duplicateVenue->getTitle(),
-					'lat'=>$duplicateVenue->getLat(),
-					'lng'=>$duplicateVenue->getLng(),
-					'description'=>$duplicateVenue->getDescription(),
-					'user_account_id'=>($user ? $user->getId() : null),
-					'country_id'=>$duplicateVenue->getCountryId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
+			$duplicateVenue->setIsDeleted(true);
+			$duplicateVenue->setIsDuplicateOfId($originalVenue->getId());
+			$this->venueDBAccess->update($duplicateVenue,array('is_deleted','is_duplicate_of_id'),$user);
 
 			// Move any Events
 			$statUpdateInfo = $DB->prepare("UPDATE event_information  SET venue_id=:venue_id WHERE id=:id");
