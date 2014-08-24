@@ -7,6 +7,7 @@ use models\TagModel;
 use models\SiteModel;
 use models\EventModel;
 use models\UserAccountModel;
+use dbaccess\TagDBAccess;
 
 /**
  *
@@ -17,7 +18,16 @@ use models\UserAccountModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class TagRepository {
-	
+
+	/** @var  \dbaccess\TagDBAccess */
+	protected $tagDBAccess;
+
+	function __construct()
+	{
+		global $DB, $USERAGENT;
+		$this->tagDBAccess = new TagDBAccess($DB, new \TimeSource(), $USERAGENT);
+	}
+
 	
 	public function create(TagModel $tag, SiteModel $site, UserAccountModel $creator) {
 		global $DB;
@@ -86,7 +96,7 @@ class TagRepository {
 	
 	
 	
-	public function edit(TagModel $tag, UserAccountModel $creator) {
+	public function edit(TagModel $tag, UserAccountModel $user) {
 		global $DB;
 		if ($tag->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted tag!");
@@ -94,23 +104,9 @@ class TagRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE tag_information  SET title=:title, description=:description, is_deleted='0' WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$tag->getId(),
-					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$tag->getDescription(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_deleted, is_new) VALUES ".
-					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '0', '0')");
-			$stat->execute(array(
-					'tag_id'=>$tag->getId(),
-					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$tag->getDescription(),
-					'user_account_id'=>$creator->getId(),				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
+			$fields = array('title','description','is_deleted');
+			$tag->setIsDeleted(false);
+			$this->tagDBAccess->update($tag, $fields, $user);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -119,26 +115,13 @@ class TagRepository {
 	}
 	
 	
-	public function delete(TagModel $tag, UserAccountModel $creator) {
+	public function delete(TagModel $tag, UserAccountModel $user) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE tag_information  SET is_deleted='1' WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$tag->getId(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at,is_deleted, is_new) VALUES ".
-					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1','0')");
-			$stat->execute(array(
-					'tag_id'=>$tag->getId(),
-					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$tag->getDescription(),
-					'user_account_id'=>$creator->getId(),				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
+			$tag->setIsDeleted(true);
+			$this->tagDBAccess->update($tag, array('is_deleted'), $user);
 			
 			$DB->commit();
 		} catch (Exception $e) {
