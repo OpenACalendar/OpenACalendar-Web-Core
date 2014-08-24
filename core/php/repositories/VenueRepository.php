@@ -4,6 +4,7 @@
 namespace repositories;
 
 use dbaccess\VenueDBAccess;
+use dbaccess\EventDBAccess;
 use models\VenueModel;
 use models\SiteModel;
 use models\UserAccountModel;
@@ -145,39 +146,12 @@ class VenueRepository {
 			$this->venueDBAccess->update($duplicateVenue,array('is_deleted','is_duplicate_of_id'),$user);
 
 			// Move any Events
-			$statUpdateInfo = $DB->prepare("UPDATE event_information  SET venue_id=:venue_id WHERE id=:id");
-			$statInsertHistory = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
-					"created_at, reverted_from_created_at,venue_id,country_id,timezone,".
-					"url, ticket_url, is_physical, is_virtual, area_id, approved_at) VALUES ".
-					"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
-					":created_at, :reverted_from_created_at,:venue_id,:country_id,:timezone,"."
-						:url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at)");
 			$eventRepoBuilder = new EventRepositoryBuilder();
 			$eventRepoBuilder->setVenue($duplicateVenue);
+			$eventDBAccess = new EventDBAccess($DB, new \TimeSource());
 			foreach($eventRepoBuilder->fetchAll() as $event) {
-				$statUpdateInfo->execute(array(
-					'id'=>$event->getId(),
-					'venue_id'=>$originalVenue->getId(),
-				));
-				$statInsertHistory->execute(array(
-					'event_id'=>$event->getId(),
-					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$event->getDescription(),
-					'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
-					'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
-					'venue_id'=>$originalVenue->getId(),
-					'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
-					'country_id'=>$event->getCountryId(),
-					'timezone'=>$event->getTimezone(),
-					'user_account_id'=>($user ? $user->getId(): null),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-					'reverted_from_created_at'=> null,
-					'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'is_physical'=>$event->getIsPhysical()?1:0,
-					'is_virtual'=>$event->getIsVirtual()?1:0,
-				));
+				$event->setVenueId($originalVenue->getId());
+				$eventDBAccess->update($event, array('venue_id'), $user, null);
 			}
 
 			$DB->commit();

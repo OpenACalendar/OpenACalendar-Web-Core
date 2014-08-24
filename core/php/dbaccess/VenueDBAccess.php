@@ -32,7 +32,7 @@ class VenueDBAccess {
 	}
 
 
-	public function update(VenueModel $venue, $fields, UserAccountModel $user ) {
+	public function update(VenueModel $venue, $fields, UserAccountModel $user = null ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		try {
