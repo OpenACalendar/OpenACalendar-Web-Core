@@ -3,6 +3,7 @@
 
 namespace repositories;
 
+use dbaccess\GroupDBAccess;
 use models\GroupModel;
 use models\EventModel;
 use models\SiteModel;
@@ -20,7 +21,16 @@ use repositories\UserWatchesGroupRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class GroupRepository {
-	
+
+	/** @var  \dbaccess\GroupDBAccess */
+	protected $groupDBAccess;
+
+	function __construct()
+	{
+		global $DB, $USERAGENT;
+		$this->groupDBAccess = new GroupDBAccess($DB, new \TimeSource(), $USERAGENT);
+	}
+
 	
 	public function create(GroupModel $group, SiteModel $site, UserAccountModel $creator) {
 		global $DB;
@@ -94,7 +104,7 @@ class GroupRepository {
 		}
 	}
 	
-	public function edit(GroupModel $group, UserAccountModel $creator) {
+	public function edit(GroupModel $group, UserAccountModel $user) {
 		global $DB;
 		if ($group->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted group!");
@@ -102,32 +112,11 @@ class GroupRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE group_information  SET title=:title, url=:url, description=:description, twitter_username=:twitter_username, is_deleted='0' WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$group->getId(),
-					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$group->getDescription(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at,approved_at, twitter_username, is_duplicate_of_id) VALUES ".
-					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username, :is_duplicate_of_id)");
-			$stat->execute(array(
-					'group_id'=>$group->getId(),
-					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$group->getDescription(),
-					'user_account_id'=>$creator->getId(),	
-					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'is_duplicate_of_id'=>$group->getIsDuplicateOfId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
+			$fields = array('title','url','twitter_username','description');
+			$this->groupDBAccess->update($group, $fields, $user);
 
 			$ufgr = new UserWatchesGroupRepository();
-			$ufgr->startUserWatchingGroupIfNotWatchedBefore($creator, $group);
+			$ufgr->startUserWatchingGroupIfNotWatchedBefore($user, $group);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -136,33 +125,17 @@ class GroupRepository {
 	}
 	
 	
-	public function delete(GroupModel $group, UserAccountModel $creator) {
+	public function delete(GroupModel $group, UserAccountModel $user) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE group_information  SET is_deleted='1' WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$group->getId(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, approved_at, twitter_username, is_deleted, is_duplicate_of_id) VALUES ".
-					"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username, '1', :is_duplicate_of_id)");
-			$stat->execute(array(
-					'group_id'=>$group->getId(),
-					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$group->getDescription(),
-					'user_account_id'=>$creator->getId(),	
-					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'is_duplicate_of_id'=>$group->getIsDuplicateOfId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
+
+			$group->setIsDeleted(true);
+			$this->groupDBAccess->update($group, array('is_deleted'), $user);
 
 			$ufgr = new UserWatchesGroupRepository();
-			$ufgr->startUserWatchingGroupIfNotWatchedBefore($creator, $group);
+			$ufgr->startUserWatchingGroupIfNotWatchedBefore($user, $group);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -339,25 +312,9 @@ class GroupRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE group_information  SET is_duplicate_of_id = :is_duplicate_of_id, is_deleted='1' WHERE id=:id");
-			$stat->execute(array(
-				'id'=>$duplicateGroup->getId(),
-				'is_duplicate_of_id'=>$originalGroup->getId(),
-			));
-
-			$stat = $DB->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at,approved_at, twitter_username, is_duplicate_of_id, is_deleted) VALUES ".
-				"(:group_id, :title, :url, :description,  :user_account_id  , :created_at, :approved_at, :twitter_username, :is_duplicate_of_id, '1')");
-			$stat->execute(array(
-				'group_id'=>$duplicateGroup->getId(),
-				'title'=>substr($duplicateGroup->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'url'=>substr($duplicateGroup->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'description'=>$duplicateGroup->getDescription(),
-				'user_account_id'=>($user ? $user->getId() : null),
-				'twitter_username'=>substr($duplicateGroup->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'is_duplicate_of_id'=>$originalGroup->getId(),
-				'created_at'=>\TimeSource::getFormattedForDataBase(),
-				'approved_at'=>\TimeSource::getFormattedForDataBase(),
-			));
+			$duplicateGroup->setIsDeleted(true);
+			$duplicateGroup->setIsDuplicateOfId($originalGroup->getId());
+			$this->groupDBAccess->update($duplicateGroup, array('is_deleted','is_duplicate_of_id'), $user);
 
 			// Users Watching Group
 			$ufgr = new UserWatchesGroupRepository();
