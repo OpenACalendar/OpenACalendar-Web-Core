@@ -4,6 +4,7 @@
 namespace repositories;
 
 use dbaccess\VenueDBAccess;
+use dbaccess\AreaDBAccess;
 use models\AreaModel;
 use models\SiteModel;
 use models\UserAccountModel;
@@ -21,6 +22,14 @@ use repositories\builders\VenueRepositoryBuilder;
  */
 class AreaRepository {
 
+	/** @var  \dbaccess\AreaDBAccess */
+	protected $areaDBAccess;
+
+	function __construct()
+	{
+		global $DB, $USERAGENT;
+		$this->areaDBAccess = new AreaDBAccess($DB, new \TimeSource(), $USERAGENT);
+	}
 	
 	public function create(AreaModel $area, AreaModel $parentArea = null, SiteModel $site, CountryModel $country, UserAccountModel $creator) {
 		global $DB;
@@ -164,71 +173,33 @@ class AreaRepository {
 	/** 
 	 * This will undelete the area to.
 	 */
-	public function edit(AreaModel $area, UserAccountModel $creator) {
+	public function edit(AreaModel $area, UserAccountModel $user) {
 		global $DB, $USERAGENT;
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE area_information  SET ".
-					"title=:title,description=:description, is_deleted='0'".
-					"WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$area->getId(),
-					'title'=>$area->getTitle(),
-					'description'=>$area->getDescription(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, api2_application_id,is_duplicate_of_id) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :approved_at, :api2_application_id, :is_duplicate_of_id)");
-			$stat->execute(array(
-					'area_id'=>$area->getId(),
-					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$area->getDescription(),
-					'country_id'=>$area->getCountryId(),
-					'parent_area_id'=>$area->getParentAreaId(),
-					'user_account_id'=>$creator->getId(),				
-					'api2_application_id'=>($USERAGENT->hasApi2ApplicationId()?$USERAGENT->getApi2ApplicationId():null),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-					'is_duplicate_of_id'=>$area->getIsDuplicateOfId(),
-				));
-			
-			
+			$area->setIsDeleted(false);
+
+			$fields = array('title','description','is_deleted');
+
+			$this->areaDBAccess->update($area, $fields, $user);
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
 	}
 	
-	public function editParentArea(AreaModel $area, UserAccountModel $creator) {
+	public function editParentArea(AreaModel $area, UserAccountModel $user) {
 		global $DB;
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted area!");
 		}
 		try {
 			$DB->beginTransaction();
-			
-			$stat = $DB->prepare("UPDATE area_information  SET ".
-					"parent_area_id=:parent_area_id ".
-					"WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$area->getId(),
-					'parent_area_id'=>$area->getParentAreaId(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :approved_at)");
-			$stat->execute(array(
-					'area_id'=>$area->getId(),
-					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$area->getDescription(),
-					'country_id'=>$area->getCountryId(),
-					'parent_area_id'=>$area->getParentAreaId(),
-					'user_account_id'=>$creator->getId(),				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
+
+			$this->areaDBAccess->update($area, array('parent_area_id'), $user);
+
 			// new must clear caches
 			// TODO clear for this area only - for now clear all.
 			$DB->prepare("DELETE FROM cached_area_has_parent")->execute();
@@ -240,7 +211,7 @@ class AreaRepository {
 		}
 	}
 
-	public function delete(AreaModel $area, UserAccountModel $creator) {
+	public function delete(AreaModel $area, UserAccountModel $user) {
 		global $DB;
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't delete deleted area!");
@@ -248,27 +219,8 @@ class AreaRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE area_information  SET ".
-					" is_deleted='1'".
-					"WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$area->getId(),
-					
-				));
-			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_deleted) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at, '1')");
-			$stat->execute(array(
-					'area_id'=>$area->getId(),
-					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$area->getDescription(),
-					'country_id'=>$area->getCountryId(),
-					'parent_area_id'=>$area->getParentAreaId(),
-					'user_account_id'=>$creator->getId(),				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
+			$area->setIsDeleted(true);
+			$this->areaDBAccess->update($area, array('is_deleted'), $user);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -346,27 +298,11 @@ class AreaRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE area_information  SET ".
-				" is_deleted='1', is_duplicate_of_id= :is_duplicate_of_id ".
-				" WHERE id=:id");
-			$stat->execute(array(
-				'id'=>$duplicateArea->getId(),
-				'is_duplicate_of_id'=>$originalArea->getId(),
-			));
 
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_deleted, is_duplicate_of_id) VALUES ".
-				"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at, '1', :is_duplicate_of_id)");
-			$stat->execute(array(
-				'area_id'=>$duplicateArea->getId(),
-				'title'=>substr($duplicateArea->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'description'=>$duplicateArea->getDescription(),
-				'country_id'=>$duplicateArea->getCountryId(),
-				'parent_area_id'=>$duplicateArea->getParentAreaId(),
-				'user_account_id'=>($user ? $user->getId() : null),
-				'created_at'=>\TimeSource::getFormattedForDataBase(),
-				'approved_at'=>\TimeSource::getFormattedForDataBase(),
-				'is_duplicate_of_id'=>$originalArea->getId(),
-			));
+			$duplicateArea->setIsDuplicateOfId($originalArea->getId());
+			$duplicateArea->setIsDeleted(true);
+			$this->areaDBAccess->update($duplicateArea, array('is_duplicate_of_id','is_deleted'), $user);
+
 
 			// Move Venues
 			$venueDBAccess = new VenueDBAccess($DB, new \TimeSource());
