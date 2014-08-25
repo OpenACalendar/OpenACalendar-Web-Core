@@ -3,6 +3,7 @@
 
 namespace repositories;
 
+use dbaccess\SiteDBAccess;
 use models\SiteModel;
 use models\UserAccountModel;
 use models\SiteQuotaModel;
@@ -17,7 +18,16 @@ use models\SiteQuotaModel;
  */
 class SiteRepository {
 	
-	
+
+	/** @var  \dbaccess\SiteDBAccess */
+	protected $siteDBAccess;
+
+	function __construct()
+	{
+		global $DB, $USERAGENT;
+		$this->siteDBAccess = new SiteDBAccess($DB, new \TimeSource(), $USERAGENT);
+	}
+
 	public function create(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota) {
 		global $DB, $CONFIG, $EXTENSIONHOOKRUNNER;
 		$createdat = \TimeSource::getFormattedForDataBase();
@@ -205,76 +215,18 @@ class SiteRepository {
 	
 	public function edit(SiteModel $site, UserAccountModel $user) {
 		global $DB;
-		$createdat = \TimeSource::getFormattedForDataBase();
-		
+
 		try {
 			$DB->beginTransaction();
-			
-			$stat = $DB->prepare("UPDATE site_information SET title=:title, description_text = :description_text, ".
-					" footer_text= :footer_text, is_web_robots_allowed=:is_web_robots_allowed, is_all_users_editors=:is_all_users_editors, ".
-					"  is_closed_by_sys_admin=:is_closed_by_sys_admin, closed_by_sys_admin_reason=:closed_by_sys_admin_reason, is_listed_in_index=:is_listed_in_index, ".
-					" request_access_question=:request_access_question, is_request_access_allowed=:is_request_access_allowed , ".
-					" is_feature_importer=:is_feature_importer,is_feature_curated_list=:is_feature_curated_list, is_feature_map=:is_feature_map, ".
-					" is_feature_virtual_events=:is_feature_virtual_events, is_feature_physical_events=:is_feature_physical_events , is_feature_group=:is_feature_group, ".
-					" prompt_emails_days_in_advance=:prompt_emails_days_in_advance, is_feature_tag=:is_feature_tag ".
-					" WHERE id=:id");
-			$stat->execute(array(
-					'title'=>substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description_text'=>$site->getDescriptionText(),
-					'footer_text'=>$site->getFooterText(),
-					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
-					'is_all_users_editors'=>$site->getIsAllUsersEditors() ? 1 : 0,
-					'is_closed_by_sys_admin'=>$site->getIsClosedBySysAdmin() ? 1 : 0,
-					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
-					'is_request_access_allowed'=>$site->getIsRequestAccessAllowed() ? 1 : 0,
-					'closed_by_sys_admin_reason'=> $site->getClosedBySysAdminReason(),	
-					'request_access_question'=> $site->getRequestAccessQuestion(),	
-					'id'=>$site->getId(),
-					'is_feature_curated_list'=>$site->getIsFeatureCuratedList() ? 1 : 0,
-					'is_feature_importer'=>$site->getIsFeatureImporter() ? 1 : 0,
-					'is_feature_map'=>$site->getIsFeatureMap() ? 1 : 0,
-					'is_feature_tag'=>$site->getIsFeatureTag() ? 1 : 0,
-					'is_feature_virtual_events'=>$site->getIsFeatureVirtualEvents() ? 1 : 0,
-					'is_feature_physical_events'=>$site->getIsFeaturePhysicalEvents() ? 1 : 0,
-					'is_feature_group'=>$site->getIsFeatureGroup() ? 1 : 0,
-					'prompt_emails_days_in_advance'=>$site->getPromptEmailsDaysInAdvance(),
-				));
 
-			
-			$stat = $DB->prepare("INSERT INTO site_history (site_id, user_account_id, title, slug, slug_canonical, created_at, description_text, footer_text, ".
-					" is_web_robots_allowed, is_closed_by_sys_admin, closed_by_sys_admin_reason, is_all_users_editors, is_listed_in_index,request_access_question,".
-					" is_request_access_allowed,is_feature_map,is_feature_importer,is_feature_curated_list, is_feature_virtual_events, is_feature_physical_events, is_feature_group, ".
-					" prompt_emails_days_in_advance, is_feature_tag ) ".
-					" VALUES (:site_id, :user_account_id, :title, :slug, :slug_canonical,  :created_at, :description_text, :footer_text, ".
-					" :is_web_robots_allowed, :is_closed_by_sys_admin, :closed_by_sys_admin_reason, :is_all_users_editors, :is_listed_in_index,:request_access_question, ".
-					" :is_request_access_allowed,:is_feature_map,:is_feature_importer,:is_feature_curated_list, :is_feature_virtual_events, :is_feature_physical_events, :is_feature_group, ".
-					" :prompt_emails_days_in_advance, :is_feature_tag)");
-			$stat->execute(array(
-					'site_id'=>$site->getId(),
-					'user_account_id'=>$user->getId(),
-					'title'=>substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED), 
-					'slug'=> $site->getSlug(), 
-					'slug_canonical'=>SiteModel::makeCanonicalSlug($site->getSlug()), 
-					'created_at'=>  $createdat,
-					'description_text'=>$site->getDescriptionText(), 
-					'footer_text'=>$site->getFooterText(), 
-					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
-					'is_closed_by_sys_admin'=>$site->getIsClosedBySysAdmin() ? 1 : 0,
-					'is_all_users_editors'=>$site->getIsAllUsersEditors() ? 1 : 0,
-					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
-					'is_request_access_allowed'=>$site->getIsRequestAccessAllowed() ? 1 : 0,
-					'closed_by_sys_admin_reason'=> $site->getClosedBySysAdminReason(),
-					'request_access_question'=> $site->getRequestAccessQuestion(),	
-					'is_feature_curated_list'=>$site->getIsFeatureCuratedList() ? 1 : 0,
-					'is_feature_importer'=>$site->getIsFeatureImporter() ? 1 : 0,
-					'is_feature_map'=>$site->getIsFeatureMap() ? 1 : 0,
-					'is_feature_tag'=>$site->getIsFeatureTag() ? 1 : 0,
-					'is_feature_virtual_events'=>$site->getIsFeatureVirtualEvents() ? 1 : 0,
-					'is_feature_physical_events'=>$site->getIsFeaturePhysicalEvents() ? 1 : 0,
-					'is_feature_group'=>$site->getIsFeatureGroup() ? 1 : 0,
-					'prompt_emails_days_in_advance'=>$site->getPromptEmailsDaysInAdvance(),
-				));
-			
+			$fields = array('title','description_text','footer_text','is_web_robots_allowed','is_all_users_editors',
+				'is_closed_by_sys_admin','is_listed_in_index','is_request_access_allowed','closed_by_sys_admin_reason',
+				'request_access_question','is_feature_curated_list','is_feature_importer','is_feature_map',
+				'is_feature_tag','is_feature_virtual_events','is_feature_physical_events','is_feature_group',
+				'prompt_emails_days_in_advance');
+
+			$this->siteDBAccess->update($site, $fields, $user);
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
@@ -317,53 +269,14 @@ class SiteRepository {
 	public function editSlug(SiteModel $site, UserAccountModel $user = null) {
 		global $DB;
 		
-		$createdat = \TimeSource::getFormattedForDataBase();
-		
+
 		try {
 			$DB->beginTransaction();
-		
-			$stat = $DB->prepare("UPDATE site_information SET slug=:slug, slug_canonical=:slug_canonical WHERE id=:id");
-			$stat->execute(array(
-				'slug'=> $site->getSlug(), 
-				'slug_canonical'=>SiteModel::makeCanonicalSlug($site->getSlug()), 
-				'id'=>$site->getId(),
-			));
-		
-			
-			$stat = $DB->prepare("INSERT INTO site_history (site_id, user_account_id, title, slug, slug_canonical, created_at, description_text, footer_text, ".
-					" is_web_robots_allowed, is_closed_by_sys_admin, closed_by_sys_admin_reason, is_all_users_editors, is_listed_in_index,request_access_question,".
-					" is_request_access_allowed,is_feature_map,is_feature_importer,is_feature_curated_list, is_feature_virtual_events, is_feature_physical_events, is_feature_group, ".
-					" prompt_emails_days_in_advance, is_feature_tag ) ".
-					" VALUES (:site_id, :user_account_id, :title, :slug, :slug_canonical,  :created_at, :description_text, :footer_text, ".
-					" :is_web_robots_allowed, :is_closed_by_sys_admin, :closed_by_sys_admin_reason, :is_all_users_editors, :is_listed_in_index,:request_access_question, ".
-					" :is_request_access_allowed,:is_feature_map,:is_feature_importer,:is_feature_curated_list, :is_feature_virtual_events, :is_feature_physical_events, :is_feature_group, ".
-					" :prompt_emails_days_in_advance, :is_feature_tag)");
-			$stat->execute(array(
-					'site_id'=>$site->getId(),
-					'user_account_id'=>$user->getId(),
-					'title'=>substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED), 
-					'slug'=> $site->getSlug(), 
-					'slug_canonical'=>SiteModel::makeCanonicalSlug($site->getSlug()), 
-					'created_at'=>  $createdat,
-					'description_text'=>$site->getDescriptionText(), 
-					'footer_text'=>$site->getFooterText(), 
-					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
-					'is_closed_by_sys_admin'=>$site->getIsClosedBySysAdmin() ? 1 : 0,
-					'is_all_users_editors'=>$site->getIsAllUsersEditors() ? 1 : 0,
-					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
-					'is_request_access_allowed'=>$site->getIsRequestAccessAllowed() ? 1 : 0,
-					'closed_by_sys_admin_reason'=> $site->getClosedBySysAdminReason(),
-					'request_access_question'=> $site->getRequestAccessQuestion(),	
-					'is_feature_curated_list'=>$site->getIsFeatureCuratedList() ? 1 : 0,
-					'is_feature_importer'=>$site->getIsFeatureImporter() ? 1 : 0,
-					'is_feature_map'=>$site->getIsFeatureMap() ? 1 : 0,
-					'is_feature_tag'=>$site->getIsFeatureTag() ? 1 : 0,
-					'is_feature_virtual_events'=>$site->getIsFeatureVirtualEvents() ? 1 : 0,
-					'is_feature_physical_events'=>$site->getIsFeaturePhysicalEvents() ? 1 : 0,
-					'is_feature_group'=>$site->getIsFeatureGroup() ? 1 : 0,
-					'prompt_emails_days_in_advance'=>$site->getPromptEmailsDaysInAdvance(),
-				));
-			
+
+
+			$this->siteDBAccess->update($site, array('slug'), $user);
+
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
