@@ -32,50 +32,93 @@ class VenueDBAccess {
 	}
 
 
+	protected $possibleFields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_duplicate_of_id','is_deleted');
+
 	public function update(VenueModel $venue, $fields, UserAccountModel $user = null ) {
 		$alreadyInTransaction = $this->db->inTransaction();
+
+		// Make Information Data
+		$fieldsSQL1 = array();
+		$fieldsParams1 = array( 'id'=>$venue->getId() );
+		foreach($fields as $field) {
+			$fieldsSQL1[] = " ".$field."=:".$field." ";
+			if ($field == 'title') {
+				$fieldsParams1['title'] = $venue->getTitle();
+			} else if ($field == 'lat') {
+				$fieldsParams1['lat'] = $venue->getLat();
+			} else if ($field == 'lng') {
+				$fieldsParams1['lng'] = $venue->getLng();
+			} else if ($field == 'description') {
+				$fieldsParams1['description'] = $venue->getDescription();
+			} else if ($field == 'address') {
+				$fieldsParams1['address'] = $venue->getAddress();
+			} else if ($field == 'address_code') {
+				$fieldsParams1['address_code'] = $venue->getAddressCode();
+			} else if ($field == 'country_id') {
+				$fieldsParams1['country_id'] = $venue->getCountryId();
+			} else if ($field == 'area_id') {
+				$fieldsParams1['area_id'] = $venue->getAreaId();
+			} else if ($field == 'is_duplicate_of_id') {
+				$fieldsParams1['is_duplicate_of_id'] = $venue->getIsDuplicateOfId();
+			} else if ($field == 'is_deleted') {
+				$fieldsParams1['is_deleted'] = ($venue->getIsDeleted()?1:0);
+			}
+		}
+
+		// Make History Data
+		$fieldsSQL2 = array('venue_id','user_account_id','created_at','approved_at');
+		$fieldsSQLParams2 = array(':venue_id',':user_account_id',':created_at',':approved_at');
+		$fieldsParams2 = array(
+			'venue_id'=>$venue->getId(),
+			'user_account_id'=>($user ? $user->getId() : null),
+			'created_at'=>$this->timesource->getFormattedForDataBase(),
+			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+		);
+		foreach($this->possibleFields as $field) {
+			if (in_array($field, $fields)) {
+				$fieldsSQL2[] = " ".$field." ";
+				$fieldsSQLParams2[] = " :".$field." ";
+				if ($field == 'title') {
+					$fieldsParams2['title'] = $venue->getTitle();
+				} else if ($field == 'lat') {
+					$fieldsParams2['lat'] = $venue->getLat();
+				} else if ($field == 'lng') {
+					$fieldsParams2['lng'] = $venue->getLng();
+				} else if ($field == 'description') {
+					$fieldsParams2['description'] = $venue->getDescription();
+				} else if ($field == 'address') {
+					$fieldsParams2['address'] = $venue->getAddress();
+				} else if ($field == 'address_code') {
+					$fieldsParams2['address_code'] = $venue->getAddressCode();
+				} else if ($field == 'country_id') {
+					$fieldsParams2['country_id'] = $venue->getCountryId();
+				} else if ($field == 'area_id') {
+					$fieldsParams2['area_id'] = $venue->getAreaId();
+				} else if ($field == 'is_duplicate_of_id') {
+					$fieldsParams2['is_duplicate_of_id'] = $venue->getIsDuplicateOfId();
+				} else if ($field == 'is_deleted') {
+					$fieldsParams2['is_deleted'] = ($venue->getIsDeleted()?1:0);
+				}
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " 0 ";
+			} else {
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " -2 ";
+			}
+		}
 
 		try {
 			if (!$alreadyInTransaction) {
 				$this->db->beginTransaction();
 			}
 
-			$stat = $this->db->prepare("UPDATE venue_information  SET title=:title,description=:description,".
-				"lat=:lat,lng=:lng , country_id=:country_id, area_id=:area_id, address=:address, ".
-				"address_code=:address_code, is_deleted=:is_deleted WHERE id=:id");
-			$stat->execute(array(
-				'id'=>$venue->getId(),
-				'title'=>$venue->getTitle(),
-				'lat'=>$venue->getLat(),
-				'lng'=>$venue->getLng(),
-				'description'=>$venue->getDescription(),
-				'address'=>$venue->getAddress(),
-				'address_code'=>$venue->getAddressCode(),
-				'country_id'=>$venue->getCountryId(),
-				'area_id'=>$venue->getAreaId(),
-				'is_deleted'=>($venue->getIsdeleted()?1:0),
-			));
+			// Information SQL
+			$stat = $this->db->prepare("UPDATE venue_information  SET ".implode(",", $fieldsSQL1)." WHERE id=:id");
+			$stat->execute($fieldsParams1);
 
-			$stat = $this->db->prepare("INSERT INTO venue_history (venue_id, title, lat,lng,country_id, ".
-				"area_id, description, user_account_id  , created_at,approved_at,address,address_code,is_duplicate_of_id,is_deleted) VALUES ".
-				"(:venue_id, :title, :lat, :lng, :country_id,".
-				":area_id,:description,  :user_account_id  , :created_at,:approved_at,:address,:address_code,:is_duplicate_of_id,:is_deleted)");
-			$stat->execute(array(
-				'venue_id'=>$venue->getId(),
-				'title'=>$venue->getTitle(),
-				'lat'=>$venue->getLat(),
-				'lng'=>$venue->getLng(),
-				'description'=>$venue->getDescription(),
-				'address'=>$venue->getAddress(),
-				'address_code'=>$venue->getAddressCode(),
-				'user_account_id'=>($user ? $user->getId() : null),
-				'country_id'=>$venue->getCountryId(),
-				'is_duplicate_of_id'=>$venue->getIsDuplicateOfId(),
-				'area_id'=>$venue->getAreaId(),
-				'created_at'=>$this->timesource->getFormattedForDataBase(),
-				'approved_at'=>$this->timesource->getFormattedForDataBase(),
-				'is_deleted'=>($venue->getIsdeleted()?1:0),
-			));
+			// History SQL
+			$stat = $this->db->prepare("INSERT INTO venue_history (".implode(",",$fieldsSQL2).") VALUES (".implode(",",$fieldsSQLParams2).")");
+			$stat->execute($fieldsParams2);
 
 			if (!$alreadyInTransaction) {
 				$this->db->commit();

@@ -46,6 +46,8 @@ class VenueHistoryModel extends VenueModel {
 		$this->lng = $data['lng'];
 		$this->country_id = $data['country_id'];
 		$this->area_id = $data['area_id'];
+		$this->is_deleted = $data['is_deleted'];
+		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->user_account_id = isset($data['user_account_id']) ? $data['user_account_id'] : null;
@@ -124,58 +126,118 @@ class VenueHistoryModel extends VenueModel {
 		$this->is_new = 1;	
 	}
 	
-	public function setChangedFlagsFromLast(VenueHistoryModel $last) {		
-		$this->title_changed  = ($this->title  != $last->title  )? 1 : -1;
-		$this->description_changed  = ($this->description  != $last->description  )? 1 : -1;
-		$this->lat_changed  = ($this->lat  != $last->lat  )? 1 : -1;
-		$this->lng_changed  = ($this->lng  != $last->lng  )? 1 : -1;
-		$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
-		$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
-		$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
-		$this->address_changed  = ($this->address  != $last->address  )? 1 : -1;
-		$this->address_code_changed  = ($this->address_code  != $last->address_code  )? 1 : -1;
-		$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
+	public function setChangedFlagsFromLast(VenueHistoryModel $last) {
+		if ($this->title_changed == 0 && $last->title_changed != -2) {
+			$this->title_changed  = ($this->title  != $last->title  )? 1 : -1;
+		}
+		if ($this->description_changed == 0 && $last->title_changed != -2) {
+			$this->description_changed  = ($this->description  != $last->description  )? 1 : -1;
+		}
+		if ($this->lat_changed == 0 && $last->lat_changed != -2) {
+			$this->lat_changed  = ($this->lat  != $last->lat  )? 1 : -1;
+		}
+		if ($this->lng_changed == 0 && $last->lng_changed != -2) {
+			$this->lng_changed  = ($this->lng  != $last->lng  )? 1 : -1;
+		}
+		if ($this->is_deleted_changed == 0 && $last->is_deleted_changed != -2) {
+			$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
+		}
+		if ($this->country_id_changed == 0 && $last->country_id_changed != -2) {
+			$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
+		}
+		if ($this->area_id_changed == 0 && $last->area_id_changed != -2) {
+			$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
+		}
+		if ($this->address_changed == 0 && $last->address_changed != -2) {
+			$this->address_changed  = ($this->address  != $last->address  )? 1 : -1;
+		}
+		if ($this->address_code_changed == 0 && $last->address_code_changed != -2) {
+			$this->address_code_changed  = ($this->address_code  != $last->address_code  )? 1 : -1;
+		}
+		if ($this->is_duplicate_of_id_changed == 0 && $last->is_duplicate_of_id_changed != -2) {
+			$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
+		}
 		$this->is_new = 0;
 	}
 	
 	public function getTitleChanged() {
-		return ($this->title_changed != -1);
+		return ($this->title_changed > -1);
+	}
+
+	public function getTitleChangedKnown() {
+		return ($this->title_changed > -2);
 	}
 
 	public function getDescriptionChanged() {
-		return ($this->description_changed != -1);
+		return ($this->description_changed > -1);
+	}
+
+	public function getDescriptionChangedKnown() {
+		return ($this->description_changed > -2);
 	}
 
 	public function getLatChanged() {
-		return ($this->lat_changed != -1);
+		return ($this->lat_changed > -1);
+	}
+
+	public function getLatChangedKnown() {
+		return ($this->lat_changed > -2);
 	}
 
 	public function getLngChanged() {
-		return ($this->lng_changed != -1);
+		return ($this->lng_changed > -1);
+	}
+
+	public function getLngChangedKnown() {
+		return ($this->lng_changed > -2);
 	}
 
 	public function getCountryIdChanged() {
-		return ($this->country_id_changed != -1);
+		return ($this->country_id_changed > -1);
+	}
+
+	public function getCountryIdChangedKnown() {
+		return ($this->country_id_changed > -2);
 	}
 
 	public function getIsDeletedChanged() {
-		return ($this->is_deleted_changed != -1);
+		return ($this->is_deleted_changed > -1);
+	}
+
+	public function getIsDeletedChangedKnown() {
+		return ($this->is_deleted_changed > -2);
 	}
 
 	public function getAreaIdChanged() {
-		return ($this->area_id_changed != -1);
+		return ($this->area_id_changed > -1);
+	}
+
+	public function getAreaIdChangedKnown() {
+		return ($this->area_id_changed > -2);
 	}
 
 	public function getAddressChanged() {
-		return ($this->address_changed != -1);
+		return ($this->address_changed > -1);
+	}
+
+	public function getAddressChangedKnown() {
+		return ($this->address_changed > -2);
 	}
 
 	public function getAddressCodeChanged() {
-		return ($this->address_code_changed != -1);
+		return ($this->address_code_changed > -1);
+	}
+
+	public function getAddressCodeChangedKnown() {
+		return ($this->address_code_changed > -2);
 	}
 
 	public function getIsDuplicateOfIdChanged() {
-		return ($this->is_duplicate_of_id_changed != -1);
+		return ($this->is_duplicate_of_id_changed > -1);
+	}
+
+	public function getIsDuplicateOfIdChangedKnown() {
+		return ($this->is_duplicate_of_id_changed > -2);
 	}
 
 	public function getIsNew() {
