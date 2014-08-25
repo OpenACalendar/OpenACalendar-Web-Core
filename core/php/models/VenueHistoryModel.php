@@ -46,6 +46,8 @@ class VenueHistoryModel extends VenueModel {
 		$this->lng = $data['lng'];
 		$this->country_id = $data['country_id'];
 		$this->area_id = $data['area_id'];
+		$this->is_deleted = $data['is_deleted'];
+		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->user_account_id = isset($data['user_account_id']) ? $data['user_account_id'] : null;

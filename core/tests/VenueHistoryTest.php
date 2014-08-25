@@ -103,7 +103,101 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 				
 		
 	} 
-	
+
+	function testIntegration2() {
+		$DB = getNewTestDB();
+		addCountriesToTestDB();
+		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$countryRepo = new CountryRepository();
+		$gb = $countryRepo->loadByTwoCharCode('GB');
+
+		## Create venue
+		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$venue = new VenueModel();
+		$venue->setTitle("test");
+		$venue->setDescription("test test");
+		$venue->setCountryId($gb->getId());
+
+		$venueRepo = new VenueRepository();
+		$venueRepo->create($venue, $site, $user);
+
+		## Edit venue
+		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+
+		$venue = $venueRepo->loadById($venue->getId());
+		$venue->setDescription("testy");
+		$venue->setLat(3.6);
+		$venue->setLng(3.7);
+		$venueRepo->edit($venue, $user);
+
+		## Delete venue
+		\TimeSource::mock(2014, 1, 1, 15, 0, 0);
+
+		$venueRepo->delete($venue, $user);
+
+		## Now save changed flags on these .....
+		$venueHistoryRepo = new VenueHistoryRepository();
+		$stat = $DB->prepare("SELECT * FROM venue_history");
+		$stat->execute();
+		while($data = $stat->fetch()) {
+			$venueHistory = new VenueHistoryModel();
+			$venueHistory->setFromDataBaseRow($data);
+			$venueHistoryRepo->ensureChangedFlagsAreSet($venueHistory);
+		}
+
+		## Now load and check
+		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo->setVenue($venue);
+		$historyRepo->setIncludeEventHistory(false);
+		$historyRepo->setIncludeGroupHistory(false);
+		$historyRepo->setIncludeVenueHistory(true);
+		$histories = $historyRepo->fetchAll();
+
+		$this->assertEquals(3, count($histories));
+
+		#the delete
+		$this->assertEquals(FALSE, $histories[0]->getTitleChanged());
+		$this->assertEquals(false, $histories[0]->getDescriptionChanged());
+		$this->assertEquals(false, $histories[0]->getCountryIdChanged());
+		$this->assertEquals(true, $histories[0]->getIsDeletedChanged());
+		$this->assertEquals(false, $histories[0]->getLatChanged());
+		$this->assertEquals(false, $histories[0]->getLngChanged());
+
+		#the edit
+		$this->assertEquals(FALSE, $histories[1]->getTitleChanged());
+		$this->assertEquals(true, $histories[1]->getDescriptionChanged());
+		$this->assertEquals(false, $histories[1]->getCountryIdChanged());
+		$this->assertEquals(false, $histories[1]->getIsDeletedChanged());
+		$this->assertEquals(true, $histories[1]->getLatChanged());
+		$this->assertEquals(true, $histories[1]->getLngChanged());
+
+		#the create
+		$this->assertEquals(true, $histories[2]->getTitleChanged());
+		$this->assertEquals(true, $histories[2]->getDescriptionChanged());
+		$this->assertEquals(true, $histories[2]->getCountryIdChanged());
+		$this->assertEquals(false, $histories[2]->getIsDeletedChanged());
+		$this->assertEquals(false, $histories[2]->getLatChanged());
+		$this->assertEquals(false, $histories[2]->getLngChanged());
+
+	}
+
+
 	function testSetChangedFlagsFromNothing1() {
 		$venueHistory = new VenueHistoryModel();
 		$venueHistory->setFromDataBaseRow(array(
@@ -117,6 +211,7 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'is_duplicate_of_id'=>null,
 			'address'=>'',
 			'address_code'=>'',
 			'title_changed'=>0,
@@ -156,6 +251,7 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'is_duplicate_of_id'=>null,
 			'address'=>'',
 			'address_code'=>'',
 			'title_changed'=>0,
@@ -196,6 +292,7 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'is_duplicate_of_id'=>null,
 			'address'=>'',
 			'address_code'=>'',
 			'title_changed'=>0,
@@ -222,6 +319,7 @@ class VenueHistoryTest extends \PHPUnit_Framework_TestCase {
 			'user_account_id'=>1,
 			'created_at'=>'2014-02-01 10:00:00',
 			'is_deleted'=>0,
+			'is_duplicate_of_id'=>null,
 			'address'=>'',
 			'address_code'=>'',
 			'title_changed'=>0,
