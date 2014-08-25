@@ -5,10 +5,12 @@ namespace repositories;
 
 use dbaccess\VenueDBAccess;
 use dbaccess\AreaDBAccess;
+use dbaccess\EventDBAccess;
 use models\AreaModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use models\CountryModel;
+use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
 
@@ -204,7 +206,7 @@ class AreaRepository {
 			// TODO clear for this area only - for now clear all.
 			$DB->prepare("DELETE FROM cached_area_has_parent")->execute();
 			$DB->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
-			
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
@@ -314,17 +316,37 @@ class AreaRepository {
 			}
 
 			// Move Events
-			// TODO
-
-
-
+			$eventRepoBuilder = new EventRepositoryBuilder();
+			$eventRepoBuilder->setArea($duplicateArea);
+			$eventDBAccess = new EventDBAccess($DB, new \TimeSource());
+			foreach($eventRepoBuilder->fetchAll() as $event) {
+				// Check Area actually matches here because we may get events at a venue.
+				// Based on the order we do things in (ie Move Venue, Move Event) we shouldn't but let's be safe.
+				if ($event->getAreaId() == $duplicateArea->getId() && $event->getVenueId() == null) {
+					$event->setAreaId($originalArea->getId());
+					$eventDBAccess->update($event, array('area_id'), $user, null);
+				}
+			}
 
 			// Move Child Areas
-			// TODO
-
-
-
-
+			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder->setParentArea($duplicateArea);
+			$areaRepoBuilder->setIncludeParentLevels(0);
+			$flag = false;
+			foreach($areaRepoBuilder->fetchAll() as $area) {
+				// lets just double check we haven't got any child areas.
+				if ($area->getParentAreaId() == $duplicateArea->getId()) {
+					$area->setParentAreaId($originalArea->getId());
+					$this->areaDBAccess->update($area, array('parent_area_id'), $user);
+					$flag = true;
+				}
+			}
+			if ($flag) {
+				// now must clear caches
+				// TODO clear for this area only - for now clear all.
+				$DB->prepare("DELETE FROM cached_area_has_parent")->execute();
+				$DB->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
+			}
 
 			$DB->commit();
 		} catch (Exception $e) {

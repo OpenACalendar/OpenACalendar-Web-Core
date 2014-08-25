@@ -54,8 +54,15 @@ class AreaDuplicateTest extends \PHPUnit_Framework_TestCase {
 		$area2->setTitle("test this looks similar");
 		$area2->setDescription("test test");
 
+
 		$areaRepo->create($area1, null, $site, $countryRepo->loadByTwoCharCode('GB') , $user);
 		$areaRepo->create($area2, null, $site, $countryRepo->loadByTwoCharCode('GB') , $user);
+
+		$areaChild = new AreaModel();
+		$areaChild->setTitle("child");
+		$areaChild->setDescription("child");
+
+		$areaRepo->create($areaChild, $area2, $site, $countryRepo->loadByTwoCharCode('GB') , $user);
 
 		$area1 = $areaRepo->loadById($area1->getId());
 		$area2 = $areaRepo->loadById($area2->getId());
@@ -72,11 +79,25 @@ class AreaDuplicateTest extends \PHPUnit_Framework_TestCase {
 		$venueRepo = new VenueRepository();
 		$venueRepo->create($venue, $site, $user);
 
+		$event = new EventModel();
+		$event->setSummary("test");
+		$event->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
+		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
+		$event->setAreaId($area2->getId());
+
+		$eventRepository = new EventRepository();
+		$eventRepository->create($event, $site, $user);
+
 		// Test before
 
 		$venue = $venueRepo->loadById($venue->getId());
 		$this->assertEquals($area2->getId(), $venue->getAreaId());
 
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+		$this->assertEquals($area2->getId(), $event->getAreaId());
+
+		$areaChild = $areaRepo->loadById($areaChild->getId());
+		$this->assertEquals($area2->getId(), $areaChild->getParentAreaId());
 
 		// Mark
 		\TimeSource::mock(2014,1,1,2,0,0);
@@ -88,6 +109,11 @@ class AreaDuplicateTest extends \PHPUnit_Framework_TestCase {
 		$venue = $venueRepo->loadById($venue->getId());
 		$this->assertEquals($area1->getId(), $venue->getAreaId());
 
+		$event = $eventRepository->loadBySlug($site, $event->getSlug());
+		$this->assertEquals($area1->getId(), $event->getAreaId());
+
+		$areaChild = $areaRepo->loadById($areaChild->getId());
+		$this->assertEquals($area1->getId(), $areaChild->getParentAreaId());
 	}
 }
 
