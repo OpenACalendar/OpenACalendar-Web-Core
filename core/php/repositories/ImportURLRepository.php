@@ -3,6 +3,7 @@
 
 namespace repositories;
 
+use dbaccess\ImportURLDBAccess;
 use models\ImportURLModel;
 use models\SiteModel;
 use models\UserAccountModel;
@@ -17,8 +18,17 @@ use models\UserAccountModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLRepository {
-	
-	
+
+
+	/** @var  \dbaccess\ImportURLDBAccess */
+	protected $importURLDBAccess;
+
+	function __construct()
+	{
+		global $DB, $USERAGENT;
+		$this->importURLDBAccess = new ImportURLDBAccess($DB, new \TimeSource(), $USERAGENT);
+	}
+
 	public function create(ImportURLModel $importURL, SiteModel $site, UserAccountModel $creator) {
 		global $DB;
 		try {
@@ -88,32 +98,13 @@ class ImportURLRepository {
 		}
 	}
 	
-	public function edit(ImportURLModel $importURL, UserAccountModel $creator) {
+	public function edit(ImportURLModel $importURL, UserAccountModel $user) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE import_url_information  SET title=:title, country_id=:country_id, area_id=:area_id WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$importURL->getId(),
-					'country_id'=>$importURL->getCountryId(),
-					'area_id'=>$importURL->getAreaId(),
-					'title'=>$importURL->getTitle(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at, country_id, area_id) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at, :country_id, :area_id)");
-			$stat->execute(array(
-					'curated_list_id'=>$importURL->getId(),
-					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'group_id'=>$importURL->getGroupId(),
-					'country_id'=>$importURL->getCountryId(),
-					'area_id'=>$importURL->getAreaId(),
-					'user_account_id'=>$creator->getId(),				
-					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'expired_at'=>$importURL->getExpiredAt() ? $importURL->getExpiredAt()->format('Y-m-d H:i:s') : null,
-				));
+			$fields = array('title','country_id','area_id');
+			$this->importURLDBAccess->update($importURL, $fields, $user);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -122,61 +113,33 @@ class ImportURLRepository {
 	}
 	
 	
-	public function enable(ImportURLModel $importURL, UserAccountModel $creator) {
+	public function enable(ImportURLModel $importURL, UserAccountModel $user) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$importURL->setIsEnabled(true);
 			$importURL->setExpiredAt(null);
-			
-			$stat = $DB->prepare("UPDATE import_url_information  SET is_enabled='1', expired_at=null WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$importURL->getId(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at)");
-			$stat->execute(array(
-					'curated_list_id'=>$importURL->getId(),
-					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'group_id'=>$importURL->getGroupId(),
-					'user_account_id'=>$creator->getId(),				
-					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'expired_at'=> null,
-				));
-			
+
+			$this->importURLDBAccess->update($importURL, array('is_enabled','expired_at'), $user);
+
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
 	}
 	
-	public function disable(ImportURLModel $importURL, UserAccountModel $creator) {
+	public function disable(ImportURLModel $importURL, UserAccountModel $user) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
+
 			$importURL->setIsEnabled(false);
 			$importURL->setExpiredAt(null);
-			
-			$stat = $DB->prepare("UPDATE import_url_information  SET is_enabled='0', expired_at=null WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$importURL->getId(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at) VALUES ".
-					"(:curated_list_id, :title,  :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at)");
-			$stat->execute(array(
-					'curated_list_id'=>$importURL->getId(),
-					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'group_id'=>$importURL->getGroupId(),
-					'user_account_id'=>$creator->getId(),			
-					'expired_at'=>null,
-					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-				));
+
+			$this->importURLDBAccess->update($importURL, array('is_enabled','expired_at'), $user);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -207,25 +170,10 @@ class ImportURLRepository {
 			$DB->beginTransaction();
 
 			$importURL->setExpiredAt(\TimeSource::getDateTime());
-			
-			$stat = $DB->prepare("UPDATE import_url_information  SET expired_at=:expired_at WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$importURL->getId(),
-					'expired_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at)");
-			$stat->execute(array(
-					'curated_list_id'=>$importURL->getId(),
-					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'group_id'=>$importURL->getGroupId(),
-					'user_account_id'=>null,			
-					'expired_at'=>\TimeSource::getFormattedForDataBase(),
-					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
+
+
+			$this->importURLDBAccess->update($importURL, array('expired_at'), $user);
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
