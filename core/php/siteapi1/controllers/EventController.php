@@ -39,6 +39,11 @@ class EventController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array('groups'=>array(),'country'=>null,'venue'=>null,'area'=>null);
 
+		if (strpos($slug,"-") > 0) {
+			$slugBits = explode("-", $slug, 2);
+			$slug = $slugBits[0];
+		}
+
 		$eventRepository = new EventRepository();
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['event']) {
