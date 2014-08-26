@@ -39,7 +39,12 @@ class VenueController {
 	
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array();
-		
+
+		if (strpos($slug,"-") > 0) {
+			$slugBits = explode("-", $slug, 2);
+			$slug = $slugBits[0];
+		}
+
 		$vr = new VenueRepository();
 		$this->parameters['venue'] = $vr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['venue']) {

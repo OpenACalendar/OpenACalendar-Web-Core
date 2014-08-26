@@ -39,7 +39,12 @@ class TagController {
 	
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array();
-		
+
+		if (strpos($slug,"-") > 0) {
+			$slugBits = explode("-", $slug, 2);
+			$slug = $slugBits[0];
+		}
+
 		$tr = new TagRepository();
 		$this->parameters['tag'] = $tr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['tag']) {

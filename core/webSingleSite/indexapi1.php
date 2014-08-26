@@ -59,6 +59,8 @@ $app->before(function (Request $request) use ($app) {
 });
 
 
+define('FRIENDLY_SLUG_REGEX','\d[a-z\d\-]*');
+
 $app->match('/api1/', "siteapi1\controllers\IndexController::index") ; 
 
 require APP_ROOT_DIR.'/core/webSite/indexapi1.routes.php';

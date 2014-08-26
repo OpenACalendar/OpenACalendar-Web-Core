@@ -57,6 +57,8 @@ $app->before(function (Request $request) use ($app) {
 });
 
 
+define('FRIENDLY_SLUG_REGEX','\d[a-z\d\-]*');
+
 
 $app->match('/api1/', "siteapi1\controllers\IndexController::index") ; 
 

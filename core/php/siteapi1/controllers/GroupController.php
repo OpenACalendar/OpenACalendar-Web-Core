@@ -39,7 +39,12 @@ class GroupController {
 	
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array();
-		
+
+		if (strpos($slug,"-") > 0) {
+			$slugBits = explode("-", $slug, 2);
+			$slug = $slugBits[0];
+		}
+
 		$gr = new GroupRepository();
 		$this->parameters['group'] = $gr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['group']) {
