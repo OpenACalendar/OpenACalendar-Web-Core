@@ -126,7 +126,9 @@ foreach($venueRepoBuilder->fetchAll() as $venue) {
 	}
 }
 
-// ######################################################### Build Email Content, show user. 
+// ######################################################### Build Email Content, show user.
+configureAppForSite($site);
+
 $messageText = $app['twig']->render('email/sendSpecifiedEventsEmail.cli.txt.twig', array(
 	'data'=>$calData,
 	'venueData'=>$venueData,
