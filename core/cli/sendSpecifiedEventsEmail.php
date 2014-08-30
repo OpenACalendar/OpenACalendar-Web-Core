@@ -112,26 +112,16 @@ if ($thisconfig->hasValue('AreaID')) {
 }
 
 // ######################################################### Get Data
+$calendar->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
+
 $calData = $calendar->getData();
 
-$venueData = array();
-$venueRepoBuilder = new VenueRepositoryBuilder();
-$venueRepoBuilder->setSite($site);
-$areaRepository = new AreaRepository();
-foreach($venueRepoBuilder->fetchAll() as $venue) {
-	$venueData[$venue->getId()] = array('area'=>array());
-	$area = $venue->getAreaId() ? $areaRepository->loadById($venue->getAreaId()) : null;
-	if ($area) {
-		$venueData[$venue->getId()]['area'] = array('title'=>$area->getTitle());
-	}
-}
 
 // ######################################################### Build Email Content, show user.
 configureAppForSite($site);
 
 $messageText = $app['twig']->render('email/sendSpecifiedEventsEmail.cli.txt.twig', array(
 	'data'=>$calData,
-	'venueData'=>$venueData,
 	'currentSite'=>$site,
 	'currentTimeZone'=>$thisconfig->get('TimeZone'),
 	'intro'=>  file_get_contents($configDataDir.'/'.$thisconfig->get('IntroTXTFile')),
@@ -139,7 +129,6 @@ $messageText = $app['twig']->render('email/sendSpecifiedEventsEmail.cli.txt.twig
 
 $messageHTML = $app['twig']->render('email/sendSpecifiedEventsEmail.cli.html.twig', array(
 	'data'=>$calData,
-	'venueData'=>$venueData,
 	'currentSite'=>$site,
 	'currentTimeZone'=>$thisconfig->get('TimeZone'),
 	'intro'=> file_get_contents($configDataDir.'/'.$thisconfig->get('IntroHTMLFile')),
