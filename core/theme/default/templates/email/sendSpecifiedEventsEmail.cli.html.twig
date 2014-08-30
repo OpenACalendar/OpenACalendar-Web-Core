@@ -8,7 +8,21 @@
 {% block content %}
 
 	{{ intro | raw }}
-	
+
+	{%  if listChildAreas %}
+		<p style="line-height: 2;">
+			{{ listChildAreasIntro }}
+			{% for area in childAreas %}
+				<span style="">
+					<span style="background: url('{{ config.getWebSiteDomainSecure(currentSite.slug) }}/theme/default/img/areaBackground.png') no-repeat {{ themeVariables.colourDarker2 }}; padding: 3px 3px 3px 20px; white-space: nowrap; -webkit-border-radius: 3px; border-radius: 3px;">
+						<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{area.slug}}/calendar?mytimezone={{ currentTimeZone }}" style="color: white; text-decoration: none;">{{  area.title }}</a>
+					</span>
+					<span>&nbsp;</span>
+				</span>
+			{%  endfor %}
+		</p>
+	{%  endif  %}
+
 	{% for d in data %}
 		<div style="background: {% if d.dayOfWeek > 5 %}#ccc{% else %}white{% endif %}; padding-bottom:10px;">
 			<div style="padding: 2px 5px; font-weight: bold;">

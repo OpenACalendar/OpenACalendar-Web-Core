@@ -47,6 +47,10 @@ class IniConfigWithEnvironment {
 			return $this->data['Common'][$key];
 		} 
 	}
+	function getBoolean($key) {
+		$val = $this->get($key);
+		return in_array(strtolower(trim($val)), array("true","yes","1"));
+	}
 }
 
 
