@@ -81,6 +81,11 @@ class GroupDuplicateTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertNull($uwgr->loadByUserAndGroup($user2, $group1));
 
+		$group2 = $groupRepo->loadById($group2->getId());
+		$this->assertFalse($group2->getIsDeleted());
+		$this->assertNull($group2->getIsDuplicateOfId());
+
+
 		// Mark
 		\TimeSource::mock(2014,1,1,2,0,0);
 		$groupRepo->markDuplicate($group2, $group1, $user1);
@@ -94,6 +99,10 @@ class GroupDuplicateTest extends \PHPUnit_Framework_TestCase {
 
 		$uwg = $uwgr->loadByUserAndGroup($user2, $group1);
 		$this->assertNotNull($uwg);
+
+		$group2 = $groupRepo->loadById($group2->getId());
+		$this->assertTrue($group2->getIsDeleted());
+		$this->assertEquals($group1->getId(), $group2->getIsDuplicateOfId());
 
 
 
