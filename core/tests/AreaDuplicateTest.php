@@ -99,6 +99,10 @@ class AreaDuplicateTest extends \PHPUnit_Framework_TestCase {
 		$areaChild = $areaRepo->loadById($areaChild->getId());
 		$this->assertEquals($area2->getId(), $areaChild->getParentAreaId());
 
+		$area2 = $areaRepo->loadById($area2->getId());
+		$this->assertFalse($area2->getIsDeleted());
+		$this->assertNull($area2->getIsDuplicateOfId());
+
 		// Mark
 		\TimeSource::mock(2014,1,1,2,0,0);
 		$areaRepo->markDuplicate($area2, $area1, $user);
@@ -114,6 +118,10 @@ class AreaDuplicateTest extends \PHPUnit_Framework_TestCase {
 
 		$areaChild = $areaRepo->loadById($areaChild->getId());
 		$this->assertEquals($area1->getId(), $areaChild->getParentAreaId());
+
+		$area2 = $areaRepo->loadById($area2->getId());
+		$this->assertTrue($area2->getIsDeleted());
+		$this->assertEquals($area1->getId(), $area2->getIsDuplicateOfId());
 	}
 }
 
