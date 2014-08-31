@@ -70,6 +70,10 @@ class VenueDuplicateTest extends \PHPUnit_Framework_TestCase {
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());
 		$this->assertEquals($venue2->getId(), $event->getVenueId());
 
+		$venue2 = $venueRepo->loadById($venue2->getId());
+		$this->assertFalse($venue2->getIsDeleted());
+		$this->assertNull($venue2->getIsDuplicateOfId());
+
 		// Mark
 		\TimeSource::mock(2014,1,1,2,0,0);
 		$venueRepo->markDuplicate($venue2, $venue1, $user);
@@ -77,6 +81,10 @@ class VenueDuplicateTest extends \PHPUnit_Framework_TestCase {
 		// Test Duplicate
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());
 		$this->assertEquals($venue1->getId(), $event->getVenueId());
+
+		$venue2 = $venueRepo->loadById($venue2->getId());
+		$this->assertTrue($venue2->getIsDeleted());
+		$this->assertEquals($venue1->getId(), $venue2->getIsDuplicateOfId());
 
 
 	}
