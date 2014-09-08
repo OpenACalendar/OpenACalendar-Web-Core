@@ -56,6 +56,7 @@ class EventHistoryRepository {
 				" start_at_changed = :start_at_changed   , ".
 				" end_at_changed = :end_at_changed   , ".
 				" is_deleted_changed = :is_deleted_changed   , ".
+				" is_cancelled_changed = :is_cancelled_changed   , ".
 				" country_id_changed = :country_id_changed   , ".
 				" timezone_changed = :timezone_changed   , ".
 				" venue_id_changed = :venue_id_changed   , ".
@@ -75,6 +76,7 @@ class EventHistoryRepository {
 				'start_at_changed'=> $eventhistory->getStartAtChanged() ? 1 : -1,
 				'end_at_changed'=> $eventhistory->getEndAtChanged() ? 1 : -1,
 				'is_deleted_changed'=> $eventhistory->getIsDeletedChanged() ? 1 : -1,
+				'is_cancelled_changed'=> $eventhistory->getIsCancelledChanged() ? 1 : -1,
 				'country_id_changed'=> $eventhistory->getCountryIdChanged() ? 1 : -1,
 				'timezone_changed'=> $eventhistory->getTimezoneChanged() ? 1 : -1,
 				'venue_id_changed'=> $eventhistory->getVenueIdChanged() ? 1 : -1,

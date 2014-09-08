@@ -65,12 +65,12 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		$txt = $this->getIcalLine('BEGIN','VEVENT');
 		$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$CONFIG->webSiteDomain);
 		
-		if ($event->getIsDeleted()) {
+		if ($event->getIsDeleted() || $event->getIsCancelled()) {
 			$txt .= $this->getIcalLine('METHOD','CANCEL');
 			$txt .= $this->getIcalLine('STATUS','CANCELLED');
 		} else {
 			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay());
-			
+
 			$url = $CONFIG->isSingleSiteMode ?
 					'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() : 
 					'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() ; 

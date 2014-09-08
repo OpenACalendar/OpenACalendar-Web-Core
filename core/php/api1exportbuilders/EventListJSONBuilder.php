@@ -49,6 +49,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 			'summaryDisplay'=> $event->getSummaryDisplay(),			
 			'description'=> ($event->getDescription()?$event->getDescription():''),
 			'deleted'=> (boolean)$event->getIsDeleted(),
+			'cancelled'=> (boolean)$event->getIsCancelled(),
 			'is_physical'=> (boolean)$event->getIsPhysical(),
 			'is_virtual'=> (boolean)$event->getIsVirtual(),
 		);

@@ -8,7 +8,7 @@
 {% extends 'site/event/page.html.twig' %}
 
 
-{% block pageTitle %}History of changes of {{ event.summaryDisplay }} - {% endblock %} 
+{% block pageTitle %}History of changes of {{ event.summaryDisplay }} {%  if event.isCancelled  %}[CANCELLED] {%  endif %}- {% endblock %}
 
 
 {% block htmlHeader %}

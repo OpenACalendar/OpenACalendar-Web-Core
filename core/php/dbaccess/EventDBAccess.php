@@ -5,6 +5,7 @@ namespace dbaccess;
 
 use models\UserAccountModel;
 use models\EventModel;
+use models\EventHistoryModel;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -42,7 +43,7 @@ class EventDBAccess {
 
 
 			$stat = $this->db->prepare("UPDATE event_information  SET summary=:summary, description=:description, ".
-				"start_at=:start_at, end_at=:end_at, is_deleted=:is_deleted, area_id=:area_id, ".
+				"start_at=:start_at, end_at=:end_at, is_deleted=:is_deleted, is_cancelled=:is_cancelled, area_id=:area_id, ".
 				" venue_id=:venue_id, country_id=:country_id, timezone=:timezone, ".
 				"url=:url, ticket_url=:ticket_url, is_physical=:is_physical, is_virtual=:is_virtual ".
 				"WHERE id=:id");
@@ -61,14 +62,15 @@ class EventDBAccess {
 				'is_physical'=>$event->getIsPhysical()?1:0,
 				'is_virtual'=>$event->getIsVirtual()?1:0,
 				'is_deleted'=>$event->getIsDeleted()?1:0,
+				'is_cancelled'=>$event->getIsCancelled()?1:0,
 			));
 
 			$stat = $this->db->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
 				"created_at, reverted_from_created_at,venue_id,country_id,timezone,".
-				"url, ticket_url, is_physical, is_virtual, area_id, approved_at,is_deleted ) VALUES ".
+				"url, ticket_url, is_physical, is_virtual, area_id, approved_at,is_deleted, is_cancelled ) VALUES ".
 				"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
 				":created_at, :reverted_from_created_at,:venue_id,:country_id,:timezone,"."
-						:url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at, :is_deleted )");
+						:url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at, :is_deleted, :is_cancelled )");
 			$stat->execute(array(
 				'event_id'=>$event->getId(),
 				'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -88,6 +90,7 @@ class EventDBAccess {
 				'is_physical'=>$event->getIsPhysical()?1:0,
 				'is_virtual'=>$event->getIsVirtual()?1:0,
 				'is_deleted'=>$event->getIsDeleted()?1:0,
+				'is_cancelled'=>$event->getIsCancelled()?1:0,
 			));
 
 

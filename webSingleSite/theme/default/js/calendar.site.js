@@ -31,7 +31,11 @@ function showEventPopup(data) {
 		url: "/api1/event/"+data.slug+"/info.json"
 	}).success(function ( eventdata ) {
 	var event = eventdata.data[0];
-		$('#EventPopupTitle').text(event.summaryDisplay);
+        if (event.cancelled) {
+            $('#EventPopupTitle').text(event.summaryDisplay + " [CANCELLED]");
+        } else {
+            $('#EventPopupTitle').text(event.summaryDisplay);
+        }
 		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,500));
 		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
 		if (event.venue) {

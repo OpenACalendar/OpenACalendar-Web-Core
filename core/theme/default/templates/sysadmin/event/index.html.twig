@@ -21,6 +21,10 @@
 			<td>{{ event.slug }}</td>
 		</tr>
 		<tr>
+			<th>Cancelled</th>
+			<td>{% if event.isCancelled %}Cancelled{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
 			<th>Deleted</th>
 			<td>{% if event.isDeleted %}Deleted{% else %}-{% endif %}</td>
 		</tr>

@@ -23,6 +23,7 @@ class EventModel {
 	protected $group_id;
 	protected $group_title;
 	protected $is_deleted;
+	protected $is_cancelled;
 	protected $event_recur_set_id;
 	protected $timezone = 'Europe/London';
 	protected $venue_id;
@@ -82,6 +83,7 @@ class EventModel {
 		$this->group_id = isset($data['group_id']) ? $data['group_id'] : null;
 		$this->group_title = isset($data['group_title']) ? $data['group_title'] : null;
 		$this->is_deleted = $data['is_deleted'];
+		$this->is_cancelled = $data['is_cancelled'];
 		$this->event_recur_set_id = $data['event_recur_set_id'];
 		$this->country_id = $data['country_id'];
 		$this->venue_id = $data['venue_id'];
@@ -124,6 +126,7 @@ class EventModel {
 		$this->start_at = clone $ehm->getStartAt();
 		$this->end_at = clone $ehm->getEndAt();
 		$this->is_deleted = false;
+		$this->is_cancelled = false;
 	}
 	
 	protected $validateErrors = array();
@@ -322,6 +325,16 @@ class EventModel {
 
 	public function setIsDeleted($is_deleted) {
 		$this->is_deleted = $is_deleted;
+	}
+
+	public function setIsCancelled($is_cancelled)
+	{
+		$this->is_cancelled = $is_cancelled;
+	}
+
+	public function getIsCancelled()
+	{
+		return $this->is_cancelled;
 	}
 
 	public function getEventRecurSetId() {

@@ -999,7 +999,9 @@ div.event div.dateTimeIcon div.timeIcon {
   text-align: center;
 }
 ul.events li.event div.dateTimeIcon span.deleted,
-div.event div.dateTimeIcon span.deleted {
+ul.events li.event div.dateTimeIcon span.cancelled,
+div.event div.dateTimeIcon span.deleted,
+div.event div.dateTimeIcon span.cancelled {
   padding-top: 5px;
   display: block;
   color: white;

@@ -8,6 +8,7 @@ use site\forms\EventNewForm;
 use site\forms\EventEditForm;
 use site\forms\EventImportedEditForm;
 use site\forms\EventDeleteForm;
+use site\forms\EventCancelForm;
 use site\forms\UploadNewMediaForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -1176,7 +1177,66 @@ class EventController {
 		
 		
 	}
-	
+
+	function cancel($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+
+		if ($this->parameters['event']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+
+		if ($this->parameters['event']->getIsCancelled()) {
+			die("No"); // TODO
+		}
+
+		if ($this->parameters['event']->getIsImported()) {
+			die("No"); // TODO
+		}
+
+		$form = $app['form.factory']->create(new EventCancelForm());
+
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+
+			if ($form->isValid()) {
+
+				$eventRepository = new EventRepository();
+				$eventRepository->cancel($this->parameters['event'], userGetCurrent());
+
+				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+
+			}
+		}
+
+		$this->parameters['form'] = $form->createView();
+
+		return $app['twig']->render('site/event/cancel.html.twig', $this->parameters);
+
+	}
+
+
+	function uncancel($slug, Request $request, Application $app) {
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+
+		//TODO It's inefective to get them all when really we just want the latest one!
+
+		$ehrb = new EventHistoryRepositoryBuilder();
+		$ehrb->setEvent($this->parameters['event']);
+		$ehrb->setOrderByCreatedAt(true);
+		$eventHistories = $ehrb->fetchAll();
+
+		$eventHistory = $eventHistories[0];
+
+		return $app->redirect("/event/".$this->parameters['event']->getSlug().'/rollback/'.$eventHistory->getCreatedAtTimeStamp());
+
+
+	}
+
 	
 	function rollback($slug, $timestamp, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {

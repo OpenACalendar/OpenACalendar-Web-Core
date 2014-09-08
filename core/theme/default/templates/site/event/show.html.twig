@@ -14,7 +14,7 @@
 {% extends 'site/event/page.html.twig' %}
 
 
-{% block pageTitle %}{{ event.summaryDisplay }} - {% endblock %} 
+{% block pageTitle %}{{ event.summaryDisplay }} {%  if event.isCancelled  %}[CANCELLED] {%  endif %}- {% endblock %}
 
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{ event.slugForUrl }}/" />
@@ -26,7 +26,7 @@
 	
 {% block actions %}
 	{% if currentUserCanEditSite %}
-		{% if not event.isDeleted %}
+		{% if not event.isDeleted and not event.isCancelled %}
 			{%  if currentSite.isFeaturePhysicalEvents or currentSite.isFeatureTag or currentSite.isFeatureGroup %}
 				<li class="actionWithSubMenu">
 					<a href="/event/{{ event.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
@@ -55,13 +55,21 @@
 			{% endif %}
 		{% endif %}
 		{% if not event.isImported %}
-			{% if not event.isDeleted %}
+			{% if event.isDeleted %}
+				<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
+			{% elseif event.isCancelled %}
+				<li class="action"><a href="/event/{{ event.slugForUrl }}/uncancel"><div class="iconTrashOSmall"></div> uncancel</a></li>
+			{%  else  %}
 				{% if group is not null or currentSite.isFeatureGroup %}
 					<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><div class="iconCircleONotchSmall"></div> recur</a></li>
 				{% endif %}
-				<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
-			{% else %}
-				<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
+				<li class="actionWithSubMenu">
+					<a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a>
+					<ul class="submenu">
+						<li><a href="/event/{{ event.slugForUrl }}/cancel">Cancel</a></li>
+						<li><a href="/event/{{ event.slugForUrl }}/delete">Delete</a></li>
+					</ul>
+				</li>
 			{% endif %}
 		{% endif %}
 	{% endif %}
@@ -98,6 +106,12 @@
 			<div class="dateTimeIcon">
 				<div class="dateIcon">
 					<span class="deleted">Deleted!</span>
+				</div>
+			</div>
+		{% elseif event.isCancelled %}
+			<div class="dateTimeIcon">
+				<div class="dateIcon">
+					<span class="cancelled">Cancel<br>-led!</span>
 				</div>
 			</div>
 		{% else %}

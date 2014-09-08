@@ -252,6 +252,27 @@ class EventRepository {
 		
 		$event->setIsDeleted(true);
 	}
+
+
+	public function cancel(EventModel $event,  UserAccountModel $user=null) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$event->setIsCancelled(true);
+			$this->eventDBAccess->update($event, array('is_cancelled'), $user, null);
+
+
+			// TODO if in group, watch
+
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+
+		$event->setIsDeleted(true);
+	}
 	
 	public function loadLastNonDeletedNonImportedByStartTimeInSiteId($siteID) {
 		global $DB;

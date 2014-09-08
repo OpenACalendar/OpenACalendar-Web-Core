@@ -1059,11 +1059,17 @@ ul.history li.importurl div.dateTimeIcon div.timeIcon {
   text-align: center;
 }
 ul.history li.event div.dateTimeIcon span.deleted,
+ul.history li.event div.dateTimeIcon span.cancelled,
 ul.history li.group div.dateTimeIcon span.deleted,
+ul.history li.group div.dateTimeIcon span.cancelled,
 ul.history li.venue div.dateTimeIcon span.deleted,
+ul.history li.venue div.dateTimeIcon span.cancelled,
 ul.history li.area div.dateTimeIcon span.deleted,
+ul.history li.area div.dateTimeIcon span.cancelled,
 ul.history li.tag div.dateTimeIcon span.deleted,
-ul.history li.importurl div.dateTimeIcon span.deleted {
+ul.history li.tag div.dateTimeIcon span.cancelled,
+ul.history li.importurl div.dateTimeIcon span.deleted,
+ul.history li.importurl div.dateTimeIcon span.cancelled {
   padding-top: 5px;
   display: block;
   color: white;
@@ -1870,7 +1876,9 @@ div.event div.dateTimeIcon div.timeIcon {
   text-align: center;
 }
 ul.events li.event div.dateTimeIcon span.deleted,
-div.event div.dateTimeIcon span.deleted {
+ul.events li.event div.dateTimeIcon span.cancelled,
+div.event div.dateTimeIcon span.deleted,
+div.event div.dateTimeIcon span.cancelled {
   padding-top: 5px;
   display: block;
   color: white;

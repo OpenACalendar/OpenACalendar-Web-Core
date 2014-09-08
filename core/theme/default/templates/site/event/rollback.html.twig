@@ -25,6 +25,8 @@
 
 		{% if event.isDeleted %}
 			<p>(The event will no longer be deleted.)</p>
+		{% elseif event.isCancelled %}
+			<p>(The event will no longer be cancelled.)</p>
 		{% endif %}
 
 		<input type="submit"  value="Rollback to this state" />	

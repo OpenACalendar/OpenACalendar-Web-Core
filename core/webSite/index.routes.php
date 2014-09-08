@@ -102,6 +102,14 @@ $app->match('/event/{slug}/undelete', "site\controllers\EventController::undelet
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)
 		->before($canChangeSite); 
+$app->match('/event/{slug}/cancel', "site\controllers\EventController::cancel")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite);
+$app->match('/event/{slug}/uncancel', "site\controllers\EventController::uncancel")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appVerifiedEditorUserRequired)
+		->before($canChangeSite);
 $app->match('/event/{slug}/rollback/{timestamp}', "site\controllers\EventController::rollback")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('rollback', '\d+')

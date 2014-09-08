@@ -27,6 +27,7 @@ class EventHistoryModel extends EventModel {
 	protected $start_at_changed   = 0;
 	protected $end_at_changed   = 0;
 	protected $is_deleted_changed   = 0;
+	protected $is_cancelled_changed   = 0;
 	protected $country_id_changed   = 0;
 	protected $timezone_changed   = 0;
 	protected $venue_id_changed   = 0;
@@ -54,6 +55,7 @@ class EventHistoryModel extends EventModel {
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->group_id = isset($data['group_id']) ? $data['group_id'] : null;
 		$this->is_deleted = $data['is_deleted'];
+		$this->is_cancelled = $data['is_cancelled'];
 		$this->country_id  = $data['country_id'];
 		$this->timezone  = $data['timezone'];
 		$this->venue_id  = $data['venue_id'];
@@ -69,6 +71,7 @@ class EventHistoryModel extends EventModel {
 		$this->start_at_changed  = isset($data['start_at_changed']) ? $data['start_at_changed'] : 0;
 		$this->end_at_changed  = isset($data['end_at_changed']) ? $data['end_at_changed'] : 0;
 		$this->is_deleted_changed  = isset($data['is_deleted_changed']) ? $data['is_deleted_changed'] : 0;
+		$this->is_cancelled_changed  = isset($data['is_cancelled_changed']) ? $data['is_cancelled_changed'] : 0;
 		$this->country_id_changed = isset($data['country_id_changed']) ? $data['country_id_changed'] : 0;
 		$this->timezone_changed  = isset($data['timezone_changed']) ? $data['timezone_changed'] : 0;
 		$this->venue_id_changed  = isset($data['venue_id_changed']) ? $data['venue_id_changed'] : 0;
@@ -87,6 +90,7 @@ class EventHistoryModel extends EventModel {
 			$this->start_at_changed == 0 ||
 			$this->end_at_changed == 0 ||
 			$this->is_deleted_changed == 0 ||
+			$this->is_cancelled_changed == 0 ||
 			$this->country_id_changed == 0 ||
 			$this->timezone_changed == 0 ||
 			$this->venue_id_changed == 0 ||
@@ -104,6 +108,7 @@ class EventHistoryModel extends EventModel {
 		$this->start_at_changed = $this->start_at ? 1 : -1;
 		$this->end_at_changed = $this->end_at ? 1 : -1;
 		$this->is_deleted_changed = $this->is_deleted ?  1 : -1;
+		$this->is_cancelled_changed = $this->is_cancelled ?  1 : -1;
 		$this->country_id_changed = $this->country_id ? 1 : -1;
 		$this->timezone_changed = $this->timezone ? 1 : -1;
 		$this->venue_id_changed = $this->venue_id ? 1 : -1;
@@ -122,6 +127,7 @@ class EventHistoryModel extends EventModel {
 		$this->start_at_changed  = ($this->start_at  != $last->start_at  )? 1 : -1;
 		$this->end_at_changed  = ($this->end_at  != $last->end_at  )? 1 : -1;
 		$this->is_deleted_changed  = ($this->is_deleted != $last->is_deleted  )? 1 : -1;
+		$this->is_cancelled_changed  = ($this->is_cancelled != $last->is_cancelled  )? 1 : -1;
 		$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
 		$this->timezone_changed  = ($this->timezone  != $last->timezone  )? 1 : -1;
 		$this->venue_id_changed  = ($this->venue_id  != $last->venue_id  )? 1 : -1;
@@ -187,6 +193,10 @@ class EventHistoryModel extends EventModel {
 
 	public function getIsDeletedChanged() {
 		return ($this->is_deleted_changed != -1);
+	}
+
+	public function getIsCancelledChanged() {
+		return ($this->is_cancelled_changed != -1);
 	}
 
 	public function getCountryIdChanged() {

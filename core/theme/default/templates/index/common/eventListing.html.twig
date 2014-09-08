@@ -12,6 +12,12 @@
 				<span class="deleted">Deleted!</span>
 			</div>
 		</div>
+	{% elseif event.isCancelled %}
+		<div class="dateTimeIcon">
+			<div class="dateIcon">
+				<span class="cancelled">Cancel<br>-led!</span>
+			</div>
+		</div>
 	{% else %}
 		<div class="dateTimeIcon">
 			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">

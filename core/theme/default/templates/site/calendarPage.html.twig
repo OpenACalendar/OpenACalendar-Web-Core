@@ -186,7 +186,7 @@
 								<div class="event continuing">
 									<div class="above"></div>
 									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
-										{{ event.getSummaryDisplay()  }} 
+										{{ event.getSummaryDisplay()  }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
 									</a>
 									<div class="below"></div>
 								</div>
@@ -211,7 +211,7 @@
 										{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
 									</span>
 									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
-										{{ event.getSummaryDisplay() }}
+										{{ event.getSummaryDisplay() }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
 									</a>
 									<div class="below"></div>
 								</div>
