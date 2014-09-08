@@ -64,17 +64,20 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		
 		$txt = $this->getIcalLine('BEGIN','VEVENT');
 		$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$CONFIG->webSiteDomain);
-		
+
+		$url = $CONFIG->isSingleSiteMode ?
+			'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() :
+			'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() ;
+		$txt .= $this->getIcalLine('URL',$url);
+
 		if ($event->getIsDeleted()) {
+			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay(). " [DELETED]");
 			$txt .= $this->getIcalLine('METHOD','CANCEL');
 			$txt .= $this->getIcalLine('STATUS','CANCELLED');
+			$txt .= $this->getIcalLine('DESCRIPTION','DELETED');
 		} else {
 			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay());
-			
-			$url = $CONFIG->isSingleSiteMode ?
-					'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() : 
-					'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() ; 
-			$txt .= $this->getIcalLine('URL',$url);
+
 			$description = '';
 			foreach($this->extraHeaders as $extraHeader) {
 				$description .= $extraHeader->getText()."\n\n";
