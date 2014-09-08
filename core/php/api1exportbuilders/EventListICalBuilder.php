@@ -64,17 +64,25 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		
 		$txt = $this->getIcalLine('BEGIN','VEVENT');
 		$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$CONFIG->webSiteDomain);
-		
-		if ($event->getIsDeleted() || $event->getIsCancelled()) {
+
+		$url = $CONFIG->isSingleSiteMode ?
+			'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() :
+			'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() ;
+		$txt .= $this->getIcalLine('URL',$url);
+
+		if ($event->getIsDeleted()) {
+			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay(). " [DELETED]");
 			$txt .= $this->getIcalLine('METHOD','CANCEL');
 			$txt .= $this->getIcalLine('STATUS','CANCELLED');
+			$txt .= $this->getIcalLine('DESCRIPTION','DELETED');
+		} else if ($event->getIsCancelled()) {
+			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay(). " [CANCELLED]");
+			$txt .= $this->getIcalLine('METHOD','CANCEL');
+			$txt .= $this->getIcalLine('STATUS','CANCELLED');
+			$txt .= $this->getIcalLine('DESCRIPTION','CANCELLED');
 		} else {
 			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay());
 
-			$url = $CONFIG->isSingleSiteMode ?
-					'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() : 
-					'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() ; 
-			$txt .= $this->getIcalLine('URL',$url);
 			$description = '';
 			foreach($this->extraHeaders as $extraHeader) {
 				$description .= $extraHeader->getText()."\n\n";
