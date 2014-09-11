@@ -12,6 +12,9 @@
 		</a>
 	</div>
 	<div class="title"><a href="/tag/{{ historyItem.tagSlug }}">{{ historyItem.title }}</a></div>
+	{% if historyItem.getIsNew %}
+		<div class="new">New!</div>
+	{% endif %}
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.description | nl2br  }}</div>
 	{% else %}

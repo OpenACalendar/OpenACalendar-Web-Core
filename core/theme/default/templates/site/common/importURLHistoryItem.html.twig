@@ -12,6 +12,9 @@
 		</a>
 	</div>
 	<div class="title"><a href="/importurl/{{ historyItem.importURLSlug }}">{{ historyItem.title }}</a></div>
+	{% if historyItem.getIsNew %}
+		<div class="new">New!</div>
+	{% endif %}
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.title | nl2br  }}</div>
 	{% else %}
