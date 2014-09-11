@@ -173,7 +173,7 @@ ul.actionHelp {
 }
 
 ul.history {
-	li.event, li.group, li.venue {
+	li.event, li.group, li.venue, li.area, li.tag, li.importurl {
 		padding: 5px;
 		margin: 5px 0 5px 0;
 		.rounded-corners (5px);
@@ -236,16 +236,25 @@ ul.history {
 		}
 	}
 	li.event {
-		background: #dcc;
+		background: @colourHistoryEventBackground;
 	}
 	li.group {
-		background: #cdc;
+		background: @colourHistoryGroupBackground;
 	}
 	li.venue {
-		background: #8ac4bc;
+		background: @colourHistoryVenueBackground;
+	}
+	li.area {
+		background: @colourHistoryAreaBackground;
+	}
+	li.tag {
+		background: @colourHistoryTagBackground;
+	}
+	li.importurl {
+		background: @colourHistoryImportURLBackground;
 	}
 	li.deleted {
-		text-color: #999;
+		text-color: @colourHistoryDeletedBackground;
 	}
 }
 

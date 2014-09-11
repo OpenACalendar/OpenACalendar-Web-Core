@@ -22,6 +22,10 @@
 				{% include 'sysadmin/common/venueHistoryItem.html.twig' %}
 			{% elseif historyItem is areahistory %}
 				{% include 'sysadmin/common/areaHistoryItem.html.twig' %}
+			{% elseif historyItem is taghistory %}
+				{% include 'sysadmin/common/tagHistoryItem.html.twig' %}
+			{% elseif historyItem is importurlhistory %}
+				{% include 'sysadmin/common/importURLHistoryItem.html.twig' %}
 			{% endif %}
 		{% endfor %}
 	</ul>

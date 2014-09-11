@@ -268,7 +268,10 @@ ul.actionHelp li span.param {
 }
 ul.history li.event,
 ul.history li.group,
-ul.history li.venue {
+ul.history li.venue,
+ul.history li.area,
+ul.history li.tag,
+ul.history li.importurl {
   padding: 5px;
   margin: 5px 0 5px 0;
   -webkit-border-radius: 5px;
@@ -279,7 +282,10 @@ ul.history li.venue {
 }
 ul.history li.event div.icon,
 ul.history li.group div.icon,
-ul.history li.venue div.icon {
+ul.history li.venue div.icon,
+ul.history li.area div.icon,
+ul.history li.tag div.icon,
+ul.history li.importurl div.icon {
   float: left;
   width: 60px;
   height: 60px;
@@ -296,52 +302,76 @@ ul.history li.venue div.icon {
 }
 ul.history li.event div.icon a,
 ul.history li.group div.icon a,
-ul.history li.venue div.icon a {
+ul.history li.venue div.icon a,
+ul.history li.area div.icon a,
+ul.history li.tag div.icon a,
+ul.history li.importurl div.icon a {
   text-decoration: none;
   color: white;
 }
 ul.history li.event div.icon a span.deleted,
 ul.history li.group div.icon a span.deleted,
-ul.history li.venue div.icon a span.deleted {
+ul.history li.venue div.icon a span.deleted,
+ul.history li.area div.icon a span.deleted,
+ul.history li.tag div.icon a span.deleted,
+ul.history li.importurl div.icon a span.deleted {
   padding-top: 5px;
   display: block;
   color: white;
 }
 ul.history li.event div.icon a span.startDay,
 ul.history li.group div.icon a span.startDay,
-ul.history li.venue div.icon a span.startDay {
+ul.history li.venue div.icon a span.startDay,
+ul.history li.area div.icon a span.startDay,
+ul.history li.tag div.icon a span.startDay,
+ul.history li.importurl div.icon a span.startDay {
   font-weight: 200;
   padding-top: 5px;
   display: block;
 }
 ul.history li.event div.icon a span.startDate,
 ul.history li.group div.icon a span.startDate,
-ul.history li.venue div.icon a span.startDate {
+ul.history li.venue div.icon a span.startDate,
+ul.history li.area div.icon a span.startDate,
+ul.history li.tag div.icon a span.startDate,
+ul.history li.importurl div.icon a span.startDate {
   font-size: 16pt;
   font-weight: 400;
   display: block;
 }
 ul.history li.event div.icon a span.startMonthYear,
 ul.history li.group div.icon a span.startMonthYear,
-ul.history li.venue div.icon a span.startMonthYear {
+ul.history li.venue div.icon a span.startMonthYear,
+ul.history li.area div.icon a span.startMonthYear,
+ul.history li.tag div.icon a span.startMonthYear,
+ul.history li.importurl div.icon a span.startMonthYear {
   font-weight: 200;
   display: block;
   font-size: 0.75em;
 }
 ul.history li.event .title,
 ul.history li.group .title,
-ul.history li.venue .title {
+ul.history li.venue .title,
+ul.history li.area .title,
+ul.history li.tag .title,
+ul.history li.importurl .title {
   font-weight: bold;
 }
 ul.history li.event .title a,
 ul.history li.group .title a,
-ul.history li.venue .title a {
+ul.history li.venue .title a,
+ul.history li.area .title a,
+ul.history li.tag .title a,
+ul.history li.importurl .title a {
   color: black;
   text-decoration: none;
 }
 ul.history li.event .created,
 ul.history li.group .created,
-ul.history li.venue .created {
+ul.history li.venue .created,
+ul.history li.area .created,
+ul.history li.tag .created,
+ul.history li.importurl .created {
   padding: 5px 0 0 0;
   clear: both;
   font-style: italic;
@@ -349,13 +379,19 @@ ul.history li.venue .created {
 }
 ul.history li.event .fieldChanged .field,
 ul.history li.group .fieldChanged .field,
-ul.history li.venue .fieldChanged .field {
+ul.history li.venue .fieldChanged .field,
+ul.history li.area .fieldChanged .field,
+ul.history li.tag .fieldChanged .field,
+ul.history li.importurl .fieldChanged .field {
   display: inline;
   font-style: italic;
 }
 ul.history li.event .fieldChanged .value,
 ul.history li.group .fieldChanged .value,
-ul.history li.venue .fieldChanged .value {
+ul.history li.venue .fieldChanged .value,
+ul.history li.area .fieldChanged .value,
+ul.history li.tag .fieldChanged .value,
+ul.history li.importurl .fieldChanged .value {
   display: inline;
 }
 ul.history li.event {
@@ -366,6 +402,15 @@ ul.history li.group {
 }
 ul.history li.venue {
   background: #8ac4bc;
+}
+ul.history li.area {
+  background: #8ac4bc;
+}
+ul.history li.tag {
+  background: #eefcbc;
+}
+ul.history li.importurl {
+  background: #bcdffc;
 }
 ul.history li.deleted {
   text-color: #999;
