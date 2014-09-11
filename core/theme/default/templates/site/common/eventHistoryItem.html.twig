@@ -29,6 +29,9 @@
 		</div>
 	{% endif %}
 	<div class="title"><a href="/event/{{ historyItem.eventSlug }}">{{ historyItem.summaryDisplay }}</a></div>
+	{% if historyItem.getIsNew %}
+		<div class="new">New!</div>
+	{% endif %}
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.description | nl2br  }}</div>
 	{% else %}
