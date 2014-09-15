@@ -395,7 +395,21 @@ class EventRepository {
 		if ($duplicateEvent->getId() == $originalEvent->getId()) return;
 
 
-		die("TODO");
+		try {
+			$DB->beginTransaction();
+
+			$duplicateEvent->setIsDeleted(true);
+			$duplicateEvent->setIsDuplicateOfId($originalEvent->getId());
+			$this->eventDBAccess->update($duplicateEvent, array('is_deleted','is_duplicate_of_id'), $user);
+
+			// TODO users attending event
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+
+
 	}
 	
 	public function purge(EventModel $event) {
