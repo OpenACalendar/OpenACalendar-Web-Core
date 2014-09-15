@@ -417,6 +417,13 @@ class EventRepository {
 		try {
 			$DB->beginTransaction();
 			
+			
+			$stat = $DB->prepare("UPDATE event_history SET is_duplicate_of_id=NULL, is_duplicate_of_id_changed=0 WHERE is_duplicate_of_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+
+			$stat = $DB->prepare("UPDATE event_information SET is_duplicate_of_id=NULL WHERE is_duplicate_of_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+			
 			$stat = $DB->prepare("DELETE FROM event_in_group WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 			

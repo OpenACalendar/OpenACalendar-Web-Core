@@ -63,9 +63,17 @@ class EventPurgeTest extends \PHPUnit_Framework_TestCase {
 		$event->setUrl("http://www.info.com");
 		$event->setTicketUrl("http://www.tickets.com");
 
+		$eventDupe = new EventModel();
+		$eventDupe->setSummary("test");
+		$eventDupe->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
+		$eventDupe->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
+
 		$eventRepository = new EventRepository();
 		$eventRepository->create($event, $site, $user, $group);
-		
+		$eventRepository->create($eventDupe, $site, $user, $group);
+		TimeSource::mock(2014,5,1,7,1,0);
+		$eventRepository->markDuplicate($eventDupe, $event);
+
 		$curatedList = new CuratedListModel();
 		$curatedList->setTitle("test");
 		$curatedList->setDescription("test this!");
