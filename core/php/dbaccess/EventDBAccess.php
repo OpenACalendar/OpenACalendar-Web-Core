@@ -63,7 +63,7 @@ class EventDBAccess {
 				'is_virtual'=>$event->getIsVirtual()?1:0,
 				'is_deleted'=>$event->getIsDeleted()?1:0,
 				'is_cancelled'=>$event->getIsCancelled()?1:0,
-				'is_duplicate_of_id'=>$event->getIsDuplicateOfId()?1:0,
+				'is_duplicate_of_id'=>$event->getIsDuplicateOfId(),
 			));
 
 			$stat = $this->db->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
@@ -92,7 +92,7 @@ class EventDBAccess {
 				'is_virtual'=>$event->getIsVirtual()?1:0,
 				'is_deleted'=>$event->getIsDeleted()?1:0,
 				'is_cancelled'=>$event->getIsCancelled()?1:0,
-				'is_duplicate_of_id'=>$event->getIsDuplicateOfId()?1:0,
+				'is_duplicate_of_id'=>$event->getIsDuplicateOfId(),
 			));
 
 
