@@ -362,7 +362,13 @@ class GroupRepository {
 		global $DB;
 		try {
 			$DB->beginTransaction();
-			
+
+			$stat = $DB->prepare("UPDATE group_history SET is_duplicate_of_id=NULL, is_duplicate_of_id_changed=0 WHERE is_duplicate_of_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
+			$stat = $DB->prepare("UPDATE group_information SET is_duplicate_of_id=NULL WHERE is_duplicate_of_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+
 			$stat = $DB->prepare("DELETE FROM user_watches_group_notify_email WHERE group_id=:id");
 			$stat->execute(array('id'=>$group->getId()));
 
@@ -386,7 +392,7 @@ class GroupRepository {
 
 			$stat = $DB->prepare("DELETE FROM group_information WHERE id=:id");
 			$stat->execute(array('id'=>$group->getId()));
-		
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();

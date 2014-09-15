@@ -46,10 +46,16 @@ class GroupPurgeTest extends \PHPUnit_Framework_TestCase {
 		$group->setTitle("test");
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
-		
+
+		$groupDupe = new GroupModel();
+		$groupDupe->setTitle("test DUPE");
+
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
-		
+		$groupRepo->create($groupDupe, $site, $user);
+		TimeSource::mock(2013,7,1,7,1,0);
+		$groupRepo->markDuplicate($groupDupe, $group);
+
 		$ufgr = new UserWatchesGroupRepository();
 		$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($user, $group->getId());
 		
