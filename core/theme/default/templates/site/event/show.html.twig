@@ -18,7 +18,7 @@
 
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{ event.slugForUrl }}/" />
-	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% if not currentSite.isWebRobotsAllowed or event.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
 {% endblock %}
 
