@@ -251,7 +251,7 @@ class VenueController {
 						$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
 						
 						$app['flashmessages']->addMessage('Picture added!');
-						return $app->redirect("/venue/".$this->parameters['venue']->getSlug());
+						return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
 						
 					}
 					
@@ -286,7 +286,7 @@ class VenueController {
 			}
 		}
 		
-		return $app->redirect("/venue/".$this->parameters['venue']->getSlug().'/media');
+		return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL().'/media');
 	}
 	
 	function mediaAddExisting($slug, Request $request, Application $app) {		
@@ -301,7 +301,7 @@ class VenueController {
 				$mediaInVenueRepo = new MediaInVenueRepository();
 				$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
 				$app['flashmessages']->addMessage('Added!');
-				return $app->redirect("/venue/".$this->parameters['venue']->getSlug().'/');
+				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL().'/');
 			}
 		}
 		
@@ -340,7 +340,7 @@ class VenueController {
 		}
 		
 		
-		return $app->redirect("/venue/".$this->parameters['venue']->getSlug().'/');
+		return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL().'/');
 
 	}
 	
@@ -368,7 +368,7 @@ class VenueController {
 				$venueRepository = new VenueRepository();
 				$venueRepository->delete($this->parameters['venue'], userGetCurrent());
 				
-				return $app->redirect("/venue/".$this->parameters['venue']->getSlug());
+				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
 				
 			}
 		}
