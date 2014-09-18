@@ -31,34 +31,66 @@ class TagDBAccess {
 		$this->timesource = $timesource;
 	}
 
+	protected $possibleFields = array('title','description','is_deleted');
+
 
 	public function update(TagModel $tag, $fields, UserAccountModel $user = null ) {
 		$alreadyInTransaction = $this->db->inTransaction();
+
+		// Make Information Data
+		$fieldsSQL1 = array();
+		$fieldsParams1 = array( 'id'=>$tag->getId() );
+		foreach($fields as $field) {
+			$fieldsSQL1[] = " ".$field."=:".$field." ";
+			if ($field == 'title') {
+				$fieldsParams1['title'] = $tag->getTitle();
+			} else if ($field == 'description') {
+				$fieldsParams1['description'] = $tag->getDescription();
+			} else if ($field == 'is_deleted') {
+				$fieldsParams1['is_deleted'] = ($tag->getIsDeleted()?1:0);
+			}
+		}
+
+		// Make History Data
+		$fieldsSQL2 = array('tag_id','user_account_id','created_at','approved_at');
+		$fieldsSQLParams2 = array(':tag_id',':user_account_id',':created_at',':approved_at');
+		$fieldsParams2 = array(
+			'tag_id'=>$tag->getId(),
+			'user_account_id'=>($user ? $user->getId() : null),
+			'created_at'=>$this->timesource->getFormattedForDataBase(),
+			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+		);
+		foreach($this->possibleFields as $field) {
+			if (in_array($field, $fields)) {
+				$fieldsSQL2[] = " ".$field." ";
+				$fieldsSQLParams2[] = " :".$field." ";
+				if ($field == 'title') {
+					$fieldsParams2['title'] = $tag->getTitle();
+				} else if ($field == 'description') {
+					$fieldsParams2['description'] = $tag->getDescription();
+				} else if ($field == 'is_deleted') {
+					$fieldsParams2['is_deleted'] = ($tag->getIsDeleted()?1:0);
+				}
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " 0 ";
+			} else {
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " -2 ";
+			}
+		}
 
 		try {
 			if (!$alreadyInTransaction) {
 				$this->db->beginTransaction();
 			}
 
-			$stat = $this->db->prepare("UPDATE tag_information  SET title=:title, description=:description, is_deleted=:is_deleted WHERE id=:id");
-			$stat->execute(array(
-				'id'=>$tag->getId(),
-				'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'description'=>$tag->getDescription(),
-				'is_deleted'=>$tag->getIsDeleted()?1:0,
-			));
+			// Information SQL
+			$stat = $this->db->prepare("UPDATE tag_information  SET ".implode(",", $fieldsSQL1)." WHERE id=:id");
+			$stat->execute($fieldsParams1);
 
-			$stat = $this->db->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_deleted, is_new) VALUES ".
-				"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, :is_deleted, '0')");
-			$stat->execute(array(
-				'tag_id'=>$tag->getId(),
-				'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'description'=>$tag->getDescription(),
-				'user_account_id'=>$user->getId(),
-				'created_at'=>$this->timesource->getFormattedForDataBase(),
-				'approved_at'=>$this->timesource->getFormattedForDataBase(),
-				'is_deleted'=>$tag->getIsDeleted()?1:0,
-			));
+			// History SQL
+			$stat = $this->db->prepare("INSERT INTO tag_history (".implode(",",$fieldsSQL2).") VALUES (".implode(",",$fieldsSQLParams2).")");
+			$stat->execute($fieldsParams2);
 
 			if (!$alreadyInTransaction) {
 				$this->db->commit();
@@ -69,7 +101,6 @@ class TagDBAccess {
 			}
 			throw $e;
 		}
-
 	}
 
 
