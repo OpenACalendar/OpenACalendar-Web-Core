@@ -21,7 +21,7 @@ use \repositories\builders\HistoryRepositoryBuilder;
  */
 class AreaHistoryTest extends \PHPUnit_Framework_TestCase {
 
-	/**
+
 	function testIntegration1() {
 		$DB = getNewTestDB();
 		addCountriesToTestDB();
@@ -74,7 +74,6 @@ class AreaHistoryTest extends \PHPUnit_Framework_TestCase {
 		
 		## Now load and check
 		$historyRepo = new HistoryRepositoryBuilder();
-		$historyRepo->setArea($area);
 		$historyRepo->setIncludeEventHistory(false);
 		$historyRepo->setIncludeVenueHistory(false);
 		$historyRepo->setIncludeGroupHistory(false);
@@ -99,7 +98,7 @@ class AreaHistoryTest extends \PHPUnit_Framework_TestCase {
 
 				
 		
-	}  **/
+	}
 	
 	function testSetChangedFlagsFromNothing1() {
 		$areaHistory = new AreaHistoryModel();

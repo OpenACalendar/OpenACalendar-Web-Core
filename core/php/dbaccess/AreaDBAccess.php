@@ -34,43 +34,79 @@ class AreaDBAccess {
 		$this->useragent = $useragent;
 	}
 
+	protected $possibleFields = array('title','description','parent_area_id','is_duplicate_of_id','is_deleted','country_id');
 
 	public function update(AreaModel $area, $fields, UserAccountModel $user = null ) {
 		$alreadyInTransaction = $this->db->inTransaction();
+
+		// Make Information Data
+		$fieldsSQL1 = array();
+		$fieldsParams1 = array( 'id'=>$area->getId() );
+		foreach($fields as $field) {
+			$fieldsSQL1[] = " ".$field."=:".$field." ";
+			if ($field == 'title') {
+				$fieldsParams1['title'] = $area->getTitle();
+			} else if ($field == 'description') {
+				$fieldsParams1['description'] = $area->getDescription();
+			} else if ($field == 'parent_area_id') {
+				$fieldsParams1['parent_area_id'] = $area->getParentAreaId();
+			} else if ($field == 'country_id') {
+				$fieldsParams1['country_id'] = $area->getCountryId();
+			} else if ($field == 'is_duplicate_of_id') {
+				$fieldsParams1['is_duplicate_of_id'] = $area->getIsDuplicateOfId();
+			} else if ($field == 'is_deleted') {
+				$fieldsParams1['is_deleted'] = ($area->getIsDeleted()?1:0);
+			}
+		}
+
+		// Make History Data
+		$fieldsSQL2 = array('area_id','user_account_id','created_at','approved_at');
+		$fieldsSQLParams2 = array(':area_id',':user_account_id',':created_at',':approved_at');
+		$fieldsParams2 = array(
+			'area_id'=>$area->getId(),
+			'user_account_id'=>($user ? $user->getId() : null),
+			'created_at'=>$this->timesource->getFormattedForDataBase(),
+			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+		);
+		foreach($this->possibleFields as $field) {
+			if (in_array($field, $fields)) {
+				$fieldsSQL2[] = " ".$field." ";
+				$fieldsSQLParams2[] = " :".$field." ";
+				if ($field == 'title') {
+					$fieldsParams2['title'] = $area->getTitle();
+				} else if ($field == 'description') {
+					$fieldsParams2['description'] = $area->getDescription();
+				} else if ($field == 'country_id') {
+					$fieldsParams2['country_id'] = $area->getCountryId();
+				} else if ($field == 'parent_area_id') {
+					$fieldsParams2['parent_area_id'] = $area->getParentAreaId();
+				} else if ($field == 'is_duplicate_of_id') {
+					$fieldsParams2['is_duplicate_of_id'] = $area->getIsDuplicateOfId();
+				} else if ($field == 'is_deleted') {
+					$fieldsParams2['is_deleted'] = ($area->getIsDeleted()?1:0);
+				}
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " 0 ";
+			} else {
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " -2 ";
+			}
+		}
+
+
 
 		try {
 			if (!$alreadyInTransaction) {
 				$this->db->beginTransaction();
 			}
 
-			$stat = $this->db->prepare("UPDATE area_information  SET ".
-					"title=:title,description=:description,parent_area_id=:parent_area_id, is_deleted=:is_deleted, is_duplicate_of_id=:is_duplicate_of_id ".
-					"WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$area->getId(),
-					'title'=>$area->getTitle(),
-					'description'=>$area->getDescription(),
-					'parent_area_id'=>$area->getParentAreaId(),
-					'is_duplicate_of_id'=>$area->getIsDuplicateOfId(),
-					'is_deleted'=>$area->getIsDeleted()?1:0,
-				));
+			// Information SQL
+			$stat = $this->db->prepare("UPDATE area_information  SET ".implode(",", $fieldsSQL1)." WHERE id=:id");
+			$stat->execute($fieldsParams1);
 
-			$stat = $this->db->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, api2_application_id,is_duplicate_of_id,is_deleted) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at, :approved_at, :api2_application_id, :is_duplicate_of_id,:is_deleted)");
-			$stat->execute(array(
-					'area_id'=>$area->getId(),
-					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$area->getDescription(),
-					'country_id'=>$area->getCountryId(),
-					'parent_area_id'=>$area->getParentAreaId(),
-					'user_account_id'=>$user->getId(),
-					'api2_application_id'=>($this->useragent && $this->useragent->hasApi2ApplicationId() ? $this->useragent->getApi2ApplicationId() : null),
-					'created_at'=>$this->timesource->getFormattedForDataBase(),
-					'approved_at'=>$this->timesource->getFormattedForDataBase(),
-					'is_duplicate_of_id'=>$area->getIsDuplicateOfId(),
-					'is_deleted'=>$area->getIsDeleted()?1:0,
-				));
-
+			// History SQL
+			$stat = $this->db->prepare("INSERT INTO area_history (".implode(",",$fieldsSQL2).") VALUES (".implode(",",$fieldsSQLParams2).")");
+			$stat->execute($fieldsParams2);
 
 			if (!$alreadyInTransaction) {
 				$this->db->commit();
