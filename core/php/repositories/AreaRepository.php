@@ -45,8 +45,8 @@ class AreaRepository {
 			
 			if ($parentArea) $area->setParentAreaId($parentArea->getId());
 			
-			$stat = $DB->prepare("INSERT INTO area_information (site_id, slug, title,description,country_id,parent_area_id,created_at,approved_at,cache_area_has_parent_generated) ".
-					"VALUES (:site_id, :slug, :title,:description,:country_id,:parent_area_id,:created_at,:approved_at,:cache_area_has_parent_generated) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO area_information (site_id, slug, title,description,country_id,parent_area_id,created_at,approved_at,cache_area_has_parent_generated, is_deleted) ".
+					"VALUES (:site_id, :slug, :title,:description,:country_id,:parent_area_id,:created_at,:approved_at,:cache_area_has_parent_generated, '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$area->getSlug(),
@@ -61,8 +61,8 @@ class AreaRepository {
 			$data = $stat->fetch();
 			$area->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_new) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at,'1')");
+			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_new, is_deleted) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at,'1','0')");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

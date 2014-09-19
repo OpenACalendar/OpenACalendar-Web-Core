@@ -39,8 +39,8 @@ class TagRepository {
 			$data = $stat->fetch();
 			$tag->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO tag_information (site_id, slug, title,description,created_at,approved_at) ".
-					"VALUES (:site_id, :slug, :title, :description, :created_at,:approved_at) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO tag_information (site_id, slug, title,description,created_at,approved_at, is_deleted) ".
+					"VALUES (:site_id, :slug, :title, :description, :created_at,:approved_at, '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$tag->getSlug(),
@@ -52,8 +52,8 @@ class TagRepository {
 			$data = $stat->fetch();
 			$tag->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_new) VALUES ".
-					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1')");
+			$stat = $DB->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_new, is_deleted) VALUES ".
+					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1', '0')");
 			$stat->execute(array(
 					'tag_id'=>$tag->getId(),
 					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

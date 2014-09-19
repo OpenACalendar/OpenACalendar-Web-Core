@@ -45,9 +45,9 @@ class VenueRepository {
 			$venue->setSlug($data['c'] + 1);
 			
 			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, title,".
-					"description,lat,lng,country_id,area_id,created_at,approved_at,address,address_code) ".
+					"description,lat,lng,country_id,area_id,created_at,approved_at,address,address_code, is_deleted) ".
 					"VALUES (:site_id, :slug, :title, ".
-					":description, :lat, :lng,:country_id, :area_id,:created_at,:approved_at,:address,:address_code) RETURNING id");
+					":description, :lat, :lng,:country_id, :area_id,:created_at,:approved_at,:address,:address_code, '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$venue->getSlug(),
@@ -65,8 +65,8 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new) VALUES ".
-					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1')");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new, is_deleted) VALUES ".
+					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1', '0')");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

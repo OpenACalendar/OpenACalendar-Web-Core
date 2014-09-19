@@ -48,10 +48,10 @@ class EventRepository {
 
 			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, summary,description,start_at,end_at,".
 				" created_at, event_recur_set_id,venue_id,country_id,timezone, ".
-				" url, ticket_url, is_physical, is_virtual, area_id, approved_at) ".
+				" url, ticket_url, is_physical, is_virtual, area_id, approved_at, is_deleted, is_cancelled) ".
 					" VALUES (:site_id, :slug, :summary, :description, :start_at, :end_at, ".
 						" :created_at, :event_recur_set_id,:venue_id,:country_id,:timezone, ".
-						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at) RETURNING id");
+						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at, '0', '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$event->getSlug(),
@@ -76,10 +76,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
 				" user_account_id  , created_at,venue_id,country_id,timezone,".
-				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at) VALUES ".
+				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at, is_deleted, is_cancelled) VALUES ".
 					" (:event_id, :summary, :description, :start_at, :end_at, ".
 						" :user_account_id  , :created_at,:venue_id,:country_id,:timezone,".
-						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, '1', :approved_at)");
+						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, '1', :approved_at, '0', '0')");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
