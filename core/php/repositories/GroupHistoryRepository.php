@@ -16,46 +16,67 @@ use models\GroupHistoryModel;
 class GroupHistoryRepository {
 
 	
-	public function ensureChangedFlagsAreSet(GroupHistoryModel $grouphistory) {
+	public function ensureChangedFlagsAreSet(GroupHistoryModel $groupHistory) {
 		global $DB;
 		
 		// do we already have them?
-		if (!$grouphistory->isAnyChangeFlagsUnknown()) return;
+		if (!$groupHistory->isAnyChangeFlagsUnknown()) return;
 		
 		// load last.
 		$stat = $DB->prepare("SELECT * FROM group_history WHERE group_id = :id AND created_at < :at ".
 				"ORDER BY created_at DESC LIMIT 1");
-		$stat->execute(array('id'=>$grouphistory->getId(),'at'=>$grouphistory->getCreatedAt()->format("Y-m-d H:i:s")));
+		$stat->execute(array('id'=>$groupHistory->getId(),'at'=>$groupHistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
 		
 		if ($stat->rowCount() == 0) {
-			$grouphistory->setChangedFlagsFromNothing();
+			$groupHistory->setChangedFlagsFromNothing();
 		} else {
-			$lastHistory = new GroupHistoryModel();
-			$lastHistory->setFromDataBaseRow($stat->fetch());
-			$grouphistory->setChangedFlagsFromLast($lastHistory);
+			while($groupHistory->isAnyChangeFlagsUnknown() && $lastHistoryData = $stat->fetch()) {
+				$lastHistory = new GroupHistoryModel();
+				$lastHistory->setFromDataBaseRow($lastHistoryData);
+				$groupHistory->setChangedFlagsFromLast($lastHistory);
+			}
 		}
-		
+
+
+		// Save back to DB
+		$sqlFields = array();
+		$sqlParams = array(
+			'id'=>$groupHistory->getId(),
+			'created_at'=>$groupHistory->getCreatedAt()->format("Y-m-d H:i:s"),
+			'is_new'=>$groupHistory->getIsNew()?1:0,
+		);
+
+		if ($groupHistory->getTitleChangedKnown()) {
+			$sqlFields[] = " title_changed = :title_changed ";
+			$sqlParams['title_changed'] = $groupHistory->getTitleChanged() ? 1 : -1;
+		}
+		if ($groupHistory->getDescriptionChangedKnown()) {
+			$sqlFields[] = " description_changed = :description_changed ";
+			$sqlParams['description_changed'] = $groupHistory->getDescriptionChanged() ? 1 : -1;
+		}
+		if ($groupHistory->getUrlChangedKnown()) {
+			$sqlFields[] = " url_changed = :url_changed ";
+			$sqlParams['url_changed'] = $groupHistory->getUrlChanged() ? 1 : -1;
+		}
+		if ($groupHistory->getTwitterUsernameChangedKnown()) {
+			$sqlFields[] = " twitter_username_changed = :twitter_username_changed ";
+			$sqlParams['twitter_username_changed'] = $groupHistory->getTwitterUsernameChanged() ? 1 : -1;
+		}
+		if ($groupHistory->getIsDuplicateOfIdChangedKnown()) {
+			$sqlFields[] = " is_duplicate_of_id_changed  = :is_duplicate_of_id_changed ";
+			$sqlParams['is_duplicate_of_id_changed'] = $groupHistory->getIsDuplicateOfIdChangedKnown() ? 1 : -1;
+		}
+		if ($groupHistory->getIsDeletedChangedKnown()) {
+			$sqlFields[] = " is_deleted_changed = :is_deleted_changed ";
+			$sqlParams['is_deleted_changed'] = $groupHistory->getIsDeletedChanged() ? 1 : -1;
+		}
+
 		$statUpdate = $DB->prepare("UPDATE group_history SET ".
-				" is_new = :is_new, ".
-				" title_changed = :title_changed,  ".
-				" description_changed = :description_changed,  ".
-				" url_changed = :url_changed,  ".
-				" twitter_username_changed = :twitter_username_changed,  ".
-				" is_duplicate_of_id_changed = :is_duplicate_of_id_changed, ".
-				" is_deleted_changed = :is_deleted_changed  ".
-				"WHERE group_id = :id AND created_at = :created_at");
-		$statUpdate->execute(array(
-				'id'=>$grouphistory->getId(),
-				'created_at'=>$grouphistory->getCreatedAt()->format("Y-m-d H:i:s"),
-				'is_new'=>$grouphistory->getIsNew()?1:0,
-				'title_changed'=> $grouphistory->getTitleChanged() ? 1 : -1,
-				'description_changed'=> $grouphistory->getDescriptionChanged() ? 1 : -1,
-				'url_changed'=> $grouphistory->getUrlChanged() ? 1 : -1,
-				'twitter_username_changed'=> $grouphistory->getTwitterUsernameChanged() ? 1 : -1,
-				'is_deleted_changed'=> $grouphistory->getIsDeletedChanged() ? 1 : -1,
-				'is_duplicate_of_id_changed' => $grouphistory->getIsDuplicateOfIdChanged() ? 1:-1,
-			));
+			" is_new = :is_new, ".
+			implode(" , ",$sqlFields).
+			" WHERE group_id = :id AND created_at = :created_at");
+		$statUpdate->execute($sqlParams);
 	}
 	
 }

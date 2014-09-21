@@ -102,37 +102,73 @@ class GroupHistoryModel extends GroupModel {
 	}
 	
 	public function setChangedFlagsFromLast(GroupHistoryModel $last) {
-		$this->title_changed  = ($this->title  != $last->title  )? 1 : -1;
-		$this->description_changed  = ($this->description  != $last->description  )? 1 : -1;
-		$this->url_changed  = ($this->url  != $last->url  )? 1 : -1;
-		$this->twitter_username_changed  = ($this->twitter_username  != $last->twitter_username  )? 1 : -1;
-		$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
-		$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
+		if ($this->title_changed == 0 && $last->title_changed != -2) {
+			$this->title_changed  = ($this->title  != $last->title  )? 1 : -1;
+		}
+		if ($this->description_changed == 0 && $last->description_changed != -2) {
+			$this->description_changed  = ($this->description  != $last->description  )? 1 : -1;
+		}
+		if ($this->url_changed == 0 && $last->url_changed != -2) {
+			$this->url_changed  = ($this->url  != $last->url  )? 1 : -1;
+		}
+		if ($this->twitter_username_changed == 0 && $last->twitter_username_changed != -2) {
+			$this->twitter_username_changed  = ($this->twitter_username  != $last->twitter_username  )? 1 : -1;
+		}
+		if ($this->is_deleted_changed == 0 && $last->is_deleted_changed != -2) {
+			$this->is_deleted_changed  = ($this->is_deleted  != $last->is_deleted  )? 1 : -1;
+		}
+		if ($this->is_duplicate_of_id_changed == 0 && $last->is_duplicate_of_id_changed != -2) {
+			$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
+		}
 		$this->is_new = 0;
 	}
 	
 	public function getTitleChanged() {
-		return ($this->title_changed != -1);
+		return ($this->title_changed > -1);
+	}
+
+	public function getTitleChangedKnown() {
+		return ($this->title_changed > -2);
 	}
 
 	public function getDescriptionChanged() {
-		return ($this->description_changed != -1);
+		return ($this->description_changed > -1);
+	}
+
+	public function getDescriptionChangedKnown() {
+		return ($this->description_changed > -2);
 	}
 
 	public function getUrlChanged() {
-		return ($this->url_changed != -1);
+		return ($this->url_changed > -1);
+	}
+
+	public function getUrlChangedKnown() {
+		return ($this->url_changed > -2);
 	}
 
 	public function getTwitterUsernameChanged() {
-		return ($this->twitter_username_changed != -1);
+		return ($this->twitter_username_changed > -1);
+	}
+
+	public function getTwitterUsernameChangedKnown() {
+		return ($this->twitter_username_changed > -2);
 	}
 
 	public function getIsDeletedChanged() {
-		return ($this->is_deleted_changed != -1);
+		return ($this->is_deleted_changed > -1);
+	}
+
+	public function getIsDeletedChangedKnown() {
+		return ($this->is_deleted_changed > -2);
 	}
 
 	public function getIsDuplicateOfIdChanged() {
-		return ($this->is_duplicate_of_id_changed != -1);
+		return ($this->is_duplicate_of_id_changed > -1);
+	}
+
+	public function getIsDuplicateOfIdChangedKnown() {
+		return ($this->is_duplicate_of_id_changed > -2);
 	}
 
 	public function getIsNew() {
