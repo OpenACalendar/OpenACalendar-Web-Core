@@ -154,7 +154,16 @@ class AreaModel {
 	public function getCachedFutureEvents() {
 		return $this->cached_future_events;
 	}
-	
+
+	/**
+	 * @param mixed $cached_future_events
+	 */
+	public function setCachedFutureEvents($cached_future_events)
+	{
+		$this->cached_future_events = $cached_future_events;
+	}
+
+
 	
 	public function getCachedMinLat() {
 		return $this->cached_min_lat;

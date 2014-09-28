@@ -286,7 +286,8 @@ class AreaRepository {
 		$count = count($erb->fetchAll());
 
 		$statUpdate->execute(array('count'=>$count,'id'=>$area->getId()));
-		
+
+		$area->setCachedFutureEvents($count);
 	}
 
 	public function updateBoundsCache(AreaModel $area) {
