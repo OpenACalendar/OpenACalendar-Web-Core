@@ -42,6 +42,7 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  *
  * ListChildAreas=true
  * ListChildAreasIntro=Browse events in:
+ * ListChildAreasWithNoEvents=true
  *
  * By using different environments and different headers in the ini file you can 
  * do stuff like sending a test email to yourself before sending the real email 
@@ -124,16 +125,24 @@ $calData = $calendar->getData();
 
 
 $childAreas = array();
-if ($thisconfig->getBoolean('ListChildAreas')) {
+if ($thisconfig->getBoolean('ListChildAreas', false)) {
 	$areaRepoBuilder = new \repositories\builders\AreaRepositoryBuilder();
 	$areaRepoBuilder->setSite($site);
 	$areaRepoBuilder->setIncludeDeleted(false);
+
 	if ($area) {
 		$areaRepoBuilder->setParentArea($area);
 	} else {
 		$areaRepoBuilder->setNoParentArea(true);
 	}
-	$childAreas = $areaRepoBuilder->fetchAll();
+	$childAreas = array();
+	$areaRepository = new AreaRepository();
+	foreach($areaRepoBuilder->fetchAll() as $area) {
+		$areaRepository->updateFutureEventsCache($area);
+		if ($thisconfig->getBoolean('ListChildAreasWithNoEvents', false) || $area->getCachedFutureEvents() > 0) {
+			$childAreas[] = $area;
+		}
+	}
 }
 
 // ######################################################### Build Email Content, show user.

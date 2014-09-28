@@ -39,16 +39,17 @@ class IniConfigWithEnvironment {
 			return isset($this->data['Common'][$key]) && $this->data['Common'][$key];
 		}
 	}
-	function get($key) {
+	function get($key, $default=null) {
 		if (isset($this->data['Environment'.$this->environment][$key])) {
 			return $this->data['Environment'.$this->environment][$key];
 		} 
 		if (isset($this->data['Common'][$key])) {
 			return $this->data['Common'][$key];
-		} 
+		}
+		return $default;
 	}
-	function getBoolean($key) {
-		$val = $this->get($key);
+	function getBoolean($key, $default="false") {
+		$val = $this->get($key, $default);
 		return in_array(strtolower(trim($val)), array("true","yes","1"));
 	}
 }
