@@ -237,6 +237,7 @@ class AreaRepository {
 		$erb = new EventRepositoryBuilder();
 		$erb->setArea($area);
 		$erb->setIncludeDeleted(false);
+		$erb->setIncludeCancelled(false);
 		$erb->setAfterNow();
 		$count = count($erb->fetchAll());
 

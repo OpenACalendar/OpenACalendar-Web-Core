@@ -185,6 +185,12 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	public function setIncludeDeleted($value) {
 		$this->include_deleted = $value;
 	}
+
+	protected $include_cancelled = true;
+
+	public function setIncludeCancelled($value) {
+		$this->include_cancelled = $value;
+	}
 	
 	protected $include_venue_information= false;
 
@@ -338,6 +344,10 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		
 		if (!$this->include_deleted) {
 			$this->where[] = " event_information.is_deleted = '0' ";
+		}
+
+		if (!$this->include_cancelled) {
+			$this->where[] = " event_information.is_cancelled = '0' ";
 		}
 		
 		if (!$this->include_imported) {
