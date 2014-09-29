@@ -14,7 +14,7 @@
 			{{ listChildAreasIntro }}
 			{% for area in childAreas %}
 				<span style="">
-					<span style="background: url('{{ config.getWebSiteDomainSecure(currentSite.slug) }}/theme/default/img/areaBackground.png') no-repeat {{ themeVariables.colourDarker2 }}; padding: 3px 3px 3px 20px; white-space: nowrap; -webkit-border-radius: 3px; border-radius: 3px;">
+					<span style="background-image: url('{{ config.getWebSiteDomainSecure(currentSite.slug) }}/theme/default/img/areaBackground.png'); background-repeat: no-repeat; background-color: {{ themeVariables.colourDarker2 }}; padding: 3px 3px 3px 20px; white-space: nowrap; -webkit-border-radius: 3px; border-radius: 3px;">
 						<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{area.slugForUrl}}/?mytimezone={{ currentTimeZone }}" style="color: white; text-decoration: none;">{{  area.title }}</a>
 					</span>
 					<span>&nbsp;</span>
