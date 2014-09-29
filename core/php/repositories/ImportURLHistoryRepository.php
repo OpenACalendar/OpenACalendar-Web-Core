@@ -44,29 +44,52 @@ class ImportURLHistoryRepository {
 		if ($stat->rowCount() == 0) {
 			$importurlhistory->setChangedFlagsFromNothing();
 		} else {
-			$lastHistory = new ImportURLHistoryModel();
-			$lastHistory->setFromDataBaseRow($stat->fetch());
-			$importurlhistory->setChangedFlagsFromLast($lastHistory);
+			while($importurlhistory->isAnyChangeFlagsUnknown() && $lastHistoryData = $stat->fetch()) {
+				$lastHistory = new ImportURLHistoryModel();
+				$lastHistory->setFromDataBaseRow($lastHistoryData);
+				$importurlhistory->setChangedFlagsFromLast($lastHistory);
+			}
 		}
-		
+
+		// Save back to DB
+		$sqlFields = array();
+		$sqlParams = array(
+			'id'=>$importurlhistory->getId(),
+			'created_at'=>$importurlhistory->getCreatedAt()->format("Y-m-d H:i:s"),
+			'is_new'=>$importurlhistory->getIsNew()?1:0,
+		);
+
+		if ($importurlhistory->getTitleChangedKnown()) {
+			$sqlFields[] = " title_changed = :title_changed ";
+			$sqlParams['title_changed'] = $importurlhistory->getTitleChanged() ? 1 : -1;
+		}
+		if ($importurlhistory->getAreaIdChangedKnown()) {
+			$sqlFields[] = " area_id_changed = :area_id_changed ";
+			$sqlParams['area_id_changed'] = $importurlhistory->getAreaIdChanged() ? 1 : -1;
+		}
+		if ($importurlhistory->getCountryIdChangedKnown()) {
+			$sqlFields[] = " country_id_changed = :country_id_changed ";
+			$sqlParams['country_id_changed'] = $importurlhistory->getCountryIdChanged() ? 1 : -1;
+		}
+		if ($importurlhistory->getIsEnabledChangedKnown()) {
+			$sqlFields[] = " is_enabled_changed = :is_enabled_changed ";
+			$sqlParams['is_enabled_changed'] = $importurlhistory->getIsEnabledChanged() ? 1 : -1;
+		}
+		if ($importurlhistory->getExpiredAtChangedKnown()) {
+			$sqlFields[] = " expired_at_changed  = :expired_at_changed ";
+			$sqlParams['expired_at_changed'] = $importurlhistory->getExpiredAtChanged() ? 1 : -1;
+		}
+		if ($importurlhistory->getGroupIdChangedKnown()) {
+			$sqlFields[] = " group_id_changed = :group_id_changed ";
+			$sqlParams['group_id_changed'] = $importurlhistory->getGroupIdChanged() ? 1 : -1;
+		}
+
 		$statUpdate = $DB->prepare("UPDATE import_url_history SET ".
-				" is_new = :is_new, ".
-				" title_changed = :title_changed   , ".
-				" is_enabled_changed = :is_enabled_changed   , ".
-				" expired_at_changed = :expired_at_changed   , ".
-				" area_id_changed = :area_id_changed   , ".
-				" country_id_changed = :country_id_changed    ".
-				"WHERE import_url_id = :id AND created_at = :created_at");
-		$statUpdate->execute(array(
-				'id'=>$importurlhistory->getId(),
-				'created_at'=>$importurlhistory->getCreatedAt()->format("Y-m-d H:i:s"),
-				'is_new'=>$importurlhistory->getIsNew()?1:0,
-				'title_changed'=> $importurlhistory->getTitleChanged() ? 1 : -1,
-				'is_enabled_changed'=> $importurlhistory->getIsEnabledChanged() ? 1 : -1,
-				'expired_at_changed'=> $importurlhistory->getExpiredAtChanged() ? 1 : -1,
-				'country_id_changed'=> $importurlhistory->getCountryIdChanged() ? 1 : -1,
-				'area_id_changed'=> $importurlhistory->getAreaIdChanged() ? 1 : -1,
-			));
+			" is_new = :is_new, ".
+			implode(" , ",$sqlFields).
+			" WHERE import_url_id = :id AND created_at = :created_at");
+		$statUpdate->execute($sqlParams);
+
 	}
 	
 	

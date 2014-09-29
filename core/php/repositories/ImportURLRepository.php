@@ -39,8 +39,8 @@ class ImportURLRepository {
 			$data = $stat->fetch();
 			$importURL->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id,area_id) ".
-					"VALUES (:site_id, :slug, :title,:url,:url_canonical, :created_at, :group_id,:is_enabled,:country_id,:area_id) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id,area_id, approved_at) ".
+					"VALUES (:site_id, :slug, :title,:url,:url_canonical, :created_at, :group_id,:is_enabled,:country_id,:area_id,:approved_at) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$importURL->getSlug(),
@@ -51,13 +51,14 @@ class ImportURLRepository {
 					'country_id'=>$importURL->getCountryId(),
 					'area_id'=>$importURL->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),		
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
 				));
 			$data = $stat->fetch();
 			$importURL->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id)");
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, approved_at) VALUES ".
+					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id, :approved_at)");
 			$stat->execute(array(
 					'curated_list_id'=>$importURL->getId(),
 					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -66,6 +67,7 @@ class ImportURLRepository {
 					'area_id'=>$importURL->getAreaId(),
 					'user_account_id'=>$creator->getId(),				
 					'created_at'=>\TimeSource::getFormattedForDataBase(),		
+					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
 				));
 			

@@ -35,39 +35,79 @@ class ImportURLDBAccess {
 	}
 
 
+	protected $possibleFields = array('country_id','area_id','title','is_enabled','expired_at','group_id');
+
 	public function update(ImportURLModel $importURL, $fields, UserAccountModel $user = null ) {
 		$alreadyInTransaction = $this->db->inTransaction();
+
+		// Make Information Data
+		$fieldsSQL1 = array();
+		$fieldsParams1 = array( 'id'=>$importURL->getId() );
+		foreach($fields as $field) {
+			$fieldsSQL1[] = " ".$field."=:".$field." ";
+			if ($field == 'title') {
+				$fieldsParams1['title'] = $importURL->getTitle();
+			} else if ($field == 'area_id') {
+				$fieldsParams1['area_id'] = $importURL->getAreaId();
+			} else if ($field == 'is_enabled') {
+				$fieldsParams1['is_enabled'] = $importURL->getIsEnabled() ? 1 : 0;
+			} else if ($field == 'country_id') {
+				$fieldsParams1['country_id'] = $importURL->getCountryId();
+			} else if ($field == 'expired_at') {
+				$fieldsParams1['expired_at'] = $importURL->getExpiredAt();
+			} else if ($field == 'group_id') {
+				$fieldsParams1['group_id'] = ($importURL->getGroupId());
+			}
+		}
+
+		// Make History Data
+		$fieldsSQL2 = array('import_url_id','user_account_id','created_at','approved_at');
+		$fieldsSQLParams2 = array(':import_url_id',':user_account_id',':created_at',':approved_at');
+		$fieldsParams2 = array(
+			'import_url_id'=>$importURL->getId(),
+			'user_account_id'=>($user ? $user->getId() : null),
+			'created_at'=>$this->timesource->getFormattedForDataBase(),
+			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+		);
+		foreach($this->possibleFields as $field) {
+			if (in_array($field, $fields)) {
+				$fieldsSQL2[] = " ".$field." ";
+				$fieldsSQLParams2[] = " :".$field." ";
+				if ($field == 'title') {
+					$fieldsParams2['title'] = $importURL->getTitle();
+				} else if ($field == 'area_id') {
+					$fieldsParams2['area_id'] = $importURL->getAreaId();
+				} else if ($field == 'country_id') {
+					$fieldsParams2['country_id'] = $importURL->getCountryId();
+				} else if ($field == 'group_id') {
+					$fieldsParams2['group_id'] = $importURL->getGroupId();
+				} else if ($field == 'expired_at') {
+					$fieldsParams2['expired_at'] = $importURL->getExpiredAt();
+				} else if ($field == 'is_enabled') {
+					$fieldsParams2['is_enabled'] = ($importURL->getIsEnabled()?1:0);
+				}
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " 0 ";
+			} else {
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " -2 ";
+			}
+		}
+
+
 
 		try {
 			if (!$alreadyInTransaction) {
 				$this->db->beginTransaction();
 			}
 
-			$stat = $this->db->prepare("UPDATE import_url_information  SET title=:title, country_id=:country_id, area_id=:area_id, is_enabled=:is_enabled, expired_at=:expired_at WHERE id=:id");
-			$stat->execute(array(
-				'id'=>$importURL->getId(),
-				'country_id'=>$importURL->getCountryId(),
-				'area_id'=>$importURL->getAreaId(),
-				'title'=>$importURL->getTitle(),
-				'is_enabled'=>$importURL->getIsEnabled()?1:0,
-				'expired_at'=>$importURL->getExpiredAt() ? $importURL->getExpiredAt()->format('Y-m-d H:i:s') : null,
-			));
+			// Information SQL
+			$stat = $this->db->prepare("UPDATE import_url_information  SET ".implode(",", $fieldsSQL1)." WHERE id=:id");
+			$stat->execute($fieldsParams1);
 
-			$stat = $this->db->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at, country_id, area_id) VALUES ".
-				"(:import_url_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at, :country_id, :area_id)");
-			$stat->execute(array(
-				'import_url_id'=>$importURL->getId(),
-				'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'group_id'=>$importURL->getGroupId(),
-				'country_id'=>$importURL->getCountryId(),
-				'area_id'=>$importURL->getAreaId(),
-				'user_account_id'=>$user->getId(),
-				'is_enabled'=>$importURL->getIsEnabled()?1:0,
-				'created_at'=>$this->timesource->getFormattedForDataBase(),
-				'expired_at'=>$importURL->getExpiredAt() ? $importURL->getExpiredAt()->format('Y-m-d H:i:s') : null,
-			));
-
-
+			// History SQL
+			$stat = $this->db->prepare("INSERT INTO import_url_history (".implode(",",$fieldsSQL2).") VALUES (".implode(",",$fieldsSQLParams2).")");
+			$stat->execute($fieldsParams2);
 
 			if (!$alreadyInTransaction) {
 				$this->db->commit();

@@ -26,6 +26,7 @@ class ImportURLHistoryModel extends ImportURLModel {
 	protected $expired_at_changed  = 0;
 	protected $country_id_changed  = 0;
 	protected $area_id_changed  = 0;
+	protected $group_id_changed  = 0;
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['import_url_id'];
@@ -34,6 +35,7 @@ class ImportURLHistoryModel extends ImportURLModel {
 		
 		$this->country_id = $data['country_id'];
 		$this->area_id = $data['area_id'];
+		$this->group_id = $data['group_id'];
 		$this->title = $data['title'];
 		$this->is_enabled = $data['is_enabled'];
 		$this->expired_at = $data['expired_at'] ? new \DateTime($data['expired_at'], $utc) : null;
@@ -43,7 +45,8 @@ class ImportURLHistoryModel extends ImportURLModel {
 		$this->expired_at_changed  = isset($data['expired_at_changed']) ? $data['expired_at_changed'] : 0;
 		$this->country_id_changed  = isset($data['country_id_changed']) ? $data['country_id_changed'] : 0;
 		$this->area_id_changed  = isset($data['area_id_changed']) ? $data['area_id_changed'] : 0;
-		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;	
+		$this->group_id_changed  = isset($data['group_id_changed']) ? $data['group_id_changed'] : 0;
+		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 		
 		$this->user_account_id = $data['user_account_id'];
 		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
@@ -57,6 +60,7 @@ class ImportURLHistoryModel extends ImportURLModel {
 			$this->is_enabled_changed == 0 ||
 			$this->expired_at_changed == 0 ||
 			$this->country_id_changed == 0 ||
+			$this->group_id_changed == 0 ||
 			$this->area_id_changed == 0;
 	}
 		
@@ -66,15 +70,29 @@ class ImportURLHistoryModel extends ImportURLModel {
 		$this->expired_at_changed = $this->expired_at ?  1 : -1;
 		$this->country_id_changed = $this->country_id ?  1 : -1;
 		$this->area_id_changed = $this->area_id ?  1 : -1;
+		$this->group_id_changed = $this->group_id ?  1 : -1;
 		$this->is_new = 1;
 	}	
 	
-	public function setChangedFlagsFromLast(ImportURLModel $last) {		
-		$this->title_changed  = ($this->title != $last->title  )? 1 : -1;
-		$this->is_enabled_changed  = ($this->is_enabled  != $last->is_enabled  )? 1 : -1;
-		$this->expired_at_changed  = ($this->expired_at  != $last->expired_at  )? 1 : -1;
-		$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
-		$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
+	public function setChangedFlagsFromLast(ImportURLModel $last) {
+		if ($this->title_changed == 0 && $last->title_changed != -2) {
+			$this->title_changed  = ($this->title != $last->title  )? 1 : -1;
+		}
+		if ($this->is_enabled_changed == 0 && $last->is_enabled_changed != -2) {
+			$this->is_enabled_changed  = ($this->is_enabled  != $last->is_enabled  )? 1 : -1;
+		}
+		if ($this->expired_at_changed == 0 && $last->expired_at_changed != -2) {
+			$this->expired_at_changed  = ($this->expired_at  != $last->expired_at  )? 1 : -1;
+		}
+		if ($this->country_id_changed == 0 && $last->country_id_changed != -2) {
+			$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
+		}
+		if ($this->area_id_changed == 0 && $last->area_id_changed != -2) {
+			$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
+		}
+		if ($this->group_id_changed == 0 && $last->group_id_changed != -2) {
+			$this->group_id_changed  = ($this->group_id  != $last->group_id  )? 1 : -1;
+		}
 		$this->is_new = 0;
 	}
 	
@@ -89,25 +107,53 @@ class ImportURLHistoryModel extends ImportURLModel {
 	}
 	
 	public function getTitleChanged() {
-		return ($this->title_changed != -1);
+		return ($this->title_changed > -1);
+	}
+
+	public function getTitleChangedKnown() {
+		return ($this->title_changed > -2);
 	}
 
 	public function getIsEnabledChanged() {
-		return ($this->is_enabled_changed != -1);
+		return ($this->is_enabled_changed > -1);
+	}
+
+	public function getIsEnabledChangedKnown() {
+		return ($this->is_enabled_changed > -2);
 	}
 
 	public function getExpiredAtChanged() {
-		return ($this->expired_at_changed != -1);
+		return ($this->expired_at_changed > -1);
+	}
+
+	public function getExpiredAtChangedKnown() {
+		return ($this->expired_at_changed > -2);
 	}
 
 	public function getCountryIdChanged() {
-		return ($this->country_id_changed != -1);
+		return ($this->country_id_changed > -1);
 	}
 	
+	public function getCountryIdChangedKnown() {
+		return ($this->country_id_changed > -2);
+	}
+
 	public function getAreaIdChanged() {
-		return ($this->area_id_changed != -1);
+		return ($this->area_id_changed > -1);
 	}
 	
+	public function getAreaIdChangedKnown() {
+		return ($this->area_id_changed > -2);
+	}
+
+	public function getGroupIdChanged() {
+		return ($this->group_id_changed > -1);
+	}
+
+	public function getGroupIdChangedKnown() {
+		return ($this->group_id_changed > -2);
+	}
+
 	public function getIsNew() {
 		return $this->is_new;
 	}
