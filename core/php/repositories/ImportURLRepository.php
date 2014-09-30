@@ -134,18 +134,21 @@ class ImportURLRepository {
 			$stat->execute(array(
 					'id'=>$importURL->getId(),
 				));
-			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at)");
+
+
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at, country_id, area_id) VALUES ".
+				"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at, :country_id, :area_id)");
 			$stat->execute(array(
-					'curated_list_id'=>$importURL->getId(),
-					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'group_id'=>$importURL->getGroupId(),
-					'user_account_id'=>$creator->getId(),				
-					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'expired_at'=> null,
-				));
+				'curated_list_id'=>$importURL->getId(),
+				'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'group_id'=>$importURL->getGroupId(),
+				'country_id'=>$importURL->getCountryId(),
+				'area_id'=>$importURL->getAreaId(),
+				'user_account_id'=>$creator->getId(),
+				'is_enabled'=>$importURL->getIsEnabled()?1:0,
+				'created_at'=>\TimeSource::getFormattedForDataBase(),
+				'expired_at'=>$importURL->getExpiredAt() ? $importURL->getExpiredAt()->format('Y-m-d H:i:s') : null,
+			));
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -165,18 +168,21 @@ class ImportURLRepository {
 			$stat->execute(array(
 					'id'=>$importURL->getId(),
 				));
-			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at) VALUES ".
-					"(:curated_list_id, :title,  :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at)");
+
+
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at, country_id, area_id) VALUES ".
+				"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at, :country_id, :area_id)");
 			$stat->execute(array(
-					'curated_list_id'=>$importURL->getId(),
-					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'group_id'=>$importURL->getGroupId(),
-					'user_account_id'=>$creator->getId(),			
-					'expired_at'=>null,
-					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-				));
+				'curated_list_id'=>$importURL->getId(),
+				'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'group_id'=>$importURL->getGroupId(),
+				'country_id'=>$importURL->getCountryId(),
+				'area_id'=>$importURL->getAreaId(),
+				'user_account_id'=>$creator->getId(),
+				'is_enabled'=>$importURL->getIsEnabled()?1:0,
+				'created_at'=>\TimeSource::getFormattedForDataBase(),
+				'expired_at'=>$importURL->getExpiredAt() ? $importURL->getExpiredAt()->format('Y-m-d H:i:s') : null,
+			));
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -213,18 +219,20 @@ class ImportURLRepository {
 					'id'=>$importURL->getId(),
 					'expired_at'=>\TimeSource::getFormattedForDataBase(),
 				));
-			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at)");
+
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id, is_enabled, expired_at, country_id, area_id) VALUES ".
+				"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id, :is_enabled, :expired_at, :country_id, :area_id)");
 			$stat->execute(array(
-					'curated_list_id'=>$importURL->getId(),
-					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'group_id'=>$importURL->getGroupId(),
-					'user_account_id'=>null,			
-					'expired_at'=>\TimeSource::getFormattedForDataBase(),
-					'is_enabled'=>$importURL->getIsEnabled()?1:0,				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-				));
+				'curated_list_id'=>$importURL->getId(),
+				'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'group_id'=>$importURL->getGroupId(),
+				'country_id'=>$importURL->getCountryId(),
+				'area_id'=>$importURL->getAreaId(),
+				'user_account_id'=>null,
+				'is_enabled'=>$importURL->getIsEnabled()?1:0,
+				'created_at'=>\TimeSource::getFormattedForDataBase(),
+				'expired_at'=>$importURL->getExpiredAt() ? $importURL->getExpiredAt()->format('Y-m-d H:i:s') : null,
+			));
 			
 			$DB->commit();
 		} catch (Exception $e) {
