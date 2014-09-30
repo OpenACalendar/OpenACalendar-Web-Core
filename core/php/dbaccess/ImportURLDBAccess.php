@@ -54,7 +54,7 @@ class ImportURLDBAccess {
 			} else if ($field == 'country_id') {
 				$fieldsParams1['country_id'] = $importURL->getCountryId();
 			} else if ($field == 'expired_at') {
-				$fieldsParams1['expired_at'] = $importURL->getExpiredAt();
+				$fieldsParams1['expired_at'] = $importURL->getExpiredAt() ? $importURL->getExpiredAt()->format("Y-m-d H:i:s") : null;
 			} else if ($field == 'group_id') {
 				$fieldsParams1['group_id'] = ($importURL->getGroupId());
 			}
@@ -82,7 +82,7 @@ class ImportURLDBAccess {
 				} else if ($field == 'group_id') {
 					$fieldsParams2['group_id'] = $importURL->getGroupId();
 				} else if ($field == 'expired_at') {
-					$fieldsParams2['expired_at'] = $importURL->getExpiredAt();
+					$fieldsParams2['expired_at'] = $importURL->getExpiredAt() ? $importURL->getExpiredAt()->format("Y-m-d H:i:s") : null;
 				} else if ($field == 'is_enabled') {
 					$fieldsParams2['is_enabled'] = ($importURL->getIsEnabled()?1:0);
 				}

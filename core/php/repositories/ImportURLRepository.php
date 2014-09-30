@@ -174,7 +174,7 @@ class ImportURLRepository {
 			$importURL->setExpiredAt(\TimeSource::getDateTime());
 
 
-			$this->importURLDBAccess->update($importURL, array('expired_at'), $user);
+			$this->importURLDBAccess->update($importURL, array('expired_at'), null);
 
 			$DB->commit();
 		} catch (Exception $e) {
