@@ -25,7 +25,15 @@ class ImportURLExpiredUserNotificationModel extends \BaseUserNotificationModel {
 	function setImportURL(ImportURLModel $importURL) {
 		$this->data['importurl'] = $importURL->getId();
 	}
-	
+
+
+	function setGroup(GroupModel $group) {
+		$this->data['group'] = $group->getId();
+	}
+
+	/** @var GroupModel  **/
+	var $group;
+
 	/** @var ImportURLModel  **/
 	var $importURL;
 	
@@ -38,7 +46,8 @@ class ImportURLExpiredUserNotificationModel extends \BaseUserNotificationModel {
 	
 	public function getNotificationText() {
 		$this->loadImportURLIfNeeded();
-		return "An Importer has expired: ".$this->importURL->getTitle();
+		// Checking $this->importURL exists is related to #261 - bad data might exist that doesn't have this set
+		return "An Importer has expired: ".($this->importURL ? $this->importURL->getTitle() : null);
 	}
 	
 	public function getNotificationURL() {

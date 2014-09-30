@@ -80,6 +80,7 @@ class RunImportURLsTask {
 						/// Notification Class 
 						$userNotification = $userNotificationType->getNewNotification($user, $site);
 						$userNotification->setImportURL($importURL);
+						$userNotification->setGroup($group);
 
 						////// Save Notification Class
 						$userNotificationRepo->create($userNotification);
@@ -130,6 +131,7 @@ class RunImportURLsTask {
 					if ($userWatchesGroup->getIsWatching()) {
 						/// Notification Class
 						$userNotification = $userNotificationType->getNewNotification($user, $site);
+						$userNotification->setImportURL($importURL);
 						$userNotification->setGroup($group);
 
 						////// Save Notification Class
