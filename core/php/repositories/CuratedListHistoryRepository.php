@@ -37,32 +37,49 @@ class CuratedListHistoryRepository {
 		
 		// load last.
 		$stat = $DB->prepare("SELECT * FROM curated_list_history WHERE curated_list_id = :id AND created_at < :at ".
-				"ORDER BY created_at DESC LIMIT 1");
+				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$curatedlisthistory->getId(),'at'=>$curatedlisthistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
 		
 		if ($stat->rowCount() == 0) {
 			$curatedlisthistory->setChangedFlagsFromNothing();
 		} else {
-			$lastHistory = new CuratedListHistoryModel();
-			$lastHistory->setFromDataBaseRow($stat->fetch());
-			$curatedlisthistory->setChangedFlagsFromLast($lastHistory);
+
+			while($curatedlisthistory->isAnyChangeFlagsUnknown() && $lastHistoryData = $stat->fetch()) {
+				$lastHistory = new CuratedListHistoryModel();
+				$lastHistory->setFromDataBaseRow($lastHistoryData);
+				$curatedlisthistory->setChangedFlagsFromLast($lastHistory);
+			}
 		}
-		
+
+
+		// Save back to DB
+		$sqlFields = array();
+		$sqlParams = array(
+			'id'=>$curatedlisthistory->getId(),
+			'created_at'=>$curatedlisthistory->getCreatedAt()->format("Y-m-d H:i:s"),
+			'is_new'=>$curatedlisthistory->getIsNew()?1:0,
+		);
+
+		if ($areaHistory->getTitleChangedKnown()) {
+			$sqlFields[] = " title_changed = :title_changed ";
+			$sqlParams['title_changed'] = $areaHistory->getTitleChanged() ? 1 : -1;
+		}
+		if ($areaHistory->getDescriptionChangedKnown()) {
+			$sqlFields[] = " description_changed = :description_changed ";
+			$sqlParams['description_changed'] = $areaHistory->getDescriptionChanged() ? 1 : -1;
+		}
+		if ($areaHistory->getIsDeletedChangedKnown()) {
+			$sqlFields[] = " is_deleted_changed = :is_deleted_changed ";
+			$sqlParams['is_deleted_changed'] = $areaHistory->getIsDeletedChanged() ? 1 : -1;
+		}
+
 		$statUpdate = $DB->prepare("UPDATE curated_list_history SET ".
-				" is_new = :is_new, ".
-				" title_changed = :title_changed   , ".
-				" description_changed = :description_changed   , ".
-				" is_deleted_changed = :is_deleted_changed    ".
-				"WHERE curated_list_id = :id AND created_at = :created_at");
-		$statUpdate->execute(array(
-				'id'=>$curatedlisthistory->getId(),
-				'created_at'=>$curatedlisthistory->getCreatedAt()->format("Y-m-d H:i:s"),
-				'is_new'=>$curatedlisthistory->getIsNew()?1:0,
-				'title_changed'=> $curatedlisthistory->getTitleChanged() ? 1 : -1,
-				'description_changed'=> $curatedlisthistory->getDescriptionChanged() ? 1 : -1,
-				'is_deleted_changed'=> $curatedlisthistory->getIsDeletedChanged() ? 1 : -1,
-			));
+			" is_new = :is_new, ".
+			implode(" , ",$sqlFields).
+			" WHERE area_id = :id AND created_at = :created_at");
+		$statUpdate->execute($sqlParams);
+
 	}
 
 	public function loadByEventAndlastEditByUser(CuratedListModel $curatedlist, UserAccountModel $user) {

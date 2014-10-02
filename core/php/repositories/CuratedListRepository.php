@@ -3,11 +3,13 @@
 
 namespace repositories;
 
+use models\CuratedListHistoryModel;
 use models\CuratedListModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use models\EventModel;
 use models\GroupModel;
+use dbaccess\CuratedListDBAccess;
 
 
 /**
@@ -20,7 +22,18 @@ use models\GroupModel;
  */
 class CuratedListRepository {
 	
-	
+
+	/** @var  \dbaccess\CuratedListBAccess */
+	protected $curatedListDBAccess;
+
+
+	function __construct()
+	{
+		global $DB, $USERAGENT;
+		$this->curatedListDBAccess = new CuratedListDBAccess($DB, new \TimeSource(), $USERAGENT);
+	}
+
+
 	
 	public function create(CuratedListModel $curatedList, SiteModel $site, UserAccountModel $creator) {
 		global $DB;
@@ -87,23 +100,8 @@ class CuratedListRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE curated_list_information  SET title=:title, description=:description WHERE id=:id");
-			$stat->execute(array(
-					'id'=>$curatedList->getId(),
-					'title'=>substr($curatedList->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$curatedList->getDescription(),
-				));
-			
-			$stat = $DB->prepare("INSERT INTO curated_list_history (curated_list_id, title, description, user_account_id  , created_at) VALUES ".
-					"(:curated_list_id, :title, :description, :user_account_id  , :created_at)");
-			$stat->execute(array(
-					'curated_list_id'=>$curatedList->getId(),
-					'title'=>substr($curatedList->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-					'description'=>$curatedList->getDescription(),
-					'user_account_id'=>$creator->getId(),				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-				));
-			
+			$this->curatedListDBAccess->update($curatedList, array('title','description'), $creator);
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
