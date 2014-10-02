@@ -37,7 +37,7 @@ class ImportURLHistoryRepository {
 		
 		// load last.
 		$stat = $DB->prepare("SELECT * FROM import_url_history WHERE import_url_id = :id AND created_at < :at ".
-				"ORDER BY created_at DESC LIMIT 1");
+				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$importurlhistory->getId(),'at'=>$importurlhistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
 		

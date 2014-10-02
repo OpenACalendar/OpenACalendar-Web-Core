@@ -24,7 +24,7 @@ class AreaHistoryRepository {
 		
 		// load last.
 		$stat = $DB->prepare("SELECT * FROM area_history WHERE area_id = :id AND created_at < :at ".
-				"ORDER BY created_at DESC LIMIT 1");
+				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$areaHistory->getId(),'at'=>$areaHistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
 		

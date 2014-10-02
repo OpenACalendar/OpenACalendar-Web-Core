@@ -24,7 +24,7 @@ class GroupHistoryRepository {
 		
 		// load last.
 		$stat = $DB->prepare("SELECT * FROM group_history WHERE group_id = :id AND created_at < :at ".
-				"ORDER BY created_at DESC LIMIT 1");
+				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$groupHistory->getId(),'at'=>$groupHistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
 		
