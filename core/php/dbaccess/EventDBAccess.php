@@ -47,7 +47,7 @@ class EventDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'summary') {
-				$fieldsParams1['summary'] = $event->getSummary();
+				$fieldsParams1['summary'] = substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'description') {
 				$fieldsParams1['description'] = $event->getDescription();
 			} else if ($field == 'start_at') {
@@ -61,11 +61,11 @@ class EventDBAccess {
 			} else if ($field == 'country_id') {
 				$fieldsParams1['country_id'] = $event->getCountryId();
 			} else if ($field == 'timezone') {
-				$fieldsParams1['timezone'] = $event->getTimezone();
+				$fieldsParams1['timezone'] = substr($event->getTimezone(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'url') {
-				$fieldsParams1['url'] = $event->getUrl();
+				$fieldsParams1['url'] = substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'ticket_url') {
-				$fieldsParams1['ticket_url'] = $event->getTicketUrl();
+				$fieldsParams1['ticket_url'] = substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'is_physical') {
 				$fieldsParams1['is_physical'] = $event->getIsPhysical() ? 1 : 0;
 			} else if ($field == 'is_virtual') {
@@ -93,7 +93,7 @@ class EventDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'summary') {
-					$fieldsParams2['summary'] = $event->getSummary();
+					$fieldsParams2['summary'] = substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'description') {
 					$fieldsParams2['description'] = $event->getDescription();
 				} else if ($field == 'start_at') {
@@ -107,11 +107,11 @@ class EventDBAccess {
 				} else if ($field == 'country_id') {
 					$fieldsParams2['country_id'] = $event->getCountryId();
 				} else if ($field == 'timezone') {
-					$fieldsParams2['timezone'] = $event->getTimezone();
+					$fieldsParams2['timezone'] = substr($event->getTimezone(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'url') {
-					$fieldsParams2['url'] = $event->getUrl();
+					$fieldsParams2['url'] = substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'ticket_url') {
-					$fieldsParams2['ticket_url'] = $event->getTicketUrl();
+					$fieldsParams2['ticket_url'] = substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'is_physical') {
 					$fieldsParams2['is_physical'] = $event->getIsPhysical() ? 1 : 0;
 				} else if ($field == 'is_virtual') {

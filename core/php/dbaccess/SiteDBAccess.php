@@ -57,11 +57,11 @@ class SiteDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {
-				$fieldsParams1['title'] = $site->getTitle();
+				$fieldsParams1['title'] = substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'slug') {
-				$fieldsParams1['slug'] = $site->getSlug();
+				$fieldsParams1['slug'] = substr($site->getSlug(),0,VARCHAR_COLUMN_LENGTH_USED);
 				$fieldsSQL1[] = " slug_canonical=:slug_canonical ";
-				$fieldsParams1['slug_canonical'] = SiteModel::makeCanonicalSlug($site->getSlug());
+				$fieldsParams1['slug_canonical'] = substr(SiteModel::makeCanonicalSlug($site->getSlug()),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'description_text') {
 				$fieldsParams1['description_text'] = $site->getDescriptionText();
 			} else if ($field == 'footer_text') {
@@ -112,12 +112,12 @@ class SiteDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
-					$fieldsParams2['title'] = $site->getTitle();
+					$fieldsParams2['title'] = substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'slug') {
-					$fieldsParams2['slug'] = $site->getSlug();
+					$fieldsParams2['slug'] = substr($site->getSlug(),0,VARCHAR_COLUMN_LENGTH_USED);
 					$fieldsSQL2[] = " slug_canonical  ";
 					$fieldsSQLParams2[] = " :slug_canonical  ";
-					$fieldsParams2['slug_canonical'] = SiteModel::makeCanonicalSlug($site->getSlug());
+					$fieldsParams2['slug_canonical'] = substr(SiteModel::makeCanonicalSlug($site->getSlug()),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'description_text') {
 					$fieldsParams2['description_text'] = $site->getDescriptionText();
 				} else if ($field == 'footer_text') {

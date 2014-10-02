@@ -45,7 +45,7 @@ class AreaDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {
-				$fieldsParams1['title'] = $area->getTitle();
+				$fieldsParams1['title'] = substr($area->getTitle(), 0, VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'description') {
 				$fieldsParams1['description'] = $area->getDescription();
 			} else if ($field == 'parent_area_id') {
@@ -73,7 +73,7 @@ class AreaDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
-					$fieldsParams2['title'] = $area->getTitle();
+					$fieldsParams2['title'] = substr($area->getTitle(), 0, VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'description') {
 					$fieldsParams2['description'] = $area->getDescription();
 				} else if ($field == 'country_id') {

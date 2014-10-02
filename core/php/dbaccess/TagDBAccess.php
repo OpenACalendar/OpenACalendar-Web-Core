@@ -43,7 +43,7 @@ class TagDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {
-				$fieldsParams1['title'] = $tag->getTitle();
+				$fieldsParams1['title'] = substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'description') {
 				$fieldsParams1['description'] = $tag->getDescription();
 			} else if ($field == 'is_deleted') {
@@ -65,7 +65,7 @@ class TagDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
-					$fieldsParams2['title'] = $tag->getTitle();
+					$fieldsParams2['title'] = substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'description') {
 					$fieldsParams2['description'] = $tag->getDescription();
 				} else if ($field == 'is_deleted') {

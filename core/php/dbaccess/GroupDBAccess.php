@@ -47,13 +47,13 @@ class GroupDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {
-				$fieldsParams1['title'] = $group->getTitle();
+				$fieldsParams1['title'] = substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'description') {
 				$fieldsParams1['description'] = $group->getDescription();
 			} else if ($field == 'url') {
-				$fieldsParams1['url'] = $group->getUrl();
+				$fieldsParams1['url'] = substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'twitter_username') {
-				$fieldsParams1['twitter_username'] = $group->getTwitterUsername();
+				$fieldsParams1['twitter_username'] = substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'is_duplicate_of_id') {
 				$fieldsParams1['is_duplicate_of_id'] = $group->getIsDuplicateOfId();
 			} else if ($field == 'is_deleted') {
@@ -75,13 +75,13 @@ class GroupDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
-					$fieldsParams2['title'] = $group->getTitle();
+					$fieldsParams2['title'] = substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'description') {
 					$fieldsParams2['description'] = $group->getDescription();
 				} else if ($field == 'url') {
-					$fieldsParams2['url'] = $group->getUrl();
+					$fieldsParams2['url'] = substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'twitter_username') {
-					$fieldsParams2['twitter_username'] = $group->getTwitterUsername();
+					$fieldsParams2['twitter_username'] = substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'is_duplicate_of_id') {
 					$fieldsParams2['is_duplicate_of_id'] = $group->getIsDuplicateOfId();
 				} else if ($field == 'is_deleted') {

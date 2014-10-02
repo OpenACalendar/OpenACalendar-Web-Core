@@ -43,7 +43,7 @@ class VenueDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {
-				$fieldsParams1['title'] = $venue->getTitle();
+				$fieldsParams1['title'] = substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'lat') {
 				$fieldsParams1['lat'] = $venue->getLat();
 			} else if ($field == 'lng') {
@@ -53,7 +53,7 @@ class VenueDBAccess {
 			} else if ($field == 'address') {
 				$fieldsParams1['address'] = $venue->getAddress();
 			} else if ($field == 'address_code') {
-				$fieldsParams1['address_code'] = $venue->getAddressCode();
+				$fieldsParams1['address_code'] = substr($venue->getAddressCode(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'country_id') {
 				$fieldsParams1['country_id'] = $venue->getCountryId();
 			} else if ($field == 'area_id') {
@@ -79,7 +79,7 @@ class VenueDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
-					$fieldsParams2['title'] = $venue->getTitle();
+					$fieldsParams2['title'] = substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'lat') {
 					$fieldsParams2['lat'] = $venue->getLat();
 				} else if ($field == 'lng') {
@@ -89,7 +89,7 @@ class VenueDBAccess {
 				} else if ($field == 'address') {
 					$fieldsParams2['address'] = $venue->getAddress();
 				} else if ($field == 'address_code') {
-					$fieldsParams2['address_code'] = $venue->getAddressCode();
+					$fieldsParams2['address_code'] = substr($venue->getAddressCode(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'country_id') {
 					$fieldsParams2['country_id'] = $venue->getCountryId();
 				} else if ($field == 'area_id') {

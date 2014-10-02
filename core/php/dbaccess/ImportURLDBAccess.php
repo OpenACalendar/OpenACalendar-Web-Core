@@ -46,7 +46,7 @@ class ImportURLDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {
-				$fieldsParams1['title'] = $importURL->getTitle();
+				$fieldsParams1['title'] = substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'area_id') {
 				$fieldsParams1['area_id'] = $importURL->getAreaId();
 			} else if ($field == 'is_enabled') {
@@ -74,7 +74,7 @@ class ImportURLDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
-					$fieldsParams2['title'] = $importURL->getTitle();
+					$fieldsParams2['title'] = substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'area_id') {
 					$fieldsParams2['area_id'] = $importURL->getAreaId();
 				} else if ($field == 'country_id') {

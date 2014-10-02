@@ -45,7 +45,7 @@ class CuratedListDBAccess {
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {
-				$fieldsParams1['title'] = $curatedList->getTitle();
+				$fieldsParams1['title'] = substr($curatedList->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 			} else if ($field == 'description') {
 				$fieldsParams1['description'] = $curatedList->getDescription();
 			} else if ($field == 'parent_area_id') {
@@ -68,7 +68,7 @@ class CuratedListDBAccess {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
-					$fieldsParams2['title'] = $curatedList->getTitle();
+					$fieldsParams2['title'] = substr($curatedList->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED);
 				} else if ($field == 'description') {
 					$fieldsParams2['description'] = $curatedList->getDescription();
 				} else if ($field == 'is_deleted') {
