@@ -25,53 +25,51 @@
 {% block tabDetails %}currentTab{% endblock %}
 	
 {% block actions %}
-	{% if currentUserCanEditSite %}
-		{% if not event.isDeleted and not event.isCancelled %}
-			{%  if currentSite.isFeaturePhysicalEvents or currentSite.isFeatureTag or currentSite.isFeatureGroup %}
-				<li class="actionWithSubMenu">
-					<a href="/event/{{ event.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
-					<ul class="submenu">
-						<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
-						{% if currentSite.isFeaturePhysicalEvents %}
-							<li><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></li>
-						{% endif %}
-						{% if currentSite.isFeatureTag %}
-							<li><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></li>
-						{% endif %}
-						{% if currentSite.isFeatureGroup %}
-							<li><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
-						{% endif %}
-					</ul>
-				</li>
-			{%  else %}
-				<li class="action">
-					<a href="/event/{{ event.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> edit</a>
-				</li>
-			{% endif %}
-			{% if config.isFileStore %}
-				<li class="action">
-					<a href="/event/{{ event.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
-				</li>
-			{% endif %}
-		{% endif %}
-		{% if not event.isImported %}
-			{% if event.isDeleted %}
-				<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
-			{% elseif event.isCancelled %}
-				<li class="action"><a href="/event/{{ event.slugForUrl }}/uncancel"><div class="iconTrashOSmall"></div> uncancel</a></li>
-			{%  else  %}
-				{% if group is not null or currentSite.isFeatureGroup %}
-					<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><div class="iconCircleONotchSmall"></div> recur</a></li>
+	{%  if actionEditDetails and ( actionEditVenue or actionEditTags or actionEditGroups ) %}
+		<li class="actionWithSubMenu">
+			<a href="/event/{{ event.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
+			<ul class="submenu">
+				<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
+				{% if actionEditVenue %}
+					<li><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></li>
 				{% endif %}
-				<li class="actionWithSubMenu">
-					<a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a>
-					<ul class="submenu">
-						<li><a href="/event/{{ event.slugForUrl }}/cancel">Cancel</a></li>
-						<li><a href="/event/{{ event.slugForUrl }}/delete">Delete</a></li>
-					</ul>
-				</li>
-			{% endif %}
-		{% endif %}
+				{% if actionEditTags %}
+					<li><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></li>
+				{% endif %}
+				{% if actionEditGroups %}
+					<li><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
+				{% endif %}
+			</ul>
+		</li>
+	{%  elseif actionEditDetails %}
+		<li class="action">
+			<a href="/event/{{ event.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> edit</a>
+		</li>
+	{% endif %}
+	{% if actionMedia %}
+		<li class="action">
+			<a href="/event/{{ event.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
+		</li>
+	{% endif %}
+	{% if actionUndelete %}
+		<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
+	{% endif %}
+	{% if actionUncancel %}
+		<li class="action"><a href="/event/{{ event.slugForUrl }}/uncancel"><div class="iconTrashOSmall"></div> uncancel</a></li>
+	{%  endif  %}
+	{% if actionRecur %}
+		<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><div class="iconCircleONotchSmall"></div> recur</a></li>
+	{% endif %}
+	{% if actionDelete and actionCancel %}
+		<li class="actionWithSubMenu">
+			<a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a>
+			<ul class="submenu">
+				<li><a href="/event/{{ event.slugForUrl }}/cancel">Cancel</a></li>
+				<li><a href="/event/{{ event.slugForUrl }}/delete">Delete</a></li>
+			</ul>
+		</li>
+	{%  elseif actionDelete  %}
+		<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> Delete</a></li>
 	{% endif %}
 	<li class="action">
 		<a href="/api1/event/{{ event.slug }}/info.ical" onclick="showExportPopup(); return false;">
