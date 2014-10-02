@@ -121,22 +121,52 @@ class EventHistoryModel extends EventModel {
 		$this->is_new = 1;
 	}
 	
-	public function setChangedFlagsFromLast(EventHistoryModel $last) {		
-		$this->summary_changed  = ($this->summary != $last->summary  )? 1 : -1;
-		$this->description_changed  = ($this->description  != $last->description  )? 1 : -1;
-		$this->start_at_changed  = ($this->start_at  != $last->start_at  )? 1 : -1;
-		$this->end_at_changed  = ($this->end_at  != $last->end_at  )? 1 : -1;
-		$this->is_deleted_changed  = ($this->is_deleted != $last->is_deleted  )? 1 : -1;
-		$this->is_cancelled_changed  = ($this->is_cancelled != $last->is_cancelled  )? 1 : -1;
-		$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
-		$this->timezone_changed  = ($this->timezone  != $last->timezone  )? 1 : -1;
-		$this->venue_id_changed  = ($this->venue_id  != $last->venue_id  )? 1 : -1;
-		$this->url_changed = ($this->url  != $last->url  )? 1 : -1;
-		$this->ticket_url_changed = ($this->ticket_url  != $last->ticket_url  )? 1 : -1;
-		$this->is_virtual_changed  = ($this->is_virtual  != $last->is_virtual  )? 1 : -1;
-		$this->is_physical_changed  = ($this->is_physical  != $last->is_physical  )? 1 : -1;
-		$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
-		$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
+	public function setChangedFlagsFromLast(EventHistoryModel $last) {
+		if ($this->summary_changed == 0 && $last->summary_changed != -2) {
+			$this->summary_changed  = ($this->summary != $last->summary  )? 1 : -1;
+		}
+		if ($this->description_changed == 0 && $last->description_changed != -2) {
+			$this->description_changed  = ($this->description  != $last->description  )? 1 : -1;
+		}
+		if ($this->start_at_changed == 0 && $last->start_at_changed != -2) {
+			$this->start_at_changed  = ($this->start_at->format("Y-m-d H:i:s")  != $last->start_at->format("Y-m-d H:i:s")  )? 1 : -1;
+		}
+		if ($this->end_at_changed == 0 && $last->end_at_changed != -2) {
+			$this->end_at_changed  = ($this->end_at->format("Y-m-d H:i:s")  != $last->end_at->format("Y-m-d H:i:s")  )? 1 : -1;
+		}
+		if ($this->is_deleted_changed == 0 && $last->is_deleted_changed != -2) {
+			$this->is_deleted_changed  = ($this->is_deleted != $last->is_deleted  )? 1 : -1;
+		}
+		if ($this->is_cancelled_changed == 0 && $last->is_cancelled_changed != -2) {
+			$this->is_cancelled_changed  = ($this->is_cancelled != $last->is_cancelled  )? 1 : -1;
+		}
+		if ($this->country_id_changed == 0 && $last->country_id_changed != -2) {
+			$this->country_id_changed  = ($this->country_id  != $last->country_id  )? 1 : -1;
+		}
+		if ($this->timezone_changed == 0 && $last->timezone_changed != -2) {
+			$this->timezone_changed  = ($this->timezone  != $last->timezone  )? 1 : -1;
+		}
+		if ($this->venue_id_changed == 0 && $last->venue_id_changed != -2) {
+			$this->venue_id_changed  = ($this->venue_id  != $last->venue_id  )? 1 : -1;
+		}
+		if ($this->url_changed == 0 && $last->url_changed != -2) {
+			$this->url_changed = ($this->url  != $last->url  )? 1 : -1;
+		}
+		if ($this->ticket_url_changed == 0 && $last->ticket_url_changed != -2) {
+			$this->ticket_url_changed = ($this->ticket_url  != $last->ticket_url  )? 1 : -1;
+		}
+		if ($this->is_virtual_changed == 0 && $last->is_virtual_changed != -2) {
+			$this->is_virtual_changed  = ($this->is_virtual  != $last->is_virtual  )? 1 : -1;
+		}
+		if ($this->is_physical_changed == 0 && $last->is_physical_changed != -2) {
+			$this->is_physical_changed  = ($this->is_physical  != $last->is_physical  )? 1 : -1;
+		}
+		if ($this->area_id_changed == 0 && $last->area_id_changed != -2) {
+			$this->area_id_changed  = ($this->area_id  != $last->area_id  )? 1 : -1;
+		}
+		if ($this->is_duplicate_of_id_changed == 0 && $last->is_duplicate_of_id_changed != -2) {
+			$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
+		}
 		$this->is_new = 0;
 	}
 	
@@ -176,63 +206,123 @@ class EventHistoryModel extends EventModel {
 
 	
 	public function getSummaryChanged() {
-		return ($this->summary_changed != -1);
+		return ($this->summary_changed > -1);
+	}
+
+	public function getSummaryChangedKnown() {
+		return ($this->summary_changed > -2);
 	}
 
 	public function getDescriptionChanged() {
-		return ($this->description_changed != -1);
+		return ($this->description_changed > -1);
+	}
+
+	public function getDescriptionChangedKnown() {
+		return ($this->description_changed > -2);
 	}
 
 	public function getStartAtChanged() {
-		return ($this->start_at_changed != -1);
+		return ($this->start_at_changed > -1);
+	}
+
+	public function getStartAtChangedKnown() {
+		return ($this->start_at_changed > -2);
 	}
 
 	public function getEndAtChanged() {
-		return ($this->end_at_changed != -1);
+		return ($this->end_at_changed > -1);
+	}
+
+	public function getEndAtChangedKnown() {
+		return ($this->end_at_changed > -2);
 	}
 
 	public function getIsDeletedChanged() {
-		return ($this->is_deleted_changed != -1);
+		return ($this->is_deleted_changed > -1);
+	}
+
+	public function getIsDeletedChangedKnown() {
+		return ($this->is_deleted_changed > -2);
 	}
 
 	public function getIsCancelledChanged() {
-		return ($this->is_cancelled_changed != -1);
+		return ($this->is_cancelled_changed > -1);
+	}
+
+	public function getIsCancelledChangedKnown() {
+		return ($this->is_cancelled_changed > -2);
 	}
 
 	public function getCountryIdChanged() {
-		return ($this->country_id_changed != -1);
+		return ($this->country_id_changed > -1);
+	}
+
+	public function getCountryIdChangedKnown() {
+		return ($this->country_id_changed > -2);
 	}
 
 	public function getTimezoneChanged() {
-		return ($this->timezone_changed != -1);
+		return ($this->timezone_changed > -1);
+	}
+
+	public function getTimezoneChangedKnown() {
+		return ($this->timezone_changed > -2);
 	}
 
 	public function getVenueIdChanged() {
-		return ($this->venue_id_changed != -1);
+		return ($this->venue_id_changed > -1);
+	}
+
+	public function getVenueIdChangedKnown() {
+		return ($this->venue_id_changed > -2);
 	}
 
 	public function getUrlChanged() {
-		return ($this->url_changed != -1);
+		return ($this->url_changed > -1);
+	}
+
+	public function getUrlChangedKnown() {
+		return ($this->url_changed > -2);
 	}
 
 	public function getTicketUrlChanged() {
-		return ($this->ticket_url_changed != -1);
+		return ($this->ticket_url_changed > -1);
 	}
 		
+	public function getTicketUrlChangedKnown() {
+		return ($this->ticket_url_changed > -2);
+	}
+
 	public function getIsVirtualChanged() {
-		return ($this->is_virtual_changed != -1);
+		return ($this->is_virtual_changed > -1);
+	}
+
+	public function getIsVirtualChangedKnown() {
+		return ($this->is_virtual_changed > -2);
 	}
 
 	public function getIsPhysicalChanged() {
-		return ($this->is_physical_changed != -1);
+		return ($this->is_physical_changed > -1);
+	}
+
+	public function getIsPhysicalChangedKnown() {
+		return ($this->is_physical_changed > -2);
 	}
 
 	public function getAreaIdChanged() {
-		return ($this->area_id_changed != -1);
+		return ($this->area_id_changed > -1);
+	}
+
+	public function getAreaIdChangedKnown() {
+		return ($this->area_id_changed > -2);
 	}
 
 	public function getIsDuplicateOfIdChanged() {
-		return ($this->is_duplicate_of_id_changed != -1);
+		return ($this->is_duplicate_of_id_changed > -1);
+	}
+
+	public function getIsDuplicateOfIdChangedKnown() {
+		return ($this->is_duplicate_of_id_changed > -2);
 	}
 
 	public function getIsNew() {

@@ -33,69 +33,118 @@ class EventDBAccess {
 	}
 
 
+	protected $possibleFields = array('summary','description','start_at','end_at','venue_id','area_id','country_id','timezone',
+		'url','ticket_url','is_physical','is_virtual','is_cancelled','is_deleted','is_duplicate_of_id');
+
+
 	public function update(EventModel $event, $fields, UserAccountModel $user = null, EventHistoryModel $fromHistory = null ) {
 		$alreadyInTransaction = $this->db->inTransaction();
+
+
+		// Make Information Data
+		$fieldsSQL1 = array();
+		$fieldsParams1 = array( 'id'=>$event->getId() );
+		foreach($fields as $field) {
+			$fieldsSQL1[] = " ".$field."=:".$field." ";
+			if ($field == 'summary') {
+				$fieldsParams1['summary'] = $event->getSummary();
+			} else if ($field == 'description') {
+				$fieldsParams1['description'] = $event->getDescription();
+			} else if ($field == 'start_at') {
+				$fieldsParams1['start_at'] = $event->getStartAt()->format("Y-m-d H:i:s");
+			} else if ($field == 'end_at') {
+				$fieldsParams1['end_at'] = $event->getEndAt()->format("Y-m-d H:i:s");
+			} else if ($field == 'venue_id') {
+				$fieldsParams1['venue_id'] = $event->getVenueId();
+			} else if ($field == 'area_id') {
+				$fieldsParams1['area_id'] = $event->getAreaId();
+			} else if ($field == 'country_id') {
+				$fieldsParams1['country_id'] = $event->getCountryId();
+			} else if ($field == 'timezone') {
+				$fieldsParams1['timezone'] = $event->getTimezone();
+			} else if ($field == 'url') {
+				$fieldsParams1['url'] = $event->getUrl();
+			} else if ($field == 'ticket_url') {
+				$fieldsParams1['ticket_url'] = $event->getTicketUrl();
+			} else if ($field == 'is_physical') {
+				$fieldsParams1['is_physical'] = $event->getIsPhysical() ? 1 : 0;
+			} else if ($field == 'is_virtual') {
+				$fieldsParams1['is_virtual'] = $event->getIsVirtual() ? 1 : 0;
+			} else if ($field == 'is_cancelled') {
+				$fieldsParams1['is_cancelled'] = $event->getIsCancelled() ? 1 : 0;
+			} else if ($field == 'is_deleted') {
+				$fieldsParams1['is_deleted'] = $event->getIsDeleted() ? 1 : 0;
+			} else if ($field == 'is_duplicate_of_id') {
+				$fieldsParams1['is_duplicate_of_id'] = $event->getIsDuplicateOfId();
+			}
+		}
+
+		// Make History Data
+		$fieldsSQL2 = array('event_id','user_account_id','created_at','approved_at');
+		$fieldsSQLParams2 = array(':event_id',':user_account_id',':created_at',':approved_at');
+		$fieldsParams2 = array(
+			'event_id'=>$event->getId(),
+			'user_account_id'=>($user ? $user->getId() : null),
+			'created_at'=>$this->timesource->getFormattedForDataBase(),
+			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+		);
+		foreach($this->possibleFields as $field) {
+			if (in_array($field, $fields)) {
+				$fieldsSQL2[] = " ".$field." ";
+				$fieldsSQLParams2[] = " :".$field." ";
+				if ($field == 'summary') {
+					$fieldsParams2['summary'] = $event->getSummary();
+				} else if ($field == 'description') {
+					$fieldsParams2['description'] = $event->getDescription();
+				} else if ($field == 'start_at') {
+					$fieldsParams2['start_at'] = $event->getStartAt()->format("Y-m-d H:i:s");
+				} else if ($field == 'end_at') {
+					$fieldsParams2['end_at'] = $event->getEndAt()->format("Y-m-d H:i:s");
+				} else if ($field == 'venue_id') {
+					$fieldsParams2['venue_id'] = $event->getVenueId();
+				} else if ($field == 'area_id') {
+					$fieldsParams2['area_id'] = $event->getAreaId();
+				} else if ($field == 'country_id') {
+					$fieldsParams2['country_id'] = $event->getCountryId();
+				} else if ($field == 'timezone') {
+					$fieldsParams2['timezone'] = $event->getTimezone();
+				} else if ($field == 'url') {
+					$fieldsParams2['url'] = $event->getUrl();
+				} else if ($field == 'ticket_url') {
+					$fieldsParams2['ticket_url'] = $event->getTicketUrl();
+				} else if ($field == 'is_physical') {
+					$fieldsParams2['is_physical'] = $event->getIsPhysical() ? 1 : 0;
+				} else if ($field == 'is_virtual') {
+					$fieldsParams2['is_virtual'] = $event->getIsVirtual() ? 1 : 0;
+				} else if ($field == 'is_cancelled') {
+					$fieldsParams2['is_cancelled'] = $event->getIsCancelled() ? 1 : 0;
+				} else if ($field == 'is_deleted') {
+					$fieldsParams2['is_deleted'] = $event->getIsDeleted() ? 1 : 0;
+				} else if ($field == 'is_duplicate_of_id') {
+					$fieldsParams2['is_duplicate_of_id'] = $event->getIsDuplicateOfId();
+				}
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " 0 ";
+			} else {
+				$fieldsSQL2[] = " ".$field."_changed ";
+				$fieldsSQLParams2[] = " -2 ";
+			}
+		}
+
+
 
 		try {
 			if (!$alreadyInTransaction) {
 				$this->db->beginTransaction();
 			}
 
+			// Information SQL
+			$stat = $this->db->prepare("UPDATE event_information  SET ".implode(",", $fieldsSQL1)." WHERE id=:id");
+			$stat->execute($fieldsParams1);
 
-			$stat = $this->db->prepare("UPDATE event_information  SET summary=:summary, description=:description, ".
-				"start_at=:start_at, end_at=:end_at, is_deleted=:is_deleted, is_cancelled=:is_cancelled, area_id=:area_id, ".
-				" venue_id=:venue_id, country_id=:country_id, timezone=:timezone, ".
-				"url=:url, ticket_url=:ticket_url, is_physical=:is_physical, is_virtual=:is_virtual, is_duplicate_of_id=:is_duplicate_of_id ".
-				"WHERE id=:id");
-			$stat->execute(array(
-				'id'=>$event->getId(),
-				'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'description'=>$event->getDescription(),
-				'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
-				'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
-				'venue_id'=>$event->getVenueId(),
-				'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
-				'country_id'=>$event->getCountryId(),
-				'timezone'=>$event->getTimezone(),
-				'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'is_physical'=>$event->getIsPhysical()?1:0,
-				'is_virtual'=>$event->getIsVirtual()?1:0,
-				'is_deleted'=>$event->getIsDeleted()?1:0,
-				'is_cancelled'=>$event->getIsCancelled()?1:0,
-				'is_duplicate_of_id'=>$event->getIsDuplicateOfId(),
-			));
-
-			$stat = $this->db->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, user_account_id  , ".
-				"created_at, reverted_from_created_at,venue_id,country_id,timezone,".
-				"url, ticket_url, is_physical, is_virtual, area_id, approved_at,is_deleted, is_cancelled,is_duplicate_of_id ) VALUES ".
-				"(:event_id, :summary, :description, :start_at, :end_at, :user_account_id  , ".
-				":created_at, :reverted_from_created_at,:venue_id,:country_id,:timezone,"."
-						:url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at, :is_deleted, :is_cancelled, :is_duplicate_of_id )");
-			$stat->execute(array(
-				'event_id'=>$event->getId(),
-				'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'description'=>$event->getDescription(),
-				'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
-				'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
-				'venue_id'=>$event->getVenueId(),
-				'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
-				'country_id'=>$event->getCountryId(),
-				'timezone'=>$event->getTimezone(),
-				'user_account_id'=>($user ? $user->getId(): null),
-				'created_at'=>$this->timesource->getFormattedForDataBase(),
-				'approved_at'=>$this->timesource->getFormattedForDataBase(),
-				'reverted_from_created_at'=> ($fromHistory ? date("Y-m-d H:i:s",$fromHistory->getCreatedAtTimeStamp()):null),
-				'url'=>substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'is_physical'=>$event->getIsPhysical()?1:0,
-				'is_virtual'=>$event->getIsVirtual()?1:0,
-				'is_deleted'=>$event->getIsDeleted()?1:0,
-				'is_cancelled'=>$event->getIsCancelled()?1:0,
-				'is_duplicate_of_id'=>$event->getIsDuplicateOfId(),
-			));
-
-
+			// History SQL
+			$stat = $this->db->prepare("INSERT INTO event_history (".implode(",",$fieldsSQL2).") VALUES (".implode(",",$fieldsSQLParams2).")");
+			$stat->execute($fieldsParams2);
 
 			if (!$alreadyInTransaction) {
 				$this->db->commit();
@@ -106,6 +155,7 @@ class EventDBAccess {
 			}
 			throw $e;
 		}
+
 
 	}
 
