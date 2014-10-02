@@ -83,6 +83,85 @@ class EventHistoryModel extends EventModel {
 		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 		$this->is_duplicate_of_id_changed = isset($data['is_duplicate_of_id_changed']) ? $data['is_duplicate_of_id_changed'] : 0;
 	}
+
+
+	public function isAnyDataUnknown() {
+		return $this->summary_changed == -2 ||
+		$this->description_changed == -2 ||
+		$this->start_at_changed == -2 ||
+		$this->end_at_changed == -2 ||
+		$this->is_deleted_changed == -2 ||
+		$this->is_cancelled_changed == -2 ||
+		$this->country_id_changed == -2 ||
+		$this->timezone_changed == -2 ||
+		$this->venue_id_changed == -2 ||
+		$this->url_changed == -2 ||
+		$this->ticket_url_changed == -2 ||
+		$this->is_virtual_changed == -2 ||
+		$this->is_physical_changed == -2 ||
+		$this->area_id_changed == -2 ||
+		$this->is_duplicate_of_id_changed == -2;
+	}
+
+	public function setFromDataBaseSupplementaryRow($data) {
+		if ($this->summary_changed == -2 && $data['summary_changed'] != -2) {
+			$this->summary = $data['summary'];
+			$this->summary_changed = -1;
+		}
+		if ($this->description_changed == -2 && $data['description_changed'] != -2) {
+			$this->description = $data['description'];
+			$this->description_changed = -1;
+		}
+		$utc = new \DateTimeZone("UTC");
+		if ($this->start_at_changed == -2 && $data['start_at_changed'] != -2) {
+			$this->start_at = new \DateTime($data['start_at'], $utc);
+			$this->start_at_changed = -1;
+		}
+		if ($this->end_at_changed == -2 && $data['end_at_changed'] != -2) {
+			$this->end_at = new \DateTime($data['end_at'], $utc);
+			$this->end_at_changed = -1;
+		}
+		if ($this->is_deleted_changed == -2 && $data['is_deleted_changed'] != -2) {
+			$this->is_deleted = $data['is_deleted'];
+			$this->is_deleted_changed = -1;
+		}
+		if ($this->is_cancelled_changed == -2 && $data['is_cancelled_changed'] != -2) {
+			$this->is_cancelled = $data['is_cancelled'];
+			$this->is_cancelled_changed = -1;
+		}
+		if ($this->country_id_changed == -2 && $data['country_id_changed'] != -2) {
+			$this->country_id  = $data['country_id'];
+			$this->country_id_changed = -1;
+		}
+		if ($this->timezone_changed == -2 && $data['timezone_changed'] != -2) {
+			$this->timezone  = $data['timezone'];
+			$this->timezone_changed = -1;
+		}
+		if ($this->venue_id_changed == -2 && $data['venue_id_changed'] != -2) {
+			$this->venue_id  = $data['venue_id'];
+			$this->venue_id_changed = -1;
+		}
+		if ($this->url_changed == -2 && $data['url_changed'] != -2) {
+			$this->url  = $data['url'];
+			$this->url_changed = -1;
+		}
+		if ($this->ticket_url_changed == -2 && $data['ticket_url_changed'] != -2) {
+			$this->ticket_url  = $data['ticket_url'];
+			$this->ticket_url_changed = -1;
+		}
+		if ($this->is_virtual_changed == -2 && $data['is_virtual_changed'] != -2) {
+			$this->is_virtual  = $data['is_virtual'];
+			$this->is_virtual_changed = -1;
+		}
+		if ($this->is_physical_changed == -2 && $data['is_physical_changed'] != -2) {
+			$this->is_physical  = $data['is_physical'];
+			$this->is_physical_changed = -1;
+		}
+		if ($this->area_id_changed == -2 && $data['area_id_changed'] != -2) {
+			$this->area_id  = $data['area_id'];
+			$this->area_id_changed = -1;
+		}
+	}
 	
 	public function isAnyChangeFlagsUnknown() {
 		return $this->summary_changed == 0 ||

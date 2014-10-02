@@ -20,11 +20,14 @@ class EventHistoryRepository {
 	public function loadByEventAndtimeStamp(EventModel $event, $timestamp) {
 		global $DB;
 		$stat = $DB->prepare("SELECT event_history.* FROM event_history ".
-				"WHERE event_history.event_id =:id AND event_history.created_at =:cat");
+				"WHERE event_history.event_id =:id AND event_history.created_at <= :cat ORDER BY event_history.created_at DESC");
 		$stat->execute(array( 'id'=>$event->getId(), 'cat'=>date("Y-m-d H:i:s",$timestamp) ));
 		if ($stat->rowCount() > 0) {
 			$event = new EventHistoryModel();
 			$event->setFromDataBaseRow($stat->fetch());
+			while($event->isAnyDataUnknown() && $data = $stat->fetch()) {
+				$event->setFromDataBaseSupplementaryRow($data);
+			}
 			return $event;
 		}
 	}
@@ -45,7 +48,7 @@ class EventHistoryRepository {
 			$eventhistory->setChangedFlagsFromNothing();
 		} else {
 			while($eventhistory->isAnyChangeFlagsUnknown() && $lastHistoryData = $stat->fetch()) {
-				$lastHistory = new GroupHistoryModel();
+				$lastHistory = new EventHistoryModel();
 				$lastHistory->setFromDataBaseRow($lastHistoryData);
 				$eventhistory->setChangedFlagsFromLast($lastHistory);
 			}
