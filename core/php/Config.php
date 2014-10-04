@@ -143,6 +143,8 @@ class Config {
 	public $apiExtraFooter1Html = null;
 	public $apiExtraFooter1Text = null;
 
+	public $api1EventListLimit = 1000;
+
 	public $findDuplicateEventsShow = 3;
 	public $findDuplicateEventsThreshhold = 2;
 	
