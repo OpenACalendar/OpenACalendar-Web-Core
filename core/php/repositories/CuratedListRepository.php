@@ -57,8 +57,8 @@ class CuratedListRepository {
 			$data = $stat->fetch();
 			$curatedList->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO curated_list_history (curated_list_id, title, description, user_account_id  , created_at, is_deleted) VALUES ".
-					"(:curated_list_id, :title, :description, :user_account_id  , :created_at, '0')");
+			$stat = $DB->prepare("INSERT INTO curated_list_history (curated_list_id, title, description, user_account_id  , created_at, is_deleted, is_new) VALUES ".
+					"(:curated_list_id, :title, :description, :user_account_id  , :created_at, '0', '1')");
 			$stat->execute(array(
 					'curated_list_id'=>$curatedList->getId(),
 					'title'=>substr($curatedList->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

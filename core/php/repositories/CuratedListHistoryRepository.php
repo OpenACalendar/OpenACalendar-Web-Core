@@ -31,7 +31,6 @@ class CuratedListHistoryRepository {
 		if ($stat->rowCount() == 0) {
 			$curatedlisthistory->setChangedFlagsFromNothing();
 		} else {
-
 			while($curatedlisthistory->isAnyChangeFlagsUnknown() && $lastHistoryData = $stat->fetch()) {
 				$lastHistory = new CuratedListHistoryModel();
 				$lastHistory->setFromDataBaseRow($lastHistoryData);
@@ -48,23 +47,23 @@ class CuratedListHistoryRepository {
 			'is_new'=>$curatedlisthistory->getIsNew()?1:0,
 		);
 
-		if ($areaHistory->getTitleChangedKnown()) {
+		if ($curatedlisthistory->getTitleChangedKnown()) {
 			$sqlFields[] = " title_changed = :title_changed ";
-			$sqlParams['title_changed'] = $areaHistory->getTitleChanged() ? 1 : -1;
+			$sqlParams['title_changed'] = $curatedlisthistory->getTitleChanged() ? 1 : -1;
 		}
-		if ($areaHistory->getDescriptionChangedKnown()) {
+		if ($curatedlisthistory->getDescriptionChangedKnown()) {
 			$sqlFields[] = " description_changed = :description_changed ";
-			$sqlParams['description_changed'] = $areaHistory->getDescriptionChanged() ? 1 : -1;
+			$sqlParams['description_changed'] = $curatedlisthistory->getDescriptionChanged() ? 1 : -1;
 		}
-		if ($areaHistory->getIsDeletedChangedKnown()) {
+		if ($curatedlisthistory->getIsDeletedChangedKnown()) {
 			$sqlFields[] = " is_deleted_changed = :is_deleted_changed ";
-			$sqlParams['is_deleted_changed'] = $areaHistory->getIsDeletedChanged() ? 1 : -1;
+			$sqlParams['is_deleted_changed'] = $curatedlisthistory->getIsDeletedChanged() ? 1 : -1;
 		}
 
 		$statUpdate = $DB->prepare("UPDATE curated_list_history SET ".
 			" is_new = :is_new, ".
 			implode(" , ",$sqlFields).
-			" WHERE area_id = :id AND created_at = :created_at");
+			" WHERE curated_list_id = :id AND created_at = :created_at");
 		$statUpdate->execute($sqlParams);
 
 	}
