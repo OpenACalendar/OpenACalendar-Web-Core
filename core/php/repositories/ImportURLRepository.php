@@ -46,8 +46,8 @@ class ImportURLRepository {
 			$data = $stat->fetch();
 			$importURL->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id)");
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, is_new) VALUES ".
+					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id,'1')");
 			$stat->execute(array(
 					'curated_list_id'=>$importURL->getId(),
 					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),

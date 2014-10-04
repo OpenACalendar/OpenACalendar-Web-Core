@@ -69,7 +69,7 @@ class CuratedListHistoryModel extends CuratedListModel {
 	}
 
 	public function getIsNew() {
-		return ($this->is_new != -1);
+		return ($this->is_new == 1);
 	}
 
 }
