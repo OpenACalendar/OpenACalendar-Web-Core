@@ -9,6 +9,7 @@ $(document).ready(function() {
 	$('#ImportURLEditForm_country_id, #ImportURLNewForm_country_id').change(function() {
 		onCountryChange();
 	});
+	onCountryChange();
 });
 	
 	
