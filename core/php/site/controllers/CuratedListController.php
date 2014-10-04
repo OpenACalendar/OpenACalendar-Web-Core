@@ -40,6 +40,10 @@ class CuratedListController {
 			$app['currentSite']->getIsFeatureCuratedList() &&
 			!$this->parameters['curatedlist']->getIsDeleted();
 			$this->parameters['curatedlist']->canUserEdit(userGetCurrent());
+		$this->parameters['actionCuratedListEditCurators'] = $app['currentUserCanEditSite'] &&
+			$app['currentSite']->getIsFeatureCuratedList() &&
+			!$this->parameters['curatedlist']->getIsDeleted();
+			$this->parameters['curatedlist']->canUserEdit(userGetCurrent());
 
 		return true;
 
@@ -110,7 +114,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		if (!$this->parameters['currentUserCanEditCuratedList']) {
+		if (!$this->parameters['actionCuratedListEditDetails']) {
 			$app->abort(404, "curatedlist does not exist for editing.");
 		}
 		

@@ -32,7 +32,7 @@
 			{% for curator in curatedlistEditors %}
 				<li>
 					{{  curator.username }}
-					{% if currentUserCanEditCuratedList and currentSite.isFeatureCuratedList %}
+					{% if actionCuratedListEditCurators %}
 						<form action="#" method="post">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="submitted" value="remove">
@@ -45,7 +45,7 @@
 		</ul>
 	{% endif %}
 	
-	{% if currentUserCanEditCuratedList and currentSite.isFeatureCuratedList %}
+	{% if actionCuratedListEditCurators %}
 	
 		<h3>Add a Curator</h3>
 		<form action="#" method="post">
