@@ -38,6 +38,7 @@ class CuratedListController {
 
 		$this->parameters['actionCuratedListEditDetails'] = $app['currentUserCanEditSite'] &&
 			$app['currentSite']->getIsFeatureCuratedList() &&
+			!$this->parameters['curatedlist']->getIsDeleted();
 			$this->parameters['curatedlist']->canUserEdit(userGetCurrent());
 
 		return true;

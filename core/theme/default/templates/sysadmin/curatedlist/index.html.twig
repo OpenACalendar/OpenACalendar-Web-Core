@@ -22,6 +22,10 @@
 			<td>{{ curatedlist.slug }}</td>
 		</tr>
 		<tr>
+			<th>Deleted</th>
+			<td>{% if curatedlist.isDeleted %}Deleted{% else %}-{% endif %}</td>
+		</tr>
+		<tr>
 			<th>Title</th>
 			<td>{{ curatedlist.title }}</td>
 		</tr>
@@ -38,6 +42,8 @@
 	</form>
 
 	<ul class="actionHelp">
+		<li>delete</li>
+		<li>undelete</li>
 		<li>addeditor  <span class="param">userid</a></li>
 		<li>removeeditor  <span class="param">userid</a></li>
 		<li>addevent  <span class="param">eventslug</a></li>

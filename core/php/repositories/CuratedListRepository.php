@@ -107,7 +107,35 @@ class CuratedListRepository {
 			$DB->rollBack();
 		}
 	}
-	
+
+	public function delete(CuratedListModel $curatedList, UserAccountModel $creator) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$curatedList->setIsDeleted(true);
+			$this->curatedListDBAccess->update($curatedList, array('is_deleted'), $creator);
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+
+	public function undelete(CuratedListModel $curatedList, UserAccountModel $creator) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$curatedList->setIsDeleted(false);
+			$this->curatedListDBAccess->update($curatedList, array('is_deleted'), $creator);
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+
 	public function addEditorToCuratedList(UserAccountModel $user, CuratedListModel $curatedList, UserAccountModel $addedBy) {
 		global $DB;
 		

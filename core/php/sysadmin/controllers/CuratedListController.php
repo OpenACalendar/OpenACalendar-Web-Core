@@ -60,8 +60,18 @@ class CuratedListController {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
-				
-				if ($action->getCommand() == 'addeditor') {
+
+				if ($action->getCommand() == 'delete' && !$this->parameters['curatedlist']->getIsDeleted()) {
+					$clr = new CuratedListRepository();
+					$clr->delete($this->parameters['curatedlist'],  userGetCurrent());
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
+
+				} else if ($action->getCommand() == 'undelete' && $this->parameters['curatedlist']->getIsDeleted()) {
+					$clr = new CuratedListRepository();
+					$clr->undelete($this->parameters['curatedlist'],  userGetCurrent());
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
+
+				} else if ($action->getCommand() == 'addeditor') {
 					$userRepo = new UserAccountRepository;
 					$user = $userRepo->loadByID($action->getParam(0));
 					if ($user) {

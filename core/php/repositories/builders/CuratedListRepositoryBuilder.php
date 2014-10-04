@@ -46,7 +46,13 @@ class CuratedListRepositoryBuilder  extends BaseRepositoryBuilder {
 	public function setGroupInformation(GroupModel $group) {
 		$this->groupInfo = $group;
 	}
-	
+
+	protected $include_deleted = true;
+
+	public function setIncludeDeleted($value) {
+		$this->include_deleted = $value;
+	}
+
 	protected function build() {
 
 		$this->select[] = ' curated_list_information.* ';
@@ -75,6 +81,10 @@ class CuratedListRepositoryBuilder  extends BaseRepositoryBuilder {
 					" group_in_curated_list.group_id = :group_id AND group_in_curated_list.removed_at IS NULL ";
 			$this->params['group_id'] = $this->groupInfo->getId();
 			$this->select[] =  " group_in_curated_list.added_at AS is_group_in_list ";
+		}
+
+		if (!$this->include_deleted) {
+			$this->where[] = " curated_list_information.is_deleted = '0' ";
 		}
 	}
 	

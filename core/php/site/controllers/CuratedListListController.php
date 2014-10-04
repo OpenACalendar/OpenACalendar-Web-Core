@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use repositories\builders\filterparams\CuratedListFilterParams;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use models\CuratedListModel;
@@ -19,13 +20,13 @@ class CuratedListListController {
 
 	
 	function index(Application $app) {
-		
 
 		$grb = new CuratedListRepositoryBuilder();
 		$grb->setSite($app['currentSite']);
-		
+		$grb->setIncludeDeleted(false);
+
 		$lists = $grb->fetchAll();
-		
+
 		return $app['twig']->render('site/curatedlistlist/index.html.twig', array(
 				'curatedlists'=>$lists,
 			));

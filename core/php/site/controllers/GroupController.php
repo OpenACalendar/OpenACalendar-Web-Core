@@ -122,6 +122,7 @@ class GroupController {
 			$clrb = new CuratedListRepositoryBuilder();
 			$clrb->setSite($app['currentSite']);
 			$clrb->setUserCanEdit(userGetCurrent());
+			$clrb->setIncludeDeleted(false);
 			$clrb->setGroupInformation($this->parameters['group']);
 			$this->parameters['curatedListsUserCanEdit'] = $clrb->fetchAll();
 		} else {

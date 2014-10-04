@@ -195,6 +195,7 @@ class EventController {
 			$clrb->setSite($app['currentSite']);
 			$clrb->setUserCanEdit(userGetCurrent());
 			$clrb->setEventInformation($this->parameters['event']);
+			$clrb->setIncludeDeleted(false);
 			$this->parameters['curatedListsUserCanEdit'] = $clrb->fetchAll();
 		} else {
 			$this->parameters['curatedListsUserCanEdit'] = array();
