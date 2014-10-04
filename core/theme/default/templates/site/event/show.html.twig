@@ -25,42 +25,42 @@
 {% block tabDetails %}currentTab{% endblock %}
 	
 {% block actions %}
-	{%  if actionEditDetails and ( actionEditVenue or actionEditTags or actionEditGroups ) %}
+	{%  if actionEventEditDetails and ( actionEventEditVenue or actionEventEditTags or actionEventEditGroups ) %}
 		<li class="actionWithSubMenu">
 			<a href="/event/{{ event.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 			<ul class="submenu">
 				<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
-				{% if actionEditVenue %}
+				{% if actionEventEditVenue %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></li>
 				{% endif %}
-				{% if actionEditTags %}
+				{% if actionEventEditTags %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></li>
 				{% endif %}
-				{% if actionEditGroups %}
+				{% if actionEventEditGroups %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
 				{% endif %}
 			</ul>
 		</li>
-	{%  elseif actionEditDetails %}
+	{%  elseif actionEventEditDetails %}
 		<li class="action">
 			<a href="/event/{{ event.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> edit</a>
 		</li>
 	{% endif %}
-	{% if actionMedia %}
+	{% if actionEventEditMedia %}
 		<li class="action">
 			<a href="/event/{{ event.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
 		</li>
 	{% endif %}
-	{% if actionUndelete %}
+	{% if actionEventUndelete %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
 	{% endif %}
-	{% if actionUncancel %}
+	{% if actionEventUncancel %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/uncancel"><div class="iconTrashOSmall"></div> uncancel</a></li>
 	{%  endif  %}
-	{% if actionRecur %}
+	{% if actionEventRecur %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><div class="iconCircleONotchSmall"></div> recur</a></li>
 	{% endif %}
-	{% if actionDelete and actionCancel %}
+	{% if actionEventDelete and actionEventCancel %}
 		<li class="actionWithSubMenu">
 			<a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a>
 			<ul class="submenu">
@@ -68,7 +68,7 @@
 				<li><a href="/event/{{ event.slugForUrl }}/delete">Delete</a></li>
 			</ul>
 		</li>
-	{%  elseif actionDelete  %}
+	{%  elseif actionEventDelete  %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> Delete</a></li>
 	{% endif %}
 	<li class="action">

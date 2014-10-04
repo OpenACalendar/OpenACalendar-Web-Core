@@ -36,6 +36,7 @@ class VenueController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
+		global $CONFIG;
 		$this->parameters = array('country'=>null,'area'=>null, 'parentAreas'=>array(), 'childAreas'=>array());
 		
 		if (strpos($slug, "-")) {
@@ -80,7 +81,20 @@ class VenueController {
 			$areaRepoBuilder->setIncludeDeleted(false);
 			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 		}
-		
+
+
+		$this->parameters['actionVenueHistory'] = true;
+		$this->parameters['actionVenueEditDetails'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& !$this->parameters['venue']->getIsDeleted();
+		$this->parameters['actionVenueDelete'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& !$this->parameters['venue']->getIsDeleted();
+		$this->parameters['actionVenueEditMedia'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& !$this->parameters['venue']->getIsDeleted()
+			&& $CONFIG->isFileStore();
+
 		return true;
 	}
 	

@@ -35,10 +35,11 @@ class CuratedListController {
 		if (!$this->parameters['curatedlist']) {
 			return false;
 		}
-		
-		
-		$this->parameters['currentUserCanEditCuratedList'] = $this->parameters['curatedlist']->canUserEdit(userGetCurrent());
-		
+
+		$this->parameters['actionCuratedListEditDetails'] = $app['currentUserCanEditSite'] &&
+			$app['currentSite']->getIsFeatureCuratedList() &&
+			$this->parameters['curatedlist']->canUserEdit(userGetCurrent());
+
 		return true;
 
 	}

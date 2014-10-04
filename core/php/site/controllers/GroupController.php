@@ -47,6 +47,7 @@ class GroupController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
+		global $CONFIG;
 		$this->parameters = array('currentUserWatchesGroup'=>false);
 		
 		if (strpos($slug, "-")) {
@@ -64,7 +65,23 @@ class GroupController {
 			$uwg = $uwgr->loadByUserAndGroup(userGetCurrent(), $this->parameters['group']);
 			$this->parameters['currentUserWatchesGroup'] = $uwg && $uwg->getIsWatching();
 		}
-		
+
+
+		$this->parameters['actionGroupHistory'] = true;
+		$this->parameters['actionGroupEditDetails'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeatureGroup()
+			&& !$this->parameters['group']->getIsDeleted();
+		$this->parameters['actionGroupEditMedia'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeatureGroup()
+			&& !$this->parameters['group']->getIsDeleted()
+			&& $CONFIG->isFileStore();
+		$this->parameters['actionGroupNewEvent'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeatureGroup()
+			&& !$this->parameters['group']->getIsDeleted();
+
+
+
+
 		return true;
 	}
 	

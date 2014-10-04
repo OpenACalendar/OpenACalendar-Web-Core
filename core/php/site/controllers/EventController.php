@@ -120,41 +120,41 @@ class EventController {
 			}
 		}
 
-		$this->parameters['actionHistory'] = true;
-		$this->parameters['actionEditDetails'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventHistory'] = true;
+		$this->parameters['actionEventEditDetails'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled();
-		$this->parameters['actionEditVenue'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventEditVenue'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeaturePhysicalEvents();
-		$this->parameters['actionEditTags'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventEditTags'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeatureTag();
-		$this->parameters['actionEditGroups'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventEditGroups'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeatureGroup();
-		$this->parameters['actionMedia'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventEditMedia'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $CONFIG->isFileStore();
-		$this->parameters['actionRecur'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventRecur'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled();
-		$this->parameters['actionDelete'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventDelete'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsDeleted();
-		$this->parameters['actionCancel'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventCancel'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& !$this->parameters['event']->getIsDeleted();
-		$this->parameters['actionUndelete'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventUndelete'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsImported()
 			&& $this->parameters['event']->getIsDeleted();
-		$this->parameters['actionUncancel'] = $app['currentUserCanEditSite']
+		$this->parameters['actionEventUncancel'] = $app['currentUserCanEditSite']
 			&& !$this->parameters['event']->getIsImported()
 			&& $this->parameters['event']->getIsCancelled();
 

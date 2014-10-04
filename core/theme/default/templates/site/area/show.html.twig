@@ -17,10 +17,12 @@
 {% endblock %}
 
 {% block actions %}
-	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not area.isDeleted %}
+	{% if actionAreaEditDetails %}
 		<li class="action">
 			<a href="/area/{{ area.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
-		</li>		
+		</li>
+	{%  endif %}
+	{%  if actionAreaNew %}
 		<li class="action">
 			<a href="/area/{{ area.slugForUrl }}/new"><div class="iconPencilSmall"></div> new</a>
 		</li>

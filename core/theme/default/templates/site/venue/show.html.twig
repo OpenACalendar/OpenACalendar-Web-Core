@@ -25,14 +25,16 @@
 {% endblock %}
 
 {% block actions %}
-	{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
+	{% if actionVenueDelete %}
 		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
+	{%  endif %}
+	{%  if actionVenueEditDetails %}
 		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a></li>
-		{% if config.isFileStore %}
-			<li class="action">
-				<a href="/venue/{{ venue.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
-			</li>		
-		{% endif %}
+	{%  endif %}
+	{% if actionVenueEditMedia %}
+		<li class="action">
+			<a href="/venue/{{ venue.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
+		</li>
 	{% endif %}
 	<li class="action">
 		<a href="/api1/venue/{{ venue.slug }}/events.ical" onclick="showExportPopup(); return false;">

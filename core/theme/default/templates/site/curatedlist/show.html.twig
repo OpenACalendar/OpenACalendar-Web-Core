@@ -20,7 +20,7 @@
 
 
 {% block actions %}
-	{% if currentUserCanEditCuratedList and currentUserCanEditSite and currentSite.isFeatureCuratedList %}
+	{% if actionCuratedListEditDetails %}
 		<li class="action">
 			<a href="/curatedlist/{{ curatedlist.slug }}/edit"><div class="iconPencilSmall"></div> edit</a>
 		</li>

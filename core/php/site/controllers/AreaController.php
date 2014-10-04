@@ -63,7 +63,12 @@ class AreaController {
 		$areaRepoBuilder->setParentArea($this->parameters['area']);
 		$areaRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
-		
+
+		$this->parameters['actionAreaEditDetails'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['area']->getIsDeleted();
+		$this->parameters['actionAreaNew'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['area']->getIsDeleted();
+
 		return true;
 	}
 	

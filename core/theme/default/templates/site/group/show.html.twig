@@ -18,15 +18,17 @@
 {% block tabDetails %}currentTab{% endblock %}
 
 {% block actions %}
-	{% if currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}
+	{% if actionGroupEditDetails %}
 		<li class="action">
-			<a href="/group/{{ group.slugForUrl }}/edit"><div class="iconPencilSmall"></div>  edit</a>
+			<a href="/group/{{ group.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 		</li>
-		{% if config.isFileStore %}
-			<li class="action">
-				<a href="/group/{{ group.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
-			</li>
-		{% endif %}
+	{%  endif %}
+	{% if actionGroupEditMedia %}
+		<li class="action">
+			<a href="/group/{{ group.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
+		</li>
+	{% endif %}
+	{%  if actionGroupNewEvent %}
 		<li class="action">
 			<a href="/group/{{ group.slugForUrl }}/newevent"><div class="iconPencilSmall"></div> new event</a>
 		</li>
