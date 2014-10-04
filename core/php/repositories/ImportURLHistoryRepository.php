@@ -16,19 +16,6 @@ use models\UserAccountModel;
  */
 class ImportURLHistoryRepository {
 
-	
-	public function loadByEventAndtimeStamp(ImportURLModel $importurl, $timestamp) {
-		global $DB;
-		$stat = $DB->prepare("SELECT import_url_history.* FROM import_url_history ".
-				"WHERE import_url_history.import_url_id =:id AND import_url_history.created_at =:cat");
-		$stat->execute(array( 'id'=>$importurl->getId(), 'cat'=>date("Y-m-d H:i:s",$timestamp) ));
-		if ($stat->rowCount() > 0) {
-			$importurl = new ImportURLHistoryModel();
-			$importurl->setFromDataBaseRow($stat->fetch());
-			return $importurl;
-		}
-	}
-	
 	public function ensureChangedFlagsAreSet(ImportURLHistoryModel $importurlhistory) {
 		global $DB;
 		
@@ -91,26 +78,7 @@ class ImportURLHistoryRepository {
 		$statUpdate->execute($sqlParams);
 
 	}
-	
-	
-	
-	
-	public function loadByEventAndlastEditByUser(ImportURLModel $importurl, UserAccountModel $user) {
-		global $DB;
-		$stat = $DB->prepare("SELECT import_url_history.* FROM import_url_history ".
-				" WHERE import_url_history.import_url_id = :id AND import_url_history.user_account_id = :user ".
-				" ORDER BY import_url_history.created_at DESc");
-		$stat->execute(array( 
-				'id'=>$importurl->getId(), 
-				'user'=>$user->getId() 
-			));
-		if ($stat->rowCount() > 0) {
-			$importurl = new ImportURLHistoryModel();
-			$importurl->setFromDataBaseRow($stat->fetch());
-			return $importurl;
-		}
-	}
-	
+
 	
 }
 
