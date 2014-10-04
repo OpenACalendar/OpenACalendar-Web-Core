@@ -548,6 +548,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th>api1EventListLimit</th>
+			<td>{{ config.api1EventListLimit }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'api1EventListLimit'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>findDuplicateEventsShow</th>
 			<td>{{ config.findDuplicateEventsShow }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'findDuplicateEventsShow'} %}
