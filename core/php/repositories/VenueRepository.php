@@ -176,13 +176,13 @@ class VenueRepository {
 		try {
 			$DB->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE event_history SET venue_id = NULL WHERE venue_id=:id");
+			$stat = $DB->prepare("UPDATE event_history SET venue_id = NULL, venue_id_changed=0 WHERE venue_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
 			$stat = $DB->prepare("UPDATE event_information SET venue_id = NULL WHERE venue_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
-			$stat = $DB->prepare("UPDATE venue_history SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
+			$stat = $DB->prepare("UPDATE venue_history SET is_duplicate_of_id = NULL, is_duplicate_of_id_changed = 0 WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
 			$stat = $DB->prepare("UPDATE venue_information SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
