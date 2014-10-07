@@ -26,6 +26,7 @@ class VenuePurgeTest extends \PHPUnit_Framework_TestCase {
 		$DB = getNewTestDB();
 		addCountriesToTestDB();
 
+		\TimeSource::mock(2014,10,1,1,1,0);
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
@@ -61,6 +62,12 @@ class VenuePurgeTest extends \PHPUnit_Framework_TestCase {
 		$venueRepo = new VenueRepository();
 		$venueRepo->create($venue, $site, $user);
 
+		$venueDuplicate = new VenueModel();
+		$venueDuplicate->setTitle("test Duplicate");
+
+		$venueRepo->create($venueDuplicate, $site, $user);
+		\TimeSource::mock(2014,10,1,1,2,0);
+		$venueRepo->markDuplicate($venueDuplicate, $venue, $user);
 
 		$event = new EventModel();
 		$event->setSummary("test");
