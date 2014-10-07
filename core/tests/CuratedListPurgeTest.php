@@ -4,10 +4,12 @@ use models\UserAccountModel;
 use models\SiteModel;
 use models\CuratedListModel;
 use models\EventModel;
+use models\GroupModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\CuratedListRepository;
 use repositories\EventRepository;
+use repositories\GroupRepository;
 use repositories\builders\CuratedListRepositoryBuilder;
 
 /**
@@ -43,8 +45,15 @@ class CuratedListPurgeTest extends \PHPUnit_Framework_TestCase {
 		
 		$siteRepo = new SiteRepository();
 		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
-		
-		
+
+		$group = new GroupModel();
+		$group->setTitle("test");
+		$group->setDescription("test test");
+		$group->setUrl("http://www.group.com");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
 		$event = new EventModel();
 		$event->setSummary("test");
 		$event->setDescription("test test");
@@ -64,7 +73,8 @@ class CuratedListPurgeTest extends \PHPUnit_Framework_TestCase {
 		$clRepo->create($curatedList, $site, $user);
 		$clRepo->addEditorToCuratedList($userOther, $curatedList, $user);
 		$clRepo->addEventtoCuratedList($event, $curatedList, $user);
-			
+		$clRepo->addGroupToCuratedList($group, $curatedList, $user);
+
 		## Test
 		$this->assertNotNull($clRepo->loadBySlug($site, $curatedList->getSlug()));		
 
