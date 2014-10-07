@@ -203,9 +203,7 @@ class AreaRepository {
 			$this->areaDBAccess->update($area, array('parent_area_id'), $user);
 
 			// new must clear caches
-			// TODO clear for this area only - for now clear all.
-			$DB->prepare("DELETE FROM cached_area_has_parent")->execute();
-			$DB->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
+			$this->deleteParentCacheForArea($area);
 
 			$DB->commit();
 		} catch (Exception $e) {
@@ -345,9 +343,8 @@ class AreaRepository {
 			}
 			if ($flag) {
 				// now must clear caches
-				// TODO clear for this area only - for now clear all.
-				$DB->prepare("DELETE FROM cached_area_has_parent")->execute();
-				$DB->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
+				$this->deleteParentCacheForArea($originalArea);
+				$this->deleteParentCacheForArea($duplicateArea);
 			}
 
 			$DB->commit();
@@ -355,5 +352,73 @@ class AreaRepository {
 			$DB->rollBack();
 		}
 	}
+
+
+	/**
+	 *
+	 * Delete Parent Cache for Area and any children areas to.
+	 *
+	 * If there is an area Tree A -> B -> C and this function is called with B should delete C to.
+	 * This is because the cache for C includes which parents it has and that might have just changed!
+	 *
+	 * @param AreaModel $area
+	 */
+	protected function deleteParentCacheForArea(AreaModel $area) {
+		global $DB;
+		// TODO clear for this area only - for now clear all.
+		$DB->prepare("DELETE FROM cached_area_has_parent")->execute();
+		$DB->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
+	}
+
+	/**
+	 *
+	 * @TODO This could be improved, At the moment it sets any events with this area to no area but it could set them to area of parent (if any).
+	 * (Same for setting parent_area to NULL)
+	 * Have to be careful of rewriting history if we do that. Create Edinburgh, Create Stockbridge as child, Create Scotland and set as parent of Edinburgh. Now purge Edinburgh.
+	 * If just did "update area set parent_area_id=X where parent_area_id=Y" it will look as if Stockbridge was set as a child of Scotland BEFORE Scotland was created.
+	 *
+	 * @param VenueModel $venue
+	 * @throws \Exception
+	 * @throws Exception
+	 */
+	public function purge(AreaModel $area) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$this->deleteParentCacheForArea($area);
+
+			$stat = $DB->prepare("UPDATE event_history SET area_id = NULL WHERE area_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$stat = $DB->prepare("UPDATE event_information SET area_id = NULL WHERE area_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$stat = $DB->prepare("UPDATE area_history SET parent_area_id = NULL WHERE parent_area_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$stat = $DB->prepare("UPDATE area_information SET parent_area_id = NULL WHERE parent_area_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$stat = $DB->prepare("UPDATE area_history SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$stat = $DB->prepare("UPDATE area_information SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$stat = $DB->prepare("DELETE FROM area_history WHERE area_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$stat = $DB->prepare("DELETE FROM area_information WHERE id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+			throw $e;
+		}
+
+	}
+
 
 }
