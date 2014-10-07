@@ -59,6 +59,7 @@ class AreaController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
+		global $CONFIG;
 
 		$this->build($siteid, $slug, $request, $app);
 		
@@ -99,6 +100,14 @@ class AreaController {
 						$ar->markDuplicate($this->parameters['area'], $originalArea, userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
 					}
+
+
+				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeAreaPassword && $CONFIG->sysAdminExtraPurgeAreaPassword == $action->getParam(0)) {
+
+					$ar = new AreaRepository();
+					$ar->purge($this->parameters['area']);
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/');
+
 
 				}
 			}

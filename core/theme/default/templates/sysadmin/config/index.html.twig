@@ -275,6 +275,10 @@
 			<td>{%  if config.sysAdminExtraPurgeVenuePassword %}*********{% else %}Not Set{% endif %}</td>
 		</tr>
 		<tr>
+			<th>sysAdminExtraPurgeAreaPassword</th>
+			<td>{%  if config.sysAdminExtraPurgeAreaPassword %}*********{% else %}Not Set{% endif %}</td>
+		</tr>
+		<tr>
 			<th>sysAdminTimeZone</th>
 			<td>{{ config.sysAdminTimeZone }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminTimeZone'} %}
