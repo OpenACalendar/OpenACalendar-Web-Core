@@ -74,6 +74,14 @@ class EventPurgeTest extends \PHPUnit_Framework_TestCase {
 		TimeSource::mock(2014,5,1,7,1,0);
 		$eventRepository->markDuplicate($eventDupe, $event);
 
+		$userAtEvent = new \models\UserAtEventModel();
+		$userAtEvent->setEventId($event->getId());
+		$userAtEvent->setUserAccountId($user->getId());
+		$userAtEvent->setIsPlanAttending(true);
+
+		$userAtEventRepo = new \repositories\UserAtEventRepository();
+		$userAtEventRepo->create($userAtEvent);
+
 		$curatedList = new CuratedListModel();
 		$curatedList->setTitle("test");
 		$curatedList->setDescription("test this!");

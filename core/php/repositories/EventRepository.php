@@ -426,7 +426,10 @@ class EventRepository {
 			
 			$stat = $DB->prepare("DELETE FROM event_in_group WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
-			
+
+			$stat = $DB->prepare("DELETE FROM user_at_event_information WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+
 			$stat = $DB->prepare("DELETE FROM event_in_curated_list WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 			
