@@ -159,6 +159,42 @@ class VenueRepository {
 			$DB->rollBack();
 		}
 	}
-	
+
+
+	/**
+	 *
+	 * @TODO This could be improved, At the moment it sets any events with this venue to no venue & no area but it could set them to area of venue.
+	 * Have to be careful of rewriting history if we do that. Create Event - Create Area - Create Venue  and set event to it - now purge venue.
+	 * If we just did "update event set area=X, venue=null where venue=Y" on the history table it will look as if the venue was set on the event BEFORE the venue was created.
+	 *
+	 * @param VenueModel $venue
+	 * @throws \Exception
+	 * @throws Exception
+	 */
+	public function purge(VenueModel $venue) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$stat = $DB->prepare("UPDATE event_history SET venue_id = NULL WHERE venue_id=:id");
+			$stat->execute(array('id'=>$venue->getId()));
+
+			$stat = $DB->prepare("UPDATE event_information SET venue_id = NULL WHERE venue_id=:id");
+			$stat->execute(array('id'=>$venue->getId()));
+
+			$stat = $DB->prepare("DELETE FROM venue_history WHERE venue_id=:id");
+			$stat->execute(array('id'=>$venue->getId()));
+
+			$stat = $DB->prepare("DELETE FROM venue_information WHERE id=:id");
+			$stat->execute(array('id'=>$venue->getId()));
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+			throw $e;
+		}
+
+	}
+
 }
 
