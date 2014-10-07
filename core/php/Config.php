@@ -97,7 +97,10 @@ class Config {
 	
 	public $sysAdminExtraPassword = "1234";
 	public $sysAdminTimeZone = "Europe/London";
-	
+
+	public $sysAdminExtraPurgeEventPassword = null;
+
+
 	public $sessionLastsInSeconds = 14400; // 4 hours, 4 * 60 * 60
 	
 	public $resetEmailsGapBetweenInSeconds = 600; // 10 mins
