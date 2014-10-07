@@ -99,6 +99,7 @@ class Config {
 	public $sysAdminTimeZone = "Europe/London";
 
 	public $sysAdminExtraPurgeEventPassword = null;
+	public $sysAdminExtraPurgeGroupPassword = null;
 
 
 	public $sessionLastsInSeconds = 14400; // 4 hours, 4 * 60 * 60

@@ -267,6 +267,10 @@
 			<td>{%  if config.sysAdminExtraPurgeEventPassword %}*********{% else %}Not Set{% endif %}</td>
 		</tr>
 		<tr>
+			<th>sysAdminExtraPurgeGroupPassword</th>
+			<td>{%  if config.sysAdminExtraPurgeGroupPassword %}*********{% else %}Not Set{% endif %}</td>
+		</tr>
+		<tr>
 			<th>sysAdminTimeZone</th>
 			<td>{{ config.sysAdminTimeZone }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminTimeZone'} %}

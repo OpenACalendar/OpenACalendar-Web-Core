@@ -49,6 +49,7 @@ class GroupController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
+		global $CONFIG;
 
 		$this->build($siteid, $slug, $request, $app);
 		
@@ -77,6 +78,14 @@ class GroupController {
 						$gr->markDuplicate($this->parameters['group'], $originalGroup, userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
 					}
+
+
+				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeGroupPassword && $CONFIG->sysAdminExtraPurgeGroupPassword == $action->getParam(0)) {
+
+					$gr = new GroupRepository();
+					$gr->purge($this->parameters['group']);
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/');
+
 				}
 			}
 		}
