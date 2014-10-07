@@ -388,19 +388,19 @@ class AreaRepository {
 
 			$this->deleteParentCacheForArea($area);
 
-			$stat = $DB->prepare("UPDATE event_history SET area_id = NULL WHERE area_id=:id");
+			$stat = $DB->prepare("UPDATE event_history SET area_id = NULL, area_id_changed = 0 WHERE area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
 			$stat = $DB->prepare("UPDATE event_information SET area_id = NULL WHERE area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("UPDATE area_history SET parent_area_id = NULL WHERE parent_area_id=:id");
+			$stat = $DB->prepare("UPDATE area_history SET parent_area_id = NULL, parent_area_id_changed=0 WHERE parent_area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
 			$stat = $DB->prepare("UPDATE area_information SET parent_area_id = NULL WHERE parent_area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("UPDATE area_history SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
+			$stat = $DB->prepare("UPDATE area_history SET is_duplicate_of_id = NULL, is_duplicate_of_id_changed = 0 WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
 			$stat = $DB->prepare("UPDATE area_information SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
