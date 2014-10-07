@@ -49,7 +49,8 @@ class CuratedListController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
-		
+		global $CONFIG;
+
 		$this->build($siteid, $slug, $request, $app);
 		
 				
@@ -106,6 +107,14 @@ class CuratedListController {
 						$clr->removeEventFromCuratedList($event, $this->parameters['curatedlist'], userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$event->getSlug());
 					}
+
+
+				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeCuratedListPassword && $CONFIG->sysAdminExtraPurgeCuratedListPassword == $action->getParam(0)) {
+
+					$clr = new CuratedListRepository();
+					$clr->purge($this->parameters['curatedlist']);
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/');
+
 				}
 			}
 		}

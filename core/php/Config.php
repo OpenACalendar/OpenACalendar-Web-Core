@@ -102,6 +102,7 @@ class Config {
 	public $sysAdminExtraPurgeGroupPassword = null;
 	public $sysAdminExtraPurgeVenuePassword = null;
 	public $sysAdminExtraPurgeAreaPassword = null;
+	public $sysAdminExtraPurgeCuratedListPassword = null;
 
 
 	public $sessionLastsInSeconds = 14400; // 4 hours, 4 * 60 * 60
