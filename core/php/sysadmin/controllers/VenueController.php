@@ -43,6 +43,7 @@ class VenueController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
+		global $CONFIG;
 
 		$this->build($siteid, $slug, $request, $app);
 		
@@ -72,6 +73,13 @@ class VenueController {
 						$vr->markDuplicate($this->parameters['venue'], $originalVenue, userGetCurrent());
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
 					}
+
+
+				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeVenuePassword && $CONFIG->sysAdminExtraPurgeVenuePassword == $action->getParam(0)) {
+
+					$vr = new VenueRepository();
+					$vr->purge($this->parameters['venue']);
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/');
 
 				}
 			}

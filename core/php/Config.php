@@ -100,6 +100,7 @@ class Config {
 
 	public $sysAdminExtraPurgeEventPassword = null;
 	public $sysAdminExtraPurgeGroupPassword = null;
+	public $sysAdminExtraPurgeVenuePassword = null;
 
 
 	public $sessionLastsInSeconds = 14400; // 4 hours, 4 * 60 * 60
