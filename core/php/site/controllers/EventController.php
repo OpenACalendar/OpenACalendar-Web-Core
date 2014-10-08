@@ -255,7 +255,15 @@ class EventController {
 		$uaerb->setPlanAttendingMaybeOnly(true);
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
-		
+
+		if (userGetCurrent()) {
+			$uaer = new UserAtEventRepository();
+			$uae = $uaer->loadByUserAndEvent(userGetCurrent(), $this->parameters['event']);
+			$this->parameters['userAtEventIsCurrentUser'] = $uae && ($uae->getIsPlanAttending() || $uae->getIsPlanMaybeAttending());
+		} else {
+			$this->parameters['userAtEventIsCurrentUser'] = false;
+		}
+
 		$this->addTagsToParameters($app);
 		
 		if ($this->parameters['country']) {
@@ -309,7 +317,15 @@ class EventController {
 		$uaerb->setPlanAttendingMaybeOnly(true);
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
-		
+
+		if (userGetCurrent()) {
+			$uaer = new UserAtEventRepository();
+			$uae = $uaer->loadByUserAndEvent(userGetCurrent(), $this->parameters['event']);
+			$this->parameters['userAtEventIsCurrentUser'] = $uae && ($uae->getIsPlanAttending() || $uae->getIsPlanMaybeAttending());
+		} else {
+			$this->parameters['userAtEventIsCurrentUser'] = false;
+		}
+
 		return $app['twig']->render('/site/event/usersAttending.html.twig', $this->parameters);
 	}
 	
