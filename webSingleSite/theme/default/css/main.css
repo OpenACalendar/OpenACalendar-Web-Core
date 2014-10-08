@@ -1473,6 +1473,11 @@ div.filterListVenueWrapper form.filterListVenue div.submitField input {
   background-repeat: no-repeat;
   background-position: 5px 5px;
 }
+.UserAttendingList .GetTicket {
+  font-weight: bold;
+  font-size: 120%;
+  font-style: italic;
+}
 ul.mediaGrid li {
   width: 100px;
   height: 100px;
