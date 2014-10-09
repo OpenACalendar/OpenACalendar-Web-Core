@@ -74,7 +74,7 @@ class CuratedListController {
 		$userAccountRepository = new UserAccountRepository();
 		$this->parameters['curatedlistOwner'] = $userAccountRepository->loadByOwnerOfCuratedList($this->parameters['curatedlist']);
 		
-		if ($request->request->get('submitted') == 'add' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+		if ($request->request->get('submitted') == 'add' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $this->parameters['currentUserCanEditCuratedList']) {
 			$newUser = $userAccountRepository->loadByUserName($request->request->get('userdetails'));
 			if ($newUser){
 				$curatedListRepo = new CuratedListRepository();
@@ -84,7 +84,7 @@ class CuratedListController {
 				$app['flashmessages']->addError("Could not find that user");
 				// TODO put error in form instead, in usual field error place
 			}
-		} else if ($request->request->get('submitted') == 'remove' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+		} else if ($request->request->get('submitted') == 'remove' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $this->parameters['currentUserCanEditCuratedList']) {
 			$oldUser = $userAccountRepository->loadByUserName($request->request->get('username'));
 			if ($oldUser) {
 				$curatedListRepo = new CuratedListRepository();
