@@ -77,23 +77,25 @@ class CuratedListController {
 				
 		$userAccountRepository = new UserAccountRepository();
 		$this->parameters['curatedlistOwner'] = $userAccountRepository->loadByOwnerOfCuratedList($this->parameters['curatedlist']);
-		
-		if ($request->request->get('submitted') == 'add' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$newUser = $userAccountRepository->loadByUserName($request->request->get('userdetails'));
-			if ($newUser){
-				$curatedListRepo = new CuratedListRepository();
-				$curatedListRepo->addEditorToCuratedList($newUser, $this->parameters['curatedlist'], userGetCurrent());
-				$app['flashmessages']->addMessage("Added");
-			} else {
-				$app['flashmessages']->addError("Could not find that user");
-				// TODO put error in form instead, in usual field error place
-			}
-		} else if ($request->request->get('submitted') == 'remove' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$oldUser = $userAccountRepository->loadByUserName($request->request->get('username'));
-			if ($oldUser) {
-				$curatedListRepo = new CuratedListRepository();
-				$curatedListRepo->removeEditorFromCuratedList($oldUser, $this->parameters['curatedlist'], userGetCurrent());
-				$app['flashmessages']->addMessage("Removed");
+
+		if ($this->parameters['actionCuratedListEditCurators'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+			if ($request->request->get('submitted') == 'add') {
+				$newUser = $userAccountRepository->loadByUserName($request->request->get('userdetails'));
+				if ($newUser){
+					$curatedListRepo = new CuratedListRepository();
+					$curatedListRepo->addEditorToCuratedList($newUser, $this->parameters['curatedlist'], userGetCurrent());
+					$app['flashmessages']->addMessage("Added");
+				} else {
+					$app['flashmessages']->addError("Could not find that user");
+					// TODO put error in form instead, in usual field error place
+				}
+			} else if ($request->request->get('submitted') == 'remove') {
+				$oldUser = $userAccountRepository->loadByUserName($request->request->get('username'));
+				if ($oldUser) {
+					$curatedListRepo = new CuratedListRepository();
+					$curatedListRepo->removeEditorFromCuratedList($oldUser, $this->parameters['curatedlist'], userGetCurrent());
+					$app['flashmessages']->addMessage("Removed");
+				}
 			}
 		}
 
