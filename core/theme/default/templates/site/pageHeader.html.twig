@@ -51,10 +51,10 @@
 			<li class="menu">
 				<a href="/places">Places</a>
 				<ul class="submenu">
-					{% if currentSite.cachedIsMultipleCountries %}
-						<li><a href="/country">Countries</a></li>
-					{% else %}
+					{% if not currentSite.cachedIsMultipleCountries and currentSiteHasOneCountry is defined %}
 						<li><a href="/country/{{ currentSiteHasOneCountry.twoCharCode }}">{{ currentSiteHasOneCountry.title }}</a></li>
+					{% else %}
+						<li><a href="/country">Countries</a></li>
 					{% endif %}
 					{% if currentSite.isFeatureVirtualEvents %}
 						<li><a href="/venue/virtual">Virtual</a></li>
@@ -88,13 +88,15 @@
 					{% if currentSite.cachedIsMultipleTimezones %}
 						<li><a href="/mytimezone">{{ currentTimeZone }}</a></li>
 					{% endif %}
-					<li id="userWatchesSite">
-						{% if currentUserWatchesSite %}
-							<a href="/watch/">Watching!</a>
-						{% else %}
-							<a href="/watch/">Watch?</a>
-						{% endif %}
-					</li>
+					{% if currentUserWatchesSite is defined %}
+						<li id="userWatchesSite">
+							{%  if currentUserWatchesSite %}
+								<a href="/watch/">Watching!</a>
+							{% else %}
+								<a href="/watch/">Watch?</a>
+							{% endif %}
+						</li>
+					{% endif %}
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
 					{% if currentUserCanAdminSite %}
 						<li><a href="{{ config.getWebSiteDomainSecure( currentSite.slug ) }}/admin">Calendar Admin</a></li>
