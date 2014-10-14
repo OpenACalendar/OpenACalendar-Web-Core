@@ -20,7 +20,7 @@ $(document).ready(function() {
 		}).success(function ( eventdata ) {
 			savingIndicatorObj.hide();
 			savedIndicatorObj.show();
-			$( "#UserAttendingListAjaxWrapper" ).load( "/event/"+event.slug+"/userAttendance.html" );
+			$( "#UserAttendingListAjaxWrapper" ).load( "/event/"+eventData.slug+"/userAttendance.html" );
 		});
 		var attendingObj = formObj.children('select[name="attending"]');
 		var privacyWrapperObj = formObj.children(".UserAttendingPrivacyOptionsWrapper");

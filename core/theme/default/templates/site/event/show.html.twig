@@ -287,7 +287,10 @@
 
 {% block scriptsForState %}
 	{% include '/site/common/mediasJavaScriptInformation.html.twig' with { medias:medias } %}
+	{# This is DEPRECATED. the name event is used inside several JS functions which overwrites this #}
 	<script type="text/javascript">var event = { slug: {{ event.slug }} };</script>
+	{# so we need a new name ... #}
+	<script type="text/javascript">var eventData = { slug: {{ event.slug }} };</script>
 	{{ parent() }}
 {% endblock %}		
 		
