@@ -148,6 +148,7 @@ class CurrentUserController {
 		
 		$srb = new SiteRepositoryBuilder();
 		$srb->setUserInterestedIn(userGetCurrent());
+		$srb->setIsOpenBySysAdminsOnly(true);
 		
 		return $app['twig']->render('index/currentuser/sites.html.twig', array(
 			'sites'=>$srb->fetchAll(),
