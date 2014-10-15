@@ -1654,6 +1654,126 @@ ul.areasAdmin li.area span.contentNew a {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
+ul.importedevents li.importedevent {
+  border-bottom: 2px solid #E9E9E9;
+  margin-bottom: 10px;
+  padding: 20px 0;
+}
+ul.importedevents li.importedevent div.dateTimeIcon {
+  float: left;
+  width: 60px;
+  height: 80px;
+  position: relative;
+  z-index: 100;
+  margin: 0 10px 10px 0;
+  border: 2px solid #555555;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -o-border-radius: 1px;
+  border-radius: 1px;
+}
+ul.importedevents li.importedevent div.dateTimeIcon div.dateIcon {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  background: #555555;
+}
+ul.importedevents li.importedevent div.dateTimeIcon div.timeIcon {
+  padding: 1px;
+  text-align: center;
+}
+ul.importedevents li.importedevent div.dateTimeIcon span.deleted,
+ul.importedevents li.importedevent div.dateTimeIcon span.cancelled {
+  padding-top: 5px;
+  display: block;
+  color: white;
+}
+ul.importedevents li.importedevent div.dateTimeIcon span.startDay {
+  font-weight: 200;
+  padding-top: 5px;
+  display: block;
+  color: white;
+}
+ul.importedevents li.importedevent div.dateTimeIcon span.startDate {
+  font-size: 16pt;
+  font-weight: 400;
+  display: block;
+  color: white;
+}
+ul.importedevents li.importedevent div.dateTimeIcon span.startMonthYear {
+  font-weight: 200;
+  display: block;
+  font-size: 0.75em;
+  color: white;
+}
+ul.importedevents li.importedevent div.dateTimeIcon span.startTime {
+  font-size: 11pt;
+  color: black;
+}
+ul.importedevents li.importedevent div.dateTimeIcon a {
+  text-decoration: none;
+}
+ul.importedevents li.importedevent div.dateTimeIcon a span.startDay {
+  color: white;
+}
+ul.importedevents li.importedevent div.dateTimeIcon a span.startDate {
+  color: white;
+}
+ul.importedevents li.importedevent div.dateTimeIcon a span.startMonthYear {
+  color: white;
+}
+ul.importedevents li.importedevent div.dateTimeIcon a span.startTime {
+  color: black;
+}
+ul.importedevents li.importedevent div.title {
+  font-size: 16pt;
+  font-weight: bold;
+  line-height: 1.25em;
+  padding: 2px 0 10px 70px;
+  position: relative;
+  top: -5px;
+}
+ul.importedevents li.importedevent div.title a {
+  color: #333;
+  text-decoration: none;
+}
+ul.importedevents li.importedevent div.title a:hover {
+  color: black;
+  text-decoration: underline;
+}
+ul.importedevents li.importedevent div.afterEventListing {
+  clear: both;
+}
+div.filterListImportedEventWrapper {
+  padding: 5px 0;
+}
+div.filterListImportedEventWrapper form.filterListImportedEvent {
+  background: #72DA72;
+  padding: 10px;
+}
+div.filterListImportedEventWrapper form.filterListImportedEvent div.inputField {
+  display: inline;
+  padding: 10px;
+}
+div.filterListImportedEventWrapper form.filterListImportedEvent #eventListFilterFromWrapper input {
+  background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
+}
+div.filterListImportedEventWrapper form.filterListImportedEvent div.submitField {
+  display: inline;
+  padding: 10px;
+}
+div.filterListImportedEventWrapper form.filterListImportedEvent div.submitField input {
+  background: #004300;
+  color: white;
+  border: 2px solid #004300;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  cursor: pointer;
+}
 p.FrontPage {
   font-size: 16pt;
   margin-bottom: 20px;

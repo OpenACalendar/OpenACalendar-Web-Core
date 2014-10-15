@@ -38,6 +38,7 @@
 			{% if currentUserActions.has("org.openacalendar","importURLLog") %}
 				<li class="tab {% block tabLog %}{% endblock %}"><a href="/importurl/{{ importurl.slug }}/log">Log</a></li>
 			{% endif %}
+			<li class="tab {% block tabImportedEvents %}{% endblock %}"><a href="/importurl/{{ importurl.slug }}/importedevent">Imported Events</a></li>
 		</ul>
 		<div id="innerPage">
 

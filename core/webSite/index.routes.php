@@ -536,7 +536,10 @@ $app->match('/importurl/{slug}/disable', "site\controllers\ImportURLController::
 		->before($canChangeSite)
 		->assert('slug', '\d+'); 
 $app->match('/importurl/{slug}/log', "site\controllers\ImportURLController::log")
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+');
+
+$app->match('/importurl/{slug}/importedevent', "site\controllers\ImportURLImportedEventListController::index")
+		->assert('slug', '\d+');
 
 $app->match('/curatedlist', "site\controllers\CuratedListListController::index"); 
 $app->match('/curatedlist/', "site\controllers\CuratedListListController::index"); 

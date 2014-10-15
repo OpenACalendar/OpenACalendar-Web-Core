@@ -1,0 +1,26 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<div class="filterListImportedEventWrapper">
+	<form method="get" class="filterListImportedEvent">
+		<input type="hidden" name="importedEventListFilterDataSubmitted" value="1">
+
+		{% if importedEventListFilterParams.dateControls %}
+			<div class="inputField">
+				<label><input type="checkbox" name="fromNow" value="1" {% if importedEventListFilterParams.fromNow %}checked{% endif %}> From now</label>
+			</div>
+
+			<div class="inputField" id="eventListFilterFromWrapper">
+				<label>From <input type="text" name="from" value="{{  importedEventListFilterParams.from }}"></label>
+			</div>
+		{% endif %}
+
+		<div class="submitField">
+			<input type="submit" value="Filter">
+		</div>
+	</form>
+</div>
