@@ -51,6 +51,7 @@ $app->before(function (Request $request) use ($app) {
 
 	# ////////////// User and their watch and perms
 	$app['currentUserActions'] = new UserActionsSiteList($app['currentSite'], $app['currentUserPermissions']);
+	$app['currentUserWatchesSite'] = false;
 	if (userGetCurrent()) {
 		$uwsr = new UserWatchesSiteRepository();
 		$uws = $uwsr->loadByUserAndSite(userGetCurrent(), $app['currentSite']);
