@@ -106,23 +106,39 @@ $app->match('/event/{slug}/rollback/{timestamp}', "site\controllers\EventControl
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('rollback', '\d+')
 		->before($appVerifiedEditorUserRequired)
-		->before($canChangeSite); 
+		->before($canChangeSite);
 $app->match('/event/{slug}/recur', "site\controllers\EventController::recur")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/recur/', "site\controllers\EventController::recur")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/recur/weekly', "site\controllers\EventController::recurWeekly")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/recur/weekly/', "site\controllers\EventController::recurWeekly")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/recur/monthly', "site\controllers\EventController::recurMonthly")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/recur/monthly/', "site\controllers\EventController::recurMonthly")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/recur/monthlyLast', "site\controllers\EventController::recurMonthlyLast")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/recur/monthlyLast/', "site\controllers\EventController::recurMonthlyLast")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($appVerifiedEditorUserRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/moveToArea', "site\controllers\EventController::moveToArea")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appVerifiedEditorUserRequired)
