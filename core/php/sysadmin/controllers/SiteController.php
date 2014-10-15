@@ -11,7 +11,6 @@ use models\AreaModel;
 use repositories\SiteRepository;
 use repositories\SiteQuotaRepository;
 use repositories\UserAccountRepository;
-use repositories\UserInSiteRepository;
 use repositories\CountryRepository;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\AreaRepositoryBuilder;
@@ -125,31 +124,7 @@ class SiteController {
 					$this->parameters['site']->setIsListedInIndex($action->getParamBoolean(0));
 					$sr->edit($this->parameters['site'], userGetCurrent());
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'addadmin') {
-					$user = $userRepository->loadById($action->getParam(0));
-					if ($user) {
-						$userInSiteRepo = new UserInSiteRepository();
-						$userInSiteRepo->markUserAdministratesSite($user, $this->parameters['site']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					}
-					
-				} else if ($action->getCommand() == 'addeditor') {
-					$user = $userRepository->loadById($action->getParam(0));
-					if ($user) {
-						$userInSiteRepo = new UserInSiteRepository();
-						$userInSiteRepo->markUserEditsSite($user, $this->parameters['site']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					}
-					
-				} else if ($action->getCommand() == 'owner') {
-					$user = $userRepository->loadById($action->getParam(0));
-					if ($user) {
-						$userInSiteRepo = new UserInSiteRepository();
-						$userInSiteRepo->setUserOwnsSite($user, $this->parameters['site']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					}
-					
+
 				} else if ($action->getCommand() == 'quota') {
 					$sitequota = $siteQuotaRepository->loadByCode($action->getParam(0));
 					if ($sitequota) {
@@ -182,26 +157,6 @@ class SiteController {
 		
 		return $app['twig']->render('sysadmin/site/show.html.twig', $this->parameters);		
 	
-	}
-	
-
-	function owner($id, Request $request, Application $app) {
-		$this->build($id, $request, $app);
-
-		$userRepo = new UserAccountRepository();
-		$this->parameters['owner'] = $userRepo->loadByOwnerOfSite($this->parameters['site']);
-
-		return $app['twig']->render('sysadmin/site/owner.html.twig', $this->parameters);
-	}
-
-	function editors($id, Request $request, Application $app) {
-		$this->build($id, $request, $app);
-			
-		$uarb = new UserAccountRepositoryBuilder();
-		$uarb->setCanEditSite($this->parameters['site']);
-		$this->parameters['users'] = $uarb->fetchAll();
-
-		return $app['twig']->render('sysadmin/site/editors.html.twig', $this->parameters);		
 	}
 	
 	function watchers($id, Request $request, Application $app) {

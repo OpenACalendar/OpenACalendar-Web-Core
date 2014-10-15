@@ -31,7 +31,7 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
-			{% if currentUserCanEditSite and currentSite.isFeatureCuratedList %}
+			{% if currentUserActions.has("org.openacalendar","curatedListNew") %}
 				<li class="action">
 					<a href="/curatedlist/new"><div class="iconPencilSmall"></div> new</a>
 				</li>

@@ -8,29 +8,37 @@
 {% extends 'site/page.html.twig' %}
 
 
-{% block pageTitle %}Add User Admin - {% endblock %} 
+{% block pageTitle %}User Admin - {% endblock %}
 
 
 {% block breadcrumbs %}
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	<li><a href="/admin">admin</a></li>
-	<li><a href="/admin/users">users</a></li>
-	<li class="current"><a href="/admin/users/add">add user</a></li>
+	<li class="current"><a href="/admin/user">users</a></li>
 {% endblock %}
 
 {% block content %}
 
+	<h2>User {{ user.username }}</h2>
 
 
-	<form action="#" method="post" class="styled">
+	<h3>Has User Permissions</h3>
 
-		{{ form_errors(form) }}
+	<table class="data">
+		<tr>
+			<th>Extension</th>
+			<th>ID</th>
+		</tr>
+		{% for userpermission in userpermissions %}
+			<tr>
+				<td>{{ userpermission.userPermissionExtensionID }}</td>
+				<td>{{ userpermission.userPermissionKey }}</td>
+			</tr>
+		{% endfor %}
+	</table>
 
-		{{ form_rest(form) }}
-
-		<input type="submit"  value="Add Administrator" />	
-	</form>
-	
 
 
+
+		
 {% endblock %}

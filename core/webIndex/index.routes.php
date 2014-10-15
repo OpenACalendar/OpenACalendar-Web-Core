@@ -33,11 +33,6 @@ $app->match('/credits/',"index\controllers\IndexController::credits");
 $app->match('/mytimezone', "index\controllers\IndexController::myTimeZone") ; 
 $app->match('/mytimezone/', "index\controllers\IndexController::myTimeZone") ; 
 
-if ($CONFIG->canCreateSitesVerifiedEditorUsers) {
-	$app->match('/create', "index\controllers\IndexController::create")
-			->before($appVerifiedEditorUserRequired)
-			->before($canChangeSite);
-}
 
 // Logged out user actions
 // ... routes all under "you" - as they happen to you, the person using the site

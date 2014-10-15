@@ -34,7 +34,7 @@
 							{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
 						</a>
 					</div>
-					{% if currentUserCanEditSite %}
+					{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
 						<form action="/event/{{ event.slugForUrl }}/media/{{ media.slug }}/remove" method="post" onsubmit="return confirm('Are you sure you want to remove this?');">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="remove" value="yes">
@@ -49,7 +49,7 @@
 		<p>There are no pictures.</p>
 	{% endif %}
 
-	{% if currentUserCanEditSite %}
+	{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
 
 		<h3>Add new picture</h3>
 

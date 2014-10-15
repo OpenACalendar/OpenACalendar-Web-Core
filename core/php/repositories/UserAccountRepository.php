@@ -85,22 +85,7 @@ class UserAccountRepository {
 			return $user;
 		}
 	}
-	
-	
-	public function loadByOwnerOfSite(SiteModel $site) {
-		global $DB;
-		$stat = $DB->prepare("SELECT user_account_information.* FROM user_account_information ".
-				" JOIN user_in_site_information ON user_in_site_information.user_account_id = user_account_information.id ".
-				"WHERE user_in_site_information.site_id = :id AND user_in_site_information.is_owner = 't'");
-		$stat->execute(array( 'id'=>$site->getId() ));
-		if ($stat->rowCount() > 0) {
-			$user = new UserAccountModel();
-			$user->setFromDataBaseRow($stat->fetch());
-			return $user;
-		}
-	}
-	
-	
+
 	public function loadByOwnerOfCuratedList(CuratedListModel $curatedList) {
 		global $DB;
 		$stat = $DB->prepare("SELECT user_account_information.* FROM user_account_information ".
@@ -113,9 +98,7 @@ class UserAccountRepository {
 			return $user;
 		}
 	}
-	
-	
-	
+
 	public function verifyEmail(UserAccountModel $user) {
 		global $DB;
 		$stat = $DB->prepare("UPDATE user_account_information SET  is_email_verified='t' WHERE id =:id");

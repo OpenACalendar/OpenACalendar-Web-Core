@@ -50,13 +50,12 @@ class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		
 		#### Initial Set
 		$permissions = new API2ApplicationUserPermissionsModel();
-		$permissions->setWriteCalendarGranted();
+		$permissions->setIsEditorGranted();
 		$userInApi2AppRepo->setPermissionsForUserInApp($permissions, $user, $api2app);
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(true, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
+		$this->assertEquals(true, $userInApp->getIsEditor());
 
 		#### This should do nothing
 		$permissions = new API2ApplicationUserPermissionsModel();
@@ -64,28 +63,25 @@ class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(true, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
-		
+		$this->assertEquals(true, $userInApp->getIsEditor());
+
 		#### Then Remove
 		$permissions = new API2ApplicationUserPermissionsModel();
-		$permissions->setWriteCalendarRefused();
+		$permissions->setIsEditorRefused();
 		$userInApi2AppRepo->setPermissionsForUserInApp($permissions, $user, $api2app);
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(false, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
-		
+		$this->assertEquals(false, $userInApp->getIsEditor());
+
 		#### This should do nothing
 		$permissions = new API2ApplicationUserPermissionsModel();
 		$userInApi2AppRepo->setPermissionsForUserInApp($permissions, $user, $api2app);
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(false, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
-		
+		$this->assertEquals(false, $userInApp->getIsEditor());
+
 	}
 	
 	function testStartRefusedThenGrantPermissionIsWriteCalendar() {
@@ -125,8 +121,7 @@ class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(false, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
+		$this->assertEquals(false, $userInApp->getIsEditor());
 
 		#### This should do nothing
 		$permissions = new API2ApplicationUserPermissionsModel();
@@ -134,28 +129,25 @@ class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(false, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
-		
+		$this->assertEquals(false, $userInApp->getIsEditor());
+
 		#### Then Remove
 		$permissions = new API2ApplicationUserPermissionsModel();
-		$permissions->setWriteCalendarGranted();
+		$permissions->setIsEditorGranted();
 		$userInApi2AppRepo->setPermissionsForUserInApp($permissions, $user, $api2app);
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(true, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
-		
+		$this->assertEquals(true, $userInApp->getIsEditor());
+
 		#### This should do nothing
 		$permissions = new API2ApplicationUserPermissionsModel();
 		$userInApi2AppRepo->setPermissionsForUserInApp($permissions, $user, $api2app);
 		
 		#### Test
 		$userInApp = $userInApi2AppRepo->loadByUserAndApplication($user, $api2app);
-		$this->assertEquals(true, $userInApp->getIsWriteCalendar());
-		$this->assertEquals(false, $userInApp->getIsWriteUserActions());
-		
+		$this->assertEquals(true, $userInApp->getIsEditor());
+
 	}
 	
 }

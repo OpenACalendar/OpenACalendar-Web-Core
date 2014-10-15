@@ -17,58 +17,33 @@ use models\API2ApplicationModel;
  */
 class API2ApplicationUserPermissionsModel {
 	
-	protected $is_write_user_actions = 0;
-	protected $is_write_calendar = 0;
+	protected $is_editor = 0;
 
 	public function setFromData($data) {
-		$this->is_write_calendar  = isset($data['is_write_calendar']) ? ($data['is_write_calendar'] ? 1 : -1) : 0;
-		$this->is_write_user_actions  = isset($data['is_write_user_actions']) ? ($data['is_write_user_actions'] ? 1 : -1) : 0;
+		$this->is_editor  = isset($data['is_editor']) ? ($data['is_editor'] ? 1 : -1) : 0;
 	}
 	
 	public function setFromApp(API2ApplicationModel $app) {
-		$this->is_write_calendar  = $app->getIsWriteCalendar() ? 1 : 0;
-		$this->is_write_user_actions  = $app->getIsWriteUserActions() ? 1 : 0;
-	}
-	
-	/** is_write_user_actions **/
-	
-	public function getIsWriteUserActionsGranted() {
-		return ($this->is_write_user_actions == 1);
-	}
-	
-	public function getIsWriteUserActionsRefused() {
-		return ($this->is_write_user_actions == -1);
+		$this->is_editor  = $app->getIsEditor() ? 1 : 0;
 	}
 
-	public function setWriteUserActionsGranted() {
-		$this->is_write_user_actions = 1;
+	public function getIsEditorGranted() {
+		return ($this->is_editor == 1);
 	}
-
-	public function setWriteUserActionsRefused() {
-		$this->is_write_user_actions = -1;
-	}
-
-	/** is_write_calendar **/
 	
-	public function getIsWriteCalendarGranted() {
-		return ($this->is_write_calendar == 1);
+	public function getIsEditorRefused() {
+		return ($this->is_editor == -1);
 	}
 
-	public function getIsWriteCalendarRefused() {
-		return ($this->is_write_calendar == -1);
+	public function setIsEditorGranted() {
+		$this->is_editor = 1;
 	}
 
-	public function setWriteCalendarGranted() {
-		$this->is_write_calendar = 1;
+	public function setIsEditorRefused() {
+		$this->is_editor = -1;
 	}
 
-	public function setWriteCalendarRefused() {
-		$this->is_write_calendar = -1;
-	}
 
-	
-	
-	
 	
 }
 

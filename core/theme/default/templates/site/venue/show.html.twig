@@ -6,13 +6,6 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 
-
-
-{% set pushToChildAreas = false %}
-{% if childAreas and currentUserCanEditSite and currentSite.isFeaturePhysicalEvents and not venue.isDeleted %}
-	{% set pushToChildAreas = true %}
-{% endif %}
-
 {% extends 'site/venue/page.html.twig' %}
 
 {% block pageTitle %}{{ venue.title }} - {% endblock %} 
@@ -25,13 +18,13 @@
 {% endblock %}
 
 {% block actions %}
-	{% if actionVenueDelete %}
+	{% if currentUserActions.has("org.openacalendar","venueDelete") %}
 		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
 	{%  endif %}
-	{%  if actionVenueEditDetails %}
+	{%  if currentUserActions.has("org.openacalendar","venueEditDetails") %}
 		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a></li>
 	{%  endif %}
-	{% if actionVenueEditMedia %}
+	{% if currentUserActions.has("org.openacalendar","venueEditMedia") %}
 		<li class="action">
 			<a href="/venue/{{ venue.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
 		</li>
@@ -61,7 +54,7 @@
 		<div id="innerPageLeft" class="venue">
 
 
-			{% if pushToChildAreas %}
+			{% if currentUserActions.has("org.openacalendar","venueEditPushToChildAreas") %}
 				<div id="userCanPushToChildAreaWrapper">
 					<p>Is "{{ venue.title }}" in one of these places?</p>
 					<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
@@ -143,7 +136,7 @@
 	<script type="text/javascript" src="/theme/default/js/venueshow.js?v={{ config.assetsVersion }}"></script>
 	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
 	<script src="/theme/default/js/mediaPopup.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-	{%  if pushToChildAreas %}
+	{%  if currentUserActions.has("org.openacalendar","venueEditPushToChildAreas") %}
 		<script src="/theme/default/js/pushToChildArea.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 	{%  endif %}
 {% endblock %}

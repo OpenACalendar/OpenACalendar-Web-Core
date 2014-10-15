@@ -26,13 +26,11 @@
 		<li><a href="/admin/profile"><div class="iconUserLarge"></div> Profile</a></li>
 
 		<li><a href="/admin/visibility"><div class="iconEyeLarge"></div> Visiblity</a></li>
-		
-		{% if not config.isSingleSiteMode and currentUserOwnsSite %}
-			<li><a href="/admin/owner"><div class="iconUserLarge"></div> Owner</a></li>
-		{% endif %}
-		
-		<li><a href="/admin/users"><div class="iconUsersLarge"></div> Users (Administrators & Editors)</a></li>
-		
+
+		<li><a href="/admin/usergroup"><div class="iconUsersLarge"></div> User Groups (Permissions)</a></li>
+
+		<li><a href="/admin/user"><div class="iconUsersLarge"></div> Users (Permissions)</a></li>
+
 		<li><a href="/admin/countries"><div class="iconGlobeLarge"></div> Countries</a></li>
 		
 		{% if currentSite.isFeaturePhysicalEvents %}

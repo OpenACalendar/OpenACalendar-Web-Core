@@ -14,7 +14,7 @@
 		<p>{{ api2app.description | nl2br }}</p>
 	</div>
 
-	<form action="/api2/login.html" method="post" class="styled">
+	<form action="/api2/login.html?app_token={{ api2app.appToken }}" method="post" class="styled">
 
 		{{ form_errors(form) }}
 
@@ -32,11 +32,8 @@
 		{{ form_row(form.password) }}
 
 		<div>
-			{% if askForPermissionWriteUserActions %}
-				{{ form_row(form.is_write_user_actions) }}
-			{% endif %}
-			{% if askForPermissionWriteCalendar %}
-				{{ form_row(form.is_write_calendar) }}
+			{% if askForPermissionEditor %}
+				{{ form_row(form.is_editor) }}
 			{% endif %}
 		</div>
 		

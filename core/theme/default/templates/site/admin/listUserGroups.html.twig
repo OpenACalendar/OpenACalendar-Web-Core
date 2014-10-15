@@ -1,0 +1,50 @@
+
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}User Groups Admin - {% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li class="current"><a href="/admin/usergroup">user groups</a></li>
+{% endblock %}
+
+{% block content %}
+
+
+	<h2>User Groups</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			<li class="action">
+				<a href="/admin/usergroup/new"><div class="iconPencilSmall"></div> new</a>
+			</li>
+			<li class="tab currentTab"><a href="/admin/usergroup">User Groups</a></li>
+		</ul>
+		<div id="innerPage">
+
+			<ul class="usergroups">
+				{% for usergroup in usergroups %}
+					<li class="usergroup">
+						<div class="title"><a href="/admin/usergroup/{{ usergroup.id }}">{{ usergroup.title }}</a></div>
+						{{ usergroup.description | nl2br }}
+					</li>
+				{% else %}
+					<li>
+						No user groups found.
+					</li>
+				{% endfor %}
+			</ul>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+{% endblock %}

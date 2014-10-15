@@ -1,0 +1,145 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}User Group {{  usergroup.title }} {% endblock %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ usergroup.id }}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ usergroup.title }}</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td>{{ usergroup.description | nl2br }}</td>
+		</tr>
+		<tr>
+			<th>Is In Index</th>
+			<td>{% if usergroup.isInIndex %}Yes{% else %}No{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Includes all Anonymous Users</th>
+			<td>{% if usergroup.isIncludesAnonymous %}Yes{% else %}No{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Includes all Users</th>
+			<td>{% if usergroup.isIncludesUsers %}Yes{% else %}No{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Includes all Verified Users</th>
+			<td>{% if usergroup.isIncludesVerifiedUsers %}Yes{% else %}No{% endif %}</td>
+		</tr>
+	</table>
+
+	<h3>User Permissions</h3>
+
+	<table class="data">
+		<tr>
+			<th>Extension</th>
+			<th>ID</th>
+				<th>&nbsp;</th>
+		</tr>
+		{% for userpermission in userpermissions %}
+			<tr>
+				<td>{{ userpermission.userPermissionExtensionID }}</td>
+				<td>{{ userpermission.userPermissionKey }}</td>
+				<td>
+					<form method="post" action="">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="action" value="removepermission">
+						<input type="hidden" name="extension" value="{{ userpermission.userPermissionExtensionID }}">
+						<input type="hidden" name="permission" value="{{ userpermission.userPermissionKey }}">
+						<input type="submit" value="Remove!">
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+
+	<h3>Add User Permissions</h3>
+
+	{%  if  userpermissionstoadd %}
+		<table class="data">
+			<tr>
+				<th>Extension</th>
+				<th>ID</th>
+				<th>&nbsp;</th>
+			</tr>
+			{% for userpermission in userpermissionstoadd %}
+				<tr>
+					<td>{{ userpermission.userPermissionExtensionID }}</td>
+					<td>{{ userpermission.userPermissionKey }}</td>
+					<td>
+						<form method="post" action="">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="action" value="addpermission">
+							<input type="hidden" name="extension" value="{{ userpermission.userPermissionExtensionID }}">
+							<input type="hidden" name="permission" value="{{ userpermission.userPermissionKey }}">
+							<input type="submit" value="Add!">
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{%  else %}
+		<p>No more to add.</p>
+	{%  endif %}
+
+	<h3>Users</h3>
+
+	<table class="data">
+		<tr>
+			<th>ID</th>
+			<th>Username</th>
+			<th>Email</th>
+			<th>Is Verifed</th>
+			<th>Is Editor</th>
+			<th>Is Closed</th>
+			<th>Is System Admin</th>
+			<th>&nbsp;</th>
+		</tr>
+		{% for user in users %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %}>
+				<td>{{ user.id }}</td>
+				<td>{{ user.username }}</td>
+				<td>{{ user.email }}</td>
+				<td>{% if user.isEmailVerified %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>{% if user.isEditor %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>{% if user.isClosedBySysAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>{% if user.isSystemAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+				<td>
+					<a href="/sysadmin/user/{{ user.id }}/" class="button">Show</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>addusername  <span class="param">username</a></li>
+		<li>removeusername  <span class="param">username</a></li>
+		<li>includesanonymous  <span class="param">boolean</a></li>
+		<li>includesusers  <span class="param">boolean</a></li>
+		<li>includesverifiedusers  <span class="param">boolean</a></li>
+	</ul>
+
+{% endblock %}
+

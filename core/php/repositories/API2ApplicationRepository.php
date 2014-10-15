@@ -98,8 +98,8 @@ class API2ApplicationRepository {
 		global $DB;
 		
 		$stat = $DB->prepare("UPDATE api2_application_information SET ".
-				"user_id = :user_id,title = :title,description = :description,is_write_user_actions = :is_write_user_actions,".
-				"is_write_calendar = :is_write_calendar,is_callback_url = :is_callback_url,".
+				"user_id = :user_id,title = :title,description = :description,is_editor = :is_editor,".
+				"is_callback_url = :is_callback_url,".
 				"is_callback_display = :is_callback_display,is_callback_javascript = :is_callback_javascript,".
 				"allowed_callback_urls = :allowed_callback_urls,is_auto_approve = :is_auto_approve,is_all_sites = :is_all_sites,".
 				"is_closed_by_sys_admin = :is_closed_by_sys_admin,closed_by_sys_admin_reason = :closed_by_sys_admin_reason".
@@ -108,8 +108,7 @@ class API2ApplicationRepository {
 				'user_id'=>$app->getUserId(),
 				'title'=>$app->getTitle(),
 				'description'=>$app->getDescription(),
-				'is_write_user_actions'=>$app->getIsWriteUserActions()?1:0,
-				'is_write_calendar'=>$app->getIsWriteCalendar()?1:0,
+				'is_editor'=>$app->getIsEditor()?1:0,
 				'is_callback_url'=>$app->getIsCallbackUrl()?1:0,
 				'is_callback_display'=>$app->getIsCallbackDisplay()?1:0,
 				'is_callback_javascript'=>$app->getIsCallbackJavascript()?1:0,

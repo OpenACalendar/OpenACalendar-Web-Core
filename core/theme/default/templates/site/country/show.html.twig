@@ -21,7 +21,7 @@
 
 {% block actions %}
 	<li class="action">
-		{% if currentUserCanEditSite %}
+		{% if currentUserActions.has("org.openacalendar","areaNew") %}
 			<a href="/country/{{ country.twoCharCode }}/new"><div class="iconPencilSmall"></div> new</a>
 		{%  endif  %}
 	</li>
@@ -57,7 +57,7 @@
 				{% else %}
 					<li>
 						No events found.
-						{% if currentUserCanEditSite %}Why not <a href="/event/new">add one</a>?{% endif %}
+						{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
 					</li>
 				{% endfor %}
 			</ul>

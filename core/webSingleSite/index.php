@@ -8,6 +8,7 @@ use repositories\SiteRepository;
 use repositories\UserInSiteRepository;
 use repositories\UserWatchesSiteRepository;
 use repositories\CountryRepository;
+use Silex\Application;
 
 
 /**
@@ -42,41 +43,23 @@ $app->before(function (Request $request) use ($app) {
 		$app['twig']->addGlobal('currentUserCanEditSite', false);
 		return new Response($app['twig']->render('site/closed_by_sys_admin.html.twig', array()));
 	}
-	
+
+	# ////////////// Permissions and Watch
+	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite(userGetCurrent(), $app['currentSite'], false, true);
+
+
 	# ////////////// User and their watch and perms
-	$app['currentUserInSite'] = null;
-	$app['currentUserCanAdminSite'] = false;
-	$app['currentUserCanEditSite'] = false;
-	$app['currentUserOwnsSite'] = false;
-	$app['currentUserWatchesSite'] = false;
+	$app['currentUserActions'] = new UserActionsSiteList($app['currentSite'], $app['currentUserPermissions']);
 	if (userGetCurrent()) {
-		$uisr = new UserInSiteRepository();
-		$app['currentUserInSite'] = $uisr->loadBySiteAndUserAccount($app['currentSite'], userGetCurrent());
-		if (userGetCurrent()->getIsEmailVerified() && userGetCurrent()->getIsEditor()) {
-			if ($app['currentUserInSite'] && $app['currentUserInSite']->getIsOwner()) {
-				$app['currentUserOwnsSite'] = true;
-				$app['currentUserCanEditSite'] = true;
-				$app['currentUserCanAdminSite'] = true;
-			} else if ($app['currentUserInSite'] && $app['currentUserInSite']->getIsAdministrator()) {
-				$app['currentUserCanEditSite'] = true;
-				$app['currentUserCanAdminSite'] = true;
-			} else if ($app['currentSite']->getIsAllUsersEditors() ) {
-				$app['currentUserCanEditSite'] = true;
-			} else if ($app['currentUserInSite'] && $app['currentUserInSite']->getIsEditor()) {
-				$app['currentUserCanEditSite'] = true;
-			};
-		}
 		$uwsr = new UserWatchesSiteRepository();
 		$uws = $uwsr->loadByUserAndSite(userGetCurrent(), $app['currentSite']);
 		$app['currentUserWatchesSite'] = $uws && $uws->getIsWatching();
 	}
-	$app['twig']->addGlobal('currentUserInSite', $app['currentUserInSite']);
-	$app['twig']->addGlobal('currentUserCanAdminSite', $app['currentUserCanAdminSite']);
-	$app['twig']->addGlobal('currentUserCanEditSite', $app['currentUserCanEditSite']);
-	$app['twig']->addGlobal('currentUserOwnsSite', $app['currentUserOwnsSite']);
+	$app['twig']->addGlobal('currentUserActions', $app['currentUserActions']);
 	$app['twig']->addGlobal('currentUserWatchesSite', $app['currentUserWatchesSite']);
-	
-	
+
+
 	# ////////////// Timezone
 	$timezone = "";
 	if (isset($_GET['mytimezone']) && in_array($_GET['mytimezone'], $app['currentSite']->getCachedTimezonesAsList())) {
@@ -100,6 +83,23 @@ $app->before(function (Request $request) use ($app) {
 		$app['twig']->addGlobal('currentSiteHasOneCountry', $app['currentSiteHasOneCountry']);	
 	}
 });
+
+
+$permissionCalendarChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
+		return $app->abort(403); // TODO
+	}
+};
+
+$permissionCalendarAdministratorRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_ADMINISTRATE")) {
+		return $app->abort(403); // TODO
+	}
+};
+
+
 
 $appUserRequired = function(Request $request) {
 	global $CONFIG;
@@ -128,44 +128,6 @@ $appVerifiedUserRequired = function(Request $request) {
 	}
 };
 
-$appVerifiedEditorUserRequired = function(Request $request)  use ($app) {
-	global $CONFIG;	
-	if (!userGetCurrent()) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
-	}
-	if (!userGetCurrent()->getIsEmailVerified()) {
-		return new RedirectResponse('http://'.$CONFIG->webIndexDomain.'/me/verifyneeded');
-	}
-	if (!$app['currentUserCanEditSite']) {
-		die("No"); // TODO
-	}
-};
-
-$appVerifiedAdminUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;	
-	if (!userGetCurrent()) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
-	}
-	if (!userGetCurrent()->getIsEmailVerified()) {
-		return new RedirectResponse('http://'.$CONFIG->webIndexDomain.'/me/verifyneeded');
-	}
-	if (!$app['currentUserCanAdminSite']) {
-		die("No"); // TODO
-	}
-};
-
-$appVerifiedOwnerUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;	
-	if (!userGetCurrent()) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
-	}
-	if (!userGetCurrent()->getIsEmailVerified()) {
-		return new RedirectResponse('http://'.$CONFIG->webIndexDomain.'/me/verifyneeded');
-	}
-	if (!$app['currentUserOwnsSite']) {
-		die("No"); // TODO
-	}
-};
 
 $featureCuratedListRequired = function(Request $request)  use ($app) {
 	global $CONFIG;

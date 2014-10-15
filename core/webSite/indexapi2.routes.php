@@ -13,7 +13,7 @@ $app->match('/api2/', "siteapi2\controllers\IndexController::index");
 
 ## User data
 $app->match('/api2/current_user_on_site.json', "siteapi2\controllers\IndexController::currentUserOnSiteJson")
-		->before($appUserRequired); 
+		->before($appUserRequired);
 
 ## country
 $app->get('/api2/country/list.json', "siteapi2\controllers\CountryListController::listJson")
@@ -29,7 +29,7 @@ $app->get('/api2/area/{slug}/info.json', "siteapi2\controllers\AreaController::i
 		->assert('slug', '\d+'); 
 $app->post('/api2/area/{slug}/info.json', "siteapi2\controllers\AreaController::postInfoJson")
 		->before($appUserRequired)
-		->before($appVerifiedEditorUserRequired)
+		->before($appUserPermissionCalendarChangeRequired)
 		->assert('slug', '\d+'); 
 
 ## Venue

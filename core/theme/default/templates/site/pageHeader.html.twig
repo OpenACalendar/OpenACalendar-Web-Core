@@ -27,7 +27,7 @@
 				{% if currentSite.isFeatureImporter %}
 					<li><a href="/importurl">Import</a></li>
 				{% endif %}		
-				{% if currentUserCanEditSite %}
+				{% if currentUserActions.has("org.openacalendar","eventNew") %}
 					<li><a href="/event/new">New event</a></li>
 				{% endif %}						
 			</ul>
@@ -35,7 +35,7 @@
 		{% if currentSite.isFeatureGroup %}
 			<li class="menu">
 				<a href="/group">Groups</a>	
-				{% if currentUserCanEditSite %}
+				{% if currentUserActions.has("org.openacalendar","groupNew") %}
 					<ul class="submenu">
 						<li><a href="/group">Groups</a></li>
 						<li><a href="/group/new">New Group</a></li>
@@ -64,7 +64,7 @@
 						{% if currentSite.isFeatureMap %}
 							<li><a href="/map">Map</a></li>
 						{% endif %}	
-						{% if currentUserCanEditSite %}
+						{% if currentUserActions.has("org.openacalendar","venueNew") %}
 							<li><a href="/venue/new">New venue</a></li>
 						{% endif %}
 					{% endif %}
@@ -98,7 +98,7 @@
 						</li>
 					{% endif %}
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
-					{% if currentUserCanAdminSite %}
+					{% if currentUserActions.has("org.openacalendar","admin") %}
 						<li><a href="{{ config.getWebSiteDomainSecure( currentSite.slug ) }}/admin">Calendar Admin</a></li>
 					{% endif %}
 					{% if currentUser.isSystemAdmin %}

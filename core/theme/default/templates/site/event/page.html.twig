@@ -37,7 +37,7 @@
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/event/{{ event.slugForUrl }}">Details</a></li>
-			{%  if actionEventHistory %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/event/{{ event.slugForUrl }}/history">History of changes</a></li>{%  endif %}
+			{%  if currentUserActions.has("org.openacalendar","eventHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/event/{{ event.slugForUrl }}/history">History of changes</a></li>{%  endif %}
 		</ul>
 		<div id="innerPage">
 

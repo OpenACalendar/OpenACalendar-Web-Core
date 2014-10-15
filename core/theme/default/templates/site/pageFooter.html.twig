@@ -5,7 +5,7 @@
 		<li><a href="/displayboard">displayboard</a></li>
 		<li><a href="http://{{ config.webIndexDomain }}/terms">terms</a></li>
 		<li><a href="http://jmbtechnology.co.uk/">&copy; JMB Technology Limited {{ COPYRIGHT_YEARS }}</a></li>
-		{% if currentUserCanAdminSite %}
+		{% if currentUserActions.has("org.openacalendar","admin") %}
 			<li><a href="/admin">Admin</a></li>
 		{% endif %}
 	</ul>

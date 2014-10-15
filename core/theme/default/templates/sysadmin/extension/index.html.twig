@@ -7,24 +7,36 @@
  #}
 {% extends 'sysadmin/page.html.twig' %}
 
-{% block pageTitle %}Extensions - {% endblock %}
+{% block pageTitle %}Extension {{  extension.title }} {% endblock %}
 
 {% block content %}
 
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ extension.id }}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td>{{ extension.title }}</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td>{{ extension.description }}</td>
+		</tr>
+	</table>
+
+	<h3>User Permissions</h3>
+
 	<table class="data">
 		<tr>
-			<th>Folder Name</th>
 			<th>ID</th>
-			<th>Title</th>
-			<th>Description</th>
 		</tr>
-		{% for extensionKey,extensionObj in extensions %}
-		<tr>
-			<td>{{ extensionKey }}</td>
-			<td>{{ extensionObj.id }}</td>
-			<td>{{ extensionObj.title }}</td>
-			<td>{{ extensionObj.description }}</td>
-		</tr>
+		{% for userpermission in userpermissions %}
+			<tr>
+				<td>{{ userpermission.userPermissionKey }}</td>
+			</tr>
 		{% endfor %}
 	</table>
 

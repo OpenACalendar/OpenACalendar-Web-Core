@@ -32,7 +32,7 @@
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/venue/{{ venue.slugForUrl }}">Details</a></li>
 			<li class="tab"><a href="/venue/{{ venue.slugForUrl }}/calendar">Calendar</a></li>
-			{% if actionVenueHistory %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/venue/{{ venue.slugForUrl }}/history">History of changes</a></li>{% endif %}
+			{% if currentUserActions.has("org.openacalendar","venueHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/venue/{{ venue.slugForUrl }}/history">History of changes</a></li>{% endif %}
 		</ul>
 		<div id="innerPage">
 

@@ -64,10 +64,12 @@ class AreaController {
 		$areaRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 
-		$this->parameters['actionAreaEditDetails'] = $app['currentUserCanEditSite']
-			&& !$this->parameters['area']->getIsDeleted();
-		$this->parameters['actionAreaNew'] = $app['currentUserCanEditSite']
-			&& !$this->parameters['area']->getIsDeleted();
+		$app['currentUserActions']->set("org.openacalendar","actionAreaEditDetails",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			&& !$this->parameters['area']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","actionAreaNew",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			&& !$this->parameters['area']->getIsDeleted());
 
 		return true;
 	}

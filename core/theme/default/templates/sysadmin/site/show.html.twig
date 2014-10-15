@@ -46,10 +46,6 @@
 			<td>{% if site.isListedInIndex %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
 		</tr>
 		<tr>
-			<th>All users editors</th>
-			<td>{% if site.IsAllUsersEditors %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>
-		<tr>
 			<th>Is Request Access Allowed</th>
 			<td>{% if site.isRequestAccessAllowed %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
 		</tr>
@@ -109,9 +105,7 @@
 			<th>More</th>
 			<td>
 				<ul>
-					<li><a href="/sysadmin/site/{{ site.id }}/owner">Owner</a></li>
 					<li><a href="/sysadmin/site/{{ site.id }}/country">Countries</a></li>
-					<li><a href="/sysadmin/site/{{ site.id }}/editors">Editors</a></li>
 					<li><a href="/sysadmin/site/{{ site.id }}/watchers">Watchers</a></li>
 					<li>
 						<a href="/sysadmin/site/{{ site.id }}/event">Events</a>
@@ -155,6 +149,9 @@
 							Slug: <input type="text" name="slug"><input type="submit" value="Go directly!">
 						</form>
 					</li>
+					<li>
+						<a href="/sysadmin/site/{{ site.id }}/usergroup">User Groups</a>
+					</li>
 				</ul>
 			</td>
 		</tr>
@@ -182,9 +179,7 @@
 		<li>featurevirtualevents <span class="param">boolean</a></li>
 		<li>featurephysicalevents <span class="param">boolean</a></li>
 		<li>quota <span class="param">code</a></li>
-		<li>addadmin <span class="param">id</a></li>
-		<li>addeditor <span class="param">id</a></li>
-		<li>owner <span class="param">id</a></li>
+
 		<li>newslug <span class="param">slug</a></li>
 	</ul>
 

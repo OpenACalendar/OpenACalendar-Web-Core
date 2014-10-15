@@ -35,7 +35,9 @@
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/importurl/{{ importurl.slug }}">Details</a></li>
-			<li class="tab {% block tabLog %}{% endblock %}"><a href="/importurl/{{ importurl.slug }}/log">Log</a></li>
+			{% if currentUserActions.has("org.openacalendar","importURLLog") %}
+				<li class="tab {% block tabLog %}{% endblock %}"><a href="/importurl/{{ importurl.slug }}/log">Log</a></li>
+			{% endif %}
 		</ul>
 		<div id="innerPage">
 

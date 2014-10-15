@@ -17,15 +17,13 @@ class UserInAPI2ApplicationModel {
 	protected $api2_application_id;
 	protected $user_id;
 	protected $is_in_app;
-	protected $is_write_user_actions = false;
-	protected $is_write_calendar = false;
-	
+	protected $is_editor = false;
+
 	public function setFromDataBaseRow($data) {
 		$this->api2_application_id = $data['api2_application_id'];
 		$this->user_id = $data['user_id'];
 		$this->is_in_app = (boolean)$data['is_in_app'];
-		$this->is_write_user_actions = (boolean)$data['is_write_user_actions'];
-		$this->is_write_calendar = (boolean)$data['is_write_calendar'];
+		$this->is_editor = (boolean)$data['is_editor'];
 	}
 	
 	public function getApi2ApplicationId() {
@@ -52,20 +50,20 @@ class UserInAPI2ApplicationModel {
 		$this->is_in_app = $is_in_app;
 	}
 
-	public function getIsWriteUserActions() {
-		return $this->is_write_user_actions;
+	/**
+	 * @param boolean $is_editor
+	 */
+	public function setIsEditor($is_editor)
+	{
+		$this->is_editor = $is_editor;
 	}
 
-	public function setIsWriteUserActions($is_write_user_actions) {
-		$this->is_write_user_actions = $is_write_user_actions;
-	}
-
-	public function getIsWriteCalendar() {
-		return $this->is_write_calendar;
-	}
-
-	public function setIsWriteCalendar($is_write_calendar) {
-		$this->is_write_calendar = $is_write_calendar;
+	/**
+	 * @return boolean
+	 */
+	public function getIsEditor()
+	{
+		return $this->is_editor;
 	}
 
 

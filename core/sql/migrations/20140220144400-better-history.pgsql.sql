@@ -4,11 +4,8 @@ ALTER TABLE site_history ADD   description_text_changed SMALLINT DEFAULT '0' NOT
 ALTER TABLE site_history ADD   footer_text_changed SMALLINT DEFAULT '0' NOT NULL;
 ALTER TABLE site_history ADD   is_web_robots_allowed_changed SMALLINT DEFAULT '0' NOT NULL;
 ALTER TABLE site_history ADD   is_closed_by_sys_admin_changed SMALLINT DEFAULT '0' NOT NULL;
-ALTER TABLE site_history ADD   is_all_users_editors_changed SMALLINT DEFAULT '0' NOT NULL;
 ALTER TABLE site_history ADD   closed_by_sys_admin_reason_changed SMALLINT DEFAULT '0' NOT NULL;
 ALTER TABLE site_history ADD   is_listed_in_index_changed SMALLINT DEFAULT '0' NOT NULL;
-ALTER TABLE site_history ADD   is_request_access_allowed_changed SMALLINT DEFAULT '0' NOT NULL;
-ALTER TABLE site_history ADD   request_access_question_changed SMALLINT DEFAULT '0' NOT NULL;
 ALTER TABLE site_history ADD   is_feature_map_changed SMALLINT DEFAULT '0' NOT NULL;
 ALTER TABLE site_history ADD   is_feature_importer_changed SMALLINT DEFAULT '0' NOT NULL;
 ALTER TABLE site_history ADD   is_feature_curated_list_changed SMALLINT DEFAULT '0' NOT NULL;

@@ -1,0 +1,38 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}User Groups for Index - {% endblock %}
+
+{% block breadcrumbs %}
+	<li class="current"><a href="/sysadmin/usergroup">user groups</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<table class="data">
+		<tr>
+			<th>ID</th>
+			<th>Title</th>
+			<th>&nbsp;</th>
+		</tr>
+		{% for ug in usergroups %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %} >
+				<td>{{ ug.id }}</td>
+				<td>{{ ug.title }}</td>
+				<td>
+					<a href="/sysadmin/usergroup/{{ ug.id }}" class="button">Show</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<p><a href="/sysadmin/usergroup/new">New</a></p>
+
+{% endblock %}
+

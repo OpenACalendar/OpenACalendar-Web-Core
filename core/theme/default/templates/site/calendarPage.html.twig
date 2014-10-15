@@ -175,7 +175,7 @@
 					<td {% if data.today %}id="Now"{% endif %} class="day{{data.dayOfWeek}} {% if data.today %}today{% endif %}">
 						<div class="date">
 							{{data.display}}
-							{% if addURL and currentUserCanEditSite and data.dataForAddUrl %}
+							{% if addURL and currentUserActions.has("org.openacalendar","eventNew") and data.dataForAddUrl %}
 								<div class="addURL">
 									<a href="{{ addURL }}&date={{ data.dataForAddUrl }}" title="Add an event"><img src="/theme/default/img/calendarAddEvent.png" alt="Add"></a>
 								</div>

@@ -15,15 +15,32 @@ use Symfony\Component\HttpFoundation\Request;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ExtensionController {
-	
-	
-	function index(Request $request, Application $app) {
-		return $app['twig']->render('sysadmin/extension/index.html.twig', array(
-				'extensions'=>$app['extensions']->getExtensions(),
-			));
-		
+
+
+	protected $parameters = array();
+
+	protected function build($id, Request $request, Application $app) {
+
+		$this->parameters['extension'] = $app['extensions']->getExtensionById($id);
+		if (!$this->parameters['extension']) {
+			$app->abort(404);
+		}
+
 	}
-	
+
+
+	function index($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+
+		$this->parameters['userpermissions'] = array();
+		foreach($this->parameters['extension']->getUserPermissions() as $key) {
+			$this->parameters['userpermissions'][] = $this->parameters['extension']->getUserPermission($key);
+		}
+
+		return $app['twig']->render('sysadmin/extension/index.html.twig', $this->parameters);
+	}
+
+
 }
 
 

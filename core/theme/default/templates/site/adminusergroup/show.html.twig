@@ -1,0 +1,78 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/adminusergroup/page.html.twig' %}
+
+
+{% block pageTitle %}User Group Admin - {% endblock %}
+
+
+{% block tabDetails %}currentTab{% endblock %}
+
+
+{% block innerContent %}
+
+	<p>{{  usergroup.description | nl2br }}</p>
+
+	<p>
+		Includes all anonymous users:
+		{%  if usergroup.isIncludesAnonymous %}
+			Yes
+		{%  else %}
+			No
+		{%  endif %}
+	</p>
+
+	<p>
+		Includes all users:
+		{%  if usergroup.isIncludesUsers %}
+			Yes
+		{%  else %}
+			No
+			</form>
+		{%  endif %}
+	</p>
+
+	<p>
+		Includes verified all users:
+		{%  if usergroup.isIncludesVerifiedUsers %}
+			Yes
+		{%  else %}
+			No
+		{%  endif %}
+	</p>
+
+	<h3>User Permissions</h3>
+
+	<table class="data">
+		<tr>
+			<th>Extension</th>
+			<th>ID</th>
+		</tr>
+		{% for userpermission in userpermissions %}
+			<tr>
+				<td>{{ userpermission.userPermissionExtensionID }}</td>
+				<td>{{ userpermission.userPermissionKey }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<h3>Users</h3>
+
+	<table class="data">
+		<tr>
+			<th>Username</th>
+		</tr>
+		{% for user in users %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %}>
+				<td><a href="/admin/user/{{  user.username }}">{{ user.username }}</a></td>
+			</tr>
+		{% endfor %}
+	</table>
+
+
+{% endblock %}

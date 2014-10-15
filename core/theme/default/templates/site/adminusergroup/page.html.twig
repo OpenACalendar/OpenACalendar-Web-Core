@@ -1,0 +1,42 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li><a href="/admin/usergroup">user groups</a></li>
+	<li class="current"><a href="/admin/usergroup/{{  usergroup.id }}">{{  usergroup.title }}</a></li>
+{% endblock %}
+
+
+
+{% block content %}
+
+		
+	<h2>{{  usergroup.title }}</h2>
+	
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% block actions %}{% endblock %}
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/admin/usergroup/{{  usergroup.id }}">Details</a></li>
+			<li class="tab {% block tabPermissions %}{% endblock %}"><a href="/admin/usergroup/{{  usergroup.id }}/permissions">Manage Permissions</a></li>
+			<li class="tab {% block tabUsers %}{% endblock %}"><a href="/admin/usergroup/{{  usergroup.id }}/users">Manage Users</a></li>
+		</ul>
+		<div id="innerPage">
+
+			{% block innerContent %}{% endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+{% endblock %}
+

@@ -10,7 +10,7 @@
 		<li class="title">
 			<a href="/"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.siteTitle  }}</h1></a>
 		</li>
-		{%  if canUserCreateSites %}
+		{%  if actionCreateSite %}
 			<li><a href="{{ config.getWebIndexDomainSecure() }}/create">Create</a></li>
 		{% endif %}
 		<li><a href="/discover">Discover</a></li>

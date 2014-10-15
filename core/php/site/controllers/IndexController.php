@@ -13,7 +13,6 @@ use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
 use repositories\UserWatchesSiteRepository;
 use repositories\UserWatchesSiteStopRepository;
-use repositories\SiteAccessRequestRepository;
 use repositories\builders\UserAccountRepositoryBuilder;
 use repositories\UserNotificationRepository;
 
@@ -105,63 +104,7 @@ class IndexController {
 		
 	}
 	
-	
-	function requestAccess(Request $request, Application $app) {		
-		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			
-			$repo = new SiteAccessRequestRepository();
-			$isCurrentRequestExistsForSiteAndUser = $repo->isCurrentRequestExistsForSiteAndUser($app['currentSite'], userGetCurrent());
-			$repo->create($app['currentSite'], userGetCurrent(), $request->request->get('answer'));
-			
-			if (!$isCurrentRequestExistsForSiteAndUser) {
-				
-				$userNotificationRepo = new UserNotificationRepository();
-				$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserRequestsAccessNotifyAdmin');
-				
-				$urb = new UserAccountRepositoryBuilder();
-				$urb->setCanAdministrateSite($app['currentSite']);
-				foreach($urb->fetchAll() as $admin) {
-					
-					$userNotification = $userNotificationType->getNewNotification($admin, $app['currentSite']);
-					$userNotification->setRequestingUser(userGetCurrent());
-					$userNotificationRepo->create($userNotification);
-					
-					$message = \Swift_Message::newInstance();
-					$message->setSubject("A request to access ". $app['currentSite']->getTitle());
-					$message->setFrom(array($app['config']->emailFrom => $app['config']->emailFromName));
-					$message->setTo($admin->getEmail());
 
-					configureAppForThemeVariables($app['currentSite']);
-
-					$messageText = $app['twig']->render('email/requestAccess.txt.twig', array(
-						'user'=>  userGetCurrent(),
-						'admin'=>  $admin,
-						'answer'=>  $request->request->get('answer'),
-					));
-					if ($app['config']->isDebug) file_put_contents('/tmp/requestAccess.txt', $messageText);
-					$message->setBody($messageText);
-
-					$messageHTML = $app['twig']->render('email/requestAccess.html.twig', array(
-						'user'=>userGetCurrent(),
-						'admin'=>  $admin,
-						'answer'=>  $request->request->get('answer'),
-					));
-					if ($app['config']->isDebug) file_put_contents('/tmp/requestAccess.html', $messageHTML);
-					$message->addPart($messageHTML,'text/html');
-
-					if (!$app['config']->isDebug) $app['mailer']->send($message);
-					$userNotificationRepo->markEmailed($userNotification);
-				}
-				
-			}
-			
-			return $app['twig']->render('site/index/requestaccess.done.html.twig', array());
-			
-		}
-
-		return $app->redirect('/');
-		
-	}
 
 	
 	function places(Application $app) {		

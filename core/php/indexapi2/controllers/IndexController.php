@@ -33,26 +33,18 @@ class IndexController {
 	function requestTokenJson(Application $app) {
 		
 		$data = array_merge($_GET, $_POST);
-		
-		$appRepo = new API2ApplicationRepository();
-		
-		// Load App
-		$apiapp = $data['app_token'] && $data['app_secret'] ?
-				$appRepo->loadByAppTokenAndAppSecret($data['app_token'], $data['app_secret'])
-				: null;
-		
-		// Is correct?
-		if (!$apiapp) {
-			// TODO also if app closed
+
+		if (!$app['apiApp'] || !$app['apiAppLoadedBySecret']) {
 			return json_encode(array(
 				'success'=>false,
 			));
 		}
+
 		
 		// Settings
 		$requestToken = new \models\API2ApplicationRequestTokenModel();
-		if ($apiapp->getIsCallbackUrl() && isset($data['callback_url']) && trim($data['callback_url'])) {
-			if ($apiapp->isCallbackUrlAllowed(trim($data['callback_url']))) {
+		if ($app['apiApp']->getIsCallbackUrl() && isset($data['callback_url']) && trim($data['callback_url'])) {
+			if ($app['apiApp']->isCallbackUrlAllowed(trim($data['callback_url']))) {
 				$requestToken->setCallbackUrl(trim($data['callback_url']));
 			} else {
 				return json_encode(array(
@@ -61,18 +53,17 @@ class IndexController {
 				));
 			}
 		}
-		if ($apiapp->getIsCallbackDisplay() && isset($data['callback_display']) && strtolower(trim($data['callback_display'])) == "true") {
+		if ($app['apiApp']->getIsCallbackDisplay() && isset($data['callback_display']) && strtolower(trim($data['callback_display'])) == "true") {
 			$requestToken->setIsCallbackDisplay(true);
 		}
-		if ($apiapp->getIsCallbackJavascript() && isset($data['callback_javascript']) && strtolower(trim($data['callback_javascript'])) == "true") {
+		if ($app['apiApp']->getIsCallbackJavascript() && isset($data['callback_javascript']) && strtolower(trim($data['callback_javascript'])) == "true") {
 			$requestToken->setIsCallbackJavascript(true);
 		}
 		// $requestToken->setUserId();  TODO
 		
 		$scopeArray = isset($data['scope']) ? explode(",", str_replace(" ", ",", $data['scope'])) : array();
-		$requestToken->setIsWriteUserActions(in_array('permission_write_user_actions', $scopeArray) && $apiapp->getIsWriteUserActions());
-		$requestToken->setIsWriteCalendar(in_array('permission_write_calendar', $scopeArray) && $apiapp->getIsWriteCalendar());
-		
+		$requestToken->setIsEditor(in_array('permission_editor', $scopeArray) && $app['apiApp']->getIsEditor());
+
 		$requestToken->setStateFromUser(isset($data['state']) ? $data['state'] : null);
 		
 		// Check 
@@ -85,7 +76,7 @@ class IndexController {
 		
 		// Generate Token
 		$tokenRepo = new API2ApplicationRequestTokenRepository();
-		$token = $tokenRepo->create($apiapp, $requestToken);
+		$token = $tokenRepo->create($app['apiApp'], $requestToken);
 		
 		return json_encode(array(
 			'success'=>true,
@@ -93,8 +84,11 @@ class IndexController {
 		));
 	}
 	
-	function login(Request $request, Application $app) {		
-		$appRepo = new API2ApplicationRepository();
+	function login(Request $request, Application $app) {
+		if (!$app['apiApp']) {
+			return $app['twig']->render('indexapi2/index/login.app.problem.html.twig', array());
+		}
+
 		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository();
 		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository();
 		$userInApp2Repo = new UserInAPI2ApplicationRepository();
@@ -103,29 +97,23 @@ class IndexController {
 		
 		// Load and check request token!
 		$data = array();
-		if ($app['websession']->has('api2appToken')) $data['app_token'] = $app['websession']->get('api2appToken');
 		if ($app['websession']->has('api2requestToken')) $data['request_token'] = $app['websession']->get('api2requestToken');
 		$data = array_merge($data, $_GET, $_POST);
-		
-		$apiapp = $data['app_token'] ? $appRepo->loadByAppToken($data['app_token']) : null;
-		if (!$apiapp) {
-			// TODO also if app closed
-			return $app['twig']->render('indexapi2/index/login.app.problem.html.twig', array());
-		}
-		$requestToken = $data['request_token'] ? $appRequestTokenRepo->loadByAppAndRequestToken($apiapp, $data['request_token']) : null;
+
+		$requestToken = $data['request_token'] ? $appRequestTokenRepo->loadByAppAndRequestToken($app['apiApp'], $data['request_token']) : null;
 		if (!$requestToken || $requestToken->getIsUsed()) {
 			return $app['twig']->render('indexapi2/index/login.requestToken.problem.html.twig', array());
 		}
 		$userAuthorisationToken = null;
 		$permissionsGranted = new API2ApplicationUserPermissionsModel();
 
-		$app['websession']->set('api2appToken', $apiapp->getAppToken());
+		$app['websession']->set('api2appToken', $app['apiApp']->getAppToken());
 		$app['websession']->set('api2requestToken', $requestToken->getRequestToken());
 
 		
 		######################################## User Workflow
 		
-		$formObj = new LogInUserForm(userGetCurrent(), $apiapp, $requestToken);
+		$formObj = new LogInUserForm(userGetCurrent(), $app['apiApp'], $requestToken);
 		$form = $app['form.factory']->create($formObj);
 		
 		if ('POST' == $request->getMethod()) {
@@ -143,13 +131,13 @@ class IndexController {
 				if ($user) {
 					if ($user->checkPassword($formData['password'])) {
 						
-						if ($apiapp->getIsAutoApprove()) {
-							$permissionsGranted->setFromApp($apiapp);
+						if ($app['apiApp']->getIsAutoApprove()) {
+							$permissionsGranted->setFromApp($app['apiApp']);
 						} else {
 							$permissionsGranted->setFromData($formData);
 						}
-						$userInApp2Repo->setPermissionsForUserInApp($permissionsGranted, $user, $apiapp);
-						$userAuthorisationToken = $userAuthorisationTokenRepo->createForAppAndUserFromRequestToken($apiapp, $user, $requestToken);
+						$userInApp2Repo->setPermissionsForUserInApp($permissionsGranted, $user, $app['apiApp']);
+						$userAuthorisationToken = $userAuthorisationTokenRepo->createForAppAndUserFromRequestToken($app['apiApp'], $user, $requestToken);
 						
 					} else {
 						$app['monolog']->addError("Login attempt on API2 - account ".$user->getId().' - password wrong.');
@@ -166,9 +154,8 @@ class IndexController {
 		if (!$userAuthorisationToken) {
 			return $app['twig']->render('indexapi2/index/login.html.twig', array(
 						'form'=>$form->createView(),
-						'api2app'=>$apiapp,
-						'askForPermissionWriteUserActions' => $formObj->getIsWriteUserActions(),
-						'askForPermissionWriteCalendar' => $formObj->getIsWriteCalendar(),
+						'api2app'=>$app['apiApp'],
+						'askForPermissionEditor' => $formObj->getIsEditor(),
 					));
 		}
 		
@@ -219,20 +206,18 @@ class IndexController {
 		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository();
 		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository();
 		$userTokenRepo = new API2ApplicationUserTokenRepository();
-		
-		// Load and check request token!
-		$data = array_merge($_GET, $_POST);
-		$apiapp = $data['app_token'] && $data['app_secret'] ?
-				$appRepo->loadByAppTokenAndAppSecret($data['app_token'], $data['app_secret'])
-				: null;
-		if (!$apiapp) {
-			// TODO also if app closed
+
+		if (!$app['apiApp'] || !$app['apiAppLoadedBySecret']) {
 			return json_encode(array(
 				'success'=>false,
 			));
 		}
+
+		// Load and check request token!
+		$data = array_merge($_GET, $_POST);
+
 		$authorisationToken = $data['authorisation_token'] && $data['request_token'] ?
-				$userAuthorisationTokenRepo->loadByAppAndAuthorisationTokenAndRequestToken($apiapp, $data['authorisation_token'], $data['request_token'])
+				$userAuthorisationTokenRepo->loadByAppAndAuthorisationTokenAndRequestToken($app['apiApp'], $data['authorisation_token'], $data['request_token'])
 				: null;
 		if (!$authorisationToken || $authorisationToken->getIsUsed()) {
 			return json_encode(array(
@@ -241,8 +226,8 @@ class IndexController {
 		}
 		
 		// get user tokens
-		$userTokenRepo->createForAppAndUserId($apiapp, $authorisationToken->getUserId());
-		$userToken = $userTokenRepo->loadByAppAndUserID($apiapp, $authorisationToken->getUserId());
+		$userTokenRepo->createForAppAndUserId($app['apiApp'], $authorisationToken->getUserId());
+		$userToken = $userTokenRepo->loadByAppAndUserID($app['apiApp'], $authorisationToken->getUserId());
 		// mark token used
 		$userAuthorisationTokenRepo->markTokenUsed($authorisationToken);
 		// return
@@ -250,8 +235,7 @@ class IndexController {
 			return json_encode(array(
 					'success'=>true,
 					'permissions'=>array(
-						'is_write_user_actions'=>$userToken->getIsWriteUserActions(),
-						'is_write_calendar'=>$userToken->getIsWriteCalendar(),
+						'is_editor'=>$userToken->getIsEditor(),
 					),
 					'user_token'=>$userToken->getUserToken(),
 					'user_secret'=>$userToken->getUserSecret(),
@@ -275,8 +259,7 @@ class IndexController {
 					'username'=>$app['apiUser']->getUserName(),
 				),
 				'permissions'=>array(
-					'is_write_user_actions'=>$app['apiUserToken']->getIsWriteUserActions(),
-					'is_write_calendar'=>$app['apiUserToken']->getIsWriteCalendar(),
+					'is_editor'=>$app['apiUserToken']->getIsEditor(),
 				)
 			));
 	}

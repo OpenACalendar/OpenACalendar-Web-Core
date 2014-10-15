@@ -18,17 +18,17 @@
 {% block tabDetails %}currentTab{% endblock %}
 
 {% block actions %}
-	{% if actionGroupEditDetails %}
+	{% if currentUserActions.has("org.openacalendar","groupEditDetails") %}
 		<li class="action">
 			<a href="/group/{{ group.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 		</li>
 	{%  endif %}
-	{% if actionGroupEditMedia %}
+	{% if currentUserActions.has("org.openacalendar","groupEditMedia") %}
 		<li class="action">
 			<a href="/group/{{ group.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
 		</li>
 	{% endif %}
-	{%  if actionGroupNewEvent %}
+	{%  if currentUserActions.has("org.openacalendar","groupNewEvent") %}
 		<li class="action">
 			<a href="/group/{{ group.slugForUrl }}/newevent"><div class="iconPencilSmall"></div> new event</a>
 		</li>
@@ -85,7 +85,7 @@
 				</ul>
 			{% endif %}
 				
-			{% if isGroupRunningOutOfFutureEvents and currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}
+			{% if isGroupRunningOutOfFutureEvents %}
 				<div class="isGroupRunningOutOfFutureEventsWarning">
 					<p>
 						Do you know of any more events for {{ group.title }}?
@@ -102,7 +102,7 @@
 			{% endif %}
 
 
-			{% if currentSite.isFeatureCuratedList and currentUserCanEditSite and curatedListsUserCanEdit %}
+			{% if curatedListsUserCanEdit and currentUserActions.has("org.openacalendar","curatedListGeneralEdit") %}
 				<div id="curatedListsOnEventWrapper">
 					<span class="title">Curated Lists</span>
 					<ul>
@@ -140,7 +140,7 @@
 				{% else %}
 					<li>
 						No events found.
-						{% if currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}Why not <a href="/group/{{ group.slugForUrl }}/newevent">add one</a>?{% endif %}
+						{% if currentUserActions.has("org.openacalendar","groupNewEvent") %}Why not <a href="/group/{{ group.slugForUrl }}/newevent">add one</a>?{% endif %}
 					</li>		
 				{% endfor %}
 			</ul>

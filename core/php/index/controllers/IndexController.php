@@ -64,6 +64,7 @@ class IndexController {
 	}
 	
 	function create(Request $request, Application $app) {
+
 		$siteRepository = new SiteRepository();
 				
 		$form = $app['form.factory']->create(new CreateForm());
@@ -90,10 +91,10 @@ class IndexController {
 					$site->setIsWebRobotsAllowed(false);
 				}
 				if ($data['write'] == 'public') {
-					$site->setIsAllUsersEditors(true);
+					$isAllUsersEditors = true;
 					$site->setIsRequestAccessAllowed(false);
 				} else {
-					$site->setIsAllUsersEditors(false);
+					$isAllUsersEditors = false;
 					$site->setIsRequestAccessAllowed(true);
 				}
 				$site->setIsFeatureCuratedList($app['config']->newSiteHasFeatureCuratedList);
@@ -112,7 +113,8 @@ class IndexController {
 							$site, 
 							userGetCurrent(), 
 							array( $countryRepository->loadByTwoCharCode("GB") ), 
-							$siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode)
+							$siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode),
+							$isAllUsersEditors
 						);
 
 				if ($app['config']->hasSSL){

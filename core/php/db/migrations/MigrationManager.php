@@ -15,8 +15,11 @@ namespace db\migrations;
  */
 class MigrationManager {
 	public static function upgrade($verbose = false) {
-		global $DB, $CONFIG;
-		
+		global $DB, $CONFIG, $LASTMIGRATIONCLASS;
+
+		// some vars
+		$timeSource = new \TimeSource();
+
 		// First, the migrations table.
 		$stat = $DB->query("select * from information_schema.tables where table_name='migration'");
 		$tableExists = ($stat->rowCount() == 1);
@@ -37,12 +40,17 @@ class MigrationManager {
 		foreach($dirs as $dir) {
 			if (is_dir($dir)) {
 				$handle = opendir($dir);		
-				$fileEnding = '.'.$CONFIG->databaseType.'.sql';
+				$fileEndingPHP = '.migration.set.php';
+				$fileEndingSQL = '.'.$CONFIG->databaseType.'.sql';
 				while (false !== ($file = readdir($handle))) {
 					if ($file != '.' && $file != '..') {
 						if ($verbose) echo "Loading ".$file."\n";
-						if (substr($file, -strlen($fileEnding)) == $fileEnding) {
-							$migrations[] = new Migration(substr($file, 0, -strlen($fileEnding)), file_get_contents($dir.$file));
+						if (substr($file, -strlen($fileEndingSQL)) == $fileEndingSQL) {
+							$migrations[] = new Migration(substr($file, 0, -strlen($fileEndingSQL)), file_get_contents($dir.$file));
+						} else if (substr($file, -strlen($fileEndingPHP)) == $fileEndingPHP) {
+							require_once $dir. substr($file,0, - strlen($fileEndingPHP)).".migration.class.php";
+							require $dir.$file;
+							$migrations[] = $LASTMIGRATIONCLASS;
 						}
 					}
 				}
@@ -72,12 +80,13 @@ class MigrationManager {
 				}
 			}
 		}
+
 		$stat = $DB->prepare("INSERT INTO migration (id, installed_at) VALUES (:id, :at)");
 		foreach($migrations as $migration) {
 			if (!$migration->getApplied()) {
 				if ($verbose) print "Applying ".$migration->getId()."\n";
 				$DB->beginTransaction();
-				$migration->performMigration($DB);
+				$migration->performMigration($DB, $timeSource, $CONFIG);
 				$stat->execute(array('id'=>$migration->getId(),'at'=> date("Y-m-d H:i:s")));
 				$DB->commit();
 				if ($verbose) print "Applied ".$migration->getId()."\n";

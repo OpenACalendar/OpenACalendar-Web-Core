@@ -35,14 +35,11 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 	protected function build() {
 		if ($this->userInterestedIn) {
-			$this->joins[] = " LEFT JOIN user_in_site_information ON user_in_site_information.site_id = site_information.id AND user_in_site_information.user_account_id = :user_in_site ";
 			$this->joins[] = " LEFT JOIN user_watches_site_information ON user_watches_site_information.site_id = site_information.id AND user_watches_site_information.user_account_id = :user_in_site ";
 			$this->params['user_in_site'] = $this->userInterestedIn->getId();
-			$this->where[] = " ( ( user_in_site_information.is_owner = '1'  OR  user_in_site_information.is_editor = '1' ".
-					" OR   user_in_site_information.is_administrator = '1' ) OR ".
-					"   user_watches_site_information.is_watching = '1')";
+			$this->where[] = " (   user_watches_site_information.is_watching = '1')";
 			// TODO could do user_watches_group_information to?
-			
+			// TODO permissions?
 		}
 
 		if ($this->isListedInIndexOnly) {

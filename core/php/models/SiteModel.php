@@ -25,11 +25,8 @@ class SiteModel {
 	protected $footer_text;
 	protected $is_web_robots_allowed = true;
 	protected $is_closed_by_sys_admin = false;
-	protected $is_all_users_editors = true;
 	protected $is_listed_in_index = true;
 	protected $closed_by_sys_admin_reason;
-	protected $is_request_access_allowed = false;
-	protected $request_access_question;
 	protected $is_feature_map = false;
 	protected $is_feature_importer = false;
 	protected $is_feature_curated_list =  false;
@@ -59,13 +56,10 @@ class SiteModel {
 		$this->is_web_robots_allowed = $data['is_web_robots_allowed'];
 		$this->is_closed_by_sys_admin = $data['is_closed_by_sys_admin'];
 		$this->closed_by_sys_admin_reason = $data['closed_by_sys_admin_reason'];
-		$this->is_all_users_editors = $data['is_all_users_editors'];
 		$this->is_listed_in_index = $data['is_listed_in_index'];
 		$this->cached_is_multiple_countries = $data['cached_is_multiple_countries'];
 		$this->cached_is_multiple_timezones = $data['cached_is_multiple_timezones'];
 		$this->cached_timezones = $data['cached_timezones'];
-		$this->is_request_access_allowed = $data['is_request_access_allowed'];
-		$this->request_access_question = $data['request_access_question'];
 		$this->site_quota_id = $data['site_quota_id'];
 		$this->logo_media_id = isset($data['logo_media_id']) ? $data['logo_media_id'] : null;
 		$this->is_feature_map = (boolean)$data['is_feature_map'];
@@ -143,14 +137,8 @@ class SiteModel {
 	public function setClosedBySysAdminreason($closed_by_sys_admin_reason) {
 		$this->closed_by_sys_admin_reason = $closed_by_sys_admin_reason;
 	}
-	
-	public function getIsAllUsersEditors() {
-		return $this->is_all_users_editors;
-	}
 
-	public function setIsAllUsersEditors($is_all_users_editors) {
-		$this->is_all_users_editors = $is_all_users_editors;
-	}
+
 	
 	public function getIsListedInIndex() {
 		return $this->is_listed_in_index;
@@ -196,22 +184,6 @@ class SiteModel {
 		$this->cached_is_multiple_timezones = (count($array) > 1);
 	}
 
-	public function getIsRequestAccessAllowed() {
-		return $this->is_request_access_allowed;
-	}
-
-	public function setIsRequestAccessAllowed($is_request_access_allowed) {
-		$this->is_request_access_allowed = $is_request_access_allowed;
-	}
-
-	public function getRequestAccessQuestion() {
-		return $this->request_access_question ? $this->request_access_question : "Why to you want to edit this calendar?";
-	}
-
-	public function setRequestAccessQuestion($request_access_question) {
-		$this->request_access_question = $request_access_question;
-	}
-	
 	public function getLogoCacheKey() {
 		return $this->logo_media_id ? md5($this->logo_media_id) : 'null';
 	}

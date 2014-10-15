@@ -1,0 +1,74 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/adminusergroup/page.html.twig' %}
+
+
+{% block pageTitle %}User Group Admin - {% endblock %}
+
+
+{% block tabPermissions %}currentTab{% endblock %}
+
+
+{% block innerContent %}
+
+	<h3>User Permissions</h3>
+
+	<table class="data">
+		<tr>
+			<th>Extension</th>
+			<th>ID</th>
+				<th>&nbsp;</th>
+		</tr>
+		{% for userpermission in userpermissions %}
+			<tr>
+				<td>{{ userpermission.userPermissionExtensionID }}</td>
+				<td>{{ userpermission.userPermissionKey }}</td>
+				<td>
+					<form method="post" action="">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="action" value="removepermission">
+						<input type="hidden" name="extension" value="{{ userpermission.userPermissionExtensionID }}">
+						<input type="hidden" name="permission" value="{{ userpermission.userPermissionKey }}">
+						<input type="submit" value="Remove!">
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<h3>Add User Permissions</h3>
+
+	{%  if  userpermissionstoadd %}
+		<table class="data">
+			<tr>
+				<th>Extension</th>
+				<th>ID</th>
+				<th>&nbsp;</th>
+			</tr>
+			{% for userpermission in userpermissionstoadd %}
+				<tr>
+					<td>{{ userpermission.userPermissionExtensionID }}</td>
+					<td>{{ userpermission.userPermissionKey }}</td>
+					<td>
+						<form method="post" action="">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="action" value="addpermission">
+							<input type="hidden" name="extension" value="{{ userpermission.userPermissionExtensionID }}">
+							<input type="hidden" name="permission" value="{{ userpermission.userPermissionKey }}">
+							<input type="submit" value="Add!">
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{%  else %}
+		<p>No more to add.</p>
+	{%  endif %}
+
+
+{% endblock %}

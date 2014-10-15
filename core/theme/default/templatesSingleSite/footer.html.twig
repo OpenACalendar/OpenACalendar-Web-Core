@@ -15,7 +15,7 @@
 		Powered by <a href="http://ican.openacalendar.org">OpenACalendar</a> -
 		<a href="http://jmbtechnology.co.uk/">&copy; JMB Technology Limited {{ COPYRIGHT_YEARS }}</a>
 	</p>
-	{% if currentUserCanAdminSite %}
+	{% if currentUserActions.has("org.openacalendar","admin") %}
 		<p><a href="/admin">Admin</a></p>
 	{% endif %}
 </div>

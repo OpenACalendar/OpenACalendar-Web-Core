@@ -6,11 +6,6 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 
-{% set pushToChildAreas = false %}
-{% if childAreas and currentUserCanEditSite and event.isPhysical and currentSite.isFeaturePhysicalEvents and not event.isDeleted %}
-	{% set pushToChildAreas = true %}
-{%  endif %}
-
 {% extends 'site/event/page.html.twig' %}
 
 
@@ -25,42 +20,44 @@
 {% block tabDetails %}currentTab{% endblock %}
 	
 {% block actions %}
-	{%  if actionEventEditDetails and ( actionEventEditVenue or actionEventEditTags or actionEventEditGroups ) %}
+	{%  if currentUserActions.has("org.openacalendar","eventEditDetails") and ( currentUserActions.has("org.openacalendar","eventEditVenue") or currentUserActions.has("org.openacalendar","eventEditTags") or currentUserActions.has("org.openacalendar","eventEditGroups") ) %}
 		<li class="actionWithSubMenu">
 			<a href="/event/{{ event.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 			<ul class="submenu">
-				<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
-				{% if actionEventEditVenue %}
+				{%  if currentUserActions.has("org.openacalendar","eventEditDetails") %}
+					<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>
+				{%  endif %}
+				{% if currentUserActions.has("org.openacalendar","eventEditVenue") %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/venue">Edit Venue</a></li>
 				{% endif %}
-				{% if actionEventEditTags %}
+				{% if currentUserActions.has("org.openacalendar","eventEditTags") %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/tags">Edit Tags</a></li>
 				{% endif %}
-				{% if actionEventEditGroups %}
+				{% if currentUserActions.has("org.openacalendar","eventEditGroups") %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
 				{% endif %}
 			</ul>
 		</li>
-	{%  elseif actionEventEditDetails %}
+	{%  elseif currentUserActions.has("org.openacalendar","eventEditDetails") %}
 		<li class="action">
 			<a href="/event/{{ event.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> edit</a>
 		</li>
 	{% endif %}
-	{% if actionEventEditMedia %}
+	{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
 		<li class="action">
 			<a href="/event/{{ event.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
 		</li>
 	{% endif %}
-	{% if actionEventUndelete %}
+	{% if currentUserActions.has("org.openacalendar","eventUndelete") %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
 	{% endif %}
-	{% if actionEventUncancel %}
+	{% if currentUserActions.has("org.openacalendar","eventUncancel") %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/uncancel"><div class="iconTrashOSmall"></div> uncancel</a></li>
 	{%  endif  %}
-	{% if actionEventRecur %}
+	{% if currentUserActions.has("org.openacalendar","eventRecur") %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><div class="iconCircleONotchSmall"></div> recur</a></li>
 	{% endif %}
-	{% if actionEventDelete and actionEventCancel %}
+	{% if currentUserActions.has("org.openacalendar","eventDelete") and currentUserActions.has("org.openacalendar","eventCancel") %}
 		<li class="actionWithSubMenu">
 			<a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a>
 			<ul class="submenu">
@@ -68,7 +65,7 @@
 				<li><a href="/event/{{ event.slugForUrl }}/delete">Delete</a></li>
 			</ul>
 		</li>
-	{%  elseif actionEventDelete  %}
+	{%  elseif currentUserActions.has("org.openacalendar","eventDelete")  %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> Delete</a></li>
 	{% endif %}
 	<li class="action">
@@ -91,7 +88,7 @@
 	<div class="event" itemscope itemtype="http://schema.org/Event">
 		<meta itemprop="name" content="{{ event.summaryDisplay|e('html_attr') }}" />
 
-		{% if pushToChildAreas %}
+		{% if currentUserActions.has("org.openacalendar","eventEditPushToChildAreas") %}
 			<div id="userCanPushToChildAreaWrapper">
 				<p>Is {% if venue %}"{{ venue.title }}"{% else %}this{% endif %} in one of these places?</p>
 				<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
@@ -253,7 +250,7 @@
 			{% include 'site/common/eventUsersAttending.html.twig' with {} %}				
 		</div>
 				
-		{% if group and isGroupRunningOutOfFutureEvents and currentUserCanEditSite and currentSite.isFeatureGroup and not group.isDeleted %}
+		{% if isGroupRunningOutOfFutureEvents %}
 			<div class="isGroupRunningOutOfFutureEventsWarning">
 				<p>
 					Do you know of <a href="/group/{{ group.slugForUrl }}">any more events for {{ group.title }}</a>?
@@ -269,7 +266,7 @@
 		<div class="afterEventListing"></div>
 	</div>
 	
-	{% if currentSite.isFeatureCuratedList and currentUserCanEditSite and curatedListsUserCanEdit %}
+	{% if curatedListsUserCanEdit and currentUserActions.has("org.openacalendar","curatedListGeneralEdit")  %}
 		<div id="curatedListsOnEventWrapper">
 			<span class="title">Curated Lists</span>
 			<ul>
@@ -320,7 +317,7 @@
 	{% include 'site/common/mapLibrary.js.html.twig' %}
 	<script src="/theme/default/js/mediaPopup.js?v={{ config.assetsVersion }}" type="text/javascript"></script>	
 	<script type="text/javascript" src="/theme/default/js/venueshow.js?v={{ config.assetsVersion }}"></script>
-	{%  if pushToChildAreas %}
+	{%  if currentUserActions.has("org.openacalendar","eventEditPushToChildAreas") %}
 		<script src="/theme/default/js/pushToChildArea.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 	{%  endif %}
 {% endblock %}

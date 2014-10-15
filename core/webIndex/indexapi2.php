@@ -22,8 +22,8 @@ use repositories\UserInSiteRepository;
 $app->before(function (Request $request) use ($app) {
 	global $CONFIG, $WEBSESSION;
 
-	
-	
+
+
 	# ////////////// Timezone
 	$timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 	$timezone = "";
@@ -34,60 +34,62 @@ $app->before(function (Request $request) use ($app) {
 	} else {
 		$timezone = 'Europe/London';
 	}
-	$app['twig']->addGlobal('currentTimeZone', $timezone);	
+	$app['twig']->addGlobal('currentTimeZone', $timezone);
 	$app['currentTimeZone'] = $timezone;
+
+	# /////////////// Permissions
+
+	// App and user?
+	$data = array_merge(array('app_token'=>null,'app_secret'=>null,'user_token'=>null,'user_secret'=>null),$_POST, $_GET);
+	$app['apiApp'] = null;
+	$app['apiAppLoadedBySecret'] = false;
+	$app['apiUser'] = null;
+	$app['apiUserToken'] = null;
+	$appRepo = new API2ApplicationRepository();
+	if ($data['app_secret']) {
+		$apiapp = $appRepo->loadByAppTokenAndAppSecret($data['app_token'], $data['app_secret']);
+		$app['apiAppLoadedBySecret'] = true;
+	} else {
+		$apiapp = $appRepo->loadByAppToken($data['app_token']);
+	}
+	if ($apiapp && !$apiapp->getIsClosedBySysAdmin()) {
+
+		$app['apiApp'] = $apiapp;
+		$app['userAgent']->setApi2ApplicationId($apiapp->getId());
+
+		// User Token
+		$userTokenRepo = new API2ApplicationUserTokenRepository();
+		if ($data['user_token']) {
+			$app['apiUserToken'] = $userTokenRepo->loadByAppAndUserTokenAndUserSecret($apiapp, $data['user_token'], $data['user_secret']);
+			if ($app['apiUserToken']) {
+
+				// User
+				$userRepo = new UserAccountRepository();
+				$app['apiUser'] = $userRepo->loadByID($app['apiUserToken']->getUserId());
+
+			}
+		}
+
+	}
+
+	// user permissons
+	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+	// if app is not editor or token is not editor, remove edit permissions
+	$removeEditPermissions =
+		($app['apiApp'] && !$app['apiApp']->getIsEditor()) ||
+		($app['apiUserToken'] && !$app['apiUserToken']->getIsEditor());
+	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInIndex($app['apiUser'], $removeEditPermissions, true);
+
 	
 });
 
 $appUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;
-	$data = array_merge($_POST, $_GET);
-	
-	// App?
-	$appRepo = new API2ApplicationRepository();
-	$apiapp = $appRepo->loadByAppToken($data['app_token']);
-	if (!$apiapp) {
+
+	if (!$app['apiUser']) {
 		// TODO also if app closed
 		die("ERROR"); // TODO something better
 	}
-	$app['userAgent']->setApi2ApplicationId($apiapp->getId());
-	
-	// User Token
-	$userTokenRepo = new API2ApplicationUserTokenRepository();
-	$app['apiUserToken'] = $userTokenRepo->loadByAppAndUserTokenAndUserSecret($apiapp, $data['user_token'], $data['user_secret']);
-	if (!$app['apiUserToken']) {
-		// TODO also if user account closed
-		die("ERROR"); // TODO something better
-	}
-	
-	// User
-	$userRepo = new UserAccountRepository();
-	$app['apiUser'] = $userRepo->loadByID($app['apiUserToken']->getUserId());
-	
 
-	$app['apiUserIsWriteUserActions'] = false;
-	$app['apiUserIsWriteCalendar'] = FALSE;
-	
-	$uisr = new UserInSiteRepository();
-	$app['currentUserInSite'] = $uisr->loadBySiteAndUserAccount($app['currentSite'], $app['apiUser'] );
-	if ($app['apiUser'] ->getIsEmailVerified() && $app['apiUser'] ->getIsEditor()) {
-		if ($app['currentUserInSite'] && $app['currentUserInSite']->getIsOwner()) {
-			$app['apiUserIsWriteCalendar']  = $app['apiUserToken']->getIsWriteCalendar();
-		} else if ($app['currentUserInSite'] && $app['currentUserInSite']->getIsAdministrator()) {
-			$app['apiUserIsWriteCalendar']  = $app['apiUserToken']->getIsWriteCalendar();
-		} else if ($app['currentSite']->getIsAllUsersEditors() ) {
-			$app['apiUserIsWriteCalendar']  = $app['apiUserToken']->getIsWriteCalendar();
-		} else if ($app['currentUserInSite'] && $app['currentUserInSite']->getIsEditor()) {
-			$app['apiUserIsWriteCalendar']  = $app['apiUserToken']->getIsWriteCalendar();
-		};
-	}
-	
-};
-
-$appVerifiedEditorUserRequired = function(Request $request)  use ($app) {
-	if (!$app['apiUserIsWriteCalendar']) {
-		die("ERROR"); // TODO something better
-	}
 };
 
 require APP_ROOT_DIR.'/core/webIndex/indexapi2.routes.php';

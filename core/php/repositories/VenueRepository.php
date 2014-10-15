@@ -9,7 +9,6 @@ use models\VenueModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use repositories\builders\EventRepositoryBuilder;
-use repositories\UserInSiteRepository;
 
 /**
  *

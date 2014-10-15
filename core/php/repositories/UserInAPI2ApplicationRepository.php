@@ -30,52 +30,46 @@ class UserInAPI2ApplicationRepository {
 		################## If not there, just add
 		if ($stat->rowCount() == 0) {
 			$stat = $DB->prepare("INSERT INTO user_in_api2_application_information ".
-					"(api2_application_id, user_id, is_write_user_actions, is_write_calendar, created_at) ".
-					"VALUES (:api2_application_id, :user_id, :is_write_user_actions, :is_write_calendar, :created_at)");
+					"(api2_application_id, user_id, is_editor, created_at) ".
+					"VALUES (:api2_application_id, :user_id, :is_editor, :created_at)");
 			
 			$stat->execute(array(
 				'api2_application_id'=>$app->getId(),
 				'user_id'=> $user->getId() ,
-				'is_write_user_actions'=>  $permissions->getIsWriteUserActionsGranted() ? 1 : 0,
-				'is_write_calendar'=> $permissions->getIsWriteCalendarGranted() ? 1 : 0 ,
+				'is_editor'=>  $permissions->getIsEditorGranted() ? 1 : 0,
 				'created_at'=>  \TimeSource::getFormattedForDataBase(),
 			));
 			
 			return;
 		}	
 			
-		################## get data, check if we need to escalate permissions
+		################## get data, check if we need to escalate or remove permissions
 		$userInAppData = $stat->fetch();
 
-		if (($permissions->getIsWriteCalendarGranted() && $userInAppData['is_write_calendar'] == 0) || 
-				($permissions->getIsWriteCalendarRefused() && $userInAppData['is_write_calendar'] == 1)) {
+		if (($permissions->getIsEditorGranted() && $userInAppData['is_editor'] == 0)) {
 			
 			$stat = $DB->prepare("UPDATE user_in_api2_application_information ".
-					" SET is_write_calendar=:is_write_calendar ".
+					" SET is_editor='1' ".
 					" WHERE api2_application_id =:api2_application_id AND user_id =:user_id ");
 			$stat->execute(array( 
 					'api2_application_id'=>$app->getId(), 
 					'user_id'=>$user->getId() ,
-					'is_write_calendar'=>$permissions->getIsWriteCalendarGranted() ? 1 : 0,
 				));
 			
-		}		
+		}
 
-		if (($permissions->getIsWriteUserActionsGranted() && $userInAppData['is_write_user_actions'] == 0) || 
-				($permissions->getIsWriteUserActionsRefused() && $userInAppData['is_write_user_actions'] == 1)) {
-			
+		if (($permissions->getIsEditorRefused() && $userInAppData['is_editor'] == 1)) {
+
 			$stat = $DB->prepare("UPDATE user_in_api2_application_information ".
-					" SET is_write_user_actions=:is_write_user_actions ".
+					" SET is_editor='0' ".
 					" WHERE api2_application_id =:api2_application_id AND user_id =:user_id ");
-			$stat->execute(array( 
-					'api2_application_id'=>$app->getId(), 
+			$stat->execute(array(
+					'api2_application_id'=>$app->getId(),
 					'user_id'=>$user->getId() ,
-					'is_write_user_actions'=>$permissions->getIsWriteUserActionsGranted() ? 1 : 0,
 				));
-			
-		}		
-		
-		
+
+		}
+
 	}
 	
 	

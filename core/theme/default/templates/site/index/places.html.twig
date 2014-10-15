@@ -35,7 +35,7 @@
 			{% if currentSite.isFeatureMap %}
 				<li><a href="/map"><div class="iconGlobeLarge"></div> Map</a></li>
 			{% endif %}	
-			{% if currentUserCanEditSite %}
+			{% if currentUserActions.has("org.openacalendar","venueNew") %}
 				<li><a href="/venue/new"><div class="iconGlobeLarge"></div> New venue</a></li>
 			{% endif %}
 		{% endif %}

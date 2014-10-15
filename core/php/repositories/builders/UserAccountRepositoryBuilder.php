@@ -16,22 +16,8 @@ use models\CuratedListModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
-	
 
-	public $canPermissionSite = null;
-	public $canEditSite = false;
-	public $canAdministrateSite = false;
-	
-	public function setCanEditSite(SiteModel $site) {
-		$this->canEditSite = true;
-		$this->canPermissionSite = $site;
-	}
-	
-	public function setCanAdministrateSite(SiteModel $site) {
-		$this->canAdministrateSite = true;
-		$this->canPermissionSite = $site;
-	}
-	
+
 	protected $requestAccessSite = null;
 
 	public function setRequestAccessSite(SiteModel $site) {
@@ -62,27 +48,26 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 
 	protected $groupNeeded;
 
+	/** @var UserGroupModel **/
+	protected $inUserGroup;
+
+	/**
+	 * @param \repositories\builders\UserGroupModel $inUserGroup
+	 */
+	public function setInUserGroup($inUserGroup)
+	{
+		$this->inUserGroup = $inUserGroup;
+		return $this;
+	}
+
+
+
 
 	protected function build() {
 
 		$this->select[]  = 'user_account_information.*';
 		$this->groupNeeded = false;
-		
-		if ($this->canEditSite || $this->canAdministrateSite) {
-			$this->joins[] = " JOIN user_in_site_information ON user_in_site_information.user_account_id = user_account_information.id ";
-			$this->where[] = "  user_in_site_information.site_id = :user_in_site ";
-			$this->select[] = " user_in_site_information.is_owner AS is_site_owner ";
-			$this->select[] = " user_in_site_information.is_administrator AS is_site_administrator ";
-			$this->select[] = " user_in_site_information.is_editor AS is_site_editor ";
-			$this->params['user_in_site'] = $this->canPermissionSite->getId();
-			if ($this->canAdministrateSite) {
-				$this->where[] = "  ( user_in_site_information.is_administrator = '1' OR user_in_site_information.is_owner = '1'   )";
-			} else if ($this->canEditSite) {
-				$this->where[] = "  ( user_in_site_information.is_editor = '1' OR user_in_site_information.is_administrator = '1' ".
-						"OR user_in_site_information.is_owner = '1'   )";
-			}
-			
-		}
+
 		
 		if ($this->requestAccessSite) {
 			$this->joins[] = " LEFT JOIN user_in_site_information ON user_in_site_information.user_account_id = user_account_information.id ";
@@ -118,7 +103,13 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 					"user_watches_group_information.is_watching = '1'";
 			$this->params['group_id'] = $this->watchesGroup->getId();
 		}
-		
+
+		if ($this->inUserGroup) {
+			$this->joins[] = " JOIN user_in_user_group ON user_in_user_group.user_account_id = user_account_information.id ".
+				"AND user_in_user_group.user_group_id = :user_group_id AND user_in_user_group.removed_at IS NULL  ";
+			$this->params['user_group_id'] = $this->inUserGroup->getId();
+		}
+
 	}
 	
 	protected function buildStat() {

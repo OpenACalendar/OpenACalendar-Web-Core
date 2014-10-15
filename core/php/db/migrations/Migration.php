@@ -12,9 +12,9 @@ namespace db\migrations;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class Migration {
-	private $id;
-	private $sql;
-	private $applied = false;
+	protected  $id;
+	protected $sql;
+	protected $applied = false;
 
 
 	public function __construct($id=null, $sql=null) {
@@ -26,7 +26,7 @@ class Migration {
 	public function getApplied() { return $this->applied; }
 	public function setIsApplied() { $this->applied = true; }
 
-	public  function performMigration($db) {
+	public  function performMigration(\PDO $db, \TimeSource $timeSource, \Config $config) {
 		foreach(explode(";", $this->sql) as $line) {
 			if (trim($line)) {
 				$db->query($line.';');

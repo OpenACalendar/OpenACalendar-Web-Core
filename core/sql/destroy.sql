@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS permission_in_user_group CASCADE;
+DROP TABLE IF EXISTS user_in_user_group CASCADE;
+DROP TABLE IF EXISTS user_group_in_site CASCADE;
+DROP TABLE IF EXISTS user_group_history CASCADE;
+DROP TABLE IF EXISTS user_group_information CASCADE;
 DROP TABLE IF EXISTS event_has_tag CASCADE;
 DROP TABLE IF EXISTS tag_history CASCADE;
 DROP TABLE IF EXISTS tag_information CASCADE;
@@ -22,7 +27,6 @@ DROP TABLE IF EXISTS user_watches_site_prompt_email CASCADE;
 DROP TABLE IF EXISTS user_watches_site_notify_email CASCADE;
 DROP TABLE IF EXISTS user_watches_group_prompt_email CASCADE;
 DROP TABLE IF EXISTS user_watches_group_notify_email CASCADE;
-DROP TABLE IF EXISTS site_access_request CASCADE;
 DROP TABLE IF EXISTS send_email_has_event CASCADE;
 DROP TABLE IF EXISTS send_email_information CASCADE;
 DROP TABLE IF EXISTS user_watches_site_stop CASCADE;

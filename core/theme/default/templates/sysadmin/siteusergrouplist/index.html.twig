@@ -7,34 +7,31 @@
  #}
 {% extends 'sysadmin/page.html.twig' %}
 
-
-{% block pageTitle %}Site {{  site.title }} Owner - {% endblock %}
-
+{% block pageTitle %}User Groups for Site - {% endblock %}
 
 {% block breadcrumbs %}
 	<li><a href="/sysadmin/site/{{ site.id }}/">{{ site.title }}</a></li>
-	<li class="current"><a href="/sysadmin/site/{{ site.id }}/owner">owner</a></li>
+	<li class="current"><a href="/sysadmin/usergroup">user groups</a></li>
 {% endblock %}
 
 {% block content %}
 
-
-	<p>The owner is:</p>
-
-
-	<table class="oneData">
+	<table class="data">
 		<tr>
 			<th>ID</th>
-			<td><a href="/sysadmin/user/{{ owner.id }}">{{ owner.id }}</a></td>
+			<th>Title</th>
+			<th>&nbsp;</th>
 		</tr>
-		<tr>
-			<th>Username</th>
-			<td>{{ owner.username }}</td>
-		</tr>
-		<tr>
-			<th>Email</th>
-			<td>{{ owner.email }}</td>
-		</tr>
+		{% for ug in usergroups %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %} >
+				<td>{{ ug.id }}</td>
+				<td>{{ ug.title }}</td>
+				<td>
+					<a href="/sysadmin/site/{{  site.id }}/usergroup/{{ ug.id }}" class="button">Show</a>
+				</td>
+			</tr>
+		{% endfor %}
 	</table>
+
 {% endblock %}
 

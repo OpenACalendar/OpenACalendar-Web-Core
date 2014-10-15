@@ -28,7 +28,7 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
-			{% if currentUserCanEditSite %}
+			{% if currentUserActions.has("org.openacalendar","eventNew") %}
 				<li class="action">
 					<a href="/event/new"><div class="iconPencilSmall"></div> new</a>
 				</li>
@@ -63,7 +63,7 @@
 				{% else %}
 					<li>
 						No events found.
-						{% if currentUserCanEditSite %}Why not <a href="/event/new">add one</a>?{% endif %}
+						{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
 					</li>					
 				{% endfor %}
 			</ul>

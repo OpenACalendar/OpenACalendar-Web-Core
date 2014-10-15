@@ -58,7 +58,7 @@
 			{% if currentSite.logoMediaId == media.id %}
 				<p>This is being used as the logo for the calendar.</p>
 			{% else %}
-				{% if currentUserCanAdminSite %}
+				{% if currentUserActions.has("org.openacalendar","admin") %}
 					<form id="CountriesForm" action="" method="post" onsubmit="return confirm('Are you sure?');">
 						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 						<input type="hidden" name="action" value="makeSiteLogo">

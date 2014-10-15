@@ -167,6 +167,7 @@ class Config {
 	
 	public $CLIAPI1Enabled = false;
 
+	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 
 	function getWebIndexDomainSecure() {

@@ -12,19 +12,20 @@
 {% block tabDetails %}currentTab{% endblock %}
 
 {% block actions %}
-	{% if currentUserCanEditSite and currentSite.isFeatureImporter %}
+	{% if currentUserActions.has("org.openacalendar","importURLEditDetails") %}
 		<li class="action">
 			<a href="/importurl/{{ importurl.slug }}/edit"><div class="iconPencilSmall"></div> edit</a>
 		</li>
-		{% if not importurl.isEnabled or importurl.expiredat  %}
-			<li class="action">
-				<a href="/importurl/{{ importurl.slug }}/enable"><div class="iconPencilSmall"></div> enable</a>
-			</li>
-		{% else %}
-			<li class="action">
-				<a href="/importurl/{{ importurl.slug }}/disable"><div class="iconTrashOSmall"></div> disable</a>
-			</li>			
-		{% endif %}
+	{%  endif %}
+	{% if currentUserActions.has("org.openacalendar","importURLEnable")  %}
+		<li class="action">
+			<a href="/importurl/{{ importurl.slug }}/enable"><div class="iconPencilSmall"></div> enable</a>
+		</li>
+	{% endif %}
+	{% if currentUserActions.has("org.openacalendar","importURLDisable") %}
+		<li class="action">
+			<a href="/importurl/{{ importurl.slug }}/disable"><div class="iconTrashOSmall"></div> disable</a>
+		</li>
 	{% endif %}
 {% endblock %}
 

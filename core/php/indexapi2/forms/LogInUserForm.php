@@ -28,28 +28,20 @@ class LogInUserForm  extends AbstractType {
 	protected $user;
 
 
-	protected $is_write_calendar;
-	protected $is_write_user_actions;
+	protected $is_editor;
 
 	function __construct(UserAccountModel $user, API2ApplicationModel $app, API2ApplicationRequestTokenModel $requestToken) {
 		if (!$app->getIsAutoApprove()) {
 			// if the app auto approves permissions we don't ask or tell the user anything about them.
-			$this->is_write_calendar = $requestToken ? $requestToken->getIsWriteCalendar() : null;
-			$this->is_write_user_actions = $requestToken ? $requestToken->getIsWriteUserActions() : null;
+			$this->is_editor = $requestToken ? $requestToken->getIsEditor() : null;
 		}
 		$this->user = $user;
 	}
 	
-	public function getIsWriteCalendar() {
-		return $this->is_write_calendar;
+	public function getIsEditor() {
+		return $this->is_editor;
 	}
 
-	public function getIsWriteUserActions() {
-		return $this->is_write_user_actions;
-	}
-
-
-		
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
 		$builder->add('username', 'text', array(
@@ -68,27 +60,17 @@ class LogInUserForm  extends AbstractType {
 			'required'=>true
 		));
 		
-		if ($this->is_write_user_actions) {
-			$builder->add("is_write_user_actions",
+		if ($this->is_editor) {
+			$builder->add("is_editor",
 					"checkbox",
 						array(
 							'required'=>false,
-							'label'=>'Allow this app to alter your personal calendar and lists.',
+							'label'=>'Allow this app to make changes on your behalf',
 							'data'=>true,
 						)
 					);
 		}
-		if ($this->is_write_calendar) {
-			$builder->add("is_write_calendar",
-					"checkbox",
-						array(
-							'required'=>false,
-							'label'=>'Allow this app to alter the calendar on your behalf.',
-							'data'=>true,
-						)
-					);
-		}
-		
+
 	}
 	
 	public function getName() {

@@ -1,0 +1,80 @@
+
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}User  Admin - {% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li class="current"><a href="/admin/user">users</a></li>
+{% endblock %}
+
+{% block content %}
+
+
+	<h2>Users</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			
+		</ul>
+		<div id="innerPage">
+
+
+			<h3>User Permissions all Anonymous Users have</h3>
+
+			<table class="data">
+				<tr>
+					<th>Extension</th>
+					<th>ID</th>
+				</tr>
+				{% for userpermission in userPermissionForAnonymous %}
+					<tr>
+						<td>{{ userpermission.userPermissionExtensionID }}</td>
+						<td>{{ userpermission.userPermissionKey }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+
+			<h3>User Permissions any User has</h3>
+
+			<table class="data">
+				<tr>
+					<th>Extension</th>
+					<th>ID</th>
+				</tr>
+				{% for userpermission in userPermissionForAnyUser %}
+					<tr>
+						<td>{{ userpermission.userPermissionExtensionID }}</td>
+						<td>{{ userpermission.userPermissionKey }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+
+			<h3>User Permissions any Verified User has</h3>
+
+			<table class="data">
+				<tr>
+					<th>Extension</th>
+					<th>ID</th>
+				</tr>
+				{% for userpermission in userPermissionForAnyVerifiedUser %}
+					<tr>
+						<td>{{ userpermission.userPermissionExtensionID }}</td>
+						<td>{{ userpermission.userPermissionKey }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+{% endblock %}

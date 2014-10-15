@@ -17,12 +17,12 @@
 {% endblock %}
 
 {% block actions %}
-	{% if actionAreaEditDetails %}
+	{% if currentUserActions.has("org.openacalendar","actionAreaEditDetails") %}
 		<li class="action">
 			<a href="/area/{{ area.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 		</li>
 	{%  endif %}
-	{%  if actionAreaNew %}
+	{%  if currentUserActions.has("org.openacalendar","actionAreaNew") %}
 		<li class="action">
 			<a href="/area/{{ area.slugForUrl }}/new"><div class="iconPencilSmall"></div> new</a>
 		</li>

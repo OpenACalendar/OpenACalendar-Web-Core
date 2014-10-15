@@ -60,16 +60,11 @@ class API2Application {
 					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
 					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
 					
-				} else if ($action->getCommand() == 'permissionwriteuseractions') {
-					$this->parameters['api2Application']->setIsWriteUserActions($action->getParamBoolean(0));
+				} else if ($action->getCommand() == 'permissioneditor') {
+					$this->parameters['api2Application']->setIsEditor($action->getParamBoolean(0));
 					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
 					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
-				
-				} else if ($action->getCommand() == 'permissionwritecalendar') {
-					$this->parameters['api2Application']->setIsWriteCalendar($action->getParamBoolean(0));
-					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());
-					return $app->redirect('/sysadmin/api2app/'.$this->parameters['api2Application']->getId());
-				
+
 				} else if ($action->getCommand() == 'iscallbackdisplay') {
 					$this->parameters['api2Application']->setIsCallbackDisplay($action->getParamBoolean(0));
 					$api2appRepo->edit($this->parameters['api2Application'], userGetCurrent());

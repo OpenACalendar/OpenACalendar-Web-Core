@@ -45,12 +45,8 @@
 			<td>{% if api2Application.isAutoApprove %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
 		</tr>	
 		<tr>
-			<th>is_write_user_actions</th>
-			<td>{% if api2Application.isWriteUserActions %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>
-		<tr>
-			<th>is_write_calendar</th>
-			<td>{% if api2Application.isWriteCalendar %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
+			<th>is_editor</th>
+			<td>{% if api2Application.isEditor %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
 		</tr>
 		<tr>
 			<th>is_callback_display</th>
@@ -89,8 +85,7 @@
 		<li>close  <span class="param">reason</a></li>
 		<li>open</li>
 		<li>autoapprove <span class="param">boolean</a></li>
-		<li>permissionwriteuseractions <span class="param">boolean</a></li>
-		<li>permissionwritecalendar <span class="param">boolean</a></li>
+		<li>permissioneditor <span class="param">boolean</a></li>
 		<li>iscallbackdisplay <span class="param">boolean</a></li>
 		<li>iscallbackjavascript <span class="param">boolean</a></li>
 		<li>iscallbackurl <span class="param">boolean</a></li>

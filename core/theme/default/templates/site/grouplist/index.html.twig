@@ -30,7 +30,7 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
-			{% if currentUserCanEditSite and currentSite.isFeatureGroup %}
+			{% if currentUserActions.has("org.openacalendar","groupNew") %}
 				<li class="action">
 					<a href="/group/new"><div class="iconPencilSmall"></div> new</a>
 				</li>
@@ -50,7 +50,7 @@
 				{% else %}
 					<li>
 						There are no groups.
-						{% if currentUserCanEditSite %}Why not <a href="/group/new">add one</a>?{% endif %}
+						{% if currentUserActions.has("org.openacalendar","groupNew") %}Why not <a href="/group/new">add one</a>?{% endif %}
 					</li>								
 				{% endfor %}
 			</ul>

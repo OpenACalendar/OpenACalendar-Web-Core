@@ -638,11 +638,6 @@
 			<td>{% if config.CLIAPI1Enabled %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'CLIAPI1Enabled'} %}</td>
 		</tr>
-		<tr>
-			<th>canCreateSitesVerifiedEditorUsers</th>
-			<td>{% if config.canCreateSitesVerifiedEditorUsers %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'canCreateSitesVerifiedEditorUsers'} %}</td>
-		</tr>
 	</table>
 
 {% endblock %}

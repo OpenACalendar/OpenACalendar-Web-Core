@@ -51,8 +51,7 @@ class API2ApplicationUserTokenRepository {
 	 */
 	public function loadByAppAndUserID(API2ApplicationModel $app, $userID) {
 		global $DB;
-		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_write_user_actions, ".
-				" user_in_api2_application_information.is_write_calendar ".
+		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_editor ".
 				" FROM api2_application_user_token_information".
 				" JOIN user_in_api2_application_information ON user_in_api2_application_information.is_in_app = '1' ".
 				" AND user_in_api2_application_information.user_id = api2_application_user_token_information.user_id ".
@@ -75,8 +74,7 @@ class API2ApplicationUserTokenRepository {
 	 */
 	public function loadByAppAndUserTokenAndUserSecret(API2ApplicationModel $app, $userToken, $userSecret) {
 		global $DB;
-		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_write_user_actions, ".
-				" user_in_api2_application_information.is_write_calendar ".
+		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_editor ".
 				" FROM api2_application_user_token_information".
 				" JOIN user_in_api2_application_information ON user_in_api2_application_information.is_in_app = '1' ".
 				" AND user_in_api2_application_information.user_id = api2_application_user_token_information.user_id ".

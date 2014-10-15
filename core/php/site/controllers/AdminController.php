@@ -2,7 +2,12 @@
 
 namespace site\controllers;
 
+use models\UserGroupModel;
+use repositories\builders\UserGroupRepositoryBuilder;
+use repositories\UserGroupRepository;
+use repositories\UserPermissionsRepository;
 use Silex\Application;
+use site\forms\AdminUserGroupNewForm;
 use site\forms\SiteEditProfileForm;
 use site\forms\AdminTagNewForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +16,6 @@ use models\MediaModel;
 use models\TagModel;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
-use repositories\UserInSiteRepository;
 use repositories\CountryInSiteRepository;
 use repositories\MediaRepository;
 use repositories\SiteProfileMediaRepository;
@@ -37,14 +41,58 @@ class AdminController {
 		return $app['twig']->render('site/admin/index.html.twig', array(
 			));
 	}
-		
-	
-	function owner(Application $app) {
-		$uar = new UserAccountRepository();
-		return $app['twig']->render('site/admin/owner.html.twig', array(
-				'owner'=>$uar->loadByOwnerOfSite($app['currentSite'])
+
+	function listUserGroups(Application $app) {
+
+		$ugrb = new UserGroupRepositoryBuilder();
+		$ugrb->setSite($app['currentSite']);
+
+		return $app['twig']->render('site/admin/listUserGroups.html.twig', array(
+				'usergroups'=>$ugrb->fetchAll(),
 			));
+
 	}
+
+	function listUsers(Application $app) {
+
+
+		$upr = new UserPermissionsRepository($app['extensions']);
+
+
+
+		return $app['twig']->render('site/admin/listUsers.html.twig', array(
+				'userPermissionForAnonymous'=>$upr->getPermissionsForAnonymousInSite($app['currentSite'], false, false)->getPermissions(),
+				'userPermissionForAnyUser'=>$upr->getPermissionsForAnyUserInSite($app['currentSite'], false, false)->getPermissions(),
+				'userPermissionForAnyVerifiedUser'=>$upr->getPermissionsForAnyVerifiedUserInSite($app['currentSite'], false, false)->getPermissions(),
+			));
+
+	}
+
+	function newUserGroup(Application $app, Request $request) {
+
+		$userGroup = new UserGroupModel();
+
+		$form = $app['form.factory']->create(new AdminUserGroupNewForm($app['config']), $userGroup);
+
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+
+			if ($form->isValid()) {
+
+				$ugRepository = new UserGroupRepository();
+				$ugRepository->createForSite($app['currentSite'], $userGroup, userGetCurrent());
+				return $app->redirect("/admin/usergroup/".$userGroup->getId());
+
+			}
+		}
+
+
+		return $app['twig']->render('site/admin/newUserGroup.html.twig', array(
+			'form'=>$form->createView(),
+		));
+
+	}
+
 		
 	function profile(Request $request, Application $app) {		
 		$form = $app['form.factory']->create(new SiteEditProfileForm($app['config']), $app['currentSite']);
@@ -143,112 +191,7 @@ class AdminController {
 				'form' => $form->createView(),
 			));
 	}
-	
-	function users(Request $request, Application $app) {		
-		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			
-			if ($request->request->get('isAllUsersEditors') == 'yes') {
-				$app['currentSite']->setIsAllUsersEditors(true);
-				// if all users can edit no need for request acces
-				$app['currentSite']->setIsRequestAccessAllowed(false);
-			} else {
-				$app['currentSite']->setIsAllUsersEditors(false);
-				if ($request->request->get('isRequestAccessAllowed') == 'yes') {
-					$app['currentSite']->setIsRequestAccessAllowed(true);
-					$app['currentSite']->setRequestAccessQuestion($request->request->get('requestAccessQuestion'));
-				} else {
-					$app['currentSite']->setIsRequestAccessAllowed(false);
-				}				
-			}
-			
-			$siteRepository = new SiteRepository();
-			$siteRepository->edit($app['currentSite'], userGetCurrent());
-				
-			return $app->redirect("/admin/users");
-		}
-			
-		$uarb = new UserAccountRepositoryBuilder();
-		$uarb->setCanEditSite($app['currentSite']);
-		$users = $uarb->fetchAll();
 
-		$uarb = new UserAccountRepositoryBuilder();
-		$uarb->setRequestAccessSite($app['currentSite']);
-		$usersRequest = $uarb->fetchAll();
-
-		return $app['twig']->render('site/admin/users.html.twig', array(
-				'users'=>$users,
-				'usersRequest'=>$usersRequest,
-			));
-		
-	}
-	
-	function usersActions(Request $request, Application $app) {		
-		if ($request->request->get('userID')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$uisr = new UserInSiteRepository();
-			$uar = new UserAccountRepository();
-			if ($request->request->get('actionRemove')) {
-				foreach($request->request->get('userID') as $uid) {
-					$user = $uar->loadByID($uid);
-					if ($user) {
-						$uisr->removeUserAdministratesSite($user, $app['currentSite']);
-						$uisr->removeUserEditsSite($user, $app['currentSite']);
-					}
-				}
-			} else if ($request->request->get('actionAdministrator')) {
-				foreach($request->request->get('userID') as $uid) {
-					$user = $uar->loadByID($uid);
-					if ($user) {
-						$uisr->markUserAdministratesSite($user, $app['currentSite']);
-					}
-				}
-			} else if ($request->request->get('actionEditor')) {
-				foreach($request->request->get('userID') as $uid) {
-					$user = $uar->loadByID($uid);
-					if ($user) {
-						$uisr->removeUserAdministratesSite($user, $app['currentSite']);
-						$uisr->markUserEditsSite($user, $app['currentSite']);
-					}
-				}
-			}
-		}
-
-		return $app->redirect('/admin/users');
-	}
-	
-	function usersAdd(Request $request, Application $app) {
-			
-		$form = $app['form.factory']->create(new AdminUsersAddForm($app['currentSite']));
-		
-		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
-
-			if ($form->isValid()) {
-				$data = $form->getData();
-				
-				$uisr = new UserInSiteRepository();
-				$uar = new UserAccountRepository();
-				$user = $uar->loadByUserName($data['username']);
-				if ($user) {
-					if ($data['role'] == 'admin') {
-						$uisr->markUserAdministratesSite($user, $app['currentSite']);
-					} else {
-						$uisr->markUserEditsSite($user, $app['currentSite']);
-					}
-					return $app->redirect("/admin/users");
-				} else {
-					// TODO
-				}
-				
-				
-				
-			}
-		}
-
-		return $app['twig']->render('site/admin/usersAdd.html.twig', array(
-				'form' => $form->createView(),
-			));
-		
-	}
 	
 	
 	function countries(Request $request, Application $app) {		

@@ -9,7 +9,6 @@ CREATE TABLE site_information (
 	footer_text TEXT NULL,
 	is_web_robots_allowed boolean default '1' NOT NULL,
 	is_closed_by_sys_admin boolean default '0' NOT NULL,
-	is_all_users_editors boolean default '1' NOT NULL,
 	closed_by_sys_admin_reason TEXT NULL,
 	PRIMARY KEY(id)
 );
@@ -27,7 +26,6 @@ CREATE TABLE site_history (
 	footer_text TEXT NULL,
 	is_web_robots_allowed boolean default '1' NOT NULL,
 	is_closed_by_sys_admin boolean default '0' NOT NULL,
-	is_all_users_editors boolean default '1' NOT NULL,
 	closed_by_sys_admin_reason TEXT NULL,
 	PRIMARY KEY(site_id, created_at)
 );

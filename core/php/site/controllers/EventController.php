@@ -120,46 +120,54 @@ class EventController {
 			}
 		}
 
-		$this->parameters['actionEventHistory'] = true;
-		$this->parameters['actionEventEditDetails'] = $app['currentUserCanEditSite']
+		$app['currentUserActions']->set("org.openacalendar","eventHistory",true);
+		$app['currentUserActions']->set("org.openacalendar","eventEditDetails",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
-			&& !$this->parameters['event']->getIsCancelled();
-		$this->parameters['actionEventEditVenue'] = $app['currentUserCanEditSite']
-			&& !$this->parameters['event']->getIsDeleted()
-			&& !$this->parameters['event']->getIsCancelled()
-			&& $app['currentSite']->getIsFeaturePhysicalEvents();
-		$this->parameters['actionEventEditTags'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['event']->getIsCancelled());
+		$app['currentUserActions']->set("org.openacalendar","eventEditVenue",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& $app['currentSite']->getIsFeatureTag();
-		$this->parameters['actionEventEditGroups'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeaturePhysicalEvents());
+		$app['currentUserActions']->set("org.openacalendar","eventEditTags",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& $app['currentSite']->getIsFeatureGroup();
-		$this->parameters['actionEventEditMedia'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeatureTag());
+		$app['currentUserActions']->set("org.openacalendar","eventEditGroups",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& $CONFIG->isFileStore();
-		$this->parameters['actionEventRecur'] = $app['currentUserCanEditSite']
+			&& $app['currentSite']->getIsFeatureGroup());
+		$app['currentUserActions']->set("org.openacalendar","eventEditMedia",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			&& !$this->parameters['event']->getIsDeleted()
+			&& !$this->parameters['event']->getIsCancelled()
+			&& $CONFIG->isFileStore());
+		$app['currentUserActions']->set("org.openacalendar","eventRecur",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsDeleted()
-			&& !$this->parameters['event']->getIsCancelled();
-		$this->parameters['actionEventDelete'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['event']->getIsCancelled());
+		$app['currentUserActions']->set("org.openacalendar","eventDelete",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
-			&& !$this->parameters['event']->getIsDeleted();
-		$this->parameters['actionEventCancel'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['event']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","eventCancel",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& !$this->parameters['event']->getIsDeleted();
-		$this->parameters['actionEventUndelete'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['event']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","eventUndelete",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
-			&& $this->parameters['event']->getIsDeleted();
-		$this->parameters['actionEventUncancel'] = $app['currentUserCanEditSite']
+			&& $this->parameters['event']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","eventUncancel",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
-			&& $this->parameters['event']->getIsCancelled();
+			&& $this->parameters['event']->getIsCancelled());
 
-		
-		
 		return true;
 
 	}
@@ -277,9 +285,20 @@ class EventController {
 				$areaRepoBuilder->setNoParentArea(true);
 			}
 			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
+			$app['currentUserActions']->set("org.openacalendar","eventEditPushToChildAreas",
+				$this->parameters['childAreas'] &&
+				$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+				&& $app['currentSite']->getIsFeaturePhysicalEvents()
+				&& $this->parameters['event']->getIsPhysical()
+				&& !$this->parameters['event']->getIsCancelled()
+				&& !$this->parameters['event']->getIsDeleted());
 		}
-		
-		if ($this->parameters['group']) {
+
+		$this->parameters['isGroupRunningOutOfFutureEvents'] = 0;
+		if ($this->parameters['group'] &&
+			!$this->parameters['group']->getIsDeleted()
+			&& $app['currentSite']->getIsFeatureGroup()
+			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
 			$groupRepo = new GroupRepository();
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
 		}

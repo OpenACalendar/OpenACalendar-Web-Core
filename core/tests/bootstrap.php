@@ -77,6 +77,12 @@ function getNewTestDB() {
 	return $DB;
 }
 
+function getNewTestApp() {
+	$app = new Silex\Application();
+
+	return $app;
+}
+
 function getSiteQuotaUsedForTesting() {
 	global $DB, $CONFIG;
 	$siteQuotaRepository = new repositories\SiteQuotaRepository();

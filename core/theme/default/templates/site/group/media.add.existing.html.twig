@@ -34,7 +34,7 @@
 							{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
 						</a>
 					</div>
-					{% if currentUserCanEditSite and currentSite.isFeatureGroup %}
+					{% if currentUserActions.has("org.openacalendar","groupEditMedia") %}
 						<form action="" method="post">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="addMedia" value="{{ media.slug }}">

@@ -45,6 +45,14 @@ abstract class BaseExtension {
 	public function getUserNotificationTypes() {
 		return array();
 	}
+
+	public function getUserPermissions() {
+		return array();
+	}
+
+	public function getUserPermission($key) {
+		return null;
+	}
 	
 	public function getUserNotificationType($type) {
 		return null;

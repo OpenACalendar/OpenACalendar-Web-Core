@@ -67,19 +67,19 @@ class GroupController {
 		}
 
 
-		$this->parameters['actionGroupHistory'] = true;
-		$this->parameters['actionGroupEditDetails'] = $app['currentUserCanEditSite']
+		$app['currentUserActions']->set("org.openacalendar","groupHistory",true);
+		$app['currentUserActions']->set("org.openacalendar","groupEditDetails",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
-			&& !$this->parameters['group']->getIsDeleted();
-		$this->parameters['actionGroupEditMedia'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['group']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","groupEditMedia",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
-			&& !$this->parameters['group']->getIsDeleted()
-			&& $CONFIG->isFileStore();
-		$this->parameters['actionGroupNewEvent'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['group']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","groupNewEvent",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
-			&& !$this->parameters['group']->getIsDeleted();
-
-
+			&& !$this->parameters['group']->getIsDeleted());
 
 
 		return true;
@@ -115,7 +115,12 @@ class GroupController {
 		$this->parameters['importurls'] = $importurlRepoBuilder->fetchAll();
 		
 		$groupRepo = new GroupRepository();
-		$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
+		if (!$this->parameters['group']->getIsDeleted() && $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			&& $app['currentSite']->getIsFeatureGroup() ) {
+			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
+		} else {
+			$this->parameters['isGroupRunningOutOfFutureEvents'] = 0;
+		}
 
 
 		if (userGetCurrent()) {

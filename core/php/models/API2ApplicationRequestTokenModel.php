@@ -24,8 +24,7 @@ class API2ApplicationRequestTokenModel {
 	protected $callback_url;
 	protected $is_callback_display;
 	protected $is_callback_javascript;
-	protected $is_write_user_actions;
-	protected $is_write_calendar;
+	protected $is_editor;
 	protected $state_from_user;
 
 	public function setFromDataBaseRow($data) {
@@ -37,8 +36,7 @@ class API2ApplicationRequestTokenModel {
 		$this->callback_url   = $data['callback_url'];
 		$this->is_callback_display   = $data['is_callback_display'];
 		$this->is_callback_javascript   = $data['is_callback_javascript'];
-		$this->is_write_calendar  = (boolean)$data['is_write_calendar'];
-		$this->is_write_user_actions  = (boolean)$data['is_write_user_actions'];
+		$this->is_editor  = (boolean)$data['is_editor'];
 		$this->state_from_user  = $data['state_from_user'];
 	}
 	
@@ -124,21 +122,23 @@ class API2ApplicationRequestTokenModel {
 		$this->is_callback_javascript = $is_callback_javascript;
 	}
 
-	public function getIsWriteUserActions() {
-		return $this->is_write_user_actions;
+	/**
+	 * @param mixed $is_editor
+	 */
+	public function setIsEditor($is_editor)
+	{
+		$this->is_editor = $is_editor;
 	}
 
-	public function setIsWriteUserActions($is_write_user_actions) {
-		$this->is_write_user_actions = $is_write_user_actions;
+	/**
+	 * @return mixed
+	 */
+	public function getIsEditor()
+	{
+		return $this->is_editor;
 	}
 
-	public function getIsWriteCalendar() {
-		return $this->is_write_calendar;
-	}
 
-	public function setIsWriteCalendar($is_write_calendar) {
-		$this->is_write_calendar = $is_write_calendar;
-	}
 
 	public function isAnyCallbackSet() {
 		return $this->is_callback_display || $this->is_callback_javascript || $this->callback_url;

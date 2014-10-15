@@ -35,7 +35,7 @@
 			{% endif %}
 		</li>
 		<li><a href="{{ config.getWebIndexDomainSecure() }}/me/"><div class="iconUserLarge"></div> Your account</a></li>
-		{% if currentUserCanAdminSite %}
+		{% if currentUserActions.has("org.openacalendar","admin") %}
 			<li><a href="/admin"><div class="iconGearsLarge"></div> Calendar Admin</a></li>
 		{% endif %}
 		<li><a href="{{ config.getWebIndexDomainSecure() }}/me/logout"><div class="iconUserLarge"></div> Logout</a></li>

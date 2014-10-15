@@ -32,7 +32,7 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
-			{% if currentUserCanEditSite and currentSite.isFeaturePhysicalEvents %}
+			{% if currentUserActions.has("org.openacalendar","venueNew") %}
 				<li class="action">
 					<a href="/venue/new"><div class="iconPencilSmall"></div> new</a>
 				</li>
@@ -60,7 +60,7 @@
 				{% else %}
 					<li>
 						There are no venues.
-						{% if currentUserCanEditSite %}Why not <a href="/venue/new">add one</a>?{% endif %}
+						{% if currentUserActions.has("org.openacalendar","venueNew") %}Why not <a href="/venue/new">add one</a>?{% endif %}
 					</li>								
 				{% endfor %}
 			</ul>

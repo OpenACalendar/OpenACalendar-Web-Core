@@ -19,8 +19,7 @@ class API2ApplicationModel {
 	protected $description;
 	protected $app_token;
 	protected $app_secret;
-	protected $is_write_user_actions = 0;
-	protected $is_write_calendar = 0;
+	protected $is_editor = 0;
 	protected $is_auto_approve = 0;
 	protected $is_all_sites = 1;
 	protected $is_callback_url = 1;
@@ -38,8 +37,7 @@ class API2ApplicationModel {
 		$this->description  = $data['description'];
 		$this->app_token  = $data['app_token'];
 		$this->app_secret  = $data['app_secret'];
-		$this->is_write_user_actions  = $data['is_write_user_actions'];
-		$this->is_write_calendar  = $data['is_write_calendar'];
+		$this->is_editor  = $data['is_editor'];
 		$this->is_auto_approve  = $data['is_auto_approve'];
 		$this->is_all_sites  = $data['is_all_sites'];
 		$this->is_callback_display  = $data['is_callback_display'];
@@ -98,22 +96,22 @@ class API2ApplicationModel {
 		$this->app_secret = $app_secret;
 	}
 
-	public function getIsWriteUserActions() {
-		return $this->is_write_user_actions;
+	/**
+	 * @param int $is_editor
+	 */
+	public function setIsEditor($is_editor)
+	{
+		$this->is_editor = $is_editor;
 	}
 
-	public function setIsWriteUserActions($is_write_user_actions) {
-		$this->is_write_user_actions = $is_write_user_actions;
+	/**
+	 * @return int
+	 */
+	public function getIsEditor()
+	{
+		return $this->is_editor;
 	}
 
-
-	public function getIsWriteCalendar() {
-		return $this->is_write_calendar;
-	}
-
-	public function setIsWriteCalendar($is_write_calendar) {
-		$this->is_write_calendar = $is_write_calendar;
-	}
 
 	public function getIsAutoApprove() {
 		return $this->is_auto_approve;

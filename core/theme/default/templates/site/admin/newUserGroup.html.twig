@@ -1,3 +1,4 @@
+
 {#
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
@@ -7,18 +8,28 @@
  #}
 {% extends 'site/page.html.twig' %}
 
-{% block pageTitle %}Owner Admin - {% endblock %} 
+
+{% block pageTitle %}User Groups Admin - {% endblock %}
 
 {% block breadcrumbs %}
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	<li><a href="/admin">admin</a></li>
-	<li class="current"><a href="/admin/owner">owner</a></li>
+	<li><a href="/admin/usergroup">user groups</a></li>
+	<li class="current"><a href="/admin/usergroup/new">new</a></li>
 {% endblock %}
 
 {% block content %}
 
-	<p>The Current Owner is:  {{ owner.username }}</p>
+	<form action="#" method="post" class="styled">
 
-	<!-- <p>You can contact them on {{ owner.email }}</p> -->
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.description) }}
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Save" />
+	</form>
 
 {% endblock %}
+

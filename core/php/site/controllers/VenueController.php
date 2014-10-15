@@ -83,17 +83,27 @@ class VenueController {
 		}
 
 
-		$this->parameters['actionVenueHistory'] = true;
-		$this->parameters['actionVenueEditDetails'] = $app['currentUserCanEditSite']
+		$app['currentUserActions']->set("org.openacalendar","venueHistory",true);
+		$app['currentUserActions']->set("org.openacalendar","venueEditDetails",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
-			&& !$this->parameters['venue']->getIsDeleted();
-		$this->parameters['actionVenueDelete'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['venue']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","venueDelete",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
-			&& !$this->parameters['venue']->getIsDeleted();
-		$this->parameters['actionVenueEditMedia'] = $app['currentUserCanEditSite']
+			&& !$this->parameters['venue']->getIsDeleted());
+		$app['currentUserActions']->set("org.openacalendar","venueEditMedia",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
 			&& !$this->parameters['venue']->getIsDeleted()
-			&& $CONFIG->isFileStore();
+			&& $CONFIG->isFileStore());
+
+		$app['currentUserActions']->set("org.openacalendar","venueEditPushToChildAreas",
+			$this->parameters['childAreas'] &&
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& !$this->parameters['venue']->getIsDeleted());
+
 
 		return true;
 	}

@@ -1,0 +1,31 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}User Group New {% endblock %}
+
+{% block breadcrumbs %}
+	<li><a href="/sysadmin/usergroup">user groups</a></li>
+	<li class="current"><a href="/sysadmin/usergroup/new">new</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.description) }}
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Save" />
+	</form>
+
+
+{% endblock %}
