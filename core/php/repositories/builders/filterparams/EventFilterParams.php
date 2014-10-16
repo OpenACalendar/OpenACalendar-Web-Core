@@ -139,9 +139,30 @@ class EventFilterParams {
 	public function getFromNow() {
 		return $this->fromNow;
 	}
+
+	/**
+	 * @param boolean $fromNow
+	 */
+	public function setFromNow($fromNow)
+	{
+		$this->fromNow = $fromNow;
+	}
+
+
 	public function getIncludeDeleted() {
 		return $this->include_deleted;
 	}
+
+	/**
+	 * @param boolean $include_deleted
+	 */
+	public function setIncludeDeleted($include_deleted)
+	{
+		$this->include_deleted = $include_deleted;
+	}
+
+
+
 	public function getIncludeSpecifiedUserAttending() {
 		return $this->includeSpecifiedUserAttending;
 	}

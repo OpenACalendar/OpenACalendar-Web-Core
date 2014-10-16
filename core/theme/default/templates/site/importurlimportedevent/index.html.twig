@@ -1,0 +1,84 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/importurl/page2col.html.twig' %}
+
+{% block pageTitle %}{{ importurl.title }} - {% endblock %}
+
+{% block actions %}
+{% endblock %}
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block innerContentLeft %}
+
+	<h3>Imported event</h3>
+
+	<div class="importedevent">
+
+		{% if true %}
+			<div class="dateTimeIcon">
+				<time datetime="{{ importedEvent.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+					<div class="dateIcon">
+						<span class="startDay">{{ importedEvent.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
+						<span class="startDate">{{ importedEvent.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+						<span class="startMonthYear">{{ importedEvent.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+					</div>
+					<div class="timeIcon">
+						<span class="startTime">{{ importedEvent.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+					</div>
+				</time>
+			</div>
+		{% endif %}
+		<div class="title">{{ importedEvent.title }}</div>
+		<p class="description">{{ importedEvent.description |  truncate(1000) | nl2br  | linkify }}</p>
+
+
+		<div class="dateAndLocationWrapper">
+			{% if currentTimeZone == importedEvent.timezone %}
+				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+			{% else %}
+				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':importedEvent.timezone, 'showTimeZone':true} %}
+				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+			{% endif %}
+		</div>
+
+
+		<div class="afterEventListing"></div>
+	</div>
+
+
+{% endblock %}
+
+{% block innerContentRight %}
+
+	<h3>Real events</h3>
+
+	{% include '/site/eventListFilterParams.html.twig' %}
+
+	<ul class="events">
+		{% for event in events %}
+			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
+		{% else %}
+			<li>
+				No events found.
+				{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}
+
+

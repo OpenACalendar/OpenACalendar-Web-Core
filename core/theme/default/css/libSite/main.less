@@ -885,95 +885,108 @@ ul.areasAdmin {
 }
 
 
-ul.importedevents {
-	li.importedevent {
-		border-bottom: 2px solid #E9E9E9;
-		margin-bottom: 10px;
-		padding: 20px 0;
-		div.dateTimeIcon {
-			float: left;
+ul.importedevents li.importedevent, div.importedevent {
+	border-bottom: 2px solid #E9E9E9;
+	margin-bottom: 10px;
+	padding: 20px 0;
+	div.dateTimeIcon {
+		float: left;
+		width: 60px;
+		height: 80px;
+		position: relative;
+		z-index: 100;
+		margin: 0 10px 10px 0;
+		border: 2px solid #555555;
+		.rounded-corners(1px);
+		div.dateIcon {
 			width: 60px;
-			height: 80px;
-			position: relative;
-			z-index: 100;
-			margin: 0 10px 10px 0;
-			border: 2px solid #555555;
-			.rounded-corners(1px);
-			div.dateIcon {
-				width: 60px;
-				height: 60px;
-				text-align: center;
-				background: #555555;
-			}
-			div.timeIcon {
-				padding: 1px;
-				text-align: center;
-			}
-			span.deleted, span.cancelled {
-				padding-top: 5px;
-				display: block;
-				color: white;
-			}
+			height: 60px;
+			text-align: center;
+			background: #555555;
+		}
+		div.timeIcon {
+			padding: 1px;
+			text-align: center;
+		}
+		span.deleted, span.cancelled {
+			padding-top: 5px;
+			display: block;
+			color: white;
+		}
+		span.startDay {
+			font-weight: 200;
+			padding-top: 5px;
+			display: block;
+			color: white;
+		}
+		span.startDate {
+			font-size: 16pt;
+			font-weight: 400;
+			display: block;
+			color: white;
+		}
+		span.startMonthYear {
+			font-weight: 200;
+			display: block;
+			font-size: 0.75em;
+			color: white;
+		}
+		span.startTime {
+			font-size: 11pt;
+			color: black;
+		}
+		a {
+			text-decoration: none;
 			span.startDay {
-				font-weight: 200;
-				padding-top: 5px;
-				display: block;
 				color: white;
 			}
 			span.startDate {
-				font-size: 16pt;
-				font-weight: 400;
-				display: block;
 				color: white;
 			}
 			span.startMonthYear {
-				font-weight: 200;
-				display: block;
-				font-size: 0.75em;
 				color: white;
 			}
 			span.startTime {
-				font-size: 11pt;
 				color: black;
 			}
-			a {
-				text-decoration: none;
-				span.startDay {
-					color: white;
-				}
-				span.startDate {
-					color: white;
-				}
-				span.startMonthYear {
-					color: white;
-				}
-				span.startTime {
-					color: black;
-				}
-			}
-		}
-		div.title {
-			font-size: 16pt;
-			font-weight: bold;
-			line-height: 1.25em;
-			padding: 2px 0 10px 70px;
-			position: relative;
-			top: -5px;
-			a {
-				color: #333;
-				text-decoration: none;
-			}
-			a:hover {
-				color: black;
-				text-decoration: underline;
-			}
-		}
-		div.afterEventListing {
-			clear: both;
 		}
 	}
+	div.title {
+		font-size: 16pt;
+		font-weight: bold;
+		line-height: 1.25em;
+		padding: 2px 0 10px 70px;
+		position: relative;
+		top: -5px;
+		color: #555555;
+		a {
+			color: #555;
+			text-decoration: none;
+		}
+		a:hover {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+	p.description {
+		color: #555555;
+	}
+	.dateAndLocationWrapper {
+		clear: both;
+		padding: 10px 0 0 0;
+		margin-top: 10px;
+		div.date {
+			display: block;
+			color: #555;
+			font-weight: 400;
+			background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+			padding: 5px 10px 5px 20px;
+		}
+	}
+	div.afterEventListing {
+		clear: both;
+	}
 }
-
 
 
 div.filterListImportedEventWrapper {
@@ -985,7 +998,7 @@ div.filterListImportedEventWrapper {
 			display: inline;
 			padding: 10px;
 		}
-		#eventListFilterFromWrapper {
+		#importedEventListFilterFromWrapper {
 			input {
 				background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
 			}

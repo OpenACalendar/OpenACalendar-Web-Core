@@ -540,6 +540,9 @@ $app->match('/importurl/{slug}/log', "site\controllers\ImportURLController::log"
 
 $app->match('/importurl/{slug}/importedevent', "site\controllers\ImportURLImportedEventListController::index")
 		->assert('slug', '\d+');
+$app->match('/importurl/{slug}/importedevent/{id}', "site\controllers\ImportURLImportedEventController::index")
+		->assert('slug', '\d+')
+		->assert('id', '\d+');
 
 $app->match('/curatedlist', "site\controllers\CuratedListListController::index"); 
 $app->match('/curatedlist/', "site\controllers\CuratedListListController::index"); 

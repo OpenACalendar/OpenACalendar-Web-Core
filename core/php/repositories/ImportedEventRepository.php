@@ -41,7 +41,19 @@ class ImportedEventRepository {
 			return $event;
 		}
 	}
-	
+
+	public function loadByImportURLIDAndId($import_url_id, $id) {
+		global $DB;
+		$stat = $DB->prepare("SELECT imported_event.* FROM imported_event ".
+				"WHERE imported_event.import_url_id =:import_url_id AND imported_event.id =:id");
+		$stat->execute(array( 'id'=>$id, 'import_url_id'=>$import_url_id ));
+		if ($stat->rowCount() > 0) {
+			$event = new ImportedEventModel();
+			$event->setFromDataBaseRow($stat->fetch());
+			return $event;
+		}
+	}
+
 	public function create(ImportedEventModel $importedEvent) {
 		global $DB;
 		$stat = $DB->prepare("INSERT INTO imported_event ( import_url_id, import_id, title, ".

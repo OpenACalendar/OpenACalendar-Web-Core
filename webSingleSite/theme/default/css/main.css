@@ -1654,12 +1654,14 @@ ul.areasAdmin li.area span.contentNew a {
   -o-border-radius: 5px;
   border-radius: 5px;
 }
-ul.importedevents li.importedevent {
+ul.importedevents li.importedevent,
+div.importedevent {
   border-bottom: 2px solid #E9E9E9;
   margin-bottom: 10px;
   padding: 20px 0;
 }
-ul.importedevents li.importedevent div.dateTimeIcon {
+ul.importedevents li.importedevent div.dateTimeIcon,
+div.importedevent div.dateTimeIcon {
   float: left;
   width: 60px;
   height: 80px;
@@ -1673,76 +1675,112 @@ ul.importedevents li.importedevent div.dateTimeIcon {
   -o-border-radius: 1px;
   border-radius: 1px;
 }
-ul.importedevents li.importedevent div.dateTimeIcon div.dateIcon {
+ul.importedevents li.importedevent div.dateTimeIcon div.dateIcon,
+div.importedevent div.dateTimeIcon div.dateIcon {
   width: 60px;
   height: 60px;
   text-align: center;
   background: #555555;
 }
-ul.importedevents li.importedevent div.dateTimeIcon div.timeIcon {
+ul.importedevents li.importedevent div.dateTimeIcon div.timeIcon,
+div.importedevent div.dateTimeIcon div.timeIcon {
   padding: 1px;
   text-align: center;
 }
 ul.importedevents li.importedevent div.dateTimeIcon span.deleted,
-ul.importedevents li.importedevent div.dateTimeIcon span.cancelled {
+ul.importedevents li.importedevent div.dateTimeIcon span.cancelled,
+div.importedevent div.dateTimeIcon span.deleted,
+div.importedevent div.dateTimeIcon span.cancelled {
   padding-top: 5px;
   display: block;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startDay {
+ul.importedevents li.importedevent div.dateTimeIcon span.startDay,
+div.importedevent div.dateTimeIcon span.startDay {
   font-weight: 200;
   padding-top: 5px;
   display: block;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startDate {
+ul.importedevents li.importedevent div.dateTimeIcon span.startDate,
+div.importedevent div.dateTimeIcon span.startDate {
   font-size: 16pt;
   font-weight: 400;
   display: block;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startMonthYear {
+ul.importedevents li.importedevent div.dateTimeIcon span.startMonthYear,
+div.importedevent div.dateTimeIcon span.startMonthYear {
   font-weight: 200;
   display: block;
   font-size: 0.75em;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startTime {
+ul.importedevents li.importedevent div.dateTimeIcon span.startTime,
+div.importedevent div.dateTimeIcon span.startTime {
   font-size: 11pt;
   color: black;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a {
+ul.importedevents li.importedevent div.dateTimeIcon a,
+div.importedevent div.dateTimeIcon a {
   text-decoration: none;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startDay {
+ul.importedevents li.importedevent div.dateTimeIcon a span.startDay,
+div.importedevent div.dateTimeIcon a span.startDay {
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startDate {
+ul.importedevents li.importedevent div.dateTimeIcon a span.startDate,
+div.importedevent div.dateTimeIcon a span.startDate {
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startMonthYear {
+ul.importedevents li.importedevent div.dateTimeIcon a span.startMonthYear,
+div.importedevent div.dateTimeIcon a span.startMonthYear {
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startTime {
+ul.importedevents li.importedevent div.dateTimeIcon a span.startTime,
+div.importedevent div.dateTimeIcon a span.startTime {
   color: black;
 }
-ul.importedevents li.importedevent div.title {
+ul.importedevents li.importedevent div.title,
+div.importedevent div.title {
   font-size: 16pt;
   font-weight: bold;
   line-height: 1.25em;
   padding: 2px 0 10px 70px;
   position: relative;
   top: -5px;
+  color: #555555;
 }
-ul.importedevents li.importedevent div.title a {
-  color: #333;
+ul.importedevents li.importedevent div.title a,
+div.importedevent div.title a {
+  color: #555;
   text-decoration: none;
 }
-ul.importedevents li.importedevent div.title a:hover {
+ul.importedevents li.importedevent div.title a:hover,
+div.importedevent div.title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.importedevents li.importedevent div.afterEventListing {
+ul.importedevents li.importedevent p.description,
+div.importedevent p.description {
+  color: #555555;
+}
+ul.importedevents li.importedevent .dateAndLocationWrapper,
+div.importedevent .dateAndLocationWrapper {
+  clear: both;
+  padding: 10px 0 0 0;
+  margin-top: 10px;
+}
+ul.importedevents li.importedevent .dateAndLocationWrapper div.date,
+div.importedevent .dateAndLocationWrapper div.date {
+  display: block;
+  color: #555;
+  font-weight: 400;
+  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+ul.importedevents li.importedevent div.afterEventListing,
+div.importedevent div.afterEventListing {
   clear: both;
 }
 div.filterListImportedEventWrapper {
@@ -1756,7 +1794,7 @@ div.filterListImportedEventWrapper form.filterListImportedEvent div.inputField {
   display: inline;
   padding: 10px;
 }
-div.filterListImportedEventWrapper form.filterListImportedEvent #eventListFilterFromWrapper input {
+div.filterListImportedEventWrapper form.filterListImportedEvent #importedEventListFilterFromWrapper input {
   background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
 }
 div.filterListImportedEventWrapper form.filterListImportedEvent div.submitField {

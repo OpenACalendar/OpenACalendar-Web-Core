@@ -113,6 +113,21 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		$this->importURL = $importURL;
 	}
 
+
+
+	/** @var ImportedEventModel **/
+	protected $importedEvent;
+
+	/**
+	 * @param \repositories\builders\ImportedEventModel $importedEvent
+	 */
+	public function setImportedEvent($importedEvent)
+	{
+		$this->importedEvent = $importedEvent;
+	}
+
+
+
 	
 	/** @var CuratedListModel **/
 	protected $curatedList;
@@ -292,7 +307,12 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->where[] =  " event_information.import_url_id = :import_url_id ";
 			$this->params['import_url_id'] = $this->importURL->getId();
 		}
-		
+
+		if ($this->importedEvent) {
+			$this->joins[] = " JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id AND imported_event_is_event.imported_event_id = :imported_event_id ";
+			$this->params['imported_event_id'] = $this->importedEvent->getId();
+		}
+
 		if (!$this->site && !$this->group) {
 			$this->joins[] = " JOIN site_information ON event_information.site_id = site_information.id ";
 			$this->select[] = " site_information.slug AS site_slug ";
