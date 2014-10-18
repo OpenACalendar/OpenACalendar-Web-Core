@@ -846,20 +846,15 @@ table.calendar .deleted {
   border-radius: 2px;
   background: white;
   padding: 0;
-  min-width: 600px;
-  width: 50%;
+  width: 95%;
+  min-width: 300px;
+  max-width: 950px;
+  position: absolute;
   top: 25px;
-  left: 20%;
-  position: fixed;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
   z-index: 1000;
-}
-@media screen and (max-width: 750px) {
-  .PopupBox {
-    min-width: 200px;
-    width: 95%;
-    top: 25px;
-    left: 10px;
-  }
 }
 .PopupBox .PopupBoxClose {
   padding: 3px;
