@@ -58,6 +58,7 @@ function showPopup() {
 	$(document).on('keyup.close_popup', function(e) {
 		if (e.keyCode == 27) { closePopup() }
 	});
+	$('.PopupBox').css({top: ($(document).scrollTop()+25)+'px' });
 }
 
 
