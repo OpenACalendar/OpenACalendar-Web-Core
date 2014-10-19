@@ -122,6 +122,12 @@ function userLogOut() {
 $USER_CURRENT = null;
 $USER_CURRENT_LOADED = false;
 
+/**
+ * DEPRECATED This should only be called once, to load into $app['currentUser']. So $USER_CURRENT & $USER_CURRENT_LOADED shouldn't be needed.
+ * At some point in future, remove this function and put the logic into code that just writes to $app['currentUser'] only.
+ *
+ * @return UserAccountModel|null
+ */
 function userGetCurrent() {
 	global $USER_CURRENT, $USER_CURRENT_LOADED, $WEBSESSION;
 	if (!$USER_CURRENT_LOADED) {
@@ -147,11 +153,13 @@ function userGetCurrent() {
 	return $USER_CURRENT;
 }
 
+$app['currentUser'] = userGetCurrent();
+
 $app->before(function () use ($app) {
-	$app['twig']->addGlobal('currentUser', userGetCurrent());
+	$app['twig']->addGlobal('currentUser', $app['currentUser']);
 	$app['twig']->addFunction(new Twig_SimpleFunction('getCurrentUserPrivateFeedKey', function () {
 		$r = new \repositories\UserAccountPrivateFeedKeyRepository();
-		return $r->getForUser(userGetCurrent());
+		return $r->getForUser( userGetCurrent());
 	}));
 	$app['twig']->addFunction(new Twig_SimpleFunction('getCSFRToken', function () {
 		global $WEBSESSION;
@@ -167,8 +175,8 @@ $app->before(function () use ($app) {
 	}));		
 	# ////////////// 12 or 24 hour clock
 	$clock12Hour = true;
-	if (userGetCurrent()) {
-		$clock12Hour = userGetCurrent()->getIsClock12Hour() ;
+	if ($app['currentUser']) {
+		$clock12Hour = $app['currentUser']->getIsClock12Hour() ;
 	}
 	$app['currentUserClock12Hour'] = $clock12Hour;
 	$app['twig']->addGlobal('currentUserClock12Hour', $clock12Hour);
