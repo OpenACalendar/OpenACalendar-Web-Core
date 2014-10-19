@@ -94,7 +94,7 @@ class IndexController {
 					$site->setIsRequestAccessAllowed(false);
 				} else {
 					$site->setIsAllUsersEditors(false);
-					$site->setIsRequestAccessAllowed(true);
+					$site->setIsRequestAccessAllowed(false);
 				}
 				$site->setIsFeatureCuratedList($app['config']->newSiteHasFeatureCuratedList);
 				$site->setIsFeatureImporter($app['config']->newSiteHasFeatureImporter);
