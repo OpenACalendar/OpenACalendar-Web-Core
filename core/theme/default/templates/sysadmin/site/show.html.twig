@@ -46,14 +46,6 @@
 			<td>{% if site.isListedInIndex %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
 		</tr>
 		<tr>
-			<th>Is Request Access Allowed</th>
-			<td>{% if site.isRequestAccessAllowed %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>
-		<tr>
-			<th>Request Access Question</th>
-			<td>{{ site.requestAccessQuestion | nl2br }}</td>
-		</tr>
-		<tr>
 			<th>Closed by sys admin</th>
 			<td>
 				{% if site.isClosedBySysAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}				
@@ -171,7 +163,6 @@
 		<li>webrobots <span class="param">boolean</a></li>
 		<li>listedinindex <span class="param">boolean</a></li>
 		<li>allusersedit <span class="param">boolean</a></li>
-		<li>requestaccessallowed <span class="param">boolean</a></li>
 		<li>featuregroup <span class="param">boolean</a></li>
 		<li>featuremap <span class="param">boolean</a></li>
 		<li>featureimporter <span class="param">boolean</a></li>
@@ -179,7 +170,6 @@
 		<li>featurevirtualevents <span class="param">boolean</a></li>
 		<li>featurephysicalevents <span class="param">boolean</a></li>
 		<li>quota <span class="param">code</a></li>
-
 		<li>newslug <span class="param">slug</a></li>
 	</ul>
 

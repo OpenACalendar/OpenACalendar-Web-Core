@@ -84,12 +84,7 @@ class SiteController {
 					$this->parameters['site']->setIsAllUsersEditors($action->getParamBoolean(0));
 					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'requestaccessallowed') {
-					$this->parameters['site']->setIsRequestAccessAllowed($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
+
 				} else if ($action->getCommand() == 'featuremap') {
 					$this->parameters['site']->setIsFeatureMap($action->getParamBoolean(0));
 					$sr->edit($this->parameters['site'], $app['currentUser']);
