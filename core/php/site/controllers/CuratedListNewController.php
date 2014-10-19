@@ -33,7 +33,7 @@ class CuratedListNewController {
 			if ($form->isValid()) {
 				
 				$clRepository = new CuratedListRepository();
-				$clRepository->create($curatedList, $app['currentSite'], userGetCurrent());
+				$clRepository->create($curatedList, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/curatedlist/".$curatedList->getSlug());
 				

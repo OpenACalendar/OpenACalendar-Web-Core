@@ -193,15 +193,15 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 				
-		if (userGetCurrent() && !$this->parameters['event']->isInPast()) {
+		if ($app['currentUser'] && !$this->parameters['event']->isInPast()) {
 			$uaer = new UserAtEventRepository();
-			$this->parameters['userAtEvent'] = $uaer->loadByUserAndEventOrInstanciate(userGetCurrent(), $this->parameters['event']);
+			$this->parameters['userAtEvent'] = $uaer->loadByUserAndEventOrInstanciate($app['currentUser'], $this->parameters['event']);
 		}
 		
-		if (userGetCurrent()) {
+		if ($app['currentUser']) {
 			$clrb = new CuratedListRepositoryBuilder();
 			$clrb->setSite($app['currentSite']);
-			$clrb->setUserCanEdit(userGetCurrent());
+			$clrb->setUserCanEdit($app['currentUser']);
 			$clrb->setEventInformation($this->parameters['event']);
 			$clrb->setIncludeDeleted(false);
 			$this->parameters['curatedListsUserCanEdit'] = $clrb->fetchAll();
@@ -264,9 +264,9 @@ class EventController {
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
 
-		if (userGetCurrent()) {
+		if ($app['currentUser']) {
 			$uaer = new UserAtEventRepository();
-			$uae = $uaer->loadByUserAndEvent(userGetCurrent(), $this->parameters['event']);
+			$uae = $uaer->loadByUserAndEvent($app['currentUser'], $this->parameters['event']);
 			$this->parameters['userAtEventIsCurrentUser'] = $uae && ($uae->getIsPlanAttending() || $uae->getIsPlanMaybeAttending());
 		} else {
 			$this->parameters['userAtEventIsCurrentUser'] = false;
@@ -337,9 +337,9 @@ class EventController {
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
 
-		if (userGetCurrent()) {
+		if ($app['currentUser']) {
 			$uaer = new UserAtEventRepository();
-			$uae = $uaer->loadByUserAndEvent(userGetCurrent(), $this->parameters['event']);
+			$uae = $uaer->loadByUserAndEvent($app['currentUser'], $this->parameters['event']);
 			$this->parameters['userAtEventIsCurrentUser'] = $uae && ($uae->getIsPlanAttending() || $uae->getIsPlanMaybeAttending());
 		} else {
 			$this->parameters['userAtEventIsCurrentUser'] = false;
@@ -355,7 +355,7 @@ class EventController {
 		}
 
 		$uaer = new UserAtEventRepository();
-		$userAtEvent = $uaer->loadByUserAndEventOrInstanciate(userGetCurrent(), $this->parameters['event']);
+		$userAtEvent = $uaer->loadByUserAndEventOrInstanciate($app['currentUser'], $this->parameters['event']);
 
 		$data = array();
 		
@@ -436,7 +436,7 @@ class EventController {
 			if ($form->isValid()) {
 				
 				$eventRepository = new EventRepository();
-				$eventRepository->edit($this->parameters['event'], userGetCurrent());
+				$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 				
 				
 				$repo = new EventRecurSetRepository();
@@ -509,7 +509,7 @@ class EventController {
 					$this->parameters['event']->setVenueId($venue->getId());
 					$this->parameters['event']->setAreaId(null);
 					$eventRepository = new EventRepository();
-					$eventRepository->edit($this->parameters['event'], userGetCurrent());
+					$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 					$gotResult = true;
 				}
 			}
@@ -670,7 +670,7 @@ class EventController {
 					$this->parameters['event']->setVenueId(null);
 					$this->parameters['event']->setAreaId($area->getId());
 					$eventRepository = new EventRepository();
-					$eventRepository->edit($this->parameters['event'], userGetCurrent());
+					$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 					$gotResult = true;
 				}
 			}
@@ -780,12 +780,12 @@ class EventController {
 				$venue->setCountryId($this->parameters['country']->getId());
 				if ($this->parameters['fieldAreaObject']) $venue->setAreaId($this->parameters['fieldAreaObject']->getId());
 
-				$venueRepository->create($venue, $app['currentSite'], userGetCurrent());
+				$venueRepository->create($venue, $app['currentSite'], $app['currentUser']);
 
 				$this->parameters['event']->setVenueId($venue->getId());
 				$this->parameters['event']->setAreaId(null);
 				$eventRepository = new EventRepository();
-				$eventRepository->edit($this->parameters['event'], userGetCurrent());
+				$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 				$gotResult = true;
 			}
 
@@ -891,7 +891,7 @@ class EventController {
 		
 		// Load history we are working with
 		$eventHistoryRepo = new EventHistoryRepository();
-		$this->parameters['eventHistory'] = $eventHistoryRepo->loadByEventAndlastEditByUser($this->parameters['event'], userGetCurrent());
+		$this->parameters['eventHistory'] = $eventHistoryRepo->loadByEventAndlastEditByUser($this->parameters['event'], $app['currentUser']);
 		if (!$this->parameters['eventHistory']) {
 			return false;
 		}
@@ -959,7 +959,7 @@ class EventController {
 						$proposedChanges->setStartEndAtChangePossible($request->request->get("eventSlug".$futureEvent->getSlug().'fieldStartEnd') == 1);
 					} 
 					if ($proposedChanges->applyToEvent($futureEvent, $this->parameters['event'])) {
-						$eventRepo->edit($futureEvent, userGetCurrent(), $this->parameters['eventHistory']);
+						$eventRepo->edit($futureEvent, $app['currentUser'], $this->parameters['eventHistory']);
 						$countEvents++;
 					}
 				}
@@ -1015,7 +1015,7 @@ class EventController {
 				if ($group) {
 					$groupRepo->addEventToGroup($this->parameters['event'], $group);
 					$repo = new UserWatchesGroupRepository();
-					$repo->startUserWatchingGroupIfNotWatchedBefore(userGetCurrent(), $group);
+					$repo->startUserWatchingGroupIfNotWatchedBefore($app['currentUser'], $group);
 					return $app->redirect("/event/".$this->parameters['event']->getSlug()."/recur/");
 				}
 			}
@@ -1025,7 +1025,7 @@ class EventController {
 				$group = new GroupModel();
 				$group->setTitle($request->request->get('NewGroupTitle'));
 				$groupRepo = new GroupRepository();
-				$groupRepo->create($group, $app['currentSite'], userGetCurrent());
+				$groupRepo->create($group, $app['currentSite'], $app['currentUser']);
 				$groupRepo->addEventToGroup($this->parameters['event'], $group);
 				return $app->redirect("/event/".$this->parameters['event']->getSlug()."/recur/");
 			}
@@ -1086,7 +1086,7 @@ class EventController {
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], 
+					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'],
 							$this->parameters['groups'], null, $this->parameters['tags']);
 					++$count;
 				}
@@ -1135,7 +1135,7 @@ class EventController {
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], 
+					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'],
 							$this->parameters['groups'], null, $this->parameters['tags']);
 					++$count;
 				}
@@ -1184,7 +1184,7 @@ class EventController {
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group'], $this->parameters['groups']);
+					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'], $this->parameters['groups']);
 					++$count;
 				}
 			}
@@ -1221,7 +1221,7 @@ class EventController {
 			if ($form->isValid()) {
 				
 				$eventRepository = new EventRepository();
-				$eventRepository->delete($this->parameters['event'], userGetCurrent());
+				$eventRepository->delete($this->parameters['event'], $app['currentUser']);
 				
 				return $app->redirect("/event/".$this->parameters['event']->getSlug());
 				
@@ -1280,7 +1280,7 @@ class EventController {
 			if ($form->isValid()) {
 
 				$eventRepository = new EventRepository();
-				$eventRepository->cancel($this->parameters['event'], userGetCurrent());
+				$eventRepository->cancel($this->parameters['event'], $app['currentUser']);
 
 				return $app->redirect("/event/".$this->parameters['event']->getSlug());
 
@@ -1342,7 +1342,7 @@ class EventController {
 			if ($form->isValid()) {
 				
 				$eventRepository = new EventRepository();
-				$eventRepository->edit($newEventState, userGetCurrent(), $this->parameters['eventHistory']);
+				$eventRepository->edit($newEventState, $app['currentUser'], $this->parameters['eventHistory']);
 				
 				return $app->redirect("/event/".$this->parameters['event']->getSlug());
 				
@@ -1376,12 +1376,12 @@ class EventController {
 					if ($this->parameters['venue']) {
 						$this->parameters['venue']->setAreaId($area->getId());
 						$venueRepository = new VenueRepository();
-						$venueRepository->edit($this->parameters['venue'], userGetCurrent());
+						$venueRepository->edit($this->parameters['venue'], $app['currentUser']);
 						$gotResultEditedVenue = true;
 					} else {
 						$this->parameters['event']->setAreaId($area->getId());
 						$eventRepository = new EventRepository();
-						$eventRepository->edit($this->parameters['event'], userGetCurrent());
+						$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 						$gotResultEditedEvent = true;
 					}
 					$app['flashmessages']->addMessage('Thank you; event updated!');
@@ -1418,12 +1418,12 @@ class EventController {
 			if ($request->request->get('addTag')) {
 				$tag = $tagRepo->loadBySlug($app['currentSite'], $request->request->get('addTag'));
 				if ($tag) {
-					$tagRepo->addTagToEvent($tag, $this->parameters['event'], userGetCurrent());
+					$tagRepo->addTagToEvent($tag, $this->parameters['event'], $app['currentUser']);
 				}
 			} elseif ($request->request->get('removeTag')) {
 				$tag = $tagRepo->loadBySlug($app['currentSite'], $request->request->get('removeTag'));
 				if ($tag) {
-					$tagRepo->removeTagFromEvent($tag, $this->parameters['event'], userGetCurrent());
+					$tagRepo->removeTagFromEvent($tag, $this->parameters['event'], $app['currentUser']);
 				}
 				
 			}
@@ -1458,14 +1458,14 @@ class EventController {
 			if ($request->request->get('addGroup')) {
 				$group = $groupRepo->loadBySlug($app['currentSite'], $request->request->get('addGroup'));
 				if ($group) {
-					$groupRepo->addEventToGroup($this->parameters['event'], $group, userGetCurrent());
+					$groupRepo->addEventToGroup($this->parameters['event'], $group, $app['currentUser']);
 					// Need to redirect here so other parts of page are correct when shown
 					return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/edit/groups');
 				}
 			} elseif ($request->request->get('removeGroup')) {
 				$group = $groupRepo->loadBySlug($app['currentSite'], $request->request->get('removeGroup'));
 				if ($group) {
-					$groupRepo->removeEventFromGroup($this->parameters['event'], $group, userGetCurrent());
+					$groupRepo->removeEventFromGroup($this->parameters['event'], $group, $app['currentUser']);
 					// Need to redirect here so other parts of page are correct when shown
 					return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/edit/groups');
 				}
@@ -1503,13 +1503,13 @@ class EventController {
 				if ($form->isValid()) {
 
 					$mediaRepository = new MediaRepository();
-					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], userGetCurrent(),
+					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
 							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
 
 						$mediaInEventRepo = new MediaInEventRepository();
-						$mediaInEventRepo->add($media, $this->parameters['event'], userGetCurrent());
+						$mediaInEventRepo->add($media, $this->parameters['event'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
 						return $app->redirect("/event/".$this->parameters['event']->getSlug());
@@ -1542,7 +1542,7 @@ class EventController {
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
 				$mediaInEventRepo = new MediaInEventRepository();
-				$mediaInEventRepo->remove($media, $this->parameters['event'], userGetCurrent());
+				$mediaInEventRepo->remove($media, $this->parameters['event'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Removed!');
 			}
 		}
@@ -1560,7 +1560,7 @@ class EventController {
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
 				$mediaInEventRepo = new MediaInEventRepository();
-				$mediaInEventRepo->add($media, $this->parameters['event'], userGetCurrent());
+				$mediaInEventRepo->add($media, $this->parameters['event'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Added!');
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/');
 			}

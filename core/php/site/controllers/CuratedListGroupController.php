@@ -40,7 +40,7 @@ class CuratedListGroupController {
 			return false;
 		}
 		
-		$this->parameters['currentUserCanEditCuratedList'] = $this->parameters['curatedlist']->canUserEdit(userGetCurrent());
+		$this->parameters['currentUserCanEditCuratedList'] = $this->parameters['curatedlist']->canUserEdit($app['currentUser']);
 		
 		return true;
 
@@ -54,7 +54,7 @@ class CuratedListGroupController {
 		
 		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
-			$curatedlistRepository->removeGroupFromCuratedList($this->parameters['group'], $this->parameters['curatedlist'], userGetCurrent());
+			$curatedlistRepository->removeGroupFromCuratedList($this->parameters['group'], $this->parameters['curatedlist'], $app['currentUser']);
 		}
 		
 		if ($request->request->get('returnTo','group') == 'group') {
@@ -72,7 +72,7 @@ class CuratedListGroupController {
 		
 		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
-			$curatedlistRepository->addGrouptoCuratedList($this->parameters['group'], $this->parameters['curatedlist'], userGetCurrent());			
+			$curatedlistRepository->addGrouptoCuratedList($this->parameters['group'], $this->parameters['curatedlist'], $app['currentUser']);
 		}
 		
 		if ($request->request->get('returnTo','group') == 'group') {

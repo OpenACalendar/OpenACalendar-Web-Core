@@ -88,39 +88,39 @@ class EventController {
 					$gr = new GroupRepository();
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
-						$gr->addEventToGroup($this->parameters['event'], $group, userGetCurrent());
+						$gr->addEventToGroup($this->parameters['event'], $group, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					}
 				} else if ($action->getCommand() == 'removegroup') {
 					$gr = new GroupRepository();
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
-						$gr->removeEventFromGroup($this->parameters['event'], $group, userGetCurrent());
+						$gr->removeEventFromGroup($this->parameters['event'], $group, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					}
 				} else if ($action->getCommand() == 'maingroup') {
 					$gr = new GroupRepository();
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
-						$gr->setMainGroupForEvent($group, $this->parameters['event'], userGetCurrent());
+						$gr->setMainGroupForEvent($group, $this->parameters['event'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					}
 				} else if ($action->getCommand() == 'delete' && !$this->parameters['event']->getIsDeleted()) {
 					$er = new EventRepository();
-					$er->delete($this->parameters['event'],  userGetCurrent());
+					$er->delete($this->parameters['event'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['event']->getIsDeleted()) {
 					$this->parameters['event']->setIsDeleted(false);
 					$er = new EventRepository();
-					$er->edit($this->parameters['event'],  userGetCurrent());
+					$er->edit($this->parameters['event'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					
 				} else if ($action->getCommand() == 'addcuratedlist') {
 					$clr = new CuratedListRepository();
 					$curatedList = $clr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($curatedList) {
-						$clr->addEventtoCuratedList($this->parameters['event'], $curatedList, userGetCurrent());
+						$clr->addEventtoCuratedList($this->parameters['event'], $curatedList, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$curatedList->getSlug());
 					}
 					
@@ -128,7 +128,7 @@ class EventController {
 					$clr = new CuratedListRepository();
 					$curatedList = $clr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($curatedList) {
-						$clr->removeEventFromCuratedList($this->parameters['event'], $curatedList, userGetCurrent());
+						$clr->removeEventFromCuratedList($this->parameters['event'], $curatedList, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$curatedList->getSlug());
 					}
 
@@ -137,7 +137,7 @@ class EventController {
 					$er = new EventRepository();
 					$originalEvent = $er->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalEvent && $originalEvent->getId() != $this->parameters['event']->getId()) {
-						$er->markDuplicate($this->parameters['event'], $originalEvent, userGetCurrent());
+						$er->markDuplicate($this->parameters['event'], $originalEvent, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					}
 

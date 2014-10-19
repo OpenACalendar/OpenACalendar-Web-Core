@@ -60,9 +60,9 @@ class GroupController {
 			return false;
 		}
 		
-		if (userGetCurrent()) {
+		if ($app['currentUser']) {
 			$uwgr = new UserWatchesGroupRepository();
-			$uwg = $uwgr->loadByUserAndGroup(userGetCurrent(), $this->parameters['group']);
+			$uwg = $uwgr->loadByUserAndGroup($app['currentUser'], $this->parameters['group']);
 			$this->parameters['currentUserWatchesGroup'] = $uwg && $uwg->getIsWatching();
 		}
 
@@ -96,8 +96,8 @@ class GroupController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
-		if (userGetCurrent()) {
-			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
@@ -123,10 +123,10 @@ class GroupController {
 		}
 
 
-		if (userGetCurrent()) {
+		if ($app['currentUser']) {
 			$clrb = new CuratedListRepositoryBuilder();
 			$clrb->setSite($app['currentSite']);
-			$clrb->setUserCanEdit(userGetCurrent());
+			$clrb->setUserCanEdit($app['currentUser']);
 			$clrb->setIncludeDeleted(false);
 			$clrb->setGroupInformation($this->parameters['group']);
 			$this->parameters['curatedListsUserCanEdit'] = $clrb->fetchAll();
@@ -188,13 +188,13 @@ class GroupController {
 				if ($form->isValid()) {
 
 					$mediaRepository = new MediaRepository();
-					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], userGetCurrent(),
+					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
 							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
 
 						$mediaInGroupRepo = new MediaInGroupRepository();
-						$mediaInGroupRepo->add($media, $this->parameters['group'], userGetCurrent());
+						$mediaInGroupRepo->add($media, $this->parameters['group'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
 						return $app->redirect("/group/".$this->parameters['group']->getSlug());
@@ -227,7 +227,7 @@ class GroupController {
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
 				$mediaInGroupRepo = new MediaInGroupRepository();
-				$mediaInGroupRepo->remove($media, $this->parameters['group'], userGetCurrent());
+				$mediaInGroupRepo->remove($media, $this->parameters['group'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Removed!');
 			}
 		}
@@ -245,7 +245,7 @@ class GroupController {
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
 				$mediaInGroupRepo = new MediaInGroupRepository();
-				$mediaInGroupRepo->add($media, $this->parameters['group'], userGetCurrent());
+				$mediaInGroupRepo->add($media, $this->parameters['group'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Added!');
 				return $app->redirect("/group/".$this->parameters['group']->getSlug().'/');
 			}
@@ -280,7 +280,7 @@ class GroupController {
 			if ($form->isValid()) {
 				
 				$groupRepository = new GroupRepository();
-				$groupRepository->edit($this->parameters['group'], userGetCurrent());
+				$groupRepository->edit($this->parameters['group'], $app['currentUser']);
 				
 				return $app->redirect("/group/".$this->parameters['group']->getSlugForUrl());
 				
@@ -350,7 +350,7 @@ class GroupController {
 			if ($form->isValid()) {
 				
 				$eventRepository = new EventRepository();
-				$eventRepository->create($event, $app['currentSite'], userGetCurrent(), $this->parameters['group']);
+				$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group']);
 				
 				
 				if ($parseResult && $app['config']->logFileParseDateTimeRange && 
@@ -393,8 +393,8 @@ class GroupController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}
 		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
@@ -415,8 +415,8 @@ class GroupController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}
 		$this->parameters['calendar']->byMonth($year, $month, true);
@@ -436,10 +436,10 @@ class GroupController {
 		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$repo = new UserWatchesGroupRepository();
 			if ($request->request->get('action') == 'watch') {
-				$repo->startUserWatchingGroup(userGetCurrent(), $this->parameters['group']);
+				$repo->startUserWatchingGroup($app['currentUser'], $this->parameters['group']);
 				$app['flashmessages']->addMessage("Watching!");
 			} else if ($request->request->get('action') == 'unwatch') {
-				$repo->stopUserWatchingGroup(userGetCurrent(), $this->parameters['group']);
+				$repo->stopUserWatchingGroup($app['currentUser'], $this->parameters['group']);
 				$app['flashmessages']->addMessage("No longer watching");
 			}
 			// redirect here because if we didn't the  $this->parameters vars would be wrong (the old state)
@@ -530,7 +530,7 @@ class GroupController {
 				}
 				$importurl->setAreaId($area ? $area->getId() : null);
 				
-				$importURLRepository->create($importurl, $app['currentSite'], userGetCurrent());
+				$importURLRepository->create($importurl, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/importurl/".$importurl->getSlug());
 				

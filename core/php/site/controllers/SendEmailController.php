@@ -40,9 +40,9 @@ class SendEmailController {
 		}
 		
 		if ($request->request->get('actionSend')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {	
-			$this->parameters['sendemail']->send($app, userGetCurrent());
+			$this->parameters['sendemail']->send($app, $app['currentUser']);
 			$sec = new SendEmailRepository();
-			$sec->markSent($this->parameters['sendemail'], userGetCurrent());
+			$sec->markSent($this->parameters['sendemail'], $app['currentUser']);
 			
 			return $app->redirect("/admin/sendemail/".$this->parameters['sendemail']->getSlug());
 		}

@@ -143,11 +143,11 @@ class UserController {
 		
 		$userRepository = new UserAccountRepository();
 		
-		if (userGetCurrent() && userGetCurrent()->getId() == $id) {
+		if ($app['currentUser'] && $app['currentUser']->getId() == $id) {
 			// we don't just do this to save a DB Query. We do this so when we mark user object 
 			// verified the user object available to twig is marked verified and so the user
 			// doesn't see big notices on the page.
-			$user = userGetCurrent();
+			$user = $app['currentUser'];
 		} else {
 			$user = $userRepository->loadByID($id);
 		}
@@ -228,9 +228,9 @@ class UserController {
 		
 		$userRepository = new UserAccountRepository();
 		
-		if (userGetCurrent() && userGetCurrent()->getId() == $id) {
+		if ($app['currentUser'] && $app['currentUser']->getId() == $id) {
 			// We do this to save a DB Query
-			$user = userGetCurrent();
+			$user = $app['currentUser'];
 		} else {
 			$user = $userRepository->loadByID($id);
 		}
@@ -282,9 +282,9 @@ class UserController {
 	function emails($id, $code, Request $request, Application $app) {		
 		$userRepository = new UserAccountRepository();
 		
-		if (userGetCurrent() && userGetCurrent()->getId() == $id) {
+		if ($app['currentUser'] && $app['currentUser']->getId() == $id) {
 			// We do this to save a DB Query
-			$user = userGetCurrent();
+			$user = $app['currentUser'];
 		} else {
 			$user = $userRepository->loadByID($id);
 		}

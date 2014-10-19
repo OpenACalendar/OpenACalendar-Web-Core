@@ -64,12 +64,12 @@ class CuratedListController {
 
 				if ($action->getCommand() == 'delete' && !$this->parameters['curatedlist']->getIsDeleted()) {
 					$clr = new CuratedListRepository();
-					$clr->delete($this->parameters['curatedlist'],  userGetCurrent());
+					$clr->delete($this->parameters['curatedlist'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
 
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['curatedlist']->getIsDeleted()) {
 					$clr = new CuratedListRepository();
-					$clr->undelete($this->parameters['curatedlist'],  userGetCurrent());
+					$clr->undelete($this->parameters['curatedlist'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
 
 				} else if ($action->getCommand() == 'addeditor') {
@@ -77,7 +77,7 @@ class CuratedListController {
 					$user = $userRepo->loadByID($action->getParam(0));
 					if ($user) {
 						$clr = new CuratedListRepository();
-						$clr->addEditorToCuratedList($user, $this->parameters['curatedlist'], userGetCurrent());
+						$clr->addEditorToCuratedList($user, $this->parameters['curatedlist'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
 					}					
 					
@@ -86,7 +86,7 @@ class CuratedListController {
 					$user = $userRepo->loadByID($action->getParam(0));
 					if ($user) {
 						$clr = new CuratedListRepository();
-						$clr->removeEditorFromCuratedList($user, $this->parameters['curatedlist'], userGetCurrent());
+						$clr->removeEditorFromCuratedList($user, $this->parameters['curatedlist'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
 					}	
 					
@@ -95,7 +95,7 @@ class CuratedListController {
 					$event = $eventRepository->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($event) {
 						$clr = new CuratedListRepository();
-						$clr->addEventtoCuratedList($event, $this->parameters['curatedlist'], userGetCurrent());
+						$clr->addEventtoCuratedList($event, $this->parameters['curatedlist'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$event->getSlug());
 					}
 					
@@ -104,7 +104,7 @@ class CuratedListController {
 					$event = $eventRepository->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($event) {
 						$clr = new CuratedListRepository();
-						$clr->removeEventFromCuratedList($event, $this->parameters['curatedlist'], userGetCurrent());
+						$clr->removeEventFromCuratedList($event, $this->parameters['curatedlist'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$event->getSlug());
 					}
 

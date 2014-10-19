@@ -31,7 +31,7 @@ class LogInController {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				
-				if (userGetCurrent()->checkPassword($data['password']) && $data['extrapassword'] == $app['config']->sysAdminExtraPassword) {
+				if ($app['currentUser']->checkPassword($data['password']) && $data['extrapassword'] == $app['config']->sysAdminExtraPassword) {
 					$app['websession']->set('sysAdminLastActive', \TimeSource::time());
 					return $app->redirect("/sysadmin");
 				} else {

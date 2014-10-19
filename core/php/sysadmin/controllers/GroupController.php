@@ -64,18 +64,18 @@ class GroupController {
 			
 				if ($action->getCommand() == 'delete' && !$this->parameters['group']->getIsDeleted()) {
 					$gr = new GroupRepository();
-					$gr->delete($this->parameters['group'],  userGetCurrent());
+					$gr->delete($this->parameters['group'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['group']->getIsDeleted()) {
 					$this->parameters['group']->setIsDeleted(false);
 					$gr = new GroupRepository();
-					$gr->edit($this->parameters['group'],  userGetCurrent());
+					$gr->edit($this->parameters['group'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
 				} else if ($action->getCommand() == 'isduplicateof') {
 					$gr = new GroupRepository();
 					$originalGroup = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalGroup && $originalGroup->getId() != $this->parameters['group']->getId()) {
-						$gr->markDuplicate($this->parameters['group'], $originalGroup, userGetCurrent());
+						$gr->markDuplicate($this->parameters['group'], $originalGroup, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
 					}
 

@@ -117,8 +117,8 @@ class VenueController {
 		$this->parameters['eventListFilterParams'] = new EventFilterParams();
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
-		if (userGetCurrent()) {
-			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
@@ -163,7 +163,7 @@ class VenueController {
 						} else if (substr($areaCode, 0, 4) == 'NEW:') {
 							$newArea = new AreaModel();
 							$newArea->setTitle(substr($areaCode, 4));
-							$areaRepository->create($newArea, $area, $app['currentSite'], $countryRepository->loadById($venue->getCountryId()) , userGetCurrent());
+							$areaRepository->create($newArea, $area, $app['currentSite'], $countryRepository->loadById($venue->getCountryId()) , $app['currentUser']);
 							$areaRepository->buildCacheAreaHasParent($newArea);
 							$area = $newArea;
 						}
@@ -177,7 +177,7 @@ class VenueController {
 				}
 				
 				$venueRepository = new VenueRepository();
-				$venueRepository->edit($this->parameters['venue'], userGetCurrent());
+				$venueRepository->edit($this->parameters['venue'], $app['currentUser']);
 				
 				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
 				
@@ -199,8 +199,8 @@ class VenueController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}	
 		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
@@ -221,8 +221,8 @@ class VenueController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}	
 		$this->parameters['calendar']->byMonth($year, $month, true);
@@ -266,13 +266,13 @@ class VenueController {
 				if ($form->isValid()) {
 
 					$mediaRepository = new MediaRepository();
-					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], userGetCurrent(),
+					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
 							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
 
 						$mediaInVenueRepo = new MediaInVenueRepository();
-						$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
+						$mediaInVenueRepo->add($media, $this->parameters['venue'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
 						return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
@@ -305,7 +305,7 @@ class VenueController {
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
 				$mediaInVenueRepo = new MediaInVenueRepository();
-				$mediaInVenueRepo->remove($media, $this->parameters['venue'], userGetCurrent());
+				$mediaInVenueRepo->remove($media, $this->parameters['venue'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Removed!');
 			}
 		}
@@ -323,7 +323,7 @@ class VenueController {
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
 				$mediaInVenueRepo = new MediaInVenueRepository();
-				$mediaInVenueRepo->add($media, $this->parameters['venue'], userGetCurrent());
+				$mediaInVenueRepo->add($media, $this->parameters['venue'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Added!');
 				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL().'/');
 			}
@@ -354,7 +354,7 @@ class VenueController {
 
 					$this->parameters['venue']->setAreaId($area->getId());
 					$venueRepository = new VenueRepository();
-					$venueRepository->edit($this->parameters['venue'], userGetCurrent());
+					$venueRepository->edit($this->parameters['venue'], $app['currentUser']);
 					$app['flashmessages']->addMessage('Thank you; venue updated!');
 				}
 			
@@ -387,10 +387,10 @@ class VenueController {
 			if ($form->isValid()) {
 				
 				$eventRepository = new EventRepository();
-				$eventRepository->moveAllFutureEventsAtVenueToNoSetVenue($this->parameters['venue'], userGetCurrent());
+				$eventRepository->moveAllFutureEventsAtVenueToNoSetVenue($this->parameters['venue'], $app['currentUser']);
 
 				$venueRepository = new VenueRepository();
-				$venueRepository->delete($this->parameters['venue'], userGetCurrent());
+				$venueRepository->delete($this->parameters['venue'], $app['currentUser']);
 				
 				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
 				

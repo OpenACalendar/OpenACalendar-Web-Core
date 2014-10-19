@@ -54,7 +54,7 @@ class MediaController {
 			
 				if ($action->getCommand() == 'delete' && !$this->parameters['media']->getIsDeleted()) {
 					$mr = new MediaRepository();
-					$mr->delete($this->parameters['media'],  userGetCurrent());
+					$mr->delete($this->parameters['media'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/media/'.$this->parameters['media']->getSlug());
 				}
 			}

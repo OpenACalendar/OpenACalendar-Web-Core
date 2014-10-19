@@ -66,8 +66,8 @@ class CountryController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
-		if (userGetCurrent()) {
-			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
@@ -88,8 +88,8 @@ class CountryController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}		
 		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
@@ -110,8 +110,8 @@ class CountryController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}		
 		$this->parameters['calendar']->byMonth($year, $month, true);
@@ -146,7 +146,7 @@ class CountryController {
 			if ($form->isValid()) {
 				
 				$areaRepository = new AreaRepository();
-				$areaRepository->create($area, null, $app['currentSite'], $this->parameters['country'], userGetCurrent());
+				$areaRepository->create($area, null, $app['currentSite'], $this->parameters['country'], $app['currentUser']);
 				// don't need to call $areaRepository->buildCacheAreaHasParent($area); - there are no parents!
 				return $app->redirect("/area/".$area->getSlug());
 				

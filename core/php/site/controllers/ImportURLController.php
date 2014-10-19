@@ -134,7 +134,7 @@ class ImportURLController {
 				$this->parameters['importurl']->setAreaId($area ? $area->getId() : null);
 				
 				$iRepository = new ImportURLRepository();
-				$iRepository->edit($this->parameters['importurl'], userGetCurrent());
+				$iRepository->edit($this->parameters['importurl'], $app['currentUser']);
 				
 				return $app->redirect("/importurl/".$this->parameters['importurl']->getSlug());
 				
@@ -179,7 +179,7 @@ class ImportURLController {
 		}
 		
 		if ($request->request->get('enable') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-				$iRepository->enable($this->parameters['importurl'], userGetCurrent());
+				$iRepository->enable($this->parameters['importurl'], $app['currentUser']);
 				return $app->redirect("/importurl/".$this->parameters['importurl']->getSlug());
 		}
 		
@@ -197,7 +197,7 @@ class ImportURLController {
 		
 		if ($request->request->get('disable') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				$iRepository = new ImportURLRepository();
-				$iRepository->disable($this->parameters['importurl'], userGetCurrent());
+				$iRepository->disable($this->parameters['importurl'], $app['currentUser']);
 				
 				$erb = new EventRepositoryBuilder();
 				$erb->setAfterNow();
@@ -205,7 +205,7 @@ class ImportURLController {
 				$erb->setImportURL($this->parameters['importurl']);
 				$eventRepository = new EventRepository();
 				foreach($erb->fetchAll() as $event) {
-					$eventRepository->delete($event, userGetCurrent());
+					$eventRepository->delete($event, $app['currentUser']);
 				}
 				
 				

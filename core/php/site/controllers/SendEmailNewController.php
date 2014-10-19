@@ -50,18 +50,18 @@ class SendEmailNewController {
 				$sendemail->buildEvents($app);
 		
 				$repository = new SendEmailRepository();
-				$repository->create($sendemail, $app['currentSite'], userGetCurrent());
+				$repository->create($sendemail, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/admin/sendemail/".$sendemail->getSlug());
 				
 			}
 		}
 		
-		$emails = array(  userGetCurrent()->getEmail()  );
+		$emails = array(  $app['currentUser']->getEmail()  );
 		
 		$rb = new SendEmailRepositoryBuilder();
 		$rb->setSite($app['currentSite']);
-		$rb->setUserCreatedBy(userGetCurrent());
+		$rb->setUserCreatedBy($app['currentUser']);
 		foreach($rb->fetchAll() as $sendemail) {
 			if (!in_array($sendemail->getSendTo(), $emails)) {
 				$emails[] = $sendemail->getSendTo();

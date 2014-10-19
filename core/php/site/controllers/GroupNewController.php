@@ -37,7 +37,7 @@ class GroupNewController {
 			if ($form->isValid()) {
 				
 				$groupRepository = new GroupRepository();
-				$groupRepository->create($group, $app['currentSite'], userGetCurrent());
+				$groupRepository->create($group, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/group/".$group->getSlugForUrl());
 				

@@ -4,6 +4,7 @@
 
 namespace index\forms;
 
+use models\UserAccountModel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -19,8 +20,16 @@ use Symfony\Component\Form\FormError;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ContactForm  extends AbstractType {
-	
-	
+
+	/** @var  UserAccountModel */
+	protected $currentUser;
+
+	function __construct(UserAccountModel $currentUser = null)
+	{
+		$this->currentUser = $currentUser;
+	}
+
+
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		global $CONFIG;
 		
@@ -31,12 +40,12 @@ class ContactForm  extends AbstractType {
 			'attr' => array('autofocus' => 'autofocus')
 		));
 		
-		$user = userGetCurrent();
+
 		$builder->add('email', 'email', array(
 			'label'=>'Email',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
-			'data' => $user ? $user->getEmail() : '',
+			'data' => $this->currentUser ? $this->currentUser->getEmail() : '',
 		));
 		
 		$builder->add('message', 'textarea', array(
@@ -45,7 +54,7 @@ class ContactForm  extends AbstractType {
 		));
 
 		
-		if ($CONFIG->contactFormAntiSpam && !$user) {
+		if ($CONFIG->contactFormAntiSpam && !$this->currentUser) {
 			$builder->add('antispam','text',array('label'=>'What is 2 + 2?','required'=>true));
 			
 			$myExtraFieldValidatorSpam = function(FormEvent $event){

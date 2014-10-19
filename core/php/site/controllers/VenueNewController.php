@@ -82,7 +82,7 @@ class VenueNewController {
 						} else if (substr($areaCode, 0, 4) == 'NEW:') {
 							$newArea = new AreaModel();
 							$newArea->setTitle(substr($areaCode, 4));
-							$areaRepository->create($newArea, $area, $app['currentSite'], $countryRepository->loadById($venue->getCountryId()) , userGetCurrent());
+							$areaRepository->create($newArea, $area, $app['currentSite'], $countryRepository->loadById($venue->getCountryId()) , $app['currentUser']);
 							$areaRepository->buildCacheAreaHasParent($newArea);
 							$area = $newArea;
 						}
@@ -93,7 +93,7 @@ class VenueNewController {
 				}
 				
 				$venueRepository = new VenueRepository();
-				$venueRepository->create($venue, $app['currentSite'], userGetCurrent());
+				$venueRepository->create($venue, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/venue/".$venue->getSlug());
 				
@@ -121,7 +121,7 @@ class VenueNewController {
 				}
 				
 				$venueRepository = new VenueRepository();
-				$venueRepository->create($venue, $app['currentSite'], userGetCurrent());
+				$venueRepository->create($venue, $app['currentSite'], $app['currentUser']);
 
 				$data['venue'] = array(
 						'id'=>$venue->getId(), 

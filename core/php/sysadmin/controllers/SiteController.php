@@ -66,70 +66,70 @@ class SiteController {
 				if ($action->getCommand() == 'close') {
 					$this->parameters['site']->setIsClosedBySysAdmin(true);
 					$this->parameters['site']->setClosedBySysAdminreason($action->getParam(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'open') {
 					$this->parameters['site']->setIsClosedBySysAdmin(false);
 					$this->parameters['site']->setClosedBySysAdminreason(null);
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'webrobots') {
 					$this->parameters['site']->setIsWebRobotsAllowed($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'allusersedit') {
 					$this->parameters['site']->setIsAllUsersEditors($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'requestaccessallowed') {
 					$this->parameters['site']->setIsRequestAccessAllowed($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'featuremap') {
 					$this->parameters['site']->setIsFeatureMap($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'featuregroup') {
 					$this->parameters['site']->setIsFeatureGroup($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'featureimporter') {
 					$this->parameters['site']->setIsFeatureImporter($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'featurecuratedlist') {
 					$this->parameters['site']->setIsFeatureCuratedList($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'featurephysicalevents') {
 					$this->parameters['site']->setIsFeaturePhysicalEvents($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'featurevirtualevents') {
 					$this->parameters['site']->setIsFeatureVirtualEvents($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					
 				} else if ($action->getCommand() == 'listedinindex') {
 					$this->parameters['site']->setIsListedInIndex($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], userGetCurrent());
+					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 
 				} else if ($action->getCommand() == 'quota') {
 					$sitequota = $siteQuotaRepository->loadByCode($action->getParam(0));
 					if ($sitequota) {
 						$this->parameters['site']->setSiteQuotaId($sitequota->getId());
-						$sr->editQuota($this->parameters['site'], userGetCurrent());
+						$sr->editQuota($this->parameters['site'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					}
 					
@@ -138,7 +138,7 @@ class SiteController {
 					$newslug = $action->getParam(0);
 					if (ctype_alnum($newslug) && strlen($newslug) > 1) {
 						$this->parameters['site']->setSlug($newslug);
-						$sr->editSlug($this->parameters['site'], userGetCurrent());
+						$sr->editSlug($this->parameters['site'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
 					}
 					

@@ -34,7 +34,7 @@ class UserGroupNewController {
 			if ($form->isValid()) {
 
 				$ugRepository = new UserGroupRepository();
-				$ugRepository->createForIndex($userGroup, userGetCurrent());
+				$ugRepository->createForIndex($userGroup, $app['currentUser']);
 				return $app->redirect("/sysadmin/usergroup/".$userGroup->getId());
 
 			}

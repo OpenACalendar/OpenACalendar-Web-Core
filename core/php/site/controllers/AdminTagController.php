@@ -51,8 +51,8 @@ class AdminTagController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
-		if (userGetCurrent()) {
-			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
@@ -77,7 +77,7 @@ class AdminTagController {
 			if ($form->isValid()) {
 				
 				$tagRepository = new TagRepository();
-				$tagRepository->edit($this->parameters['tag'], userGetCurrent());
+				$tagRepository->edit($this->parameters['tag'], $app['currentUser']);
 				
 				return $app->redirect("/admin/tag/".$this->parameters['tag']->getSlugForUrl());
 				
@@ -103,7 +103,7 @@ class AdminTagController {
 		
 		if ($request->request->get('delete') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$tagRepository = new TagRepository();
-			$tagRepository->delete($this->parameters['tag'], userGetCurrent());
+			$tagRepository->delete($this->parameters['tag'], $app['currentUser']);
 			return $app->redirect("/admin/tag/".$this->parameters['tag']->getSlugForUrl());
 		}
 		
@@ -124,7 +124,7 @@ class AdminTagController {
 		if ($request->request->get('undelete') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['tag']->setIsDeleted(false);
 			$tagRepository = new TagRepository();
-			$tagRepository->edit($this->parameters['tag'], userGetCurrent());
+			$tagRepository->edit($this->parameters['tag'], $app['currentUser']);
 			return $app->redirect("/admin/tag/".$this->parameters['tag']->getSlugForUrl());
 		}
 		

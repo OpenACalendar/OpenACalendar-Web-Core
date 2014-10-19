@@ -60,8 +60,8 @@ class ImportURLImportedEventController extends ImportURLController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		// Technically we should be able to do this ... but to keep the UI simple, lets not.
-		//if (userGetCurrent()) {
-		//	$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		//if ($app['currentUser'])) {
+		//	$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		//}
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setImportedEvent($this->parameters['importedEvent']);
 

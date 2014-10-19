@@ -89,10 +89,10 @@ class UserController {
 					$app['flashmessages']->addMessage('Sent');
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());	
 				} else if ($action->getCommand() == 'close') {
-					$uar->systemAdminShuts($this->parameters['user'], userGetCurrent(), $action->getParam(0));
+					$uar->systemAdminShuts($this->parameters['user'], $app['currentUser'], $action->getParam(0));
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());	
 				} else if ($action->getCommand() == 'open') {
-					$uar->systemAdminOpens($this->parameters['user'], userGetCurrent());
+					$uar->systemAdminOpens($this->parameters['user'], $app['currentUser']);
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());			
 				}
 		

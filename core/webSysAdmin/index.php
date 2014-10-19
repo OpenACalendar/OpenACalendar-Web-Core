@@ -17,10 +17,10 @@ use repositories\SiteRepository;
 
 ///////////////////////////////////////////// SECURITY
 
-if (!userGetCurrent()) {
+if (!$app['currentUser']) {
 	die("No");
 }	
-if (!userGetCurrent()->getIsSystemAdmin()) {
+if (!$app['currentUser']->getIsSystemAdmin()) {
 	die("No");
 }
 if (!$WEBSESSION->has('sysAdminLastActive')) {

@@ -56,7 +56,7 @@ class SiteUserGroupController {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
 					$ugr = new UserGroupRepository();
-					$ugr->addPermissionToGroup($permission, $this->parameters['usergroup'], userGetCurrent());
+					$ugr->addPermissionToGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/usergroup/'.$this->parameters['usergroup']->getId());
 				}
 			}
@@ -66,7 +66,7 @@ class SiteUserGroupController {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
 					$ugr = new UserGroupRepository();
-					$ugr->removePermissionFromGroup($permission, $this->parameters['usergroup'], userGetCurrent());
+					$ugr->removePermissionFromGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/usergroup/'.$this->parameters['usergroup']->getId());
 				}
 			}
@@ -87,7 +87,7 @@ class SiteUserGroupController {
 					$user = $uar->loadByUserName($action->getParam(0));
 					if ($user) {
 						$ugr = new UserGroupRepository();
-						$ugr->addUserToGroup($user, $this->parameters['usergroup'], userGetCurrent(), userGetCurrent());
+						$ugr->addUserToGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/usergroup/'.$this->parameters['usergroup']->getId());
 					}
 
@@ -96,26 +96,26 @@ class SiteUserGroupController {
 					$user = $uar->loadByUserName($action->getParam(0));
 					if ($user) {
 						$ugr = new UserGroupRepository();
-						$ugr->removeUserFromGroup($user, $this->parameters['usergroup'], userGetCurrent(), userGetCurrent());
+						$ugr->removeUserFromGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/usergroup/'.$this->parameters['usergroup']->getId());
 					}
 
 				} else if ($action->getCommand() == 'includesanonymous') {
 					$ugr = new UserGroupRepository();
 					$this->parameters['usergroup']->setIsIncludesAnonymous($action->getParamBoolean(0));
-					$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], userGetCurrent());
+					$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/usergroup/'.$this->parameters['usergroup']->getId());
 
 				} else if ($action->getCommand() == 'includesusers') {
 					$ugr = new UserGroupRepository();
 					$this->parameters['usergroup']->setIsIncludesUsers($action->getParamBoolean(0));
-					$ugr->editIsIncludesUser($this->parameters['usergroup'], userGetCurrent());
+					$ugr->editIsIncludesUser($this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/usergroup/'.$this->parameters['usergroup']->getId());
 
 				} else if ($action->getCommand() == 'includesverifiedusers') {
 					$ugr = new UserGroupRepository();
 					$this->parameters['usergroup']->setIsIncludesVerifiedUsers($action->getParamBoolean(0));
-					$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], userGetCurrent());
+					$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/usergroup/'.$this->parameters['usergroup']->getId());
 
 				}

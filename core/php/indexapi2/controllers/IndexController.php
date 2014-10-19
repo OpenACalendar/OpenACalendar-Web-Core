@@ -113,7 +113,7 @@ class IndexController {
 		
 		######################################## User Workflow
 		
-		$formObj = new LogInUserForm(userGetCurrent(), $app['apiApp'], $requestToken);
+		$formObj = new LogInUserForm($app['currentUser'], $app['apiApp'], $requestToken);
 		$form = $app['form.factory']->create($formObj);
 		
 		if ('POST' == $request->getMethod()) {

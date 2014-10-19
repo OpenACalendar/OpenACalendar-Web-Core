@@ -53,7 +53,7 @@ class SiteController {
 		}
 		
 		$uaer = new UserAtEventRepository();
-		$userAtEvent = $uaer->loadByUserAndEventOrInstanciate(userGetCurrent(), $this->parameters['event']);
+		$userAtEvent = $uaer->loadByUserAndEventOrInstanciate($app['currentUser'], $this->parameters['event']);
 
 		$data = array();
 		

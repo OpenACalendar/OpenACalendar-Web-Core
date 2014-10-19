@@ -33,8 +33,8 @@ class IndexController {
 		$erb->setIncludeDeleted(false);
 		$erb->setIncludeAreaInformation(true);
 		$erb->setIncludeVenueInformation(true);
-		if (userGetCurrent()) {
-			$erb->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$erb->setUserAccount($app['currentUser'], true);
 		}		
 		$events = $erb->fetchAll();
 		
@@ -55,9 +55,9 @@ class IndexController {
 		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$repo = new UserWatchesSiteRepository();
 			if ($request->request->get('action') == 'watch') {
-				$repo->startUserWatchingSite(userGetCurrent(), $app['currentSite']);
+				$repo->startUserWatchingSite($app['currentUser'], $app['currentSite']);
 			} else if ($request->request->get('action') == 'unwatch') {
-				$repo->stopUserWatchingSite(userGetCurrent(), $app['currentSite']);
+				$repo->stopUserWatchingSite($app['currentUser'], $app['currentSite']);
 			}
 			// redirect here because if we didn't the twig global and $app vars would be wrong (the old state)
 			// this is an easy way to get round that.
@@ -114,7 +114,7 @@ class IndexController {
 	
 	
 	function currentUser(Application $app) {		
-		if (userGetCurrent()) {
+		if ($app['currentUser']) {
 			return $app['twig']->render('site/index/currentUser.user.html.twig', array(
 				));
 		} else {

@@ -31,8 +31,8 @@ class VenueVirtualController {
 		$this->parameters['eventListFilterParams'] = new EventFilterParams();
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
-		if (userGetCurrent()) {
-			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}	
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
@@ -47,8 +47,8 @@ class VenueVirtualController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}	
 		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
@@ -66,8 +66,8 @@ class VenueVirtualController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}	
 		$this->parameters['calendar']->byMonth($year, $month, true);

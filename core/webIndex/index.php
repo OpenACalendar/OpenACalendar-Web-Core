@@ -39,7 +39,7 @@ $app->before(function (Request $request) use ($app) {
 
 	# ////////////// Permissions
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
-	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInIndex(userGetCurrent(), false, true);
+	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInIndex($app['currentUser'], false, true);
 
 
 	$app['twig']->addGlobal('actionCreateSite', $app['currentUserPermissions']->hasPermission("org.openacalendar","CREATE_SITE"));
@@ -54,42 +54,42 @@ $permissionCreateSiteRequired = function(Request $request, Application $app) {
 	}
 };
 
-$appUserRequired = function(Request $request) {
+$appUserRequired = function(Request $request) use ($app) {
 	global $CONFIG;
-	if (!userGetCurrent()) {
+	if (!$app['currentUser']) {
 		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
 	}
 };
 
-$appUnverifiedUserRequired = function(Request $request) {
+$appUnverifiedUserRequired = function(Request $request) use ($app) {
 	global $CONFIG;
-	if (!userGetCurrent()) {
+	if (!$app['currentUser']) {
 		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
 	}
-	if (userGetCurrent()->getIsEmailVerified()) {
+	if ($app['currentUser']->getIsEmailVerified()) {
 		return new RedirectResponse('/');
 	}
 };
 
-$appVerifiedUserRequired = function(Request $request) {
+$appVerifiedUserRequired = function(Request $request) use ($app) {
 	global $CONFIG;
-	if (!userGetCurrent()) {
+	if (!$app['currentUser']) {
 		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
 	}
-	if (!userGetCurrent()->getIsEmailVerified()) {
+	if (!$app['currentUser']->getIsEmailVerified()) {
 		return new RedirectResponse('/me/verifyneeded');
 	}
 };
 
-$appVerifiedEditorUserRequired = function(Request $request) {
+$appVerifiedEditorUserRequired = function(Request $request) use ($app) {
 	global $CONFIG;
-	if (!userGetCurrent()) {
+	if (!$app['currentUser']) {
 		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
 	}
-	if (!userGetCurrent()->getIsEmailVerified()) {
+	if (!$app['currentUser']->getIsEmailVerified()) {
 		return new RedirectResponse('/me/verifyneeded');
 	}
-	if (!userGetCurrent()->getIsEditor()) {
+	if (!$app['currentUser']->getIsEditor()) {
 		die("NO"); // TODO
 	}
 };

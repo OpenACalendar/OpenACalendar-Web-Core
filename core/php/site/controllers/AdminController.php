@@ -80,7 +80,7 @@ class AdminController {
 			if ($form->isValid()) {
 
 				$ugRepository = new UserGroupRepository();
-				$ugRepository->createForSite($app['currentSite'], $userGroup, userGetCurrent());
+				$ugRepository->createForSite($app['currentSite'], $userGroup, $app['currentUser']);
 				return $app->redirect("/admin/usergroup/".$userGroup->getId());
 
 			}
@@ -103,17 +103,17 @@ class AdminController {
 			if ($form->isValid()) {
 				
 				$siteRepository = new SiteRepository();
-				$siteRepository->edit($app['currentSite'], userGetCurrent());
+				$siteRepository->edit($app['currentSite'], $app['currentUser']);
 
 				if ($app['config']->isFileStore()) {
 					$newLogo = $form['logo']->getData();
 					if ($newLogo) {
 						$mediaRepository = new MediaRepository();
-						$media = $mediaRepository->createFromFile($newLogo, $app['currentSite'], userGetCurrent());
+						$media = $mediaRepository->createFromFile($newLogo, $app['currentSite'], $app['currentUser']);
 						if ($media) {
 							$app['currentSite']->setLogoMediaId($media->getId());
 							$siteProfileMediaRepository = new SiteProfileMediaRepository();
-							$siteProfileMediaRepository->createOrEdit($app['currentSite'], userGetCurrent());
+							$siteProfileMediaRepository->createOrEdit($app['currentSite'], $app['currentUser']);
 						}
 					}
 				}
@@ -142,7 +142,7 @@ class AdminController {
 			$app['currentSite']->setIsFeatureTag($request->request->get('isFeatureTag') == '1');
 
 			$siteRepository = new SiteRepository();
-			$siteRepository->edit($app['currentSite'], userGetCurrent());
+			$siteRepository->edit($app['currentSite'], $app['currentUser']);
 
 			$app['flashmessages']->addMessage("Details saved.");
 			return $app->redirect("/admin/");
@@ -159,7 +159,7 @@ class AdminController {
 			$app['currentSite']->setPromptEmailsDaysInAdvance($request->request->get('PromptEmailsDaysInAdvance'));
 
 			$siteRepository = new SiteRepository();
-			$siteRepository->edit($app['currentSite'], userGetCurrent());
+			$siteRepository->edit($app['currentSite'], $app['currentUser']);
 
 			$app['flashmessages']->addMessage("Details saved.");
 			return $app->redirect("/admin/");
@@ -180,7 +180,7 @@ class AdminController {
 			if ($form->isValid()) {
 				
 				$siteRepository = new SiteRepository();
-				$siteRepository->edit($app['currentSite'], userGetCurrent());
+				$siteRepository->edit($app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/admin/");
 				
@@ -207,13 +207,13 @@ class AdminController {
 			$timezones = array();
 			foreach($countries as $country) {
 				if (isset($in[$country->getTwoCharCode()]) && $in[$country->getTwoCharCode()] == 'yes') {
-					$cisr->addCountryToSite($country, $app['currentSite'], userGetCurrent());
+					$cisr->addCountryToSite($country, $app['currentSite'], $app['currentUser']);
 					$countriesCount++;
 					foreach(explode(",", $country->getTimezones()) as $timeZone) {
 						$timezones[] = $timeZone;
 					}
 				} else {
-					$cisr->removeCountryFromSite($country, $app['currentSite'], userGetCurrent());
+					$cisr->removeCountryFromSite($country, $app['currentSite'], $app['currentUser']);
 				}
 			}
 			
@@ -290,7 +290,7 @@ class AdminController {
 			if ($form->isValid()) {
 
 				$tagRepo = new TagRepository();
-				$tagRepo->create($tag, $app['currentSite'], userGetCurrent());
+				$tagRepo->create($tag, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect('/admin/tag/'.$tag->getSlugForUrl());
 				

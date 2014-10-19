@@ -40,15 +40,15 @@ $app->before(function (Request $request) use ($app) {
 
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
-	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite(userGetCurrent(), $app['currentSite'], false, true);
+	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite($app['currentUser'], $app['currentSite'], false, true);
 
 
 	# ////////////// User and their watch and perms
 	$app['currentUserActions'] = new UserActionsSiteList($app['currentSite'], $app['currentUserPermissions']);
 	$app['currentUserWatchesSite'] = false;
-	if (userGetCurrent()) {
+	if ($app['currentUser']) {
 		$uwsr = new UserWatchesSiteRepository();
-		$uws = $uwsr->loadByUserAndSite(userGetCurrent(), $app['currentSite']);
+		$uws = $uwsr->loadByUserAndSite($app['currentUser'], $app['currentSite']);
 		$app['currentUserWatchesSite'] = $uws && $uws->getIsWatching();
 	}
 	$app['twig']->addGlobal('currentUserActions', $app['currentUserActions']);
@@ -110,19 +110,19 @@ $permissionCalendarAdministratorRequired = function(Request $request, Applicatio
 
 
 
-$appUserRequired = function(Request $request) {
+$appUserRequired = function(Request $request) use ($app) {
 	global $CONFIG;
-	if (!userGetCurrent()) {
+	if (!$app['currentUser']) {
 		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
 	}
 };
 
-$appVerifiedUserRequired = function(Request $request) {
+$appVerifiedUserRequired = function(Request $request) use ($app) {
 	global $CONFIG;	
-	if (!userGetCurrent()) {
+	if (!$app['currentUser']) {
 		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
 	}
-	if (!userGetCurrent()->getIsEmailVerified()) {
+	if (!$app['currentUser']->getIsEmailVerified()) {
 		return new RedirectResponse('http://'.$CONFIG->webIndexDomain.'/me/verifyneeded');
 	}
 };

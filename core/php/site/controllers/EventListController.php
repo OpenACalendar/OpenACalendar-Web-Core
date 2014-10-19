@@ -23,8 +23,8 @@ class EventListController {
 		$params->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
-		if (userGetCurrent()) {
-			$params->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$params->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		
 		$events = $params->getEventRepositoryBuilder()->fetchAll();
@@ -42,8 +42,8 @@ class EventListController {
 		$cal = new \RenderCalendar();
 		$cal->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$cal->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$cal->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$cal->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		$cal->byDate(\TimeSource::getDateTime(), 31, true);
 		
@@ -65,8 +65,8 @@ class EventListController {
 		$cal = new \RenderCalendar();
 		$cal->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$cal->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$cal->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$cal->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		$cal->byMonth($year, $month, true);
 		

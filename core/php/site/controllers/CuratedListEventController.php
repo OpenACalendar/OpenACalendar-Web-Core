@@ -40,7 +40,7 @@ class CuratedListEventController {
 			return false;
 		}
 		
-		$this->parameters['currentUserCanEditCuratedList'] = $this->parameters['curatedlist']->canUserEdit(userGetCurrent());
+		$this->parameters['currentUserCanEditCuratedList'] = $this->parameters['curatedlist']->canUserEdit($app['currentUser']);
 		
 		return true;
 
@@ -54,7 +54,7 @@ class CuratedListEventController {
 		
 		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
-			$curatedlistRepository->removeEventFromCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());
+			$curatedlistRepository->removeEventFromCuratedList($this->parameters['event'], $this->parameters['curatedlist'], $app['currentUser']);
 		}
 		
 		if ($request->request->get('returnTo','event') == 'event') {
@@ -72,7 +72,7 @@ class CuratedListEventController {
 		
 		if ($this->parameters['currentUserCanEditCuratedList'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$curatedlistRepository = new CuratedListRepository();
-			$curatedlistRepository->addEventtoCuratedList($this->parameters['event'], $this->parameters['curatedlist'], userGetCurrent());			
+			$curatedlistRepository->addEventtoCuratedList($this->parameters['event'], $this->parameters['curatedlist'], $app['currentUser']);
 		}
 		
 		if ($request->request->get('returnTo','event') == 'event') {

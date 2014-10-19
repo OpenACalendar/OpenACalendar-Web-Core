@@ -67,7 +67,7 @@ class AdminUserGroupController {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
 					$ugr = new UserGroupRepository();
-					$ugr->addPermissionToGroup($permission, $this->parameters['usergroup'], userGetCurrent());
+					$ugr->addPermissionToGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/permissions');
 				}
 			}
@@ -77,7 +77,7 @@ class AdminUserGroupController {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
 					$ugr = new UserGroupRepository();
-					$ugr->removePermissionFromGroup($permission, $this->parameters['usergroup'], userGetCurrent());
+					$ugr->removePermissionFromGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/permissions');
 				}
 			}
@@ -113,7 +113,7 @@ class AdminUserGroupController {
 			$user = $ur->loadById($request->request->get('id'));
 			if ($user) {
 				$ugr = new UserGroupRepository();
-				$ugr->removeUserFromGroup($user, $this->parameters['usergroup'], userGetCurrent());
+				$ugr->removeUserFromGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 				return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 			}
 		} else if ($request->request->get('action') == "adduser" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
@@ -121,40 +121,40 @@ class AdminUserGroupController {
 			$user = $ur->loadByUserName($request->request->get('username'));
 			if ($user) {
 				$ugr = new UserGroupRepository();
-				$ugr->addUserToGroup($user, $this->parameters['usergroup'], userGetCurrent());
+				$ugr->addUserToGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 				return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 			}
 		} else if ($request->request->get('action') == "removeanonymous" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesAnonymous(false);
 			$ugr = new UserGroupRepository();
-			$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], userGetCurrent());
+			$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 		} else if ($request->request->get('action') == "addanonymous" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesAnonymous(true);
 			$ugr = new UserGroupRepository();
-			$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], userGetCurrent());
+			$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 
 		} else if ($request->request->get('action') == "removeusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesUsers(false);
 			$ugr = new UserGroupRepository();
-			$ugr->editIsIncludesUser($this->parameters['usergroup'], userGetCurrent());
+			$ugr->editIsIncludesUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 		} else if ($request->request->get('action') == "addusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesUsers(true);
 			$ugr = new UserGroupRepository();
-			$ugr->editIsIncludesUser($this->parameters['usergroup'], userGetCurrent());
+			$ugr->editIsIncludesUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 
 		} else if ($request->request->get('action') == "removeverifiedusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesVerifiedUsers(false);
 			$ugr = new UserGroupRepository();
-			$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], userGetCurrent());
+			$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 		} else if ($request->request->get('action') == "addverifiedusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesVerifiedUsers(true);
 			$ugr = new UserGroupRepository();
-			$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], userGetCurrent());
+			$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 
 		}

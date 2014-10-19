@@ -88,7 +88,7 @@ class EventNewController {
 			if ($form->isValid()) {
 				
 				$eventRepository = new EventRepository();
-				$eventRepository->create($event, $app['currentSite'], userGetCurrent());
+				$eventRepository->create($event, $app['currentSite'], $app['currentUser']);
 				
 				if ($parseResult && $app['config']->logFileParseDateTimeRange && 
 						($parseResult->getStart()->getTimestamp() != $event->getStartAt()->getTimestamp() 

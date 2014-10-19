@@ -39,10 +39,10 @@ class IndexController {
 			}
 		}
 		
-		if (userGetCurrent()) {
+		if ($app['currentUser']) {
 			$srb = new SiteRepositoryBuilder();
 			$srb->setIsOpenBySysAdminsOnly(true);
-			$srb->setUserInterestedIn(userGetCurrent());
+			$srb->setUserInterestedIn($app['currentUser']);
 			foreach($srb->fetchAll() as $site) {
 				$sites[$site->getId()] = $site;
 			}
@@ -110,8 +110,8 @@ class IndexController {
 				$siteQuotaRepository = new SiteQuotaRepository();
 				
 				$siteRepository->create(
-							$site, 
-							userGetCurrent(), 
+							$site,
+							$app['currentUser'],
 							array( $countryRepository->loadByTwoCharCode("GB") ), 
 							$siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode),
 							$isAllUsersEditors
@@ -140,7 +140,7 @@ class IndexController {
 
 		$srb = new SiteRepositoryBuilder();
 		$srb->setIsOpenBySysAdminsOnly(true);
-		$srb->setUserInterestedIn(userGetCurrent());
+		$srb->setUserInterestedIn($app['currentUser']);
 		foreach($srb->fetchAll() as $site) {
 			$sites[$site->getId()] = $site;
 		}
@@ -153,7 +153,7 @@ class IndexController {
 	}
 	
 	function contact(Application $app, Request $request) {		
-		$form = $app['form.factory']->create(new ContactForm());
+		$form = $app['form.factory']->create(new ContactForm($app['currentUser']));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -164,8 +164,8 @@ class IndexController {
 				$contact->setSubject($data['subject']);
 				$contact->setMessage($data['message']);
 				$contact->setEmail($data['email']);
-				if (userGetCurrent()) {
-					$contact->setUserAccountId(userGetCurrent()->getId());
+				if ($app['currentUser']) {
+					$contact->setUserAccountId($app['currentUser']->getId());
 				}
 				$contact->setIp($_SERVER['REMOTE_ADDR']);
 				$contact->setBrowser($_SERVER['HTTP_USER_AGENT']);			
@@ -177,7 +177,7 @@ class IndexController {
 				$contactSupportRepository->create($contact);
 
 				if (!$contact->getIsSpam()) {
-					$contact->sendEmailToSupport($app, userGetCurrent());
+					$contact->sendEmailToSupport($app, $app['currentUser']);
 				}
 
 				$app['flashmessages']->addMessage('Your message has been sent');

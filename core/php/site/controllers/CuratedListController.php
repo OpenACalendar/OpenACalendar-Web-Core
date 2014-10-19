@@ -39,7 +39,7 @@ class CuratedListController {
 		$this->parameters['actionCuratedListEditDetails'] = $app['currentUserCanEditSite'] &&
 			$app['currentSite']->getIsFeatureCuratedList() &&
 			!$this->parameters['curatedlist']->getIsDeleted();
-			$this->parameters['curatedlist']->canUserEdit(userGetCurrent());
+			$this->parameters['curatedlist']->canUserEdit($app['currentUser']);
 		$this->parameters['actionCuratedListEditCurators'] = $this->parameters['actionCuratedListEditDetails'];
 		$this->parameters['actionCuratedListEditContents'] = $this->parameters['actionCuratedListEditDetails'];
 
@@ -58,8 +58,8 @@ class CuratedListController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist'], true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
-		if (userGetCurrent()) {
-			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
@@ -83,7 +83,7 @@ class CuratedListController {
 				$newUser = $userAccountRepository->loadByUserName($request->request->get('userdetails'));
 				if ($newUser){
 					$curatedListRepo = new CuratedListRepository();
-					$curatedListRepo->addEditorToCuratedList($newUser, $this->parameters['curatedlist'], userGetCurrent());
+					$curatedListRepo->addEditorToCuratedList($newUser, $this->parameters['curatedlist'], $app['currentUser']);
 					$app['flashmessages']->addMessage("Added");
 				} else {
 					$app['flashmessages']->addError("Could not find that user");
@@ -93,7 +93,7 @@ class CuratedListController {
 				$oldUser = $userAccountRepository->loadByUserName($request->request->get('username'));
 				if ($oldUser) {
 					$curatedListRepo = new CuratedListRepository();
-					$curatedListRepo->removeEditorFromCuratedList($oldUser, $this->parameters['curatedlist'], userGetCurrent());
+					$curatedListRepo->removeEditorFromCuratedList($oldUser, $this->parameters['curatedlist'], $app['currentUser']);
 					$app['flashmessages']->addMessage("Removed");
 				}
 			}
@@ -126,7 +126,7 @@ class CuratedListController {
 			if ($form->isValid()) {
 				
 				$clistRepository = new CuratedListRepository();
-				$clistRepository->edit($this->parameters['curatedlist'], userGetCurrent());
+				$clistRepository->edit($this->parameters['curatedlist'], $app['currentUser']);
 				
 				return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getSlug());
 				
@@ -149,8 +149,8 @@ class CuratedListController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}
 		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
@@ -171,8 +171,8 @@ class CuratedListController {
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if (userGetCurrent()) {
-			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount(userGetCurrent(), true);
+		if ($app['currentUser']) {
+			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}
 		$this->parameters['calendar']->byMonth($year, $month, true);

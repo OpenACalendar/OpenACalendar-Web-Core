@@ -97,7 +97,7 @@ class AdminAreasController {
 				foreach($areaSlugs as $areaSlug) {
 					$area = $areaRepository->loadBySlugAndCountry($app['currentSite'], $areaSlug, $this->parameters['country']);
 					if ($area && !$area->getIsDeleted()) {
-						$areaRepository->delete($area, userGetCurrent());
+						$areaRepository->delete($area, $app['currentUser']);
 					}
 					$app['flashmessages']->addMessage("Deleted!");
 				}
@@ -105,7 +105,7 @@ class AdminAreasController {
 				foreach($areaSlugs as $areaSlug) {
 					$area = $areaRepository->loadBySlugAndCountry($app['currentSite'], $areaSlug, $this->parameters['country']);
 					if ($area) {
-						$areaRepository->edit($area, userGetCurrent());
+						$areaRepository->edit($area, $app['currentUser']);
 					}
 					$app['flashmessages']->addMessage("Undeleted!");
 				}
@@ -148,7 +148,7 @@ class AdminAreasController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				$areaRepository->create($area, $parentArea, $app['currentSite'], $this->parameters['country'], userGetCurrent());
+				$areaRepository->create($area, $parentArea, $app['currentSite'], $this->parameters['country'], $app['currentUser']);
 				$areaRepository->buildCacheAreaHasParent($area);
 				return $app->redirect("/admin/areas/".$this->parameters['country']->getTwoCharCode());
 			}

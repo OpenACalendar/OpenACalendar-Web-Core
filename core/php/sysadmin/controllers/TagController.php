@@ -60,12 +60,12 @@ class TagController {
 			
 				if ($action->getCommand() == 'delete' && !$this->parameters['tag']->getIsDeleted()) {
 					$tr = new TagRepository();
-					$tr->delete($this->parameters['tag'],  userGetCurrent());
+					$tr->delete($this->parameters['tag'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['tag']->getIsDeleted()) {
 					$this->parameters['tag']->setIsDeleted(false);
 					$tr = new TagRepository();
-					$tr->edit($this->parameters['tag'],  userGetCurrent());
+					$tr->edit($this->parameters['tag'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
 				}
 			}
