@@ -45,12 +45,12 @@ class EventNewForm extends AbstractType{
 		));
 		
 		
-		$builder->add('url', 'url', array(
+		$builder->add('url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Information Web Page URL',
 			'required'=>false
 		));
 		
-		$builder->add('ticket_url', 'url', array(
+		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Tickets Web Page URL',
 			'required'=>false
 		));
@@ -199,7 +199,7 @@ class EventNewForm extends AbstractType{
 		return array(
 		);
 	}
-	
+
 }
 
 

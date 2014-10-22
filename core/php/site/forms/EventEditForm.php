@@ -31,7 +31,7 @@ class EventEditForm extends AbstractType{
 		$this->timeZoneName = $timeZoneName;
 	}
 
-	
+
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
 		$builder->add('summary', 'text', array(
@@ -46,12 +46,12 @@ class EventEditForm extends AbstractType{
 			'required'=>false
 		));
 		
-		$builder->add('url', 'url', array(
+		$builder->add('url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Information Web Page URL',
 			'required'=>false
 		));
 		
-		$builder->add('ticket_url', 'url', array(
+		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Tickets Web Page URL',
 			'required'=>false
 		));
