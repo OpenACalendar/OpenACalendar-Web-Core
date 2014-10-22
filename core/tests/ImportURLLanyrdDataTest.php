@@ -90,7 +90,14 @@ class ImportURLLanyrdDataTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals("http://sotms.eventbrite.com/\n\nhttp://lanyrd.com/crkmt",$event->getDescription());
 		$this->assertEquals('http://lanyrd.com/2013/sotmscot2013/',$event->getURL());
 		$this->assertFalse($event->getIsDeleted());
-		
+
+
+		// Look for event
+		$erb = new EventRepositoryBuilder();
+		$erb->setSite($site);
+		$erb->setImportURL($importURL);
+		$this->assertEquals(1, count($erb->fetchAll()));
+
 	}
 	
 	
