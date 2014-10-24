@@ -36,7 +36,8 @@ class CuratedListController {
 			return false;
 		}
 
-		$this->parameters['actionCuratedListEditDetails'] = $app['currentUserCanEditSite'] &&
+		$this->parameters['actionCuratedListEditDetails'] = 
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") &&
 			$app['currentSite']->getIsFeatureCuratedList() &&
 			!$this->parameters['curatedlist']->getIsDeleted();
 			$this->parameters['curatedlist']->canUserEdit($app['currentUser']);
