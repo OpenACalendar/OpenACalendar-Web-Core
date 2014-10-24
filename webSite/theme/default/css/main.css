@@ -799,6 +799,11 @@ div.group .title a:hover {
   color: black;
   text-decoration: underline;
 }
+ul.groups li.group .notfound,
+div.group .notfound {
+  text-align: center;
+  font-style: italic;
+}
 ul.countries li.country {
   border-bottom: 2px solid #E9E9E9;
 }
