@@ -40,7 +40,10 @@ class UserPermissionsRepository {
 		while($data = $stat->fetch()) {
 			$ext = $app['extensions']->getExtensionById($data['extension_id']);
 			if ($ext) {
-				$permissions[] = $ext->getUserPermission($data['permission_key']);
+				$per = $ext->getUserPermission($data['permission_key']);
+				if ($per) {
+					$permissions[] = $per;
+				}
 			}
 		}
 		// child permissions
@@ -79,7 +82,10 @@ class UserPermissionsRepository {
 		while($data = $stat->fetch()) {
 			$ext = $this->extensionsManager->getExtensionById($data['extension_id']);
 			if ($ext) {
-				$permissions[] = $ext->getUserPermission($data['permission_key']);
+				$per = $ext->getUserPermission($data['permission_key']);
+				if ($per) {
+					$permissions[] = $per;
+				}
 			}
 		}
 		return new \UserPermissionsList($this->extensionsManager, $permissions, $userAccountModel, $CONFIG->siteReadOnly || $removeEditorPermissions, $includeChildrenPermissions);
@@ -118,7 +124,10 @@ class UserPermissionsRepository {
 		while($data = $stat->fetch()) {
 			$ext = $this->extensionsManager->getExtensionById($data['extension_id']);
 			if ($ext) {
-				$permissions[] = $ext->getUserPermission($data['permission_key']);
+				$per = $ext->getUserPermission($data['permission_key']);
+				if ($per) {
+					$permissions[] = $per;
+				}
 			}
 		}
 		return new \UserPermissionsList($this->extensionsManager, $permissions, $userAccountModel, $CONFIG->siteReadOnly || $removeEditorPermissions, $includeChildrenPermissions);
@@ -139,7 +148,10 @@ class UserPermissionsRepository {
 		while($data = $stat->fetch()) {
 			$ext = $this->extensionsManager->getExtensionById($data['extension_id']);
 			if ($ext) {
-				$permissions[] = $ext->getUserPermission($data['permission_key']);
+				$per = $ext->getUserPermission($data['permission_key']);
+				if ($per) {
+					$permissions[] = $per;
+				}
 			}
 		}
 		return new \UserPermissionsList($this->extensionsManager, $permissions, null, $CONFIG->siteReadOnly || $removeEditorPermissions, $includeChildrenPermissions);
@@ -160,7 +172,10 @@ class UserPermissionsRepository {
 		while($data = $stat->fetch()) {
 			$ext = $this->extensionsManager->getExtensionById($data['extension_id']);
 			if ($ext) {
-				$permissions[] = $ext->getUserPermission($data['permission_key']);
+				$per = $ext->getUserPermission($data['permission_key']);
+				if ($per) {
+					$permissions[] = $per;
+				}
 			}
 		}
 		$user = new UserAccountModel();
@@ -183,7 +198,10 @@ class UserPermissionsRepository {
 		while($data = $stat->fetch()) {
 			$ext = $this->extensionsManager->getExtensionById($data['extension_id']);
 			if ($ext) {
-				$permissions[] = $ext->getUserPermission($data['permission_key']);
+				$per = $ext->getUserPermission($data['permission_key']);
+				if ($per) {
+					$permissions[] = $per;
+ 				}
 			}
 		}
 		$user = new UserAccountModel();
