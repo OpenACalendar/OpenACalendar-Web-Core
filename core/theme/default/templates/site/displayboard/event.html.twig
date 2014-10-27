@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<li>
+<li {% if minorImportance %}class="minorImportance"{% else %}class="majorImportance"{% endif %}>
 	<div class="dateIcon">
 		<a href="/event/{{ event.slugForUrl }}">
 			<time datetime="{{ event.getStartAt|tolocaltimeformatted('c',currentTimeZone) }}">
@@ -18,7 +18,7 @@
 					<span class="startTime1">{{ event.getStartAt|tolocaltimeformatted('g:i',currentTimeZone) }}</span>
 					<span class="startTime2">{{ event.getStartAt|tolocaltimeformatted('a',currentTimeZone) }}</span>
 				{% endif %}
-			</time>				
+			</time>
 		</a>
 	</div>
 	<div class="title">

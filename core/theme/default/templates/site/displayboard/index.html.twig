@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/page2col.html.twig' %}
+{% extends 'site/page.html.twig' %}
 
 {% block pageTitle %}Display Board - {% endblock %} 
 
@@ -20,25 +20,59 @@
 {% endblock %}
 
 
-{% block contentLeft %}
-	<p>Get a display board for this calendar</p>
-{% endblock %}
+{% block content %}
+
+	<form action="/displayboard/run/" method="GET" class="styled">
 
 
-{% block contentRight %}
+		<ul class="eventsFilters">
+			{% set idx = 0 %}
+			{% for eventQuery in data %}
+				<div class="rowWrapper">
+					<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
+					<div class="widgetWrapperPlacementOnly">
+						<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}" style="width: 50px;">
+						<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}" {% if eventQuery.minorImportance %}checked{% endif %}>Minor Importance</label>
+					</div>
+					<div class="after"></div>
+				</div>
+				{% set idx = idx+1 %}
+			{% endfor %}
+			{% if idx < MAX_EVENT_QUERIES_ON_EVENT_BOARD %}
+				<div class="rowWrapper">
+					<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
+					<div class="widgetWrapperPlacementOnly">
+						<input type="text" value="" name="eventArea{{ idx }}" style="width: 50px;">
+						<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}">Minor Importance</label>
+					</div>
+					<div class="after"></div>
+				</div>
+			{% endif %}
+		</ul>
 
 
-	<form action="/displayboard/run/" method="GET">
-		
-		<label>
-			How many days to show in the next box?
-			<input type="text" name="daysAheadInNextBox" value="{{ daysAheadInNextBox }}"> 
-		</label>
-		
-		<label>
-			How many characters of description to show?
-			<input type="text" name="showCharsOfDescription" value="{{ showCharsOfDescription }}"> 
-		</label>
+
+
+
+
+
+
+		<div class="rowWrapper">
+			<div class="labelWrapper"><label for="daysAheadInNextBox">How many days to show in the next box?</label></div>
+			<div class="widgetWrapperPlacementOnly">
+				<input type="text" name="daysAheadInNextBox" value="{{ daysAheadInNextBox }}">
+			</div>
+			<div class="after"></div>
+		</div>
+
+
+		<div class="rowWrapper">
+			<div class="labelWrapper"><label for="showCharsOfDescription">How many characters of description to show?</label></div>
+			<div class="widgetWrapperPlacementOnly">
+				<input type="text" name="showCharsOfDescription" value="{{ showCharsOfDescription }}">
+			</div>
+			<div class="after"></div>
+		</div>
 
 		<input type="submit" value="Run">
 	</form>

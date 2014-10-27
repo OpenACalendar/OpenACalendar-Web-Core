@@ -248,6 +248,15 @@ html {
   color: #007900;
   text-decoration: none;
 }
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li.minorImportance div.dateIcon {
+  background: #726568;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li.minorImportance div.title {
+  font-size: 14pt;
+}
+#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li.minorImportance div.title a {
+  color: #726568;
+}
 #pageWrapper.displayBoard #headerAndBodyWrapper .afterDisplayBoardSegment {
   clear: both;
 }
