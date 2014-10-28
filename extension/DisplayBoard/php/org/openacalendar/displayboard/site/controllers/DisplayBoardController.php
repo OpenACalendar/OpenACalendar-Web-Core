@@ -1,6 +1,6 @@
 <?php
 
-namespace site\controllers;
+namespace org\openacalendar\displayboard\site\controllers;
 
 use repositories\AreaRepository;
 use Silex\Application;
@@ -11,7 +11,7 @@ use repositories\builders\EventRepositoryBuilder;
 
 /**
  *
- * @package Core
+ * @package org.openacalendar.displayboard
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
@@ -85,7 +85,7 @@ class DisplayBoardController {
 	function index(Request $request, Application $app) {
 		$this->build($app);
 		
-		return $app['twig']->render('site/displayboard/index.html.twig', $this->paramaters);
+		return $app['twig']->render('displayboard/site/displayboard/index.html.twig', $this->paramaters);
 	}
 
 	function run(Request $request, Application $app) {
@@ -143,7 +143,7 @@ class DisplayBoardController {
 		usort($this->paramaters['eventsLaterMinorImportance'], $cmp);
 		
 		
-		return $app['twig']->render('site/displayboard/run.html.twig', $this->paramaters);
+		return $app['twig']->render('displayboard/site/displayboard/run.html.twig', $this->paramaters);
 	}
 
 }

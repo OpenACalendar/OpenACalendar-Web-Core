@@ -507,12 +507,6 @@ $app->match('/map/time', "site\controllers\MapTimeController::index");
 $app->match('/map/time/', "site\controllers\MapTimeController::index");
 $app->match('/map/time/getdata.json', "site\controllers\MapTimeController::getDataJson");
 
-
-$app->match('/displayboard', "site\controllers\DisplayBoardController::index");
-$app->match('/displayboard/', "site\controllers\DisplayBoardController::index");
-$app->match('/displayboard/run', "site\controllers\DisplayBoardController::run");
-$app->match('/displayboard/run/', "site\controllers\DisplayBoardController::run");
-
 $app->match('/importurl', "site\controllers\ImportURLListController::index"); 
 $app->match('/importurl/', "site\controllers\ImportURLListController::index"); 
 
