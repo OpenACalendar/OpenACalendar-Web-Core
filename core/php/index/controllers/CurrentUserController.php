@@ -53,7 +53,7 @@ class CurrentUserController {
 		
 		$date = $repo->getLastSentForUserAccount(userGetCurrent());
 		if ($date && $date->getTimestamp() > (\TimeSource::time() - $app['config']->userAccountVerificationSecondsBetweenAllowedSends)) {
-			$app['flashmessages']->addMessage("Sorry, but the email was sent to recently. Please try again soon.");
+			$app['flashmessages']->addMessage("Sorry, but an email was sent too recently. Please try again later.");
 		}  else {
 			
 			$verifyEmail = $repo->create(userGetCurrent());
