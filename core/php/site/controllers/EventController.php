@@ -1223,7 +1223,7 @@ class EventController {
 				$eventRepository = new EventRepository();
 				$eventRepository->delete($this->parameters['event'], $app['currentUser']);
 				
-				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 				
 			}
 		}
@@ -1250,7 +1250,7 @@ class EventController {
 		
 		$eventHistory = $eventHistories[0];
 		
-		return $app->redirect("/event/".$this->parameters['event']->getSlug().'/rollback/'.$eventHistory->getCreatedAtTimeStamp());
+		return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/rollback/'.$eventHistory->getCreatedAtTimeStamp());
 		
 		
 	}
@@ -1282,7 +1282,7 @@ class EventController {
 				$eventRepository = new EventRepository();
 				$eventRepository->cancel($this->parameters['event'], $app['currentUser']);
 
-				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 
 			}
 		}
@@ -1309,7 +1309,7 @@ class EventController {
 
 		$eventHistory = $eventHistories[0];
 
-		return $app->redirect("/event/".$this->parameters['event']->getSlug().'/rollback/'.$eventHistory->getCreatedAtTimeStamp());
+		return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/rollback/'.$eventHistory->getCreatedAtTimeStamp());
 
 
 	}
@@ -1344,7 +1344,7 @@ class EventController {
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($newEventState, $app['currentUser'], $this->parameters['eventHistory']);
 				
-				return $app->redirect("/event/".$this->parameters['event']->getSlug());
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 				
 			}
 		}
