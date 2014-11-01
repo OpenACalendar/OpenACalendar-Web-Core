@@ -28,25 +28,55 @@
 		<ul class="eventsFilters">
 			{% set idx = 0 %}
 			{% for eventQuery in data %}
-				<div class="rowWrapper">
-					<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
-					<div class="widgetWrapperPlacementOnly">
-						<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}" style="width: 50px;">
-						<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}" {% if eventQuery.minorImportance %}checked{% endif %}>Minor Importance</label>
+				<li class="eventsFilter" style="border: 2px solid #999966;">
+					<div class="rowWrapper">
+						<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
+						<div class="widgetWrapperPlacementOnly">
+							<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}" style="width: 50px;">
+						</div>
+						<div class="after"></div>
 					</div>
-					<div class="after"></div>
-				</div>
+					<div class="rowWrapper">
+						<div class="labelWrapper"><label for="daysAheadInNextBox">Group Filter:</label></div>
+						<div class="widgetWrapperPlacementOnly">
+							<input type="text" value="{% if eventQuery.group %}{{ eventQuery.group.id }}{% endif %}" name="eventGroup{{ idx }}" style="width: 50px;">
+						</div>
+						<div class="after"></div>
+					</div>
+					<div class="rowWrapper">
+						<div class="labelWrapper">&nbsp;</div>
+						<div class="widgetWrapperPlacementOnly">
+							<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}" {% if eventQuery.minorImportance %}checked{% endif %}>Minor Importance</label>
+						</div>
+						<div class="after"></div>
+					</div>
+				</li>
 				{% set idx = idx+1 %}
 			{% endfor %}
 			{% if idx < MAX_EVENT_QUERIES_ON_EVENT_BOARD %}
-				<div class="rowWrapper">
-					<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
-					<div class="widgetWrapperPlacementOnly">
-						<input type="text" value="" name="eventArea{{ idx }}" style="width: 50px;">
-						<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}">Minor Importance</label>
+				<li class="eventsFilter" style="border: 2px solid #999966;">
+					<div class="rowWrapper">
+						<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
+						<div class="widgetWrapperPlacementOnly">
+							<input type="text" value="" name="eventArea{{ idx }}" style="width: 50px;">
+						</div>
+						<div class="after"></div>
 					</div>
-					<div class="after"></div>
-				</div>
+					<div class="rowWrapper">
+						<div class="labelWrapper"><label for="daysAheadInNextBox">Group Filter:</label></div>
+						<div class="widgetWrapperPlacementOnly">
+							<input type="text" value="" name="groupArea{{ idx }}" style="width: 50px;">
+						</div>
+						<div class="after"></div>
+					</div>
+					<div class="rowWrapper">
+						<div class="labelWrapper">&nbsp;</div>
+						<div class="widgetWrapperPlacementOnly">
+							<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}">Minor Importance</label>
+						</div>
+						<div class="after"></div>
+					</div>
+				</li>
 			{% endif %}
 		</ul>
 
@@ -70,6 +100,14 @@
 			<div class="labelWrapper"><label for="showCharsOfDescription">How many characters of description to show?</label></div>
 			<div class="widgetWrapperPlacementOnly">
 				<input type="text" name="showCharsOfDescription" value="{{ showCharsOfDescription }}">
+			</div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
+			<div class="labelWrapper"><label for="refreshInMinutes">Refresh after minutes? (0 to disable)</label></div>
+			<div class="widgetWrapperPlacementOnly">
+				<input type="text" name="refreshInMinutes" value="{{ refreshInMinutes }}">
 			</div>
 			<div class="after"></div>
 		</div>

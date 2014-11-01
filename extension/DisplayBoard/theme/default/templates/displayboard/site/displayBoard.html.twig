@@ -15,6 +15,7 @@
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/displayboard.css?v={{ config.assetsVersion }}">
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+		{%  if refreshInMinutes > 0  %}<meta http-equiv="refresh" content="{{  refreshInMinutes * 60 }}">{%  endif %}
 	</head>
 	<body>
 		<div id="pageWrapper" class="displayBoard">

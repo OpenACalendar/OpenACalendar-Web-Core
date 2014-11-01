@@ -3,6 +3,7 @@
 namespace org\openacalendar\displayboard\site\controllers;
 
 use repositories\AreaRepository;
+use repositories\GroupRepository;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,26 +29,34 @@ class DisplayBoardController {
 		$this->paramaters = array(
 			'daysAheadInNextBox'=>3,
 			'showCharsOfDescription'=>0,
+			'refreshInMinutes'=>0,
 			'MAX_EVENT_QUERIES_ON_EVENT_BOARD'=>  self::$MAX_EVENT_QUERIES_ON_EVENT_BOARD,
 		);
 		
-		if (isset($_GET['daysAheadInNextBox']) && intval($_GET['daysAheadInNextBox']) > 0){
+		if (isset($_GET['daysAheadInNextBox']) && intval($_GET['daysAheadInNextBox']) >= 0){
 			$this->paramaters['daysAheadInNextBox'] = intval($_GET['daysAheadInNextBox']);
 		}
 		
-		if (isset($_GET['showCharsOfDescription']) && intval($_GET['showCharsOfDescription']) > 0){
+		if (isset($_GET['showCharsOfDescription']) && intval($_GET['showCharsOfDescription']) >= 0){
 			$this->paramaters['showCharsOfDescription'] = intval($_GET['showCharsOfDescription']);
 		}
 
+		if (isset($_GET['refreshInMinutes']) && intval($_GET['refreshInMinutes']) >= 0){
+			$this->paramaters['refreshInMinutes'] = intval($_GET['refreshInMinutes']);
+		}
+
 		$areaRepository = new AreaRepository();
+		$groupRepository = new GroupRepository();
 
 		$this->paramaters['data'] = array();
 
 		for ($i = 0; $i <= self::$MAX_EVENT_QUERIES_ON_EVENT_BOARD; $i++) {
 			$area = isset($_GET['eventArea'.$i]) ? intval($_GET['eventArea'.$i]) : null;
-			if ($area) {
+			$group = isset($_GET['eventGroup'.$i]) ? intval($_GET['eventGroup'.$i]) : null;
+			if ($area || $group) {
 				$queryData = array(
 						'area'=>null,
+						'group'=>null,
 						'minorImportance'=>false,
 						'query'=>new EventRepositoryBuilder(),
 					);
@@ -55,10 +64,17 @@ class DisplayBoardController {
 				$queryData['query']->setAfterNow();
 				$queryData['query']->setIncludeDeleted(false);
 				if ($area) {
-					$areaObj = $areaRepository->loadById($area);
+					$areaObj = $areaRepository->loadBySlug($app['currentSite'],$area);
 					if ($areaObj) {
 						$queryData['area'] = $areaObj;
 						$queryData['query']->setArea($areaObj);
+					}
+				}
+				if ($group) {
+					$groupObj = $groupRepository->loadBySlug($app['currentSite'],$group);
+					if ($groupObj) {
+						$queryData['group'] = $groupObj;
+						$queryData['query']->setGroup($groupObj);
 					}
 				}
 				if (isset($_GET['eventMinorImportance'.$i]) && $_GET['eventMinorImportance'.$i] == 'yes') {
@@ -71,6 +87,7 @@ class DisplayBoardController {
 		if (count($this->paramaters['data']) == 0 ) {
 			$queryData = array(
 					'area'=>null,
+					'group'=>null,
 					'minorImportance'=>false,
 					'query'=>new EventRepositoryBuilder(),
 				);
