@@ -103,13 +103,13 @@
 		{% endif %}
 		{% if historyItem.getIsDeletedChanged %}
 			<div class="fieldChanged">
-				<div class="field">Status changed:</div>
+				<div class="field">Deleted Status changed:</div>
 				<div class="value">{% if historyItem.getIsDeleted %}Deleted!{% else %}Restored!{% endif %}</div>
 			</div>
 		{%endif %}
 		{% if historyItem.getIsCancelledChanged %}
 			<div class="fieldChanged">
-				<div class="field">Status changed:</div>
+				<div class="field">Cancelled Status changed:</div>
 				<div class="value">{% if historyItem.getIsCancelled %}Cancelled!{% else %}Restored!{% endif %}</div>
 			</div>
 		{%endif %}
