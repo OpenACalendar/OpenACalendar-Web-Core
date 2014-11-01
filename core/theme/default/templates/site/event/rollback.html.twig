@@ -23,7 +23,9 @@
 		{{ form_row(form.end_at) }}
 		{{ form_rest(form) }}
 
-		{% if event.isDeleted %}
+		{% if event.isDeleted and event.isCancelled %}
+			<p>(The event will no longer be deleted and no longer be cancelled.)</p>
+		{% elseif event.isDeleted %}
 			<p>(The event will no longer be deleted.)</p>
 		{% elseif event.isCancelled %}
 			<p>(The event will no longer be cancelled.)</p>

@@ -1340,7 +1340,11 @@ class EventController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+				// Because to undelete or uncancel something, you rollback to a valid state, when you rollback you must set these.
+				$newEventState->setIsCancelled(false);
+				$newEventState->setIsDeleted(false);
+
 				$eventRepository = new EventRepository();
 				$eventRepository->edit($newEventState, $app['currentUser'], $this->parameters['eventHistory']);
 				

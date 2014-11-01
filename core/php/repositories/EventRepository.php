@@ -212,7 +212,7 @@ class EventRepository {
 			$DB->beginTransaction();
 
 			$fields = array('summary','description','start_at','end_at','venue_id','area_id','country_id','timezone',
-				'url','ticket_url','is_physical','is_virtual','is_deleted');
+				'url','ticket_url','is_physical','is_virtual','is_deleted','is_cancelled');
 
 			$this->eventDBAccess->update($event, $fields, $user, $fromHistory);
 			
