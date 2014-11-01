@@ -78,8 +78,14 @@
 		{% endif %}
 		{% if historyItem.getIsDeletedChanged %}
 			<div>
-				<div>Status changed:</div>
+				<div>Deleted Status changed:</div>
 				<div style="font-size: 10pt;">{% if historyItem.getIsDeleted %}Deleted!{% else %}Restored!{% endif %}</div>
+			</div>
+		{%endif %}
+		{% if historyItem.getIsCancelledChanged %}
+			<div>
+				<div>Cancelled Status changed:</div>
+				<div style="font-size: 10pt;">{% if historyItem.getIsCancelled %}Cancelled!{% else %}Restored!{% endif %}</div>
 			</div>
 		{%endif %}
 	{% endif %}
