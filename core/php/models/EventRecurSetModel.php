@@ -446,6 +446,12 @@ class EventRecurSetModel {
 					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsVirtualChangeSelected(true);
 				}
 			}
+			if ($this->initalEventLastChange->getIsCancelledChanged() && $this->initalEvent->getIsCancelled() != $futureEvent->getIsCancelled()) {
+				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsCancelledChangePossible(true);
+				if ($this->initialEventJustBeforeLastChange->getIsCancelled() == $futureEvent->getIsCancelled()) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setIsCancelledChangeSelected(true);
+				}
+			}
 			if (($startDiff->y != 0 || $startDiff->m != 0 || $startDiff->d != 0  || $startDiff->h != 0  || $startDiff->i != 0  || $startDiff->s != 0 ) || 
 					($endDiff->y != 0 || $endDiff->m != 0 || $endDiff->d != 0  || $endDiff->h != 0  || $endDiff->i != 0  || $endDiff->s != 0 )) {
 				$start = clone $futureEvent->getStartAtInUTC();

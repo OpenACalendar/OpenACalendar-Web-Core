@@ -116,6 +116,14 @@
 								</label>
 							</li>
 						{% endif %}
+						{% if futureEventsProposedChanges[event.slug].getIsCancelledChangePossible %}
+							<li>
+								<label>
+									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsCancelled" value="1" {% if futureEventsProposedChanges[event.slug].getIsCancelledChangeSelected %}checked="checked"{% endif %}>
+									Is Cancelled
+								</label>
+							</li>
+						{% endif %}
 					</ul>
 						
 					<div class="afterEventListing"></div>

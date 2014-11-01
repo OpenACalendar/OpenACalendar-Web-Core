@@ -32,6 +32,8 @@ class EventInRecurSetProposedChangesModel {
 	protected $is_physical_change_selected = false;
 	protected $start_end_at_change_possible = false;
 	protected $start_end_at_change_selected = false;
+	protected $is_cancelled_change_possible = false;
+	protected $is_cancelled_change_selected = false;
 	
 	protected $summary;
 	
@@ -184,6 +186,41 @@ class EventInRecurSetProposedChangesModel {
 		$this->start_end_at_change_selected = $start_end_at_change_selected;
 	}
 
+	/**
+	 * @param boolean $is_cancelled_change_possible
+	 */
+	public function setIsCancelledChangePossible($is_cancelled_change_possible)
+	{
+		$this->is_cancelled_change_possible = $is_cancelled_change_possible;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIsCancelledChangePossible()
+	{
+		return $this->is_cancelled_change_possible;
+	}
+
+	/**
+	 * @param boolean $is_cancelled_change_selected
+	 */
+	public function setIsCancelledChangeSelected($is_cancelled_change_selected)
+	{
+		$this->is_cancelled_change_selected = $is_cancelled_change_selected;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIsCancelledChangeSelected()
+	{
+		return $this->is_cancelled_change_selected;
+	}
+
+
+
+
 	public function isAnyChangesPossible() {
 		return $this->summary_change_possible ||
 				$this->description_change_possible ||
@@ -193,7 +230,8 @@ class EventInRecurSetProposedChangesModel {
 				$this->ticket_url_change_possible ||
 				$this->is_virtual_change_possible ||
 				$this->is_physical_change_possible ||
-				$this->start_end_at_change_possible;
+				$this->start_end_at_change_possible ||
+				$this->is_cancelled_change_possible;
 	}
 			
 	public function getSummary() {
@@ -260,6 +298,10 @@ class EventInRecurSetProposedChangesModel {
 		if ($this->start_end_at_change_possible && $this->start_end_at_change_selected) {
 			$event->setStartAt($this->start_at);
 			$event->setEndAt($this->end_at);
+			$changes = true;
+		}
+		if ($this->is_cancelled_change_possible && $this->is_cancelled_change_selected) {
+			$event->setIsCancelled($originalEvent->getIsCancelled());
 			$changes = true;
 		}
 		

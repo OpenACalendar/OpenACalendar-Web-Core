@@ -881,7 +881,7 @@ class EventController {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
-		
+
 		// Event Recur Set
 		$eventRecurSetRepo = new EventRecurSetRepository();
 		$this->parameters['eventRecurSet'] = $eventRecurSetRepo->loadForEvent($this->parameters['event']);
@@ -893,7 +893,7 @@ class EventController {
 		$eventHistoryRepo = new EventHistoryRepository();
 		$this->parameters['eventHistory'] = $eventHistoryRepo->loadByEventAndlastEditByUser($this->parameters['event'], $app['currentUser']);
 		if (!$this->parameters['eventHistory']) {
-			return false;
+			return false; // TODO
 		}
 		$eventHistoryRepo->ensureChangedFlagsAreSet($this->parameters['eventHistory']);
 		$this->parameters['eventRecurSet']->setInitalEventLastChange($this->parameters['eventHistory']);
@@ -954,7 +954,10 @@ class EventController {
 					} 
 					if ($proposedChanges->getIsPhysicalChangePossible()) {
 						$proposedChanges->setIsPhysicalChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldIsPhysical') == 1);
-					} 
+					}
+					if ($proposedChanges->getIsCancelledChangePossible()) {
+						$proposedChanges->setIsCancelledChangeSelected($request->request->get("eventSlug".$futureEvent->getSlug().'fieldIsCancelled') == 1);
+					}
 					if ($proposedChanges->getStartEndAtChangePossible()) {
 						$proposedChanges->setStartEndAtChangePossible($request->request->get("eventSlug".$futureEvent->getSlug().'fieldStartEnd') == 1);
 					} 
@@ -1222,14 +1225,14 @@ class EventController {
 				
 				$eventRepository = new EventRepository();
 				$eventRepository->delete($this->parameters['event'], $app['currentUser']);
-				
+
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 				
 			}
 		}
 		
 		$this->parameters['form'] = $form->createView();
-		
+
 		return $app['twig']->render('site/event/delete.html.twig', $this->parameters);
 		
 	}
@@ -1282,7 +1285,12 @@ class EventController {
 				$eventRepository = new EventRepository();
 				$eventRepository->cancel($this->parameters['event'], $app['currentUser']);
 
-				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
+				$repo = new EventRecurSetRepository();
+				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
+					return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl().'/edit/future');
+				} else {
+					return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl());
+				}
 
 			}
 		}
