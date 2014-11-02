@@ -498,8 +498,11 @@ $app->match('/admin/user/{username}/', "site\controllers\AdminUserController::in
 	->before($permissionCalendarAdministratorRequired)
 	->before($canChangeSite);
 
-		
-		
+if (!$CONFIG->isSingleSiteMode) {
+	$app->match('/admin/usernoteditor/', "site\controllers\AdminController::listUsersNotEditors")
+		->before($permissionCalendarAdministratorRequired);
+}
+
 $app->match('/map', "site\controllers\MapController::index");
 $app->match('/map/', "site\controllers\MapController::index");
 

@@ -31,6 +31,10 @@
 
 		<li><a href="/admin/user"><div class="iconUsersLarge"></div> Users (Permissions)</a></li>
 
+		{%  if not config.isSingleSiteMode %}
+			<li><a href="/admin/usernoteditor"><div class="iconUsersLarge"></div> Users blocked from being editors (Permissions)</a></li>
+		{% endif %}
+
 		<li><a href="/admin/countries"><div class="iconGlobeLarge"></div> Countries</a></li>
 		
 		{% if currentSite.isFeaturePhysicalEvents %}

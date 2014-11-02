@@ -130,6 +130,13 @@ $app->match('/sysadmin/site/{siteid}/usergroup/{id}/', "sysadmin\controllers\Sit
 		->assert('siteid', '\d+')
 		->assert('id', '\d+');
 
+
+$app->match('/sysadmin/site/{siteid}/usernoteditor', "sysadmin\controllers\SiteController::listUsersNotEditors")
+		->assert('siteid', '\d+');
+$app->match('/sysadmin/site/{siteid}/usernoteditor/', "sysadmin\controllers\SiteController::listUsersNotEditors")
+		->assert('siteid', '\d+');
+
+
 $app->match('/sysadmin/site/{siteid}/country', "sysadmin\controllers\SiteController::listCountries")
 		->assert('siteid', '\d+');
 $app->match('/sysadmin/site/{siteid}/country/', "sysadmin\controllers\SiteController::listCountries")

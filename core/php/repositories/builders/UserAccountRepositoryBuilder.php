@@ -60,6 +60,17 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 		return $this;
 	}
 
+	/** @var SiteModel */
+	protected $userHasNoEditorPermissionsInSite;
+
+	/**
+	 * @param mixed $userHasNoEditorPermissionsInSite
+	 */
+	public function setUserHasNoEditorPermissionsInSite(SiteModel $userHasNoEditorPermissionsInSite)
+	{
+		$this->userHasNoEditorPermissionsInSite = $userHasNoEditorPermissionsInSite;
+	}
+
 
 
 
@@ -109,6 +120,15 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 				"AND user_in_user_group.user_group_id = :user_group_id AND user_in_user_group.removed_at IS NULL  ";
 			$this->params['user_group_id'] = $this->inUserGroup->getId();
 		}
+
+
+		if ($this->userHasNoEditorPermissionsInSite) {
+			$this->joins[] = " JOIN user_has_no_editor_permissions_in_site ON user_has_no_editor_permissions_in_site.user_account_id = user_account_information.id ".
+				"AND user_has_no_editor_permissions_in_site.site_id = :no_edit_permissions_in_site_id AND user_has_no_editor_permissions_in_site.removed_at IS NULL  ";
+			$this->params['no_edit_permissions_in_site_id'] = $this->userHasNoEditorPermissionsInSite->getId();
+		}
+
+
 
 	}
 	

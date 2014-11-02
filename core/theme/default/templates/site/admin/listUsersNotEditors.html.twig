@@ -1,0 +1,69 @@
+
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}User  Admin - {% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li><a href="/admin">admin</a></li>
+	<li class="current"><a href="/admin/usernoteditor">users blocked from being editors</a></li>
+{% endblock %}
+
+{% block content %}
+
+
+	<h2>Users blocked from being editors</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+
+		</ul>
+		<div id="innerPage">
+
+
+		<h3>Users</h3>
+
+			<table class="data">
+				<tr>
+					<th>Username</th>
+					<th>&nbsp;</th>
+				</tr>
+				{% for user in users %}
+					<tr {% if loop.index is even %}class="alternative"{% endif %}>
+						<td><a href="/admin/user/{{  user.username }}">{{ user.username }}</a></td>
+						<td>
+							<form method="post" action="">
+								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+								<input type="hidden" name="action" value="remove">
+								<input type="hidden" name="id" value="{{ user.id }}">
+								<input type="submit" value="Remove!">
+							</form>
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+
+
+			<h3>Add User</h3>
+
+			<form action="" method="post">
+
+				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+				<input type="hidden" name="action" value="add">
+				<input type="text" name="username" value="">
+				<input type="submit" value="Add Username!">
+			</form>
+
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+{% endblock %}

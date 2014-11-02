@@ -5,6 +5,7 @@ namespace site\controllers;
 use models\UserGroupModel;
 use repositories\builders\UserGroupRepositoryBuilder;
 use repositories\UserGroupRepository;
+use repositories\UserHasNoEditorPermissionsInSiteRepository;
 use repositories\UserPermissionsRepository;
 use Silex\Application;
 use site\forms\AdminUserGroupNewForm;
@@ -67,6 +68,39 @@ class AdminController {
 			));
 
 	}
+
+	function listUsersNotEditors(Application $app, Request $request) {
+
+
+
+		$repo = new UserHasNoEditorPermissionsInSiteRepository();
+
+
+		if ($request->request->get('action') == "add" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+			$ur = new UserAccountRepository();
+			$user = $ur->loadByUserName($request->request->get('username'));
+			if ($user) {
+				$repo->addUserToSite($user, $app['currentSite'], $app['currentUser']);
+				return $app->redirect('/admin/usernoteditor/');
+			}
+		} else if ($request->request->get('action') == "remove" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+			$ur = new UserAccountRepository();
+			$user = $ur->loadByID($request->request->get('id'));
+			if ($user) {
+				$repo->removeUserFromSite($user, $app['currentSite'], $app['currentUser']);
+				return $app->redirect('/admin/usernoteditor/');
+			}
+		}
+
+
+		$userAccountRepoBuilder = new UserAccountRepositoryBuilder();
+		$userAccountRepoBuilder->setUserHasNoEditorPermissionsInSite($app['currentSite']);
+
+		return $app['twig']->render('site/admin/listUsersNotEditors.html.twig', array(
+			'users'=>$userAccountRepoBuilder->fetchAll(),
+		));
+	}
+
 
 	function newUserGroup(Application $app, Request $request) {
 

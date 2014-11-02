@@ -1,5 +1,6 @@
 <?php
 
+use repositories\UserHasNoEditorPermissionsInSiteRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +41,12 @@ $app->before(function (Request $request) use ($app) {
 
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
-	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite($app['currentUser'], $app['currentSite'], false, true);
+	$removeEditorPermissions = false;
+	$userEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+	if ($app['currentUser'] && $userEditorPermissionsInSiteRepo->isUserInSite($app['currentUser'], $app['currentSite'])) {
+		$removeEditorPermissions = true;
+	}
+	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite($app['currentUser'], $app['currentSite'], $removeEditorPermissions, true);
 
 
 	# ////////////// User and their watch and perms
