@@ -123,6 +123,8 @@ class AdminUserGroupController {
 				$ugr = new UserGroupRepository();
 				$ugr->addUserToGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 				return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
+			} else {
+				$app['flashmessages']->addError("Could not find user");
 			}
 		} else if ($request->request->get('action') == "removeanonymous" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesAnonymous(false);
