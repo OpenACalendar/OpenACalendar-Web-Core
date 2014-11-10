@@ -163,7 +163,7 @@ class VenueController {
 						} else if (substr($areaCode, 0, 4) == 'NEW:') {
 							$newArea = new AreaModel();
 							$newArea->setTitle(substr($areaCode, 4));
-							$areaRepository->create($newArea, $area, $app['currentSite'], $countryRepository->loadById($venue->getCountryId()) , $app['currentUser']);
+							$areaRepository->create($newArea, $area, $app['currentSite'], $this->parameters['country'] , $app['currentUser']);
 							$areaRepository->buildCacheAreaHasParent($newArea);
 							$area = $newArea;
 						}
