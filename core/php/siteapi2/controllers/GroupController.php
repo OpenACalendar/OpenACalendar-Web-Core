@@ -47,12 +47,46 @@ class GroupController {
 				'slug'=>$this->group->getSlug(),
 				'slugForURL'=>$this->group->getSlugForUrl(),
 				'title'=>$this->group->getTitle(),
-			),			
+				'description'=>$this->group->getDescription(),
+				'url'=>$this->group->getUrl(),
+			),
 		);
 		
 		return json_encode($out);
 	}
-	
+
+	public function postInfoJson ($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Does not exist.");
+		}
+
+		$ourRequest = new \Request($request);
+
+		$edits = false;
+		if ($ourRequest->hasGetOrPost('title') && $this->group->setTitleIfDifferent($ourRequest->getGetOrPostString('title', ''))) {
+			$edits = true;
+		}
+		if ($ourRequest->hasGetOrPost('description') && $this->group->setDescriptionIfDifferent($ourRequest->getGetOrPostString('description', ''))) {
+			$edits = true;
+		}
+		if ($ourRequest->hasGetOrPost('url') && $this->group->setUrlIfDifferent($ourRequest->getGetOrPostString('url', ''))) {
+			$edits = true;
+		}
+
+		if ($edits) {
+			$repo = new GroupRepository();
+			$repo->edit($this->group, $app['apiUser']);
+			$out = array(
+				'edited'=>true,
+			);
+		} else {
+			$out = array(
+				'edited'=>false,
+			);
+		}
+
+		return json_encode($out);
+	}
 	
 }
 

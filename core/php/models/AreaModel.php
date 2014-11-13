@@ -103,6 +103,14 @@ class AreaModel {
 		$this->title = $title;
 	}
 
+	public function setTitleIfDifferent($title) {
+		if ($this->title != $title) {
+			$this->title = $title;
+			return true;
+		}
+		return false;
+	}
+
 	public function getDescription() {
 		return $this->description;
 	}

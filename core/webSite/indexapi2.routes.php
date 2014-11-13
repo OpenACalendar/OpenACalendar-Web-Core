@@ -37,19 +37,31 @@ $app->get('/api2/venue/list.json', "siteapi2\controllers\VenueListController::li
 		->before($appUserRequired); 
 $app->get('/api2/venue/{slug}/info.json', "siteapi2\controllers\VenueController::infoJson")
 		->before($appUserRequired)
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+');
+$app->post('/api2/venue/{slug}/info.json', "siteapi2\controllers\VenueController::postInfoJson")
+		->before($appUserRequired)
+		->before($appUserPermissionCalendarChangeRequired)
+		->assert('slug', '\d+');
 
 ## Group
 $app->get('/api2/group/list.json', "siteapi2\controllers\GroupListController::listJson")
 		->before($appUserRequired); 
 $app->get('/api2/group/{slug}/info.json', "siteapi2\controllers\GroupController::infoJson")
 		->before($appUserRequired)
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+');
+$app->post('/api2/group/{slug}/info.json', "siteapi2\controllers\GroupController::postInfoJson")
+	->before($appUserRequired)
+	->before($appUserPermissionCalendarChangeRequired)
+	->assert('slug', '\d+');
 
 ## Event
 $app->get('/api2/event/list.json', "siteapi2\controllers\EventListController::listJson")
 		->before($appUserRequired); 
 $app->get('/api2/event/{slug}/info.json', "siteapi2\controllers\EventController::infoJson")
 		->before($appUserRequired)
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+');
+$app->post('/api2/event/{slug}/info.json', "siteapi2\controllers\EventController::postInfoJson")
+	->before($appUserRequired)
+	->before($appUserPermissionCalendarChangeRequired)
+	->assert('slug', '\d+');
 

@@ -250,12 +250,28 @@ class EventModel {
 		$this->summary = $summary;
 	}
 
+	public function setSummaryIfDifferent($summary) {
+		if ($this->summary != $summary) {
+			$this->summary = $summary;
+			return true;
+		}
+		return false;
+	}
+
 	public function getDescription() {
 		return $this->description;
 	}
 
 	public function setDescription($description) {
 		$this->description = $description;
+	}
+
+	public function setDescriptionIfDifferent($description) {
+		if ($this->description != $description) {
+			$this->description = $description;
+			return true;
+		}
+		return false;
 	}
 
 	public function getStartAt() {
@@ -411,13 +427,29 @@ class EventModel {
 		$this->url = $url;
 		return $this;
 	}
-	
+
+	public function setUrlIfDifferent($url) {
+		if ($this->url != $url) {
+			$this->url = $url;
+			return true;
+		}
+		return false;
+	}
+
 	public function getTicketUrl() {
 		return $this->ticket_url;
 	}
 
 	public function setTicketUrl($ticket_url) {
 		$this->ticket_url = $ticket_url;
+	}
+
+	public function setTicketUrlIfDifferent($ticket_url) {
+		if ($this->ticket_url != $ticket_url) {
+			$this->ticket_url = $ticket_url;
+			return true;
+		}
+		return false;
 	}
 
 		

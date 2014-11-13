@@ -94,6 +94,14 @@ class VenueModel {
 		$this->title = $title;
 	}
 
+	public function setTitleIfDifferent($title) {
+		if ($this->title != $title) {
+			$this->title = $title;
+			return true;
+		}
+		return false;
+	}
+
 	
 	public function getDescription() {
 		return $this->description;
@@ -101,6 +109,14 @@ class VenueModel {
 
 	public function setDescription($description) {
 		$this->description = $description;
+	}
+
+	public function setDescriptionIfDifferent($description) {
+		if ($this->description != $description) {
+			$this->description = $description;
+			return true;
+		}
+		return false;
 	}
 	
 	public function getAddress() {
@@ -111,12 +127,28 @@ class VenueModel {
 		$this->address = $address;
 	}
 
+	public function setAddressIfDifferent($address) {
+		if ($this->address != $address) {
+			$this->address = $address;
+			return true;
+		}
+		return false;
+	}
+
 	public function getAddressCode() {
 		return $this->address_code;
 	}
 
 	public function setAddressCode($address_code) {
 		$this->address_code = $address_code;
+	}
+
+	public function setAddressCodeIfdifferent($address_code) {
+		if ($this->address_code) {
+			$this->address_code = $address_code;
+			return true;
+		}
+		return false;
 	}
 
 	public function getLat() {
@@ -127,11 +159,27 @@ class VenueModel {
 		$this->lat = $lat;
 	}
 
+	public function setLatIfDifferent($lat) {
+		if ($this->lat != $lat) {
+			$this->lat = $lat;
+			return true;
+		}
+		return false;
+	}
+
 	public function getLng() {
 		return $this->lng;
 	}
 
 	public function setLng($lng) {
+		if ($this->lng != $lng) {
+			$this->lng = $lng;
+			return true;
+		}
+		return false;
+	}
+
+	public function setLngIfDifferent($lng) {
 		$this->lng = $lng;
 	}
 

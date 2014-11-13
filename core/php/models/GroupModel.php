@@ -85,7 +85,16 @@ class GroupModel {
 		$this->title = $title;
 	}
 
-	
+
+	public function setTitleIfDifferent($title) {
+		if ($this->title != $title) {
+			$this->title = $title;
+			return true;
+		}
+		return false;
+	}
+
+
 	public function getDescription() {
 		return $this->description;
 	}
@@ -94,12 +103,28 @@ class GroupModel {
 		$this->description = $description;
 	}
 
+	public function setDescriptionIfDifferent($description) {
+		if ($this->description != $description) {
+			$this->description = $description;
+			return true;
+		}
+		return false;
+	}
+
 	public function getUrl() {
 		return $this->url;
 	}
 
 	public function setUrl($url) {
 		$this->url = $url;
+	}
+
+	public function setUrlIfDifferent($url) {
+		if ($this->url != $url) {
+			$this->url = $url;
+			return true;
+		}
+		return false;
 	}
 
 	public function getTwitterUsername() {

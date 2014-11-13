@@ -57,12 +57,8 @@ class AreaController {
 		$ourRequest = new \Request($request);
 		
 		$edits = false;
-		if ($ourRequest->hasGetOrPost('title')) {
-			$newValue = $ourRequest->getGetOrPostString('title', '');
-			if ($newValue && $newValue != $this->area->getTitle()) {
-				$edits = true;
-				$this->area->setTitle($newValue);
-			}
+		if ($ourRequest->hasGetOrPost('title') && $this->area->setTitleIfDifferent($ourRequest->getGetOrPostString('title', ''))) {
+			$edits = true;
 		}
 		
 		if ($edits) {
