@@ -38,7 +38,8 @@ class UserController {
 	}
 	
 	
-	function register(Request $request, Application $app) {		
+	function register(Request $request, Application $app) {
+		global $CONFIG;
 		if (!$app['config']->allowNewUsersToRegister) {
 			return $app['twig']->render('index/user/register.notallowed.html.twig', array(
 			));
@@ -51,10 +52,14 @@ class UserController {
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 			$data = $form->getData();
-			
+
+			if (is_array($CONFIG->userNameReserved) && in_array($data['username'], $CONFIG->userNameReserved)) {
+				$form->addError(new FormError('That user name is already taken'));
+			}
+
 			$userExistingUserName = $userRepository->loadByUserName($data['username']);
 			if ($userExistingUserName) {
-				$form->addError(new FormError('That address is already taken'));
+				$form->addError(new FormError('That user name is already taken'));
 			}
 			
 			$userExistingEmail = $userRepository->loadByEmail($data['email']);
