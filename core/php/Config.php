@@ -19,7 +19,9 @@ class Config {
 	public $databaseHost;
 	public $databaseUser;
 	public $databasePassword;
-	
+
+	public $userNameReserved = array();
+
 	public $siteSlugReserved = array('www',	'blog');
 	
 	public $siteSlugDemoSite = "demo";

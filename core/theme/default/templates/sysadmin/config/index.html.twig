@@ -60,6 +60,11 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteSlugReserved'} %}</td>
 		</tr>
 		<tr>
+			<th>userNameReserved</th>
+			<td>{{ config.userNameReserved | join(", ") }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'userNameReserved'} %}</td>
+		</tr>
+		<tr>
 			<th>siteSlugDemoSite</th>
 			<td>{{ config.siteSlugDemoSite }}
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteSlugDemoSite'} %}</td>

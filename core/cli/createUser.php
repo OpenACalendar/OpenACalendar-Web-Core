@@ -41,14 +41,18 @@ print "Starting ...\n";
 
 $userRepository = new UserAccountRepository();
 
+if (is_array($CONFIG->userNameReserved) && in_array($username, $CONFIG->userNameReserved)) {
+	die("That user name is reserved\n");
+}
+
 $userExistingUserName = $userRepository->loadByUserName($username);
 if ($userExistingUserName) {
-	die('That address is already taken');
+	die("That user name is already taken\n");
 }
 
 $userExistingEmail = $userRepository->loadByEmail($email);
 if ($userExistingEmail) {
-	die('That email address already has an account');
+	die("That email address already has an account\n");
 }
 
 $user = new UserAccountModel();
