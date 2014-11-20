@@ -61,6 +61,9 @@ function showExportPopup() {
 		html += '</ul>';
 		html += '<div class="content" id="ExportToGoogleCalendar">';
 			html += '<p>In Google Calendar, click the drop down menu next to "Other calendars". Select "Add by URL" and copy and paste this in:</p><input type="text" class="exportlink"></p>';
+			if (exportData.hasOwnProperty("event")) {
+				html += '<p id="ExportToExistingGoogleCalendar">This will create a new calendar. You can <a href="/event/'+exportData.event+'/export/existinggooglecalendar" rel="nofollow" target="_blank">also add the event to an existing calendar</a>, but it will not receive future updates automatically.</p>';
+			}
 		html += '</div>'
 		html += '<div class="content" id="ExportToAppleCalendar">';
 			html += '<p>For Apple Mac/iPhone/iPad <a href="#" target="_blank" class="exportlink">click here to subscribe</a>.</p>';
@@ -169,11 +172,13 @@ function showLinksFor(showFor) {
 	var atomCreateURL  = "http://" + config.httpDomain + "/api1";
 	var atomBeforeURL  = "http://" + config.httpDomain + "/api1";
 	var hasAtom = true;
+	var hasExistingGoogleCalendar = false;
 	if (exportData.hasOwnProperty("event") && showFor == "event") {
 		icalURL += "/event/"+exportData.event+"/info.ical";
 		jsonURL += "/event/"+exportData.event+"/info.json";
 		jsonpURL += "/event/"+exportData.event+"/info.jsonp?callback=myfunc";
 		hasAtom = false;
+		hasExistingGoogleCalendar = true;
 	} else if (exportData.hasOwnProperty("group") && showFor == "group") {
 		icalURL += "/group/"+exportData.group+"/events.ical";
 		jsonURL += "/group/"+exportData.group+"/events.json";
@@ -231,6 +236,11 @@ function showLinksFor(showFor) {
 	} else {
 		$('#ExportToATOM').hide();
 		$('#ExportToATOMTab').hide();
+	}
+	if (hasExistingGoogleCalendar) {
+		$('#ExportToExistingGoogleCalendar').show();
+	} else {
+		$('#ExportToExistingGoogleCalendar').hide();
 	}
 }
 

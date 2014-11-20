@@ -1586,6 +1586,65 @@ class EventController {
 		
 		return $app['twig']->render('site/event/media.add.existing.html.twig', $this->parameters);
 	}
+
+	function exportExistingGoogleCalendar($slug, Request $request, Application $app) {
+		global $CONFIG;
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+
+		// Apparently maximum safe length of a URL is 2000 chars.
+		// Allocate 1000 to description,
+		// 300 to address, 300 to title
+		// rest for misc.
+
+		$eventURL = $CONFIG->getWebSiteDomainSecure($app['currentSite']->getSlug()).'/event/'.$this->parameters['event']->getSlugForURL();
+
+		$locationStringBits = array();
+		if ($this->parameters['venue']) {
+			if ($this->parameters['venue']->getTitle()) {
+				$locationStringBits[] = $this->parameters['venue']->getTitle();
+			}
+			if ($this->parameters['venue']->getAddress()) {
+				$locationStringBits[] = $this->parameters['venue']->getAddress();
+			}
+			if ($this->parameters['venue']->getAddressCode()) {
+				$locationStringBits[] = $this->parameters['venue']->getAddressCode();
+			}
+		}
+		if ($this->parameters['area']) {
+			$locationStringBits[] = $this->parameters['area']->getTitle();
+		}
+		if ($this->parameters['country']) {
+			$locationStringBits[] = $this->parameters['country']->getTitle();
+		}
+
+		$start = $this->parameters['event']->getStartAtInUTC();
+		$end = $this->parameters['event']->getEndAtInUTC();
+
+		$description = $this->parameters['event']->getDescription();
+		if (strlen($description) > 1000) {
+			$description = substr($description, 0, 1000)." ....";
+		}
+		$description .= "\n\nFor More: ".$eventURL;
+		if ($this->parameters['event']->getUrl()) {
+			$description .= " or " . $this->parameters['event']->getUrl();
+		}
+		if ($this->parameters['event']->getTicketUrl()) {
+			$description .= "\n\nFor Tickets: ".$this->parameters['event']->getTicketUrl();
+		}
+
+		$newURL = "https://www.google.com/calendar/render?".
+			"action=TEMPLATE&text=".urlencode($this->parameters['event']->getSummaryDisplay())."&".
+			"dates=".$start->format("Ymd")."T".$start->format("His")."Z/".$end->format("Ymd")."T".$end->format("His")."Z&".
+			"details=".urlencode($description)."&".
+			"location=".urlencode(substr(implode(", ", $locationStringBits),0,300))."&".
+			"pli=1&sf=true&output=xml#f";
+
+		return $app->redirect($newURL);
+
+	}
 	
 	
 }

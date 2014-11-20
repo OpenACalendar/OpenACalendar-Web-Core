@@ -60,7 +60,9 @@ $app->match('/event/{slug}/myAttendance.json', "site\controllers\EventController
 $app->match('/event/{slug}/userAttendance.html', "site\controllers\EventController::userAttendanceHtml")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/event/{slug}/history', "site\controllers\EventController::history")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
+		->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/event/{slug}/export/existinggooglecalendar', "site\controllers\EventController::exportExistingGoogleCalendar")
+		->assert('slug', FRIENDLY_SLUG_REGEX);
 $app->match('/event/{slug}/edit', "site\controllers\EventController::editSplash")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
