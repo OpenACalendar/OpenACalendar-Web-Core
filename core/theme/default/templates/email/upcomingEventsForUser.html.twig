@@ -31,7 +31,7 @@
 				{{ event.summaryDisplay }}
 			</a>
 			<br>
-			{{ event.description | nl2br}}
+			{{ event.description  |  truncate(1000) | nl2br}}
 			{% if userAtEvent[event.id] and ( userAtEvent[event.id].isPlanAttending or userAtEvent[event.id].isPlanMaybeAttending ) %}
 				<div style="font-style: italic;">
 					{% if userAtEvent[event.id].isPlanAttending %}
