@@ -30,7 +30,7 @@ class ImportURLImportedEventController extends ImportURLController {
 
 
 
-	protected function build($slug, $id, Request $request, Application $app) {
+	protected function buildEvent($slug, $id, Request $request, Application $app) {
 		if (!parent::build($slug, $request, $app)) {
 			return false;
 		}
@@ -46,7 +46,7 @@ class ImportURLImportedEventController extends ImportURLController {
 	}
 
 	function index($slug,$id, Request $request, Application $app) {
-		if (!$this->build($slug, $id, $request, $app)) {
+		if (!$this->buildEvent($slug, $id, $request, $app)) {
 			$app->abort(404, "Import does not exist.");
 		}
 
