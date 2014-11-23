@@ -18,6 +18,13 @@ use repositories\VenueHistoryRepository;
 use repositories\UserNotificationRepository;
 use repositories\ImportURLHistoryRepository;
 
+
+use models\EventHistoryModel;
+use models\GroupHistoryModel;
+use models\VenueHistoryModel;
+use models\AreaHistoryModel;
+use models\ImportURLHistoryModel;
+
 /**
  *
  * @package Core
@@ -80,15 +87,15 @@ class SendUserWatchesSiteNotifyEmailsTask {
 
 					// lets make sure histories are correct
 					foreach($histories as $history) {
-						if ($history instanceof models\EventHistoryModel) {
+						if ($history instanceof EventHistoryModel) {
 							$eventHistoryRepository->ensureChangedFlagsAreSet($history);
-						} elseif ($history instanceof models\GroupHistoryModel) {
+						} elseif ($history instanceof GroupHistoryModel) {
 							$groupHistoryRepository->ensureChangedFlagsAreSet($history);
-						} elseif ($history instanceof models\VenueHistoryModel) {
+						} elseif ($history instanceof VenueHistoryModel) {
 							$venueHistoryRepository->ensureChangedFlagsAreSet($history);
-						} elseif ($history instanceof models\AreaHistoryModel) {
+						} elseif ($history instanceof AreaHistoryModel) {
 							$areaHistoryRepository->ensureChangedFlagsAreSet($history);
-						} elseif ($history instanceof models\ImportURLHistoryModel) {
+						} elseif ($history instanceof ImportURLHistoryModel) {
 							$importURLHistoryRepository->ensureChangedFlagsAreSet($history);
 						}
 					}
