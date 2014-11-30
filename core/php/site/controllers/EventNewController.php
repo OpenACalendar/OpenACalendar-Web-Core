@@ -90,23 +90,44 @@ class EventNewController {
 				$eventRepository = new EventRepository();
 				$eventRepository->create($event, $app['currentSite'], userGetCurrent());
 				
-				if ($parseResult && $app['config']->logFileParseDateTimeRange && 
-						($parseResult->getStart()->getTimestamp() != $event->getStartAt()->getTimestamp() 
-						|| $parseResult->getEnd()->getTimestamp() != $event->getEndAt()->getTimestamp())) {
-					
+				if ($parseResult && $app['config']->logFileParseDateTimeRange) {
+
+					$parseStart = clone $parseResult->getStart();
+					$parseStart->setTimezone(new \DateTimeZone('UTC'));
+					$parseEnd = clone $parseResult->getEnd();
+					$parseEnd->setTimezone(new \DateTimeZone('UTC'));
+
+					$success = $parseStart->getTimestamp() == $event->getStartAt()->getTimestamp()
+						&& $parseEnd->getTimestamp() == $event->getEndAt()->getTimestamp();
+
 					$handle = fopen($app['config']->logFileParseDateTimeRange, "a");
 					$now = \TimeSource::getDateTime();
-					fwrite($handle, 'Site, '.$app['currentSite']->getId()." ,". $app['currentSite']->getSlug()." ,".
-							'Event,'.$event->getSlug()." ,".
-							'Now,'.$now->format("c") . "," . 
-							'Wanted Start,'.$event->getStartAt()->format("c") . " ," . 
-							'Wanted End,'.$event->getEndAt()->format("c") . " ," . 
-							'Typed,'.str_replace("\n", " ", $_GET['when']) . "\n");
+					var_dump(fputcsv($handle, array(
+						'Site',
+						$app['currentSite']->getId(),
+						$app['currentSite']->getSlug(),
+						'Event',
+						$event->getSlug(),
+						'Now',
+						$now->format("c"),
+						'Wanted Timezone',
+						$event->getTimezone(),
+						'Wanted Start UTC',
+						$event->getStartAtInUTC()->format("c"),
+						'Wanted End UTC',
+						$event->getEndAtInUTC()->format("c"),
+						'Typed',
+						$_GET['when'],
+						'Got Start UTC',
+						$parseStart->format("c"),
+						'Got End UTC',
+						$parseEnd->format("c"),
+						($success ? 'SUCCESS' : 'FAIL'),
+					)));
 					fclose($handle);
-					
 				}
-				
-				
+
+
 				if ($event->getIsPhysical() && $app['currentSite']->getIsFeaturePhysicalEvents()) {
 					return $app->redirect("/event/".$event->getSlugForURL().'/edit/venue');
 				} else {
