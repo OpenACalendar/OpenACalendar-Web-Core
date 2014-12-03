@@ -43,7 +43,7 @@
 		<div class="rowWrapper">
 			<div class="errorsWrapper">{{ form_errors(form.slug) }}</div>
 			<div class="labelWrapper">{{ form_label(form.slug) }}</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">http://{{ form_widget(form.slug) }}.{{ config.webSiteDomain }}</div>
+			<div class="widgetWrapperPlacementOnly smallInputs">http{% if config.hasSSL %}s{%  endif %}://{{ form_widget(form.slug) }}.{{ config.webSiteDomain }}</div>
 			<div class="after"></div>
 		</div>
 			
