@@ -132,6 +132,7 @@ class ContactSupportModel {
 			$message->setSubject("Contact Message From ".$CONFIG->siteTitle." : ".$this->subject);
 			$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 			$message->setTo($CONFIG->contactEmail);
+			$message->setReplyTo(array($this->email => $this->email));
 
 			configureAppForThemeVariables();
 
