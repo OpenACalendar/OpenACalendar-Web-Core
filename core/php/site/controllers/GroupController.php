@@ -176,7 +176,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		if ($app['currentUserCanEditSite'] && $app['currentSite']->getIsFeatureGroup()) {
+		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSite']->getIsFeatureGroup()) {
 			
 			
 			$form = $app['form.factory']->create(new UploadNewMediaForm());

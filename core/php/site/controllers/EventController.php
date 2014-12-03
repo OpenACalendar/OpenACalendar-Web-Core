@@ -1503,7 +1503,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		if ($app['currentUserCanEditSite']) {
+		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
 			
 			
 			$form = $app['form.factory']->create(new UploadNewMediaForm());

@@ -254,7 +254,7 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		if ($app['currentUserCanEditSite'] && $app['currentSite']->getIsFeaturePhysicalEvents()) {
+		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSite']->getIsFeaturePhysicalEvents()) {
 			
 			
 			$form = $app['form.factory']->create(new UploadNewMediaForm());
