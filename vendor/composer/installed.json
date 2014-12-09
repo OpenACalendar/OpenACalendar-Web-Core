@@ -1608,5 +1608,50 @@
             "facebook",
             "sdk"
         ]
+    },
+    {
+        "name": "jmbtechnologylimited/rruleunravel",
+        "version": "v0.1.0",
+        "version_normalized": "0.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/JMB-Technology-Limited/RRuleUnravel.git",
+            "reference": "e34b6a5745e5d09742f33f013490a6e46fdc1e2b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/e34b6a5745e5d09742f33f013490a6e46fdc1e2b",
+            "reference": "e34b6a5745e5d09742f33f013490a6e46fdc1e2b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2014-12-09 16:56:23",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "JMBTechnologyLimited": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD"
+        ],
+        "authors": [
+            {
+                "name": "James Baster",
+                "email": "james@jarofgreen.co.uk",
+                "homepage": "http://jamesbaster.co.uk",
+                "role": "Developer"
+            }
+        ],
+        "description": "Unravels a ICAL RRULE. STILL IN DEVELOPMENT.",
+        "homepage": "https://github.com/JMB-Technology-Limited/RRuleUnravel",
+        "keywords": [
+            "ical",
+            "rrule"
+        ]
     }
 ]

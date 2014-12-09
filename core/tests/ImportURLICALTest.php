@@ -100,8 +100,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$event = $events[0];
 		
 		$this->assertEquals("Test 3 SpecFic Writing Group",$event->getSummary());
-		$this->assertEquals('2013-11-12 18:00:00', $event->getStartAt()->format('Y-m-d H:i:s'));
-		$this->assertEquals('2013-11-12 20:30:00', $event->getEndAt()->format('Y-m-d H:i:s'));		
+		$this->assertEquals('2013-11-12 18:00:00', $event->getStartAtInUTC()->format('Y-m-d H:i:s'));
+		$this->assertEquals('2013-11-12 20:30:00', $event->getEndAtInUTC()->format('Y-m-d H:i:s'));
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getDescription());
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getURL());
 		$this->assertFalse($event->getIsDeleted());
@@ -189,8 +189,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$event = $events[0];
 		
 		$this->assertEquals("Test 3 SpecFic Writing Group",$event->getSummary());
-		$this->assertEquals('2013-11-12 18:00:00', $event->getStartAt()->format('Y-m-d H:i:s'));
-		$this->assertEquals('2013-11-12 20:30:00', $event->getEndAt()->format('Y-m-d H:i:s'));		
+		$this->assertEquals('2013-11-12 18:00:00', $event->getStartAtInUTC()->format('Y-m-d H:i:s'));
+		$this->assertEquals('2013-11-12 20:30:00', $event->getEndAtInUTC()->format('Y-m-d H:i:s'));
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getDescription());
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getURL());
 		$this->assertFalse($event->getIsDeleted());
@@ -212,8 +212,8 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$event = $events[0];
 		
 		$this->assertEquals("Test 3 SpecFic Writing Group",$event->getSummary());
-		$this->assertEquals('2013-11-12 18:30:00', $event->getStartAt()->format('Y-m-d H:i:s'));
-		$this->assertEquals('2013-11-12 20:30:00', $event->getEndAt()->format('Y-m-d H:i:s'));		
+		$this->assertEquals('2013-11-12 18:30:00', $event->getStartAtInUTC()->format('Y-m-d H:i:s'));
+		$this->assertEquals('2013-11-12 20:30:00', $event->getEndAtInUTC()->format('Y-m-d H:i:s'));
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getDescription());
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getURL());
 		$this->assertFalse($event->getIsDeleted());
@@ -342,6 +342,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		
 		
 	}
+
 	
 }
 

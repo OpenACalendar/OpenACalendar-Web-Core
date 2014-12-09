@@ -33,6 +33,8 @@ class ICalParserEvent
 
 	protected $url;
 
+	protected $ical_rrule_1;
+
 	public function __construct(\DateTimeZone $timeZone = null) {
 		$this->timeZoneUTC =  new \DateTimeZone('UTC');
 		$this->timeZone = $timeZone ? $timeZone : $this->timeZoneUTC;
@@ -57,6 +59,12 @@ class ICalParserEvent
 			$this->deleted = true;
 		} else if ($keyword == 'STATUS' && $value == 'CANCELLED') {
 			$this->deleted = true;
+		} else if ($keyword == 'RRULE') {
+			$this->ical_rrule_1 = array();
+			foreach(explode(";", $value) as $rrule) {
+				list($k, $v) = explode("=",$rrule,2);
+				$this->ical_rrule_1[strtoupper($k)] = $v;
+			}
 		}
 	}
 	
@@ -143,6 +151,16 @@ class ICalParserEvent
 	public function isDeleted() {
 		return $this->deleted;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIcalRrule1()
+	{
+		return $this->ical_rrule_1;
+	}
+
+
 	
 }
 

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "0bd2a51e63fc1d8b4ceb9204d2efeb93",
+    "hash": "829f737665efb541577f4e9176040f37",
     "packages": [
         {
             "name": "facebook/php-sdk-v4",
@@ -135,6 +135,49 @@
                 "time"
             ],
             "time": "2014-02-19 21:45:55"
+        },
+        {
+            "name": "jmbtechnologylimited/rruleunravel",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JMB-Technology-Limited/RRuleUnravel.git",
+                "reference": "e34b6a5745e5d09742f33f013490a6e46fdc1e2b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/e34b6a5745e5d09742f33f013490a6e46fdc1e2b",
+                "reference": "e34b6a5745e5d09742f33f013490a6e46fdc1e2b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JMBTechnologyLimited": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "James Baster",
+                    "email": "james@jarofgreen.co.uk",
+                    "homepage": "http://jamesbaster.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Unravels a ICAL RRULE. STILL IN DEVELOPMENT.",
+            "homepage": "https://github.com/JMB-Technology-Limited/RRuleUnravel",
+            "keywords": [
+                "ical",
+                "rrule"
+            ],
+            "time": "2014-12-09 16:56:23"
         },
         {
             "name": "monolog/monolog",
@@ -1562,20 +1605,10 @@
             "time": "2014-02-13 10:19:29"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "stability-flags": [],
+    "platform": [],
+    "platform-dev": []
 }

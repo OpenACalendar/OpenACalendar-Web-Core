@@ -27,7 +27,10 @@ class ImportedEventModel {
 	protected $is_deleted;
 	protected $url;
 	protected $ticket_url;
-		
+
+	protected $ics_rrule_1;
+
+
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
 		$this->import_url_id = $data['import_url_id'];
@@ -42,6 +45,9 @@ class ImportedEventModel {
 		$this->url = $data['url'];
 		$this->ticket_url = $data['ticket_url'];
 		$this->timezone = $data['timezone'];
+		if ($data['ics_rrule_1']) {
+			$this->ics_rrule_1 = get_object_vars(json_decode($data['ics_rrule_1']));
+		}
 	}
 	
 
@@ -153,6 +159,71 @@ class ImportedEventModel {
 	public function setTicketUrl($ticket_url) {
 		$this->ticket_url = $ticket_url;
 	}
+
+	/**
+	 * @param mixed $ics_rrule_1
+	 */
+	public function setIcsRrule1($ics_rrule_1)
+	{
+		$this->ics_rrule_1 = $ics_rrule_1;
+	}
+
+	/**
+	 * @param mixed $ics_rrule_1
+	 */
+	public function setIcsRrule1IfDifferent($ics_rrule_1)
+	{
+		if (is_null($this->ics_rrule_1)) {
+			$this->ics_rrule_1 = $ics_rrule_1;
+			return true;
+		}
+
+		if (count(array_keys($ics_rrule_1)) != count(array_keys($this->ics_rrule_1))) {
+			$this->ics_rrule_1 = $ics_rrule_1;
+			return true;
+		}
+
+		foreach($ics_rrule_1 as $k=>$v) {
+			if (!array_key_exists($k, $this->ics_rrule_1) || $this->ics_rrule_1[$k] != $ics_rrule_1[$k]) {
+				$this->ics_rrule_1 = $ics_rrule_1;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIcsRrule1()
+	{
+		return $this->ics_rrule_1;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIcsRrule1AsString()
+	{
+		if ($this->ics_rrule_1) {
+			$out = array();
+			foreach($this->ics_rrule_1 as $k=>$v) {
+				$out[] = $k."=".$v;
+			}
+			return implode(";", $out);
+		} else {
+			return "";
+		}
+	}
+
+	public function hasReoccurence() {
+		return (boolean)$this->ics_rrule_1;
+	}
+
+
+
+
 
 }
 

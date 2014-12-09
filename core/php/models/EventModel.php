@@ -149,7 +149,7 @@ class EventModel {
 		return $this->validateErrors ? false : true;
 	}
 	
-	public function setFromImportedEventModel(ImportedEventModel $importedEvent) {
+	public function setFromImportedEventModel(ImportedEventModel $importedEvent, $startAt = null, $endAt = null) {
 		$changesToSave = false;
 		if ($importedEvent->getTitle() != $this->getSummary()) {
 			$this->setSummary($importedEvent->getTitle());
@@ -159,12 +159,18 @@ class EventModel {
 			$this->setDescription($importedEvent->getDescription());
 			$changesToSave = true;
 		}
-		if (!$this->getStartAt() || $importedEvent->getStartAtInUTC()->getTimeStamp() != $this->getStartAtInUTC()->getTimeStamp()) {
-			$this->setStartAt(clone $importedEvent->getStartAt());
+		if (!$startAt) {
+			$startAt = $importedEvent->getStartAtInUTC();
+		}
+		if (!$this->getStartAt() || $startAt->getTimeStamp() != $this->getStartAtInUTC()->getTimeStamp()) {
+			$this->setStartAt(clone $startAt);
 			$changesToSave = true;
 		}
-		if (!$this->getEndAt() || $importedEvent->getEndAtInUTC()->getTimeStamp() != $this->getEndAtInUTC()->getTimeStamp()) {
-			$this->setEndAt(clone $importedEvent->getEndAt());
+		if (!$endAt) {
+			$endAt = $importedEvent->getEndAtInUTC();
+		}
+		if (!$this->getEndAt() || $endAt->getTimeStamp() != $this->getEndAtInUTC()->getTimeStamp()) {
+			$this->setEndAt(clone $endAt);
 			$changesToSave = true;
 		}
 		if ($importedEvent->getUrl() != $this->getUrl()) {

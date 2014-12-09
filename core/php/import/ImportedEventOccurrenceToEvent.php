@@ -1,13 +1,17 @@
 <?php
 
+
 namespace import;
 
 use models\ImportedEventModel;
+use models\ImportedEventOccurrenceModel;
 use models\SiteModel;
 use models\GroupModel;
 use models\CountryModel;
 use models\AreaModel;
 use models\EventModel;
+use repositories\builders\EventRepositoryBuilder;
+use repositories\EventRepository;
 use repositories\ImportedEventIsEventRepository;
 
 /**
@@ -18,7 +22,7 @@ use repositories\ImportedEventIsEventRepository;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ImportedEventsToEvents {
+class ImportedEventOccurrenceToEvent {
 
 	/** @var models\SiteModel **/
 	protected $site;
@@ -32,7 +36,6 @@ class ImportedEventsToEvents {
 	/** @var models\AreaModel **/
 	protected $area;
 
-	protected $importedEvents = array();
 
 	public function setFromImportURlRun(ImportURLRun $importURLRun) {
 		$this->site = $importURLRun->getSite();
@@ -41,32 +44,41 @@ class ImportedEventsToEvents {
 		$this->area = $importURLRun->getArea();
 	}
 
-	public function addImportedEvent(ImportedEventModel $importedEvent) {
-		$this->importedEvents[] = $importedEvent;
-	}
+	public function run(ImportedEventOccurrenceModel $importedEventOccurrenceModel) {
 
-	public function run() {
-		$eventRepo = new \repositories\EventRepository;
-		foreach($this->importedEvents as $importedEvent) {
-			$event = $this->loadEventForImportedEvent($importedEvent);
-			if ($event) {
-				// Set Existing Event From Import Event URL
-				if ($importedEvent->getIsDeleted()) {
-					if (!$event->getIsDeleted()) {
-						$eventRepo->delete($event);
-					}
-				} else {
-					if ($event->setFromImportedEventModel($importedEvent) || $event->getIsDeleted()) {
-						$event->setIsDeleted(false);
-						$eventRepo->edit($event);
-					}
+		$eventRepo = new EventRepository();
+
+		if ($importedEventOccurrenceModel->hasReoccurence()) {
+			// Have to load it looking for the right time to!
+			$event = $this->loadEventForImportedReoccurredEvent($importedEventOccurrenceModel);
+		} else {
+			// just load it.
+			$event = $this->loadEventForImportedEvent($importedEventOccurrenceModel);
+		}
+
+		if ($event) {
+			// Set Existing Event From Import Event URL
+			if ($importedEventOccurrenceModel->getIsDeleted()) {
+				if (!$event->getIsDeleted()) {
+					$eventRepo->delete($event);
+					return true;
 				}
 			} else {
-				// New Event From Import Event URL
-				$event = $this->newEventFromImportedEventModel($importedEvent);
-				$eventRepo->create($event, $this->site, null, $this->group, null, $importedEvent);
+				if ($event->setFromImportedEventModel($importedEventOccurrenceModel) || $event->getIsDeleted()) {
+					$event->setIsDeleted(false);
+					$eventRepo->edit($event);
+					return true;
+				}
 			}
+		} else {
+			// New Event From Import Event URL
+			$event = $this->newEventFromImportedEventModel($importedEventOccurrenceModel);
+			$eventRepo->create($event, $this->site, null, $this->group, null, $importedEventOccurrenceModel);
+			return true;
 		}
+
+		return false;
+
 	}
 
 	/** @var models\EventModel **/
@@ -94,10 +106,23 @@ class ImportedEventsToEvents {
 	}
 
 
-	protected function newEventFromImportedEventModel(ImportedEventModel $importedEvent) {
+	protected function loadEventForImportedReoccurredEvent(ImportedEventModel $importedEvent) {
+		$erb = new EventRepositoryBuilder();
+		$erb->setImportedEvent($importedEvent);
+		foreach($erb->fetchAll() as $event) {
+			if (abs($event->getStartAt()->getTimestamp() - $importedEvent->getStartAt()->getTimestamp()) < 60*60 &&
+				abs($event->getEndAt()->getTimestamp() - $importedEvent->getEndAt()->getTimestamp()) < 60*60) {
+				return $event;
+			}
+		}
+		return null;
+	}
+
+
+	protected function newEventFromImportedEventModel(ImportedEventModel $importedEvent, $startAt = null, $endAt = null) {
 
 		$event = new EventModel();
-		$event->setFromImportedEventModel($importedEvent);
+		$event->setFromImportedEventModel($importedEvent, $startAt, $endAt);
 
 		if ($this->site->getIsFeaturePhysicalEvents() && !$this->site->getIsFeatureVirtualEvents()) {
 			$event->setIsPhysical(true);
@@ -145,4 +170,3 @@ class ImportedEventsToEvents {
 		return $event;
 	}
 }
-

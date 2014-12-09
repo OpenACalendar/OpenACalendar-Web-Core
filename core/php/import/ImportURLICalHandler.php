@@ -28,6 +28,16 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 	protected $icalParser;
 	
 
+	protected $new;
+	protected $existing;
+	protected $saved;
+	protected $inpast;
+	protected $tofarinfuture;
+	protected $notvalid;
+
+	protected $addUIDCounter;
+
+	protected $importedEventOccurrenceToEvent;
 
 	public function canHandle() {
 	
@@ -44,98 +54,114 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 	public function handle() {
 		global $CONFIG;
 		
-		$new = $existing = $saved = $inpast = $tofarinfuture = $notvalid = 0;
+		$this->new = $this->existing = $this->saved = $this->inpast = $this->tofarinfuture = $this->notvalid = 0;
 		
-		$addUIDCounter = 1;
-		
-		$importedEventRepo = new ImportedEventRepository();
-		
-		$importedEventsToEvents = new ImportedEventsToEvents();
-		$importedEventsToEvents->setFromImportURlRun($this->importURLRun);
+		$this->addUIDCounter = 1;
+
+		$this->importedEventOccurrenceToEvent = new ImportedEventOccurrenceToEvent();
+		$this->importedEventOccurrenceToEvent->setFromImportURlRun($this->importURLRun);
 		
 		foreach ($this->icalParser->getEvents() as $icalevent) {
 			if ($this->importURLRun->hasFlag(ImportURLRun::$FLAG_ADD_UIDS) && !$icalevent->getUid()) {
-				$icalevent->setUid("ADDEDBYIMPORTER".$addUIDCounter);
-				++$addUIDCounter;
+				$icalevent->setUid("ADDEDBYIMPORTER".$this->addUIDCounter);
+				++$this->addUIDCounter;
 			}
 
-			if ($icalevent->getStart() && $icalevent->getEnd() && $icalevent->getUid() && $icalevent->getStart()->getTimeStamp() <= $icalevent->getEnd()->getTimeStamp()) { 
-				if ($icalevent->getEnd()->getTimeStamp() < TimeSource::time()) {
-					$inpast++;
-				} else if ($icalevent->getStart()->getTimeStamp() > TimeSource::time()+$CONFIG->importURLAllowEventsSecondsIntoFuture) {
-					$tofarinfuture++;
-				} else {
-					//var_dump($icalevent);
-
-					
-					$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importURLRun->getImportURL()->getId() ,$icalevent->getUid());
-					
-					$changesToSave = false;
-					if (!$importedEvent) {
-						if (!$icalevent->isDeleted()) {
-							++$new;
-							$importedEvent = new ImportedEventModel();						
-							$importedEvent->setImportId($icalevent->getUid());
-							$importedEvent->setImportUrlId($this->importURLRun->getImportURL()->getId());
-							$this->setOurEventFromIcalEvent($importedEvent, $icalevent);							
-							$changesToSave = true;
-						}
-					} else {
-						++$existing;
-						if ($icalevent->isDeleted()) {
-							if (!$importedEvent->getIsDeleted()) {
-								$importedEvent->setIsDeleted(true);
-								$changesToSave = true;
-							}
-						} else {
-							$changesToSave = $this->setOurEventFromIcalEvent($importedEvent, $icalevent);
-							// if was deleted, undelete
-							if ($importedEvent->getIsDeleted()) {
-								$importedEvent->setIsDeleted(false);
-								$changesToSave = true;
-							}
-						}
-					}
-					if ($changesToSave && $saved < $this->limitToSaveOnEachRun) {
-						++$saved;
-						
-						if ($importedEvent->getId()) {
-							if ($importedEvent->getIsDeleted()) {
-								$importedEventRepo->delete($importedEvent);
-							} else {
-								$importedEventRepo->edit($importedEvent);
-							}
-						} else {
-							$importedEventRepo->create($importedEvent);
-						}
-						$importedEventsToEvents->addImportedEvent($importedEvent);
-						
-					}					
-				}
+			if ($icalevent->getStart() && $icalevent->getEnd() && $icalevent->getUid() && $icalevent->getStart()->getTimeStamp() <= $icalevent->getEnd()->getTimeStamp()) {
+				$this->processICalEvent($icalevent);
 			} else {
-				$notvalid++;
+				$this->notvalid++;
 			}
 		}
-				
-		// Now run the thing to make imported events real events!
-		$importedEventsToEvents->run();
-		
+
 		$iurlr = new ImportURLResultModel();
 		$iurlr->setIsSuccess(true);
-		$iurlr->setNewCount($new);
-		$iurlr->setExistingCount($existing);
-		$iurlr->setSavedCount($saved);
-		$iurlr->setInPastCount($inpast);
-		$iurlr->setToFarInFutureCount($tofarinfuture);
-		$iurlr->setNotValidCount($notvalid);
+		$iurlr->setNewCount($this->new);
+		$iurlr->setExistingCount($this->existing);
+		$iurlr->setSavedCount($this->saved);
+		$iurlr->setInPastCount($this->inpast);
+		$iurlr->setToFarInFutureCount($this->tofarinfuture);
+		$iurlr->setNotValidCount($this->notvalid);
 		$iurlr->setMessage("ICAL Feed found");
 		return $iurlr;	
+	}
+
+
+	protected function processICalEvent(ICalParserEvent $icalevent) {
+		global $CONFIG;
+
+		$importedEventRepo = new ImportedEventRepository();
+
+		$importedEventChangesToSave = false;
+		$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importURLRun->getImportURL()->getId() ,$icalevent->getUid());
+
+		if (!$importedEvent) {
+			if (!$icalevent->isDeleted()) {
+				$importedEvent = new ImportedEventModel();
+				$importedEvent->setImportId($icalevent->getUid());
+				$importedEvent->setImportUrlId($this->importURLRun->getImportURL()->getId());
+				$this->setOurEventFromIcalEvent($importedEvent, $icalevent);
+				$importedEventChangesToSave = true;
+			}
+		} else {
+			if ($icalevent->isDeleted()) {
+				if (!$importedEvent->getIsDeleted()) {
+					$importedEvent->setIsDeleted(true);
+					$importedEventChangesToSave = true;
+				}
+			} else {
+				$importedEventChangesToSave = $this->setOurEventFromIcalEvent($importedEvent, $icalevent);
+				// if was deleted, undelete
+				if ($importedEvent->getIsDeleted()) {
+					$importedEvent->setIsDeleted(false);
+					$importedEventChangesToSave = true;
+				}
+			}
+		}
+
+		$ietieo = new ImportedEventToImportedEventOccurrences($importedEvent);
+		foreach($ietieo->getImportedEventOccurrences() as $importedEventOccurrence) {
+
+			if ($importedEventOccurrence->getEndAt()->getTimeStamp() < TimeSource::time()) {
+				$this->inpast++;
+			} else if ($importedEventOccurrence->getStartAt()->getTimeStamp() > TimeSource::time()+$CONFIG->importURLAllowEventsSecondsIntoFuture) {
+				$this->tofarinfuture++;
+			} else if ($this->saved < $this->limitToSaveOnEachRun) {
+
+				// Imported Event
+				if ($importedEventChangesToSave) {
+					if ($importedEvent->getId()) {
+						if ($importedEvent->getIsDeleted()) {
+							$importedEventRepo->delete($importedEvent);
+						} else {
+							$importedEventRepo->edit($importedEvent);
+						}
+					} else {
+						$importedEventRepo->create($importedEvent);
+						// the ID will not be set until this point. So make sure we copy over the ID below just to be sure.
+					}
+					$importedEventChangesToSave = false;
+				}
+
+				// ... and the Imported Event Occurrence becomes a real event!
+				$importedEventOccurrence->setId($importedEvent->getId());
+				if ($this->importedEventOccurrenceToEvent->run($importedEventOccurrence)) {
+					$this->saved++;
+				}
+
+			}
+
+		}
 	}
 
 	protected function setOurEventFromIcalEvent(ImportedEventModel $importedEvent, ICalParserEvent $icalevent) {
 		$changesToSave = false;
 		if ($importedEvent->getDescription() != $icalevent->getDescription()) {
 			$importedEvent->setDescription($icalevent->getDescription());
+			$changesToSave = true;
+		}
+		if ($importedEvent->getTimezone() != $this->icalParser->getTimeZoneIdentifier()) {
+			$importedEvent->setTimezone($this->icalParser->getTimeZoneIdentifier());
 			$changesToSave = true;
 		}
 		if (!$importedEvent->getStartAt() || $importedEvent->getStartAt()->getTimeStamp() != $icalevent->getStart()->getTimeStamp()) {
@@ -156,6 +182,9 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 		}
 		if ($this->importURLRun->hasFlag(ImportURLRun::$FLAG_SET_TICKET_URL_AS_URL) && $importedEvent->getTicketUrl() != $icalevent->getUrl()) {
 			$importedEvent->setTicketUrl($icalevent->getUrl());
+			$changesToSave = true;
+		}
+		if ($icalevent->getIcalRrule1() && $importedEvent->setIcsRrule1IfDifferent($icalevent->getIcalRrule1())) {
 			$changesToSave = true;
 		}
 		return $changesToSave;

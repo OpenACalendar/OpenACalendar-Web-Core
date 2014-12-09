@@ -28,5 +28,6 @@
 		</a>
 	</div>
 	<p class="description">{{ importedEvent.description |  truncate(1000) | nl2br  | linkify }}</p>
+	{%  if importedEvent.hasReoccurence %}<p class="reoccur">This event reoccurs</p>{% endif %}
 	<div class="afterEventListing"></div>
 </li>

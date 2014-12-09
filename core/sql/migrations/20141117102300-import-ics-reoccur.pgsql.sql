@@ -1,0 +1,1 @@
+ALTER TABLE imported_event ADD ics_rrule_1 TEXT NULL;

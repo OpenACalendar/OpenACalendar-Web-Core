@@ -12,6 +12,7 @@
 		"monolog/monolog": ">=1.0.0",
 		"symfony/monolog-bridge": "~2.3",
 		"jmbtechnologylimited/parsedatetimerangestring":"1.0.*",
-		"facebook/php-sdk-v4" : "4.0.*"
+		"facebook/php-sdk-v4" : "4.0.*",
+		"jmbtechnologylimited/rruleunravel" : "0.1.0"
     }
 }

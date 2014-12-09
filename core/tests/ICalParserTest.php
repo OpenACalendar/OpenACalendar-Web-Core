@@ -48,8 +48,34 @@ class ICalParserTest  extends \PHPUnit_Framework_TestCase {
 		$event = $events[0];
 		$this->assertEquals($output, $event->getDescription());
 	}
-	
-	
-	
+
+
+
+
+	function dataForTestRRule() {
+		return array(
+			array('IcalParserRRule1.ics',array("FREQ"=>"WEEKLY","BYDAY"=>"WE")),
+			array('IcalParserRRule2.ics',array("FREQ"=>"WEEKLY","BYDAY"=>"TH","COUNT"=>5)),
+		);
+	}
+
+	/**
+	 * @dataProvider dataForTestRRule
+	 */
+	function testRRule ($filename, $rrule) {
+		$parser = new ICalParser();
+		$this->assertTrue($parser->parseFromFile(dirname(__FILE__)."/data/".$filename));
+		$events = $parser->getEvents();
+		$this->assertEquals(1, count($events));
+		$event = $events[0];
+		$eventRRule = $event->getIcalRrule1();
+		$this->assertEquals(count(array_keys($rrule)), count(array_keys($eventRRule)));
+		foreach($rrule as $k=>$v) {
+			$this->assertEquals($v, $eventRRule[$k]);
+		}
+	}
+
+
+
 }
 

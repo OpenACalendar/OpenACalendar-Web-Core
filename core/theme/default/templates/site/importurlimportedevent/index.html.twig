@@ -41,13 +41,28 @@
 
 
 		<div class="dateAndLocationWrapper">
-			{% if currentTimeZone == importedEvent.timezone %}
-				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+			{% if  importedEvent.timezone %}
+				{% if currentTimeZone == importedEvent.timezone %}
+					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+				{% else %}
+					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':importedEvent.timezone, 'showTimeZone':true} %}
+					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+				{% endif %}
 			{% else %}
-				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':importedEvent.timezone, 'showTimeZone':true} %}
 				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
 			{% endif %}
 		</div>
+
+
+		{%  if importedEvent.hasReoccurence %}
+			 <div class="reoccur">
+				 This event reoccurs!
+				 {%  for key,value in importedEvent.getIcsRrule1  %}
+					 <p>{{  key }}: {{  value }}</p>
+				 {%  endfor %}
+			 </div>
+		{% endif %}
+
 
 
 		<div class="afterEventListing"></div>
