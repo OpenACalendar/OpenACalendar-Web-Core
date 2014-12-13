@@ -1,8 +1,8 @@
 <?php
 
 namespace import;
-use icalparser\ICalParser;
-use icalparser\ICalParserEvent;
+use JMBTechnologyLimited\ICalDissect\ICalParser;
+use JMBTechnologyLimited\ICalDissect\ICalEvent;
 use \TimeSource;
 use models\ImportedEventModel;
 use models\ImportURLResultModel;
@@ -87,7 +87,7 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 	}
 
 
-	protected function processICalEvent(ICalParserEvent $icalevent) {
+	protected function processICalEvent(ICalEvent $icalevent) {
 		global $CONFIG;
 
 		$importedEventRepo = new ImportedEventRepository();
@@ -154,7 +154,7 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 		}
 	}
 
-	protected function setOurEventFromIcalEvent(ImportedEventModel $importedEvent, ICalParserEvent $icalevent) {
+	protected function setOurEventFromIcalEvent(ImportedEventModel $importedEvent, ICalEvent $icalevent) {
 		$changesToSave = false;
 		if ($importedEvent->getDescription() != $icalevent->getDescription()) {
 			$importedEvent->setDescription($icalevent->getDescription());
@@ -184,7 +184,7 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 			$importedEvent->setTicketUrl($icalevent->getUrl());
 			$changesToSave = true;
 		}
-		if ($icalevent->getIcalRrule1() && $importedEvent->setIcsRrule1IfDifferent($icalevent->getIcalRrule1())) {
+		if ($icalevent->getRRuleCount() > 0 && $importedEvent->setIcsRrule1IfDifferent($icalevent->getRRule(0))) {
 			$changesToSave = true;
 		}
 		return $changesToSave;

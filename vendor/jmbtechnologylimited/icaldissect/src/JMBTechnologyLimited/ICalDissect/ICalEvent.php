@@ -1,15 +1,15 @@
 <?php
-namespace icalparser;
+namespace JMBTechnologyLimited\ICalDissect;
 
 
 /**
- * @package Core
- * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
- * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ *
+ * @link https://github.com/JMB-Technology-Limited/ICalDissect
+ * @license https://raw.github.com/JMB-Technology-Limited/ICalDissect/master/LICENSE.txt 3-clause BSD
+ * @copyright (c) 2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ICalParserEvent
+class ICalEvent
 {
 
 	protected $timeZone;
@@ -33,7 +33,7 @@ class ICalParserEvent
 
 	protected $url;
 
-	protected $ical_rrule_1;
+	protected $ical_rrules;
 
 	public function __construct(\DateTimeZone $timeZone = null) {
 		$this->timeZoneUTC =  new \DateTimeZone('UTC');
@@ -60,11 +60,12 @@ class ICalParserEvent
 		} else if ($keyword == 'STATUS' && $value == 'CANCELLED') {
 			$this->deleted = true;
 		} else if ($keyword == 'RRULE') {
-			$this->ical_rrule_1 = array();
-			foreach(explode(";", $value) as $rrule) {
-				list($k, $v) = explode("=",$rrule,2);
-				$this->ical_rrule_1[strtoupper($k)] = $v;
+			$rrule = array();
+			foreach(explode(";", $value) as $rruleBit) {
+				list($k, $v) = explode("=",$rruleBit,2);
+				$rrule[strtoupper($k)] = $v;
 			}
+			$this->ical_rrules[] = $rrule;
 		}
 	}
 	
@@ -155,12 +156,26 @@ class ICalParserEvent
 	/**
 	 * @return mixed
 	 */
-	public function getIcalRrule1()
+	public function getRRules()
 	{
-		return $this->ical_rrule_1;
+		return $this->ical_rrules;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getRRule($position)
+	{
+		return $this->ical_rrules[$position];
+	}
 
-	
+	/**
+	 * @return integer
+	 */
+	public function getRRuleCount()
+	{
+		return count($this->ical_rrules);
+	}
+
 }
 

@@ -1,26 +1,25 @@
 <?php
 
-namespace icalparser;
+namespace JMBTechnologyLimited\ICalDissect;
 
 /**
- * This is the iCal-class
  *
- * @package Core
- * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
- * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @link https://github.com/JMB-Technology-Limited/ICalDissect
+ * @license https://raw.github.com/JMB-Technology-Limited/ICalDissect/master/LICENSE.txt 3-clause BSD
+ * @copyright (c) 2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
+
 class ICalParser
 {
  
-	/** @var ICalParserTimeZone **/
+	/** @var ICalTimeZone **/
 	protected $timezone;
 	
 	protected $events = array();
 	
 	public function __construct() {
-		$this->timezone = new ICalParserTimeZone();
+		$this->timezone = new ICalTimeZone();
 	}
 	
     /**
@@ -47,7 +46,7 @@ class ICalParser
 			$linesCompacted = array();
 			foreach($lines as $line) {
 				if (substr($line,0,1) == ' ') {
-					$linesCompacted[count($linesCompacted)-1] .= trim($line);
+					$linesCompacted[count($linesCompacted)-1] .= substr($line, 1);
 				} else {
 					$linesCompacted[] = trim($line);
 				}
@@ -78,7 +77,7 @@ class ICalParser
 				if ($line['KEYWORD'] == 'BEGIN') {
 					$stack[] = $line['VALUE'];
 					if ($line['VALUE'] == 'VEVENT') {
-						$this->events[] = new ICalParserEvent($this->timezone->getTimeZone());
+						$this->events[] = new ICalEvent($this->timezone->getTimeZone());
 					}
 				} else if ($line['KEYWORD'] == 'END') {
 					// TODO check VALUE and last stack match

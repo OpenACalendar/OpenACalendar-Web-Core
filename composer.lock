@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "829f737665efb541577f4e9176040f37",
+    "hash": "6ecca291469314f4498a529cbaaebfda",
     "packages": [
         {
             "name": "facebook/php-sdk-v4",
@@ -92,6 +93,48 @@
                 "password"
             ],
             "time": "2013-04-30 19:58:08"
+        },
+        {
+            "name": "jmbtechnologylimited/icaldissect",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JMB-Technology-Limited/ICalDissect.git",
+                "reference": "bb2cfa89bf474cb3f56f21e2da0222f047fd1b51"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/bb2cfa89bf474cb3f56f21e2da0222f047fd1b51",
+                "reference": "bb2cfa89bf474cb3f56f21e2da0222f047fd1b51",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JMBTechnologyLimited": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "James Baster",
+                    "email": "james@jarofgreen.co.uk",
+                    "homepage": "http://jamesbaster.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Parses a ICAL file.",
+            "homepage": "https://github.com/JMB-Technology-Limited/ICalDissect",
+            "keywords": [
+                "ical"
+            ],
+            "time": "2014-12-13 20:33:31"
         },
         {
             "name": "jmbtechnologylimited/parsedatetimerangestring",
@@ -1609,6 +1652,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
+    "prefer-stable": false,
     "platform": [],
     "platform-dev": []
 }

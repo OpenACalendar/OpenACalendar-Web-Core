@@ -1653,5 +1653,49 @@
             "ical",
             "rrule"
         ]
+    },
+    {
+        "name": "jmbtechnologylimited/icaldissect",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/JMB-Technology-Limited/ICalDissect.git",
+            "reference": "bb2cfa89bf474cb3f56f21e2da0222f047fd1b51"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/bb2cfa89bf474cb3f56f21e2da0222f047fd1b51",
+            "reference": "bb2cfa89bf474cb3f56f21e2da0222f047fd1b51",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2014-12-13 20:33:31",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "JMBTechnologyLimited": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD"
+        ],
+        "authors": [
+            {
+                "name": "James Baster",
+                "email": "james@jarofgreen.co.uk",
+                "homepage": "http://jamesbaster.co.uk",
+                "role": "Developer"
+            }
+        ],
+        "description": "Parses a ICAL file.",
+        "homepage": "https://github.com/JMB-Technology-Limited/ICalDissect",
+        "keywords": [
+            "ical"
+        ]
     }
 ]
