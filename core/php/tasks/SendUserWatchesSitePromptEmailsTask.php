@@ -2,6 +2,8 @@
 
 namespace tasks;
 
+use repositories\UserHasNoEditorPermissionsInSiteRepository;
+use repositories\UserPermissionsRepository;
 use Silex\Application;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
@@ -36,6 +38,8 @@ class SendUserWatchesSitePromptEmailsTask {
 		$userWatchesSiteStopRepository = new UserWatchesSiteStopRepository();
 		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
 		$userNotificationRepo = new UserNotificationRepository();
+		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+		$userPermissionsRepo = new UserPermissionsRepository($app['extensions']);
 
 		/** @var usernotifications/UserWatchesSiteGroupPromptNotificationType **/
 		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSitePrompt');
@@ -45,11 +49,17 @@ class SendUserWatchesSitePromptEmailsTask {
 
 			$user = $userRepo->loadByID($userWatchesSite->getUserAccountId());
 			$site = $siteRepo->loadById($userWatchesSite->getSiteId());
+			// This is not the most efficient as it involves DB access and the results might not be used. But it'll do for now.
+			$userPermissions = $userPermissionsRepo->getPermissionsForUserInSite($user, $site, false, true);
 
 			if ($verbose) print date("c")." User ".$user->getEmail()." Site ".$site->getTitle()."\n";
 
 			if ($site->getIsClosedBySysAdmin()) {
 				if ($verbose) print " ... site is closed\n";
+			} else if ($userHasNoEditorPermissionsInSiteRepo->isUserInSite($user, $site)) {
+				if ($verbose) print " ... user does not have edit permissions allowed in site\n";
+			} else if (!$userPermissions->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
+				if ($verbose) print " ... user does not have org.openacalendar/CALENDAR_CHANGE permission in site\n";
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
 			} else if ($userWatchesSite->getIsWatching()) {
 

@@ -3,6 +3,8 @@
 namespace tasks;
 
 
+use repositories\UserHasNoEditorPermissionsInSiteRepository;
+use repositories\UserPermissionsRepository;
 use Silex\Application;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
@@ -41,6 +43,8 @@ class SendUserWatchesGroupPromptEmailsTask {
 		$userWatchesGroupStopRepository = new UserWatchesGroupStopRepository();
 		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
 		$userNotificationRepo = new UserNotificationRepository();
+		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+		$userPermissionsRepo = new UserPermissionsRepository($app['extensions']);
 
 		/** @var usernotifications/UserWatchesGroupPromptNotificationType **/
 		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesGroupPrompt');
@@ -51,6 +55,8 @@ class SendUserWatchesGroupPromptEmailsTask {
 			$user = $userRepo->loadByID($userWatchesGroup->getUserAccountId());
 			$group = $groupRepo->loadById($userWatchesGroup->getGroupId());
 			$site = $siteRepo->loadById($group->getSiteID());
+			// This is not the most efficient as it involves DB access and the results might not be used. But it'll do for now.
+			$userPermissions = $userPermissionsRepo->getPermissionsForUserInSite($user, $site, false, true);
 
 			if ($verbose) print date("c")." User ".$user->getEmail()." Site ".$site->getTitle()." Group ".$group->getTitle()."\n";
 
@@ -60,6 +66,10 @@ class SendUserWatchesGroupPromptEmailsTask {
 				if ($verbose) print " ... site is closed\n";
 			} else if ($group->getIsDeleted()) {
 				if ($verbose) print " ... group is deleted\n";
+			} else if ($userHasNoEditorPermissionsInSiteRepo->isUserInSite($user, $site)) {
+				if ($verbose) print " ... user does not have edit permissions allowed in site\n";
+			} else if (!$userPermissions->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
+				if ($verbose) print " ... user does not have org.openacalendar/CALENDAR_CHANGE permission in site\n";
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
 			} else if ($userWatchesGroup->getIsWatching()) {
 
