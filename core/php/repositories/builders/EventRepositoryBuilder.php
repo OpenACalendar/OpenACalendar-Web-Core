@@ -326,9 +326,9 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		if ($this->curatedList) {
 			$this->joins[] = " LEFT JOIN event_in_curated_list ON event_in_curated_list.event_id = event_information.id ".
 				" AND event_in_curated_list.removed_at IS NULL AND event_in_curated_list.curated_list_id = :curated_list";
-			$this->joins[] =  " LEFT JOIN  ( SELECT event_in_group.event_id, MAX(event_in_group.event_id) AS group_id".
+			$this->joins[] =  " LEFT JOIN  ( SELECT event_in_group.event_id, MAX(event_in_group.group_id) AS group_id".
 				" FROM event_in_group ".
-				" JOIN group_in_curated_list ON group_in_curated_list.group_id = event_in_group.event_id ".
+				" JOIN group_in_curated_list ON group_in_curated_list.group_id = event_in_group.group_id ".
 				" WHERE group_in_curated_list.curated_list_id = :curated_list AND group_in_curated_list.removed_at IS NULL AND event_in_group.removed_at IS NULL ".
 				" GROUP BY event_in_group.event_id ".
 				") AS event_in_group_in_curated_list ON event_in_group_in_curated_list.event_id = event_information.id ";

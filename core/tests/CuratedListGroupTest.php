@@ -359,9 +359,9 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
 		$eventWithInfo = $events[0];
-		$this->assertEquals($group1->getId(), $eventWithInfo->getInCuratedListGroupId());
-		$this->assertEquals($group1->getSlug(), $eventWithInfo->getInCuratedListGroupSlug());
-		$this->assertEquals($group1->getTitle(), $eventWithInfo->getInCuratedListGroupTitle());
+		$this->assertEquals($group2->getId(), $eventWithInfo->getInCuratedListGroupId());
+		$this->assertEquals($group2->getSlug(), $eventWithInfo->getInCuratedListGroupSlug());
+		$this->assertEquals($group2->getTitle(), $eventWithInfo->getInCuratedListGroupTitle());
 		$this->assertFalse($eventWithInfo->getIsEventInCuratedList());
 
 
