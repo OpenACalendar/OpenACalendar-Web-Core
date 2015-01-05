@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS api2_application_request_token CASCADE;
 DROP TABLE IF EXISTS user_in_api2_application_information CASCADE;
 DROP TABLE IF EXISTS newsletter_information CASCADE;
 DROP TABLE IF EXISTS newsletter_to_user CASCADE;
+DROP TABLE IF EXISTS media_history CASCADE;
 DROP TABLE IF EXISTS media_in_group CASCADE;
 DROP TABLE IF EXISTS media_in_event CASCADE;
 DROP TABLE IF EXISTS media_in_venue CASCADE;

@@ -72,7 +72,21 @@ class MediaRepository {
 				));
 			$data = $stat->fetch();
 			$media->setId($data['id']);
-			
+
+			$stat = $DB->prepare("INSERT INTO media_history (media_id,title,title_changed,source_text,source_text_changed,source_url,source_url_changed,user_account_id,created_at) ".
+				"VALUES (:media_id,:title,:title_changed,:source_text,:source_text_changed,:source_url,:source_url_changed,:user_account_id,:created_at)");
+			$stat->execute(array(
+				'media_id'=>$media->getId(),
+				'title'=>substr($media->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'title_changed'=>1,
+				'source_text'=>substr($media->getSourceText(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'source_text_changed'=>1,
+				'source_url'=>substr($media->getSourceUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'source_url_changed'=>1,
+				'user_account_id'=>$owner->getId(),
+				'created_at'=>$createdat,
+			));
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
