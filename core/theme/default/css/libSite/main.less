@@ -614,11 +614,30 @@ ul.newRecuringEvents li.newRecuringEvent {
 	max-width: 600px;
 	padding: 10px;
 	background: @colourLighter1;
-	.title {
+	.wrapperTitle {
 		font-weight: bold;
+		font-size: 1.1em;
+		padding-bottom: 5px;
 	}
-	form {
-		display: inline;
+	ul.curatedlists {
+		li.curatedlist {
+			border-bottom: 0px;
+			padding-bottom: 5px;
+			.title {
+				font-style: normal;
+				font-weight: normal;
+				font-size: 1.0em;
+				display: inline;
+			}
+			.addedViaGroup {
+				display: inline;
+				font-style: italic;
+			}
+			form {
+				display: inline;
+			}
+
+		}
 	}
 }
 

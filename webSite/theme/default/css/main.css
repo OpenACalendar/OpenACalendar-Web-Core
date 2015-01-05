@@ -1353,10 +1353,26 @@ ul.newRecuringEvents li.newRecuringEvent .date {
   padding: 10px;
   background: #36C036;
 }
-#curatedListsOnEventWrapper .title {
+#curatedListsOnEventWrapper .wrapperTitle {
   font-weight: bold;
+  font-size: 1.1em;
+  padding-bottom: 5px;
 }
-#curatedListsOnEventWrapper form {
+#curatedListsOnEventWrapper ul.curatedlists li.curatedlist {
+  border-bottom: 0px;
+  padding-bottom: 5px;
+}
+#curatedListsOnEventWrapper ul.curatedlists li.curatedlist .title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.0em;
+  display: inline;
+}
+#curatedListsOnEventWrapper ul.curatedlists li.curatedlist .addedViaGroup {
+  display: inline;
+  font-style: italic;
+}
+#curatedListsOnEventWrapper ul.curatedlists li.curatedlist form {
   display: inline;
 }
 #userCanPushToChildAreaWrapper,

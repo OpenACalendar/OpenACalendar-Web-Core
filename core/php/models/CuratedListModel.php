@@ -26,6 +26,7 @@ class CuratedListModel {
 	/** secondary attributes **/
 	protected $is_event_in_list;
 	protected $is_group_in_list;
+	protected $event_in_list_via_group_id;
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
@@ -37,6 +38,7 @@ class CuratedListModel {
 		$this->created_at = new \DateTime($data['created_at'], $utc);	
 		$this->is_event_in_list = isset($data['is_event_in_list']) ? (boolean)$data['is_event_in_list'] : false;
 		$this->is_group_in_list = isset($data['is_group_in_list']) ? (boolean)$data['is_group_in_list'] : false;
+		$this->event_in_list_via_group_id = isset($data['event_in_list_via_group_id']) ? $data['event_in_list_via_group_id'] : null;
 		$this->is_deleted = $data['is_deleted'];
 	}
 	
@@ -145,6 +147,24 @@ class CuratedListModel {
 	public function setIsDeleted($is_deleted) {
 		$this->is_deleted = $is_deleted;
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getEventInListViaGroupId()
+	{
+		return $this->event_in_list_via_group_id;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isEventInListViaGroup()
+	{
+		return $this->event_in_list_via_group_id != null;
+	}
+
+
 	
 }
 

@@ -268,12 +268,14 @@
 	
 	{% if curatedListsUserCanEdit and currentUserActions.has("org.openacalendar","curatedListGeneralEdit")  %}
 		<div id="curatedListsOnEventWrapper">
-			<span class="title">Curated Lists</span>
-			<ul>
+			<div class="wrapperTitle">Curated Lists</div>
+			<ul class="curatedlists">
 				{% for curatedlist in curatedListsUserCanEdit %}
-					<li>
-						{{ curatedlist.title }}
-						{% if curatedlist.isEventInlist %}
+					<li class="curatedlist">
+						<div class="title">{{ curatedlist.title }}</div>
+						{% if curatedlist.isEventInListViaGroup  %}
+							<div class="addedViaGroup">Added by a group</div>
+						{% elseif curatedlist.isEventInlist %}
 							<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
 								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 								<input type="hidden" name="returnTo" value="event">
