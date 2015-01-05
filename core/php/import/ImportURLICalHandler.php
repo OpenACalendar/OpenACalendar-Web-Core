@@ -3,6 +3,7 @@
 namespace import;
 use JMBTechnologyLimited\ICalDissect\ICalParser;
 use JMBTechnologyLimited\ICalDissect\ICalEvent;
+use repositories\EventRecurSetRepository;
 use \TimeSource;
 use models\ImportedEventModel;
 use models\ImportURLResultModel;
@@ -91,6 +92,7 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 		global $CONFIG;
 
 		$importedEventRepo = new ImportedEventRepository();
+		$eventRecurSetRepo = new EventRecurSetRepository();
 
 		$importedEventChangesToSave = false;
 		$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importURLRun->getImportURL()->getId() ,$icalevent->getUid());
@@ -120,6 +122,14 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 		}
 
 		$ietieo = new ImportedEventToImportedEventOccurrences($importedEvent);
+
+		if ($ietieo->getToMultiples()) {
+			$eventRecurSet = $importedEvent != null ? $eventRecurSetRepo->getForImportedEvent($importedEvent) : null;
+			$this->importedEventOccurrenceToEvent->setEventRecurSet($eventRecurSet, true);
+		} else {
+			$this->importedEventOccurrenceToEvent->setEventRecurSet(null, false);
+		}
+
 		foreach($ietieo->getImportedEventOccurrences() as $importedEventOccurrence) {
 
 			if ($importedEventOccurrence->getEndAt()->getTimeStamp() < TimeSource::time()) {

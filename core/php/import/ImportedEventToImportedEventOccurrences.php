@@ -20,6 +20,7 @@ class ImportedEventToImportedEventOccurrences {
 
 	protected $importedEventOccurrences = array();
 
+	protected $toMultiples;
 
 	function __construct(ImportedEventModel $importedEvent)
 	{
@@ -46,12 +47,16 @@ class ImportedEventToImportedEventOccurrences {
 				$this->importedEventOccurrences[] = $newImportedOccurrenceEvent;
 			}
 
+			$this->toMultiples = true;
+
 		} else {
 
 			// If not a reoccuring event, there will still be 1 occurence .....
 			$newImportedOccurrenceEvent = New ImportedEventOccurrenceModel();
 			$newImportedOccurrenceEvent->setFromImportedEventModel($importedEvent);
 			$this->importedEventOccurrences[] = $newImportedOccurrenceEvent;
+
+			$this->toMultiples = false;
 
 		}
 
@@ -64,5 +69,15 @@ class ImportedEventToImportedEventOccurrences {
 	{
 		return $this->importedEventOccurrences;
 	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getToMultiples()
+	{
+		return $this->toMultiples;
+	}
+
+
 
 }

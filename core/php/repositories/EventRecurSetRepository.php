@@ -7,6 +7,7 @@ namespace repositories;
 use models\EventModel;
 use models\EventHistoryModel;
 use models\EventRecurSetModel;
+use models\ImportedEventModel;
 use models\UserAccountModel;
 
 
@@ -82,8 +83,24 @@ class EventRecurSetRepository {
 			}
 		}
 	}
-	
-	
+
+	public function getForImportedEvent(ImportedEventModel $importedEventModel) {
+		global $DB;
+
+		$stat = $DB->prepare("SELECT event_recur_set.* FROM event_recur_set ".
+			" JOIN event_information ON event_information.event_recur_set_id = event_recur_set.id ".
+			" JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id ".
+			" WHERE imported_event_is_event.imported_event_id = :id");
+
+		$stat->execute(array( 'id'=>$importedEventModel->getId()));
+
+		if ($stat->rowCount() > 0) {
+			$ers = new EventRecurSetModel();
+			$ers->setFromDataBaseRow( $stat->fetch() );
+			return $ers;
+		}
+
+	}
 	
 }
 

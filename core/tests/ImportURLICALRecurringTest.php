@@ -100,34 +100,42 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$event = $events[0];
 		$this->assertEquals("2014-11-19T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-11-19T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$eventRecurSetID = $event->getEventRecurSetId();
 
 		$event = $events[1];
 		$this->assertEquals("2014-11-26T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-11-26T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[2];
 		$this->assertEquals("2014-12-03T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-12-03T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[3];
 		$this->assertEquals("2014-12-10T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-12-10T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[4];
 		$this->assertEquals("2014-12-17T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-12-17T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[5];
 		$this->assertEquals("2014-12-24T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-12-24T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[6];
 		$this->assertEquals("2014-12-31T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-12-31T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[7];
 		$this->assertEquals("2015-01-07T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-01-07T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 
 		// Now move time on
@@ -154,43 +162,53 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$event = $events[0];
 		$this->assertEquals("2014-12-31T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2014-12-31T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[1];
 		$this->assertEquals("2015-01-07T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-01-07T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		// ... these 8 were created on the second run
 		$event = $events[2];
 		$this->assertEquals("2015-01-14T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-01-14T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[3];
 		$this->assertEquals("2015-01-21T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-01-21T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[4];
 		$this->assertEquals("2015-01-28T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-01-28T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[5];
 		$this->assertEquals("2015-02-04T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-02-04T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[6];
 		$this->assertEquals("2015-02-11T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-02-11T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[7];
 		$this->assertEquals("2015-02-18T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-02-18T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[8];
 		$this->assertEquals("2015-02-25T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-02-25T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 		$event = $events[9];
 		$this->assertEquals("2015-03-04T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
 		$this->assertEquals("2015-03-04T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 
 	}

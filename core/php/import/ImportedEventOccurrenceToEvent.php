@@ -3,6 +3,7 @@
 
 namespace import;
 
+use models\EventRecurSetModel;
 use models\ImportedEventModel;
 use models\ImportedEventOccurrenceModel;
 use models\SiteModel;
@@ -11,6 +12,7 @@ use models\CountryModel;
 use models\AreaModel;
 use models\EventModel;
 use repositories\builders\EventRepositoryBuilder;
+use repositories\EventRecurSetRepository;
 use repositories\EventRepository;
 use repositories\ImportedEventIsEventRepository;
 
@@ -36,6 +38,10 @@ class ImportedEventOccurrenceToEvent {
 	/** @var models\AreaModel **/
 	protected $area;
 
+	/** @var models\EventRecurSetModel **/
+	protected $eventRecurSet;
+
+	protected $makeEventRecurSetIfNone = false;
 
 	public function setFromImportURlRun(ImportURLRun $importURLRun) {
 		$this->site = $importURLRun->getSite();
@@ -44,9 +50,15 @@ class ImportedEventOccurrenceToEvent {
 		$this->area = $importURLRun->getArea();
 	}
 
+	public function setEventRecurSet(EventRecurSetModel $eventRecurSet = null, $makeEventRecurSetIfNone = false) {
+		$this->eventRecurSet = $eventRecurSet;
+		$this->makeEventRecurSetIfNone = $makeEventRecurSetIfNone;
+	}
+
 	public function run(ImportedEventOccurrenceModel $importedEventOccurrenceModel) {
 
 		$eventRepo = new EventRepository();
+		$eventRecurSetRepo = new EventRecurSetRepository();
 
 		if ($importedEventOccurrenceModel->hasReoccurence()) {
 			// Have to load it looking for the right time to!
@@ -73,7 +85,13 @@ class ImportedEventOccurrenceToEvent {
 		} else {
 			// New Event From Import Event URL
 			$event = $this->newEventFromImportedEventModel($importedEventOccurrenceModel);
+			if ($this->eventRecurSet) {
+				$event->setEventRecurSetId($this->eventRecurSet->getId());
+			}
 			$eventRepo->create($event, $this->site, null, $this->group, null, $importedEventOccurrenceModel);
+			if (!$this->eventRecurSet && $this->makeEventRecurSetIfNone) {
+				$this->eventRecurSet = $eventRecurSetRepo->getForEvent($event);
+			}
 			return true;
 		}
 
