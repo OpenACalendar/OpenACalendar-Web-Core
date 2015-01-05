@@ -17,6 +17,7 @@
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>.</directory>
+            <directory>../../extension/CuratedLists/tests/</directory>
         </testsuite>
     </testsuites>
 

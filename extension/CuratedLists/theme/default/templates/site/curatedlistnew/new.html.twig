@@ -1,0 +1,31 @@
+{#
+ # @package org.openacalendar.curatedlists
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}New list - {% endblock %} 
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/curatedlist">curated list</a></li>
+{% endblock %}
+
+{% block content %}
+	
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_row(form.description) }}
+		{{ form_rest(form) }}
+
+		<input type="submit"  value="Save" />	
+	</form>
+
+{% endblock %}
+

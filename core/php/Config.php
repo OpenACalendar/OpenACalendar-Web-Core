@@ -138,7 +138,7 @@ class Config {
 	
 	public $siteSeenCookieStoreForDays = 30;
 
-	public $extensions = array();
+	public $extensions  = array('CuratedLists');
 	
 	public $mediaNormalSize = 500;
 	public $mediaThumbnailSize = 100;

@@ -66,3 +66,9 @@ $CONFIG->webCommonSessionDomain = "example.co.uk";
 //$CONFIG->fileStoreLocation= '/OpenACalendarFileStore';
 
 
+/**
+ * Extensions.
+ *
+ * It is currently strongly recommended to have 'CuratedLists' installed, Parts of the core code use this.
+ */
+$CONFIG->extensions = array('CuratedLists');

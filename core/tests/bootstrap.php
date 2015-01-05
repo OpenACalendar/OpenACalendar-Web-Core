@@ -42,7 +42,7 @@ function autoload($class) {
 }
 spl_autoload_register('autoload'); 
 
-
+global $CONFIG;
 $CONFIG = new Config();
 require __DIR__."/../../config.test.php";
 $CONFIG->isDebug = true;
@@ -54,6 +54,17 @@ $DB = new PDO('pgsql:host='.$CONFIG->databaseHost.';dbname='.$CONFIG->databaseNa
 $DB->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 $DB->exec("SET CLIENT_ENCODING TO 'utf8'");
 $DB->exec("SET NAMES 'utf8'");
+
+
+///////////////////////// Extensions
+$app = new Silex\Application();
+$app['debug'] = true;
+$app['extensions'] = new ExtensionManager($app);
+foreach($CONFIG->extensions as $extensionName) {
+	require APP_ROOT_DIR.'/extension/'.$extensionName.'/extension.php';
+}
+$app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
+$app['config'] = $CONFIG;
 
 
 function createKey($minLength = 10, $maxLength = 100) {

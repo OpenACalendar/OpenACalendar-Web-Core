@@ -81,17 +81,6 @@ $app->match('/api1/venue/{slug}/events.before.atom', "siteapi1\controllers\Venue
 		->assert('slug', FRIENDLY_SLUG_REGEX);
 
 
-$app->match('/api1/curatedlist/{slug}/events.ical', "siteapi1\controllers\CuratedListController::ical")
-		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.json', "siteapi1\controllers\CuratedListController::json")
-		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.jsonp', "siteapi1\controllers\CuratedListController::jsonp")
-		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.create.atom', "siteapi1\controllers\CuratedListController::atomCreate")
-		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.before.atom', "siteapi1\controllers\CuratedListController::atomBefore")
-		->assert('slug', FRIENDLY_SLUG_REGEX);
-
 $app->match('/api1/country/{slug}/events.ical', "siteapi1\controllers\CountryController::eventsIcal"); 
 $app->match('/api1/country/{slug}/events.json', "siteapi1\controllers\CountryController::eventsJson"); 
 $app->match('/api1/country/{slug}/events.jsonp', "siteapi1\controllers\CountryController::eventsJsonp"); 
