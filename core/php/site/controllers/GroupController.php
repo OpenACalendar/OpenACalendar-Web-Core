@@ -73,7 +73,8 @@ class GroupController {
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupEditMedia",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$CONFIG->isFileStore()
+			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupNewEvent",
