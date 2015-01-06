@@ -4,6 +4,7 @@ namespace org\openacalendar\displayboard\site\controllers;
 
 use repositories\AreaRepository;
 use repositories\GroupRepository;
+use repositories\VenueRepository;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,16 +48,21 @@ class DisplayBoardController {
 
 		$areaRepository = new AreaRepository();
 		$groupRepository = new GroupRepository();
+		$venueRepository = new VenueRepository();
 
 		$this->paramaters['data'] = array();
+
+
 
 		for ($i = 0; $i <= self::$MAX_EVENT_QUERIES_ON_EVENT_BOARD; $i++) {
 			$area = isset($_GET['eventArea'.$i]) ? intval($_GET['eventArea'.$i]) : null;
 			$group = isset($_GET['eventGroup'.$i]) ? intval($_GET['eventGroup'.$i]) : null;
-			if ($area || $group) {
+			$venue = isset($_GET['eventVenue'.$i]) ? intval($_GET['eventVenue'.$i]) : null;
+			if ($area || $group || $venue) {
 				$queryData = array(
 						'area'=>null,
 						'group'=>null,
+						'venue'=>null,
 						'minorImportance'=>false,
 						'query'=>new EventRepositoryBuilder(),
 					);
@@ -77,6 +83,13 @@ class DisplayBoardController {
 						$queryData['query']->setGroup($groupObj);
 					}
 				}
+				if ($venue) {
+					$venueObj = $venueRepository->loadBySlug($app['currentSite'],$venue);
+					if ($venueObj) {
+						$queryData['venue'] = $venueObj;
+						$queryData['query']->setVenue($venueObj);
+					}
+				}
 				if (isset($_GET['eventMinorImportance'.$i]) && $_GET['eventMinorImportance'.$i] == 'yes') {
 					$queryData['minorImportance'] = true;
 				}
@@ -88,6 +101,7 @@ class DisplayBoardController {
 			$queryData = array(
 					'area'=>null,
 					'group'=>null,
+					'venue'=>null,
 					'minorImportance'=>false,
 					'query'=>new EventRepositoryBuilder(),
 				);

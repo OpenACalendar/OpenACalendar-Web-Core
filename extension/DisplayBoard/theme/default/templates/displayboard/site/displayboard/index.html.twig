@@ -30,16 +30,23 @@
 			{% for eventQuery in data %}
 				<li class="eventsFilter" style="border: 2px solid #999966;">
 					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
+						<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
 							<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}" style="width: 50px;">
 						</div>
 						<div class="after"></div>
 					</div>
 					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="daysAheadInNextBox">Group Filter:</label></div>
+						<div class="labelWrapper"><label for="eventGroup{{ idx }}">Group Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
 							<input type="text" value="{% if eventQuery.group %}{{ eventQuery.group.id }}{% endif %}" name="eventGroup{{ idx }}" style="width: 50px;">
+						</div>
+						<div class="after"></div>
+					</div>
+					<div class="rowWrapper">
+						<div class="labelWrapper"><label for="eventVenue{{ idx }}">Venue Filter:</label></div>
+						<div class="widgetWrapperPlacementOnly">
+							<input type="text" value="{% if eventQuery.venue %}{{ eventQuery.venue.id }}{% endif %}" name="eventVenue{{ idx }}" style="width: 50px;">
 						</div>
 						<div class="after"></div>
 					</div>
@@ -56,16 +63,23 @@
 			{% if idx < MAX_EVENT_QUERIES_ON_EVENT_BOARD %}
 				<li class="eventsFilter" style="border: 2px solid #999966;">
 					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="daysAheadInNextBox">Area Filter:</label></div>
+						<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
 							<input type="text" value="" name="eventArea{{ idx }}" style="width: 50px;">
 						</div>
 						<div class="after"></div>
 					</div>
 					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="daysAheadInNextBox">Group Filter:</label></div>
+						<div class="labelWrapper"><label for="groupArea{{ idx }}">Group Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
 							<input type="text" value="" name="groupArea{{ idx }}" style="width: 50px;">
+						</div>
+						<div class="after"></div>
+					</div>
+					<div class="rowWrapper">
+						<div class="labelWrapper"><label for="venueArea{{ idx }}">Venue Filter:</label></div>
+						<div class="widgetWrapperPlacementOnly">
+							<input type="text" value="" name="venueArea{{ idx }}" style="width: 50px;">
 						</div>
 						<div class="after"></div>
 					</div>
