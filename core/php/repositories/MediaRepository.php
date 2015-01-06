@@ -78,11 +78,11 @@ class MediaRepository {
 			$stat->execute(array(
 				'media_id'=>$media->getId(),
 				'title'=>substr($media->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'title_changed'=>1,
+				'title_changed'=>0,
 				'source_text'=>substr($media->getSourceText(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'source_text_changed'=>1,
+				'source_text_changed'=>0,
 				'source_url'=>substr($media->getSourceUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
-				'source_url_changed'=>1,
+				'source_url_changed'=>0,
 				'user_account_id'=>$owner->getId(),
 				'created_at'=>$createdat,
 			));
