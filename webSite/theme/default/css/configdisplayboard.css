@@ -1,0 +1,7 @@
+ul.eventsFilters li.eventsFilter {
+  margin: 5px 0;
+  border: 2px solid #999966;
+}
+ul.eventsFilters li.eventsFilter input[type="text"] {
+  width: 50%;
+}

@@ -12,6 +12,7 @@
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/displayboard/" />
 	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	<link rel="stylesheet" type="text/css" href="/theme/default/css/configdisplayboard.css?v={{ config.assetsVersion }}">
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -28,25 +29,25 @@
 		<ul class="eventsFilters">
 			{% set idx = 0 %}
 			{% for eventQuery in data %}
-				<li class="eventsFilter" style="border: 2px solid #999966;">
+				<li class="eventsFilter">
 					<div class="rowWrapper">
 						<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}" style="width: 50px;">
+							<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}">
 						</div>
 						<div class="after"></div>
 					</div>
 					<div class="rowWrapper">
 						<div class="labelWrapper"><label for="eventGroup{{ idx }}">Group Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="{% if eventQuery.group %}{{ eventQuery.group.id }}{% endif %}" name="eventGroup{{ idx }}" style="width: 50px;">
+							<input type="text" value="{% if eventQuery.group %}{{ eventQuery.group.id }}{% endif %}" name="eventGroup{{ idx }}">
 						</div>
 						<div class="after"></div>
 					</div>
 					<div class="rowWrapper">
 						<div class="labelWrapper"><label for="eventVenue{{ idx }}">Venue Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="{% if eventQuery.venue %}{{ eventQuery.venue.id }}{% endif %}" name="eventVenue{{ idx }}" style="width: 50px;">
+							<input type="text" value="{% if eventQuery.venue %}{{ eventQuery.venue.id }}{% endif %}" name="eventVenue{{ idx }}">
 						</div>
 						<div class="after"></div>
 					</div>
@@ -65,21 +66,21 @@
 					<div class="rowWrapper">
 						<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="" name="eventArea{{ idx }}" style="width: 50px;">
+							<input type="text" value="" name="eventArea{{ idx }}">
 						</div>
 						<div class="after"></div>
 					</div>
 					<div class="rowWrapper">
 						<div class="labelWrapper"><label for="groupArea{{ idx }}">Group Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="" name="groupArea{{ idx }}" style="width: 50px;">
+							<input type="text" value="" name="groupArea{{ idx }}">
 						</div>
 						<div class="after"></div>
 					</div>
 					<div class="rowWrapper">
 						<div class="labelWrapper"><label for="venueArea{{ idx }}">Venue Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="" name="venueArea{{ idx }}" style="width: 50px;">
+							<input type="text" value="" name="venueArea{{ idx }}">
 						</div>
 						<div class="after"></div>
 					</div>
