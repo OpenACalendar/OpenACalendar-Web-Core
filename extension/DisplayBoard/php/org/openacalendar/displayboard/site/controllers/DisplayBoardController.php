@@ -55,9 +55,9 @@ class DisplayBoardController {
 
 
 		for ($i = 0; $i <= self::$MAX_EVENT_QUERIES_ON_EVENT_BOARD; $i++) {
-			$area = isset($_GET['eventArea'.$i]) ? intval($_GET['eventArea'.$i]) : null;
-			$group = isset($_GET['eventGroup'.$i]) ? intval($_GET['eventGroup'.$i]) : null;
-			$venue = isset($_GET['eventVenue'.$i]) ? intval($_GET['eventVenue'.$i]) : null;
+			$area = isset($_GET['eventArea'.$i]) ? $this->getIdFromPassedVariable($_GET['eventArea'.$i]) : null;
+			$group = isset($_GET['eventGroup'.$i]) ? $this->getIdFromPassedVariable($_GET['eventGroup'.$i]) : null;
+			$venue = isset($_GET['eventVenue'.$i]) ? $this->getIdFromPassedVariable($_GET['eventVenue'.$i]) : null;
 			if ($area || $group || $venue) {
 				$queryData = array(
 						'area'=>null,
@@ -175,6 +175,14 @@ class DisplayBoardController {
 		
 		
 		return $app['twig']->render('displayboard/site/displayboard/run.html.twig', $this->paramaters);
+	}
+
+	protected function getIdFromPassedVariable($var) {
+		if (strpos($var, "-")) {
+			$var = array_shift(explode("-", $var, 2));
+		}
+		return intval($var);
+
 	}
 
 }
