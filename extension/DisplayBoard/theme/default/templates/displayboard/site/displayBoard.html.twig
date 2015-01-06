@@ -42,6 +42,12 @@
 					{% block later %}{% endblock %}
 					<div class="afterDisplayBoardSegment"></div>
 				</div>
+				<form action="/displayboard" method="get">
+					{% for key, value in configParameters %}
+						<input type="hidden" name="{{ key|e('html_attr') }}" value="{{  value|e('html_attr') }}">
+					{% endfor %}
+					<input type="submit" value="Configure Board">
+				</form>
 			</div>
 			<div id="footer">
 				<p>Powered by <a href="http://ican.openacalendar.org/">OpenACalendar</a> - 

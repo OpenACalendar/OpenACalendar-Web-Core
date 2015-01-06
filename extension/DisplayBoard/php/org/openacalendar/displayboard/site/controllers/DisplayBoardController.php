@@ -32,18 +32,22 @@ class DisplayBoardController {
 			'showCharsOfDescription'=>0,
 			'refreshInMinutes'=>0,
 			'MAX_EVENT_QUERIES_ON_EVENT_BOARD'=>  self::$MAX_EVENT_QUERIES_ON_EVENT_BOARD,
+			'configParameters'=>array(),
 		);
 		
 		if (isset($_GET['daysAheadInNextBox']) && intval($_GET['daysAheadInNextBox']) >= 0){
 			$this->paramaters['daysAheadInNextBox'] = intval($_GET['daysAheadInNextBox']);
+			$this->paramaters['configParameters']['daysAheadInNextBox'] = $_GET['daysAheadInNextBox'];
 		}
 		
 		if (isset($_GET['showCharsOfDescription']) && intval($_GET['showCharsOfDescription']) >= 0){
 			$this->paramaters['showCharsOfDescription'] = intval($_GET['showCharsOfDescription']);
+			$this->paramaters['configParameters']['showCharsOfDescription'] = $_GET['showCharsOfDescription'];
 		}
 
 		if (isset($_GET['refreshInMinutes']) && intval($_GET['refreshInMinutes']) >= 0){
 			$this->paramaters['refreshInMinutes'] = intval($_GET['refreshInMinutes']);
+			$this->paramaters['configParameters']['refreshInMinutes'] = $_GET['refreshInMinutes'];
 		}
 
 		$areaRepository = new AreaRepository();
@@ -55,9 +59,21 @@ class DisplayBoardController {
 
 
 		for ($i = 0; $i <= self::$MAX_EVENT_QUERIES_ON_EVENT_BOARD; $i++) {
-			$area = isset($_GET['eventArea'.$i]) ? $this->getIdFromPassedVariable($_GET['eventArea'.$i]) : null;
-			$group = isset($_GET['eventGroup'.$i]) ? $this->getIdFromPassedVariable($_GET['eventGroup'.$i]) : null;
-			$venue = isset($_GET['eventVenue'.$i]) ? $this->getIdFromPassedVariable($_GET['eventVenue'.$i]) : null;
+			$area = null;
+			if (isset($_GET['eventArea'.$i])) {
+				$area = $this->getIdFromPassedVariable($_GET['eventArea'.$i]);
+				$this->paramaters['configParameters']['eventArea'.$i] = $_GET['eventArea'.$i];
+			}
+			$group = null;
+			if (isset($_GET['eventGroup'.$i])) {
+				$group = $this->getIdFromPassedVariable($_GET['eventGroup'.$i]);
+				$this->paramaters['configParameters']['eventGroup'.$i] = $_GET['eventGroup'.$i];
+			}
+			$venue = null;
+			if (isset($_GET['eventVenue'.$i])) {
+				$venue = $this->getIdFromPassedVariable($_GET['eventVenue'.$i]);
+				$this->paramaters['configParameters']['eventVenue'.$i] = $_GET['eventVenue'.$i];
+			}
 			if ($area || $group || $venue) {
 				$queryData = array(
 						'area'=>null,
@@ -92,6 +108,7 @@ class DisplayBoardController {
 				}
 				if (isset($_GET['eventMinorImportance'.$i]) && $_GET['eventMinorImportance'.$i] == 'yes') {
 					$queryData['minorImportance'] = true;
+					$this->paramaters['configParameters']['eventMinorImportance'.$i] = 'yes';
 				}
 				$this->paramaters['data'][] = $queryData;
 			}
