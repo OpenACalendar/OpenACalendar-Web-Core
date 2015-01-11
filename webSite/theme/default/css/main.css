@@ -2306,23 +2306,27 @@ div.mainShowEvent .GetTicket {
   color: #ec2327;
   text-decoration: none;
 }
-div.mainShowVenue .locationWrapper {
+div.mainShowVenue .locationWrapper,
+div.mainShowArea .locationWrapper {
   clear: both;
   padding: 10px 0 0 0;
   margin-top: 10px;
 }
-div.mainShowVenue .locationWrapper div.location {
+div.mainShowVenue .locationWrapper div.location,
+div.mainShowArea .locationWrapper div.location {
   display: block;
   color: #ec2327;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterLocationIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
-div.mainShowVenue .locationWrapper div.location a {
+div.mainShowVenue .locationWrapper div.location a,
+div.mainShowArea .locationWrapper div.location a {
   color: #ec2327;
   text-decoration: none;
 }
-div.mainShowVenue .map {
+div.mainShowVenue .map,
+div.mainShowArea .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
@@ -2333,12 +2337,6 @@ div.mainShowGroup p.description {
   margin: 0px 0px 10px 0px;
 }
 div.mainShowCountry .map {
-  margin: 10px 0;
-  clear: both;
-  width: 90%;
-  height: 200px;
-}
-div.mainShowArea .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
