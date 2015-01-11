@@ -162,6 +162,7 @@ class CurrentUserController {
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
+		$params->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		$params->set($_GET);
 		$events = $params->getEventRepositoryBuilder()->fetchAll();
 		

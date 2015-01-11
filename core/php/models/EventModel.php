@@ -36,6 +36,9 @@ class EventModel {
 	protected $is_virtual = false;
 	protected $is_physical = true;
 	protected $is_duplicate_of_id;
+	protected $media_event_slugs;
+	protected $media_group_slugs;
+	protected $media_venue_slugs;
 
 
 	/** @var DateTime **/
@@ -118,6 +121,9 @@ class EventModel {
 		$this->in_curated_list_group_id = isset($data['in_curated_list_group_id']) ? $data['in_curated_list_group_id'] : null;
 		$this->in_curated_list_group_slug = isset($data['in_curated_list_group_slug']) ? $data['in_curated_list_group_slug'] : null;
 		$this->in_curated_list_group_title = isset($data['in_curated_list_group_title']) ? $data['in_curated_list_group_title'] : null;
+		$this->media_event_slugs = isset($data['media_event_slugs']) ? $data['media_event_slugs'] : null;
+		$this->media_group_slugs = isset($data['media_group_slugs']) ? $data['media_group_slugs'] : null;
+		$this->media_venue_slugs = isset($data['media_venue_slugs']) ? $data['media_venue_slugs'] : null;
 	}
 	
 	public function setFromHistory(EventHistoryModel $ehm) {
@@ -540,6 +546,55 @@ class EventModel {
 	{
 		return $this->is_event_in_curated_list;
 	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasMediaSlugs()
+	{
+		return (bool)$this->media_event_slugs || (bool)$this->media_group_slugs || (bool)$this->media_venue_slugs;
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function getMediaSlugsAsList($maxCount = 1000)
+	{
+		$out = array();
+		if ($this->media_event_slugs) {
+			foreach(explode(",",$this->media_event_slugs) as $slug) {
+				if ($slug && !in_array($slug, $out)) {
+					$out[] = $slug;
+					if (count($out) == $maxCount) {
+						return $out;
+					}
+				}
+			}
+		}
+		if ($this->media_group_slugs) {
+			foreach(explode(",",$this->media_group_slugs) as $slug) {
+				if ($slug && !in_array($slug, $out)) {
+					$out[] = $slug;
+				}
+				if (count($out) == $maxCount) {
+					return $out;
+				}
+			}
+		}
+		if ($this->media_venue_slugs) {
+			foreach(explode(",",$this->media_venue_slugs) as $slug) {
+				if ($slug && !in_array($slug, $out)) {
+					$out[] = $slug;
+				}
+				if (count($out) == $maxCount) {
+					return $out;
+				}
+			}
+		}
+		return $out;
+	}
+
 
 
 	

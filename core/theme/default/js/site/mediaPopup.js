@@ -11,9 +11,9 @@ function showMediaPopup(mediaSlug) {
 	var thisMediaData = mediaData[i];
 	var div = $('#MediaPopup');
 	if (div.size() == 0) {
-		var html = '<div id="MediaPopup" class="PopupBox">';
-		html +=	'<div id="MediaPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
-		html += '<div id="MediaPopupContents" class="PopupBoxContent">'+html+'</div>';		
+		var html = '<div id="MediaPopup" class="popupBox">';
+		html +=	'<div id="MediaPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html += '<div id="MediaPopupContents" class="popupBoxContent">'+html+'</div>';
 		html += '</div>';
 		$('body').append(html);
 	}

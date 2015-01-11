@@ -44,7 +44,22 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->include_deleted = $value;
 	}
 
+
+	protected $includeMediasSlugs = false;
+
+	/**
+	 * @param boolean $includeMediasSlugs
+	 */
+	public function setIncludeMediasSlugs($includeMediasSlugs)
+	{
+		$this->includeMediasSlugs = $includeMediasSlugs;
+	}
+
+
+
 	protected function build() {
+
+		$this->select = array('group_information.*');
 
 		if ($this->site) {
 			$this->where[] =  " group_information.site_id = :site_id ";
@@ -67,6 +82,14 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		if (!$this->include_deleted) {
 			$this->where[] = " group_information.is_deleted = '0' ";
 		}
+
+		if ($this->includeMediasSlugs) {
+			$this->select[] = "  (SELECT  array_to_string(array_agg(media_information.slug), ',') FROM media_information ".
+				" JOIN media_in_group ON media_information.id = media_in_group.media_id ".
+				" WHERE media_information.deleted_at IS NULL AND media_information.is_file_lost='0' ".
+				" AND media_in_group.removal_approved_at IS NULL AND media_in_group.group_id = group_information.id ".
+				" GROUP BY group_information.id ) AS media_group_slugs ";
+		}
 	}
 	
 	protected function buildStat() {
@@ -74,7 +97,7 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		
 		
 		
-		$sql = "SELECT group_information.* FROM group_information ".
+		$sql = "SELECT ".  implode(",", $this->select)." FROM group_information ".
 				implode(" ",$this->joins).
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
 				" ORDER BY group_information.title ASC ";

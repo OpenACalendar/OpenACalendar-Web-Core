@@ -26,16 +26,7 @@
 
 
 	<div id="bodyLeft">
-		<div id="MapWrapper">
-			<div id="Map" class="leftColumnFullWidth"></div>
-			{% if currentSite.isFeatureMap %}
-				<p class="largerMapLink"><a href="/map">View larger map</a></p>
-			{% endif %}
-		</div>
-	</div>
-				
-	<div id="bodyRight">
-		<ul class="countries">
+		<ul class="mainListCountries">
 			{% for country in countries %}
 				<li class="country">
 					<div class="title"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
@@ -43,9 +34,20 @@
 			{% else %}
 				<li>
 					There are no countries.
-				</li>								
+				</li>
 			{% endfor %}
 		</ul>
+	</div>
+				
+	<div id="bodyRight">
+		<div id="MapWrapper">
+			<div id="Map" class="fullWidth"></div>
+			{% if currentSite.isFeatureMap %}
+				<ul class="actionList">
+					<li><a href="/map"><div class="iconEyeLarge"></div> View larger map</a></li>
+				</ul>
+			{% endif %}
+		</div>
 	</div>
 
 	<div id="afterPage2Col"></div>

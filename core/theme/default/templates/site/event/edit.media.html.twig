@@ -1,0 +1,81 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+{% block pageTitle %}Media of {{ event.summaryDisplay }} - {% endblock %}
+
+
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block tabMedia %}currentTab{% endblock %}
+
+{% block innerContent %}
+
+	<h3>Pictures</h3>
+
+	{% if medias %}
+		<ul class="mainListMedias">
+			{% for media in medias %}
+				<li class="media">
+					<div class="thumbnail">
+						<a href="/media/{{ media.slug }}"><img src="/media/{{ media.slug }}/thumbnail"></a>
+					</div>
+					<div class="title">{% if media.title %}{{ media.title }}{% else %}Picture{% endif %}</div>
+					<div class="source">Source: 
+						<a href="{% if media.sourceUrl %}{{ media.sourceUrl }}{% else %}/media/{{ media.slug }}/{% endif %}" target="_blank">
+							{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
+						</a>
+					</div>
+					{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
+						<form action="/event/{{ event.slugForUrl }}/edit/media/{{ media.slug }}/remove" method="post" onsubmit="return confirm('Are you sure you want to remove this?');">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="remove" value="yes">
+							<input type="submit" value="Remove this from this event">
+						</form>
+					{% endif %}
+					<div class="afterMediaListing"></div>
+				</li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<p>There are no pictures.</p>
+	{% endif %}
+
+	{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
+
+		<h3>Add new picture</h3>
+
+		{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
+		<form action="#" method="post"  {{ form_enctype(uploadNewMediaForm) }} class="styled"  novalidate="novalidate">
+
+			{{ form_errors(uploadNewMediaForm) }}
+
+			{{ form_row(uploadNewMediaForm.media) }}
+
+			{{ form_rest(uploadNewMediaForm) }}
+
+			<input type="submit"  value="Upload" />	
+
+		</form>
+		
+		<h3>Add existing picture</h3>
+
+				
+		<form action="/event/{{ event.slugForUrl }}/edit/media/add/existing" method="get" class="styled">
+
+			<input type="submit"  value="Search existing pictures" />	
+
+		</form>
+		
+	{% endif %}
+{% endblock %}
+
+

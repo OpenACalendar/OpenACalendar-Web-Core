@@ -51,14 +51,11 @@
 
 			{% include '/site/venueListFilterParams.html.twig' %}
 			
-			<ul class="venues">
+			<ul class="mainListVenues">
 				{% for venue in venues %}
-					<li class="venue">
-						<div class="title"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></div>
-						{{ venue.description | nl2br }}
-					</li>
+					{% include '/site/common/mainListVenue.html.twig' with {'venue':venue }  %}
 				{% else %}
-					<li>
+					<li class="nodata">
 						There are no venues.
 						{% if currentUserActions.has("org.openacalendar","venueNew") %}Why not <a href="/venue/new">add one</a>?{% endif %}
 					</li>								

@@ -62,7 +62,7 @@ if ($runCSS) {
 			if (is_dir($dir) && $handle = opendir($dir)) {
 				while (false !== ($entry = readdir($handle))) {
 					if ($entry != '.' && $entry != '..' && substr($entry, -5) == '.less') {
-						$cssFiles[$type][$entry] = $dir.$entry;
+						$cssFiles[$type][$entry] = realpath($dir.$entry);
 					}
 				}
 			}
@@ -81,7 +81,7 @@ if ($runCSS) {
 	foreach($CONFIG->extensions as $extension) {
 		$dir = APP_ROOT_DIR.'/extension/'.$extension.'/theme/default/css/';
 		if (is_dir($dir)) {
-			$cssFilterLess->addLoadPath($dir);
+			$cssFilterLess->addLoadPath(realpath($dir));
 		}
 	}
 	$cssFilterLess->addLoadPath(APP_ROOT_DIR.'/core/theme/default/css/');

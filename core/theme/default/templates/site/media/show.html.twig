@@ -22,53 +22,56 @@
 
 {% block content %}
 
-		
-	<h2>{% if media.title %}{{ media.title }}{% else %}Media{% endif %}</h2>
-		
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
-			<li class="tab currentTab"><a href="/media/{{ media.slug }}">Details</a></li>
-		</ul>
-		<div id="innerPage">
-		
-			<img src="/media/{{ media.slug }}/normal">
+	<div  class="mainShowMedia">
 
-			<p>
-				Size: 
-				{% set kilobyte = 1024 %}
-				{% set megabyte = kilobyte * 1024 %}
-				{% if media.storageSize < kilobyte %}
-					{{ bytmedia.storageSize ~ ' B' }}
-				{% elseif media.storageSize < megabyte %}
-					{{ (media.storageSize / kilobyte)|number_format(2, '.') ~ ' KB' }}
+		<h2>{% if media.title %}{{ media.title }}{% else %}Media{% endif %}</h2>
+
+		<div id="innerPageWrapper">
+			<ul id="innerPageActions">
+				<li class="tab currentTab"><a href="/media/{{ media.slug }}">Details</a></li>
+			</ul>
+			<div id="innerPage">
+
+				<img src="/media/{{ media.slug }}/normal">
+
+				<p>
+					Size:
+					{% set kilobyte = 1024 %}
+					{% set megabyte = kilobyte * 1024 %}
+					{% if media.storageSize < kilobyte %}
+						{{ bytmedia.storageSize ~ ' B' }}
+					{% elseif media.storageSize < megabyte %}
+						{{ (media.storageSize / kilobyte)|number_format(2, '.') ~ ' KB' }}
+					{% else %}
+						{{ (media.storageSize / megabyte)|number_format(2, '.') ~ ' MB' }}
+					{% endif %}
+				</p>
+
+				<p><a href="/media/{{ media.slug }}/full" target="_blank">View Full Size Image</a></p>
+
+				<p>
+					Source:
+					{% if media.sourceUrl %}<a href="{{ media.sourceUrl }}" target="_blank">{% endif %}
+						{% if media.sourceText %}{{ media.sourceText }}{% else %}not known{% endif%}
+					{% if media.sourceUrl %}</a>{% endif %}
+				</p>
+
+				{% if currentSite.logoMediaId == media.id %}
+					<p>This is being used as the logo for the calendar.</p>
 				{% else %}
-					{{ (media.storageSize / megabyte)|number_format(2, '.') ~ ' MB' }}
+					{% if currentUserActions.has("org.openacalendar","admin") %}
+						<form id="CountriesForm" action="" method="post" onsubmit="return confirm('Are you sure?');">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="action" value="makeSiteLogo">
+							<input type="submit" value="Make this the site logo">
+						</form>
+					{% endif %}
 				{% endif %}
-			</p>
 
-			<p><a href="/media/{{ media.slug }}/full" target="_blank">View Full Size Image</a></p>
-
-			<p>
-				Source:
-				{% if media.sourceUrl %}<a href="{{ media.sourceUrl }}" target="_blank">{% endif %}
-					{% if media.sourceText %}{{ media.sourceText }}{% else %}not known{% endif%}
-				{% if media.sourceUrl %}</a>{% endif %}
-			</p>
-
-			{% if currentSite.logoMediaId == media.id %}
-				<p>This is being used as the logo for the calendar.</p>
-			{% else %}
-				{% if currentUserActions.has("org.openacalendar","admin") %}
-					<form id="CountriesForm" action="" method="post" onsubmit="return confirm('Are you sure?');">
-						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-						<input type="hidden" name="action" value="makeSiteLogo">
-						<input type="submit" value="Make this the site logo">
-					</form>
-				{% endif %}
-			{% endif %}
-			
-			<div id="afterInnerPageContent"></div>
+				<div id="afterInnerPageContent"></div>
+			</div>
 		</div>
+
 	</div>
 		
 		

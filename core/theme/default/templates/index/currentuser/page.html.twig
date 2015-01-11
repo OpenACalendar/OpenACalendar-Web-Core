@@ -5,13 +5,21 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/admintag/page.html.twig' %}
+{% extends 'index/page.html.twig' %}
 
 
 
-{% block innerContent %}
+{% block content %}
 
-	<div id="innerPageLeft">{% block innerContentLeft %}{% endblock %}</div>
-	<div id="innerPageRight">{% block innerContentRight %}{% endblock %}</div>
+
+	<div id="innerPageWrapper">
+		<div id="innerPage">
+
+			{% block innerContent %}{% endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
 
 {% endblock %}

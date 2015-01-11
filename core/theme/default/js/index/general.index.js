@@ -9,8 +9,9 @@
 
 function showExportPopup() {
 	if ($('#ExportPopup').size() == 0) {
-		var html = '<div id="ExportPopup" class="PopupBox" style="display: none">';
-		html +=	'<div id="ExportPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		var html = '<div id="ExportPopup" class="popupBox" style="display: none">';
+		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+        html += '<div class="popupBoxContent">';
 		html += '<div id="ExportPopupIntroText">Export your data.';
 		if (exportData.hasOwnProperty("user")) {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportUserPublic" checked> the public calendar for '+exportData.user+' (events publically attending)</label>';
@@ -35,6 +36,7 @@ function showExportPopup() {
 		html += '<div class="content" id="ExportToICAL">';
 			html += '<p>For ical <a href="#" target="_blank" class="exportlink">click here</a>.</p>';
 		html += '</div>'
+		html += '</div>';
 		html += '</div>';
 		$('body').append(html);
 		div = $('#ExportPopup');

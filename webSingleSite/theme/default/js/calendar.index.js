@@ -7,14 +7,14 @@
 */
 function showEventPopup(data) {
 	if ($('#EventPopup').size() == 0) {
-		var html = '<div id="EventPopup" class="PopupBox" style="display: none;">';
-		html +=	'<div id="EventPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
-		html += '<div class="PopupBoxContent">';
-		html += '<div id="EventPopupContent" class="PopupBoxContent">';
+		var html = '<div id="EventPopup" class="popupBox" style="display: none;">';
+		html +=	'<div id="EventPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html += '<div class="popupBoxContent">';
+		html += '<div id="EventPopupContent">';
 		html += '</div>';
 		html += '<div id="EventPopupAttendanceContent">';
-		html += '</div>';				
-		html += '</div>';				
+		html += '</div>';
+		html += '</div>';
 		html += '</div>';
 		$('body').append(html);
 	}
@@ -74,9 +74,9 @@ function showEventPopup(data) {
 
 function showCurrentUserAttendanceForEvent(data) {
 	if ($('#EventAttendancePopup').size() == 0) {
-		var html = '<div id="EventAttendancePopup" class="PopupBox" style="display: none">';
-		html +=	'<div id="EventAttendancePopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
-		html += '<div id="EventAttendancePopupContent" class="PopupBoxContent">';
+		var html = '<div id="EventAttendancePopup" class="popupBox" style="display: none">';
+		html +=	'<div id="EventAttendancePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html += '<div id="EventAttendancePopupContent" class="popupBoxContent">';
 		html += '</div>';
 		html += '</div>';
 		$('body').append(html);

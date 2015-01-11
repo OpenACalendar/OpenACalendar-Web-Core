@@ -11,8 +11,9 @@ var atomBeforeDays = 3;
 
 function showExportPopup() {
 	if ($('#ExportPopup').size() == 0) {
-		var html = '<div id="ExportPopup" class="PopupBox" style="display: none">';
-		html +=	'<div id="ExportPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		var html = '<div id="ExportPopup" class="popupBox" style="display: none">';
+		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+        html += '<div class="popupBoxContent">';
 		html += '<div id="ExportPopupIntroText">Export your data.';
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label>';
@@ -81,6 +82,7 @@ function showExportPopup() {
 			html += '<p>(<a href="#" onclick="atomBeforeDaysDecrease(); return false">Minus a day</a>)</p>';
 			html += '<p>(<a href="#" onclick="atomBeforeDaysIncrease(); return false;">Plus a day</a>)</p>';
 		html += '</div>'
+		html += '</div>';
 		html += '</div>';
 		$('body').append(html);
 		div = $('#ExportPopup');
@@ -303,8 +305,8 @@ function showSharePopup() {
 		}	
 		
 		
-		var html = '<div id="SharePopup" class="PopupBox" style="display: none;">';
-		html +=	'<div id="SharePopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		var html = '<div id="SharePopup" class="popupBox" style="display: none;">';
+		html +=	'<div id="SharePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
 		
 		html += '<ul class="SharePopupOptions">'
 		

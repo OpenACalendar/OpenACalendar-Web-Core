@@ -13,21 +13,30 @@
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/" />
 	{% if not currentSite.isWebRobotsAllowed or group.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	<link rel="stylesheet" type="text/css" href="/theme/default/css/curatedlists.css?v={{ config.assetsVersion }}">
 {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
 
 {% block actions %}
-	{% if currentUserActions.has("org.openacalendar","groupEditDetails") %}
-		<li class="action">
+	{% if currentUserActions.has("org.openacalendar","groupEditDetails")
+		or currentUserActions.has("org.openacalendar","groupEditCuratedLists")
+		or currentUserActions.has("org.openacalendar","groupEditMedia") %}
+		<li class="actionWithSubMenu">
 			<a href="/group/{{ group.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
+			<ul class="submenu">
+				{%  if currentUserActions.has("org.openacalendar","groupEditDetails") %}
+					<li><a href="/group/{{ group.slugForUrl }}/edit/details">Edit Details</a></li>
+				{%  endif %}
+				{%  if currentUserActions.has("org.openacalendar","groupEditCuratedLists") %}
+					<li><a href="/group/{{ group.slugForUrl }}/edit/curatedlists">Edit Curated Lists</a></li>
+				{%  endif %}
+				{%  if currentUserActions.has("org.openacalendar","groupEditMedia") %}
+					<li><a href="/group/{{ group.slugForUrl }}/edit/media">Edit Media</a></li>
+				{%  endif %}
+			</ul>
 		</li>
 	{%  endif %}
-	{% if currentUserActions.has("org.openacalendar","groupEditMedia") %}
-		<li class="action">
-			<a href="/group/{{ group.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
-		</li>
-	{% endif %}
 	{%  if currentUserActions.has("org.openacalendar","groupNewEvent") %}
 		<li class="action">
 			<a href="/group/{{ group.slugForUrl }}/newevent"><div class="iconPencilSmall"></div> new event</a>
@@ -59,16 +68,12 @@
 
 {% block innerContent %}
 
-	<div class="event" itemscope itemtype="http://schema.org/Organization">
+	<div  class="mainShowGroup" itemscope itemtype="http://schema.org/Organization">
 		<meta itemprop="name" content="{{ group.title|e('html_attr') }}" />
 
-		<div id="innerPageLeft">
+		<div class="innerPageLeft">
 
-			<p itemprop="description">{{ group.description | nl2br  | linkify }}</p>
-
-			{% if group.twitterUsername %}<p>Follow: <a href="https://twitter.com/{{ group.twitterUsername }}">@{{ group.twitterUsername }}</a></p>{% endif %}
-			
-			{% if group.url %}<p>Website: <a href="{{ group.url }}" target="_blank">{{ group.url | linkinfo }}</a></p>{% endif %}
+			<p itemprop="description" class="description">{{ group.description | nl2br  | linkify }}</p>
 
 			{% if medias %}
 				<ul class="mediaGrid">
@@ -78,75 +83,87 @@
 				</ul>
 				<div class="afterMediaGrid"></div>
 			{% endif %}
-				
+
+
+
+		</div>
+
+		<div class="innerPageRight">
+
+			{% if group.url %}
+				<div class="innerPageRightLinkWrapper">
+					<div class="innerPageRightLinkHeader">More details</div>
+					<div class="innerPageRightLinkContent"><a href="{{ group.url }}" target="_blank">{{ group.url | linkinfo }}</a></div>
+				</div>
+			{% endif %}
+
+			{% if group.twitterUsername %}
+				<div class="innerPageRightLinkWrapper">
+					<div class="innerPageRightLinkHeader">On Twitter</div>
+					<div class="innerPageRightLinkContent"><a href="https://twitter.com/{{ group.twitterUsername }}" target="_blank">@{{ group.twitterUsername }}</a></div>
+				</div>
+			{% endif %}
+
 			{% if importurls %}
 				<ul class="actionList">
 					<li><p><a href="/group/{{ group.slugForUrl }}/importers"><div class="iconCloundDownloadSmall"></div> List importers</a></p></li>
 				</ul>
 			{% endif %}
-				
-			{% if isGroupRunningOutOfFutureEvents %}
-				<div class="isGroupRunningOutOfFutureEventsWarning">
-					<p>
-						Do you know of any more events for {{ group.title }}?
-						{% if isGroupRunningOutOfFutureEvents == 1 %}
-							We are about to run out of future events!
-						{% else %}
-							We don't know of any future events.
-						{% endif %}
-					</p>
-					<p>
-						You can <a href="/group/{{ group.slugForUrl }}/newevent">create a new event</a> or look for an old event and select "recur".
-					</p>
+
+			{%  if curatedLists|length > 0 %}
+				<div class="infoBoxWrapper">
+					<div class="infoBoxTitle">Is in Curated Lists</div>
+					<div class="infoBoxContent">
+						<ul class="infoBoxListCuratedLists">
+							{% for curatedList in curatedLists %}
+								<li class="curatedlist"><a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
 				</div>
-			{% endif %}
-
-
-			{% if curatedListsUserCanEdit and currentUserActions.has("org.openacalendar","curatedListGeneralEdit") %}
-				<div id="curatedListsOnEventWrapper">
-					<div class="wrapperTitle">Curated Lists</div>
-						<ul class="curatedlists">
-						{% for curatedlist in curatedListsUserCanEdit %}
-							<li class="curatedlist">
-								<div class="title">{{ curatedlist.title }}</div>
-								{% if curatedlist.isGroupInlist %}
-									<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ group.slug }}/remove" method="post">
-										<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-										<input type="hidden" name="returnTo" value="group">
-										<input type="submit" value="Remove">
-									</form>
-								{% else %}
-									<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ group.slug }}/add" method="post">
-										<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-										<input type="hidden" name="returnTo" value="group">
-										<input type="submit" value="Add">
-									</form>
-								{% endif %}
-							</li>
-						{% endfor %}
-					</ul>
-				</div>
-			{% endif %}
-
+			{%  endif %}
 
 		</div>
 
-		<div id="innerPageRight">
-			{% include '/site/eventListFilterParams.html.twig' %}
+		<div class="afterInnerPageContent"></div>
 
-			<ul class="events">
+		{% include '/site/eventListFilterParams.html.twig' %}
+
+		<ul class="mainListEvents">
+			{%  if events|length > 0 %}
 				{% for event in events %}
-					{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-				{% else %}
-					<li>
-						No events found.
-						{% if currentUserActions.has("org.openacalendar","groupNewEvent") %}Why not <a href="/group/{{ group.slugForUrl }}/newevent">add one</a>?{% endif %}
-					</li>		
+					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 				{% endfor %}
-			</ul>
+				{% if isGroupRunningOutOfFutureEvents and currentUserActions.has("org.openacalendar","groupNewEvent") %}
+					<li class="nodata">
+						<p>
+							Do you know of any more events for {{ group.title }}? We are about to run out of future events!
+						</p>
+						<p>
+							You can <a href="/group/{{ group.slugForUrl }}/newevent">create a new event</a> or look for an old event and select "recur".
+						</p>
+					</li>
+				{%  endif %}
+			{% else %}
+				<li class="nodata">
+					<p>No events found.</p>
+					{% if isGroupRunningOutOfFutureEvents and currentUserActions.has("org.openacalendar","groupNewEvent") %}
+						<p>
+							{% if isGroupRunningOutOfFutureEvents == 1 %}
+								We are about to run out of future events!
+							{% else %}
+								We don't know of any future events.
+							{% endif %}
+						</p>
+						<p>
+							You can <a href="/group/{{ group.slugForUrl }}/newevent">create a new event</a> or look for an old event and select "recur".
+						</p>
+					{% endif %}
+				</li>
+			{% endif %}
+		</ul>
 
-		</div>
-	
+
 	</div>
 {% endblock %}
 

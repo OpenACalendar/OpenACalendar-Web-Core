@@ -6,10 +6,10 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div id="header">
+	<div class="title">
+		<a href="/"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.siteTitle  }}</h1></a>
+	</div>
 	<ul class="menu">
-		<li class="title">
-			<a href="/"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.siteTitle  }}</h1></a>
-		</li>
 		{%  if actionCreateSite %}
 			<li><a href="{{ config.getWebIndexDomainSecure() }}/create">Create</a></li>
 		{% endif %}

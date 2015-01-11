@@ -701,11 +701,7 @@ form.styled .widgetWrapperPlacementOnly {
 }
 form.styled #Map {
   width: 50%;
-  height: 300px;
-}
-form.styled #Map.fullWidth {
-  width: 99%;
-  height: 300px;
+  height: 200px;
 }
 form.styled p.information {
   font-style: italic;
@@ -760,87 +756,158 @@ form.styled .actionWrapperBig input[type="submit"]:hover {
 .afterOneActionFormRight {
   clear: both;
 }
-#Map.leftColumnFullWidth {
+#Map.fullWidth {
   width: 99%;
   height: 400px;
 }
-#groupSummaryPanel {
-  padding: 10px;
-  float: right;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  background: #ccc;
-  text-align: right;
+.underTitleGroupListing {
+  padding: 5px 0;
 }
-ul.groups li.group {
+.underTitleGroupListing li {
+  display: inline;
+  font-style: italic;
+}
+.underTitleGroupListing li .title {
+  font-weight: bold;
+}
+ul.mainListGroups li.group {
+  margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
-ul.groups li.group,
+ul.mainListGroups li.nodata {
+  margin: 5px 5px;
+  font-style: italic;
+}
+@media screen and (min-width: 750px) {
+  ul.mainListGroups li.group,
+  ul.mainListGroups li.nodata {
+    margin: 5px 50px;
+  }
+}
+ul.mainListGroups li.group,
 div.group {
   min-height: 50px;
   padding: 5px 0 20px 0;
 }
-ul.groups li.group .title,
+ul.mainListGroups li.group .title,
 div.group .title {
   font-size: 1.1em;
   font-weight: bold;
   padding: 2px 0;
 }
-ul.groups li.group .title a,
+ul.mainListGroups li.group .title a,
 div.group .title a {
   color: #333;
   text-decoration: none;
 }
-ul.groups li.group .title a:hover,
+ul.mainListGroups li.group .title a:hover,
 div.group .title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.groups li.group .notfound,
+ul.mainListGroups li.group .media,
+div.group .media {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+  margin: 2px;
+}
+ul.mainListGroups li.group .media img,
+div.group .media img {
+  max-width: 100px;
+  max-height: 100px;
+}
+ul.mainListGroups li.group .notfound,
 div.group .notfound {
   text-align: center;
   font-style: italic;
 }
-ul.countries li.country {
+ul.mainListGroups li.group div.afterGroupListing,
+div.group div.afterGroupListing {
+  clear: both;
+}
+@media screen and (max-width: 750px) {
+  ul.mainListGroups li.group .media,
+  div.group .media {
+    display: none;
+  }
+}
+ul.mainListCountries li.country {
+  margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
-ul.countries li.country .title {
+ul.mainListCountries li.country .title {
   font-size: 1.1em;
   font-weight: bold;
   padding: 2px 0;
 }
-ul.countries li.country .title a {
+ul.mainListCountries li.country .title a {
   color: #333;
   text-decoration: none;
 }
-ul.countries li.country .title a:hover {
+ul.mainListCountries li.country .title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.venues li.venue {
+@media screen and (min-width: 750px) {
+  ul.mainListCountries li.country {
+    margin: 5px 50px;
+  }
+}
+ul.mainListVenues li.venue {
+  margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
-ul.venues li.venue .title {
+ul.mainListVenues li.venue .title {
   font-size: 1.1em;
   font-weight: bold;
   padding: 2px 0;
 }
-ul.venues li.venue .title a {
+ul.mainListVenues li.venue .title a {
   color: #333;
   text-decoration: none;
 }
-ul.venues li.venue .title a:hover {
+ul.mainListVenues li.venue .title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.venues li.information {
+ul.mainListVenues li.venue .media {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+  margin: 2px;
+}
+ul.mainListVenues li.venue .media img {
+  max-width: 100px;
+  max-height: 100px;
+}
+ul.mainListVenues li.venue .afterVenueListing {
+  clear: both;
+}
+ul.mainListVenues li.information {
   text-align: center;
   font-style: italic;
   font-size: 1.3em;
   line-height: 1.5em;
+}
+ul.mainListVenues li.nodata {
+  margin: 5px 5px;
+  font-style: italic;
+}
+@media screen and (min-width: 750px) {
+  ul.mainListVenues li.venue,
+  ul.mainListVenues li.nodata {
+    margin: 5px 50px;
+  }
+}
+@media screen and (max-width: 750px) {
+  ul.mainListVenues li.venue .media {
+    display: none;
+  }
 }
 ul.selectvenue li.newvenue .newvenueform {
   border: 1px solid #ccc;
@@ -857,39 +924,35 @@ ul.selectvenue li.newvenue .newvenueform label {
 ul.selectvenue li.newvenue .newvenueform label input[type="text"] {
   width: 50%;
 }
-ul.importurls li.importurl {
+ul.mainListImporturls li.importurl {
+  margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
-ul.importurls li.importurl .title {
+ul.mainListImporturls li.importurl .title {
   font-size: 1.1em;
   font-weight: bold;
   padding: 2px 0;
 }
-ul.importurls li.importurl .title a {
+ul.mainListImporturls li.importurl .title a {
   color: #333;
   text-decoration: none;
 }
-ul.importurls li.importurl .title a:hover {
+ul.mainListImporturls li.importurl .title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.curatedlists li.curatedlist {
-  border-bottom: 2px solid #E9E9E9;
+ul.mainListImporturls li.nodata {
+  margin: 5px 5px;
+  font-style: italic;
 }
-ul.curatedlists li.curatedlist .title {
-  font-size: 1.1em;
-  font-weight: bold;
-  padding: 2px 0;
-}
-ul.curatedlists li.curatedlist .title a {
-  color: #333;
-  text-decoration: none;
-}
-ul.curatedlists li.curatedlist .title a:hover {
-  color: black;
-  text-decoration: underline;
+@media screen and (min-width: 750px) {
+  ul.mainListImporturls li.importurl,
+  ul.mainListImporturls li.nodata {
+    margin: 5px 50px;
+  }
 }
 ul.tags li.tag {
+  margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
 ul.tags li.tag .title {
@@ -925,6 +988,16 @@ ul.tags li.tag span.tagTitleWrapper {
 ul.tags li.tag span.tagTitleWrapper a {
   color: white;
   text-decoration: none;
+}
+ul.tags li.nodata {
+  margin: 5px 5px;
+  font-style: italic;
+}
+@media screen and (min-width: 750px) {
+  ul.tags li.tag,
+  ul.tags li.nodata {
+    margin: 5px 50px;
+  }
 }
 div.inlineTags ul.inlineTags {
   display: inline;
@@ -1258,11 +1331,6 @@ ul.history li.deleted {
 #NewVenueForm form label {
   display: block;
 }
-#VenuePopup .PopUpTitle {
-  font-weight: bold;
-  font-size: 1.2em;
-  padding: 0 0 5px 0;
-}
 #MediaPopup .imageWrapper img {
   max-width: 100%;
 }
@@ -1280,15 +1348,6 @@ ul.history li.deleted {
 #MediaPopup #MediaPopupContents a:hover {
   color: black;
   text-decoration: underline;
-}
-ul.eventSmallListings li.eventSmallListing {
-  padding: 4px 0;
-}
-ul.eventSmallListings li.eventSmallListing .time {
-  color: #ec2327;
-  font-weight: 400;
-  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
-  padding: 5px 10px 5px 20px;
 }
 ul.newRecuringEvents li.newRecuringEvent {
   margin-bottom: 10px;
@@ -1347,42 +1406,6 @@ ul.newRecuringEvents li.newRecuringEvent .date {
   width: 90%;
   height: 400px;
 }
-#curatedListsOnEventWrapper {
-  margin: 10px;
-  max-width: 600px;
-  padding: 10px;
-  background: #36C036;
-}
-#curatedListsOnEventWrapper .wrapperTitle {
-  font-weight: bold;
-  font-size: 1.1em;
-  padding-bottom: 5px;
-}
-#curatedListsOnEventWrapper ul.curatedlists li.curatedlist {
-  border-bottom: 0px;
-  padding-bottom: 5px;
-}
-#curatedListsOnEventWrapper ul.curatedlists li.curatedlist .title {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 1.0em;
-  display: inline;
-}
-#curatedListsOnEventWrapper ul.curatedlists li.curatedlist .addedViaGroup {
-  display: inline;
-  font-style: italic;
-}
-#curatedListsOnEventWrapper ul.curatedlists li.curatedlist form {
-  display: inline;
-}
-#userCanPushToChildAreaWrapper,
-.isGroupRunningOutOfFutureEventsWarning {
-  clear: both;
-  margin: 10px;
-  max-width: 600px;
-  padding: 10px;
-  background: #36C036;
-}
 #MapTimeControls input {
   width: 75px;
 }
@@ -1429,12 +1452,13 @@ ul.mapTimeEvents li p.venueTitle {
 div.filterListGroupWrapper,
 div.filterListVenueWrapper {
   padding: 5px 0;
+  margin: 5px 5px;
 }
 div.filterListGroupWrapper form.filterListGroup,
 div.filterListGroupWrapper form.filterListVenue,
 div.filterListVenueWrapper form.filterListGroup,
 div.filterListVenueWrapper form.filterListVenue {
-  background: #e9e9e9;
+  background: #72DA72;
   padding: 10px;
 }
 div.filterListGroupWrapper form.filterListGroup div.inputField,
@@ -1455,15 +1479,21 @@ div.filterListGroupWrapper form.filterListGroup div.submitField input,
 div.filterListGroupWrapper form.filterListVenue div.submitField input,
 div.filterListVenueWrapper form.filterListGroup div.submitField input,
 div.filterListVenueWrapper form.filterListVenue div.submitField input {
-  background: #009900;
-  color: white;
-  border: 2px solid #009900;
+  background: #36C036;
+  color: black;
+  border: 2px solid #36C036;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
   cursor: pointer;
+}
+@media screen and (min-width: 750px) {
+  div.filterListGroupWrapper,
+  div.filterListVenueWrapper {
+    margin: 5px 40px;
+  }
 }
 .bigButtonContainer {
   padding: 6px;
@@ -1487,24 +1517,6 @@ div.filterListVenueWrapper form.filterListVenue div.submitField input {
   color: black;
   text-decoration: underline;
 }
-.UserAttendingList {
-  margin: 5px 0;
-  padding: 5px 5px 5px 50px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
-  background: #ddd;
-  background-image: url('/theme/default/img/users32.png');
-  background-repeat: no-repeat;
-  background-position: 5px 5px;
-}
-.UserAttendingList .GetTicket {
-  font-weight: bold;
-  font-size: 120%;
-  font-style: italic;
-}
 ul.mediaGrid li {
   width: 100px;
   height: 100px;
@@ -1520,23 +1532,23 @@ ul.mediaGrid li img {
 .afterMediaGrid {
   clear: left;
 }
-ul.mediaList li.media {
+ul.mainListMedias li.media {
   padding: 5px 0;
 }
-ul.mediaList li.media .thumbnail {
+ul.mainListMedias li.media .thumbnail {
   width: 70px;
   height: 70px;
   float: left;
   margin: 2px;
 }
-ul.mediaList li.media .thumbnail img {
+ul.mainListMedias li.media .thumbnail img {
   max-width: 70px;
   max-height: 70px;
 }
-ul.mediaList li.media .title {
+ul.mainListMedias li.media .title {
   font-weight: bold;
 }
-ul.mediaList li.media div.afterMediaListing {
+ul.mainListMedias li.media div.afterMediaListing {
   clear: both;
 }
 ul.areasList li.area {
@@ -1651,7 +1663,7 @@ ul.areasAdmin li.area span.contentNew a {
 #ChangeVenueAreaList li.selectedarea .content,
 #ChangeEventAreaList li.selectedarea .content,
 #ChangeAreaAreaList li.selectedarea .content {
-  background: url('/theme/default/img/areaBackground.png') no-repeat #0DA20D;
+  background: url('/theme/default/img/areaBackground.png') no-repeat #007900;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
@@ -1667,21 +1679,19 @@ ul.areasAdmin li.area span.contentNew a {
   color: white;
   text-decoration: none;
 }
-#DuplicateEventsContainer {
-  border: 1px solid #ccc;
+ul.mainListImportedEvents li.importedevent,
+div.importedevent {
+  border: 2px solid #E9E9E9;
+  background: #eeeeee;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
+  margin: 10px 0;
+  padding: 5px;
 }
-ul.importedevents li.importedevent,
-div.importedevent {
-  border-bottom: 2px solid #E9E9E9;
-  margin-bottom: 10px;
-  padding: 20px 0;
-}
-ul.importedevents li.importedevent div.dateTimeIcon,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon,
 div.importedevent div.dateTimeIcon {
   float: left;
   width: 60px;
@@ -1696,73 +1706,73 @@ div.importedevent div.dateTimeIcon {
   -o-border-radius: 1px;
   border-radius: 1px;
 }
-ul.importedevents li.importedevent div.dateTimeIcon div.dateIcon,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon div.dateIcon,
 div.importedevent div.dateTimeIcon div.dateIcon {
   width: 60px;
   height: 60px;
   text-align: center;
   background: #555555;
 }
-ul.importedevents li.importedevent div.dateTimeIcon div.timeIcon,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon div.timeIcon,
 div.importedevent div.dateTimeIcon div.timeIcon {
   padding: 1px;
   text-align: center;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.deleted,
-ul.importedevents li.importedevent div.dateTimeIcon span.cancelled,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.deleted,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.cancelled,
 div.importedevent div.dateTimeIcon span.deleted,
 div.importedevent div.dateTimeIcon span.cancelled {
   padding-top: 5px;
   display: block;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startDay,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startDay,
 div.importedevent div.dateTimeIcon span.startDay {
   font-weight: 200;
   padding-top: 5px;
   display: block;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startDate,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startDate,
 div.importedevent div.dateTimeIcon span.startDate {
   font-size: 16pt;
   font-weight: 400;
   display: block;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startMonthYear,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startMonthYear,
 div.importedevent div.dateTimeIcon span.startMonthYear {
   font-weight: 200;
   display: block;
   font-size: 0.75em;
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon span.startTime,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startTime,
 div.importedevent div.dateTimeIcon span.startTime {
   font-size: 11pt;
   color: black;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a,
 div.importedevent div.dateTimeIcon a {
   text-decoration: none;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startDay,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startDay,
 div.importedevent div.dateTimeIcon a span.startDay {
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startDate,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startDate,
 div.importedevent div.dateTimeIcon a span.startDate {
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startMonthYear,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startMonthYear,
 div.importedevent div.dateTimeIcon a span.startMonthYear {
   color: white;
 }
-ul.importedevents li.importedevent div.dateTimeIcon a span.startTime,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startTime,
 div.importedevent div.dateTimeIcon a span.startTime {
   color: black;
 }
-ul.importedevents li.importedevent div.title,
+ul.mainListImportedEvents li.importedevent div.title,
 div.importedevent div.title {
   font-size: 16pt;
   font-weight: bold;
@@ -1772,27 +1782,27 @@ div.importedevent div.title {
   top: -5px;
   color: #555555;
 }
-ul.importedevents li.importedevent div.title a,
+ul.mainListImportedEvents li.importedevent div.title a,
 div.importedevent div.title a {
   color: #555;
   text-decoration: none;
 }
-ul.importedevents li.importedevent div.title a:hover,
+ul.mainListImportedEvents li.importedevent div.title a:hover,
 div.importedevent div.title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.importedevents li.importedevent p.description,
+ul.mainListImportedEvents li.importedevent p.description,
 div.importedevent p.description {
   color: #555555;
 }
-ul.importedevents li.importedevent .dateAndLocationWrapper,
+ul.mainListImportedEvents li.importedevent .dateAndLocationWrapper,
 div.importedevent .dateAndLocationWrapper {
   clear: both;
   padding: 10px 0 0 0;
   margin-top: 10px;
 }
-ul.importedevents li.importedevent .dateAndLocationWrapper div.date,
+ul.mainListImportedEvents li.importedevent .dateAndLocationWrapper div.date,
 div.importedevent .dateAndLocationWrapper div.date {
   display: block;
   color: #555;
@@ -1800,7 +1810,7 @@ div.importedevent .dateAndLocationWrapper div.date {
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
-ul.importedevents li.importedevent div.afterEventListing,
+ul.mainListImportedEvents li.importedevent div.afterEventListing,
 div.importedevent div.afterEventListing {
   clear: both;
 }
@@ -1843,14 +1853,37 @@ body {
   background-color: #B7CFB7;
 }
 #page {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   background: white;
 }
 #header {
-  background: #0DA20D;
+  background-color: #0DA20D;
+  background-image: -webkit-linear-gradient(top,#36C036,#0DA20D);
+  background-image: linear-gradient(to bottom,#36C036,#0DA20D);
   border-bottom: #004300 2px solid;
   padding: 5px;
+}
+#header .title img {
+  max-width: 30px;
+  max-height: 30px;
+}
+#header .title h1 {
+  color: black;
+  display: inline;
+  font-weight: bold;
+  font-size: 1.6em;
+}
+#header .title a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14pt;
+  padding: 5px;
+  display: inline-block;
+}
+#header .title a:hover {
+  color: black;
+  text-decoration: underline;
 }
 #header ul.menu {
   padding: 0;
@@ -1918,16 +1951,6 @@ body {
   color: black;
   text-decoration: underline;
 }
-#header ul.menu li.title img {
-  max-width: 30px;
-  max-height: 30px;
-}
-#header ul.menu li.title h1 {
-  color: black;
-  display: inline;
-  font-weight: bold;
-  font-size: 1.6em;
-}
 #header ul.menu li.user {
   float: right;
 }
@@ -1937,9 +1960,6 @@ body {
 #body {
   min-height: 400px;
   padding: 5px;
-}
-#body p {
-  padding: 5px 0;
 }
 h2 {
   font-weight: bold;
@@ -1965,10 +1985,23 @@ h3 {
 }
 @media screen and (min-width: 750px) {
   #bodyLeft {
-    width: 47%;
+    width: 57%;
     float: left;
   }
   #bodyRight {
+    width: 37%;
+    float: right;
+  }
+  #afterPage2Col {
+    clear: both;
+  }
+}
+@media screen and (min-width: 750px) {
+  #bodyLeftEqualWidth {
+    width: 47%;
+    float: left;
+  }
+  #bodyRightEqualWidth {
     width: 47%;
     float: right;
   }
@@ -2003,27 +2036,40 @@ h3 {
 p {
   margin: 10px 0;
 }
-ul.events li.event {
+ul.mainListEvents li.event {
+  margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
-ul.events li.export {
+ul.mainListEvents li.export {
   text-align: right;
 }
-ul.events li.export a {
+ul.mainListEvents li.export a {
   color: #333;
   text-decoration: none;
 }
-ul.events li.export a:hover {
+ul.mainListEvents li.export a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.events li.event,
-div.event {
+ul.mainListEvents li.nodata,
+ul.mainListEvents li.info {
+  margin: 5px 5px;
+  font-style: italic;
+}
+@media screen and (min-width: 750px) {
+  ul.mainListEvents li.event,
+  ul.mainListEvents li.nodata,
+  ul.mainListEvents li.info {
+    margin: 5px 50px;
+  }
+}
+ul.mainListEvents li.event,
+div.mainShowEvent {
   margin-bottom: 10px;
   padding: 20px 0;
 }
-ul.events li.event div.dateTimeIcon,
-div.event div.dateTimeIcon {
+ul.mainListEvents li.event div.dateTimeIcon,
+div.mainShowEvent div.dateTimeIcon {
   float: left;
   width: 60px;
   height: 80px;
@@ -2037,84 +2083,88 @@ div.event div.dateTimeIcon {
   -o-border-radius: 4px;
   border-radius: 4px;
 }
-ul.events li.event div.dateTimeIcon div.dateIcon,
-div.event div.dateTimeIcon div.dateIcon {
+ul.mainListEvents li.event div.dateTimeIcon div.dateIcon,
+div.mainShowEvent div.dateTimeIcon div.dateIcon {
   width: 60px;
   height: 60px;
   text-align: center;
   background: #231f20;
-  -webkit-border-bottom-right-radius: 2px;
-  -moz-border-radius-bottomright: 2px;
-  -ms-border-radius-bottomright: 2px;
-  -o-border-bottom-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  -webkit-border-bottom-left-radius: 2px;
-  -moz-border-radius-bottomleft: 2px;
-  -ms-border-radius-bottomleft: 2px;
-  -o-border-bottom-left-radius: 2px;
-  border-bottom-left-radius: 2px;
 }
-ul.events li.event div.dateTimeIcon div.timeIcon,
-div.event div.dateTimeIcon div.timeIcon {
+ul.mainListEvents li.event div.dateTimeIcon div.timeIcon,
+div.mainShowEvent div.dateTimeIcon div.timeIcon {
   padding: 1px;
   text-align: center;
 }
-ul.events li.event div.dateTimeIcon span.deleted,
-ul.events li.event div.dateTimeIcon span.cancelled,
-div.event div.dateTimeIcon span.deleted,
-div.event div.dateTimeIcon span.cancelled {
+ul.mainListEvents li.event div.dateTimeIcon span.deleted,
+ul.mainListEvents li.event div.dateTimeIcon span.cancelled,
+div.mainShowEvent div.dateTimeIcon span.deleted,
+div.mainShowEvent div.dateTimeIcon span.cancelled {
   padding-top: 5px;
   display: block;
   color: white;
 }
-ul.events li.event div.dateTimeIcon span.startDay,
-div.event div.dateTimeIcon span.startDay {
+ul.mainListEvents li.event div.dateTimeIcon span.startDay,
+div.mainShowEvent div.dateTimeIcon span.startDay {
   font-weight: 200;
   padding-top: 5px;
   display: block;
   color: white;
 }
-ul.events li.event div.dateTimeIcon span.startDate,
-div.event div.dateTimeIcon span.startDate {
+ul.mainListEvents li.event div.dateTimeIcon span.startDate,
+div.mainShowEvent div.dateTimeIcon span.startDate {
   font-size: 16pt;
   font-weight: 400;
   display: block;
   color: white;
 }
-ul.events li.event div.dateTimeIcon span.startMonthYear,
-div.event div.dateTimeIcon span.startMonthYear {
+ul.mainListEvents li.event div.dateTimeIcon span.startMonthYear,
+div.mainShowEvent div.dateTimeIcon span.startMonthYear {
   font-weight: 200;
   display: block;
   font-size: 0.75em;
   color: white;
 }
-ul.events li.event div.dateTimeIcon span.startTime,
-div.event div.dateTimeIcon span.startTime {
+ul.mainListEvents li.event div.dateTimeIcon span.startTime,
+div.mainShowEvent div.dateTimeIcon span.startTime {
   font-size: 11pt;
   color: black;
 }
-ul.events li.event div.dateTimeIcon a,
-div.event div.dateTimeIcon a {
+ul.mainListEvents li.event div.dateTimeIcon a,
+div.mainShowEvent div.dateTimeIcon a {
   text-decoration: none;
 }
-ul.events li.event div.dateTimeIcon a span.startDay,
-div.event div.dateTimeIcon a span.startDay {
+ul.mainListEvents li.event div.dateTimeIcon a span.startDay,
+div.mainShowEvent div.dateTimeIcon a span.startDay {
   color: white;
 }
-ul.events li.event div.dateTimeIcon a span.startDate,
-div.event div.dateTimeIcon a span.startDate {
+ul.mainListEvents li.event div.dateTimeIcon a span.startDate,
+div.mainShowEvent div.dateTimeIcon a span.startDate {
   color: white;
 }
-ul.events li.event div.dateTimeIcon a span.startMonthYear,
-div.event div.dateTimeIcon a span.startMonthYear {
+ul.mainListEvents li.event div.dateTimeIcon a span.startMonthYear,
+div.mainShowEvent div.dateTimeIcon a span.startMonthYear {
   color: white;
 }
-ul.events li.event div.dateTimeIcon a span.startTime,
-div.event div.dateTimeIcon a span.startTime {
+ul.mainListEvents li.event div.dateTimeIcon a span.startTime,
+div.mainShowEvent div.dateTimeIcon a span.startTime {
   color: black;
 }
-ul.events li.event div.title,
-div.event div.title {
+ul.mainListEvents li.event .media,
+div.mainShowEvent .media {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+  float: right;
+  margin: 2px;
+}
+ul.mainListEvents li.event .media img,
+div.mainShowEvent .media img {
+  max-width: 100px;
+  max-height: 100px;
+}
+ul.mainListEvents li.event div.title,
+div.mainShowEvent div.title {
   font-size: 16pt;
   font-weight: bold;
   line-height: 1.25em;
@@ -2122,97 +2172,116 @@ div.event div.title {
   position: relative;
   top: -5px;
 }
-ul.events li.event div.title a,
-div.event div.title a {
+ul.mainListEvents li.event div.title a,
+div.mainShowEvent div.title a {
   color: #333;
   text-decoration: none;
 }
-ul.events li.event div.title a:hover,
-div.event div.title a:hover {
+ul.mainListEvents li.event div.title a:hover,
+div.mainShowEvent div.title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.events li.event p.groupTitle,
-ul.events li.event p.venueTitle,
-div.event p.groupTitle,
-div.event p.venueTitle {
+ul.mainListEvents li.event p.description,
+div.mainShowEvent p.description {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 10px 0px;
+}
+ul.mainListEvents li.event p.groupTitle,
+ul.mainListEvents li.event p.venueTitle,
+div.mainShowEvent p.groupTitle,
+div.mainShowEvent p.venueTitle {
   font-weight: bold;
   font-size: 0.8em;
 }
-ul.events li.event p.groupTitle a,
-ul.events li.event p.venueTitle a,
-div.event p.groupTitle a,
-div.event p.venueTitle a {
+ul.mainListEvents li.event p.groupTitle a,
+ul.mainListEvents li.event p.venueTitle a,
+div.mainShowEvent p.groupTitle a,
+div.mainShowEvent p.venueTitle a {
   color: black;
   text-decoration: none;
 }
-ul.events li.event p.groupTitle a:hover,
-ul.events li.event p.venueTitle a:hover,
-div.event p.groupTitle a:hover,
-div.event p.venueTitle a:hover {
+ul.mainListEvents li.event p.groupTitle a:hover,
+ul.mainListEvents li.event p.venueTitle a:hover,
+div.mainShowEvent p.groupTitle a:hover,
+div.mainShowEvent p.venueTitle a:hover {
   text-decoration: underline;
 }
-ul.events li.event p.groupDescription,
-ul.events li.event p.venueDescription,
-div.event p.groupDescription,
-div.event p.venueDescription {
+ul.mainListEvents li.event p.groupDescription,
+ul.mainListEvents li.event p.venueDescription,
+div.mainShowEvent p.groupDescription,
+div.mainShowEvent p.venueDescription {
   font-size: 0.8em;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 10px 0px;
 }
-ul.events li.event p.groupDescription a,
-ul.events li.event p.venueDescription a,
-div.event p.groupDescription a,
-div.event p.venueDescription a {
+ul.mainListEvents li.event p.groupDescription a,
+ul.mainListEvents li.event p.venueDescription a,
+div.mainShowEvent p.groupDescription a,
+div.mainShowEvent p.venueDescription a {
   color: black;
   text-decoration: none;
 }
-ul.events li.event p.groupDescription a:hover,
-ul.events li.event p.venueDescription a:hover,
-div.event p.groupDescription a:hover,
-div.event p.venueDescription a:hover {
+ul.mainListEvents li.event p.groupDescription a:hover,
+ul.mainListEvents li.event p.venueDescription a:hover,
+div.mainShowEvent p.groupDescription a:hover,
+div.mainShowEvent p.venueDescription a:hover {
   text-decoration: underline;
 }
-ul.events li.event .map,
-div.event .map {
+ul.mainListEvents li.event .map,
+div.mainShowEvent .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
-  height: 300px;
+  height: 200px;
 }
-ul.events li.event div.afterEventListing,
-div.event div.afterEventListing {
+ul.mainListEvents li.event div.afterEventListing,
+div.mainShowEvent div.afterEventListing {
   clear: both;
 }
-ul.events li.event div.currentUserAttendance,
-div.event div.currentUserAttendance {
+ul.mainListEvents li.event div.currentUserAttendance,
+div.mainShowEvent div.currentUserAttendance {
   text-align: right;
 }
-ul.events li.event div.currentUserAttendance a,
-div.event div.currentUserAttendance a {
+ul.mainListEvents li.event div.currentUserAttendance a,
+div.mainShowEvent div.currentUserAttendance a {
   text-decoration: none;
 }
-ul.events li.event div.currentUserAttendance div.formWrapper,
-div.event div.currentUserAttendance div.formWrapper {
+ul.mainListEvents li.event div.currentUserAttendance div.formWrapper,
+div.mainShowEvent div.currentUserAttendance div.formWrapper {
   display: inline;
 }
-ul.events li.event div.currentUserAttendance div.formWrapper form,
-div.event div.currentUserAttendance div.formWrapper form {
+ul.mainListEvents li.event div.currentUserAttendance div.formWrapper form,
+div.mainShowEvent div.currentUserAttendance div.formWrapper form {
   display: inline;
 }
-ul.events li.event div.currentUserAttendance div.activationLinkWrapper,
-div.event div.currentUserAttendance div.activationLinkWrapper {
+ul.mainListEvents li.event div.currentUserAttendance div.activationLinkWrapper,
+div.mainShowEvent div.currentUserAttendance div.activationLinkWrapper {
   display: inline;
 }
-ul.events li.event div.currentUserAttendance .savingIndicator,
-ul.events li.event div.currentUserAttendance .savedIndicator,
-div.event div.currentUserAttendance .savingIndicator,
-div.event div.currentUserAttendance .savedIndicator {
+ul.mainListEvents li.event div.currentUserAttendance .savingIndicator,
+ul.mainListEvents li.event div.currentUserAttendance .savedIndicator,
+div.mainShowEvent div.currentUserAttendance .savingIndicator,
+div.mainShowEvent div.currentUserAttendance .savedIndicator {
   font-style: italic;
 }
-ul.events li.event form.UserAttendingOptions .savingIndicator,
-ul.events li.event form.UserAttendingOptions .savedIndicator,
-div.event form.UserAttendingOptions .savingIndicator,
-div.event form.UserAttendingOptions .savedIndicator {
+ul.mainListEvents li.event form.UserAttendingOptions .savingIndicator,
+ul.mainListEvents li.event form.UserAttendingOptions .savedIndicator,
+div.mainShowEvent form.UserAttendingOptions .savingIndicator,
+div.mainShowEvent form.UserAttendingOptions .savedIndicator {
   font-style: italic;
+}
+ul.mainListEvents li.event .GetTicket,
+div.mainShowEvent .GetTicket {
+  font-weight: bold;
+  font-size: 120%;
+  font-style: italic;
+}
+@media screen and (max-width: 750px) {
+  ul.mainListEvents li.event .media,
+  div.mainShowEvent .media {
+    display: none;
+  }
 }
 .dateAndLocationWrapper {
   clear: both;
@@ -2237,36 +2306,47 @@ div.event form.UserAttendingOptions .savedIndicator {
   color: #ec2327;
   text-decoration: none;
 }
-div.venue .locationWrapper {
+div.mainShowVenue .locationWrapper {
   clear: both;
   padding: 10px 0 0 0;
   margin-top: 10px;
 }
-div.venue .locationWrapper div.location {
+div.mainShowVenue .locationWrapper div.location {
   display: block;
   color: #ec2327;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterLocationIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
-div.venue .locationWrapper div.location a {
+div.mainShowVenue .locationWrapper div.location a {
   color: #ec2327;
   text-decoration: none;
 }
-div.venue .map {
+div.mainShowVenue .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
-  height: 300px;
+  height: 200px;
 }
-div.country .map {
+div.mainShowGroup p.description {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 10px 0px;
+}
+div.mainShowCountry .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
-  height: 300px;
+  height: 200px;
+}
+div.mainShowArea .map {
+  margin: 10px 0;
+  clear: both;
+  width: 90%;
+  height: 200px;
 }
 div.filterListEventWrapper {
   padding: 5px 0;
+  margin: 5px 5px;
 }
 div.filterListEventWrapper form.filterListEvent {
   background: #72DA72;
@@ -2284,15 +2364,20 @@ div.filterListEventWrapper form.filterListEvent div.submitField {
   padding: 10px;
 }
 div.filterListEventWrapper form.filterListEvent div.submitField input {
-  background: #004300;
-  color: white;
-  border: 2px solid #004300;
+  background: #36C036;
+  color: black;
+  border: 2px solid #36C036;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
   cursor: pointer;
+}
+@media screen and (min-width: 750px) {
+  div.filterListEventWrapper {
+    margin: 5px 40px;
+  }
 }
 #innerPageWrapper {
   clear: both;
@@ -2401,143 +2486,37 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   padding: 5px;
   margin: 2px;
 }
+#innerPageWrapper #innerPage .innerPageLeftRightTitle {
+  border-top: 1px solid #ccc;
+  margin-top: 5px;
+}
 @media screen and (min-width: 750px) {
-  #innerPageWrapper #innerPage #innerPageLeft,
-  #innerPageWrapper #innerPage #innerPageRight {
-    width: 47%;
+  #innerPageWrapper #innerPage .innerPageLeft {
+    width: 57%;
     float: left;
+  }
+  #innerPageWrapper #innerPage .innerPageRight {
+    width: 37%;
+    float: right;
   }
 }
 @media screen and (max-width: 750px) {
-  #innerPageWrapper #innerPage #innerPageLeft.hideIfOneCol,
-  #innerPageWrapper #innerPage #innerPageRight.hideIfOneCol {
+  #innerPageWrapper #innerPage .innerPageLeft.hideIfOneCol,
+  #innerPageWrapper #innerPage .innerPageRight.hideIfOneCol {
     display: none;
   }
 }
-#innerPageWrapper #innerPage #afterInnerPageContent {
+#innerPageWrapper #innerPage .afterInnerPageContent {
   clear: both;
 }
-#PopupMask {
-  position: fixed;
-  top: 0px;
-  bottom: 0px;
-  width: 100%;
-  height: 100%;
-  background-color: #ccc;
-  background-color: rgba(200,200,200,0.7);
-  z-index: 500;
+#innerPageWrapper #innerPage .innerPageRight .innerPageRightLinkWrapper {
+  padding-bottom: 10px;
 }
-.PopupBox {
-  border: 4px solid #004300;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -o-border-radius: 2px;
-  border-radius: 2px;
-  background: white;
-  padding: 0;
-  width: 95%;
-  min-width: 300px;
-  max-width: 950px;
-  position: absolute;
-  top: 25px;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+#innerPageWrapper #innerPage .innerPageRight .innerPageRightLinkWrapper .innerPageRightLinkHeader {
+  font-size: 0.8em;
 }
-.PopupBox .PopupBoxClose {
-  padding: 3px;
-  background: #004300;
-  text-align: right;
-}
-.PopupBox .PopupBoxClose a {
-  color: white;
-  text-decoration: none;
-}
-.PopupBox .PopupBoxContent {
-  padding: 10px;
-}
-#ExportPopup #ExportPopupIntroText {
-  padding: 10px;
-}
-#ExportPopup #ExportPopupIntroText div {
-  display: inline;
-}
-#ExportPopup #ExportPopupIntroText label {
-  display: block;
-}
-#ExportPopup ul#ExportPopupMenu {
-  padding: 15px 5px 5px 5px;
-}
-#ExportPopup ul#ExportPopupMenu li {
-  padding: 2px;
-  line-height: 2.0em;
-  display: inline;
-}
-#ExportPopup ul#ExportPopupMenu li .wrapper {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
-  display: inline;
-  padding: 5px;
-  margin: 3px;
-  border: 1px solid black;
-  background: #d4d8db;
-  line-height: 1.6;
-}
-#ExportPopup ul#ExportPopupMenu li .wrapper a {
-  white-space: nowrap;
-  color: black;
-  text-decoration: none;
-  font-weight: bold;
-}
-#ExportPopup ul#ExportPopupMenu li .wrapper.current {
-  font-weight: bold;
-  background: #ffffff;
-}
-#ExportPopup ul#ExportPopupMenu li .wrapper.current a {
-  color: #333;
-  text-decoration: none;
-  font-weight: bold;
-}
-#ExportPopup ul#ExportPopupMenu li .wrapper:hover {
-  background: #f2f2f2;
-}
-#ExportPopup ul#ExportPopupMenu li .wrapper img {
-  max-width: 16px;
-  max-height: 16px;
-}
-@media screen and (max-width: 500px) {
-  #ExportPopup ul#ExportPopupMenu li .wrapper {
-    line-height: 0.1em;
-  }
-  #ExportPopup ul#ExportPopupMenu li .wrapper .wrapper {
-    display: block;
-  }
-  #ExportPopup ul#ExportPopupMenu li .wrapper .wrapper a {
-    display: block;
-  }
-}
-#ExportPopup .content {
-  padding: 10px;
-}
-#ExportPopup #ExportToGoogleCalendar input.exportlink {
-  display: block;
-  width: 100%;
-}
-#SharePopup ul.SharePopupOptions {
-  padding: 10px;
-}
-#SharePopup ul.SharePopupOptions li {
-  display: inline;
-  padding: 10px;
-}
-#SharePopup ul.SharePopupOptions li img {
-  max-width: 70px;
-  max-height: 70px;
+#innerPageWrapper #innerPage .innerPageRight .innerPageRightLinkWrapper .innerPageRightLinkContent a {
+  font-size: 0.8em;
 }
 .helpPopupLink img {
   max-width: 20px;
@@ -2552,6 +2531,43 @@ ul.timezones li {
 ul.listOfTextItems li {
   margin: 5px 5px 5px 20px;
   list-style-type: circle;
+}
+.highlightInfoBoxWrapper {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  border: 3px solid #004300;
+  margin-bottom: 10px;
+}
+.highlightInfoBoxWrapper .highlightInfoBoxTitle {
+  background-color: #004300;
+  color: white;
+  padding: 5px;
+  font-weight: bold;
+}
+.highlightInfoBoxWrapper .highlightInfoBoxContent {
+  padding: 5px;
+  background-color: #36C036;
+}
+.infoBoxWrapper {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #72DA72;
+  margin-bottom: 10px;
+}
+.infoBoxWrapper .infoBoxTitle {
+  background-color: #36C036;
+  color: white;
+  padding: 5px;
+  font-size: 0.8em;
+}
+.infoBoxWrapper .infoBoxContent {
+  padding: 5px;
 }
 ul.breadcrumbs {
   padding: 10px;
@@ -2668,4 +2684,180 @@ ul.usernotifications li.usernotificationunread a.title {
     padding: 5px 0;
     display: block;
   }
+}
+#PopupMask {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #ccc;
+  background-color: rgba(200,200,200,0.7);
+  z-index: 500;
+}
+.popupBox {
+  border: 4px solid #004300;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  background: white;
+  padding: 0;
+  width: 95%;
+  min-width: 300px;
+  max-width: 950px;
+  position: absolute;
+  top: 25px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+.popupBox .popupBoxClose {
+  padding: 3px;
+  background: #004300;
+  text-align: right;
+}
+.popupBox .popupBoxClose a {
+  color: white;
+  text-decoration: none;
+}
+.popupBox .popupBoxContent {
+  padding: 10px;
+}
+.popupBox .popupLink {
+  text-align: right;
+  padding: 5px 0;
+}
+.popupBox ul.popupListGroups li.group .title {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.popupBox ul.popupListGroups li.group .description {
+  padding: 5px 0;
+}
+.popupBox ul.popupListEvents li.event {
+  padding: 4px 0;
+}
+.popupBox ul.popupListEvents li.event .time {
+  color: #ec2327;
+  font-weight: 400;
+  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+.popupBox .popupShowEvent .title {
+  padding: 5px 0;
+  font-weight: bold;
+  font-size: 110%;
+}
+.popupBox .popupShowEvent .description {
+  padding: 5px 0;
+}
+.popupBox .popupShowEvent .times {
+  color: #ec2327;
+  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+.popupBox .popupShowEvent .link {
+  padding: 5px 0;
+  text-align: right;
+}
+.popupBox .popupShowVenue .title {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.popupBox .popupShowVenue .description {
+  padding: 5px 0;
+}
+.popupBox .popupShowVenue .address {
+  padding: 5px 0;
+}
+.popupBox #ExportPopupIntroText {
+  padding: 10px;
+}
+.popupBox #ExportPopupIntroText div {
+  display: inline;
+}
+.popupBox #ExportPopupIntroText label {
+  display: block;
+}
+.popupBox ul#ExportPopupMenu {
+  padding: 15px 5px 5px 5px;
+}
+.popupBox ul#ExportPopupMenu li {
+  padding: 2px;
+  line-height: 2.0em;
+  display: inline;
+}
+.popupBox ul#ExportPopupMenu li .wrapper {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  display: inline;
+  padding: 5px;
+  margin: 3px;
+  border: 1px solid black;
+  background: #d4d8db;
+  line-height: 1.6;
+}
+.popupBox ul#ExportPopupMenu li .wrapper a {
+  white-space: nowrap;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+.popupBox ul#ExportPopupMenu li .wrapper.current {
+  font-weight: bold;
+  background: #ffffff;
+}
+.popupBox ul#ExportPopupMenu li .wrapper.current a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+.popupBox ul#ExportPopupMenu li .wrapper:hover {
+  background: #f2f2f2;
+}
+.popupBox ul#ExportPopupMenu li .wrapper img {
+  max-width: 16px;
+  max-height: 16px;
+}
+@media screen and (max-width: 500px) {
+  .popupBox ul#ExportPopupMenu li .wrapper {
+    line-height: 0.1em;
+  }
+  .popupBox ul#ExportPopupMenu li .wrapper .wrapper {
+    display: block;
+  }
+  .popupBox ul#ExportPopupMenu li .wrapper .wrapper a {
+    display: block;
+  }
+}
+.popupBox #ExportToGoogleCalendar input.exportlink {
+  display: block;
+  width: 100%;
+}
+.popupBox #EventAttendancePopupContent {
+  padding: 5px;
+}
+.popupBox #EventAttendancePopupContent .savingIndicator,
+.popupBox #EventAttendancePopupContent .savedIndicator,
+.popupBox #EventPopupAttendanceContent .savingIndicator,
+.popupBox #EventPopupAttendanceContent .savedIndicator {
+  padding-left: 10px;
+  font-style: italic;
+}
+.popupBox ul.SharePopupOptions {
+  padding: 10px;
+}
+.popupBox ul.SharePopupOptions li {
+  display: inline;
+  padding: 10px;
+}
+.popupBox ul.SharePopupOptions li img {
+  max-width: 70px;
+  max-height: 70px;
 }

@@ -30,14 +30,7 @@
 		<div class="actionWrapperBig"><input type="submit" value="Search"></div>
 	</form>
 
-	<div id="innerPageLeft" class="hideIfOneCol">
-		<div id="MapWrapper">
-			<div id="Map" class="leftColumnFullWidth"></div>
-		</div>
-	</div>
-
-
-	<div id="innerPageRight">
+	<div class="innerPageLeft">
 		<ul class="areasList" id="EditEventAreaResults">
 			{% for area in areas %}
 				<li class="area" {%  if area.minLat %}onmouseover="mapToBounds({{  area.minLat }}, {{  area.maxLat }}, {{  area.minLng }}, {{  area.maxLng }})"{%  endif %}>
@@ -53,6 +46,14 @@
 			{% endfor %}
 		</ul>
 	</div>
+
+	<div class="innerPageRight" class="hideIfOneCol">
+		<div id="MapWrapper">
+			<div id="Map" class="fullWidth"></div>
+		</div>
+	</div>
+
+	<div class="afterInnerPageContent"></div>
 
 {% endblock %}
 

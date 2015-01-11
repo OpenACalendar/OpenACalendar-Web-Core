@@ -28,6 +28,7 @@ class GroupListController {
 		$params->set($_GET);
 		$params->getGroupRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getGroupRepositoryBuilder()->setIncludeDeleted(false);
+		$params->getGroupRepositoryBuilder()->setIncludeMediasSlugs(true);
 		
 		$groups = $params->getGroupRepositoryBuilder()->fetchAll();
 		

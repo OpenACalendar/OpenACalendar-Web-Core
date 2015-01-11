@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'index/page2col.html.twig' %}
+{% extends 'index/currentuser/page.html.twig' %}
 
 {% block pageTitle %}You - {% endblock %} 
 
@@ -14,35 +14,44 @@
 {% endblock %}
 
 
-{% block contentLeft %}
-
-	<p>Welcome.</p>
-
-{% endblock %}
-	
 {% set currentUserPrivateFeedKey = getCurrentUserPrivateFeedKey() %}
 
-{% block contentRight %}
 
-	<ul class="actionList">
-		<li><a href="/me/notification"><div class="iconBellOLarge"></div> Notifications</a></li>
-		<li class="header">Your Personal Calendar</li>
-		<li><a href="/me/agenda"><div class="iconCalendarOLarge"></div> Agenda</a></li>
-		<li><a href="/me/calendar"><div class="iconCalendarOLarge"></div> Calendar</a></li>
-		<li>
-			<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
-				<div class="iconDownloadLarge"></div> Export
-			</a>
-		</li>
-		<li class="header">Your account</li>
-		{% if not config.isSingleSiteMode %}
-			<li><a href="/me/sites"><div class="iconCalendarOLarge"></div> Calendars</a></li>
-		{% endif %}
-		<li><a href="/me/password"><div class="iconKeyLarge"></div> Change Password</a></li>
-		<li><a href="/me/emails"><div class="iconEnvelopeOLarge"></div> Emails we send you</a></li>
-		<li><a href="/me/prefs"><div class="iconGearsLarge"></div> Preferences</a></li>
-		<li><a href="/person/{{ currentUser.username }}"><div class="iconUserLarge"></div> View your public profile</a></li>
-	</ul>
+{% block innerContent %}
+
+	<div class="innerPageLeft">
+
+		<p>Welcome.</p>
+
+	</div>
+
+	<div class="innerPageRight">
+
+		<ul class="actionList">
+			<li><a href="/me/notification"><div class="iconBellOLarge"></div> Notifications</a></li>
+			<li class="header">Your Personal Calendar</li>
+			<li><a href="/me/agenda"><div class="iconCalendarOLarge"></div> Agenda</a></li>
+			<li><a href="/me/calendar"><div class="iconCalendarOLarge"></div> Calendar</a></li>
+			<li>
+				<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
+					<div class="iconDownloadLarge"></div> Export
+				</a>
+			</li>
+			<li class="header">Your account</li>
+			{% if not config.isSingleSiteMode %}
+				<li><a href="/me/sites"><div class="iconCalendarOLarge"></div> Calendars</a></li>
+			{% endif %}
+			<li><a href="/me/password"><div class="iconKeyLarge"></div> Change Password</a></li>
+			<li><a href="/me/emails"><div class="iconEnvelopeOLarge"></div> Emails we send you</a></li>
+			<li><a href="/me/prefs"><div class="iconGearsLarge"></div> Preferences</a></li>
+			<li><a href="/person/{{ currentUser.username }}"><div class="iconUserLarge"></div> View your public profile</a></li>
+		</ul>
+
+	</div>
+
+	<div class="afterInnerPageContent"></div>
+
+
 
 {% endblock %}
 

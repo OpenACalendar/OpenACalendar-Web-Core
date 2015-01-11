@@ -34,6 +34,11 @@
 			</time>				
 		</div>
 	{% endif %}
+	{%  if event.hasMediaSlugs %}
+		{% for mediaSlug in event.mediaSlugsAsList(2) %}
+			<div class="media"><a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slugForURL }}"><img src="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/media/{{ mediaSlug }}/thumbnail"></a></div>
+		{% endfor %}
+	{%  endif %}
 	<div class="title">
 		<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slugForUrl }}">
 			{{ event.summaryDisplay }}

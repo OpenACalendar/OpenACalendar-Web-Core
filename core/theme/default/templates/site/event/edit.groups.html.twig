@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/event/page2col.html.twig' %}
+{% extends 'site/event/page.html.twig' %}
 
 
 
@@ -13,59 +13,65 @@
 {% block pageTitle %}Edit Groups for {{ event.summaryDisplay }} - {% endblock %} 
 
 
-{% block innerContentLeft %}
+{% block innerContent %}
 
-	<h3>Groups</h3>
-	
 	<p>An event can be in more than one group at once.</p>
-		
-	<ul class="groups">
-		{% for group in groups %}
-			<li class="group">
-				<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
-				{{ group.description | truncate(200) | nl2br }}
-				<form method="post">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					<input type="hidden" name="removeGroup" value="{{ group.slug }}">
-					<input type="submit" value="Remove Event From Group">
-				</form>
-			</li>
-		{% else %}
-			<li>
-				This event is not in any groups.
-			</li>								
-		{% endfor %}
-	</ul>
-	
-	<form method="get" action="/event/{{ event.slugForURL }}">
-		<input type="submit" value="OK, Finished editing!">
-	</form>
 
-{% endblock %}
-	
-{% block innerContentRight %}
+	<div class="innerPageRight">
 
-	<h3>Add to other Groups</h3>
+		<h3>Current Groups</h3>
 
-	{% include '/site/groupListFilterParams.html.twig' %}
-			
-	<ul class="groups">
-		{% for group in groupsToAdd %}
-			<li class="group">
-				<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
-				{{ group.description | truncate(200) |  nl2br }}
-				<form method="post">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					<input type="hidden" name="addGroup" value="{{ group.slug }}">
-					<input type="submit" value="Add Event To Group">
-				</form>
-			</li>
-		{% else %}
-			<li>
-				There are no groups.
-			</li>								
-		{% endfor %}
-	</ul>
+		<ul class="mainListGroups">
+			{% for group in groups %}
+				<li class="group">
+					<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
+					{{ group.description | truncate(200) | nl2br }}
+					<form method="post">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="removeGroup" value="{{ group.slug }}">
+						<input type="submit" value="Remove Event From Group">
+					</form>
+				</li>
+			{% else %}
+				<li class="nodata">
+					This event is not in any groups.
+				</li>
+			{% endfor %}
+		</ul>
+
+		<form method="get" action="/event/{{ event.slugForURL }}">
+			<input type="submit" value="OK, Finished editing!">
+		</form>
+
+	</div>
+
+	<div class="innerPageLeft">
+
+		<h3>Add to other Groups</h3>
+
+		{% include '/site/groupListFilterParams.html.twig' %}
+
+		<ul class="mainListGroups">
+			{% for group in groupsToAdd %}
+				<li class="group">
+					<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
+					{{ group.description | truncate(200) |  nl2br }}
+					<form method="post">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="addGroup" value="{{ group.slug }}">
+						<input type="submit" value="Add Event To Group">
+					</form>
+				</li>
+			{% else %}
+				<li class="nodata">
+					There are no groups.
+				</li>
+			{% endfor %}
+		</ul>
+
+	</div>
+
+	<div class="afterInnerPageContent"></div>
 
 {% endblock %}
 

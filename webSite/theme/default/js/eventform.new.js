@@ -37,6 +37,7 @@ function loadDupes() {
 				html += '</a></div>';
 				html += '<div class="title"><a href="#" onclick="showEventPopup('+ event.slug +'); return false;">'+escapeHTML(event.summary)+'</a></div>';
 				html += '<div class="description">'+(event.description ? escapeHTMLNewLine(event.description) : '')+'</div>';
+				html += '<div class="afterEventListing"></div>';
 				html += '</li>';
 			}
 			$('#DuplicateEventsList').empty().append(html);
@@ -48,9 +49,9 @@ function loadDupes() {
 function showEventPopup(eventSlug) {
 	var div = $('#EventPopup');
 	if (div.size() == 0) {
-		var html = '<div id="EventPopup" class="PopupBox">';
-		html +=	'<div id="EventPopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
-		html += '<div class="PopupBoxContent">';
+		var html = '<div id="EventPopup" class="popupBox">';
+		html +=	'<div id="EventPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html += '<div class="popupBoxContent">';
 		html += '<div id="EventPopupContent">';
 		html += '</div>';
 		html += '<div id="EventPopupAttendanceContent">';
@@ -63,13 +64,15 @@ function showEventPopup(eventSlug) {
 	}
 	showPopup();
 
-	$('#EventPopupContent').html('<div id="EventPopupTitle">Loading ...</div>'+
-			'<div id="EventPopupDescription"></div>'+
+	$('#EventPopupContent').html('<div class="popupShowEvent">'+
+			'<div id="EventPopupTitle" class="title">Loading ...</div>'+
+			'<div id="EventPopupDescription" class="description"></div>'+
 			'<div id="EventPopupGroupsWrapper"></div>'+
-			'<div id="EventPopupVenueWrapper"></div>'+
-			'<div id="EventPopupTimes"></div>'+
-			'<div class="EventPopupLink" id="EventPopupLinkYes"><a href="/event/' + eventSlug + '">Yes, this is the event!</a></div>'+
-			'<div class="EventPopupLink" id="EventPopupLinkNo"><a href="#" onclick="notDuplicateOfEvent(' + eventSlug + '); return false;">No, this is a different event!</a></div>');
+			'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
+			'<div id="EventPopupTimes" class="times"></div>'+
+			'<div class="popupLink" id="EventPopupLinkYes"><a href="/event/' + eventSlug + '">Yes, this is the event!</a></div>'+
+			'<div class="popupLink" id="EventPopupLinkNo"><a href="#" onclick="notDuplicateOfEvent(' + eventSlug + '); return false;">No, this is a different event!</a></div>'+
+			'</div>');
 	$.ajax({
 		url: "/api1/event/"+eventSlug+"/info.json"
 	}).success(function ( eventdata ) {
@@ -79,20 +82,24 @@ function showEventPopup(eventSlug) {
 		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
 		if (event.venue) {
 			$('#EventPopupVenueWrapper').html(
-					'<div class="venueTitle">Venue '+escapeHTML(event.venue.title)+'</div>'+
-					'<div class="venueDescription">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 300) : '')+'</div>'+
-					'<div class="venueAddress">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
+					'<div class="title">Venue '+escapeHTML(event.venue.title)+'</div>'+
+					'<div class="description">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 300) : '')+'</div>'+
+					'<div class="address">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
 				);
 		} else {
 			$('#EventPopupVenueWrapper').html('&nbsp;');
 		}
 		var html = '';
 		if (event.groups) {
+			html += '<ul class="popupListGroups">';
 			for(groupIdx in event.groups) {
 				var group = event.groups[groupIdx];
-				html += '<div class="groupTitle">Group '+escapeHTML(group.title)+'</div>';
-				html += '<div class="groupDescription">'+(group.description ? escapeHTMLNewLine(group.description,300) : '')+'</div>';
+				html += '<li class="group">';
+				html += '<div class="title">Group '+escapeHTML(group.title)+'</div>';
+				html += '<div class="description">'+(group.description ? escapeHTMLNewLine(group.description,300) : '')+'</div>';
+				html += '</li>';
 			}
+			html += '</ul>';
 		}
 		$('#EventPopupGroupsWrapper').html(html);
 	});

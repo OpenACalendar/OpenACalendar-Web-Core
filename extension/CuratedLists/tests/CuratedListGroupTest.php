@@ -87,6 +87,18 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+
 		// Add group to list
 		TimeSource::mock(2014,5,1,8,0,0);
 		$clRepo->addGroupToCuratedList($group, $curatedList, $user);
@@ -135,6 +147,18 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $curatedListWithInfo->isEventInListViaGroup());
 		$this->assertEquals($group->getId(), $curatedListWithInfo->getEventInListViaGroupId());
 
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsGroup));
+
 		// Remove group from list
 		TimeSource::mock(2014,5,1,9,0,0);
 		$clRepo->removeGroupFromCuratedList($group, $curatedList, $user);
@@ -161,6 +185,16 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
 	}
 
 	function testEventInTwoGroupsOneAdded() {
@@ -235,6 +269,22 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
 		// Add group to list
 		TimeSource::mock(2014,5,1,8,0,0);
 		$clRepo->addGroupToCuratedList($group1, $curatedList, $user);
@@ -285,6 +335,21 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($group1->getId(), $curatedListWithInfo->getEventInListViaGroupId());
 
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
 
 		// Remove group from list
 		TimeSource::mock(2014,5,1,9,0,0);
@@ -313,6 +378,22 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
 	}
 
 	function testEventInTwoGroupsBothAdded() {
@@ -387,6 +468,24 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+
 		// Add group to list
 		TimeSource::mock(2014,5,1,8,0,0);
 		$clRepo->addGroupToCuratedList($group1, $curatedList, $user);
@@ -438,6 +537,23 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($group2->getId(), $curatedListWithInfo->getEventInListViaGroupId());
 
 
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsGroup));
+
 		// Remove group from list
 		TimeSource::mock(2014,5,1,9,0,0);
 		$clRepo->removeGroupFromCuratedList($group1, $curatedList, $user);
@@ -465,6 +581,22 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
 
 	}
 
@@ -540,6 +672,21 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$curatedListWithInfo = $curatedListsWithInfo[0];
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
 
 		// Add group to list
 		TimeSource::mock(2014,5,1,8,0,0);
@@ -592,6 +739,21 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($group1->getId(), $curatedListWithInfo->getEventInListViaGroupId());
 
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(1, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
 
 		// Remove group from list
 		TimeSource::mock(2014,5,1,9,0,0);
@@ -621,6 +783,21 @@ class CuratedListGroupTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($event);
+		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsEvent));
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group1);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($group2);
+		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
+		$this->assertEquals(0, count($curatedListsContainsGroup));
 	}
 
 }

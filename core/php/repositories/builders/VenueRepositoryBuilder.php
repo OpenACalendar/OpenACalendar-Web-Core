@@ -81,10 +81,23 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 	public function setIncludeDeleted($value) {
 		$this->include_deleted = $value;
 	}
-	
+
+	protected $includeMediasSlugs = false;
+
+	/**
+	 * @param boolean $includeMediasSlugs
+	 */
+	public function setIncludeMediasSlugs($includeMediasSlugs)
+	{
+		$this->includeMediasSlugs = $includeMediasSlugs;
+	}
+
+
 	
 	protected function build() {
 		global $DB;
+
+		$this->select[] = "  venue_information.* ";
 
 		if ($this->site) {
 			$this->where[] =  " venue_information.site_id = :site_id ";
@@ -137,13 +150,20 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 		if (!$this->include_deleted) {
 			$this->where[] = " venue_information.is_deleted = '0' ";
 		}
-		
+
+		if ($this->includeMediasSlugs) {
+			$this->select[] = "  (SELECT  array_to_string(array_agg(media_information.slug), ',') FROM media_information ".
+				" JOIN media_in_venue ON media_information.id = media_in_venue.media_id ".
+				" WHERE media_information.deleted_at IS NULL AND media_information.is_file_lost='0' ".
+				" AND media_in_venue.removal_approved_at IS NULL AND media_in_venue.venue_id = venue_information.id ".
+				" GROUP BY venue_information.id ) AS media_venue_slugs ";
+		}
 	}
 	
 	protected function buildStat() {
 		global $DB;
 		
-		$sql = "SELECT venue_information.* FROM venue_information ".
+		$sql = "SELECT".  implode(",", $this->select)." FROM venue_information ".
 			($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 				" ORDER BY venue_information.title ASC ";
 	

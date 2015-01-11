@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/page2col.html.twig' %}
+{% extends 'site/page.html.twig' %}
 
 {% block pageTitle %}Welcome - {% endblock %} 
 
@@ -20,53 +20,48 @@
 {% endblock %}
 
 
-{% block contentLeft %}
-	{% if currentSite.descriptionText %}
-		<p>{{ currentSite.descriptionText | nl2br | linkify }}</p>
-	{% else %}
-		<p>Welcome to the calender for {{ currentSite.title  }}.</p>
-	{% endif %}
-		
-	<ul class="actionList">
-		<li><a href="/event"><div class="iconCalendarOLarge"></div> Events</a></li>
-		{% if currentSite.isFeatureGroup %}
-			<li><a href="/group"><div class="iconUsersLarge"></div> Groups</a></li>
-		{% endif %}
-		{# We don't have currentSite.isFeatureVirtualEvents in the next OR statement because if 
-		site has virtual only, theres not much point showing places menu at all. 
-		It'll only have one entry and it will be the same as the main event listings anyway.
-		#}
-		{% if currentSite.cachedIsMultipleCountries  or currentSite.isFeaturePhysicalEvents %}
-			<li><a href="/places"><div class="iconGlobeLarge"></div> Places</a></li>
-		{% endif %}
-		<li><a href="/history"><div class="iconHistoryLarge"></div> Recent Changes</a></li>
-	</ul>
+{% block content %}
 
-{% endblock %}
+	<div id="innerPageWrapper">
+		<div id="innerPage">
 
+			<div class="innerPageLeft">
+				{% if currentSite.descriptionText %}
+					<p>{{ currentSite.descriptionText | nl2br | linkify }}</p>
+				{% else %}
+					<p>Welcome to the calender for {{ currentSite.title  }}.</p>
+				{% endif %}
+			</div>
 
-{% block contentRight %}
-		
-	<ul class="events">
-		<li class="export">
-			<a href="/api1/events.ical" onclick="showExportPopup(); return false;">
-				<div class="iconDownloadSmall"></div> export
-			</a>
-			{% if currentSite.getIsWebRobotsAllowed %}
-				<a href="#" onclick="showSharePopup(); return false;">
-					<div class="iconShareSmall"></div> share
-				</a>
-			{% endif %}				
-		</li>
-		{% for event in events %}
-			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-		{% else %}
-			<p>
-				There are no upcoming events.
-				{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
-			</p>
-		{% endfor %}
-	</ul>
+			<div class="innerPageRight">
+				&nbsp;
+			</div>
+
+			<div class="afterInnerPageContent"></div>
+
+			<ul class="mainListEvents">
+				<li class="export">
+					<a href="/api1/events.ical" onclick="showExportPopup(); return false;">
+						<div class="iconDownloadSmall"></div> export
+					</a>
+					{% if currentSite.getIsWebRobotsAllowed %}
+						<a href="#" onclick="showSharePopup(); return false;">
+							<div class="iconShareSmall"></div> share
+						</a>
+					{% endif %}
+				</li>
+				{% for event in events %}
+					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
+				{% else %}
+					<p>
+						There are no upcoming events.
+						{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
+					</p>
+				{% endfor %}
+			</ul>
+
+		</div>
+	</div>
 
 {% endblock %}
 

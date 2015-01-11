@@ -61,11 +61,7 @@ form.styled {
 	}
 	#Map {
 		width: 50%;
-		height: 300px;
-	}
-	#Map.fullWidth {
-		width: 99%;
-		height: 300px;
+		height: 200px;
 	}
 	p.information {
 		font-style: italic;
@@ -122,30 +118,43 @@ form.styled {
 	clear: both;
 }
 
-#Map.leftColumnFullWidth {
+#Map.fullWidth {
 	width: 99%;
 	height: 400px;
 }
 
-
-#groupSummaryPanel {
-	padding: 10px;
-
-	float: right;
-	.rounded-corners(5px);
-	background: #ccc;
-	text-align: right;
-}
-
-
-
-ul.groups {
-	li.group {
-		border-bottom: 2px solid #E9E9E9;
+.underTitleGroupListing {
+	padding: 5px 0;
+	li {
+		display: inline;
+		font-style: italic;
+		.title {
+			font-weight: bold;
+		}
 	}
 }
 
-ul.groups li.group, div.group {
+
+
+ul.mainListGroups {
+	li.group {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		border-bottom: 2px solid #E9E9E9;
+	}
+	li.nodata {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListGroups {
+		li.group, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
+
+ul.mainListGroups li.group, div.group {
 	min-height: 50px;
 	padding: 5px 0 20px 0;
 	.title {
@@ -161,14 +170,38 @@ ul.groups li.group, div.group {
 			text-decoration: underline;
 		}
 	}
+	.media {
+		width: 100px;
+		height: 100px;
+		text-align: center;
+		vertical-align: middle;
+		float: right;
+		margin: 2px;
+		img {
+			max-width: 100px;
+			max-height: 100px;
+		}
+	}
 	.notfound {
 		text-align: center;
 		font-style: italic;
 	}
+	div.afterGroupListing {
+		clear: both;
+	}
 }
 
-ul.countries {
+@media screen and (max-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListGroups li.group, div.group {
+		.media {
+			display: none;
+		}
+	}
+}
+
+ul.mainListCountries {
 	li.country {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
 			font-size: 1.1em;
@@ -185,9 +218,17 @@ ul.countries {
 		}
 	}
 }
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListCountries {
+		li.country {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
 
-ul.venues {
+ul.mainListVenues {
 	li.venue {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
 			font-size: 1.1em;
@@ -201,6 +242,22 @@ ul.venues {
 				color: black;
 				text-decoration: underline;
 			}
+		}
+
+		.media {
+			width: 100px;
+			height: 100px;
+			text-align: center;
+			vertical-align: middle;
+			float: right;
+			margin: 2px;
+			img {
+				max-width: 100px;
+				max-height: 100px;
+			}
+		}
+		.afterVenueListing {
+			clear: both;
 		}
 	}
 	li.information {
@@ -208,6 +265,25 @@ ul.venues {
 		font-style: italic;
 		font-size: 1.3em;
 		line-height: 1.5em;
+	}
+	li.nodata {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListVenues {
+		li.venue, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
+
+@media screen and (max-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListVenues li.venue {
+		.media {
+			display: none;
+		}
 	}
 }
 
@@ -227,8 +303,9 @@ ul.selectvenue {
 	}
 }
 
-ul.importurls {
+ul.mainListImporturls {
 	li.importurl {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
 			font-size: 1.1em;
@@ -244,30 +321,23 @@ ul.importurls {
 			}
 		}
 	}
-}
-
-ul.curatedlists {
-	li.curatedlist {
-		border-bottom: 2px solid #E9E9E9;
-		.title {
-			font-size: 1.1em;
-			font-weight: bold;
-			padding: 2px 0;
-			a {
-				color: #333;
-				text-decoration: none;
-			}
-			a:hover {
-				color: black;
-				text-decoration: underline;
-			}
-		}
+	li.nodata {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
 	}
 }
 
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListImporturls {
+		li.importurl, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
 
 ul.tags {
 	li.tag {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
 			font-size: 1.1em;
@@ -293,6 +363,17 @@ ul.tags {
 				color: white;
 				text-decoration: none;
 			}
+		}
+	}
+	li.nodata {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.tags {
+		li.tag, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
 		}
 	}
 }
@@ -503,14 +584,6 @@ ul.history {
 	}
 }
 
-#VenuePopup {
-	 .PopUpTitle {
-		font-weight: bold;
-		font-size: 1.2em;
-		padding: 0 0 5px 0;
-   }
-}
-
 #MediaPopup {
 	.imageWrapper {
 		img {
@@ -536,22 +609,6 @@ ul.history {
 		}
 	}
 }
-
-ul.eventSmallListings {
-	li.eventSmallListing {
-		padding: 4px 0;
-		.time {
-			color: #ec2327;
-			font-weight: 400;
-			background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
-			padding: 5px 10px 5px 20px;			
-		}
-		.summary {
-			
-		}
-	}
-}
-
 
 ul.newRecuringEvents li.newRecuringEvent {
 	margin-bottom: 10px;
@@ -609,46 +666,6 @@ ul.newRecuringEvents li.newRecuringEvent {
 		height: 400px;
 	}
 
-#curatedListsOnEventWrapper {
-	margin: 10px;
-	max-width: 600px;
-	padding: 10px;
-	background: @colourLighter1;
-	.wrapperTitle {
-		font-weight: bold;
-		font-size: 1.1em;
-		padding-bottom: 5px;
-	}
-	ul.curatedlists {
-		li.curatedlist {
-			border-bottom: 0px;
-			padding-bottom: 5px;
-			.title {
-				font-style: normal;
-				font-weight: normal;
-				font-size: 1.0em;
-				display: inline;
-			}
-			.addedViaGroup {
-				display: inline;
-				font-style: italic;
-			}
-			form {
-				display: inline;
-			}
-
-		}
-	}
-}
-
-#userCanPushToChildAreaWrapper, .isGroupRunningOutOfFutureEventsWarning {
-	clear: both;
-	margin: 10px;
-	max-width: 600px;
-	padding: 10px;
-	background: @colourLighter1;
-}
-
 #MapTimeControls {
 	input {
 		width: 75px;
@@ -695,8 +712,9 @@ ul.mapTimeEvents {
 /** event is in common **/
 div.filterListGroupWrapper, div.filterListVenueWrapper {
 	padding: 5px 0;
+	margin: @listDataItemsFilterMarginTopBottom @listDataItemsFilterMarginLeftRightNarrowScreen;
 	form.filterListGroup , form.filterListVenue {
-		background: #e9e9e9;
+		background: @colourLighter2;
 		padding: 10px;
 		div.inputField {
 			display: inline;
@@ -706,13 +724,18 @@ div.filterListGroupWrapper, div.filterListVenueWrapper {
 			display: inline;
 			padding: 10px;
 			input {
-				background: #009900;
-				color: white;
-				border: 2px solid #009900;
+				background: @colourLighter1;
+				color: black;
+				border: 2px solid @colourLighter1;
 				.rounded-corners(2px);
 				cursor:pointer;
 			}
 		}
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	div.filterListGroupWrapper, div.filterListVenueWrapper  {
+		margin: @listDataItemsFilterMarginTopBottom @listDataItemsFilterMarginLeftRightWideScreen;
 	}
 }
 
@@ -738,22 +761,6 @@ div.filterListGroupWrapper, div.filterListVenueWrapper {
 	}
 }
 
-
-.UserAttendingList {
-	margin: 5px 0;
-	padding: 5px 5px 5px 50px;
-	.rounded-corners(5px);
-	background: #ddd;
-	background-image: url('/theme/default/img/users32.png');
-	background-repeat: no-repeat;
-	background-position: 5px 5px;
-  	.GetTicket {
-		font-weight: bold;
-		font-size: 120%;
-		font-style: italic;
-	}
-}
-
 ul.mediaGrid {
 	li {
 		width: 100px;
@@ -772,7 +779,7 @@ ul.mediaGrid {
 	clear: left;
 }
 
-ul.mediaList {
+ul.mainListMedias {
 	li.media {
 		padding: 5px 0;
 		.thumbnail {
@@ -889,7 +896,7 @@ ul.areasAdmin {
 	li.selectedarea {
 		padding: 10px 0;
 		.content {
-			background: url('/theme/default/img/areaBackground.png') no-repeat #0DA20D;
+			background: url('/theme/default/img/areaBackground.png') no-repeat @colourDarker1;
 			.rounded-corners(2px);
 			padding: 2px 5px 2px 20px;
 			color: white;
@@ -902,16 +909,12 @@ ul.areasAdmin {
 	}
 }
 
-#DuplicateEventsContainer {
-	border: 1px solid #ccc;
+ul.mainListImportedEvents li.importedevent, div.importedevent {
+	border: 2px solid #E9E9E9;
+	background: #eeeeee;
 	.rounded-corners(5px);
-}
-
-
-ul.importedevents li.importedevent, div.importedevent {
-	border-bottom: 2px solid #E9E9E9;
-	margin-bottom: 10px;
-	padding: 20px 0;
+	margin: 10px 0;
+	padding: 5px;
 	div.dateTimeIcon {
 		float: left;
 		width: 60px;

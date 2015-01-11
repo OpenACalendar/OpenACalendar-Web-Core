@@ -248,6 +248,18 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		$this->includeEventsFromClosedSites = $includeEventsFromClosedSites;
 	}
 
+
+	protected $includeMediasSlugs = false;
+
+	/**
+	 * @param boolean $includeMediasSlugs
+	 */
+	public function setIncludeMediasSlugs($includeMediasSlugs)
+	{
+		$this->includeMediasSlugs = $includeMediasSlugs;
+	}
+
+
 	
 	protected function build() {
 		global $DB;
@@ -453,6 +465,26 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 					'(CASE WHEN group_information.title IS NULL THEN \'\' ELSE group_information.title END)'.
 					' ILIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
+		}
+
+		if ($this->includeMediasSlugs) {
+			$this->select[] = "  (SELECT  array_to_string(array_agg(media_information.slug), ',') FROM media_information ".
+				" JOIN media_in_event ON media_information.id = media_in_event.media_id ".
+				" WHERE media_information.deleted_at IS NULL AND media_information.is_file_lost='0' ".
+				" AND media_in_event.removal_approved_at IS NULL AND media_in_event.event_id = event_information.id ".
+				" GROUP BY event_information.id ) AS media_event_slugs ";
+			$this->select[] = "  (SELECT  array_to_string(array_agg(media_information.slug), ',') FROM media_information ".
+				" JOIN media_in_group ON media_information.id = media_in_group.media_id ".
+				" JOIN event_in_group ON event_in_group.group_id = media_in_group.group_id ".
+				" WHERE media_information.deleted_at IS NULL AND media_information.is_file_lost='0' ".
+				" AND media_in_group.removal_approved_at IS NULL ".
+				" AND event_in_group.removal_approved_at IS NULL AND event_in_group.event_id = event_information.id ".
+				" GROUP BY event_information.id ) AS media_group_slugs ";
+			$this->select[] = "  (SELECT  array_to_string(array_agg(media_information.slug), ',') FROM media_information ".
+				" JOIN media_in_venue ON media_information.id = media_in_venue.media_id ".
+				" WHERE media_information.deleted_at IS NULL AND media_information.is_file_lost='0' ".
+				" AND media_in_venue.removal_approved_at IS NULL AND media_in_venue.venue_id = event_information.venue_id ".
+				" GROUP BY event_information.venue_id ) AS media_venue_slugs ";
 		}
 	}
 	

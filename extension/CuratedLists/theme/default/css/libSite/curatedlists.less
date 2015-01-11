@@ -1,0 +1,54 @@
+/**
+ * @package org.openacalendar.curatedlists
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+*/
+
+
+ul.mainListCuratedLists {
+	li.curatedlist {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		border-bottom: 2px solid #E9E9E9;
+		.rounded-corners-bottom-right(5px);
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+		.editContentsWrapper {
+			padding: 5px 0;
+			text-align: right;
+			.addedViaGroup {
+				font-style: italic;
+			}
+		}
+	}
+	li.nodata {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
+	}
+}
+
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListCuratedlists {
+		li.curatedlist, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
+
+ul.infoBoxListCuratedLists {
+	li.curatedlist {
+		font-size: 0.8em;
+	}
+}

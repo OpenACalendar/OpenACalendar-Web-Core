@@ -1,0 +1,37 @@
+ul.mainListCuratedLists li.curatedlist {
+  margin: 5px 5px;
+  border-bottom: 2px solid #E9E9E9;
+}
+ul.mainListCuratedLists li.curatedlist .title {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 2px 0;
+}
+ul.mainListCuratedLists li.curatedlist .title a {
+  color: #333;
+  text-decoration: none;
+}
+ul.mainListCuratedLists li.curatedlist .title a:hover {
+  color: black;
+  text-decoration: underline;
+}
+ul.mainListCuratedLists li.curatedlist .editContentsWrapper {
+  padding: 5px 0;
+  text-align: right;
+}
+ul.mainListCuratedLists li.curatedlist .editContentsWrapper .addedViaGroup {
+  font-style: italic;
+}
+ul.mainListCuratedLists li.nodata {
+  margin: 5px 5px;
+  font-style: italic;
+}
+@media screen and (min-width: 750px) {
+  ul.mainListCuratedlists li.curatedlist,
+  ul.mainListCuratedlists li.nodata {
+    margin: 5px 50px;
+  }
+}
+ul.infoBoxListCuratedLists li.curatedlist {
+  font-size: 0.8em;
+}

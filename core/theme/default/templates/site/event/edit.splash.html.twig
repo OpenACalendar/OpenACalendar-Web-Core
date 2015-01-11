@@ -5,17 +5,13 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/event/page2col.html.twig' %}
+{% extends 'site/event/page.html.twig' %}
 
 
 {% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
 
-{% block innerContentLeft %}
-	What would you like to edit?	
-{% endblock %}
+{% block innerContent %}
 
-{% block innerContentRight %}
-	
 	<ul class="actionList">
 	
 		<li><a href="/event/{{ event.slugForURL }}/edit/details"><div class="iconPencilSmall"></div> Edit Details</a></li>
@@ -30,6 +26,11 @@
 
 		{% if currentSite.isFeatureGroup %}
 			<li><a href="/event/{{ event.slugForUrl }}/edit/groups"><div class="iconPencilSmall"></div> Edit Groups</a></li>
+		{% endif %}
+
+
+		{% if currentUserActions.has("org.openacalendar","eventEditCuratedLists") %}
+			<li><a href="/event/{{ event.slugForUrl }}/edit/curatedlists"><div class="iconPencilSmall"></div> Edit Curated lists</a></li>
 		{% endif %}
 
 	</ul>

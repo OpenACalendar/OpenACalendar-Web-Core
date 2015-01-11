@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'index/page2col.html.twig' %}
+{% extends 'index/currentuser/page.html.twig' %}
 
 {% block pageTitle %}Calendars - {% endblock %} 
 
@@ -16,22 +16,35 @@
 
 
 
-{% block contentRight %}
+{% block innerContent %}
 
 
-	<ul class="sites">
-		{% for site in sites %}
-			<li class="site">
-				<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="title">
-					<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
-					<span class="titleWrapper">{{ site.title }}</span>
-				</a>
-				<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="link">
-					View
-				</a>
-			</li>
-		{% endfor %}
-	</ul>
+	<div class="innerPageLeft">
+
+		<ul class="sites">
+			{% for site in sites %}
+				<li class="site">
+					<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="title">
+						<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
+						<span class="titleWrapper">{{ site.title }}</span>
+					</a>
+					<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="link">
+						View
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+
+
+	</div>
+
+	<div class="innerPageRight">
+
+
+	</div>
+
+	<div class="afterInnerPageContent"></div>
+
 
 
 

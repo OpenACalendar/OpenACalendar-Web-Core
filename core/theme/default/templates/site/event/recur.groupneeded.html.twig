@@ -5,9 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/event/page2col.html.twig' %}
-
-
+{% extends 'site/event/page.html.twig' %}
 
 {% block pageTitle %}Recur {{ event.summaryDisplay }} - {% endblock %} 
 
@@ -20,13 +18,10 @@
 {% endblock %}
 
 
-{% block innerContentLeft %}
+{% block innerContent %}
 
 	<p>Before you can make this event an recurring one, you must add it to a group.</p>
-	
-{% endblock %}
 
-{% block innerContentRight %}
 	<form id="GroupSearchForm" method="POST">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 		
@@ -37,7 +32,7 @@
 		</div>
 	</form>
 		
-	<ul class="groups" id="GroupSearchList">
+	<ul class="mainListGroups" id="GroupSearchList">
 	</ul>
 	
 {% endblock %}

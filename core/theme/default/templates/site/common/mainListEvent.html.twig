@@ -34,12 +34,17 @@
 			</time>				
 		</div>
 	{% endif %}
+	{%  if event.hasMediaSlugs %}
+		{% for mediaSlug in event.mediaSlugsAsList(2) %}
+			<div class="media"><a href="/event/{{ event.slugForURL }}"><img src="/media/{{ mediaSlug }}/thumbnail"></a></div>
+		{% endfor %}
+	{%  endif %}
 	<div class="title" itemprop="name">
 		<a href="/event/{{ event.slugForUrl }}" itemprop="url">
 			{{ event.summaryDisplay}}
 		</a>
 	</div>
-	<p class="description" itemprop="description">{{ event.description |  truncate(1000) | nl2br  | linkify }}</p>	
+	<p class="description" itemprop="description">{{ event.description |  truncate(1000) | nl2br  | linkify }}</p>
 	{% if showVenueAndArea is defined and showVenueAndArea and event.isPhysical and ( event.venue or event.area )%}
 		<div class="dateAndLocationWrapper">
 			<div class="location" itemprop="location">

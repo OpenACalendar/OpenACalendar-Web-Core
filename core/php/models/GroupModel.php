@@ -23,6 +23,7 @@ class GroupModel {
 	protected $twitter_username;
 	protected $is_deleted;
 	protected $is_duplicate_of_id;
+	protected $media_group_slugs;
 	
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
@@ -34,6 +35,7 @@ class GroupModel {
 		$this->twitter_username = $data['twitter_username'];
 		$this->is_deleted = $data['is_deleted'];
 		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
+		$this->media_group_slugs = isset($data['media_group_slugs']) ? $data['media_group_slugs'] : null;
 	}
 	
 	public function getId() {
@@ -179,6 +181,34 @@ class GroupModel {
 	public function getIsDuplicateOfId()
 	{
 		return $this->is_duplicate_of_id;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasMediaSlugs()
+	{
+		return (bool)$this->media_group_slugs;
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function getMediaSlugsAsList($maxCount = 1000)
+	{
+		$out = array();
+		if ($this->media_group_slugs) {
+			foreach(explode(",",$this->media_group_slugs) as $slug) {
+				if ($slug && !in_array($slug, $out)) {
+					$out[] = $slug;
+				}
+				if (count($out) == $maxCount) {
+					return $out;
+				}
+			}
+		}
+		return $out;
 	}
 
 

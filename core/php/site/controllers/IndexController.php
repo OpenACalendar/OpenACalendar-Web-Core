@@ -33,6 +33,7 @@ class IndexController {
 		$erb->setIncludeDeleted(false);
 		$erb->setIncludeAreaInformation(true);
 		$erb->setIncludeVenueInformation(true);
+		$erb->setIncludeMediasSlugs(true);
 		if ($app['currentUser']) {
 			$erb->setUserAccount($app['currentUser'], true);
 		}		

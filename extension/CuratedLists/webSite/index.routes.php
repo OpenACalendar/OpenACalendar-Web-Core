@@ -9,6 +9,21 @@
  */
 
 
+$app->match('/event/{slug}/edit/curatedlists', "org\openacalendar\curatedlists\site\controllers\EventController::editCuratedLists")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionCalendarChangeRequired)
+		->before($featureCuratedListRequired)
+		->before($canChangeSite);
+
+
+$app->match('/group/{slug}/edit/curatedlists', "org\openacalendar\curatedlists\site\controllers\GroupController::editCuratedLists")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionCalendarChangeRequired)
+		->before($featureCuratedListRequired)
+		->before($featureGroupRequired)
+		->before($canChangeSite);
+
+
 $app->match('/curatedlist', "site\controllers\CuratedListListController::index"); 
 $app->match('/curatedlist/', "site\controllers\CuratedListListController::index"); 
 

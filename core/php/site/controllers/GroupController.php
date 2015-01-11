@@ -77,6 +77,10 @@ class GroupController {
 			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
+		// There is curatedListGeneralEdit but we want to check details on this group to
+		$app['currentUserActions']->set("org.openacalendar","groupEditCuratedLists",
+			$app['currentUserActions']->has("org.openacalendar","curatedListGeneralEdit")
+			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupNewEvent",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
@@ -97,6 +101,7 @@ class GroupController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
@@ -123,17 +128,10 @@ class GroupController {
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = 0;
 		}
 
-
-		if ($app['currentUser']) {
-			$clrb = new CuratedListRepositoryBuilder();
-			$clrb->setSite($app['currentSite']);
-			$clrb->setUserCanEdit($app['currentUser']);
-			$clrb->setIncludeDeleted(false);
-			$clrb->setGroupInformation($this->parameters['group']);
-			$this->parameters['curatedListsUserCanEdit'] = $clrb->fetchAll();
-		} else {
-			$this->parameters['curatedListsUserCanEdit'] = array();
-		}
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsGroup($this->parameters['group']);
+		$curatedListRepoBuilder->setIncludeDeleted(false);
+		$this->parameters['curatedLists'] = $curatedListRepoBuilder->fetchAll();
 
 		return $app['twig']->render('site/group/show.html.twig', $this->parameters);
 	}
@@ -170,9 +168,19 @@ class GroupController {
 		
 		return $app['twig']->render('site/group/importers.html.twig', $this->parameters);
 	}
-	
-	
-	function media($slug, Request $request, Application $app) {		
+
+
+
+	function editSplash($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Group does not exist.");
+		}
+
+		return $app['twig']->render('site/group/edit.splash.html.twig', $this->parameters);
+
+	}
+
+	function editMedia($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
 		}
@@ -215,10 +223,10 @@ class GroupController {
 		$mrb->setGroup($this->parameters['group']);
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
-		return $app['twig']->render('site/group/media.html.twig', $this->parameters);
+		return $app['twig']->render('site/group/edit.media.html.twig', $this->parameters);
 	}
 	
-	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {		
+	function editMediaRemove($slug, $mediaslug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
 		}
@@ -233,10 +241,10 @@ class GroupController {
 			}
 		}
 		
-		return $app->redirect("/group/".$this->parameters['group']->getSlug().'/media');
+		return $app->redirect("/group/".$this->parameters['group']->getSlug().'/edit/media');
 	}
 	
-	function mediaAddExisting($slug, Request $request, Application $app) {		
+	function editMediaAddExisting($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
 		}
@@ -258,11 +266,11 @@ class GroupController {
 		$mrb->setNotInGroup($this->parameters['group']);
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
-		return $app['twig']->render('site/group/media.add.existing.html.twig', $this->parameters);
+		return $app['twig']->render('site/group/edit.media.add.existing.html.twig', $this->parameters);
 	}
 	
 	
-	function edit($slug, Request $request, Application $app) {
+	function editDetails($slug, Request $request, Application $app) {
 
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
@@ -290,7 +298,7 @@ class GroupController {
 		
 		
 		$this->parameters['form'] = $form->createView();
-		return $app['twig']->render('site/group/edit.html.twig', $this->parameters);
+		return $app['twig']->render('site/group/edit.details.html.twig', $this->parameters);
 		
 	}	
 	

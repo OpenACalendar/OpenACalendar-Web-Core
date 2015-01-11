@@ -28,6 +28,7 @@ class VenueListController {
 		$params->set($_GET);
 		$params->getVenueRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getVenueRepositoryBuilder()->setIncludeDeleted(false);
+		$params->getVenueRepositoryBuilder()->setIncludeMediasSlugs(true);
 		
 		$venues = $params->getVenueRepositoryBuilder()->fetchAll();
 		

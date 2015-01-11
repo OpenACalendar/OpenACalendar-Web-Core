@@ -20,19 +20,19 @@
 
 {% block content %}
 
-	{% if groups|length > 0 %}
-		<div id="groupSummaryPanel">
-			<ul>
-			{% for group in groups %}
-				<li>In group: <a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></li>
-			{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
 
 
 	<h2>{{  event.summaryDisplay }}{%  if event.isCancelled  %} [CANCELLED]{%  endif %}</h2>
-	
+
+
+	{% if groups|length > 0 %}
+		<ul class="underTitleGroupListing">
+			{% for group in groups %}
+				<li>by <a href="/group/{{ group.slugForUrl }}" class="title">{{ group.title }}</a></li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}

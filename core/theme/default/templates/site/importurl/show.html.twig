@@ -32,22 +32,26 @@
 
 {% block innerContent %}
 
-	<p>Imported from: {{ importurl.url }}</p>
+	<div  class="mainShowImportURL">
 
-	{% if country %}
-		<p>
-			Events are in:
-			{% spaceless %}
-				<img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"> {{ country.title }}
-				{% for thisarea in parentAreas %}, {{ thisarea.title }}{% endfor %}
-				{% if area %}, {{ area.title }}{% endif %}
-			{% endspaceless %}
-		</p>
-	{% endif %}
-	
-	{% if not hasLogEntries and  importurl.isEnabled %}
-		<p>This importer has not been run yet. It will be run shortly, please return soon to check on the results.</p>
-	{% endif %}
+		<p>Imported from: {{ importurl.url }}</p>
+
+		{% if country %}
+			<p>
+				Events are in:
+				{% spaceless %}
+					<img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"> {{ country.title }}
+					{% for thisarea in parentAreas %}, {{ thisarea.title }}{% endfor %}
+					{% if area %}, {{ area.title }}{% endif %}
+				{% endspaceless %}
+			</p>
+		{% endif %}
+
+		{% if not hasLogEntries and  importurl.isEnabled %}
+			<p>This importer has not been run yet. It will be run shortly, please return soon to check on the results.</p>
+		{% endif %}
+
+	</div>
 	
 {% endblock %}
 

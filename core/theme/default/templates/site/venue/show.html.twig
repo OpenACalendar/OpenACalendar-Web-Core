@@ -18,17 +18,23 @@
 {% endblock %}
 
 {% block actions %}
+	{% if currentUserActions.has("org.openacalendar","venueEditDetails")
+		or currentUserActions.has("org.openacalendar","venueEditMedia") %}
+		<li class="actionWithSubMenu">
+			<a href="/venue/{{ venue.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
+			<ul class="submenu">
+				{%  if currentUserActions.has("org.openacalendar","venueEditDetails") %}
+					<li><a href="/venue/{{ venue.slugForUrl }}/edit/details">Edit Details</a></li>
+				{%  endif %}
+				{%  if currentUserActions.has("org.openacalendar","venueEditMedia") %}
+					<li><a href="/venue/{{ venue.slugForUrl }}/edit/media">Edit Media</a></li>
+				{%  endif %}
+			</ul>
+		</li>
+	{%  endif %}
 	{% if currentUserActions.has("org.openacalendar","venueDelete") %}
 		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
 	{%  endif %}
-	{%  if currentUserActions.has("org.openacalendar","venueEditDetails") %}
-		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a></li>
-	{%  endif %}
-	{% if currentUserActions.has("org.openacalendar","venueEditMedia") %}
-		<li class="action">
-			<a href="/venue/{{ venue.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
-		</li>
-	{% endif %}
 	<li class="action">
 		<a href="/api1/venue/{{ venue.slug }}/events.ical" onclick="showExportPopup(); return false;">
 			<div class="iconDownloadSmall"></div> export
@@ -47,25 +53,12 @@
 		
 {% block innerContent %}
 
-
-	<div class="event" itemscope itemtype="http://schema.org/Place">
+	<div class="mainShowVenue" itemscope itemtype="http://schema.org/Place">
 		<meta itemprop="name" content="{{ venue.title|e('html_attr') }}" />
-			
-		<div id="innerPageLeft" class="venue">
 
+		<div class="innerPageLeft">
 
-			{% if currentUserActions.has("org.openacalendar","venueEditPushToChildAreas") %}
-				<div id="userCanPushToChildAreaWrapper">
-					<p>Is "{{ venue.title }}" in one of these places?</p>
-					<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
-						{%  include 'site/common/pushToChildArea.html.twig' %}
-					</form>
-				</div>
-			{% endif %}
-
-			<p itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
-
-			<div id="Map" class="map"></div>
+			<p itemprop="description" class="description">{{ venue.description | nl2br  | linkify }}</p>
 
 			<div class="locationWrapper">
 				<div class="location" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
@@ -93,24 +86,49 @@
 				</ul>
 				<div class="afterMediaGrid"></div>
 			{% endif %}
-			
+
+			{% if currentUserActions.has("org.openacalendar","venueEditPushToChildAreas") %}
+				<div class="highlightInfoBoxWrapper">
+					<div class="highlightInfoBoxTitle">Where is this?</div>
+					<div class="highlightInfoBoxContent">
+						<p>Is "{{ venue.title }}" in one of these places?</p>
+						<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
+							{%  include 'site/common/pushToChildArea.html.twig' %}
+						</form>
+					</div>
+				</div>
+			{% endif %}
+
 		</div>
 			
-		<div id="innerPageRight">
+		<div class="innerPageRight">
 
-			{% include '/site/eventListFilterParams.html.twig' %}
+			{%  if venue.hasLatLng %}
+				<div id="Map" class="map"></div>
+				{% if currentSite.isFeatureMap %}
+					<ul class="actionList">
+						<li><a href="/map?venue={{ venue.slugForURL }}"><div class="iconEyeLarge"></div> View larger map</a></li>
+					</ul>
+				{% endif %}
+			{% endif %}
 
-			<ul class="events">
-				{% for event in events %}
-					{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
-				{% else %}
-					<li>
-						No events found.
-					</li>		
-				{% endfor %}
-			</ul>
-		
 		</div>
+
+		<div class="afterInnerPageContent"></div>
+
+
+		{% include '/site/eventListFilterParams.html.twig' %}
+
+		<ul class="mainListEvents">
+			{% for event in events %}
+				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
+			{% else %}
+				<li class="nodata">
+					No events found.
+				</li>
+			{% endfor %}
+		</ul>
+
 	
 	</div>
 

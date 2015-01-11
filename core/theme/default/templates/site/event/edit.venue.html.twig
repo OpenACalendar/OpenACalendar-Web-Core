@@ -69,15 +69,9 @@
 	</form>
 
 
-	<div id="innerPageLeft" class="hideIfOneCol">
-		<div id="MapWrapper">
-			<div id="Map" class="leftColumnFullWidth"></div>
-		</div>
-	</div>
 
-
-	<div id="innerPageRight">
-		<ul class="venues" id="EditEventVenueSearchResults">
+	<div class="innerPageLeft">
+		<ul class="mainListVenues" id="EditEventVenueSearchResults">
 			{% for venue in venues %}
 				<li class="venue result">
 					<form action="/event/{{  event.slugForURL }}/edit/venue" method="post" class="oneActionFormRight">
@@ -112,6 +106,16 @@
 			</li>
 		</ul>
 	</div>
+
+
+	<div class="innerPageRight" class="hideIfOneCol">
+		<div id="MapWrapper">
+			<div id="Map" class="fullWidth"></div>
+		</div>
+	</div>
+
+	<div class="afterInnerPageContent"></div>
+
 
 {% endblock %}
 

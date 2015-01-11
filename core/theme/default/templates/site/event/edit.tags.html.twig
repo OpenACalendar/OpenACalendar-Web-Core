@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/event/page2col.html.twig' %}
+{% extends 'site/event/page.html.twig' %}
 
 
 
@@ -13,56 +13,62 @@
 {% block pageTitle %}Edit Tags for {{ event.summaryDisplay }} - {% endblock %} 
 
 
-{% block innerContentLeft %}
+{% block innerContent %}
 
-	<h3>Tags</h3>
-	
-	
-	<ul class="tags">
-		{% for tag in tags %}
-			<li class="tag">
-				<form method="post">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					<input type="hidden" name="removeTag" value="{{ tag.slug }}">
-					<span class="tagTitleWrapper">{{ tag.title }}</a></span>
-					<input type="submit" value="Remove Tag">
-				</form>
-				<p>{{ tag.description | nl2br | linkify }}</p>
-			</li>
-		{% else %}
-			<li>
-				This event has no tags.
-			</li>					
-		{% endfor %}
-	</ul>
-	
-	<form method="get" action="/event/{{ event.slugForURL }}">
-		<input type="submit" value="OK, Finished editing!">
-	</form>
+	<div class="innerPageRight">
 
-{% endblock %}
-	
-{% block innerContentRight %}
-	
-	<h3>Add other Tags</h3>
+	<h3>Current Tags</h3>
 
-	<ul class="tags">
-		{% for tag in tagsToAdd %}
-			<li class="tag">
-				<form method="post">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					<input type="hidden" name="addTag" value="{{ tag.slug }}">
-					<span class="tagTitleWrapper">{{ tag.title }}</span>
-					<input type="submit" value="Add Tag">
-				</form>
-				<p>{{ tag.description | nl2br | linkify }}</p>
-			</li>
-		{% else %}
-			<li>
-				No tags found to add.
-			</li>					
-		{% endfor %}
-	</ul>
+		<ul class="tags">
+			{% for tag in tags %}
+				<li class="tag">
+					<form method="post">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="removeTag" value="{{ tag.slug }}">
+						<span class="tagTitleWrapper">{{ tag.title }}</a></span>
+						<input type="submit" value="Remove Tag">
+					</form>
+					<p>{{ tag.description | nl2br | linkify }}</p>
+				</li>
+			{% else %}
+				<li>
+					This event has no tags.
+				</li>
+			{% endfor %}
+		</ul>
+
+		<form method="get" action="/event/{{ event.slugForURL }}">
+			<input type="submit" value="OK, Finished editing!">
+		</form>
+
+	</div>
+
+
+	<div class="innerPageLeft">
+
+		<h3>Add other Tags</h3>
+
+		<ul class="tags">
+			{% for tag in tagsToAdd %}
+				<li class="tag">
+					<form method="post">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="addTag" value="{{ tag.slug }}">
+						<span class="tagTitleWrapper">{{ tag.title }}</span>
+						<input type="submit" value="Add Tag">
+					</form>
+					<p>{{ tag.description | nl2br | linkify }}</p>
+				</li>
+			{% else %}
+				<li>
+					No tags found to add.
+				</li>
+			{% endfor %}
+		</ul>
+
+	</div>
+
+	<div class="afterInnerPageContent"></div>
 
 {% endblock %}
 

@@ -6,7 +6,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/tag/page2col.html.twig' %}
+{% extends 'site/tag/page.html.twig' %}
 
 {% block pageTitle %}{{ tag.title }} - {% endblock %} 
 
@@ -20,27 +20,25 @@
 {% endblock %}
 
 
-{% block innerContentLeft %}
+{% block innerContent %}
 
-	<p>{{ tag.description | nl2br  | linkify }}</p>
+	<div class="mainShowTag">
 
-
-{% endblock %}
-
-
-{% block innerContentRight %}
+		<p>{{ tag.description | nl2br  | linkify }}</p>
 
 		{% include '/site/eventListFilterParams.html.twig' %}
 
-		<ul class="events">
+		<ul class="mainListEvents">
 			{% for event in events %}
-				{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
+				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 			{% else %}
-				<li>
+				<li class="nodata">
 					No events found.
 				</li>					
 			{% endfor %}
 		</ul>
+
+	</div>
 
 {% endblock %}
 

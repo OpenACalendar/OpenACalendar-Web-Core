@@ -6,13 +6,13 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div id="header">
+	<div class="title">
+		<a href="/">
+			<img src="/{% if config.isSingleSiteMode %}theme/default/img/logo.png{% else %}getLogo.php{% endif %}?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+			<h1>{{ currentSite.title }}</h1>
+		</a>
+	</div>
 	<ul class="menu">
-		<li class="title">
-			<a href="/">
-				<img src="/{% if config.isSingleSiteMode %}theme/default/img/logo.png{% else %}getLogo.php{% endif %}?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
-				<h1>{{ currentSite.title }}</h1>
-			</a>
-		</li>
 		<li class="menu">
 			<a href="/event">Events</a>
 			<ul class="submenu">
@@ -71,6 +71,21 @@
 				</ul>
 			</li>
 		{% endif %}
+		<li class="menu">
+			<a href="/history">Changes</a>
+			<ul class="submenu">
+				<li><a href="/history">Recent Changes</a></li>
+				{% if currentUser is not null and currentUserWatchesSite is defined %}
+					<li id="userWatchesSite">
+						{%  if currentUserWatchesSite %}
+							<a href="/watch/">Watching!</a>
+						{% else %}
+							<a href="/watch/">Watch?</a>
+						{% endif %}
+					</li>
+				{% endif %}
+			</ul>
+		</li>
 		{#  the class user is used by JS to move the menu to the left #}
 		<li class="user">
 			{% if currentUser is null %}
@@ -87,15 +102,6 @@
 				<ul class="submenu">
 					{% if currentSite.cachedIsMultipleTimezones %}
 						<li><a href="/mytimezone">{{ currentTimeZone }}</a></li>
-					{% endif %}
-					{% if currentUserWatchesSite is defined %}
-						<li id="userWatchesSite">
-							{%  if currentUserWatchesSite %}
-								<a href="/watch/">Watching!</a>
-							{% else %}
-								<a href="/watch/">Watch?</a>
-							{% endif %}
-						</li>
 					{% endif %}
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
 					{% if currentUserActions.has("org.openacalendar","admin") %}

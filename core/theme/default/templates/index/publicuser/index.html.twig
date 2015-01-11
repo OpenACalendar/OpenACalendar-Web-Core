@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'index/publicuser/page2col.html.twig' %}
+{% extends 'index/publicuser/page.html.twig' %}
 
 {% block pageTitle %}{{ user.username }} - {% endblock %} 
 
@@ -17,16 +17,12 @@
 {% block tabIndex %}currentTab{% endblock %}
 
 	
-{% block innerContentLeft %}
-	<p>User: {{ user.username }}</p>
-{% endblock %}
-
-{% block innerContentRight %}
-	<ul class="events">
+{% block innerContent %}
+	<ul class="mainListEvents">
 		{% for event in events %}
 			{% include '/index/common/eventListing.html.twig' with {'event':event, 'showOtherUserOptions':true}  %}
 		{% else %}
-			<li>
+			<li class="nodata">
 				This person has not made any event attendance plans public.
 			</li>					
 		{% endfor %}

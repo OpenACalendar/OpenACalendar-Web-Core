@@ -5,7 +5,7 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/importurl/page2col.html.twig' %}
+{% extends 'site/importurl/page.html.twig' %}
 
 {% block pageTitle %}{{ importurl.title }} - {% endblock %}
 
@@ -16,7 +16,7 @@
 	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 {% endblock %}
 
-{% block innerContentLeft %}
+{% block innerContent %}
 
 	<h3>Imported event</h3>
 
@@ -68,20 +68,15 @@
 		<div class="afterEventListing"></div>
 	</div>
 
-
-{% endblock %}
-
-{% block innerContentRight %}
-
 	<h3>Real events</h3>
 
 	{% include '/site/eventListFilterParams.html.twig' %}
 
-	<ul class="events">
+	<ul class="mainListEvents">
 		{% for event in events %}
-			{% include '/site/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
+			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
 		{% else %}
-			<li>
+			<li class="nodata">
 				No events found.
 				{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
 			</li>

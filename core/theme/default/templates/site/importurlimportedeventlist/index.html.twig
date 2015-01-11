@@ -24,11 +24,11 @@
 
 	{% include '/site/importedEventListFilterParams.html.twig' %}
 
-	<ul class="importedevents">
+	<ul class="mainListImportedEvents">
 		{% for importedEvent in importedEvents %}
 			{% include '/site/common/importedEventListing.html.twig' with {'importedEvent':importedEvent , 'importurl':importurl }  %}
 		{% else %}
-			<li>
+			<li class="nodata">
 				No events found.
 			</li>
 		{% endfor %}

@@ -140,6 +140,11 @@ class EventController {
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeatureGroup());
+		// There is curatedListGeneralEdit but we want to check details on this event to
+		$app['currentUserActions']->set("org.openacalendar","eventEditCuratedLists",
+			$app['currentUserActions']->has("org.openacalendar","curatedListGeneralEdit")
+			&& !$this->parameters['event']->getIsDeleted());
+			// not && !$this->parameters['event']->getIsCancelled() because if cancelled want to remove from lists
 		$app['currentUserActions']->set("org.openacalendar","eventEditMedia",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
@@ -196,17 +201,6 @@ class EventController {
 		if ($app['currentUser'] && !$this->parameters['event']->isInPast()) {
 			$uaer = new UserAtEventRepository();
 			$this->parameters['userAtEvent'] = $uaer->loadByUserAndEventOrInstanciate($app['currentUser'], $this->parameters['event']);
-		}
-		
-		if ($app['currentUser']) {
-			$clrb = new CuratedListRepositoryBuilder();
-			$clrb->setSite($app['currentSite']);
-			$clrb->setUserCanEdit($app['currentUser']);
-			$clrb->setEventInformation($this->parameters['event']);
-			$clrb->setIncludeDeleted(false);
-			$this->parameters['curatedListsUserCanEdit'] = $clrb->fetchAll();
-		} else {
-			$this->parameters['curatedListsUserCanEdit'] = array();
 		}
 
 		$this->parameters['mediasForGroup'] = array();
@@ -302,6 +296,12 @@ class EventController {
 			$groupRepo = new GroupRepository();
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
 		}
+
+
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder->setContainsEvent($this->parameters['event']);
+		$curatedListRepoBuilder->setIncludeDeleted(false);
+		$this->parameters['curatedLists'] = $curatedListRepoBuilder->fetchAll();
 		
 		return $app['twig']->render('site/event/show.html.twig', $this->parameters);
 	}
@@ -1498,7 +1498,7 @@ class EventController {
 	}
 	
 	
-	function media($slug, Request $request, Application $app) {		
+	function editMedia($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -1541,10 +1541,10 @@ class EventController {
 		$mrb->setEvent($this->parameters['event']);
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
-		return $app['twig']->render('site/event/media.html.twig', $this->parameters);
+		return $app['twig']->render('site/event/edit.media.html.twig', $this->parameters);
 	}
 	
-	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {		
+	function editMediaRemove($slug, $mediaslug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -1559,10 +1559,10 @@ class EventController {
 			}
 		}
 		
-		return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/media');
+		return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/edit/media');
 	}
 	
-	function mediaAddExisting($slug, Request $request, Application $app) {		
+	function editMediaAddExisting($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
@@ -1584,7 +1584,7 @@ class EventController {
 		$mrb->setNotInEvent($this->parameters['event']);
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
-		return $app['twig']->render('site/event/media.add.existing.html.twig', $this->parameters);
+		return $app['twig']->render('site/event/edit.media.add.existing.html.twig', $this->parameters);
 	}
 
 	function exportExistingGoogleCalendar($slug, Request $request, Application $app) {

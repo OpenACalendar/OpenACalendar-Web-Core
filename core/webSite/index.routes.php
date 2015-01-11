@@ -163,16 +163,16 @@ $app->match('/event/{slug}/edit/groups', "site\controllers\EventController::edit
 		->before($permissionCalendarChangeRequired)
 		->before($featureGroupRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/media', "site\controllers\EventController::media")
+$app->match('/event/{slug}/edit/media', "site\controllers\EventController::editMedia")
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($appFileStoreRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/media/add/existing', "site\controllers\EventController::mediaAddExisting")
+$app->match('/event/{slug}/edit/media/add/existing', "site\controllers\EventController::editMediaAddExisting")
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionCalendarChangeRequired)
 	->before($appFileStoreRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/media/{mediaslug}/remove', "site\controllers\EventController::mediaRemove")
+$app->match('/event/{slug}/edit/media/{mediaslug}/remove', "site\controllers\EventController::editMediaRemove")
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->assert('mediaslug', '\d+')
 	->before($permissionCalendarChangeRequired)
@@ -193,23 +193,28 @@ $app->match('/group/{slug}', "site\controllers\GroupController::show")
 $app->match('/group/{slug}/', "site\controllers\GroupController::show")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/group/{slug}/history', "site\controllers\GroupController::history")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/group/{slug}/media', "site\controllers\GroupController::media")
+		->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/group/{slug}/edit', "site\controllers\GroupController::editSplash")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionCalendarChangeRequired)
+		->before($featureGroupRequired)
+		->before($canChangeSite);
+$app->match('/group/{slug}/edit/media', "site\controllers\GroupController::editMedia")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appFileStoreRequired)
 		->before($canChangeSite); 
-$app->match('/group/{slug}/media/add/existing', "site\controllers\GroupController::mediaAddExisting")
+$app->match('/group/{slug}/edit/media/add/existing', "site\controllers\GroupController::editMediaAddExisting")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
 		->before($appFileStoreRequired)
 		->before($canChangeSite);
-$app->match('/group/{slug}/media/{mediaslug}/remove', "site\controllers\GroupController::mediaRemove")
+$app->match('/group/{slug}/edit/media/{mediaslug}/remove', "site\controllers\GroupController::editMediaRemove")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('mediaslug', '\d+')
 		->before($permissionCalendarChangeRequired)
 		->before($appFileStoreRequired)
 		->before($canChangeSite); 
-$app->match('/group/{slug}/edit', "site\controllers\GroupController::edit")
+$app->match('/group/{slug}/edit/details', "site\controllers\GroupController::editDetails")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
 		->before($featureGroupRequired)
@@ -295,12 +300,16 @@ $app->match('/venue/virtual/history', "site\controllers\VenueVirtualController::
 $app->match('/venue/{slug}', "site\controllers\VenueController::show")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/venue/{slug}/', "site\controllers\VenueController::show")
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/venue/{slug}/edit', "site\controllers\VenueController::edit")
+		->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/venue/{slug}/edit', "site\controllers\VenueController::editSplash")
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($permissionCalendarChangeRequired)
+	->before($canChangeSite);
+$app->match('/venue/{slug}/edit/details', "site\controllers\VenueController::editDetails")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
 		->before($featurePhysicalEventsRequired)		
-		->before($canChangeSite); 
+		->before($canChangeSite);
 $app->match('/venue/{slug}/delete', "site\controllers\VenueController::delete")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
@@ -321,16 +330,16 @@ $app->match('/venue/{slug}/calendar/{year}/{month}/', "site\controllers\VenueCon
 		->assert('month', '\d+') ; 
 $app->match('/venue/{slug}/history', "site\controllers\VenueController::history")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/venue/{slug}/media', "site\controllers\VenueController::media")
+$app->match('/venue/{slug}/edit/media', "site\controllers\VenueController::editMedia")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appFileStoreRequired)
 		->before($canChangeSite);
-$app->match('/venue/{slug}/media/add/existing', "site\controllers\VenueController::mediaAddExisting")
+$app->match('/venue/{slug}/edit/media/add/existing', "site\controllers\VenueController::editMediaAddExisting")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appFileStoreRequired)
 		->before($permissionCalendarChangeRequired)
 		->before($canChangeSite);
-$app->match('/venue/{slug}/media/{mediaslug}/remove', "site\controllers\VenueController::mediaRemove")
+$app->match('/venue/{slug}/edit/media/{mediaslug}/remove', "site\controllers\VenueController::editMediaRemove")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('mediaslug', '\d+')
 		->before($appFileStoreRequired)
@@ -375,7 +384,7 @@ $app->match('/area/{slug}/newArea', "site\controllers\AreaController::newArea")
 		->before($permissionCalendarChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite); 
-$app->match('/area/{slug}/edit', "site\controllers\AreaController::edit")
+$app->match('/area/{slug}/edit/details', "site\controllers\AreaController::editDetails")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
 		->before($featurePhysicalEventsRequired)

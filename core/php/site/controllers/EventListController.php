@@ -23,6 +23,7 @@ class EventListController {
 		$params->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
+		$params->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		if ($app['currentUser']) {
 			$params->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}

@@ -25,8 +25,10 @@ $(document).ready(function() {
 			hasMarkers = true;
 		}
 	}
-	
-	if (area && area.maxLat && area.minLat && area.maxLng && area.minLng) {
+
+	if (venue) {
+		map.setView([venue.lat, venue.lng],17);
+	} else if (area && area.maxLat && area.minLat && area.maxLng && area.minLng) {
 		var southWest = L.latLng(area.minLat, area.minLng),
 			northEast = L.latLng(area.maxLat, area.maxLng),
 			bounds = L.latLngBounds(southWest, northEast);
@@ -47,27 +49,26 @@ $(document).ready(function() {
 function onClickMarker() {
 	var div = $('#VenuePopup');
 	if (div.size() == 0) {
-		var html = '<div id="VenuePopup" class="PopupBox">';
-		html +=	'<div id="VenuePopupClose" class="PopupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
-		html += '<div id="VenuePopupContent"  class="PopupBoxContent">';
+		var html = '<div id="VenuePopup" class="popupBox" style="display: none;">';
+		html +=	'<div id="VenuePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html += '<div id="VenuePopupContent"  class="popupBoxContent">';
 		html += '</div>';
 		html += '</div>';
 		$('body').append(html);
-	} else {
-		div.show();
 	}
 	showPopup();
+	$('#VenuePopup').fadeIn(500);
 
-	$('#VenuePopupContent').html('<div id="VenuePopupTitle" class="PopUpTitle">Loading ...</div>'+
+	$('#VenuePopupContent').html('<div class="popupShowVenue"><div id="VenuePopupTitle" class="title">Loading ...</div></div>'+
 			'<div id="VenuePopupEvents"></div>'+
-			'<div id="VenuePopupLink"><a href="/venue/' + this.slug + '">View More Details</a></div>');
+			'<div class="popupLink"><a href="/venue/' + this.slug + '">View More Details</a></div>');
 	$.ajax({
 		url: "/api1/venue/"+this.slug+"/events.json"
 	}).success(function ( venuedata ) {
-		var html = '<ul class="eventSmallListings">';
+		var html = '<ul class="popupListEvents">';
 		for(i in venuedata.data) {
 			var event = venuedata.data[i];
-			html += '<li class="eventSmallListing"><span class="time">'+event.start.displaylocal+'</span> <span class="summary">'+event.summaryDisplay+'</span></li>';
+			html += '<li class="event"><span class="time">'+event.start.displaylocal+'</span> <span class="summary">'+event.summaryDisplay+'</span></li>';
 		}
 		$('#VenuePopupEvents').html(html+'</ul>');
 		$('#VenuePopupTitle').html(venuedata.venue.title);

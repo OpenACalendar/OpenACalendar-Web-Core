@@ -15,12 +15,18 @@
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{ event.slugForUrl }}/" />
 	{% if not currentSite.isWebRobotsAllowed or event.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
+	<link rel="stylesheet" type="text/css" href="/theme/default/css/curatedlists.css?v={{ config.assetsVersion }}">
 {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
 	
 {% block actions %}
-	{%  if currentUserActions.has("org.openacalendar","eventEditDetails") and ( currentUserActions.has("org.openacalendar","eventEditVenue") or currentUserActions.has("org.openacalendar","eventEditTags") or currentUserActions.has("org.openacalendar","eventEditGroups") ) %}
+	{%  if currentUserActions.has("org.openacalendar","eventEditDetails") or
+		currentUserActions.has("org.openacalendar","eventEditVenue") or
+		currentUserActions.has("org.openacalendar","eventEditTags") or
+		currentUserActions.has("org.openacalendar","eventEditGroups") or
+		currentUserActions.has("org.openacalendar","eventEditCuratedLists") or
+		currentUserActions.has("org.openacalendar","eventEditMedia")  %}
 		<li class="actionWithSubMenu">
 			<a href="/event/{{ event.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
 			<ul class="submenu">
@@ -36,16 +42,17 @@
 				{% if currentUserActions.has("org.openacalendar","eventEditGroups") %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
 				{% endif %}
+				{% if currentUserActions.has("org.openacalendar","eventEditCuratedLists") %}
+					<li><a href="/event/{{ event.slugForUrl }}/edit/curatedlists">Edit Curated lists</a></li>
+				{% endif %}
+				{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
+					<li><a href="/event/{{ event.slugForUrl }}/edit/media">Edit Media</a></li>
+				{% endif %}
 			</ul>
 		</li>
 	{%  elseif currentUserActions.has("org.openacalendar","eventEditDetails") %}
 		<li class="action">
 			<a href="/event/{{ event.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> edit</a>
-		</li>
-	{% endif %}
-	{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
-		<li class="action">
-			<a href="/event/{{ event.slugForUrl }}/media"><div class="iconFileImageOSmall"></div> media</a>
 		</li>
 	{% endif %}
 	{% if currentUserActions.has("org.openacalendar","eventUndelete") %}
@@ -85,214 +92,259 @@
 
 {% block innerContent %}
 
-	<div class="event" itemscope itemtype="http://schema.org/Event">
+	<div class="mainShowEvent" itemscope itemtype="http://schema.org/Event">
 		<meta itemprop="name" content="{{ event.summaryDisplay|e('html_attr') }}" />
 
-		{% if currentUserActions.has("org.openacalendar","eventEditPushToChildAreas") %}
-			<div id="userCanPushToChildAreaWrapper">
-				<p>Is {% if venue %}"{{ venue.title }}"{% else %}this{% endif %} in one of these places?</p>
-				<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
-					{%  include 'site/common/pushToChildArea.html.twig' %}
-				</form>
-			</div>
-		{% endif %}
+		<div class="innerPageLeft">
 
-		{% if event.isdeleted %}
-			<div class="dateTimeIcon">
-				<div class="dateIcon">
-					<span class="deleted">Deleted!</span>
-				</div>
-			</div>
-		{% elseif event.isCancelled %}
-			<div class="dateTimeIcon">
-				<div class="dateIcon">
-					<span class="cancelled">Cancel<br>-led!</span>
-				</div>
-			</div>
-		{% else %}
-			<div class="dateTimeIcon">
-				<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+
+			{% if event.isdeleted %}
+				<div class="dateTimeIcon">
 					<div class="dateIcon">
-						<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
-						<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
-						<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+						<span class="deleted">Deleted!</span>
 					</div>
-					<div class="timeIcon">
-						<span class="startTime">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+				</div>
+			{% elseif event.isCancelled %}
+				<div class="dateTimeIcon">
+					<div class="dateIcon">
+						<span class="cancelled">Cancel<br>-led!</span>
 					</div>
-				</time>				
-			</div>
-		{% endif %}
+				</div>
+			{% else %}
+				<div class="dateTimeIcon">
+					<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+						<div class="dateIcon">
+							<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
+							<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
+							<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+						</div>
+						<div class="timeIcon">
+							<span class="startTime">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+						</div>
+					</time>
+				</div>
+			{% endif %}
 
-		<p class="description" itemprop="description">{{ event.description | nl2br  | linkify }}</p>
-	
-		{% if tags %}
-			<div class="inlineTags">
-				Tags:
-				<ul class="inlineTags">
-					{% for tag in tags %}
-						<li class="tag">
-							<span class="content"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></span>
-							<span class="aftercontent">&nbsp;</span>
-						</li>
+			<p class="description" itemprop="description">{{ event.description | nl2br  | linkify }}</p>
+
+			{% if tags %}
+				<div class="inlineTags">
+					Tags:
+					<ul class="inlineTags">
+						{% for tag in tags %}
+							<li class="tag">
+								<span class="content"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></span>
+								<span class="aftercontent">&nbsp;</span>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+
+			{% if mediasForEvent %}
+				<ul class="mediaGrid">
+					{% for media in mediasForEvent %}
+						<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
 					{% endfor %}
 				</ul>
+				<div class="afterMediaGrid"></div>
+			{% endif %}
+
+			<div class="dateAndLocationWrapper">
+				{% if currentTimeZone == event.timezone %}
+					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+				{% else %}
+					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}
+					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+				{% endif %}
 			</div>
-		{% endif %}
 
-		{% if event.url %}
-			<p class="description">More details at <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></p>
-		{% endif %}
-		
-		{% if event.ticketUrl %}
-			<p class="description">Get your tickets at <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></p>
-		{% endif %}
+		</div>
 
-		{% if mediasForEvent %}
-			<ul class="mediaGrid">
-				{% for media in mediasForEvent %}
-					<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
-				{% endfor %}
-			</ul>
-			<div class="afterMediaGrid"></div>
-		{% endif %}
+		<div class="innerPageRight">
 
-		{% if groups|length > 0 %}
-			{% for group in groups %}
-				<p class="groupTitle">About <a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></p>
+			{% if event.url %}
+				<div class="innerPageRightLinkWrapper">
+					<div class="innerPageRightLinkHeader">More details</div>
+					<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
+				</div>
+			{% endif %}
+
+			{% if event.ticketUrl %}
+				<div class="innerPageRightLinkWrapper">
+					<div class="innerPageRightLinkHeader">Get Tickets From</div>
+					<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></div>
+				</div>
+			{% endif %}
+
+			{% if event.isImported %}
+				<div class="innerPageRightLinkWrapper">
+					<div class="innerPageRightLinkHeader">Imported From</div>
+					<div class="innerPageRightLinkContent"><a href="/importurl/{{ importurl.slug }}">{{ importurl.url | linkinfo }}</a></div>
+				</div>
+			{% endif %}
+
+			<div class="infoBoxWrapper">
+				<div class="infoBoxTitle">People</div>
+				<div class="infoBoxContent">
+					{% if currentUser is not null %}
+						{% if not event.isInPast %}
+							<form method="post" action="/event/{{ event.slug }}/myAttendance.json" class="UserAttendingOptions">
+								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+								You
+								<select name="attending">
+									<option value="no" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}selected{% endif %}>are not</option>
+									<option value="maybe" {% if userAtEvent.isPlanMaybeAttending %}selected{% endif %}>might be</option>
+									<option value="yes" {% if userAtEvent.isPlanAttending %}selected{% endif %}>will be</option>
+								</select> attending.
+							<span class="UserAttendingPrivacyOptionsWrapper" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}style="display:none;"{% endif %}>
+								This is
+								<select name="privacy">
+									<option value="private" {% if not userAtEvent.isPlanPublic %}selected{% endif %}>private</option>
+									<option value="public" {% if userAtEvent.isPlanPublic %}selected{% endif %}>public</option>
+								</select>.
+							</span>
+							<span class="savingIndicator" style="display:none;">
+								<img src="/theme/default/img/ajaxLoading.gif?v={{ config.assetsVersion }}"> Saving ...
+							</span>
+								<span class="savedIndicator" style="display:none;"> Saved!</span>
+							</form>
+						{% endif %}
+					{% else %}
+						{# TODO #}
+					{% endif %}
+
+					<div id="UserAttendingListAjaxWrapper">
+						{% include 'site/common/eventUsersAttending.html.twig' with {} %}
+					</div>
+				</div>
+			</div>
+
+			{%  if curatedLists|length > 0 %}
+				<div class="infoBoxWrapper">
+					<div class="infoBoxTitle">Is in Curated Lists</div>
+					<div class="infoBoxContent">
+						<ul class="infoBoxListCuratedLists">
+							{% for curatedList in curatedLists %}
+								<li class="curatedlist"><a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			{%  endif %}
+
+		</div>
+
+		<div class="afterInnerPageContent"></div>
+
+
+
+
+
+		{% for displayGroup in groups %}
+			<div class="innerPageLeftRightTitle">
+				<p class="groupTitle">About <a href="/group/{{ displayGroup.slugForUrl }}">{{ displayGroup.title }}</a></p>
+			</div>
+			<div class="innerPageLeft">
 				{% if group.description  %}
-					<p class="groupDescription">{{ group.description | nl2br  | linkify }}</p>
+					<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
 				{% else %}
 					<p class="groupDescription">No details known.</p>
 				{% endif %}
-				{% if group.url and group.url != event.url %}
-					<p class="groupDescription">More details at <a href="{{ group.url }}" target="_blank">{{ group.url | linkinfo }}</a></p>
-				{% endif %}
-				{% if group.twitterUsername %}
-					<p class="groupDescription">Follow: <a href="https://twitter.com/{{ group.twitterUsername }}">@{{ group.twitterUsername }}</a></p>
-				{% endif %}
-				{% if mediasForGroup[group.slug] %}
+				{% if mediasForGroup[displayGroup.slug] %}
 					<ul class="mediaGrid">
-						{% for media in mediasForGroup[group.slug] %}
+						{% for media in mediasForGroup[displayGroup.slug] %}
 							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
 						{% endfor %}
 					</ul>
 					<div class="afterMediaGrid"></div>
 				{% endif %}
-			{% endfor %}
-		{% endif %}
+			</div>
+			<div class="innerPageRight">
+				{% if displayGroup.url and displayGroup.url != event.url %}
+					<div class="innerPageRightLinkWrapper">
+						<div class="innerPageRightLinkHeader">More details</div>
+						<div class="innerPageRightLinkContent"><a href="{{ displayGroup.url }}" target="_blank">{{ displayGroup.url | linkinfo }}</a></div>
+					</div>
+				{% endif %}
+				{% if displayGroup.twitterUsername %}
+					<div class="innerPageRightLinkWrapper">
+						<div class="innerPageRightLinkHeader">On Twitter</div>
+						<div class="innerPageRightLinkContent"><a href="https://twitter.com/{{ displayGroup.twitterUsername }}" target="_blank">@{{ displayGroup.twitterUsername }}</a></div>
+					</div>
+				{% endif %}
+				{% if displayGroup.id == group.id and isGroupRunningOutOfFutureEvents %}
+					<div class="highlightInfoBoxWrapper">
+						<div class="highlightInfoBoxTitle">Any more events?</div>
+						<div class="highlightInfoBoxContent">
+							Do you know of <a href="/group/{{ group.slugForUrl }}">any more events for {{ group.title }}</a>?
+							{% if isGroupRunningOutOfFutureEvents == 1 %}
+								We are about to run out of future events!
+							{% else %}
+								We don't know of any future events.
+							{% endif %}
+						</div>
+					</div>
+				{% endif %}
+			</div>
+			<div class="afterInnerPageContent"></div>
+		{% endfor %}
+
 				
 		{% if venue is not null %}
 			<div itemprop="location" itemscope itemtype="http://schema.org/Place">
-				<p class="venueTitle">About <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
-				{% if venue.description %}
-					<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
-				{% else %}
-					<p class="venueDescription">No details known.</p>
-				{% endif %}
-				<div id="Map" class="map"></div>
-				{% if mediasForVenue %}
-					<ul class="mediaGrid">
-						{% for media in mediasForVenue %}
-							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
-						{% endfor %}
-					</ul>
-					<div class="afterMediaGrid"></div>
-				{% endif %}
-			</div>
-		{% endif %}
-
-			
-				
-		<div class="dateAndLocationWrapper">
-			{% include 'site/common/eventLocationLine.html.twig' %}
-			{% if currentTimeZone == event.timezone %}
-				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
-			{% else %}
-				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}				
-				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
-			{% endif %}
-		</div>
-		
-		{% if event.isImported %}
-			<p class="imported">This was imported from <a href="/importurl/{{ importurl.slug }}">{{ importurl.url }}</a></p>
-		{% endif %}
-		
-
-		{% if currentUser is not null %} 
-			{% if not event.isInPast %}
-				<form method="post" action="/event/{{ event.slug }}/myAttendance.json" class="UserAttendingOptions">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					You 
-						<select name="attending">
-							<option value="no" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}selected{% endif %}>are not</option>
-							<option value="maybe" {% if userAtEvent.isPlanMaybeAttending %}selected{% endif %}>might be</option>
-							<option value="yes" {% if userAtEvent.isPlanAttending %}selected{% endif %}>will be</option>
-						</select> attending.
-					<span class="UserAttendingPrivacyOptionsWrapper" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}style="display:none;"{% endif %}>
-						This is 
-						<select name="privacy">
-							<option value="private" {% if not userAtEvent.isPlanPublic %}selected{% endif %}>private</option>
-							<option value="public" {% if userAtEvent.isPlanPublic %}selected{% endif %}>public</option>
-						</select>.
-					</span>
-					<span class="savingIndicator" style="display:none;">
-						<img src="/theme/default/img/ajaxLoading.gif?v={{ config.assetsVersion }}"> Saving ...
-					</span>
-					<span class="savedIndicator" style="display:none;"> Saved!</span>
-				</form>
-			{% endif %}
-		{% else %}
-			{# TODO #}
-		{% endif %}
-				
-		<div id="UserAttendingListAjaxWrapper">		
-			{% include 'site/common/eventUsersAttending.html.twig' with {} %}				
-		</div>
-				
-		{% if isGroupRunningOutOfFutureEvents %}
-			<div class="isGroupRunningOutOfFutureEventsWarning">
-				<p>
-					Do you know of <a href="/group/{{ group.slugForUrl }}">any more events for {{ group.title }}</a>?
-					{% if isGroupRunningOutOfFutureEvents == 1 %}
-						We are about to run out of future events!
+				<div class="innerPageLeftRightTitle">
+					<p class="venueTitle">About <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
+				</div>
+				<div class="innerPageLeft">
+					{% if venue.description %}
+						<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
 					{% else %}
-						We don't know of any future events.
+						<p class="venueDescription">No details known.</p>
 					{% endif %}
-				</p>
+					{% if mediasForVenue %}
+						<ul class="mediaGrid">
+							{% for media in mediasForVenue %}
+								<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+							{% endfor %}
+						</ul>
+						<div class="afterMediaGrid"></div>
+					{% endif %}
+
+					<div class="dateAndLocationWrapper">
+						{% include 'site/common/eventLocationLine.html.twig' %}
+					</div>
+
+					{% if currentUserActions.has("org.openacalendar","eventEditPushToChildAreas") %}
+						<div class="highlightInfoBoxWrapper">
+							<div class="highlightInfoBoxTitle">Where is this?</div>
+							<div class="highlightInfoBoxContent">
+								<p>Is {% if venue %}"{{ venue.title }}"{% else %}this{% endif %} in one of these places?</p>
+								<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
+									{%  include 'site/common/pushToChildArea.html.twig' %}
+								</form>
+							</div>
+						</div>
+					{% endif %}
+
+				</div>
+				<div class="innerPageRight">
+					{%  if venue.hasLatLng %}
+						<div id="Map" class="map"></div>
+						{% if currentSite.isFeatureMap %}
+							<ul class="actionList">
+								<li><a href="/map?venue={{ venue.slugForURL }}"><div class="iconEyeLarge"></div> View larger map</a></li>
+							</ul>
+						{% endif %}
+					{% endif %}
+				</div>
+				<div class="afterInnerPageContent"></div>
 			</div>
 		{% endif %}
-				
+
 		<div class="afterEventListing"></div>
 	</div>
-	
-	{% if curatedListsUserCanEdit and currentUserActions.has("org.openacalendar","curatedListGeneralEdit")  %}
-		<div id="curatedListsOnEventWrapper">
-			<div class="wrapperTitle">Curated Lists</div>
-			<ul class="curatedlists">
-				{% for curatedlist in curatedListsUserCanEdit %}
-					<li class="curatedlist">
-						<div class="title">{{ curatedlist.title }}</div>
-						{% if curatedlist.isEventInListViaGroup  %}
-							<div class="addedViaGroup">Added by a group</div>
-						{% elseif curatedlist.isEventInlist %}
-							<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
-								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-								<input type="hidden" name="returnTo" value="event">
-								<input type="submit" value="Remove">
-							</form>
-						{% else %}
-							<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/add" method="post">
-								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-								<input type="hidden" name="returnTo" value="event">
-								<input type="submit" value="Add">
-							</form>					
-						{% endif %}
-					</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endif %}	
+
 				
 {% endblock %}
 

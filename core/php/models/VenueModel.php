@@ -27,6 +27,7 @@ class VenueModel {
 	protected $is_deleted;
 	protected $area_id;
 	protected $is_duplicate_of_id;
+	protected $media_venue_slugs;
 
 
 	public function setFromDataBaseRow($data) {
@@ -43,6 +44,7 @@ class VenueModel {
 		$this->is_deleted = $data['is_deleted'];
 		$this->area_id = $data['area_id'];
 		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
+		$this->media_venue_slugs = isset($data['media_venue_slugs']) ? $data['media_venue_slugs'] : null;
 	}
 	
 	public function getId() {
@@ -151,6 +153,10 @@ class VenueModel {
 		return false;
 	}
 
+	public function hasLatLng() {
+		return $this->lat && $this->lng;
+	}
+
 	public function getLat() {
 		return $this->lat;
 	}
@@ -217,6 +223,34 @@ class VenueModel {
 	public function getIsDuplicateOfId()
 	{
 		return $this->is_duplicate_of_id;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasMediaSlugs()
+	{
+		return (bool)$this->media_venue_slugs;
+	}
+
+
+	/**
+	 * @return mixed
+	 */
+	public function getMediaSlugsAsList($maxCount = 1000)
+	{
+		$out = array();
+		if ($this->media_venue_slugs) {
+			foreach(explode(",",$this->media_venue_slugs) as $slug) {
+				if ($slug && !in_array($slug, $out)) {
+					$out[] = $slug;
+				}
+				if (count($out) == $maxCount) {
+					return $out;
+				}
+			}
+		}
+		return $out;
 	}
 
 

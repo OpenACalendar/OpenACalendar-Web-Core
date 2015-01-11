@@ -41,14 +41,11 @@
 			 
 			{% include '/site/groupListFilterParams.html.twig' %}
 			
-			<ul class="groups">
+			<ul class="mainListGroups">
 				{% for group in groups %}
-					<li class="group">
-						<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
-						{{ group.description |  truncate(1000) | nl2br | linkify }}
-					</li>
+					{% include '/site/common/mainListGroup.html.twig' with {'group':group }  %}
 				{% else %}
-					<li>
+					<li class="nodata">
 						There are no groups.
 						{% if currentUserActions.has("org.openacalendar","groupNew") %}Why not <a href="/group/new">add one</a>?{% endif %}
 					</li>								

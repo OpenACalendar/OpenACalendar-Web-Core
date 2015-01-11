@@ -33,13 +33,13 @@
 		</ul>
 		<div id="innerPage">
 
-			<ul class="importurls">
+			<ul class="mainListImporturls">
 				{% for importurl in importurls %}
 					<li class="importurl">
 						<div class="title"><a href="/importurl/{{ importurl.slug }}">{{ importurl.title }}</a></div>
 					</li>
 				{% else %}
-					<li>
+					<li class="nodata">
 						There are no imports.
 					</li>								
 				{% endfor %}

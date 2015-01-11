@@ -22,8 +22,8 @@ class MapController {
 	
 	protected $parameters = array();
 	
-	protected function build($countryCode, $areaSlug, Request $request, Application $app) {
-		$this->parameters = array('country'=>null,'area'=>null);
+	protected function build($countryCode, $areaSlug, $venueSlug, Request $request, Application $app) {
+		$this->parameters = array('country'=>null,'area'=>null,'venue'=>null);
 		
 		if ($areaSlug) {
 			$ar = new AreaRepository();
@@ -38,6 +38,11 @@ class MapController {
 			$this->parameters['country'] = $cr->loadByTwoCharCode($countryCode);
 		}
 
+		if ($venueSlug) {
+			$vr = new VenueRepository();
+			$this->parameters['venue'] = $vr->loadBySlug($app['currentSite'], $venueSlug);
+		}
+
 		return true;
 	}
 	
@@ -45,8 +50,9 @@ class MapController {
 	function index(Application $app, Request $request) {
 		
 		$this->build(
-				isset($_GET['country'])?$_GET['country']:null, 
-				isset($_GET['area'])?$_GET['area']:null, 
+				isset($_GET['country']) ? $_GET['country'] : null,
+				isset($_GET['area']) ? $_GET['area'] : null,
+				isset($_GET['venue']) ? $_GET['venue'] : null,
 				$request, $app);
 		
 		$erb = new EventRepositoryBuilder();
@@ -59,7 +65,14 @@ class MapController {
 		
 		$this->parameters['venueData'] = array();
 		
-		$venueRepo = new VenueRepository();
+		if ($this->parameters['venue']) {
+			$this->parameters['venueData'][$this->parameters['venue']->getId()] = array(
+				'venue_lat'=> $this->parameters['venue']->getLat(),
+				'venue_lng'=> $this->parameters['venue']->getLng(),
+				'venue_title'=> $this->parameters['venue']->getTitle(),
+				'venue_slug'=> $this->parameters['venue']->getSlug(),
+			);
+		}
 		
 		foreach($events as $event) {
 			$this->parameters['venueData'][$event->getVenueId()] = array(

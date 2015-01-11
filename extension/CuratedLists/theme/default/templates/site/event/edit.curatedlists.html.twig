@@ -1,0 +1,52 @@
+{#
+ # @package org.openacalendar.curatedlists
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block htmlHeader %}
+	<link rel="stylesheet" type="text/css" href="/theme/default/css/curatedlists.css?v={{ config.assetsVersion }}">
+{% endblock %}
+
+
+{% block pageTitle %}Edit Curated Lists for {{ event.summaryDisplay }} - {% endblock %}
+
+
+{% block innerContent %}
+
+
+	<ul class="mainListCuratedLists">
+		{% for curatedlist in curatedListsUserCanEdit %}
+			<li class="curatedlist">
+				<div class="title">{{ curatedlist.title }}</div>
+				<div class="description">{{ curatedlist.description | truncate(500) | nl2br  }}</div>
+				<div class="editContentsWrapper">
+					{% if curatedlist.isEventInListViaGroup  %}
+						<div class="addedViaGroup">Added by a group</div>
+					{% elseif curatedlist.isEventInlist %}
+						<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="returnTo" value="event">
+							<input type="submit" value="Remove">
+						</form>
+					{% else %}
+						<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/add" method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="returnTo" value="event">
+							<input type="submit" value="Add">
+						</form>
+					{% endif %}
+				</div>
+			</li>
+		{%  else %}
+			<li class="nodata">You have no curated lists. Do you want to <a href="/curatedlist/new/">create one</a>?</li>
+		{% endfor %}
+	</ul>
+
+
+{% endblock %}
+

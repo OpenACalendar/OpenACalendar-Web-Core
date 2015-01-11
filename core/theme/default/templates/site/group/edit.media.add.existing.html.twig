@@ -5,9 +5,9 @@
  # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/event/page.html.twig' %}
+{% extends 'site/group/page.html.twig' %}
 
-{% block pageTitle %}Add Media to {{ event.summaryDisplay }} - {% endblock %}
+{% block pageTitle %}Add Media to {{ group.title }} - {% endblock %} 
 
 
 
@@ -22,7 +22,7 @@
 	<h3>Pictures</h3>
 
 	{% if medias %}
-		<ul class="mediaList">
+		<ul class="mainListMedias">
 			{% for media in medias %}
 				<li class="media">
 					<div class="thumbnail">
@@ -34,7 +34,7 @@
 							{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
 						</a>
 					</div>
-					{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
+					{% if currentUserActions.has("org.openacalendar","groupEditMedia") %}
 						<form action="" method="post">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="addMedia" value="{{ media.slug }}">

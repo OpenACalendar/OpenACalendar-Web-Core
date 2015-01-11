@@ -691,6 +691,14 @@ h2 a {
   top: 100px;
   width: 100%;
 }
+#MapInfo {
+  background: white;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  padding: 5px;
+}
 #PopupMask {
   position: fixed;
   top: 0px;
@@ -701,8 +709,8 @@ h2 a {
   background-color: rgba(200,200,200,0.7);
   z-index: 500;
 }
-.PopupBox {
-  border: 4px solid #0DA20D;
+.popupBox {
+  border: 4px solid #004300;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
@@ -710,55 +718,160 @@ h2 a {
   border-radius: 2px;
   background: white;
   padding: 0;
-  min-width: 600px;
-  width: 50%;
+  width: 95%;
+  min-width: 300px;
+  max-width: 950px;
+  position: absolute;
   top: 25px;
-  left: 20%;
-  position: fixed;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
   z-index: 1000;
 }
-@media screen and (max-width: 750px) {
-  .PopupBox {
-    min-width: 200px;
-    width: 95%;
-    top: 25px;
-    left: 10px;
-  }
-}
-.PopupBox .PopupBoxClose {
+.popupBox .popupBoxClose {
   padding: 3px;
-  background: #0DA20D;
+  background: #004300;
   text-align: right;
 }
-.PopupBox .PopupBoxClose a {
+.popupBox .popupBoxClose a {
   color: white;
   text-decoration: none;
 }
-.PopupBox .content {
+.popupBox .popupBoxContent {
   padding: 10px;
 }
-.PopupBox .PopUpTitle {
+.popupBox .popupLink {
+  text-align: right;
+  padding: 5px 0;
+}
+.popupBox ul.popupListGroups li.group .title {
+  padding: 5px 0;
   font-weight: bold;
-  font-size: 1.1em;
-  padding: 5px 0 10px 0;
 }
-.PopupBox .PopupBoxContent {
-  padding: 10px;
+.popupBox ul.popupListGroups li.group .description {
+  padding: 5px 0;
 }
-ul.eventSmallListings li.eventSmallListing {
+.popupBox ul.popupListEvents li.event {
   padding: 4px 0;
 }
-ul.eventSmallListings li.eventSmallListing .time {
+.popupBox ul.popupListEvents li.event .time {
   color: #ec2327;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
-#MapInfo {
-  background: white;
-  position: absolute;
-  z-index: 100;
-  top: 0;
-  right: 0;
+.popupBox .popupShowEvent .title {
+  padding: 5px 0;
+  font-weight: bold;
+  font-size: 110%;
+}
+.popupBox .popupShowEvent .description {
+  padding: 5px 0;
+}
+.popupBox .popupShowEvent .times {
+  color: #ec2327;
+  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+.popupBox .popupShowEvent .link {
+  padding: 5px 0;
+  text-align: right;
+}
+.popupBox .popupShowVenue .title {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.popupBox .popupShowVenue .description {
+  padding: 5px 0;
+}
+.popupBox .popupShowVenue .address {
+  padding: 5px 0;
+}
+.popupBox #ExportPopupIntroText {
+  padding: 10px;
+}
+.popupBox #ExportPopupIntroText div {
+  display: inline;
+}
+.popupBox #ExportPopupIntroText label {
+  display: block;
+}
+.popupBox ul#ExportPopupMenu {
+  padding: 15px 5px 5px 5px;
+}
+.popupBox ul#ExportPopupMenu li {
+  padding: 2px;
+  line-height: 2.0em;
+  display: inline;
+}
+.popupBox ul#ExportPopupMenu li .wrapper {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  display: inline;
   padding: 5px;
+  margin: 3px;
+  border: 1px solid black;
+  background: #d4d8db;
+  line-height: 1.6;
+}
+.popupBox ul#ExportPopupMenu li .wrapper a {
+  white-space: nowrap;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+.popupBox ul#ExportPopupMenu li .wrapper.current {
+  font-weight: bold;
+  background: #ffffff;
+}
+.popupBox ul#ExportPopupMenu li .wrapper.current a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+.popupBox ul#ExportPopupMenu li .wrapper:hover {
+  background: #f2f2f2;
+}
+.popupBox ul#ExportPopupMenu li .wrapper img {
+  max-width: 16px;
+  max-height: 16px;
+}
+@media screen and (max-width: 500px) {
+  .popupBox ul#ExportPopupMenu li .wrapper {
+    line-height: 0.1em;
+  }
+  .popupBox ul#ExportPopupMenu li .wrapper .wrapper {
+    display: block;
+  }
+  .popupBox ul#ExportPopupMenu li .wrapper .wrapper a {
+    display: block;
+  }
+}
+.popupBox #ExportToGoogleCalendar input.exportlink {
+  display: block;
+  width: 100%;
+}
+.popupBox #EventAttendancePopupContent {
+  padding: 5px;
+}
+.popupBox #EventAttendancePopupContent .savingIndicator,
+.popupBox #EventAttendancePopupContent .savedIndicator,
+.popupBox #EventPopupAttendanceContent .savingIndicator,
+.popupBox #EventPopupAttendanceContent .savedIndicator {
+  padding-left: 10px;
+  font-style: italic;
+}
+.popupBox ul.SharePopupOptions {
+  padding: 10px;
+}
+.popupBox ul.SharePopupOptions li {
+  display: inline;
+  padding: 10px;
+}
+.popupBox ul.SharePopupOptions li img {
+  max-width: 70px;
+  max-height: 70px;
 }

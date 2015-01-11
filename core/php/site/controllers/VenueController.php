@@ -117,6 +117,7 @@ class VenueController {
 		$this->parameters['eventListFilterParams'] = new EventFilterParams();
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
@@ -134,7 +135,7 @@ class VenueController {
 	
 	
 	
-	function edit($slug, Request $request, Application $app) {
+	function editDetails($slug, Request $request, Application $app) {
 
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
@@ -247,9 +248,19 @@ class VenueController {
 		
 		return $app['twig']->render('site/venue/history.html.twig', $this->parameters);
 	}
-	
-	
-	function media($slug, Request $request, Application $app) {		
+
+
+
+	function editSplash($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Venue does not exist.");
+		}
+
+		return $app['twig']->render('site/venue/edit.splash.html.twig', $this->parameters);
+
+	}
+
+	function editMedia($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
@@ -292,10 +303,10 @@ class VenueController {
 		$mrb->setVenue($this->parameters['venue']);
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
-		return $app['twig']->render('site/venue/media.html.twig', $this->parameters);
+		return $app['twig']->render('site/venue/edit.media.html.twig', $this->parameters);
 	}
 	
-	function mediaRemove($slug, $mediaslug, Request $request, Application $app) {		
+	function editMediaRemove($slug, $mediaslug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
@@ -310,10 +321,10 @@ class VenueController {
 			}
 		}
 		
-		return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL().'/media');
+		return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL().'/edit/media');
 	}
 	
-	function mediaAddExisting($slug, Request $request, Application $app) {		
+	function editMediaAddExisting($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
@@ -335,7 +346,7 @@ class VenueController {
 		$mrb->setNotInVenue($this->parameters['venue']);
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
-		return $app['twig']->render('site/venue/media.add.existing.html.twig', $this->parameters);
+		return $app['twig']->render('site/venue/edit.media.add.existing.html.twig', $this->parameters);
 	}
 	
 	function moveToArea($slug, Request $request, Application $app) {	

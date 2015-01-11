@@ -756,9 +756,9 @@ div.filterListEventWrapper form.filterListEvent div.submitField {
   padding: 10px;
 }
 div.filterListEventWrapper form.filterListEvent div.submitField input {
-  background: #004300;
-  color: white;
-  border: 2px solid #004300;
+  background: #36C036;
+  color: black;
+  border: 2px solid #36C036;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
@@ -827,6 +827,12 @@ table.calendar .event .below {
 table.calendar .deleted {
   background: url('/theme/default/img/deletedBackground.png');
 }
+#footer {
+  padding: 10px 5px;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.8em;
+}
 #PopupMask {
   position: fixed;
   top: 0px;
@@ -837,7 +843,7 @@ table.calendar .deleted {
   background-color: rgba(200,200,200,0.7);
   z-index: 500;
 }
-.PopupBox {
+.popupBox {
   border: 4px solid #004300;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -856,33 +862,83 @@ table.calendar .deleted {
   right: 0;
   z-index: 1000;
 }
-.PopupBox .PopupBoxClose {
+.popupBox .popupBoxClose {
   padding: 3px;
   background: #004300;
   text-align: right;
 }
-.PopupBox .PopupBoxClose a {
+.popupBox .popupBoxClose a {
   color: white;
   text-decoration: none;
 }
-.PopupBox #ExportPopupIntroText {
+.popupBox .popupBoxContent {
   padding: 10px;
 }
-.PopupBox #ExportPopupIntroText div {
+.popupBox .popupLink {
+  text-align: right;
+  padding: 5px 0;
+}
+.popupBox ul.popupListGroups li.group .title {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.popupBox ul.popupListGroups li.group .description {
+  padding: 5px 0;
+}
+.popupBox ul.popupListEvents li.event {
+  padding: 4px 0;
+}
+.popupBox ul.popupListEvents li.event .time {
+  color: #ec2327;
+  font-weight: 400;
+  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+.popupBox .popupShowEvent .title {
+  padding: 5px 0;
+  font-weight: bold;
+  font-size: 110%;
+}
+.popupBox .popupShowEvent .description {
+  padding: 5px 0;
+}
+.popupBox .popupShowEvent .times {
+  color: #ec2327;
+  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
+  padding: 5px 10px 5px 20px;
+}
+.popupBox .popupShowEvent .link {
+  padding: 5px 0;
+  text-align: right;
+}
+.popupBox .popupShowVenue .title {
+  padding: 5px 0;
+  font-weight: bold;
+}
+.popupBox .popupShowVenue .description {
+  padding: 5px 0;
+}
+.popupBox .popupShowVenue .address {
+  padding: 5px 0;
+}
+.popupBox #ExportPopupIntroText {
+  padding: 10px;
+}
+.popupBox #ExportPopupIntroText div {
   display: inline;
 }
-.PopupBox #ExportPopupIntroText label {
+.popupBox #ExportPopupIntroText label {
   display: block;
 }
-.PopupBox ul#ExportPopupMenu {
+.popupBox ul#ExportPopupMenu {
   padding: 15px 5px 5px 5px;
 }
-.PopupBox ul#ExportPopupMenu li {
+.popupBox ul#ExportPopupMenu li {
   padding: 2px;
   line-height: 2.0em;
   display: inline;
 }
-.PopupBox ul#ExportPopupMenu li .wrapper {
+.popupBox ul#ExportPopupMenu li .wrapper {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
@@ -895,99 +951,61 @@ table.calendar .deleted {
   background: #d4d8db;
   line-height: 1.6;
 }
-.PopupBox ul#ExportPopupMenu li .wrapper a {
+.popupBox ul#ExportPopupMenu li .wrapper a {
   white-space: nowrap;
   color: black;
   text-decoration: none;
   font-weight: bold;
 }
-.PopupBox ul#ExportPopupMenu li .wrapper.current {
+.popupBox ul#ExportPopupMenu li .wrapper.current {
   font-weight: bold;
   background: #ffffff;
 }
-.PopupBox ul#ExportPopupMenu li .wrapper.current a {
+.popupBox ul#ExportPopupMenu li .wrapper.current a {
   color: #333;
   text-decoration: none;
   font-weight: bold;
 }
-.PopupBox ul#ExportPopupMenu li .wrapper:hover {
+.popupBox ul#ExportPopupMenu li .wrapper:hover {
   background: #f2f2f2;
 }
-.PopupBox ul#ExportPopupMenu li .wrapper img {
+.popupBox ul#ExportPopupMenu li .wrapper img {
   max-width: 16px;
   max-height: 16px;
 }
 @media screen and (max-width: 500px) {
-  .PopupBox ul#ExportPopupMenu li .wrapper {
+  .popupBox ul#ExportPopupMenu li .wrapper {
     line-height: 0.1em;
   }
-  .PopupBox ul#ExportPopupMenu li .wrapper .wrapper {
+  .popupBox ul#ExportPopupMenu li .wrapper .wrapper {
     display: block;
   }
-  .PopupBox ul#ExportPopupMenu li .wrapper .wrapper a {
+  .popupBox ul#ExportPopupMenu li .wrapper .wrapper a {
     display: block;
   }
 }
-.PopupBox .content {
-  padding: 10px;
-}
-.PopupBox .PopupBoxContent {
-  padding: 10px;
-}
-.PopupBox #ExportToGoogleCalendar input.exportlink {
+.popupBox #ExportToGoogleCalendar input.exportlink {
   display: block;
   width: 100%;
 }
-.PopupBox #EventAttendancePopupContent {
+.popupBox #EventAttendancePopupContent {
   padding: 5px;
 }
-.PopupBox #EventAttendancePopupContent .savingIndicator,
-.PopupBox #EventAttendancePopupContent .savedIndicator,
-.PopupBox #EventPopupAttendanceContent .savingIndicator,
-.PopupBox #EventPopupAttendanceContent .savedIndicator {
+.popupBox #EventAttendancePopupContent .savingIndicator,
+.popupBox #EventAttendancePopupContent .savedIndicator,
+.popupBox #EventPopupAttendanceContent .savingIndicator,
+.popupBox #EventPopupAttendanceContent .savedIndicator {
   padding-left: 10px;
   font-style: italic;
 }
-#footer {
-  padding: 10px 5px;
-  text-align: center;
-  font-style: italic;
-  font-size: 0.8em;
+.popupBox ul.SharePopupOptions {
+  padding: 10px;
 }
-.PopupBox #EventPopupContent {
-  padding: 5px;
+.popupBox ul.SharePopupOptions li {
+  display: inline;
+  padding: 10px;
 }
-.PopupBox #EventPopupTitle {
-  padding: 5px 0;
-  font-weight: bold;
-  font-size: 110%;
-}
-.PopupBox #EventPopupDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupTimes {
-  color: #ec2327;
-  background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
-  padding: 5px 10px 5px 20px;
-}
-.PopupBox .EventPopupLink {
-  padding: 5px 0;
-  text-align: right;
-}
-.PopupBox #EventPopupGroupsWrapper .groupTitle {
-  padding: 5px 0;
-  font-weight: bold;
-}
-.PopupBox #EventPopupGroupsWrapper .groupDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupVenueWrapper .venueTitle {
-  padding: 5px 0;
-  font-weight: bold;
-}
-.PopupBox #EventPopupVenueWrapper .venueDescription {
-  padding: 5px 0;
-}
-.PopupBox #EventPopupVenueWrapper .venueAddress {
-  padding: 5px 0;
+.popupBox ul.SharePopupOptions li img {
+  max-width: 70px;
+  max-height: 70px;
 }

@@ -63,7 +63,7 @@ function loadSearchResults() {
 		return;
 	}
 	lastFormSerialized = thisFormSerialized;
-	$('#EditEventVenueSearchResults li.result, #EditEventVenueSearchResults li.information').remove();
+	$('#EditEventVenueSearchResults li.result, #EditEventVenueSearchResults li.nodata').remove();
 	$("#EditEventVenueSearchResults").prepend('<li class="information"><img src="/theme/default/img/ajaxLoading.gif"> Loading, please wait ...</li>');
 	loadSearchResultsAJAX = $.ajax({
 		data: $('#EditEventVenueForm').serialize(),
@@ -125,7 +125,7 @@ function loadSearchResults() {
 					}
 					if (resultsBoundsValid) map.fitBounds(resultsBounds);
 				} else {
-					html += '<li class="information">Sorry, nothing found.</li>'
+					html += '<li class="nodata">Sorry, nothing found.</li>'
 				}
 				$('#VenueNewWrapper').show();
 			} else {

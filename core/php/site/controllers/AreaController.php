@@ -85,6 +85,7 @@ class AreaController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
+		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
@@ -135,7 +136,7 @@ class AreaController {
 		
 	}
 	
-	function edit($slug, Request $request, Application $app) {
+	function editDetails($slug, Request $request, Application $app) {
 
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Area does not exist.");
@@ -163,7 +164,7 @@ class AreaController {
 		
 		
 		$this->parameters['form'] = $form->createView();
-		return $app['twig']->render('site/area/edit.html.twig', $this->parameters);
+		return $app['twig']->render('site/area/edit.details.html.twig', $this->parameters);
 		
 	}	
 	
