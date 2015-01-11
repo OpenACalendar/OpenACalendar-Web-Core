@@ -15,5 +15,8 @@
 		"facebook/php-sdk-v4" : "4.0.*",
 		"jmbtechnologylimited/rruleunravel" : "0.1.0",
 		"jmbtechnologylimited/icaldissect" : "1.0.*"
+    },
+    "require-dev": {
+        "satooshi/php-coveralls": "dev-master"
     }
 }

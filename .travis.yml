@@ -7,6 +7,7 @@ php:
 services: PostgreSQL
 
 before_script:
+  - composer install --dev --no-interaction
   - psql -c 'create database openacalendartest;' -U postgres
   - echo "<?php" >> config.test.php
   - echo "\$CONFIG->isDebug = false;" >> config.test.php
@@ -16,5 +17,11 @@ before_script:
   - echo "\$CONFIG->databasePassword = '';" >> config.test.php
   - echo "\$CONFIG->extensions = array('CuratedLists');" >> config.test.php
 
-script: phpunit --configuration core/tests/phpunit.xml
+script: phpunit --coverage-clover build/logs/clover.xml  --configuration core/tests/phpunit.xml
+
+
+after_script:
+  - php vendor/bin/coveralls -v
+
+
 
