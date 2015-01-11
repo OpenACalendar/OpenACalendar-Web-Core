@@ -53,10 +53,10 @@
 				{% for event in events %}
 					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 				{% else %}
-					<p>
+					<li class="nodata">
 						There are no upcoming events.
 						{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
-					</p>
+					</li>
 				{% endfor %}
 			</ul>
 
