@@ -92,10 +92,8 @@ class IndexController {
 				}
 				if ($data['write'] == 'public') {
 					$isAllUsersEditors = true;
-					$site->setIsRequestAccessAllowed(false);
 				} else {
 					$isAllUsersEditors = false;
-					$site->setIsRequestAccessAllowed(true);
 				}
 				$site->setIsFeatureCuratedList($app['config']->newSiteHasFeatureCuratedList);
 				$site->setIsFeatureImporter($app['config']->newSiteHasFeatureImporter);
