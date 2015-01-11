@@ -1,6 +1,7 @@
 <?php
 
-namespace site\controllers;
+namespace org\openacalendar\curatedlists\site\controllers;
+
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;

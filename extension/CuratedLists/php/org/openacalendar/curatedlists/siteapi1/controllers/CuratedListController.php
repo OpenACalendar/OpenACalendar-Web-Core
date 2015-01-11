@@ -1,6 +1,6 @@
 <?php
 
-namespace siteapi1\controllers;
+namespace org\openacalendar\curatedlists\siteapi1\controllers;
 
 use Silex\Application;
 use site\forms\GroupNewForm;

@@ -10,13 +10,13 @@
 
 
 
-$app->match('/api1/curatedlist/{slug}/events.ical', "siteapi1\controllers\CuratedListController::ical")
+$app->match('/api1/curatedlist/{slug}/events.ical', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::ical")
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.json', "siteapi1\controllers\CuratedListController::json")
+$app->match('/api1/curatedlist/{slug}/events.json', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::json")
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.jsonp', "siteapi1\controllers\CuratedListController::jsonp")
+$app->match('/api1/curatedlist/{slug}/events.jsonp', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::jsonp")
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.create.atom', "siteapi1\controllers\CuratedListController::atomCreate")
+$app->match('/api1/curatedlist/{slug}/events.create.atom', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::atomCreate")
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/api1/curatedlist/{slug}/events.before.atom', "siteapi1\controllers\CuratedListController::atomBefore")
+$app->match('/api1/curatedlist/{slug}/events.before.atom', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::atomBefore")
 		->assert('slug', FRIENDLY_SLUG_REGEX);

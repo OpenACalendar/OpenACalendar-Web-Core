@@ -1,6 +1,7 @@
 <?php
 
-namespace site\controllers;
+namespace org\openacalendar\curatedlists\site\controllers;
+
 
 use repositories\builders\filterparams\CuratedListFilterParams;
 use Silex\Application;
