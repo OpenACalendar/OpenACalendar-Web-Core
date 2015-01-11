@@ -31,56 +31,56 @@
 			<directory suffix=".php">../../core/php/autoloadWebApp.php</directory>
 		</blacklist>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">../core/php/indexapi2/controllers</directory>
-			<directory suffix=".php">../core/php/indexapi2/forms</directory>
-			<directory suffix=".php">../core/php/index/controllers</directory>
-			<directory suffix=".php">../core/php/index/forms</directory>
-			<directory suffix=".php">../core/php/site/controllers</directory>
-			<directory suffix=".php">../core/php/site/forms</directory>
-			<directory suffix=".php">../core/php/sysadmin/controllers</directory>
-			<directory suffix=".php">../core/php/sysadmin/forms</directory>
-			<directory suffix=".php">../core/php/api1exportbuilders</directory>
-			<directory suffix=".php">../core/php/appconfiguration</directory>
-			<directory suffix=".php">../core/php/cliapi1</directory>
-			<directory suffix=".php">../core/php/icalparser</directory>
-			<directory suffix=".php">../core/php/import</directory>
-			<directory suffix=".php">../core/php/models</directory>
-			<directory suffix=".php">../core/php/repositories</directory>
-			<directory suffix=".php">../core/php/repositories/builders</directory>
-			<directory suffix=".php">../core/php/repositories/builders/filterparams</directory>
-			<directory suffix=".php">../core/php/siteapi1/controllers</directory>
-			<directory suffix=".php">../core/php/siteapi2/controllers</directory>
-			<directory suffix=".php">../core/php/tasks</directory>
-			<directory suffix=".php">../core/php/twig/extensions</directory>
-			<directory suffix=".php">../core/php/usernotifications/models</directory>
-			<directory suffix=".php">../core/php/usernotifications/preferences</directory>
-			<directory suffix=".php">../core/php/usernotifications/types</directory>
+			<directory suffix=".php">../php/indexapi2/controllers</directory>
+			<directory suffix=".php">../php/indexapi2/forms</directory>
+			<directory suffix=".php">../php/index/controllers</directory>
+			<directory suffix=".php">../php/index/forms</directory>
+			<directory suffix=".php">../php/site/controllers</directory>
+			<directory suffix=".php">../php/site/forms</directory>
+			<directory suffix=".php">../php/sysadmin/controllers</directory>
+			<directory suffix=".php">../php/sysadmin/forms</directory>
+			<directory suffix=".php">../php/api1exportbuilders</directory>
+			<directory suffix=".php">../php/appconfiguration</directory>
+			<directory suffix=".php">../php/cliapi1</directory>
+			<directory suffix=".php">../php/icalparser</directory>
+			<directory suffix=".php">../php/import</directory>
+			<directory suffix=".php">../php/models</directory>
+			<directory suffix=".php">../php/repositories</directory>
+			<directory suffix=".php">../php/repositories/builders</directory>
+			<directory suffix=".php">../php/repositories/builders/filterparams</directory>
+			<directory suffix=".php">../php/siteapi1/controllers</directory>
+			<directory suffix=".php">../php/siteapi2/controllers</directory>
+			<directory suffix=".php">../php/tasks</directory>
+			<directory suffix=".php">../php/twig/extensions</directory>
+			<directory suffix=".php">../php/usernotifications/models</directory>
+			<directory suffix=".php">../php/usernotifications/preferences</directory>
+			<directory suffix=".php">../php/usernotifications/types</directory>
 			<directory suffix=".php">../../extension/CuratedLists/php/models</directory>
 			<directory suffix=".php">../../extension/CuratedLists/php/repositories</directory>
 			<directory suffix=".php">../../extension/CuratedLists/php/repositories/builders</directory>
 			<directory suffix=".php">../../extension/CuratedLists/php/org/openacalendar/curatedlists/</directory>
 			<directory suffix=".php">../../extension/CuratedLists/php/org/openacalendar/curatedlists/site/controllers</directory>
 			<directory suffix=".php">../../extension/CuratedLists/php/org/openacalendar/curatedlists/siteapi1/controllers</directory>
-			<file>../core/php/BaseExtension.php</file>
-			<file>../core/php/BaseUserNotificationModel.php</file>
-			<file>../core/php/BaseUserNotificationPreference.php</file>
-			<file>../core/php/BaseUserNotificationType.php</file>
-			<file>../core/php/ConfigCheck.php</file>
-			<file>../core/php/Config.php</file>
-			<file>../core/php/ExtensionCore.php</file>
-			<file>../core/php/ExtensionHookRunner.php</file>
-			<file>../core/php/ExtensionManager.php</file>
-			<file>../core/php/FlashMessages.php</file>
-			<file>../core/php/IniConfigWithEnvironment.php</file>
-			<file>../core/php/ParseDomain.php</file>
-			<file>../core/php/ParseURL.php</file>
-			<file>../core/php/RenderCalendar.php</file>
-			<file>../core/php/Request.php</file>
-			<file>../core/php/SearchForDuplicateEvents.php</file>
-			<file>../core/php/SysAdminLink.php</file>
-			<file>../core/php/TimeSource.php</file>
-			<file>../core/php/UserAgent.php</file>
-			<file>../core/php/WebSession.php</file>
+			<file>../php/BaseExtension.php</file>
+			<file>../php/BaseUserNotificationModel.php</file>
+			<file>../php/BaseUserNotificationPreference.php</file>
+			<file>../php/BaseUserNotificationType.php</file>
+			<file>../php/ConfigCheck.php</file>
+			<file>../php/Config.php</file>
+			<file>../php/ExtensionCore.php</file>
+			<file>../php/ExtensionHookRunner.php</file>
+			<file>../php/ExtensionManager.php</file>
+			<file>../php/FlashMessages.php</file>
+			<file>../php/IniConfigWithEnvironment.php</file>
+			<file>../php/ParseDomain.php</file>
+			<file>../php/ParseURL.php</file>
+			<file>../php/RenderCalendar.php</file>
+			<file>../php/Request.php</file>
+			<file>../php/SearchForDuplicateEvents.php</file>
+			<file>../php/SysAdminLink.php</file>
+			<file>../php/TimeSource.php</file>
+			<file>../php/UserAgent.php</file>
+			<file>../php/WebSession.php</file>
 		</whitelist>
 	</filter>
 
