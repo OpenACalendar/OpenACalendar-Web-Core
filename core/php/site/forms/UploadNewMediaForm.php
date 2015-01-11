@@ -19,6 +19,14 @@ use Symfony\Component\Form\FormError;
  */
 class UploadNewMediaForm extends AbstractType{
 
+	protected $defaultTitle;
+
+	function __construct($defaultTitle)
+	{
+		$this->defaultTitle = $defaultTitle;
+	}
+
+
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('media', 'file', array(
 			"mapped" => false, 
@@ -29,7 +37,8 @@ class UploadNewMediaForm extends AbstractType{
 		$builder->add('title', 'text', array(
 			'label'=>'Title',
 			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
+			'data'=>$this->defaultTitle,
 		));
 		
 		$builder->add('source_text', 'text', array(
