@@ -51,6 +51,12 @@
 			<directory suffix=".php">source/core/php/usernotifications/models</directory>
 			<directory suffix=".php">source/core/php/usernotifications/preferences</directory>
 			<directory suffix=".php">source/core/php/usernotifications/types</directory>
+			<directory suffix=".php">../../extension/CuratedLists/php/models</directory>
+			<directory suffix=".php">../../extension/CuratedLists/php/repositories</directory>
+			<directory suffix=".php">../../extension/CuratedLists/php/repositories/builders</directory>
+			<directory suffix=".php">../../extension/CuratedLists/php/org/openacalendar/curatedlists/</directory>
+			<directory suffix=".php">../../extension/CuratedLists/php/org/openacalendar/curatedlists/site/controllers</directory>
+			<directory suffix=".php">../../extension/CuratedLists/php/org/openacalendar/curatedlists/siteapi1/controllers</directory>
 			<file>source/core/php/BaseExtension.php</file>
 			<file>source/core/php/BaseUserNotificationModel.php</file>
 			<file>source/core/php/BaseUserNotificationPreference.php</file>
@@ -77,6 +83,7 @@
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>.</directory>
+            <directory>../../extension/CuratedLists/tests/</directory>
         </testsuite>
     </testsuites>
 
