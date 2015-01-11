@@ -672,8 +672,10 @@ p {
 }
 #header {
   padding: 5px;
-  background: #0DA20D;
-  border-bottom: #007900 2px solid;
+  background-color: #0DA20D;
+  background-image: -webkit-linear-gradient(top,#36C036,#0DA20D);
+  background-image: linear-gradient(to bottom,#36C036,#0DA20D);
+  border-bottom: #004300 2px solid;
 }
 #header #headerOptions {
   float: right;

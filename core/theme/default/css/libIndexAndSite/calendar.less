@@ -29,8 +29,10 @@ p {
 
 #header {
 	padding: 5px;
-	background: @colourMain;
-	border-bottom: @colourDarker1 2px solid;
+	background-color: @colourMain;
+	background-image: -webkit-linear-gradient(top, @colourLighter1, @colourMain); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+	background-image:         linear-gradient(to bottom, @colourLighter1, @colourMain); /* Chrome 26, Firefox 16+, IE 10+, Opera */
+	border-bottom: @colourDarker2 2px solid;
 	#headerOptions {
 		float: right;
 		text-align: right;
