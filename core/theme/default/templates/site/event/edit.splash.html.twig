@@ -35,6 +35,10 @@
 			<li><a href="/event/{{ event.slugForUrl }}/edit/curatedlists"><div class="iconPencilSmall"></div> Edit Curated lists</a></li>
 		{% endif %}
 
+		{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
+			<li><a href="/event/{{ event.slugForUrl }}/edit/media"><div class="iconPencilSmall"></div> Edit Media</a></li>
+		{% endif %}
+
 	</ul>
 
 {% endblock %}
