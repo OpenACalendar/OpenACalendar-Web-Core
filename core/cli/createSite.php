@@ -38,6 +38,9 @@ print "Starting ...\n";
 
 $userRepository = new UserAccountRepository();
 $user = $userRepository->loadByUserNameOrEmail($email);
+if (!$user) {
+	die("Can't load user!\n\n");
+}
 
 $site = new SiteModel();
 $site->setSlug($slug);
