@@ -37,12 +37,11 @@ Registering
 .. note::
 
     If you don't want to create your own form layout, it's fine: a default one
-    will be used. But you will have to register the
-    :doc:`translation provider <providers/translation>` as the default form
-    layout requires it.
+    will be used. But you will have to register the :doc:`translation provider
+    <translation>` as the default form layout requires it.
 
     If you want to use validation with forms, do not forget to register the
-    :doc:`Validator provider <providers/validator>`.
+    :doc:`Validator provider <validator>`.
 
 .. note::
 
@@ -59,7 +58,7 @@ Registering
         }
 
     If you are going to use the validation extension with forms, you must also
-    add a dependency to the ``symfony/config`` and ```symfony/translation``
+    add a dependency to the ``symfony/config`` and ``symfony/translation``
     components:
 
     .. code-block:: json
@@ -77,6 +76,14 @@ Registering
 
         "require": {
             "symfony/locale": "~2.3"
+        }
+        
+    The Symfony Security CSRF component is used to protect forms against CSRF attacks:
+
+    .. code-block:: json
+    
+        "require": {
+            "symfony/security-csrf": "~2.4"
         }
 
     If you want to use forms in your Twig templates, make sure to install the
@@ -110,25 +117,22 @@ example::
             ))
             ->getForm();
 
-        if ('POST' == $request->getMethod()) {
-            $form->bind($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
-                $data = $form->getData();
+        if ($form->isValid()) {
+            $data = $form->getData();
 
-                // do something with the data
+            // do something with the data
 
-                // redirect somewhere
-                return $app->redirect('...');
-            }
+            // redirect somewhere
+            return $app->redirect('...');
         }
 
         // display the form
         return $app['twig']->render('index.twig', array('form' => $form->createView()));
     });
 
-And here is the ``index.twig`` form template (requires ``symfony/twig-
-bridge``):
+And here is the ``index.twig`` form template (requires ``symfony/twig-bridge``):
 
 .. code-block:: jinja
 
@@ -145,7 +149,7 @@ form by adding constraints on the fields::
 
     $app->register(new Silex\Provider\ValidatorServiceProvider());
     $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-        'translator.messages' => array(),
+        'translator.domains' => array(),
     ));
 
     $form = $app['form.factory']->createBuilder('form')
@@ -161,6 +165,14 @@ form by adding constraints on the fields::
             'constraints' => new Assert\Choice(array(1, 2)),
         ))
         ->getForm();
+
+You can register form types by extending ``form.types``::
+
+    $app['form.types'] = $app->share($app->extend('form.types', function ($types) use ($app) {
+        $types[] = new YourFormType();
+
+        return $types;
+    }));
 
 You can register form extensions by extending ``form.extensions``::
 

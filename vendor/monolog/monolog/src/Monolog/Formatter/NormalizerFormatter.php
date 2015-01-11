@@ -30,6 +30,9 @@ class NormalizerFormatter implements FormatterInterface
     public function __construct($dateFormat = null)
     {
         $this->dateFormat = $dateFormat ?: static::SIMPLE_DATE;
+        if (!function_exists('json_encode')) {
+            throw new \RuntimeException('PHP\'s json extension is required to use Monolog\'s NormalizerFormatter');
+        }
     }
 
     /**
@@ -97,16 +100,17 @@ class NormalizerFormatter implements FormatterInterface
         $data = array(
             'class' => get_class($e),
             'message' => $e->getMessage(),
+            'code' => $e->getCode(),
             'file' => $e->getFile().':'.$e->getLine(),
         );
 
         $trace = $e->getTrace();
-        array_shift($trace);
         foreach ($trace as $frame) {
             if (isset($frame['file'])) {
                 $data['trace'][] = $frame['file'].':'.$frame['line'];
             } else {
-                $data['trace'][] = json_encode($frame);
+                // We should again normalize the frames, because it might contain invalid items
+                $data['trace'][] = $this->toJson($this->normalize($frame), true);
             }
         }
 

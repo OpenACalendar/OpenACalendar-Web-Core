@@ -12,18 +12,17 @@
 use Symfony\Component\Intl\Globals\IntlGlobals;
 
 if (!function_exists('intl_is_failure')) {
-
     /**
      * Stub implementation for the {@link intl_is_failure()} function of the intl
      * extension.
      *
      * @author Bernhard Schussek <bschussek@gmail.com>
      *
-     * @param integer $errorCode  The error code returned by intl_get_error_code().
+     * @param int $errorCode The error code returned by intl_get_error_code().
      *
-     * @return Boolean Whether the error code indicates an error.
+     * @return bool Whether the error code indicates an error.
      *
-     * @see \Symfony\Component\Intl\Globals\StubIntlGlobals::isFailure
+     * @see IntlGlobals::isFailure()
      */
     function intl_is_failure($errorCode)
     {
@@ -36,10 +35,10 @@ if (!function_exists('intl_is_failure')) {
      *
      * @author Bernhard Schussek <bschussek@gmail.com>
      *
-     * @return Boolean The error code of the last intl function call or
-     *                 IntlGlobals::U_ZERO_ERROR if no error occurred.
+     * @return bool The error code of the last intl function call or
+     *              IntlGlobals::U_ZERO_ERROR if no error occurred.
      *
-     * @see \Symfony\Component\Intl\Globals\StubIntlGlobals::getErrorCode
+     * @see IntlGlobals::getErrorCode()
      */
     function intl_get_error_code()
     {
@@ -52,10 +51,10 @@ if (!function_exists('intl_is_failure')) {
      *
      * @author Bernhard Schussek <bschussek@gmail.com>
      *
-     * @return Boolean The error message of the last intl function call or
-     *                 "U_ZERO_ERROR" if no error occurred.
+     * @return bool The error message of the last intl function call or
+     *              "U_ZERO_ERROR" if no error occurred.
      *
-     * @see \Symfony\Component\Intl\Globals\StubIntlGlobals::getErrorMessage
+     * @see IntlGlobals::getErrorMessage()
      */
     function intl_get_error_message()
     {
@@ -66,15 +65,14 @@ if (!function_exists('intl_is_failure')) {
      * Stub implementation for the {@link intl_error_name()} function of the intl
      * extension.
      *
-     * @param integer $errorCode The error code.
+     * @param int $errorCode The error code.
      *
      * @return string The name of the error code constant.
      *
-     * @see \Symfony\Component\Intl\Globals\StubIntlGlobals::getErrorName
+     * @see IntlGlobals::getErrorName()
      */
     function intl_error_name($errorCode)
     {
         return IntlGlobals::getErrorName($errorCode);
     }
-
 }

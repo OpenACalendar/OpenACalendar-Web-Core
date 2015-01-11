@@ -158,6 +158,19 @@ When the user is authenticated, the user stored in the token is an instance of
 `User
 <http://api.symfony.com/master/Symfony/Component/Security/Core/User/User.html>`_
 
+.. caution::
+
+    If you are using php-cgi under Apache, you need to add this configuration
+    to make things work correctly:
+
+    .. code-block:: apache
+
+        RewriteEngine On
+        RewriteCond %{HTTP:Authorization} ^(.+)$
+        RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ app.php [QSA,L]
+
 Securing a Path with a Form
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -165,9 +178,9 @@ Using a form to authenticate users is very similar to the above configuration.
 Instead of using the ``http`` setting, use the ``form`` one and define these
 two parameters:
 
-* **login_path**: The login path where the user is redirected when he is
-  accessing a secured area without being authenticated so that he can enter
-  his credentials;
+* **login_path**: The login path where the user is redirected when they are
+  accessing a secured area without being authenticated so that they can enter
+  their credentials;
 
 * **check_path**: The check URL used by Symfony to validate the credentials of
   the user.
@@ -377,7 +390,7 @@ parameter to any URL when logged in as a user who has the
 
 You can check that you are impersonating a user by checking the special
 ``ROLE_PREVIOUS_ADMIN``. This is useful for instance to allow the user to
-switch back to his primary account:
+switch back to their primary account:
 
 .. code-block:: jinja
 

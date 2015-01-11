@@ -15,7 +15,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 /**
- * Transforms between a date string and a DateTime object
+ * Transforms between a date string and a DateTime object.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  * @author Florian Eckerstorfer <florian@eckerstorfer.org>
@@ -23,13 +23,14 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 class DateTimeToStringTransformer extends BaseDateTimeTransformer
 {
     /**
-     * Format used for generating strings
+     * Format used for generating strings.
+     *
      * @var string
      */
     private $generateFormat;
 
     /**
-     * Format used for parsing strings
+     * Format used for parsing strings.
      *
      * Different than the {@link $generateFormat} because formats for parsing
      * support additional characters in PHP that are not supported for
@@ -44,19 +45,19 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
      *
      * This only works as of PHP 5.3.7.
      *
-     * @var Boolean
+     * @var bool
      */
     private $parseUsingPipe;
 
     /**
-     * Transforms a \DateTime instance to a string
+     * Transforms a \DateTime instance to a string.
      *
      * @see \DateTime::format() for supported formats
      *
-     * @param string  $inputTimezone  The name of the input timezone
-     * @param string  $outputTimezone The name of the output timezone
-     * @param string  $format         The date format
-     * @param Boolean $parseUsingPipe Whether to parse by appending a pipe "|" to the parse format
+     * @param string $inputTimezone  The name of the input timezone
+     * @param string $outputTimezone The name of the output timezone
+     * @param string $format         The date format
+     * @param bool   $parseUsingPipe Whether to parse by appending a pipe "|" to the parse format
      *
      * @throws UnexpectedTypeException if a timezone is not a string
      */
@@ -69,7 +70,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
         // The pipe in the parser pattern only works as of PHP 5.3.7
         // See http://bugs.php.net/54316
         $this->parseUsingPipe = null === $parseUsingPipe
-            ? version_compare(phpversion(), '5.3.7', '>=')
+            ? PHP_VERSION_ID >= 50307
             : $parseUsingPipe;
 
         // See http://php.net/manual/en/datetime.createfromformat.php
@@ -87,7 +88,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
 
     /**
      * Transforms a DateTime object into a date string with the configured format
-     * and timezone
+     * and timezone.
      *
      * @param \DateTime $value A DateTime object
      *
@@ -131,7 +132,7 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
     public function reverseTransform($value)
     {
         if (empty($value)) {
-            return null;
+            return;
         }
 
         if (!is_string($value)) {
@@ -161,16 +162,16 @@ class DateTimeToStringTransformer extends BaseDateTimeTransformer
 
                 // Check which of the date parts are present in the pattern
                 preg_match(
-                    '/(' .
-                    '(?P<day>[djDl])|' .
-                    '(?P<month>[FMmn])|' .
-                    '(?P<year>[Yy])|' .
-                    '(?P<hour>[ghGH])|' .
-                    '(?P<minute>i)|' .
-                    '(?P<second>s)|' .
-                    '(?P<dayofyear>z)|' .
-                    '(?P<timestamp>U)|' .
-                    '[^djDlFMmnYyghGHiszU]' .
+                    '/('.
+                    '(?P<day>[djDl])|'.
+                    '(?P<month>[FMmn])|'.
+                    '(?P<year>[Yy])|'.
+                    '(?P<hour>[ghGH])|'.
+                    '(?P<minute>i)|'.
+                    '(?P<second>s)|'.
+                    '(?P<dayofyear>z)|'.
+                    '(?P<timestamp>U)|'.
+                    '[^djDlFMmnYyghGHiszU]'.
                     ')*/',
                     $this->parseFormat,
                     $matches

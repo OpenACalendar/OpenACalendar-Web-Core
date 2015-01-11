@@ -84,10 +84,11 @@ class FacebookRedirectLoginHelper
    *
    * @param array $scope List of permissions to request during login
    * @param string $version Optional Graph API version if not default (v2.0)
+   * @param boolean $displayAsPopup Indicate if the page will be displayed as a popup
    *
    * @return string
    */
-  public function getLoginUrl($scope = array(), $version = null)
+  public function getLoginUrl($scope = array(), $version = null, $displayAsPopup = false)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
     $this->state = $this->random(16);
@@ -97,6 +98,37 @@ class FacebookRedirectLoginHelper
       'redirect_uri' => $this->redirectUrl,
       'state' => $this->state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'scope' => implode(',', $scope)
+    );
+    
+    if ($displayAsPopup)
+    {
+      $params['display'] = 'popup';
+    }
+    
+    return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
+      http_build_query($params, null, '&');
+  }
+
+  /**
+   * Returns a URL to which the user should be sent to re-request permissions.
+   *
+   * @param array $scope List of permissions to re-request
+   * @param string $version Optional Graph API version if not default (v2.0)
+   *
+   * @return string
+   */
+  public function getReRequestUrl($scope = array(), $version = null)
+  {
+    $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
+    $this->state = $this->random(16);
+    $this->storeState($this->state);
+    $params = array(
+      'client_id' => $this->appId,
+      'redirect_uri' => $this->redirectUrl,
+      'state' => $this->state,
+      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'auth_type' => 'rerequest',
       'scope' => implode(',', $scope)
     );
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
@@ -111,9 +143,16 @@ class FacebookRedirectLoginHelper
    *   a successful logout
    *
    * @return string
+   *
+   * @throws FacebookSDKException
    */
   public function getLogoutUrl(FacebookSession $session, $next)
   {
+    if ($session->getAccessToken()->isAppSession()) {
+      throw new FacebookSDKException(
+        'Cannot generate a Logout URL with an App Session.', 722
+      );
+    }
     $params = array(
       'next' => $next,
       'access_token' => $session->getToken()
@@ -241,7 +280,8 @@ class FacebookRedirectLoginHelper
     }
     $buf = '';
     // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
-    if (is_readable('/dev/urandom')) {
+    if (!ini_get('open_basedir')
+      && is_readable('/dev/urandom')) {
       $fp = fopen('/dev/urandom', 'rb');
       if ($fp !== FALSE) {
         $buf = fread($fp, $bytes);
@@ -251,7 +291,7 @@ class FacebookRedirectLoginHelper
         }
       }
     }
-	
+
     if (function_exists('mcrypt_create_iv')) {
         $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
         if ($buf !== FALSE) {

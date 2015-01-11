@@ -102,9 +102,12 @@ class Client extends BaseClient
         $r = new \ReflectionClass('\\Symfony\\Component\\ClassLoader\\ClassLoader');
         $requirePath = str_replace("'", "\\'", $r->getFileName());
         $symfonyPath = str_replace("'", "\\'", realpath(__DIR__.'/../../..'));
+        $errorReporting = error_reporting();
 
         $code = <<<EOF
 <?php
+
+error_reporting($errorReporting);
 
 require_once '$requirePath';
 
@@ -143,7 +146,9 @@ EOF;
     {
         $httpRequest = Request::create($request->getUri(), $request->getMethod(), $request->getParameters(), $request->getCookies(), $request->getFiles(), $request->getServer(), $request->getContent());
 
-        $httpRequest->files->replace($this->filterFiles($httpRequest->files->all()));
+        foreach ($this->filterFiles($httpRequest->files->all()) as $key => $value) {
+            $httpRequest->files->set($key, $value);
+        }
 
         return $httpRequest;
     }
@@ -157,7 +162,7 @@ EOF;
      * If the size of a file is greater than the allowed size (from php.ini) then
      * an invalid UploadedFile is returned with an error set to UPLOAD_ERR_INI_SIZE.
      *
-     * @see Symfony\Component\HttpFoundation\File\UploadedFile
+     * @see UploadedFile
      *
      * @param array $files An array of files
      *
@@ -189,8 +194,6 @@ EOF;
                         true
                     );
                 }
-            } else {
-                $filtered[$key] = $value;
             }
         }
 

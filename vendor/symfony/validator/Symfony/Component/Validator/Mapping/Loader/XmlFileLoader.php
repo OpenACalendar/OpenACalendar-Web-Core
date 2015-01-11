@@ -11,21 +11,21 @@
 
 namespace Symfony\Component\Validator\Mapping\Loader;
 
+use Symfony\Component\Config\Util\XmlUtils;
 use Symfony\Component\Validator\Exception\MappingException;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Config\Util\XmlUtils;
 
 class XmlFileLoader extends FileLoader
 {
     /**
      * An array of SimpleXMLElement instances.
      *
-     * @var \SimpleXMLElement[]
+     * @var \SimpleXMLElement[]|null
      */
-    protected $classes = null;
+    protected $classes;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function loadClassMetadata(ClassMetadata $metadata)
     {

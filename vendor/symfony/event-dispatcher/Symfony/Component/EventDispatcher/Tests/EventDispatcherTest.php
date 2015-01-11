@@ -99,7 +99,7 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->dispatcher->addListener('post.foo', $listener6, 10);
 
         $expected = array(
-            'pre.foo'  => array($listener3, $listener2, $listener1),
+            'pre.foo' => array($listener3, $listener2, $listener1),
             'post.foo' => array($listener6, $listener5, $listener4),
         );
 
@@ -274,6 +274,28 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher->removeListener('bug.62976', function () {});
         $this->assertTrue($dispatcher->hasListeners('bug.62976'));
     }
+
+    public function testHasListenersWhenAddedCallbackListenerIsRemoved()
+    {
+        $listener = function () {};
+        $this->dispatcher->addListener('foo', $listener);
+        $this->dispatcher->removeListener('foo', $listener);
+        $this->assertFalse($this->dispatcher->hasListeners());
+    }
+
+    public function testGetListenersWhenAddedCallbackListenerIsRemoved()
+    {
+        $listener = function () {};
+        $this->dispatcher->addListener('foo', $listener);
+        $this->dispatcher->removeListener('foo', $listener);
+        $this->assertSame(array(), $this->dispatcher->getListeners());
+    }
+
+    public function testHasListenersWithoutEventsReturnsFalseAfterHasListenersWithEventHasBeenCalled()
+    {
+        $this->assertFalse($this->dispatcher->hasListeners('foo'));
+        $this->assertFalse($this->dispatcher->hasListeners());
+    }
 }
 
 class CallableClass
@@ -340,7 +362,7 @@ class TestEventSubscriberWithMultipleListeners implements EventSubscriberInterfa
     {
         return array('pre.foo' => array(
             array('preFoo1'),
-            array('preFoo2', 10)
+            array('preFoo2', 10),
         ));
     }
 }

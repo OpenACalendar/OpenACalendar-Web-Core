@@ -12,35 +12,35 @@
 namespace Symfony\Component\Intl\Globals;
 
 /**
- * Provides fake static versions of the global functions in the intl extension
+ * Provides fake static versions of the global functions in the intl extension.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
 abstract class IntlGlobals
 {
     /**
-     * Indicates that no error occurred
+     * Indicates that no error occurred.
      *
-     * @var integer
+     * @var int
      */
     const U_ZERO_ERROR = 0;
 
     /**
-     * Indicates that an invalid argument was passed
+     * Indicates that an invalid argument was passed.
      *
-     * @var integer
+     * @var int
      */
     const U_ILLEGAL_ARGUMENT_ERROR = 1;
 
     /**
-     * Indicates that the parse() operation failed
+     * Indicates that the parse() operation failed.
      *
-     * @var integer
+     * @var int
      */
     const U_PARSE_ERROR = 9;
 
     /**
-     * All known error codes
+     * All known error codes.
      *
      * @var array
      */
@@ -51,25 +51,25 @@ abstract class IntlGlobals
     );
 
     /**
-     * The error code of the last operation
+     * The error code of the last operation.
      *
-     * @var integer
+     * @var int
      */
     private static $errorCode = self::U_ZERO_ERROR;
 
     /**
-     * The error code of the last operation
+     * The error code of the last operation.
      *
-     * @var integer
+     * @var int
      */
     private static $errorMessage = 'U_ZERO_ERROR';
 
     /**
-     * Returns whether the error code indicates a failure
+     * Returns whether the error code indicates a failure.
      *
-     * @param integer $errorCode The error code returned by IntlGlobals::getErrorCode()
+     * @param int $errorCode The error code returned by IntlGlobals::getErrorCode()
      *
-     * @return Boolean
+     * @return bool
      */
     public static function isFailure($errorCode)
     {
@@ -78,11 +78,11 @@ abstract class IntlGlobals
     }
 
     /**
-     * Returns the error code of the last operation
+     * Returns the error code of the last operation.
      *
      * Returns IntlGlobals::U_ZERO_ERROR if no error occurred.
      *
-     * @return integer
+     * @return int
      */
     public static function getErrorCode()
     {
@@ -90,7 +90,7 @@ abstract class IntlGlobals
     }
 
     /**
-     * Returns the error message of the last operation
+     * Returns the error message of the last operation.
      *
      * Returns "U_ZERO_ERROR" if no error occurred.
      *
@@ -102,9 +102,9 @@ abstract class IntlGlobals
     }
 
     /**
-     * Returns the symbolic name for a given error code
+     * Returns the symbolic name for a given error code.
      *
-     * @param integer $code The error code returned by IntlGlobals::getErrorCode()
+     * @param int $code The error code returned by IntlGlobals::getErrorCode()
      *
      * @return string
      */
@@ -118,10 +118,10 @@ abstract class IntlGlobals
     }
 
     /**
-     * Sets the current error
+     * Sets the current error.
      *
-     * @param integer $code    One of the error constants in this class
-     * @param string  $message The ICU class error message
+     * @param int    $code    One of the error constants in this class
+     * @param string $message The ICU class error message
      *
      * @throws \InvalidArgumentException If the code is not one of the error constants in this class
      */

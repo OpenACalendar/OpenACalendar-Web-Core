@@ -12,8 +12,6 @@
 namespace Symfony\Component\HttpKernel\Tests;
 
 use Symfony\Component\HttpKernel\Client;
-use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -60,7 +58,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $expected = array(
             'foo=bar; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly',
-            'foo1=bar1; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly'
+            'foo1=bar1; expires=Sun, 15 Feb 2009 20:00:00 GMT; domain=http://example.com; path=/foo; secure; httponly',
         );
 
         $response = new Response();
@@ -126,6 +124,21 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFileExists($target);
         unlink($target);
+    }
+
+    public function testUploadedFileWhenNoFileSelected()
+    {
+        $kernel = new TestHttpKernel();
+        $client = new Client($kernel);
+
+        $file = array('tmp_name' => '', 'name' => '', 'type' => '', 'size' => 0, 'error' => UPLOAD_ERR_NO_FILE);
+
+        $client->request('POST', '/', array(), array('foo' => $file));
+
+        $files = $client->getRequest()->files->all();
+
+        $this->assertCount(1, $files);
+        $this->assertNull($files['foo']);
     }
 
     public function testUploadedFileWhenSizeExceedsUploadMaxFileSize()

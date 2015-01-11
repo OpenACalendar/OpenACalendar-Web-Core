@@ -215,7 +215,7 @@ class NumberToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCase
     // https://github.com/symfony/symfony/issues/7609
     public function testReverseTransformWithGroupingAndFixedSpaces()
     {
-        if (!extension_loaded('mbstring')) {
+        if (!function_exists('mb_detect_encoding')) {
             $this->markTestSkipped('The "mbstring" extension is required for this test.');
         }
 
@@ -461,6 +461,7 @@ class NumberToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
+     *
      * @link https://github.com/symfony/symfony/issues/3161
      */
     public function testReverseTransformDisallowsNaN()
@@ -537,7 +538,7 @@ class NumberToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReverseTransformDisallowsCenteredExtraCharactersMultibyte()
     {
-        if (!extension_loaded('mbstring')) {
+        if (!function_exists('mb_detect_encoding')) {
             $this->markTestSkipped('The "mbstring" extension is required for this test.');
         }
 
@@ -554,7 +555,7 @@ class NumberToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReverseTransformIgnoresTrailingSpacesInExceptionMessage()
     {
-        if (!extension_loaded('mbstring')) {
+        if (!function_exists('mb_detect_encoding')) {
             $this->markTestSkipped('The "mbstring" extension is required for this test.');
         }
 
@@ -582,7 +583,7 @@ class NumberToLocalizedStringTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReverseTransformDisallowsTrailingExtraCharactersMultibyte()
     {
-        if (!extension_loaded('mbstring')) {
+        if (!function_exists('mb_detect_encoding')) {
             $this->markTestSkipped('The "mbstring" extension is required for this test.');
         }
 

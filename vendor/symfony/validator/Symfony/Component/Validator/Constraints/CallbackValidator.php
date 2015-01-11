@@ -13,11 +13,11 @@ namespace Symfony\Component\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
- * Validator for Callback constraint
+ * Validator for Callback constraint.
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  *
@@ -26,17 +26,17 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 class CallbackValidator extends ConstraintValidator
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function validate($object, Constraint $constraint)
     {
-        if (null === $object) {
-            return;
+        if (!$constraint instanceof Callback) {
+            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Callback');
         }
 
         if (null !== $constraint->callback && null !== $constraint->methods) {
             throw new ConstraintDefinitionException(
-                'The Callback constraint supports either the option "callback" ' .
+                'The Callback constraint supports either the option "callback" '.
                 'or "methods", but not both at the same time.'
             );
         }
@@ -50,13 +50,15 @@ class CallbackValidator extends ConstraintValidator
         $methods = $constraint->methods ?: array($constraint->callback);
 
         foreach ($methods as $method) {
-            if (is_array($method) || $method instanceof \Closure) {
+            if ($method instanceof \Closure) {
+                $method($object, $this->context);
+            } elseif (is_array($method)) {
                 if (!is_callable($method)) {
                     throw new ConstraintDefinitionException(sprintf('"%s::%s" targeted by Callback constraint is not a valid callable', $method[0], $method[1]));
                 }
 
                 call_user_func($method, $object, $this->context);
-            } else {
+            } elseif (null !== $object) {
                 if (!method_exists($object, $method)) {
                     throw new ConstraintDefinitionException(sprintf('Method "%s" targeted by Callback constraint does not exist', $method));
                 }

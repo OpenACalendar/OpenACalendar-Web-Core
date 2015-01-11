@@ -18,20 +18,25 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/security-csrf": "~2.4",
-        "twig/twig": "~1.12"
+        "twig/twig": "~1.13,>=1.13.1"
     },
     "require-dev": {
-        "symfony/form": "~2.2",
-        "symfony/http-kernel": "~2.2",
+        "symfony/finder": "~2.3",
+        "symfony/form": "~2.6",
+        "symfony/http-kernel": "~2.3",
+        "symfony/intl": "~2.3",
         "symfony/routing": "~2.2",
         "symfony/templating": "~2.1",
         "symfony/translation": "~2.2",
-        "symfony/yaml": "~2.0",
+        "symfony/yaml": "~2.0,>=2.0.5",
         "symfony/security": "~2.4",
         "symfony/stopwatch": "~2.2",
+        "symfony/console": "~2.4",
+        "symfony/var-dumper": "~2.6",
         "symfony/expression-language": "~2.4"
     },
     "suggest": {
+        "symfony/finder": "",
         "symfony/form": "For using the FormExtension",
         "symfony/http-kernel": "For using the HttpKernelExtension",
         "symfony/routing": "For using the RoutingExtension",
@@ -40,7 +45,8 @@
         "symfony/yaml": "For using the YamlExtension",
         "symfony/security": "For using the SecurityExtension",
         "symfony/stopwatch": "For using the StopwatchExtension",
-        "symfony/expression": "For using the ExpressionExtension"
+        "symfony/var-dumper": "For using the DumpExtension",
+        "symfony/expression-language": "For using the ExpressionExtension"
     },
     "autoload": {
         "psr-0": { "Symfony\\Bridge\\Twig\\": "" }
@@ -49,7 +55,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.4-dev"
+            "dev-master": "2.6-dev"
         }
     }
 }

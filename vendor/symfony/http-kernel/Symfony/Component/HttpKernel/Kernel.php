@@ -59,25 +59,25 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     protected $startTime;
     protected $loadClassCache;
 
-    const VERSION         = '2.4.2';
-    const VERSION_ID      = '20402';
-    const MAJOR_VERSION   = '2';
-    const MINOR_VERSION   = '4';
-    const RELEASE_VERSION = '2';
-    const EXTRA_VERSION   = '';
+    const VERSION = '2.5.9';
+    const VERSION_ID = '20509';
+    const MAJOR_VERSION = '2';
+    const MINOR_VERSION = '5';
+    const RELEASE_VERSION = '9';
+    const EXTRA_VERSION = '';
 
     /**
      * Constructor.
      *
-     * @param string  $environment The environment
-     * @param Boolean $debug       Whether to enable debugging or not
+     * @param string $environment The environment
+     * @param bool   $debug       Whether to enable debugging or not
      *
      * @api
      */
     public function __construct($environment, $debug)
     {
         $this->environment = $environment;
-        $this->debug = (Boolean) $debug;
+        $this->debug = (bool) $debug;
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
 
@@ -186,7 +186,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * Gets a HTTP kernel from the container
+     * Gets a HTTP kernel from the container.
      *
      * @return HttpKernel
      */
@@ -240,35 +240,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * Returns the file path for a given resource.
+     * {@inheritDoc}
      *
-     * A Resource can be a file or a directory.
-     *
-     * The resource name must follow the following pattern:
-     *
-     *     @<BundleName>/path/to/a/file.something
-     *
-     * where BundleName is the name of the bundle
-     * and the remaining part is the relative path in the bundle.
-     *
-     * If $dir is passed, and the first segment of the path is "Resources",
-     * this method will look for a file named:
-     *
-     *     $dir/<BundleName>/path/without/Resources
-     *
-     * before looking in the bundle resource folder.
-     *
-     * @param string  $name  A resource name to locate
-     * @param string  $dir   A directory where to look for the resource first
-     * @param Boolean $first Whether to return the first path or paths for all matching bundles
-     *
-     * @return string|array The absolute path of the resource or an array if $first is false
-     *
-     * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
-     * @throws \RuntimeException         if the name contains invalid/unsafe
-     * @throws \RuntimeException         if a custom resource is hidden by a resource in a derived bundle
-     *
-     * @api
+     * @throws \RuntimeException if a custom resource is hidden by a resource in a derived bundle
      */
     public function locateResource($name, $dir = null, $first = true)
     {
@@ -517,7 +491,6 @@ abstract class Kernel implements KernelInterface, TerminableInterface
                 array_pop($bundleMap);
             }
         }
-
     }
 
     /**
@@ -585,14 +558,14 @@ abstract class Kernel implements KernelInterface, TerminableInterface
 
         return array_merge(
             array(
-                'kernel.root_dir'        => $this->rootDir,
-                'kernel.environment'     => $this->environment,
-                'kernel.debug'           => $this->debug,
-                'kernel.name'            => $this->name,
-                'kernel.cache_dir'       => $this->getCacheDir(),
-                'kernel.logs_dir'        => $this->getLogDir(),
-                'kernel.bundles'         => $bundles,
-                'kernel.charset'         => $this->getCharset(),
+                'kernel.root_dir' => realpath($this->rootDir) ?: $this->rootDir,
+                'kernel.environment' => $this->environment,
+                'kernel.debug' => $this->debug,
+                'kernel.name' => $this->name,
+                'kernel.cache_dir' => realpath($this->getCacheDir()) ?: $this->getCacheDir(),
+                'kernel.logs_dir' => realpath($this->getLogDir()) ?: $this->getLogDir(),
+                'kernel.bundles' => $bundles,
+                'kernel.charset' => $this->getCharset(),
                 'kernel.container_class' => $this->getContainerClass(),
             ),
             $this->getEnvParameters()
@@ -709,7 +682,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
             $dumper->setProxyDumper(new ProxyDumper());
         }
 
-        $content = $dumper->dump(array('class' => $class, 'base_class' => $baseClass));
+        $content = $dumper->dump(array('class' => $class, 'base_class' => $baseClass, 'file' => (string) $cache));
         if (!$this->debug) {
             $content = static::stripComments($content);
         }
@@ -757,23 +730,39 @@ abstract class Kernel implements KernelInterface, TerminableInterface
         $rawChunk = '';
         $output = '';
         $tokens = token_get_all($source);
+        $ignoreSpace = false;
         for (reset($tokens); false !== $token = current($tokens); next($tokens)) {
             if (is_string($token)) {
                 $rawChunk .= $token;
             } elseif (T_START_HEREDOC === $token[0]) {
-                $output .= preg_replace(array('/\s+$/Sm', '/\n+/S'), "\n", $rawChunk).$token[1];
+                $output .= $rawChunk.$token[1];
                 do {
                     $token = next($tokens);
                     $output .= $token[1];
                 } while ($token[0] !== T_END_HEREDOC);
                 $rawChunk = '';
-            } elseif (!in_array($token[0], array(T_COMMENT, T_DOC_COMMENT))) {
+            } elseif (T_WHITESPACE === $token[0]) {
+                if ($ignoreSpace) {
+                    $ignoreSpace = false;
+
+                    continue;
+                }
+
+                // replace multiple new lines with a single newline
+                $rawChunk .= preg_replace(array('/\n{2,}/S'), "\n", $token[1]);
+            } elseif (in_array($token[0], array(T_COMMENT, T_DOC_COMMENT))) {
+                $ignoreSpace = true;
+            } else {
                 $rawChunk .= $token[1];
+
+                // The PHP-open tag already has a new-line
+                if (T_OPEN_TAG === $token[0]) {
+                    $ignoreSpace = true;
+                }
             }
         }
 
-        // replace multiple new lines with a single newline
-        $output .= preg_replace(array('/\s+$/Sm', '/\n+/S'), "\n", $rawChunk);
+        $output .= $rawChunk;
 
         return $output;
     }

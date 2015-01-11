@@ -28,10 +28,10 @@ abstract class PdoProfilerStorage implements ProfilerStorageInterface
     /**
      * Constructor.
      *
-     * @param string  $dsn      A data source name
-     * @param string  $username The username for the database
-     * @param string  $password The password for the database
-     * @param integer $lifetime The lifetime to use for the purge
+     * @param string $dsn      A data source name
+     * @param string $username The username for the database
+     * @param string $password The password for the database
+     * @param int    $lifetime The lifetime to use for the purge
      */
     public function __construct($dsn, $username = '', $password = '', $lifetime = 86400)
     {
@@ -59,7 +59,7 @@ abstract class PdoProfilerStorage implements ProfilerStorageInterface
         $criteria = $criteria ? 'WHERE '.implode(' AND ', $criteria) : '';
 
         $db = $this->initDb();
-        $tokens = $this->fetch($db, 'SELECT token, ip, method, url, time, parent FROM sf_profiler_data '.$criteria.' ORDER BY time DESC LIMIT '.((integer) $limit), $args);
+        $tokens = $this->fetch($db, 'SELECT token, ip, method, url, time, parent FROM sf_profiler_data '.$criteria.' ORDER BY time DESC LIMIT '.((int) $limit), $args);
         $this->close($db);
 
         return $tokens;
@@ -77,8 +77,6 @@ abstract class PdoProfilerStorage implements ProfilerStorageInterface
         if (isset($data[0]['data'])) {
             return $this->createProfileFromData($token, $data[0]);
         }
-
-        return null;
     }
 
     /**
@@ -88,13 +86,13 @@ abstract class PdoProfilerStorage implements ProfilerStorageInterface
     {
         $db = $this->initDb();
         $args = array(
-            ':token'      => $profile->getToken(),
-            ':parent'     => $profile->getParentToken(),
-            ':data'       => base64_encode(serialize($profile->getCollectors())),
-            ':ip'         => $profile->getIp(),
-            ':method'     => $profile->getMethod(),
-            ':url'        => $profile->getUrl(),
-            ':time'       => $profile->getTime(),
+            ':token' => $profile->getToken(),
+            ':parent' => $profile->getParentToken(),
+            ':data' => base64_encode(serialize($profile->getCollectors())),
+            ':ip' => $profile->getIp(),
+            ':method' => $profile->getMethod(),
+            ':url' => $profile->getUrl(),
+            ':time' => $profile->getTime(),
             ':created_at' => time(),
         );
 
@@ -126,7 +124,7 @@ abstract class PdoProfilerStorage implements ProfilerStorageInterface
     }
 
     /**
-     * Build SQL criteria to fetch records by ip and url
+     * Build SQL criteria to fetch records by ip and url.
      *
      * @param string $ip     The IP
      * @param string $url    The URL
@@ -140,7 +138,7 @@ abstract class PdoProfilerStorage implements ProfilerStorageInterface
     abstract protected function buildCriteria($ip, $url, $start, $end, $limit, $method);
 
     /**
-     * Initializes the database
+     * Initializes the database.
      *
      * @throws \RuntimeException When the requested database driver is not installed
      */

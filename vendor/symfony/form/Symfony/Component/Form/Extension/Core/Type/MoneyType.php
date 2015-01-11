@@ -52,10 +52,10 @@ class MoneyType extends AbstractType
     {
         $resolver->setDefaults(array(
             'precision' => 2,
-            'grouping'  => false,
-            'divisor'   => 1,
-            'currency'  => 'EUR',
-            'compound'  => false,
+            'grouping' => false,
+            'divisor' => 1,
+            'currency' => 'EUR',
+            'compound' => false,
         ));
     }
 
@@ -68,7 +68,7 @@ class MoneyType extends AbstractType
     }
 
     /**
-     * Returns the pattern for this locale
+     * Returns the pattern for this locale.
      *
      * The pattern contains the placeholder "{{ widget }}" where the HTML tag should
      * be inserted

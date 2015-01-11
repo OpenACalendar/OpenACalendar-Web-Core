@@ -68,6 +68,11 @@ class FacebookCurlHttpClient implements FacebookHttpable
   protected static $facebookCurl;
 
   /**
+   * @var boolean If IPv6 should be disabled
+   */
+  protected static $disableIPv6;
+
+  /**
    * @const Curl Version which is unaffected by the proxy header length error.
    */
   const CURL_PROXY_QUIRK_VER = 0x071E00;
@@ -83,6 +88,15 @@ class FacebookCurlHttpClient implements FacebookHttpable
   public function __construct(FacebookCurl $facebookCurl = null)
   {
     self::$facebookCurl = $facebookCurl ?: new FacebookCurl();
+    self::$disableIPv6 = self::$disableIPv6 ?: false;
+  }
+
+  /**
+   * Disable IPv6 resolution
+   */
+  public function disableIPv6()
+  {
+    self::$disableIPv6 = true;
   }
 
   /**
@@ -132,12 +146,6 @@ class FacebookCurlHttpClient implements FacebookHttpable
     $this->openConnection($url, $method, $parameters);
     $this->tryToSendRequest();
 
-    // Need to verify the peer
-    if ($this->curlErrorCode == 60 || $this->curlErrorCode == 77) {
-      $this->addBundledCert();
-      $this->tryToSendRequest();
-    }
-
     if ($this->curlErrorCode) {
       throw new FacebookSDKException($this->curlErrorMessage, $this->curlErrorCode);
     }
@@ -167,6 +175,9 @@ class FacebookCurlHttpClient implements FacebookHttpable
       CURLOPT_TIMEOUT        => 60,
       CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
       CURLOPT_HEADER         => true, // Enable header processing
+      CURLOPT_SSL_VERIFYHOST => 2,
+      CURLOPT_SSL_VERIFYPEER => true,
+      CURLOPT_CAINFO         => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
     );
 
     if ($method !== "GET") {
@@ -180,17 +191,12 @@ class FacebookCurlHttpClient implements FacebookHttpable
       $options[CURLOPT_HTTPHEADER] = $this->compileRequestHeaders();
     }
 
+    if (self::$disableIPv6) {
+      $options[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
+    }
+
     self::$facebookCurl->init();
     self::$facebookCurl->setopt_array($options);
-  }
-
-  /**
-   * Add a bundled cert to the connection
-   */
-  public function addBundledCert()
-  {
-    self::$facebookCurl->setopt(CURLOPT_CAINFO,
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt');
   }
 
   /**

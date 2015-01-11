@@ -52,7 +52,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
         OutputInterface::VERBOSITY_NORMAL => Logger::WARNING,
         OutputInterface::VERBOSITY_VERBOSE => Logger::NOTICE,
         OutputInterface::VERBOSITY_VERY_VERBOSE => Logger::INFO,
-        OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG
+        OutputInterface::VERBOSITY_DEBUG => Logger::DEBUG,
     );
 
     /**
@@ -60,7 +60,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
      *
      * @param OutputInterface|null $output            The console output to use (the handler remains disabled when passing null
      *                                                until the output is set, e.g. by using console events)
-     * @param Boolean              $bubble            Whether the messages that are handled can bubble up the stack
+     * @param bool                 $bubble            Whether the messages that are handled can bubble up the stack
      * @param array                $verbosityLevelMap Array that maps the OutputInterface verbosity to a minimum logging
      *                                                level (leave empty to use the default mapping)
      */
@@ -139,8 +139,8 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return array(
-            ConsoleEvents::COMMAND => 'onCommand',
-            ConsoleEvents::TERMINATE => 'onTerminate'
+            ConsoleEvents::COMMAND => array('onCommand', 255),
+            ConsoleEvents::TERMINATE => array('onTerminate', -255),
         );
     }
 
@@ -167,7 +167,7 @@ class ConsoleHandler extends AbstractProcessingHandler implements EventSubscribe
     /**
      * Updates the logging level based on the verbosity setting of the console output.
      *
-     * @return Boolean Whether the handler is enabled and verbosity is not set to quiet.
+     * @return bool Whether the handler is enabled and verbosity is not set to quiet.
      */
     private function updateLevel()
     {

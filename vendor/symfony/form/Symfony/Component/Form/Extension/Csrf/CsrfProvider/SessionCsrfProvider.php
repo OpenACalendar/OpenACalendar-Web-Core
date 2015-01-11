@@ -14,7 +14,7 @@ namespace Symfony\Component\Form\Extension\Csrf\CsrfProvider;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
- * This provider uses a Symfony2 Session object to retrieve the user's
+ * This provider uses a Symfony Session object to retrieve the user's
  * session ID.
  *
  * @see DefaultCsrfProvider
@@ -29,7 +29,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class SessionCsrfProvider extends DefaultCsrfProvider
 {
     /**
-     * The user session from which the session ID is returned
+     * The user session from which the session ID is returned.
+     *
      * @var Session
      */
     protected $session;

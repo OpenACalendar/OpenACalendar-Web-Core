@@ -28,9 +28,9 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
 {
-    const REQUIREMENT_MATCH     = 0;
-    const REQUIREMENT_MISMATCH  = 1;
-    const ROUTE_MATCH           = 2;
+    const REQUIREMENT_MATCH = 0;
+    const REQUIREMENT_MISMATCH = 1;
+    const ROUTE_MATCH = 2;
 
     /**
      * @var RequestContext
@@ -205,8 +205,8 @@ class UrlMatcher implements UrlMatcherInterface, RequestMatcherInterface
         }
 
         // check HTTP scheme requirement
-        $scheme = $route->getRequirement('_scheme');
-        $status = $scheme && $scheme !== $this->context->getScheme() ? self::REQUIREMENT_MISMATCH : self::REQUIREMENT_MATCH;
+        $scheme = $this->context->getScheme();
+        $status = $route->getSchemes() && !$route->hasScheme($scheme) ? self::REQUIREMENT_MISMATCH : self::REQUIREMENT_MATCH;
 
         return array($status, null);
     }

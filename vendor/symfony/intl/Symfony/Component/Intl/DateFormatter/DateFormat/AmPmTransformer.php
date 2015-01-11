@@ -12,14 +12,14 @@
 namespace Symfony\Component\Intl\DateFormatter\DateFormat;
 
 /**
- * Parser and formatter for AM/PM markers format
+ * Parser and formatter for AM/PM markers format.
  *
  * @author Igor Wiedler <igor@wiedler.ch>
  */
 class AmPmTransformer extends Transformer
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function format(\DateTime $dateTime, $length)
     {
@@ -27,7 +27,7 @@ class AmPmTransformer extends Transformer
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getReverseMatchingRegExp($length)
     {
@@ -35,12 +35,12 @@ class AmPmTransformer extends Transformer
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function extractDateOptions($matched, $length)
     {
         return array(
-            'marker' => $matched
+            'marker' => $matched,
         );
     }
 }

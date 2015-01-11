@@ -117,7 +117,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     /**
      * Transforms a number type into localized number.
      *
-     * @param integer|float $value Number value.
+     * @param int|float $value Number value.
      *
      * @return string Localized value.
      *
@@ -148,11 +148,11 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a localized number into an integer or float
+     * Transforms a localized number into an integer or float.
      *
      * @param string $value The localized value
      *
-     * @return integer|float The numeric value
+     * @return int|float The numeric value
      *
      * @throws TransformationFailedException If the given value is not a string
      *                                       or if the value can not be transformed.
@@ -164,7 +164,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
         }
 
         if ('' === $value) {
-            return null;
+            return;
         }
 
         if ('NaN' === $value) {
@@ -195,25 +195,19 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
         }
 
         if (function_exists('mb_detect_encoding') && false !== $encoding = mb_detect_encoding($value)) {
-            $strlen = function ($string) use ($encoding) {
-                return mb_strlen($string, $encoding);
-            };
-            $substr = function ($string, $offset, $length) use ($encoding) {
-                return mb_substr($string, $offset, $length, $encoding);
-            };
+            $length = mb_strlen($value, $encoding);
+            $remainder = mb_substr($value, $position, $length, $encoding);
         } else {
-            $strlen = 'strlen';
-            $substr = 'substr';
+            $length = strlen($value);
+            $remainder = substr($value, $position, $length);
         }
-
-        $length = $strlen($value);
 
         // After parsing, position holds the index of the character where the
         // parsing stopped
         if ($position < $length) {
             // Check if there are unrecognized characters at the end of the
             // number (excluding whitespace characters)
-            $remainder = trim($substr($value, $position, $length), " \t\n\r\0\x0b\xc2\xa0");
+            $remainder = trim($remainder, " \t\n\r\0\x0b\xc2\xa0");
 
             if ('' !== $remainder) {
                 throw new TransformationFailedException(
@@ -227,7 +221,7 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * Returns a preconfigured \NumberFormatter instance
+     * Returns a preconfigured \NumberFormatter instance.
      *
      * @return \NumberFormatter
      */
@@ -248,9 +242,9 @@ class NumberToLocalizedStringTransformer implements DataTransformerInterface
     /**
      * Rounds a number according to the configured precision and rounding mode.
      *
-     * @param integer|float $number A number.
+     * @param int|float $number A number.
      *
-     * @return integer|float The rounded number.
+     * @return int|float The rounded number.
      */
     private function round($number)
     {

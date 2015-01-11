@@ -78,11 +78,11 @@ class FileProfilerStorage implements ProfilerStorageInterface
             }
 
             $result[$csvToken] = array(
-                'token'  => $csvToken,
-                'ip'     => $csvIp,
+                'token' => $csvToken,
+                'ip' => $csvIp,
                 'method' => $csvMethod,
-                'url'    => $csvUrl,
-                'time'   => $csvTime,
+                'url' => $csvUrl,
+                'time' => $csvTime,
                 'parent' => $csvParent,
             );
         }
@@ -116,7 +116,7 @@ class FileProfilerStorage implements ProfilerStorageInterface
     public function read($token)
     {
         if (!$token || !file_exists($file = $this->getFilename($token))) {
-            return null;
+            return;
         }
 
         return $this->createProfileFromData($token, unserialize(file_get_contents($file)));
@@ -140,14 +140,14 @@ class FileProfilerStorage implements ProfilerStorageInterface
 
         // Store profile
         $data = array(
-            'token'    => $profile->getToken(),
-            'parent'   => $profile->getParentToken(),
+            'token' => $profile->getToken(),
+            'parent' => $profile->getParentToken(),
             'children' => array_map(function ($p) { return $p->getToken(); }, $profile->getChildren()),
-            'data'     => $profile->getCollectors(),
-            'ip'       => $profile->getIp(),
-            'method'   => $profile->getMethod(),
-            'url'      => $profile->getUrl(),
-            'time'     => $profile->getTime(),
+            'data' => $profile->getCollectors(),
+            'ip' => $profile->getIp(),
+            'method' => $profile->getMethod(),
+            'url' => $profile->getUrl(),
+            'time' => $profile->getTime(),
         );
 
         if (false === file_put_contents($file, serialize($data))) {
@@ -215,7 +215,7 @@ class FileProfilerStorage implements ProfilerStorageInterface
         $position = ftell($file);
 
         if (0 === $position) {
-            return null;
+            return;
         }
 
         while (true) {

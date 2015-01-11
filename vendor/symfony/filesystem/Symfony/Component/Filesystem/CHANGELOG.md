@@ -1,11 +1,21 @@
 CHANGELOG
 =========
 
+2.6.0
+-----
+
+ * added LockHandler
+
+2.3.12
+------
+
+ * deprecated dumpFile() file mode argument.
+
 2.3.0
 -----
 
  * added the dumpFile() method to atomically write files
- 
+
 2.2.0
 -----
 

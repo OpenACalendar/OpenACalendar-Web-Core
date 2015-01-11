@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Validator\Tests;
 
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\ValidatorBuilder;
 use Symfony\Component\Validator\ValidatorBuilderInterface;
 
@@ -107,5 +108,44 @@ class ValidatorBuilderTest extends \PHPUnit_Framework_TestCase
     public function testSetTranslationDomain()
     {
         $this->assertSame($this->builder, $this->builder->setTranslationDomain('TRANS_DOMAIN'));
+    }
+
+    public function testLegacyDefaultApiVersion()
+    {
+        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
+
+        if (PHP_VERSION_ID < 50309) {
+            // Old implementation on PHP < 5.3.9
+            $this->assertInstanceOf('Symfony\Component\Validator\Validator', $this->builder->getValidator());
+        } else {
+            // Legacy compatible implementation on PHP >= 5.3.9
+            $this->assertInstanceOf('Symfony\Component\Validator\Validator\LegacyValidator', $this->builder->getValidator());
+        }
+    }
+
+    public function testLegacySetApiVersion24()
+    {
+        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
+
+        $this->assertSame($this->builder, $this->builder->setApiVersion(Validation::API_VERSION_2_4));
+        $this->assertInstanceOf('Symfony\Component\Validator\Validator', $this->builder->getValidator());
+    }
+
+    public function testSetApiVersion25()
+    {
+        $this->assertSame($this->builder, $this->builder->setApiVersion(Validation::API_VERSION_2_5));
+        $this->assertInstanceOf('Symfony\Component\Validator\Validator\RecursiveValidator', $this->builder->getValidator());
+    }
+
+    public function testLegacySetApiVersion24And25()
+    {
+        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
+
+        if (PHP_VERSION_ID < 50309) {
+            $this->markTestSkipped('Not supported prior to PHP 5.3.9');
+        }
+
+        $this->assertSame($this->builder, $this->builder->setApiVersion(Validation::API_VERSION_2_5_BC));
+        $this->assertInstanceOf('Symfony\Component\Validator\Validator\LegacyValidator', $this->builder->getValidator());
     }
 }

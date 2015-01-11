@@ -20,7 +20,6 @@ use Monolog\Logger;
  */
 class HipChatHandlerTest extends TestCase
 {
-
     private $res;
     private $handler;
 
@@ -155,5 +154,13 @@ class HipChatHandlerTest extends TestCase
             ->will($this->returnValue(true));
 
         $this->handler->setFormatter($this->getIdentityFormatter());
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testCreateWithTooLongName()
+    {
+        $hipChatHandler = new \Monolog\Handler\HipChatHandler('token', 'room', 'SixteenCharsHere');
     }
 }

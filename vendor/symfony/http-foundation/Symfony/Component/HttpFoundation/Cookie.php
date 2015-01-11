@@ -12,7 +12,7 @@
 namespace Symfony\Component\HttpFoundation;
 
 /**
- * Represents a cookie
+ * Represents a cookie.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  *
@@ -31,13 +31,13 @@ class Cookie
     /**
      * Constructor.
      *
-     * @param string                   $name     The name of the cookie
-     * @param string                   $value    The value of the cookie
-     * @param integer|string|\DateTime $expire   The time the cookie expires
-     * @param string                   $path     The path on the server in which the cookie will be available on
-     * @param string                   $domain   The domain that the cookie is available to
-     * @param Boolean                  $secure   Whether the cookie should only be transmitted over a secure HTTPS connection from the client
-     * @param Boolean                  $httpOnly Whether the cookie will be made accessible only through the HTTP protocol
+     * @param string               $name     The name of the cookie
+     * @param string               $value    The value of the cookie
+     * @param int|string|\DateTime $expire   The time the cookie expires
+     * @param string               $path     The path on the server in which the cookie will be available on
+     * @param string               $domain   The domain that the cookie is available to
+     * @param bool                 $secure   Whether the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param bool                 $httpOnly Whether the cookie will be made accessible only through the HTTP protocol
      *
      * @throws \InvalidArgumentException
      *
@@ -70,8 +70,8 @@ class Cookie
         $this->domain = $domain;
         $this->expire = $expire;
         $this->path = empty($path) ? '/' : $path;
-        $this->secure = (Boolean) $secure;
-        $this->httpOnly = (Boolean) $httpOnly;
+        $this->secure = (bool) $secure;
+        $this->httpOnly = (bool) $httpOnly;
     }
 
     /**
@@ -151,7 +151,7 @@ class Cookie
     /**
      * Gets the time the cookie expires.
      *
-     * @return integer
+     * @return int
      *
      * @api
      */
@@ -175,7 +175,7 @@ class Cookie
     /**
      * Checks whether the cookie should only be transmitted over a secure HTTPS connection from the client.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -187,7 +187,7 @@ class Cookie
     /**
      * Checks whether the cookie will be made accessible only through the HTTP protocol.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -197,9 +197,9 @@ class Cookie
     }
 
     /**
-     * Whether this cookie is about to be cleared
+     * Whether this cookie is about to be cleared.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */

@@ -22,8 +22,14 @@ use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceExceptio
  */
 abstract class FileLoader extends Loader
 {
+    /**
+     * @var array
+     */
     protected static $loading = array();
 
+    /**
+     * @var FileLocatorInterface
+     */
     protected $locator;
 
     private $currentDir;
@@ -38,11 +44,21 @@ abstract class FileLoader extends Loader
         $this->locator = $locator;
     }
 
+    /**
+     * Sets the current directory.
+     *
+     * @param string $dir
+     */
     public function setCurrentDir($dir)
     {
         $this->currentDir = $dir;
     }
 
+    /**
+     * Returns the file locator used by this loader.
+     *
+     * @return FileLocatorInterface
+     */
     public function getLocator()
     {
         return $this->locator;
@@ -51,10 +67,10 @@ abstract class FileLoader extends Loader
     /**
      * Imports a resource.
      *
-     * @param mixed   $resource       A Resource
-     * @param string  $type           The resource type
-     * @param Boolean $ignoreErrors   Whether to ignore import errors or not
-     * @param string  $sourceResource The original resource importing the new resource
+     * @param mixed       $resource       A Resource
+     * @param string|null $type           The resource type or null if unknown
+     * @param bool        $ignoreErrors   Whether to ignore import errors or not
+     * @param string|null $sourceResource The original resource importing the new resource
      *
      * @return mixed
      *
@@ -67,11 +83,15 @@ abstract class FileLoader extends Loader
             $loader = $this->resolve($resource, $type);
 
             if ($loader instanceof FileLoader && null !== $this->currentDir) {
-                $resource = $this->locator->locate($resource, $this->currentDir, false);
+                // we fallback to the current locator to keep BC
+                // as some some loaders do not call the parent __construct()
+                // @deprecated should be removed in 3.0
+                $locator = $loader->getLocator() ?: $this->locator;
+                $resource = $locator->locate($resource, $this->currentDir, false);
             }
 
             $resources = is_array($resource) ? $resource : array($resource);
-            for ($i = 0; $i < $resourcesCount = count($resources); $i++ ) {
+            for ($i = 0; $i < $resourcesCount = count($resources); $i++) {
                 if (isset(self::$loading[$resources[$i]])) {
                     if ($i == $resourcesCount-1) {
                         throw new FileLoaderImportCircularReferenceException(array_keys(self::$loading));

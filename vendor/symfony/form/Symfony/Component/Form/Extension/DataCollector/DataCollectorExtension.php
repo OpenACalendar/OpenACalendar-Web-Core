@@ -34,12 +34,12 @@ class DataCollectorExtension extends AbstractExtension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function loadTypeExtensions()
     {
         return array(
-            new Type\DataCollectorTypeExtension($this->dataCollector)
+            new Type\DataCollectorTypeExtension($this->dataCollector),
         );
     }
 }

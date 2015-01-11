@@ -12,7 +12,7 @@
 namespace Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 /**
- * MongoDB session handler
+ * MongoDB session handler.
  *
  * @author Markus Bachmann <markus.bachmann@bachi.biz>
  */
@@ -62,14 +62,14 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
         $this->mongo = $mongo;
 
         $this->options = array_merge(array(
-            'id_field'   => '_id',
+            'id_field' => '_id',
             'data_field' => 'data',
             'time_field' => 'time',
         ), $options);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function open($savePath, $sessionName)
     {
@@ -77,7 +77,7 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function close()
     {
@@ -85,21 +85,21 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function destroy($sessionId)
     {
         $this->getCollection()->remove(array(
-            $this->options['id_field'] => $sessionId
+            $this->options['id_field'] => $sessionId,
         ));
 
         return true;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function gc($lifetime)
+    public function gc($maxlifetime)
     {
         /* Note: MongoDB 2.2+ supports TTL collections, which may be used in
          * place of this method by indexing the "time_field" field with an
@@ -109,7 +109,7 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
          *
          * See: http://docs.mongodb.org/manual/tutorial/expire-data/
          */
-        $time = new \MongoDate(time() - $lifetime);
+        $time = new \MongoDate(time() - $maxlifetime);
 
         $this->getCollection()->remove(array(
             $this->options['time_field'] => array('$lt' => $time),
@@ -119,7 +119,7 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc]
+     * {@inheritdoc}
      */
     public function write($sessionId, $data)
     {
@@ -136,7 +136,7 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function read($sessionId)
     {
@@ -148,7 +148,7 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * Return a "MongoCollection" instance
+     * Return a "MongoCollection" instance.
      *
      * @return \MongoCollection
      */

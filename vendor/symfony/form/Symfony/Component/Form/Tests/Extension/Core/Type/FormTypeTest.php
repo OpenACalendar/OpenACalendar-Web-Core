@@ -12,7 +12,6 @@
 namespace Symfony\Component\Form\Tests\Extension\Core\Type;
 
 use Symfony\Component\PropertyAccess\PropertyPath;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Tests\Fixtures\Author;
 use Symfony\Component\Form\Tests\Fixtures\FixedDataTransformer;
@@ -132,10 +131,49 @@ class FormTypeTest extends BaseTypeTest
 
     public function testPassMaxLengthToView()
     {
+        $form = $this->factory->create('form', null, array('attr' => array('maxlength' => 10)));
+        $view = $form->createView();
+
+        $this->assertSame(10, $view->vars['attr']['maxlength']);
+    }
+
+    public function testPassMaxLengthBCToView()
+    {
         $form = $this->factory->create('form', null, array('max_length' => 10));
         $view = $form->createView();
 
-        $this->assertSame(10, $view->vars['max_length']);
+        $this->assertSame(10, $view->vars['attr']['maxlength']);
+    }
+
+    public function testDataClassMayBeNull()
+    {
+        $this->factory->createBuilder('form', null, array(
+            'data_class' => null,
+        ));
+    }
+
+    public function testDataClassMayBeAbstractClass()
+    {
+        $this->factory->createBuilder('form', null, array(
+            'data_class' => 'Symfony\Component\Form\Tests\Fixtures\AbstractAuthor',
+        ));
+    }
+
+    public function testDataClassMayBeInterface()
+    {
+        $this->factory->createBuilder('form', null, array(
+            'data_class' => 'Symfony\Component\Form\Tests\Fixtures\AuthorInterface',
+        ));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Form\Exception\InvalidArgumentException
+     */
+    public function testDataClassMustBeValidClassOrInterface()
+    {
+        $this->factory->createBuilder('form', null, array(
+            'data_class' => 'foobar',
+        ));
     }
 
     public function testSubmitWithEmptyDataCreatesObjectIfClassAvailable()
@@ -288,6 +326,7 @@ class FormTypeTest extends BaseTypeTest
 
     /**
      * @dataProvider provideZeros
+     *
      * @see https://github.com/symfony/symfony/issues/1986
      */
     public function testSetDataThroughParamsWithZero($data, $dataAsString)
@@ -334,7 +373,7 @@ class FormTypeTest extends BaseTypeTest
             // reference has a getter, but not setter
             'reference' => array(
                 'firstName' => 'Foo',
-            )
+            ),
         ));
 
         $this->assertEquals('Foo', $author->getReference()->firstName);
@@ -359,7 +398,7 @@ class FormTypeTest extends BaseTypeTest
         // referenceCopy has a getter that returns a copy
             'referenceCopy' => array(
                 'firstName' => 'Foo',
-        )
+        ),
         ));
 
         $this->assertEquals('Foo', $author->getReferenceCopy()->firstName);
@@ -372,7 +411,7 @@ class FormTypeTest extends BaseTypeTest
         $builder = $this->factory->createBuilder('form', $author);
         $builder->add('referenceCopy', 'form', array(
             'data_class' => 'Symfony\Component\Form\Tests\Fixtures\Author',
-            'by_reference' => false
+            'by_reference' => false,
         ));
         $builder->get('referenceCopy')->add('firstName', 'text');
         $form = $builder->getForm();
@@ -381,7 +420,7 @@ class FormTypeTest extends BaseTypeTest
             // referenceCopy has a getter that returns a copy
             'referenceCopy' => array(
                 'firstName' => 'Foo',
-            )
+            ),
         ));
 
         // firstName can only be updated if setReferenceCopy() was called
@@ -591,7 +630,7 @@ class FormTypeTest extends BaseTypeTest
     public function testPassZeroLabelToView()
     {
         $view = $this->factory->create('form', null, array(
-                'label' => '0'
+                'label' => '0',
             ))
             ->createView();
 

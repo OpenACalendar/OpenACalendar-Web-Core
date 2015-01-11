@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\Type;
 
+use Symfony\Component\Form\Test\TypeTestCase as TestCase;
 use Symfony\Component\Intl\Util\IntlTestHelper;
 
-class MoneyTypeTest extends TypeTestCase
+class MoneyTypeTest extends TestCase
 {
     protected function setUp()
     {
@@ -40,7 +41,7 @@ class MoneyTypeTest extends TypeTestCase
 
         $form = $this->factory->create('money', null, array('currency' => 'JPY'));
         $view = $form->createView();
-        $this->assertTrue((Boolean) strstr($view->vars['money_pattern'], '¥'));
+        $this->assertTrue((bool) strstr($view->vars['money_pattern'], '¥'));
     }
 
     // https://github.com/symfony/symfony/issues/5458

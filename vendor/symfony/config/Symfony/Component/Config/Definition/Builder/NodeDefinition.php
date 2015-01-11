@@ -40,7 +40,7 @@ abstract class NodeDefinition implements NodeParentInterface
     protected $attributes = array();
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string                   $name   The name of the node
      * @param NodeParentInterface|null $parent The parent
@@ -93,7 +93,7 @@ abstract class NodeDefinition implements NodeParentInterface
      * Sets an attribute on the node.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return NodeDefinition
      */
@@ -117,7 +117,7 @@ abstract class NodeDefinition implements NodeParentInterface
     /**
      * Creates the node.
      *
-     * @param Boolean $forceRootNode Whether to force this node as the root node
+     * @param bool $forceRootNode Whether to force this node as the root node
      *
      * @return NodeInterface
      */
@@ -279,7 +279,7 @@ abstract class NodeDefinition implements NodeParentInterface
     /**
      * Sets whether the node can be overwritten.
      *
-     * @param Boolean $deny Whether the overwriting is forbidden or not
+     * @param bool $deny Whether the overwriting is forbidden or not
      *
      * @return NodeDefinition
      */
@@ -333,12 +333,11 @@ abstract class NodeDefinition implements NodeParentInterface
     }
 
     /**
-     * Instantiate and configure the node according to this definition
+     * Instantiate and configure the node according to this definition.
      *
      * @return NodeInterface $node The node instance
      *
      * @throws InvalidDefinitionException When the definition is invalid
      */
     abstract protected function createNode();
-
 }

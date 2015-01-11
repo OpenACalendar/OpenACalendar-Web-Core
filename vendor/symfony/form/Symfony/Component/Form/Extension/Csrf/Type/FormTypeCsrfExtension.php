@@ -36,7 +36,7 @@ class FormTypeCsrfExtension extends AbstractTypeExtension
     private $defaultTokenManager;
 
     /**
-     * @var Boolean
+     * @var bool
      */
     private $defaultEnabled;
 
@@ -117,7 +117,7 @@ class FormTypeCsrfExtension extends AbstractTypeExtension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -134,18 +134,18 @@ class FormTypeCsrfExtension extends AbstractTypeExtension
         };
 
         $resolver->setDefaults(array(
-            'csrf_protection'    => $this->defaultEnabled,
-            'csrf_field_name'    => $this->defaultFieldName,
-            'csrf_message'       => 'The CSRF token is invalid. Please try to resubmit the form.',
+            'csrf_protection' => $this->defaultEnabled,
+            'csrf_field_name' => $this->defaultFieldName,
+            'csrf_message' => 'The CSRF token is invalid. Please try to resubmit the form.',
             'csrf_token_manager' => $csrfTokenManager,
-            'csrf_token_id'      => $csrfTokenId,
-            'csrf_provider'      => new CsrfTokenManagerAdapter($this->defaultTokenManager),
-            'intention'          => null,
+            'csrf_token_id' => $csrfTokenId,
+            'csrf_provider' => new CsrfTokenManagerAdapter($this->defaultTokenManager),
+            'intention' => null,
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getExtendedType()
     {

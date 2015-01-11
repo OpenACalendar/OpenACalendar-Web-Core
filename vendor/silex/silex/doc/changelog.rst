@@ -1,6 +1,36 @@
 Changelog
 =========
 
+1.2.2 (2014-09-26)
+------------------
+
+* fixed Translator locale management
+* added support for the $app argument in application middlewares (to make it consistent with route middlewares)
+* added form.types to the Form provider
+
+1.2.1 (2014-07-01)
+------------------
+
+* added support permissions in the Monolog provider
+* fixed Switfmailer spool where the event dispatcher is different from the other ones
+* fixed locale when changing it on the translator itself
+
+1.2.0 (2014-03-29)
+------------------
+
+* Allowed disabling the boot logic of MonologServiceProvider
+* Reverted "convert attributes on the request that actually exist"
+* [BC BREAK] Routes are now always added in the order of their registration (even for mounted routes)
+* Added run() on Route to be able to define the controller code
+* Deprecated TwigCoreExtension (register the new HttpFragmentServiceProvider instead)
+* Added HttpFragmentServiceProvider
+* Allowed a callback to be a method call on a service (before, after, finish, error, on Application; convert, before, after on Controller)
+
+1.1.3 (2013-XX-XX)
+------------------
+
+* Fixed translator locale management
+
 1.1.2 (2013-10-30)
 ------------------
 
@@ -39,7 +69,7 @@ Changelog
 
 * **2013-04-12**: Added support for validators as services.
 
-* **2013-04-01**: Added support for host matching with symfony 2.2:
+* **2013-04-01**: Added support for host matching with symfony 2.2::
 
       $app->match('/', function() {
           // app-specific action
