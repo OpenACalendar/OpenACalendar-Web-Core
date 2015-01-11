@@ -44,8 +44,6 @@ $site->setSlug($slug);
 $site->setTitle($slug);
 $site->setIsListedInIndex(true);
 $site->setIsWebRobotsAllowed(true);
-$site->setIsAllUsersEditors(true);
-$site->setIsRequestAccessAllowed(false);
 $site->setIsFeatureCuratedList($CONFIG->newSiteHasFeatureCuratedList);
 $site->setIsFeatureImporter($CONFIG->newSiteHasFeatureImporter);
 $site->setIsFeatureMap($CONFIG->newSiteHasFeatureMap);
@@ -67,7 +65,8 @@ $siteRepository->create(
 			$site, 
 			$user, 
 			array( $gb ), 
-			$siteQuotaRepository->loadByCode($CONFIG->newSiteHasQuotaCode)
+			$siteQuotaRepository->loadByCode($CONFIG->newSiteHasQuotaCode),
+			false
 		);
 
 
