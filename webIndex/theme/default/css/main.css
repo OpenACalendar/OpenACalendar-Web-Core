@@ -1491,7 +1491,7 @@ ul.listOfTextItems li {
 }
 .infoBoxWrapper .infoBoxTitle {
   background-color: #36C036;
-  color: white;
+  color: #333;
   padding: 5px;
   font-size: 0.8em;
 }
