@@ -13,18 +13,20 @@
 {% block innerContent %}
 
 	<ul class="actionList">
-	
-		<li><a href="/event/{{ event.slugForURL }}/edit/details"><div class="iconPencilSmall"></div> Edit Details</a></li>
-	
-		{% if currentSite.isFeaturePhysicalEvents %}
+
+		{%  if currentUserActions.has("org.openacalendar","eventEditDetails") %}
+			<li><a href="/event/{{ event.slugForURL }}/edit/details"><div class="iconPencilSmall"></div> Edit Details</a></li>
+		{%  endif %}
+
+		{% if currentUserActions.has("org.openacalendar","eventEditVenue") %}
 			<li><a href="/event/{{ event.slugForUrl }}/edit/venue"><div class="iconPencilSmall"></div> Edit Venue</a></li>
 		{% endif %}
 
-		{% if currentSite.isFeatureTag %}
+		{% if currentUserActions.has("org.openacalendar","eventEditTags") %}
 			<li><a href="/event/{{ event.slugForUrl }}/edit/tags"><div class="iconPencilSmall"></div> Edit Tags</a></li>
 		{% endif %}
 
-		{% if currentSite.isFeatureGroup %}
+		{% if currentUserActions.has("org.openacalendar","eventEditGroups") %}
 			<li><a href="/event/{{ event.slugForUrl }}/edit/groups"><div class="iconPencilSmall"></div> Edit Groups</a></li>
 		{% endif %}
 
