@@ -2,7 +2,7 @@
 
 namespace import;
 
-use JMBTechnologyLimited\RRuleUnravel\RRule;
+use JMBTechnologyLimited\RRuleUnravel\ICalData;
 use JMBTechnologyLimited\RRuleUnravel\Unraveler;
 use models\ImportedEventModel;
 use models\ImportedEventOccurrenceModel;
@@ -28,16 +28,15 @@ class ImportedEventToImportedEventOccurrences {
 		if ($importedEvent->getIcsRrule1()) {
 
 
-			$rrule = new RRule($importedEvent->getIcsRrule1());
-			$unraveler = new Unraveler($rrule, clone $importedEvent->getStartAt(), clone $importedEvent->getEndAt(), $importedEvent->getTimezone());
-			// TODO set unraveler, include original event option
+			$icaldata = new ICalData(
+				clone $importedEvent->getStartAt(),
+				clone $importedEvent->getEndAt(),
+				$importedEvent->getIcsRrule1(),
+				$importedEvent->getTimezone());
+			$unraveler = new Unraveler($icaldata);
+			$unraveler->setIncludeOriginalEvent(true);
 			$unraveler->process();
 			$results = $unraveler->getResults();
-
-			// include original event ourselves
-			$newImportedOccurrenceEvent = New ImportedEventOccurrenceModel();
-			$newImportedOccurrenceEvent->setFromImportedEventModel($importedEvent);
-			$this->importedEventOccurrences[] = $newImportedOccurrenceEvent;
 
 			foreach($results as $wantedTimes) {
 				$newImportedOccurrenceEvent = New ImportedEventOccurrenceModel();
