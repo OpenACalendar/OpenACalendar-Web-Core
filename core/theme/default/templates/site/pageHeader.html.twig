@@ -73,9 +73,9 @@
 		{% endif %}
 		<li class="menu">
 			<a href="/history">Changes</a>
-			<ul class="submenu">
-				<li><a href="/history">Recent Changes</a></li>
-				{% if currentUser is not null and currentUserWatchesSite is defined %}
+			{% if currentUser is not null and currentUserWatchesSite is defined %}
+				<ul class="submenu">
+					<li><a href="/history">Recent Changes</a></li>
 					<li id="userWatchesSite">
 						{%  if currentUserWatchesSite %}
 							<a href="/watch/">Watching!</a>
@@ -83,8 +83,8 @@
 							<a href="/watch/">Watch?</a>
 						{% endif %}
 					</li>
-				{% endif %}
-			</ul>
+				</ul>
+			{% endif %}
 		</li>
 		{#  the class user is used by JS to move the menu to the left #}
 		<li class="user">
