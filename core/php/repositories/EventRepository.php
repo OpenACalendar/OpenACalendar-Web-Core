@@ -167,8 +167,33 @@ class EventRepository {
 			$DB->rollBack();
 		}
 	}
-	
-	
+
+
+	public function loadByID($id) {
+		global $DB;
+		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
+			" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
+			" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
+			" WHERE event_information.id =:id");
+		$stat->execute(array( 'id'=>$id ));
+		if ($stat->rowCount() > 0) {
+			$event = new EventModel();
+			$event->setFromDataBaseRow($stat->fetch());
+			// Now, we currently have 2 ways of linking imported events to events
+			// old way - flags on event
+			// new way - seperate models
+			// The below code checks the new way of linking and adds it if it finds anything
+			$repo = new \repositories\ImportedEventRepository();
+			$importedEvent = $repo->loadByEvent($event);
+			if ($importedEvent) {
+				$event->setImportId($importedEvent->getImportId());
+				$event->setImportUrlId($importedEvent->getImportUrlId());
+			}
+			// ... and return
+			return $event;
+		}
+	}
+
 	public function loadBySlug(SiteModel $site, $slug) {
 		global $DB;
 		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
@@ -193,7 +218,33 @@ class EventRepository {
 			return $event;
 		}
 	}
-	
+
+
+	public function loadBySiteIDAndEventSlug($siteid, $slug) {
+		global $DB;
+		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
+				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
+				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
+				" WHERE event_information.slug =:slug AND event_information.site_id =:sid");
+		$stat->execute(array( 'sid'=>$siteid, 'slug'=>$slug ));
+		if ($stat->rowCount() > 0) {
+			$event = new EventModel();
+			$event->setFromDataBaseRow($stat->fetch());
+			// Now, we currently have 2 ways of linking imported events to events
+			// old way - flags on event
+			// new way - seperate models
+			// The below code checks the new way of linking and adds it if it finds anything
+			$repo = new \repositories\ImportedEventRepository();
+			$importedEvent = $repo->loadByEvent($event);
+			if ($importedEvent) {
+				$event->setImportId($importedEvent->getImportId());
+				$event->setImportUrlId($importedEvent->getImportUrlId());
+			}
+			// ... and return
+			return $event;
+		}
+	}
+
 	
 	/**
 	 * Note you can only edit undeleted events.

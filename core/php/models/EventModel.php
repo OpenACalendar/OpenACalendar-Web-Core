@@ -595,6 +595,9 @@ class EventModel {
 		return $out;
 	}
 
+	public function getIsAllowedForAfterGetUser() {
+		return !$this->is_deleted; // TODO add check for events in past to
+	}
 
 
 	

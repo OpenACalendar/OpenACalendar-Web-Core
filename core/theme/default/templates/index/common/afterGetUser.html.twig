@@ -1,0 +1,11 @@
+{% if afterGetUserAddEvents|length == 1 %}
+	{%  set event = afterGetUserAddEvents[0] %}
+	<p>Interested in {{  event.summaryDisplay }}?</p>
+{% elseif afterGetUserAddEvents|length > 0 %}
+	<p>Interested?</p>
+	<ul>
+		{%  for event in afterGetUserAddEvents %}
+			<li>{{  event.summaryDisplay }}</li>
+		{%  endfor %}
+	</ul>
+{%  endif %}

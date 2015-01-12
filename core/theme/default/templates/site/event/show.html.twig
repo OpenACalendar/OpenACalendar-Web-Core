@@ -211,7 +211,19 @@
 							</form>
 						{% endif %}
 					{% else %}
-						{# TODO #}
+						<p>
+							Get reminders and notifications of this event and start to build up your personal calendar!
+						</p>
+						<p>
+							<a href="{{ config.getWebIndexDomainSecure() }}/you/register?event={{ event.slug }}{%  if not config.isSingleSiteMode %}&eventSite={{ currentSite.slug }}{% endif %}">
+								Create your free account
+							</a>
+						</p>
+						<p>
+							<a href="{{ config.getWebIndexDomainSecure() }}/you/login?event={{ event.slug }}{%  if not config.isSingleSiteMode %}&eventSite={{ currentSite.slug }}{% endif %}">
+								Login
+							</a>
+						</p>
 					{% endif %}
 
 					<div id="UserAttendingListAjaxWrapper">

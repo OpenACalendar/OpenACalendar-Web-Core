@@ -3,6 +3,9 @@
 namespace index\controllers;
 
 
+use repositories\EventRepository;
+use repositories\SiteRepository;
+use repositories\UserAtEventRepository;
 use Silex\Application;
 use index\forms\SignUpUserForm;
 use index\forms\LogInUserForm;
@@ -36,15 +39,89 @@ class UserController {
 		return $app['twig']->render('index/user/index.html.twig', array(
 		));
 	}
-	
-	
+
+
+	protected $parameters = array();
+
+	protected function processThingsToDoAfterGetUser(Request $request, Application $app) {
+		global $CONFIG;
+
+
+		$eventRepo = new EventRepository();
+		$event = null;
+
+		// Any events to add?
+		if ($request->query->has("event")) {
+			if ($CONFIG->isSingleSiteMode) {
+				$event = $eventRepo->loadBySiteIDAndEventSlug($CONFIG->singleSiteID, $request->query->get("event"));
+			} else {
+				$siteRepo = new SiteRepository();
+				$site = $siteRepo->loadBySlug($request->query->get("eventSite"));
+				if ($site) {
+					$event = $eventRepo->loadBySlug($site, $request->query->get("event"));
+				}
+			}
+			if ($event && !$event->getIsDeleted()) {
+				if (!$app['websession']->hasArray("afterGetUserAddEvents")) {
+					$app['websession']->setArray("afterGetUserAddEvents",array($event->getId()));
+				} else {
+					if (!in_array($event->getId(),$app['websession']->getArray("afterGetUserAddEvents") )) {
+						$app['websession']->appendArray("afterGetUserAddEvents", $event->getId());
+					}
+				}
+			}
+		}
+
+		// load events to show user
+		$this->parameters['afterGetUserAddEvents'] = array();
+		if ($app['websession']->hasArray("afterGetUserAddEvents")) {
+			foreach($app['websession']->getArray("afterGetUserAddEvents") as $eventID) {
+				if ($event != null && $eventID == $event->getId()) {
+					if ($event->getIsAllowedForAfterGetUser()) {
+						$this->parameters['afterGetUserAddEvents'][] = $event;
+					}
+				} else {
+					$eventTmp = $eventRepo->loadByID($eventID);
+					if ($eventTmp && $eventTmp->getIsAllowedForAfterGetUser()) {
+						$this->parameters['afterGetUserAddEvents'][] = $eventTmp;
+					}
+				}
+			}
+
+		}
+
+	}
+
+	protected function actionThingsToDoAfterGetUser(Application $app, UserAccountModel $user) {
+
+		$uaerepo = new UserAtEventRepository();
+
+		$eventsAdded = false;
+		foreach($this->parameters['afterGetUserAddEvents'] as $event) {
+			$uae = $uaerepo->loadByUserAndEventOrInstanciate($user, $event);
+			if (!$uae->getIsPlanAttending() && !$uae->getIsPlanMaybeAttending()) {
+				$uae->setIsPlanMaybeAttending(true);
+				$uaerepo->save($uae);
+				$eventsAdded = true;
+			}
+		}
+		if ($eventsAdded) {
+			$app['flashmessages']->addMessage("Check out your personal calendar for events you are interested in!"); // TODO add link
+		}
+
+		$app['websession']->setArray("afterGetUserAddEvents",array());
+
+	}
+
 	function register(Request $request, Application $app) {
 		global $CONFIG;
 		if (!$app['config']->allowNewUsersToRegister) {
 			return $app['twig']->render('index/user/register.notallowed.html.twig', array(
 			));
 		}
-		
+
+		$this->processThingsToDoAfterGetUser($request, $app);
+
 		$userRepository = new UserAccountRepository();
 				
 		$form = $app['form.factory']->create(new SignUpUserForm());
@@ -81,21 +158,25 @@ class UserController {
 				$userVerify->sendEmail($app, $user);
 				
 				userLogIn($user);
+				$this->actionThingsToDoAfterGetUser($app, $user);
 				return $app->redirect("/");
 				
 			}
 		}
 		
-		
-		return $app['twig']->render('index/user/register.html.twig', array(
-			'form'=>$form->createView(),
-		));
+
+		$this->parameters['form'] = $form->createView();
+
+		return $app['twig']->render('index/user/register.html.twig', $this->parameters);
 		
 	}
 	
 	function login(Request $request, Application $app) {				
 		$form = $app['form.factory']->create(new LogInUserForm());
-		
+
+
+		$this->processThingsToDoAfterGetUser($request, $app);
+
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
@@ -115,6 +196,7 @@ class UserController {
 							$app['monolog']->addError("Login attempt - account ".$user->getId().' - closed.');
 						} else {
 							userLogIn($user);
+							$this->actionThingsToDoAfterGetUser($app, $user);
 
 							if ($data['rememberme']) {
 								$uarmr = new UserAccountRememberMeRepository();
@@ -135,11 +217,10 @@ class UserController {
 				
 			}
 		}
-		
-		
-		return $app['twig']->render('index/user/login.html.twig', array(
-			'form'=>$form->createView(),
-		));
+
+		$this->parameters['form'] = $form->createView();
+
+		return $app['twig']->render('index/user/login.html.twig', $this->parameters);
 		
 	}	
 	

@@ -10,7 +10,9 @@
 {% block pageTitle %}Login - {% endblock %} 
 
 {% block content %}
-	
+
+	{%  include '/index/common/afterGetUser.html.twig' %}
+
 	<form action="#" method="post" class="styled">
 
 		{{ form_errors(form) }}
