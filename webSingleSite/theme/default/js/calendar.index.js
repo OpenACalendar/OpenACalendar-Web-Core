@@ -26,12 +26,14 @@ function showEventPopup(data) {
 				(config.hasSSL ? config.httpsDomainSite : config.httpDomainSite )+
 				'/event/'+data.slugForURL;
 
-	$('#EventPopupContent').html('<div id="EventPopupTitle">Loading ...</div>'+
-			'<div id="EventPopupDescription"></div>'+
-			'<div id="EventPopupGroupsWrapper"></div>'+
-			'<div id="EventPopupVenueWrapper"></div>'+
-			'<div id="EventPopupTimes"></div>'+
-			'<div class="EventPopupLink"><a href="'+eventURL+'">View More Details</a></div>');
+	$('#EventPopupContent').html('<div class="popupShowEvent">'+
+		'<div id="EventPopupTitle" class="title">Loading ...</div>'+
+		'<div id="EventPopupDescription" class="description"></div>'+
+		'<div id="EventPopupGroupsWrapper"></div>'+
+		'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
+		'<div id="EventPopupTimes" class="times"></div>'+
+		'<div class="popupLink"><a href="' +eventURL + '">View More Details</a></div>'+
+		'</div>');
 	var apiURL = (config.hasSSL ? "https://" : "http://") +
 				(config.isSingleSiteMode ? '' : data.site+'.') +
 				(config.hasSSL ? config.httpsDomainSite : config.httpDomainSite )+
@@ -49,20 +51,24 @@ function showEventPopup(data) {
 		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
 		if (event.venue) {
 			$('#EventPopupVenueWrapper').html(
-					'<div class="venueTitle">Venue '+escapeHTML(event.venue.title)+'</div>'+
-					'<div class="venueDescription">'+escapeHTMLNewLine(event.venue.description, 500)+'</div>'+
-					'<div class="venueAddress">'+escapeHTMLNewLine(event.venue.address, 500)+' '+escapeHTML(event.venue.addresscode)+'</div>'
-				);
+				'<div class="title">Venue '+escapeHTML(event.venue.title)+'</div>'+
+					'<div class="description">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 300) : '')+'</div>'+
+					'<div class="address">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
+			);
 		} else {
 			$('#EventPopupVenueWrapper').html('&nbsp;');
 		}
 		var html = '';
 		if (event.groups) {
+			html += '<ul class="popupListGroups">';
 			for(groupIdx in event.groups) {
 				var group = event.groups[groupIdx];
-				html += '<div class="groupTitle">Group '+escapeHTML(group.title)+'</div>';
-				html += '<div class="groupDescription">'+escapeHTMLNewLine(group.description,500)+'</div>';
+				html += '<li class="group">';
+				html += '<div class="title">Group '+escapeHTML(group.title)+'</div>';
+				html += '<div class="description">'+(group.description ? escapeHTMLNewLine(group.description,300) : '')+'</div>';
+				html += '</li>';
 			}
+			html += '</ul>';
 		}
 		$('#EventPopupGroupsWrapper').html(html);
 	});

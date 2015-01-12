@@ -54,8 +54,10 @@ function showEventPopup(data) {
 			html += '<ul class="popupListGroups">';
 			for(groupIdx in event.groups) {
 				var group = event.groups[groupIdx];
-				html += '<div class="groupTitle">Group '+escapeHTML(group.title)+'</div>';
-				html += '<div class="groupDescription">'+(group.description ? escapeHTMLNewLine(group.description,300) : '')+'</div>';
+				html += '<li class="group">';
+				html += '<div class="title">Group '+escapeHTML(group.title)+'</div>';
+				html += '<div class="description">'+(group.description ? escapeHTMLNewLine(group.description,300) : '')+'</div>';
+				html += '</li>';
 			}
 			html += '</ul>';
 		}
