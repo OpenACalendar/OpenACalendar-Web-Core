@@ -41,7 +41,7 @@
 				<ul class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</ul>
 				{% block content %}{% endblock %}
 			</div>
-			{% include 'footer.html.twig' %}
+			{% include 'site/pageFooter.html.twig' %}
 		</div>
 		{% block scriptsForState %}{% endblock %}
 		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>

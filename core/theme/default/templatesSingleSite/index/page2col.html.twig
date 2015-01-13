@@ -41,7 +41,7 @@
 				<ul class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</ul>					
 				<div id="bodyLeft">{% block contentLeft %}{% endblock %}</div>
 				<div id="bodyRight">{% block contentRight %}{% endblock %}</div>
-				<div id="afterPage2Col"></div>
+				{% include 'site/pageFooter.html.twig' %}
 			</div>
 			{% include 'footer.html.twig' %}
 		</div>
