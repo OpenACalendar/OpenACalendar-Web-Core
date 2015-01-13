@@ -39,9 +39,9 @@
 					<div class="flash-notice">{{ msg }}</div>
 				{% endfor %}	
 				<ul class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</ul>
-				{% include 'site/pageFooter.html.twig' %}
+				{% block content %}{% endblock %}
 			</div>
-			{% include 'footer.html.twig' %}
+			{% include 'index/pageFooter.html.twig' %}
 		</div>
 		{% block scriptsForState %}{% endblock %}		
 		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>			
