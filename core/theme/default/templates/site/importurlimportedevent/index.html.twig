@@ -66,20 +66,39 @@
 		<div class="afterEventListing"></div>
 	</div>
 
-	<h3>Real events</h3>
+	{%  if importedEventReoccurs %}
 
-	{% include '/site/eventListFilterParams.html.twig' %}
+		<h3>Real events</h3>
 
-	<ul class="mainListEvents">
-		{% for event in events %}
-			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
-		{% else %}
-			<li class="nodata">
-				No events found.
-				{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
-			</li>
-		{% endfor %}
-	</ul>
+		{% include '/site/eventListFilterParams.html.twig' %}
+
+		<ul class="mainListEvents">
+			{% for event in events %}
+				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
+			{% else %}
+				<li class="nodata">
+					No events found.
+					{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+
+	{% else %}
+
+		<h3>Real event</h3>
+
+		<ul class="mainListEvents">
+			{% if event %}
+				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
+			{% else %}
+				<li class="nodata">
+					No events found.
+					{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
+				</li>
+			{% endif %}
+		</ul>
+
+	{%  endif %}
 
 
 {% endblock %}
