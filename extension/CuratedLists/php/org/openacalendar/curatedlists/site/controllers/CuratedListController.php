@@ -111,7 +111,7 @@ class CuratedListController {
 	}
 	
 	
-	function edit($slug,Request $request, Application $app) {
+	function editDetails($slug,Request $request, Application $app) {
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "curatedlist does not exist.");

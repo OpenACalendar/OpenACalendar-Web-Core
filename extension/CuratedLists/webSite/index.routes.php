@@ -36,7 +36,7 @@ $app->match('/curatedlist/{slug}', "org\openacalendar\curatedlists\site\controll
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 $app->match('/curatedlist/{slug}/', "org\openacalendar\curatedlists\site\controllers\CuratedListController::show")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/curatedlist/{slug}/edit', "org\openacalendar\curatedlists\site\controllers\CuratedListController::edit")
+$app->match('/curatedlist/{slug}/edit/details', "org\openacalendar\curatedlists\site\controllers\CuratedListController::editDetails")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
 		->before($featureCuratedListRequired)
