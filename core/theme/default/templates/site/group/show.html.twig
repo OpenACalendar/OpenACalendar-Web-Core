@@ -137,7 +137,12 @@
 				{% if isGroupRunningOutOfFutureEvents and currentUserActions.has("org.openacalendar","groupNewEvent") %}
 					<li class="nodata">
 						<p>
-							Do you know of any more events for {{ group.title }}? We are about to run out of future events!
+							{# the search filters could be showing old events, so it could be true there are event to show AND there are no future events #}
+							{% if isGroupRunningOutOfFutureEvents == 1 %}
+								We are about to run out of future events!
+							{% else %}
+								We don't know of any future events.
+							{% endif %}
 						</p>
 						<p>
 							You can <a href="/group/{{ group.slugForUrl }}/newevent">create a new event</a> or look for an old event and select "recur".
@@ -149,6 +154,7 @@
 					<p>No events found.</p>
 					{% if isGroupRunningOutOfFutureEvents and currentUserActions.has("org.openacalendar","groupNewEvent") %}
 						<p>
+							{# The search filters could be hiding future events, so it could be true there are no events to show BUT NOT that we don't know of future events #}
 							{% if isGroupRunningOutOfFutureEvents == 1 %}
 								We are about to run out of future events!
 							{% else %}
