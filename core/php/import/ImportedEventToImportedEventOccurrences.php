@@ -25,14 +25,21 @@ class ImportedEventToImportedEventOccurrences {
 	function __construct(ImportedEventModel $importedEvent)
 	{
 
-		if ($importedEvent->getIcsRrule1()) {
+		$reoccur = $importedEvent->getReoccur();
 
+		if (isset($reoccur) && isset($reoccur['ical_rrule']) && $reoccur['ical_rrule']) {
 
 			$icaldata = new ICalData(
 				clone $importedEvent->getStartAt(),
 				clone $importedEvent->getEndAt(),
-				$importedEvent->getIcsRrule1(),
+				$reoccur['ical_rrule'],
 				$importedEvent->getTimezone());
+			if (isset($reoccur['ical_exdates']) && is_array($reoccur['ical_exdates'])) {
+				foreach($reoccur['ical_exdates'] as $exdate) {
+					$icaldata->addExDateByString($exdate['values'], $exdate['properties']);
+				}
+			}
+
 			$unraveler = new Unraveler($icaldata);
 			$unraveler->setIncludeOriginalEvent(true);
 			$unraveler->process();

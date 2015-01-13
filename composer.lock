@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "87f10a64d875728c678f266d8276a213",
+    "hash": "6c5a552b4b351d7732d505cf57b9e224",
     "packages": [
         {
             "name": "facebook/php-sdk-v4",
@@ -96,20 +96,23 @@
         },
         {
             "name": "jmbtechnologylimited/icaldissect",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JMB-Technology-Limited/ICalDissect.git",
-                "reference": "bb2cfa89bf474cb3f56f21e2da0222f047fd1b51"
+                "reference": "09e59c696eb80b141e16c9a61034d71e93e6f3f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/bb2cfa89bf474cb3f56f21e2da0222f047fd1b51",
-                "reference": "bb2cfa89bf474cb3f56f21e2da0222f047fd1b51",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/09e59c696eb80b141e16c9a61034d71e93e6f3f7",
+                "reference": "09e59c696eb80b141e16c9a61034d71e93e6f3f7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -134,7 +137,7 @@
             "keywords": [
                 "ical"
             ],
-            "time": "2014-12-13 20:33:31"
+            "time": "2015-01-13 09:41:32"
         },
         {
             "name": "jmbtechnologylimited/parsedatetimerangestring",
@@ -181,16 +184,16 @@
         },
         {
             "name": "jmbtechnologylimited/rruleunravel",
-            "version": "v0.2.0",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JMB-Technology-Limited/RRuleUnravel.git",
-                "reference": "f72c10bba3b601da5789a860efd097543c00e6a1"
+                "reference": "d6c0f14b9166c3c1624a686f8845a2d39f173e7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/f72c10bba3b601da5789a860efd097543c00e6a1",
-                "reference": "f72c10bba3b601da5789a860efd097543c00e6a1",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/d6c0f14b9166c3c1624a686f8845a2d39f173e7f",
+                "reference": "d6c0f14b9166c3c1624a686f8845a2d39f173e7f",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +226,7 @@
                 "ical",
                 "rrule"
             ],
-            "time": "2015-01-12 21:52:48"
+            "time": "2015-01-13 11:06:30"
         },
         {
             "name": "monolog/monolog",

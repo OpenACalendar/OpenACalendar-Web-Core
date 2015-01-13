@@ -194,7 +194,15 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 			$importedEvent->setTicketUrl($icalevent->getUrl());
 			$changesToSave = true;
 		}
-		if ($icalevent->getRRuleCount() > 0 && $importedEvent->setIcsRrule1IfDifferent($icalevent->getRRule(0))) {
+		if ($icalevent->getRRule()) {
+			$reoccur = array('ical_rrule'=>$icalevent->getRRule(),'ical_exdates'=>array());
+			foreach($icalevent->getExDates() as $exDate) {
+				$reoccur['ical_exdates'][] = array('properties'=>$exDate->getProperties(), 'values'=>$exDate->getValues());
+			}
+		} else {
+			$reoccur = array();
+		}
+		if ($importedEvent->setReoccurIfDifferent($reoccur)) {
 			$changesToSave = true;
 		}
 		return $changesToSave;

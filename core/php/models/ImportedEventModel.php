@@ -28,7 +28,7 @@ class ImportedEventModel {
 	protected $url;
 	protected $ticket_url;
 
-	protected $ics_rrule_1;
+	protected $reoccur;
 
 
 	public function setFromDataBaseRow($data) {
@@ -45,11 +45,23 @@ class ImportedEventModel {
 		$this->url = $data['url'];
 		$this->ticket_url = $data['ticket_url'];
 		$this->timezone = $data['timezone'];
-		if ($data['ics_rrule_1']) {
-			$this->ics_rrule_1 = get_object_vars(json_decode($data['ics_rrule_1']));
+		if (isset($data['reoccur']) && $data['reoccur']) {
+			// we want to turn stdClass to arrays, all of it
+			$this->reoccur = $this->get_object_vars_recursive(json_decode($data['reoccur']));
 		}
 	}
-	
+
+	protected function get_object_vars_recursive($in) {
+		if (is_a($in, "stdClass")) {
+			return $this->get_object_vars_recursive(get_object_vars($in));
+		} else if (is_array($in)){
+			foreach($in as $k=>$v) {
+				$in[$k] = $this->get_object_vars_recursive($in[$k]);
+			}
+			return $in;
+		}
+		return $in;
+	}
 
 	public function getId() {
 		return $this->id;
@@ -160,32 +172,30 @@ class ImportedEventModel {
 		$this->ticket_url = $ticket_url;
 	}
 
-	/**
-	 * @param mixed $ics_rrule_1
-	 */
-	public function setIcsRrule1($ics_rrule_1)
+	public function setReoccur($reoccur)
 	{
-		$this->ics_rrule_1 = $ics_rrule_1;
+		$this->reoccur = $reoccur;
 	}
 
 	/**
 	 * @param mixed $ics_rrule_1
+	 * @return boolean Was it different?
 	 */
-	public function setIcsRrule1IfDifferent($ics_rrule_1)
+	public function setReoccurIfDifferent($reoccur)
 	{
-		if (is_null($this->ics_rrule_1)) {
-			$this->ics_rrule_1 = $ics_rrule_1;
+		if (is_null($this->reoccur)) {
+			$this->reoccur = $reoccur;
 			return true;
 		}
 
-		if (count(array_keys($ics_rrule_1)) != count(array_keys($this->ics_rrule_1))) {
-			$this->ics_rrule_1 = $ics_rrule_1;
+		if (count(array_keys($reoccur)) != count(array_keys($this->reoccur))) {
+			$this->reoccur = $reoccur;
 			return true;
 		}
 
-		foreach($ics_rrule_1 as $k=>$v) {
-			if (!array_key_exists($k, $this->ics_rrule_1) || $this->ics_rrule_1[$k] != $ics_rrule_1[$k]) {
-				$this->ics_rrule_1 = $ics_rrule_1;
+		foreach($reoccur as $k=>$v) {
+			if (!array_key_exists($k, $this->reoccur) || $this->isTwoJSONVariablesDifferent($this->reoccur[$k],$reoccur[$k])) {
+				$this->reoccur = $reoccur;
 				return true;
 			}
 		}
@@ -193,32 +203,35 @@ class ImportedEventModel {
 		return false;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getIcsRrule1()
-	{
-		return $this->ics_rrule_1;
+	protected function isTwoJSONVariablesDifferent($in1, $in2) {
+		if (is_string($in1)) {
+			return $in1 == $in2;
+		} elseif (is_array($in1) && is_array($in2)) {
+			if (count($in1) != count($in2)) {
+				return true;
+			}
+			foreach($in1 as $k=>$v) {
+				if (!array_key_exists($k, $in2) || $this->isTwoJSONVariablesDifferent($in1[$k], $in2[$k])) {
+					return true;
+				}
+			}
+			return false;
+		}
+		// Not sure what is happening here. Return true to be safe.
+		return true;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getIcsRrule1AsString()
+	public function getReoccur()
 	{
-		if ($this->ics_rrule_1) {
-			$out = array();
-			foreach($this->ics_rrule_1 as $k=>$v) {
-				$out[] = $k."=".$v;
-			}
-			return implode(";", $out);
-		} else {
-			return "";
-		}
+		return $this->reoccur;
 	}
+
 
 	public function hasReoccurence() {
-		return (boolean)$this->ics_rrule_1;
+		return $this->reoccur != null && is_array($this->reoccur);
 	}
 
 

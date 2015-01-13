@@ -85,8 +85,12 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, count($importedEvents));
 		$importedEvent = $importedEvents[0];
 
-		$this->assertEquals("WEEKLY", $importedEvent->getIcsRrule1()["FREQ"]);
-		$this->assertEquals("WE", $importedEvent->getIcsRrule1()["BYDAY"]);
+		$reoccur = $importedEvent->getReoccur();
+		$this->assertEquals(true, is_array($reoccur));
+		$this->assertEquals(true, isset($reoccur['ical_rrule']));
+		$this->assertEquals(true, is_array($reoccur['ical_rrule']));
+		$this->assertEquals("WEEKLY", $reoccur['ical_rrule']["FREQ"]);
+		$this->assertEquals("WE", $reoccur['ical_rrule']["BYDAY"]);
 
 
 		// Now test real events
@@ -138,7 +142,7 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($eventRecurSetID, $event->getEventRecurSetId());
 
 
-		// Now move time on
+		// ########################################################### Now move time on
 		\TimeSource::mock(2014, 12, 25, 1, 1, 1);
 
 		// reimport
@@ -270,8 +274,12 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, count($importedEvents));
 		$importedEvent = $importedEvents[0];
 
-		$this->assertEquals("WEEKLY", $importedEvent->getIcsRrule1()["FREQ"]);
-		$this->assertEquals("WE", $importedEvent->getIcsRrule1()["BYDAY"]);
+		$reoccur = $importedEvent->getReoccur();
+		$this->assertEquals(true, is_array($reoccur));
+		$this->assertEquals(true, isset($reoccur['ical_rrule']));
+		$this->assertEquals(true, is_array($reoccur['ical_rrule']));
+		$this->assertEquals("WEEKLY", $reoccur['ical_rrule']["FREQ"]);
+		$this->assertEquals("WE", $reoccur['ical_rrule']["BYDAY"]);
 
 		// Now test real events
 		$erb = new EventRepositoryBuilder();
@@ -312,6 +320,90 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals("2015-04-15T09:00:00+00:00", $event->getEndAtInUTC()->format("c"));
 
 	}
-	
+
+	function testRRuleExDate1() {
+		global $CONFIG;
+
+		\TimeSource::mock(2015, 1, 1, 1, 1, 1);
+		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
+
+		$DB = getNewTestDB();
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("test");
+		$group->setDescription("test test");
+		$group->setUrl("http://www.group.com");
+
+		$groupRepo = new GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		$importURLRepository = new ImportURLRepository();
+
+		$importURL = new ImportURLModel();
+		$importURL->setIsEnabled(true);
+		$importURL->setSiteId($site->getId());
+		$importURL->setGroupId($group->getId());
+		$importURL->setTitle("Test");
+		$importURL->setUrl("http://test.com");
+
+		$importURLRepository->create($importURL, $site, $user);
+
+		// Import
+		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleExDate1.ics');
+		$i = new ImportURLICalHandler();
+		$i->setImportURLRun($importURLRun);
+		$i->setLimitToSaveOnEachRun(7);
+		$this->assertTrue($i->canHandle());
+		$r =  $i->handle();
+
+		// Is it loaded on Imported Events?
+		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
+		$importedEvents = $ierb->fetchAll();
+		$this->assertEquals(1, count($importedEvents));
+		$importedEvent = $importedEvents[0];
+
+		$reoccur = $importedEvent->getReoccur();
+		$this->assertEquals(true, is_array($reoccur));
+		$this->assertEquals(true, isset($reoccur['ical_rrule']));
+		$this->assertEquals(true, is_array($reoccur['ical_rrule']));
+		$this->assertEquals("WEEKLY", $reoccur['ical_rrule']["FREQ"]);
+		$this->assertEquals("TH", $reoccur['ical_rrule']["BYDAY"]);
+
+		// Now test real events
+		$erb = new EventRepositoryBuilder();
+		$erb->setImportedEvent($importedEvent);
+		$erb->setAfterNow();
+		$events = $erb->fetchAll();
+
+		$this->assertEquals(7, count($events));
+
+		$event = $events[0];
+		$this->assertEquals("2015-02-12T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
+		$this->assertEquals("2015-02-12T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+
+		// The next 2 week period is skipped by EXDATE. So jump to ....
+
+		$event = $events[1];
+		$this->assertEquals("2015-03-12T09:00:00+00:00", $event->getStartAtInUTC()->format("c"));
+		$this->assertEquals("2015-03-12T10:00:00+00:00", $event->getEndAtInUTC()->format("c"));
+
+	}
+
 }
 

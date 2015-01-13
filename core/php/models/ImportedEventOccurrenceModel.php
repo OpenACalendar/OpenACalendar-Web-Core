@@ -26,7 +26,9 @@ class ImportedEventOccurrenceModel extends \models\ImportedEventModel {
 		$this->is_deleted = $importedEventModel->is_deleted;
 		$this->url = $importedEventModel->url;
 		$this->ticket_url = $importedEventModel->ticket_url;
-		$this->ics_rrule_1 = $importedEventModel->ics_rrule_1;
+		// This may seem odd to pass on .... surely for one occurence you don't care about the reoccurence rules?
+		// but the ImportedEventOccurrenceModel will want to know if it from a reoccured series or not.
+		$this->reoccur = $importedEventModel->reoccur;
 	}
 
 }
