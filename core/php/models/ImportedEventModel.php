@@ -231,7 +231,8 @@ class ImportedEventModel {
 
 
 	public function hasReoccurence() {
-		return $this->reoccur != null && is_array($this->reoccur);
+		return $this->reoccur != null && is_array($this->reoccur)
+		&& isset($this->reoccur['ical_rrule']) && is_array($this->reoccur['ical_rrule']);
 	}
 
 
