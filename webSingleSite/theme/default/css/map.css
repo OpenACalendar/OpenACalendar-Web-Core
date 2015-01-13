@@ -692,12 +692,17 @@ h2 a {
   width: 100%;
 }
 #MapInfo {
-  background: white;
+  background: #0DA20D;
   position: absolute;
   z-index: 100;
   top: 0;
   right: 0;
   padding: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  -ms-border-radius-bottomleft: 5px;
+  -o-border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 #PopupMask {
   position: fixed;
