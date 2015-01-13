@@ -75,6 +75,8 @@ class ImportURLICalHandler extends ImportURLHandlerBase {
 			}
 		}
 
+		$this->saved += $this->importedEventOccurrenceToEvent->deleteEventsNotSeenAfterRun();
+
 		$iurlr = new ImportURLResultModel();
 		$iurlr->setIsSuccess(true);
 		$iurlr->setNewCount($this->new);

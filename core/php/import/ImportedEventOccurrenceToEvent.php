@@ -6,6 +6,7 @@ namespace import;
 use models\EventRecurSetModel;
 use models\ImportedEventModel;
 use models\ImportedEventOccurrenceModel;
+use models\ImportURLModel;
 use models\SiteModel;
 use models\GroupModel;
 use models\CountryModel;
@@ -26,28 +27,35 @@ use repositories\ImportedEventIsEventRepository;
  */
 class ImportedEventOccurrenceToEvent {
 
-	/** @var models\SiteModel **/
+	/** @var  ImportURLModel */
+	protected $importURL;
+
+	/** @var SiteModel **/
 	protected $site;
 
-	/** @var models\GroupModel **/
+	/** @var GroupModel **/
 	protected $group;
 
-	/** @var models\CountryModel **/
+	/** @var CountryModel **/
 	protected $country;
 
-	/** @var models\AreaModel **/
+	/** @var AreaModel **/
 	protected $area;
 
-	/** @var models\EventRecurSetModel **/
+	/** @var EventRecurSetModel **/
 	protected $eventRecurSet;
 
 	protected $makeEventRecurSetIfNone = false;
+
+	protected $eventsSeenIDs;
 
 	public function setFromImportURlRun(ImportURLRun $importURLRun) {
 		$this->site = $importURLRun->getSite();
 		$this->group = $importURLRun->getGroup();
 		$this->country = $importURLRun->getCountry();
 		$this->area = $importURLRun->getArea();
+		$this->importURL = $importURLRun->getImportURL();
+		$this->eventsSeenIDs = array();
 	}
 
 	public function setEventRecurSet(EventRecurSetModel $eventRecurSet = null, $makeEventRecurSetIfNone = false) {
@@ -69,6 +77,7 @@ class ImportedEventOccurrenceToEvent {
 		}
 
 		if ($event) {
+			$this->eventsSeenIDs[] = $event->getId();
 			// Set Existing Event From Import Event URL
 			if ($importedEventOccurrenceModel->getIsDeleted()) {
 				if (!$event->getIsDeleted()) {
@@ -89,6 +98,7 @@ class ImportedEventOccurrenceToEvent {
 				$event->setEventRecurSetId($this->eventRecurSet->getId());
 			}
 			$eventRepo->create($event, $this->site, null, $this->group, null, $importedEventOccurrenceModel);
+			$this->eventsSeenIDs[] = $event->getId();
 			if (!$this->eventRecurSet && $this->makeEventRecurSetIfNone) {
 				$this->eventRecurSet = $eventRecurSetRepo->getForEvent($event);
 			}
@@ -99,7 +109,28 @@ class ImportedEventOccurrenceToEvent {
 
 	}
 
-	/** @var models\EventModel **/
+
+	public function deleteEventsNotSeenAfterRun() {
+
+		$count = 0;
+
+		$eventRepo = new EventRepository();
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setImportURL($this->importURL);
+		$erb->setIncludeDeleted(false);
+		$erb->setAfterNow();
+		foreach($erb->fetchAll() as $event) {
+			if (!in_array($event->getId(), $this->eventsSeenIDs)) {
+				$eventRepo->delete($event);
+				++$count;
+			}
+		}
+
+		return $count;
+	}
+
+	/** @var EventModel **/
 	protected function loadEventForImportedEvent(ImportedEventModel $importedEvent) {
 		$eventRepo = new \repositories\EventRepository;
 
