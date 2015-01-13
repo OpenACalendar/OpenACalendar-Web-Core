@@ -2780,6 +2780,7 @@ ul.usernotifications li.usernotificationunread a.title {
   font-size: 1.1em;
 }
 #footer {
+  margin-top: 50px;
   padding: 10px 5px;
   text-align: center;
   font-style: italic;
