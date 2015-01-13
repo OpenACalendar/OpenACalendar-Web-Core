@@ -14,16 +14,16 @@ use models\ImportedEventModel;
 class ImportedEventModelTest  extends \PHPUnit_Framework_TestCase {
 
 
-	public function  testIcsRRule1IfDifferentFromNull1() {
+	public function  testReoccurIfDifferentFromNull1() {
 		$iem = new ImportedEventModel();
 		$this->assertFalse($iem->hasReoccurence());
-		$this->assertTrue($iem->setIcsRrule1IfDifferent(array("FREQ"=>"WEEKLY")));
+		$this->assertTrue($iem->setReoccurIfDifferent(array("ical_rrule"=>array("FREQ"=>"WEEKLY"))));
 		$this->assertTrue($iem->hasReoccurence());
 	}
 
 
 
-	function dataForTestIcsRRule1IfDifferentTrue() {
+	function dataForTestReoccurIfDifferentTrue() {
 		return array(
 			array(array("FREQ"=>"WEEKLY","BYDAY"=>"WE"),array("FREQ"=>"WEEKLY","BYDAY"=>"WE","COUNT"=>5)),
 			array(array("FREQ"=>"WEEKLY","BYDAY"=>"WE"),array("FREQ"=>"WEEKLY","BYDAY"=>"SA")),
@@ -32,48 +32,30 @@ class ImportedEventModelTest  extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @dataProvider dataForTestIcsRRule1IfDifferentTrue
+	 * @dataProvider dataForTestReoccurIfDifferentTrue
 	 */
-	public function  testIcsRRule1IfDifferentTrue($first, $second) {
+	public function  testReoccurIfDifferentTrue($first, $second) {
 		$iem = new ImportedEventModel();
-		$iem->setIcsRrule1($first);
-		$this->assertTrue($iem->setIcsRrule1IfDifferent($second));
+		$iem->setReoccur(array('ical_rrule'=>$first));
+		$this->assertTrue($iem->setReoccurIfDifferent(array('ical_rrule'=>$second)));
 	}
 
 
 
-	function dataForTestIcsRRule1IfDifferentFalse() {
+	function dataForTestReoccurIfDifferentFalse() {
 		return array(
 			array(array("FREQ"=>"WEEKLY","BYDAY"=>"WE"),array("FREQ"=>"WEEKLY","BYDAY"=>"WE")),
 		);
 	}
 
 	/**
-	 * @dataProvider dataForTestIcsRRule1IfDifferentFalse
+	 * @dataProvider dataForTestReoccurIfDifferentFalse
 	 */
-	public function  testIcsRRule1IfDifferentFalse($first, $second) {
+	public function  testReoccurIfDifferentFalse($first, $second) {
 		$iem = new ImportedEventModel();
-		$iem->setIcsRrule1($first);
-		$this->assertFalse($iem->setIcsRrule1IfDifferent($second));
+		$iem->setReoccur(array('ical_rrule'=>$first));
+		$this->assertTrue($iem->setReoccurIfDifferent(array('ical_rrule'=>$second)));
 	}
-
-
-	function dataForTestGetIcsRRule1AsString() {
-		return array(
-			array(array("FREQ"=>"WEEKLY","BYDAY"=>"WE"),"FREQ=WEEKLY;BYDAY=WE"),
-		);
-	}
-
-	/**
-	 * @dataProvider dataForTestGetIcsRRule1AsString
-	 */
-	public function  testGetIcsRRule1AsString($in, $string) {
-		$iem = new ImportedEventModel();
-		$iem->setIcsRrule1($in);
-		$this->assertEquals($string, $iem->getIcsRrule1AsString());
-	}
-
-
 
 }
 
