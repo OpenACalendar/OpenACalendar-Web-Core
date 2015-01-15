@@ -1019,7 +1019,7 @@ class EventController {
 					$groupRepo->addEventToGroup($this->parameters['event'], $group);
 					$repo = new UserWatchesGroupRepository();
 					$repo->startUserWatchingGroupIfNotWatchedBefore($app['currentUser'], $group);
-					return $app->redirect("/event/".$this->parameters['event']->getSlug()."/recur/");
+					return $app->redirect("/event/".$this->parameters['event']->getSlugForURL()."/recur/");
 				}
 			}
 			
@@ -1030,7 +1030,7 @@ class EventController {
 				$groupRepo = new GroupRepository();
 				$groupRepo->create($group, $app['currentSite'], $app['currentUser']);
 				$groupRepo->addEventToGroup($this->parameters['event'], $group);
-				return $app->redirect("/event/".$this->parameters['event']->getSlug()."/recur/");
+				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL()."/recur/");
 			}
 			
 			return $app['twig']->render('site/event/recur.groupneeded.html.twig', $this->parameters);
@@ -1096,7 +1096,7 @@ class EventController {
 			}
 			
 			if ($count > 0) {
-				return $app->redirect("/group/".$this->parameters['group']->getSlug());
+				return $app->redirect("/group/".$this->parameters['group']->getSlugForURL());
 			}
 			
 		}
@@ -1145,7 +1145,7 @@ class EventController {
 			}
 			
 			if ($count > 0) {
-				return $app->redirect("/group/".$this->parameters['group']->getSlug());
+				return $app->redirect("/group/".$this->parameters['group']->getSlugForURL());
 			}
 			
 		}
@@ -1524,7 +1524,7 @@ class EventController {
 						$mediaInEventRepo->add($media, $this->parameters['event'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
-						return $app->redirect("/event/".$this->parameters['event']->getSlug());
+						return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 						
 					}
 					

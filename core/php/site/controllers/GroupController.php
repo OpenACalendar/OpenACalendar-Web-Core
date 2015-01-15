@@ -206,7 +206,7 @@ class GroupController {
 						$mediaInGroupRepo->add($media, $this->parameters['group'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
-						return $app->redirect("/group/".$this->parameters['group']->getSlug());
+						return $app->redirect("/group/".$this->parameters['group']->getSlugForURL());
 						
 					}
 					
@@ -241,7 +241,7 @@ class GroupController {
 			}
 		}
 		
-		return $app->redirect("/group/".$this->parameters['group']->getSlug().'/edit/media');
+		return $app->redirect("/group/".$this->parameters['group']->getSlugForURL().'/edit/media');
 	}
 	
 	function editMediaAddExisting($slug, Request $request, Application $app) {
@@ -256,7 +256,7 @@ class GroupController {
 				$mediaInGroupRepo = new MediaInGroupRepository();
 				$mediaInGroupRepo->add($media, $this->parameters['group'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Added!');
-				return $app->redirect("/group/".$this->parameters['group']->getSlug().'/');
+				return $app->redirect("/group/".$this->parameters['group']->getSlugForURL().'/');
 			}
 		}
 		
@@ -380,9 +380,9 @@ class GroupController {
 				
 				
 				if ($event->getIsPhysical()) {
-					return $app->redirect("/event/".$event->getSlug().'/edit/venue');
+					return $app->redirect("/event/".$event->getSlugForURL().'/edit/venue');
 				} else {
-					return $app->redirect("/event/".$event->getSlug());
+					return $app->redirect("/event/".$event->getSlugForURL());
 				}
 				
 			}
@@ -453,7 +453,7 @@ class GroupController {
 			}
 			// redirect here because if we didn't the  $this->parameters vars would be wrong (the old state)
 			// this is an easy way to get round that. Also it's nice UI to go back to the group page.
-			return $app->redirect('/group/'.$this->parameters['group']->getSlug());
+			return $app->redirect('/group/'.$this->parameters['group']->getSlugForURL());
 		}
 		
 		return $app['twig']->render('site/group/watch.html.twig', $this->parameters);
@@ -490,7 +490,7 @@ class GroupController {
 			// redirect here because if we didn't the twig global and $app vars would be wrong (the old state)
 			// this is an easy way to get round that.
 			$app['flashmessages']->addMessage("You have stopped watching this group.");
-			return $app->redirect('/group/'.$this->parameters['group']->getSlug());
+			return $app->redirect('/group/'.$this->parameters['group']->getSlugForURL());
 		}
 		
 		$this->parameters['user'] = $user;
