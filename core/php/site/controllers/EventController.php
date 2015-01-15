@@ -190,7 +190,7 @@ class EventController {
 			}
 		}		
 	}
-	
+
 
 	function show($slug, Request $request, Application $app) {
 		
@@ -1084,13 +1084,19 @@ class EventController {
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
 			$this->addTagsToParameters($app);
-			
+
+			$mrb = new MediaRepositoryBuilder();
+			$mrb->setIncludeDeleted(false);
+			$mrb->setSite($app['currentSite']);
+			$mrb->setEvent($this->parameters['event']);
+			$medias = $mrb->fetchAll();
+
 			$eventRepository = new EventRepository();
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
 					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'],
-							$this->parameters['groups'], null, $this->parameters['tags']);
+							$this->parameters['groups'], null, $this->parameters['tags'], $medias);
 					++$count;
 				}
 			}
@@ -1133,13 +1139,19 @@ class EventController {
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 			
 			$this->addTagsToParameters($app);
+
+			$mrb = new MediaRepositoryBuilder();
+			$mrb->setIncludeDeleted(false);
+			$mrb->setSite($app['currentSite']);
+			$mrb->setEvent($this->parameters['event']);
+			$medias = $mrb->fetchAll();
 			
 			$eventRepository = new EventRepository();
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
 					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'],
-							$this->parameters['groups'], null, $this->parameters['tags']);
+							$this->parameters['groups'], null, $this->parameters['tags'], $medias);
 					++$count;
 				}
 			}
@@ -1182,12 +1194,21 @@ class EventController {
 		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
-			
+
+			$this->addTagsToParameters($app);
+
+			$mrb = new MediaRepositoryBuilder();
+			$mrb->setIncludeDeleted(false);
+			$mrb->setSite($app['currentSite']);
+			$mrb->setEvent($this->parameters['event']);
+			$medias = $mrb->fetchAll();
+
 			$eventRepository = new EventRepository();
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'], $this->parameters['groups']);
+					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'], $this->parameters['groups'],
+						null, $this->parameters['tags'], $medias);
 					++$count;
 				}
 			}

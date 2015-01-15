@@ -36,7 +36,7 @@ class EventRepository {
 
 
 	public function create(EventModel $event, SiteModel $site, UserAccountModel $creator = null, 
-			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null, $tags=array()) {
+			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null, $tags=array(), $medias=array()) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
@@ -159,6 +159,20 @@ class EventRepository {
 							'added_at'=>  \TimeSource::getFormattedForDataBase(),
 							'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
 						));
+				}
+			}
+
+			if ($medias) {
+				$stat = $DB->prepare("INSERT INTO media_in_event (event_id,media_id,added_by_user_account_id,added_at,addition_approved_at) ".
+					"VALUES (:event_id,:media_id,:added_by_user_account_id,:added_at,:addition_approved_at)");
+				foreach($medias as $media) {
+					$stat->execute(array(
+						'event_id'=>$event->getId(),
+						'media_id'=>$media->getId(),
+						'added_by_user_account_id'=>($creator?$creator->getId():null),
+						'added_at'=>  \TimeSource::getFormattedForDataBase(),
+						'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+					));
 				}
 			}
 			
