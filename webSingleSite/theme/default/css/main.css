@@ -2352,7 +2352,7 @@ div.mainShowEvent .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
-  height: 200px;
+  height: 150px;
 }
 ul.mainListEvents li.event div.afterEventListing,
 div.mainShowEvent div.afterEventListing {
@@ -2449,7 +2449,7 @@ div.mainShowArea .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
-  height: 200px;
+  height: 150px;
 }
 div.mainShowGroup p.description {
   padding: 0px 0px 0px 0px;
@@ -2459,7 +2459,7 @@ div.mainShowCountry .map {
   margin: 10px 0;
   clear: both;
   width: 90%;
-  height: 200px;
+  height: 150px;
 }
 div.filterListEventWrapper {
   padding: 5px 0;
