@@ -31,7 +31,7 @@ class UploadNewMediaForm extends AbstractType{
 		$builder->add('media', 'file', array(
 			"mapped" => false, 
 			'label'=>'Picture',
-			'required'=>false
+			'required'=>true
 		));
 		
 		$builder->add('title', 'text', array(

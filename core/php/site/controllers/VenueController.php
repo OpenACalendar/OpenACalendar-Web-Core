@@ -274,7 +274,7 @@ class VenueController {
 			if ('POST' == $request->getMethod()) {
 				$form->bind($request);
 
-				if ($form->isValid()) {
+				if ($form->isValid() && $form['media']->getData()) {
 
 					$mediaRepository = new MediaRepository();
 					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
