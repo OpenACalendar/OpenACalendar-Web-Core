@@ -100,9 +100,15 @@ class RenderCalendar {
 	 * @TODO Change it from an Exception to another class so other exceptions are not accidentally caught.
 	 */
 	public function byMonth($year, $month, $expandToFullWeek = false) {
-		if ($year < $this->minYear) throw new \Exception($this->minYear.' Onwards Only');
-		if ($year > $this->maxYear) throw  new \Exception('Up to '.$this->maxYear.' only');
-		if ($month < 1 || $month > 12)  new \Exception('Month is wrong');
+		if ($year < $this->minYear) {
+			throw new \Exception($this->minYear.' Onwards Only');
+		}
+		if ($year > $this->maxYear) {
+			throw  new \Exception('Up to '.$this->maxYear.' only');
+		}
+		if ($month < 1 || $month > 12) {
+			throw  new \Exception('Month is wrong');
+		}
 
 		$this->start = new \DateTime('',new \DateTimeZone('UTC'));
 		$this->start->setDate($year, $month, 1);
