@@ -187,16 +187,16 @@
         },
         {
             "name": "jmbtechnologylimited/rruleunravel",
-            "version": "v0.3.0",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JMB-Technology-Limited/RRuleUnravel.git",
-                "reference": "d6c0f14b9166c3c1624a686f8845a2d39f173e7f"
+                "reference": "00a206b5a9e7c5e4b5718717a6e397298e230257"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/d6c0f14b9166c3c1624a686f8845a2d39f173e7f",
-                "reference": "d6c0f14b9166c3c1624a686f8845a2d39f173e7f",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/00a206b5a9e7c5e4b5718717a6e397298e230257",
+                "reference": "00a206b5a9e7c5e4b5718717a6e397298e230257",
                 "shasum": ""
             },
             "require": {
@@ -229,7 +229,7 @@
                 "ical",
                 "rrule"
             ],
-            "time": "2015-01-13 11:06:30"
+            "time": "2015-01-15 08:58:57"
         },
         {
             "name": "monolog/monolog",
@@ -1556,16 +1556,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.16.3",
+            "version": "v1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "6dc11a1e8ecfc30e2c68aaeb218148409d8e68af"
+                "reference": "2493970fa4d587eca73f77e6d8bd48a8bdd4c608"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/6dc11a1e8ecfc30e2c68aaeb218148409d8e68af",
-                "reference": "6dc11a1e8ecfc30e2c68aaeb218148409d8e68af",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/2493970fa4d587eca73f77e6d8bd48a8bdd4c608",
+                "reference": "2493970fa4d587eca73f77e6d8bd48a8bdd4c608",
                 "shasum": ""
             },
             "require": {
@@ -1574,7 +1574,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.16-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -1609,7 +1609,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-12-25 19:58:19"
+            "time": "2015-01-14 10:15:49"
         }
     ],
     "packages-dev": [
