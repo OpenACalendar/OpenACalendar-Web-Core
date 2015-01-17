@@ -24,13 +24,14 @@ function showEventPopup(data) {
 	$('#EventPopupContent').html('<div class="popupShowEvent">'+
 		'<div id="EventPopupTitle" class="title">Loading ...</div>'+
 		'<div id="EventPopupDescription" class="description"></div>'+
+		'<div id="EventPopupMedias"></div>'+
 		'<div id="EventPopupGroupsWrapper"></div>'+
 		'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
 		'<div id="EventPopupTimes" class="times"></div>'+
 		'<div class="popupLink"><a href="/event/' + data.slugForURL + '">View More Details</a></div>'+
 		'</div>');
 	$.ajax({
-		url: "/api1/event/"+data.slug+"/info.json"
+		url: "/api1/event/"+data.slug+"/info.json?includeMedias=yes"
 	}).success(function ( eventdata ) {
 	var event = eventdata.data[0];
         if (event.cancelled) {
@@ -49,6 +50,15 @@ function showEventPopup(data) {
 		} else {
 			$('#EventPopupVenueWrapper').html('&nbsp;');
 		}
+		var html = '';
+		if (event.medias) {
+			html += '<ul class="mediaGrid">';
+			for(id in event.medias) {
+				html += '<li class="media"><a href="/event/' + escapeHTML(event.slugforurl) + '"><img src="/media/'+escapeHTML(event.medias[id].slug)+'/thumbnail"></a></li>';
+			}
+			html += '</ul><div class="afterMediaGrid"></div>';
+		}
+		$('#EventPopupMedias').html(html);
 		var html = '';
 		if (event.groups) {
 			html += '<ul class="popupListGroups">';

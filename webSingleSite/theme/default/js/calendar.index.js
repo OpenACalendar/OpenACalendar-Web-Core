@@ -29,6 +29,7 @@ function showEventPopup(data) {
 	$('#EventPopupContent').html('<div class="popupShowEvent">'+
 		'<div id="EventPopupTitle" class="title">Loading ...</div>'+
 		'<div id="EventPopupDescription" class="description"></div>'+
+		'<div id="EventPopupMedias"></div>'+
 		'<div id="EventPopupGroupsWrapper"></div>'+
 		'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
 		'<div id="EventPopupTimes" class="times"></div>'+
@@ -37,7 +38,7 @@ function showEventPopup(data) {
 	var apiURL = (config.hasSSL ? "https://" : "http://") +
 				(config.isSingleSiteMode ? '' : data.site+'.') +
 				(config.hasSSL ? config.httpsDomainSite : config.httpDomainSite )+
-				'/api1/event/'+data.slug+"/info.jsonp?callback=?";
+				'/api1/event/'+data.slug+"/info.jsonp?includeMedias=yes&callback=?";
 	
 	$.getJSON(apiURL,{
 	}).success(function ( eventdata ) {
@@ -58,6 +59,15 @@ function showEventPopup(data) {
 		} else {
 			$('#EventPopupVenueWrapper').html('&nbsp;');
 		}
+		var html = '';
+		if (event.medias) {
+			html += '<ul class="mediaGrid">';
+			for(id in event.medias) {
+				html += '<li class="media"><a href="' + escapeHTML(eventURL) + '"><img src="'+escapeHTML(event.medias[id].picture.thumbnailURL)+'"></a></li>';
+			}
+			html += '</ul><div class="afterMediaGrid"></div>';
+		}
+		$('#EventPopupMedias').html(html);
 		var html = '';
 		if (event.groups) {
 			html += '<ul class="popupListGroups">';

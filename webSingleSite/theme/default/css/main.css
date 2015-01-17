@@ -2979,3 +2979,18 @@ ul.usernotifications li.usernotificationunread a.title {
   max-width: 70px;
   max-height: 70px;
 }
+.popupBox ul.mediaGrid li.media {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  float: left;
+  margin: 2px;
+}
+.popupBox ul.mediaGrid li.media img {
+  max-width: 50px;
+  max-height: 50px;
+}
+.popupBox .afterMediaGrid {
+  clear: left;
+}

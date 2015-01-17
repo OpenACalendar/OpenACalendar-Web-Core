@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use repositories\builders\MediaRepositoryBuilder;
 use Silex\Application;
 use site\forms\EventNewForm;
 use site\forms\EventEditForm;
@@ -99,11 +100,21 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 
-				
-		
+
+		$eventMedias = array();
+
+		$ourRequest = new \Request($request);
+
+		if ($ourRequest->getGetOrPostBoolean("includeMedias",false)) {
+			$mrb = new MediaRepositoryBuilder();
+			$mrb->setEvent($this->parameters['event']);
+			$mrb->setIncludeDeleted(false);
+			$eventMedias = $mrb->fetchAll();
+		}
+
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->addEvent($this->parameters['event'], $this->parameters['groups'], 
-				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country']);
+				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country'], $eventMedias);
 		return $json->getResponse();
 				
 	}
@@ -114,10 +125,21 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 
+		$eventMedias = array();
+
+		$ourRequest = new \Request($request);
+
+		if ($ourRequest->getGetOrPostBoolean("includeMedias",false)) {
+			$mrb = new MediaRepositoryBuilder();
+			$mrb->setEvent($this->parameters['event']);
+			$mrb->setIncludeDeleted(false);
+			$eventMedias = $mrb->fetchAll();
+		}
+
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->addEvent($this->parameters['event'], $this->parameters['groups'], 
-				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country']);
+				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country'], $eventMedias);
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();
 				

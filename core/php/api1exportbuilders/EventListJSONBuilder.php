@@ -147,9 +147,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 
 		if (is_array($eventMedias)) {
 			$out['medias'] = array();
-			$siteurl = $CONFIG->isSingleSiteMode ?
-				'http://'.$CONFIG->webSiteDomain :
-				'http://'.($this->site?$this->site->getSlug():$event->getSiteSlug()).".".$CONFIG->webSiteDomain;
+			$siteurl = $CONFIG->getWebSiteDomainSecure($this->site->getSlug());
 			foreach($eventMedias as $eventMedia) {
 				$out['medias'][] = array(
 					'slug'=>$eventMedia->getSlug(),
@@ -159,6 +157,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 					'picture'=>array(
 						'fullURL'=>$siteurl.'/media/'.$eventMedia->getSlug().'/full',
 						'normalURL'=>$siteurl.'/media/'.$eventMedia->getSlug().'/normal',
+						'thumbnailURL'=>$siteurl.'/media/'.$eventMedia->getSlug().'/thumbnail',
 					)
 				);
 			}
