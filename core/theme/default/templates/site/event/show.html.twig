@@ -303,24 +303,32 @@
 		{% endfor %}
 
 				
-		{% if venue is not null %}
+		{% if venue is not null or area is not null or country is not null %}
 			<div itemprop="location" itemscope itemtype="http://schema.org/Place">
 				<div class="innerPageLeftRightTitle">
-					<p class="venueTitle">About <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
+					{%  if venue is not null %}
+						<p class="venueTitle">At <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
+					{%  elseif area is not null  %}
+						<p class="areaTitle">In <a href="/area/{{ area.slugForUrl }}" itemprop="url"><span itemprop="name">{{ area.title }}</span></a></p>
+					{%  elseif country is not null  %}
+						<p class="countryTitle"><a href="/country/{{ country.twoCharCode }}" itemprop="url"><span itemprop="name">{{ country.title }}</span></a></p>
+					{%  endif  %}
 				</div>
 				<div class="innerPageLeft">
-					{% if venue.description %}
-						<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
-					{% else %}
-						<p class="venueDescription">No details known.</p>
-					{% endif %}
-					{% if mediasForVenue %}
-						<ul class="mediaGrid">
-							{% for media in mediasForVenue %}
-								<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
-							{% endfor %}
-						</ul>
-						<div class="afterMediaGrid"></div>
+					{%  if venue is not null %}
+						{% if venue.description %}
+							<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
+						{% else %}
+							<p class="venueDescription">No details known.</p>
+						{% endif %}
+						{% if mediasForVenue %}
+							<ul class="mediaGrid">
+								{% for media in mediasForVenue %}
+									<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+								{% endfor %}
+							</ul>
+							<div class="afterMediaGrid"></div>
+						{% endif %}
 					{% endif %}
 
 					<div class="dateAndLocationWrapper">
@@ -341,7 +349,7 @@
 
 				</div>
 				<div class="innerPageRight">
-					{%  if venue.hasLatLng %}
+					{%  if venue is not null and venue.hasLatLng %}
 						<div id="Map" class="map"></div>
 						{% if currentSite.isFeatureMap %}
 							<ul class="actionList">

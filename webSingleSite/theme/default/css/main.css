@@ -2308,22 +2308,34 @@ div.mainShowEvent p.description {
 }
 ul.mainListEvents li.event p.groupTitle,
 ul.mainListEvents li.event p.venueTitle,
+ul.mainListEvents li.event p.areaTitle,
+ul.mainListEvents li.event p.countryTitle,
 div.mainShowEvent p.groupTitle,
-div.mainShowEvent p.venueTitle {
+div.mainShowEvent p.venueTitle,
+div.mainShowEvent p.areaTitle,
+div.mainShowEvent p.countryTitle {
   font-weight: bold;
   font-size: 0.8em;
 }
 ul.mainListEvents li.event p.groupTitle a,
 ul.mainListEvents li.event p.venueTitle a,
+ul.mainListEvents li.event p.areaTitle a,
+ul.mainListEvents li.event p.countryTitle a,
 div.mainShowEvent p.groupTitle a,
-div.mainShowEvent p.venueTitle a {
+div.mainShowEvent p.venueTitle a,
+div.mainShowEvent p.areaTitle a,
+div.mainShowEvent p.countryTitle a {
   color: black;
   text-decoration: none;
 }
 ul.mainListEvents li.event p.groupTitle a:hover,
 ul.mainListEvents li.event p.venueTitle a:hover,
+ul.mainListEvents li.event p.areaTitle a:hover,
+ul.mainListEvents li.event p.countryTitle a:hover,
 div.mainShowEvent p.groupTitle a:hover,
-div.mainShowEvent p.venueTitle a:hover {
+div.mainShowEvent p.venueTitle a:hover,
+div.mainShowEvent p.areaTitle a:hover,
+div.mainShowEvent p.countryTitle a:hover {
   text-decoration: underline;
 }
 ul.mainListEvents li.event p.groupDescription,
