@@ -68,7 +68,7 @@ class UserGroupDBAccess {
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 		);
 		foreach($this->possibleFields as $field) {
-			if (in_array($field, $fields)) {
+			if (in_array($field, $fields) || $field == 'title') {
 				$fieldsSQL2[] = " ".$field." ";
 				$fieldsSQLParams2[] = " :".$field." ";
 				if ($field == 'title') {
