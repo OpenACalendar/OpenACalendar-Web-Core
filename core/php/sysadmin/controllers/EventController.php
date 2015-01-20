@@ -115,7 +115,17 @@ class EventController {
 					$er = new EventRepository();
 					$er->undelete($this->parameters['event'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
-					
+
+				} else if ($action->getCommand() == 'cancel' && !$this->parameters['event']->getIsDeleted()) {
+					$er = new EventRepository();
+					$er->cancel($this->parameters['event'],  $app['currentUser']);
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+
+				} else if ($action->getCommand() == 'uncancel' && $this->parameters['event']->getIsCancelled()) {
+					$er = new EventRepository();
+					$er->uncancel($this->parameters['event'],  $app['currentUser']);
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+
 				} else if ($action->getCommand() == 'addcuratedlist') {
 					$clr = new CuratedListRepository();
 					$curatedList = $clr->loadBySlug($this->parameters['site'], $action->getParam(0));
