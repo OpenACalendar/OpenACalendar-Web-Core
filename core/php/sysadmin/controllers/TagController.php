@@ -65,7 +65,7 @@ class TagController {
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['tag']->getIsDeleted()) {
 					$this->parameters['tag']->setIsDeleted(false);
 					$tr = new TagRepository();
-					$tr->edit($this->parameters['tag'],  $app['currentUser']);
+					$tr->undelete($this->parameters['tag'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
 				}
 			}

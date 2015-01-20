@@ -128,7 +128,22 @@ class TagRepository {
 			$DB->rollBack();
 		}
 	}
-	
+
+
+	public function undelete(TagModel $tag, UserAccountModel $user) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$tag->setIsDeleted(false);
+			$this->tagDBAccess->update($tag, array('is_deleted'), $user);
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+
 	
 	public function addTagToEvent(TagModel $tag, EventModel $event, UserAccountModel $user=null) {
 		global $DB;

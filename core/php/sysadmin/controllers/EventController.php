@@ -113,7 +113,7 @@ class EventController {
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['event']->getIsDeleted()) {
 					$this->parameters['event']->setIsDeleted(false);
 					$er = new EventRepository();
-					$er->edit($this->parameters['event'],  $app['currentUser']);
+					$er->undelete($this->parameters['event'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					
 				} else if ($action->getCommand() == 'addcuratedlist') {

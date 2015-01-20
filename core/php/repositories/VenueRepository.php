@@ -135,6 +135,11 @@ class VenueRepository {
 		$this->venueDBAccess->update($venue,array('is_deleted'),$user);
 	}
 
+	public function undelete(VenueModel $venue, UserAccountModel $user) {
+		$venue->setIsDeleted(false);
+		$this->venueDBAccess->update($venue,array('is_deleted'),$user);
+	}
+
 	public function markDuplicate(VenueModel $duplicateVenue, VenueModel $originalVenue, UserAccountModel $user=null) {
 		global $DB;
 

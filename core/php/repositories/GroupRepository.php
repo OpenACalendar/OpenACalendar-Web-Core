@@ -142,7 +142,25 @@ class GroupRepository {
 			$DB->rollBack();
 		}
 	}
-	
+
+	public function undelete(GroupModel $group, UserAccountModel $user) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+
+			$group->setIsDeleted(false);
+			$this->groupDBAccess->update($group, array('is_deleted'), $user);
+
+			$ufgr = new UserWatchesGroupRepository();
+			$ufgr->startUserWatchingGroupIfNotWatchedBefore($user, $group);
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+
 	
 	public function addEventToGroup(EventModel $event, GroupModel $group, UserAccountModel $user=null) {
 		global $DB;

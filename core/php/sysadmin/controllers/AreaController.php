@@ -80,7 +80,7 @@ class AreaController {
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['area']->getIsDeleted()) {
 					$this->parameters['area']->setIsDeleted(false);
 					$ar = new AreaRepository();
-					$ar->edit($this->parameters['area'],  $app['currentUser']);
+					$ar->undelete($this->parameters['area'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
 				} else if ($action->getCommand() == 'parentarea') {
 					$ar = new AreaRepository();

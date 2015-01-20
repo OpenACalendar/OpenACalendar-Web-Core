@@ -318,6 +318,26 @@ class EventRepository {
 		$event->setIsDeleted(true);
 	}
 
+	public function undelete(EventModel $event,  UserAccountModel $user=null) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$event->setIsDeleted(false);
+			$this->eventDBAccess->update($event, array('is_deleted'), $user, null);
+
+
+			// TODO if in group, watch
+
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+
+		$event->setIsDeleted(true);
+	}
+
 
 	public function cancel(EventModel $event,  UserAccountModel $user=null) {
 		global $DB;
