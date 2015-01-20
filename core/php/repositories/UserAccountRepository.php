@@ -6,7 +6,7 @@ namespace repositories;
 use models\UserAccountModel;
 use models\UserAccountResetModel;
 use models\SiteModel;
-use models\CuratedListModel;
+use org\openacalendar\curatedlists\models\CuratedListModel;
 
 /**
  *

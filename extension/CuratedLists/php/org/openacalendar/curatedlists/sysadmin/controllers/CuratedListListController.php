@@ -1,22 +1,19 @@
 <?php
 
-namespace sysadmin\controllers;
+namespace org\openacalendar\curatedlists\sysadmin\controllers;
 
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
-use models\SiteModel;
-use models\EventModel;
 use repositories\SiteRepository;
-use repositories\builders\SiteRepositoryBuilder;
-use repositories\builders\CuratedListRepositoryBuilder;
+use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
 
 /**
  *
- * @package Core
+ * @package org.openacalendar.curatedlists
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class CuratedListListController {

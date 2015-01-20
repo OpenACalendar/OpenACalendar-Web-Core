@@ -1,12 +1,13 @@
 <?php
 
-namespace repositories\builders;
+namespace org\openacalendar\curatedlists\repositories\builders;
 
 use models\SiteModel;
-use models\CuratedListModel;
+use org\openacalendar\curatedlists\models\CuratedListModel;
 use models\UserAccountModel;
 use models\EventModel;
 use models\GroupModel;
+use repositories\builders\BaseRepositoryBuilder;
 
 /**
  *

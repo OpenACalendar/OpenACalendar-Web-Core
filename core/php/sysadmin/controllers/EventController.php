@@ -12,7 +12,7 @@ use repositories\EventRepository;
 use repositories\GroupRepository;
 use repositories\CountryRepository;
 use repositories\VenueRepository;
-use repositories\CuratedListRepository;
+use org\openacalendar\curatedlists\repositories\CuratedListRepository;
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;

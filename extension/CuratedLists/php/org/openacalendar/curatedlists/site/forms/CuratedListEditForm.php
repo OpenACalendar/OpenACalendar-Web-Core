@@ -1,6 +1,6 @@
 <?php
 
-namespace site\forms;
+namespace org\openacalendar\curatedlists\site\forms;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -9,15 +9,16 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 
 
+
 /**
  *
- * @package Core
+ * @package org.openacalendar.curatedlists
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class CuratedListNewForm extends AbstractType{
+class CuratedListEditForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
@@ -36,7 +37,7 @@ class CuratedListNewForm extends AbstractType{
 	}
 	
 	public function getName() {
-		return 'CuratedListNewForm';
+		return 'CuratedListEditForm';
 	}
 	
 	public function getDefaultOptions(array $options) {

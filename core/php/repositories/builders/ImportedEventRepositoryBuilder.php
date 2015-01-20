@@ -10,7 +10,6 @@ use models\TagModel;
 use models\VenueModel;
 use models\UserAccountModel;
 use models\CountryModel;
-use models\CuratedListModel;
 use models\ImportURLModel;
 use models\AreaModel;
 

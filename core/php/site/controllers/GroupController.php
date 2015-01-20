@@ -27,7 +27,7 @@ use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
 use repositories\builders\ImportURLRepositoryBuilder;
-use repositories\builders\CuratedListRepositoryBuilder;
+use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
 use site\forms\ImportURLNewForm;
 use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 

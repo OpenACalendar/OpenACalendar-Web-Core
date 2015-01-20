@@ -3,19 +3,8 @@
 namespace org\openacalendar\curatedlists\siteapi1\controllers;
 
 use Silex\Application;
-use site\forms\GroupNewForm;
-use site\forms\GroupEditForm;
-use site\forms\EventNewForm;
 use Symfony\Component\HttpFoundation\Request;
-use models\SiteModel;
-use models\GroupModel;
-use models\EventModel;
-use repositories\CuratedListRepository;
-use repositories\builders\GroupRepositoryBuilder;
-use repositories\EventRepository;
-use repositories\UserWatchesGroupRepository;
-use repositories\builders\EventRepositoryBuilder;
-use repositories\builders\HistoryRepositoryBuilder;
+use org\openacalendar\curatedlists\repositories\CuratedListRepository;
 use api1exportbuilders\EventListICalBuilder;
 use api1exportbuilders\EventListJSONBuilder;
 use api1exportbuilders\EventListJSONPBuilder;

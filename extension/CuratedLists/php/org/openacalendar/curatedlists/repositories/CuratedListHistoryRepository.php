@@ -1,10 +1,8 @@
 <?php
 
-namespace repositories;
+namespace org\openacalendar\curatedlists\repositories;
 
-use models\CuratedListModel;
-use models\CuratedListHistoryModel;
-use models\UserAccountModel;
+use org\openacalendar\curatedlists\models\CuratedListHistoryModel;
 
 /**
  *

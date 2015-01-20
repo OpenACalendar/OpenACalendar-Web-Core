@@ -2,15 +2,15 @@
 
 use models\UserAccountModel;
 use models\SiteModel;
-use models\CuratedListModel;
+use org\openacalendar\curatedlists\models\CuratedListModel;
 use models\EventModel;
 use models\GroupModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
-use repositories\CuratedListRepository;
+use org\openacalendar\curatedlists\repositories\CuratedListRepository;
 use repositories\EventRepository;
 use repositories\GroupRepository;
-use repositories\builders\CuratedListRepositoryBuilder;
+use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
 
 /**
  *
