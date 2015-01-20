@@ -69,7 +69,7 @@ class GroupController {
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['group']->getIsDeleted()) {
 					$this->parameters['group']->setIsDeleted(false);
 					$gr = new GroupRepository();
-					$gr->edit($this->parameters['group'],  $app['currentUser']);
+					$gr->undelete($this->parameters['group'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
 				} else if ($action->getCommand() == 'isduplicateof') {
 					$gr = new GroupRepository();

@@ -63,7 +63,7 @@ class VenueController {
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['venue']->getIsDeleted()) {
 					$this->parameters['venue']->setIsDeleted(false);
 					$vr = new VenueRepository();
-					$vr->edit($this->parameters['venue'],  $app['currentUser']);
+					$vr->undelete($this->parameters['venue'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
 
 				} else if ($action->getCommand() == 'isduplicateof') {

@@ -227,7 +227,21 @@ class AreaRepository {
 			$DB->rollBack();
 		}
 	}
-	
+
+	public function undelete(AreaModel $area, UserAccountModel $user) {
+		global $DB;
+		try {
+			$DB->beginTransaction();
+
+			$area->setIsDeleted(false);
+			$this->areaDBAccess->update($area, array('is_deleted'), $user);
+
+			$DB->commit();
+		} catch (Exception $e) {
+			$DB->rollBack();
+		}
+	}
+
 	public function updateFutureEventsCache(AreaModel $area) {
 		global $DB;
 		$statUpdate = $DB->prepare("UPDATE area_information SET cached_future_events=:count WHERE id=:id");
