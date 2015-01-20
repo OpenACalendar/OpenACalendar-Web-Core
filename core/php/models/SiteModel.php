@@ -3,6 +3,9 @@
 
 namespace models;
 
+use Config;
+use Symfony\Component\Config\Definition\Exception\Exception;
+
 
 /**
  *
@@ -16,6 +19,15 @@ class SiteModel {
 	
 	public static function  makeCanonicalSlug($slug) {
 		return trim(strtolower($slug));
+	}
+
+	public static function isSlugValid($slug, Config $config) {
+		if (!ctype_alnum($slug) || strlen($slug) < 2) {
+			return false;
+		} else if (in_array($slug, $config->siteSlugReserved)) {
+			return false;
+		}
+		return true;
 	}
 	
 	protected $id;

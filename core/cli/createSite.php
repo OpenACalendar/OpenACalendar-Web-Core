@@ -29,6 +29,10 @@ if (!$slug || !$email) {
 	die("Slug and Email?\n\n");
 }
 
+if (!SiteModel::isSlugValid($slug, $CONFIG)) {
+	die("Slug is not valid!\n\n");
+}
+
 print "Slug: ". $slug."\n";
 print "Email: ". $email."\n";
 
