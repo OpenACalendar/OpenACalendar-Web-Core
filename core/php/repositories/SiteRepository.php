@@ -8,6 +8,7 @@ use models\SiteModel;
 use models\UserAccountModel;
 use models\SiteQuotaModel;
 use models\UserGroupModel;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  *
@@ -32,7 +33,11 @@ class SiteRepository {
 	public function create(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota, $canAnyUserVerifiedEdit = false) {
 		global $DB, $CONFIG, $EXTENSIONHOOKRUNNER;
 		$createdat = \TimeSource::getFormattedForDataBase();
-		
+
+		if (!$site->isSlugValid($site->getSlug(), $CONFIG)) {
+			throw new Exception("Slug not valid");
+		}
+
 		try {
 			$DB->beginTransaction();
 

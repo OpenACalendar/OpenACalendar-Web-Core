@@ -46,6 +46,45 @@ class SiteModelTest extends \PHPUnit_Framework_TestCase {
 		$site->setPromptEmailsDaysInAdvance($in);
 		$this->assertEquals($out, $site->getPromptEmailsDaysInAdvance());
 	}
+
+
+	function providerSlugIsValid() {
+		return array(
+			array('abc'),
+			array('cat12'),
+		);
+	}
+
+	/**
+	* @dataProvider providerSlugIsValid
+	*/
+	function testSlugIsValid($in) {
+		global $CONFIG;
+		$CONFIG->siteSlugReserved = array('www');
+		$this->assertTrue(SiteModel::isSlugValid($in, $CONFIG));
+	}
+
+	function providerSlugIsNotValid() {
+		return array(
+			array('the cat sat on the mat'),
+			array('a'),
+			array(''),
+			array('-'),
+			array('cat-mat'),
+			array('cafés'),
+			array('www'),
+		);
+	}
+
+	/**
+	* @dataProvider providerSlugIsNotValid
+	*/
+	function testSlugIsNotValid($in) {
+		global $CONFIG;
+		$CONFIG->siteSlugReserved = array('www');
+		$this->assertFalse(SiteModel::isSlugValid($in, $CONFIG));
+	}
+
 	
 }
 

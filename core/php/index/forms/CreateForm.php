@@ -2,6 +2,7 @@
 
 namespace index\forms;
 
+use models\SiteModel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -41,6 +42,10 @@ class CreateForm extends AbstractType{
 				$form['slug']->addError(new FormError("Numbers and letters only, at least 2."));
 			} else if (in_array($myExtraField, $CONFIG->siteSlugReserved)) {
 				$form['slug']->addError(new FormError("That is already taken."));
+			// The above checks provide a nice error message.
+			// Now let's do a final belt and braces check.
+			} else if (!SiteModel::isSlugValid($myExtraField, $CONFIG)) {
+				$form['slug']->addError(new FormError("That is not allowed."));
 			}
 		};
 		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);		
@@ -70,3 +75,4 @@ class CreateForm extends AbstractType{
 	}
 	
 }
+
