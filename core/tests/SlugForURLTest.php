@@ -1,8 +1,8 @@
 <?php
 
+use org\openacalendar\curatedlists\models\CuratedListModel;
 use models\GroupModel;
 use models\AreaModel;
-use models\CuratedListModel;
 use models\EventModel;
 use models\VenueModel;
 use models\TagModel;

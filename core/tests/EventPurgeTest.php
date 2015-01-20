@@ -4,13 +4,13 @@ use models\UserAccountModel;
 use models\SiteModel;
 use models\GroupModel;
 use models\EventModel;
-use models\CuratedListModel;
+use org\openacalendar\curatedlists\models\CuratedListModel;
 use models\TagModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\EventRepository;
-use repositories\CuratedListRepository;
+use org\openacalendar\curatedlists\repositories\CuratedListRepository;
 use repositories\TagRepository;
 
 
