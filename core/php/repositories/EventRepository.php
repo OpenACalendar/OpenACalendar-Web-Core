@@ -314,8 +314,6 @@ class EventRepository {
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
-		
-		$event->setIsDeleted(true);
 	}
 
 	public function undelete(EventModel $event,  UserAccountModel $user=null) {
@@ -334,8 +332,6 @@ class EventRepository {
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
-
-		$event->setIsDeleted(true);
 	}
 
 
