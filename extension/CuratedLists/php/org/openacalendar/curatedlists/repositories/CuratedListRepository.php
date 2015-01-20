@@ -1,15 +1,15 @@
 <?php
 
 
-namespace repositories;
+namespace org\openacalendar\curatedlists\repositories;
 
-use models\CuratedListHistoryModel;
-use models\CuratedListModel;
+use org\openacalendar\curatedlists\models\CuratedListHistoryModel;
+use org\openacalendar\curatedlists\models\CuratedListModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use models\EventModel;
 use models\GroupModel;
-use dbaccess\CuratedListDBAccess;
+use org\openacalendar\curatedlists\dbaccess\CuratedListDBAccess;
 
 
 /**
@@ -23,7 +23,7 @@ use dbaccess\CuratedListDBAccess;
 class CuratedListRepository {
 	
 
-	/** @var  \dbaccess\CuratedListBAccess */
+	/** @var  CuratedListBAccess */
 	protected $curatedListDBAccess;
 
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace models;
+namespace org\openacalendar\curatedlists\models;
 
 
 /**

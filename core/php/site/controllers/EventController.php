@@ -34,7 +34,7 @@ use repositories\MediaInEventRepository;
 use repositories\MediaRepository;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\EventHistoryRepositoryBuilder;
-use repositories\builders\CuratedListRepositoryBuilder;
+use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
 use repositories\builders\UserAtEventRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;

@@ -5,7 +5,7 @@ namespace repositories\builders;
 use models\UserAccountModel;
 use models\SiteModel;
 use models\GroupModel;
-use models\CuratedListModel;
+use org\openacalendar\curatedlists\models\CuratedListModel;
 
 /**
  *

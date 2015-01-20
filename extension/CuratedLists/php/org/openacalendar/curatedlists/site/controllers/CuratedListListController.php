@@ -3,11 +3,8 @@
 namespace org\openacalendar\curatedlists\site\controllers;
 
 
-use repositories\builders\filterparams\CuratedListFilterParams;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use models\CuratedListModel;
-use repositories\builders\CuratedListRepositoryBuilder;
+use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
 
 /**
  *

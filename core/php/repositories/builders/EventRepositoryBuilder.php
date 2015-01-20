@@ -9,7 +9,7 @@ use models\TagModel;
 use models\VenueModel;
 use models\UserAccountModel;
 use models\CountryModel;
-use models\CuratedListModel;
+use org\openacalendar\curatedlists\models\CuratedListModel;
 use models\ImportURLModel;
 use models\AreaModel;
 

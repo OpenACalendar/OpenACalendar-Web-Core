@@ -94,18 +94,6 @@ $app->match('/sysadmin/site/{siteid}/area/{slug}/', "sysadmin\controllers\AreaCo
 		->assert('slug', '\d+');
 
 
-$app->match('/sysadmin/site/{siteid}/curatedlist', "sysadmin\controllers\CuratedListListController::index")
-		->assert('siteid', '\d+');
-$app->match('/sysadmin/site/{siteid}/curatedlist/', "sysadmin\controllers\CuratedListListController::index")
-		->assert('siteid', '\d+');
-$app->match('/sysadmin/site/{siteid}/curatedlist/{slug}', "sysadmin\controllers\CuratedListController::index")
-		->assert('siteid', '\d+')
-		->assert('slug', '\d+');
-$app->match('/sysadmin/site/{siteid}/curatedlist/{slug}/', "sysadmin\controllers\CuratedListController::index")
-		->assert('siteid', '\d+')
-		->assert('slug', '\d+');
-
-
 $app->match('/sysadmin/site/{siteid}/tag', "sysadmin\controllers\TagListController::index")
 		->assert('siteid', '\d+');
 $app->match('/sysadmin/site/{siteid}/tag/', "sysadmin\controllers\TagListController::index")

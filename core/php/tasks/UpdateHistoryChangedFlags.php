@@ -9,7 +9,7 @@ use repositories\VenueHistoryRepository;
 use repositories\SiteHistoryRepository;
 use repositories\EventHistoryRepository;
 use repositories\TagHistoryRepository;
-use repositories\CuratedListHistoryRepository;
+use org\openacalendar\curatedlists\repositories\CuratedListHistoryRepository;
 use repositories\ImportURLHistoryRepository;
 use models\GroupHistoryModel;
 use models\AreaHistoryModel;
@@ -17,7 +17,7 @@ use models\VenueHistoryModel;
 use models\SiteHistoryModel;
 use models\EventHistoryModel;
 use models\TagHistoryModel;
-use models\CuratedListHistoryModel;
+use org\openacalendar\curatedlists\models\CuratedListHistoryModel;
 use models\ImportURLHistoryModel;
 
 

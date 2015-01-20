@@ -5,10 +5,10 @@ namespace org\openacalendar\curatedlists\site\controllers;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use models\CuratedListModel;
-use repositories\CuratedListRepository;
+use org\openacalendar\curatedlists\models\CuratedListModel;
+use org\openacalendar\curatedlists\repositories\CuratedListRepository;
 use repositories\builders\filterparams\EventFilterParams;
-use site\forms\CuratedListEditForm;
+use org\openacalendar\curatedlists\site\forms\CuratedListEditForm;
 use repositories\UserAccountRepository;
 use repositories\builders\UserAccountRepositoryBuilder;
 
