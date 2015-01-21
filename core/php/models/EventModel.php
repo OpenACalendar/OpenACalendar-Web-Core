@@ -301,6 +301,16 @@ class EventModel {
 		}
 	}
 
+	public function getStartAtInTimezone() {
+		if ($this->start_at->getTimezone() == $this->timezone) {
+			return $this->start_at;
+		} else {
+			$sa = clone $this->start_at;
+			$sa->setTimezone(new \DateTimeZone($this->timezone));
+			return $sa;
+		}
+	}
+
 	public function setStartAt(\DateTime $start_at) {
 		$this->start_at = $start_at;
 	}
@@ -319,6 +329,17 @@ class EventModel {
 			return $ea;
 		}
 	}
+
+	public function getEndAtInTimezone() {
+		if ($this->end_at->getTimezone() == $this->timezone) {
+			return $this->end_at;
+		} else {
+			$ea = clone $this->end_at;
+			$ea->setTimezone(new \DateTimeZone($this->timezone));
+			return $ea;
+		}
+	}
+
 	public function setEndAt(\DateTime $end_at) {
 		$this->end_at = $end_at;
 	}
