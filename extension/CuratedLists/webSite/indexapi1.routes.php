@@ -16,6 +16,8 @@ $app->match('/api1/curatedlist/{slug}/events.json', "org\openacalendar\curatedli
 		->assert('slug', FRIENDLY_SLUG_REGEX);
 $app->match('/api1/curatedlist/{slug}/events.jsonp', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::jsonp")
 		->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/api1/curatedlist/{slug}/events.csv', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::csv")
+		->assert('slug', FRIENDLY_SLUG_REGEX);
 $app->match('/api1/curatedlist/{slug}/events.create.atom', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::atomCreate")
 		->assert('slug', FRIENDLY_SLUG_REGEX);
 $app->match('/api1/curatedlist/{slug}/events.before.atom', "org\openacalendar\curatedlists\siteapi1\controllers\CuratedListController::atomBefore")

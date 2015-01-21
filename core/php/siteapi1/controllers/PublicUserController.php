@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,6 +95,24 @@ class PublicUserController {
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();
 			
+	}
+
+	function csv($username, Request $request,Application $app) {
+
+
+		$ourRequest = new \Request($request);
+
+		if (!$this->build($username, $request, $app)) {
+			$app->abort(404, "User does not exist.");
+		}
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$csv->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
+		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
+		$csv->build();
+		return $csv->getResponse();
+
 	}
 	
 }

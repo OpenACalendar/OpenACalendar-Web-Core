@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -73,6 +74,18 @@ class VenueVirtualController {
 		return $jsonp->getResponse();
 				
 	}	
+
+	function csv(Request $request, Application $app) {
+
+		$ourRequest = new \Request($request);
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
+		$csv->build();
+		return $csv->getResponse();
+
+	}
 
 	function atomBefore(Request $request, Application $app) {
 		

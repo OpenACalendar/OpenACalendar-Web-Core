@@ -2,6 +2,7 @@
 
 namespace org\openacalendar\curatedlists\siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use org\openacalendar\curatedlists\repositories\CuratedListRepository;
@@ -90,7 +91,24 @@ class CuratedListController {
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();
 				
-	}	
+	}
+
+	function csv($slug, Request $request, Application $app) {
+
+		$ourRequest = new \Request($request);
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "curatedlist does not exist.");
+		}
+
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
+		$csv->build();
+		return $csv->getResponse();
+
+	}
 
 	function atomBefore($slug, Request $request, Application $app) {
 		

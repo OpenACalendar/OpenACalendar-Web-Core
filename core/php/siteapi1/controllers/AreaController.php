@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use repositories\AreaRepository;
@@ -90,6 +91,23 @@ class AreaController {
 		return $jsonp->getResponse();
 				
 	}	
+
+	function csv($slug, Request $request, Application $app) {
+
+		$ourRequest = new \Request($request);
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Area does not exist.");
+		}
+
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->getEventRepositoryBuilder()->setArea($this->parameters['area']);
+		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
+		$csv->build();
+		return $csv->getResponse();
+
+	}
 
 	
 	function atomBefore($slug, Request $request, Application $app) {

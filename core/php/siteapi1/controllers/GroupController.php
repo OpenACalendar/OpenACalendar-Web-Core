@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -104,8 +105,21 @@ class GroupController {
 	}	
 
 	
-	function atomBefore($slug, Request $request, Application $app) {
+	function csv($slug, Request $request, Application $app) {
 		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Group does not exist.");
+		}
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->setTitle($this->parameters['group']->getTitle());
+		$csv->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
+		$csv->build();
+		return $csv->getResponse();
+	}	
+
+	function atomBefore($slug, Request $request, Application $app) {
+
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
 		}
@@ -117,8 +131,8 @@ class GroupController {
 		$atom->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$atom->build();
 		return $atom->getResponse();
-	}	
-	
+	}
+
 
 	function atomCreate($slug, Request $request, Application $app) {
 		

@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -101,7 +102,24 @@ class TagController {
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
 		return $jsonp->getResponse();
 				
-	}	
+	}
+
+	function csv($slug, Request $request, Application $app) {
+
+		$ourRequest = new \Request($request);
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Tag does not exist.");
+		}
+
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
+		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
+		$csv->build();
+		return $csv->getResponse();
+
+	}
 
 	
 	function atomBefore($slug, Request $request, Application $app) {

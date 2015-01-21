@@ -58,6 +58,7 @@ function showExportPopup() {
 		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="iconAppleSmall"></div> Mac/iPhone/iPad</a></span></li>';
 		html += ' <li class="ical" id="ExportToATOMTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToATOM\'); return false;">News reader (ATOM/RSS)</a></span></li>';
 		html += ' <li class="ical" id="ExportToICALTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToICAL\'); return false;">ics/ical file</a></span></li>';
+		html += ' <li class="ical" id="ExportToCSVTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToCSV\'); return false;">CSV</a></span></li>';
 		html += ' <li class="ical" id="ExportToJSONTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToJSON\'); return false;">JSON</a></span></li>';
 		html += '</ul>';
 		html += '<div class="content" id="ExportToGoogleCalendar">';
@@ -71,6 +72,9 @@ function showExportPopup() {
 		html += '</div>'
 		html += '<div class="content" id="ExportToICAL">';
 			html += '<p>For ical <a href="#" target="_blank" class="exportlink">click here</a>.</p>';
+		html += '</div>'
+		html += '<div class="content" id="ExportToCSV">';
+			html += '<p>For csv <a href="#" target="_blank" class="exportlink">click here</a>.</p>';
 		html += '</div>'
 		html += '<div class="content" id="ExportToJSON">';
 			html += '<p class="json">For JSON <a href="#" target="_blank" class="exportlink">click here</a>.</p>';
@@ -173,45 +177,54 @@ function showLinksFor(showFor) {
 	var jsonpURL = "http://" + config.httpDomain + "/api1";
 	var atomCreateURL  = "http://" + config.httpDomain + "/api1";
 	var atomBeforeURL  = "http://" + config.httpDomain + "/api1";
+	var csvURL  = "http://" + config.httpDomain + "/api1";
 	var hasAtom = true;
+	var hasCSV = true;
 	var hasExistingGoogleCalendar = false;
 	if (exportData.hasOwnProperty("event") && showFor == "event") {
 		icalURL += "/event/"+exportData.event+"/info.ical";
 		jsonURL += "/event/"+exportData.event+"/info.json";
 		jsonpURL += "/event/"+exportData.event+"/info.jsonp?callback=myfunc";
 		hasAtom = false;
+        hasCSV = false;
 		hasExistingGoogleCalendar = true;
 	} else if (exportData.hasOwnProperty("group") && showFor == "group") {
 		icalURL += "/group/"+exportData.group+"/events.ical";
+		csvURL += "/group/"+exportData.group+"/events.csv";
 		jsonURL += "/group/"+exportData.group+"/events.json";
 		jsonpURL += "/group/"+exportData.group+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/group/"+exportData.group+"/events.create.atom";
 		atomBeforeURL += "/group/"+exportData.group+"/events.before.atom?days="+atomBeforeDays;
 	} else if (exportData.hasOwnProperty("venue") && showFor == "venue") {
 		icalURL += "/venue/"+exportData.venue+"/events.ical";
+        csvURL += "/venue/"+exportData.venue+"/events.csv";
 		jsonURL += "/venue/"+exportData.venue+"/events.json";
 		jsonpURL += "/venue/"+exportData.venue+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/venue/"+exportData.venue+"/events.create.atom";
 		atomBeforeURL += "/venue/"+exportData.venue+"/events.before.atom?days="+atomBeforeDays;
 	} else if (exportData.hasOwnProperty("area") && showFor == "area") {
 		icalURL += "/area/"+exportData.area+"/events.ical";
+		csvURL += "/area/"+exportData.area+"/events.csv";
 		jsonURL += "/area/"+exportData.area+"/events.json";
 		jsonpURL += "/area/"+exportData.area+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/area/"+exportData.area+"/events.create.atom";
 		atomBeforeURL += "/area/"+exportData.area+"/events.before.atom?days="+atomBeforeDays;		
 	} else if (exportData.hasOwnProperty("tag") && showFor == "tag") {
 		icalURL += "/tag/"+exportData.tag+"/events.ical";
+		csvURL += "/tag/"+exportData.tag+"/events.csv";
 		jsonURL += "/tag/"+exportData.tag+"/events.json";
 		jsonpURL += "/tag/"+exportData.tag+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/tag/"+exportData.tag+"/events.create.atom";
 		atomBeforeURL += "/tag/"+exportData.tag+"/events.before.atom?days="+atomBeforeDays;			
 	} else if (exportData.hasOwnProperty("country") && showFor == "country") {
 		icalURL += "/country/"+exportData.country+"/events.ical";
+		csvURL += "/country/"+exportData.country+"/events.csv";
 		jsonURL += "/country/"+exportData.country+"/events.json";
 		jsonpURL += "/country/"+exportData.country+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/country/"+exportData.country+"/events.create.atom";
 		atomBeforeURL += "/country/"+exportData.country+"/events.before.atom?days="+atomBeforeDays;		
 	} else if (exportData.hasOwnProperty("curatedlist") && showFor == "curatedlist") {
+		csvURL += "/curatedlist/"+exportData.curatedlist+"/events.csv";
 		icalURL += "/curatedlist/"+exportData.curatedlist+"/events.ical";
 		jsonURL += "/curatedlist/"+exportData.curatedlist+"/events.json";
 		jsonpURL += "/curatedlist/"+exportData.curatedlist+"/events.jsonp?callback=myfunc";
@@ -219,6 +232,7 @@ function showLinksFor(showFor) {
 		atomBeforeURL += "/curatedlist/"+exportData.curatedlist+"/events.before.atom?days="+atomBeforeDays;		
 	} else {
 		icalURL += "/events.ical";
+		csvURL += "/events.csv";
 		jsonURL += "/events.json";
 		jsonpURL += "/events.jsonp?callback=myfunc";
 		atomCreateURL += "/events.create.atom";
@@ -238,6 +252,13 @@ function showLinksFor(showFor) {
 	} else {
 		$('#ExportToATOM').hide();
 		$('#ExportToATOMTab').hide();
+	}
+    if (hasCSV) {
+		$('#ExportToCSVTab').show();
+        div.find('#ExportToCSV a.exportlink').attr('href',csvURL);
+    } else {
+		$('#ExportToCSV').hide();
+		$('#ExportToCSVTab').hide();
 	}
 	if (hasExistingGoogleCalendar) {
 		$('#ExportToExistingGoogleCalendar').show();

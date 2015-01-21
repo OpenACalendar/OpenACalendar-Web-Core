@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +46,18 @@ class EventListController {
 		return $json->getResponse();
 			
 	}
-	
+
+	function csv(Request $request, Application $app) {
+
+		$ourRequest = new \Request($request);
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
+		$csv->build();
+		return $csv->getResponse();
+
+	}
+
 	function jsonp(Request $request, Application $app) {
 
 		$ourRequest = new \Request($request);

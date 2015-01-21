@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
@@ -101,6 +102,23 @@ class CountryController {
 		return $jsonp->getResponse();
 				
 	}	
+	function eventsCSV($slug, Request $request, Application $app) {
+
+		$ourRequest = new \Request($request);
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Country does not exist.");
+		}
+
+
+		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
+		$csv->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
+		$csv->build();
+		return $csv->getResponse();
+
+	}
 
 	function eventsAtomBefore($slug, Request $request, Application $app) {
 		
