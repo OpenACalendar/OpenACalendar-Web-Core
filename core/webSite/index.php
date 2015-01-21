@@ -103,14 +103,23 @@ $app->before(function (Request $request) use ($app) {
 $permissionCalendarChangeRequired = function(Request $request, Application $app) {
 	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
-		return $app->abort(403); // TODO
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
 	}
 };
 
 $permissionCalendarAdministratorRequired = function(Request $request, Application $app) {
 	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_ADMINISTRATE")) {
-		return $app->abort(403); // TODO
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
 	}
 };
 
