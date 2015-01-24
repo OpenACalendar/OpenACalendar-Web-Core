@@ -52,8 +52,7 @@ class PublicUserController {
 		}
 				
 		// TODO should we be passing a better timeZone here?
-		$ical = new EventListICalBuilder(null, "UTC", $this->parameters['user']->getUserName());
-		$ical->getEventRepositoryBuilder()->setSite($app['currentSite']);
+		$ical = new EventListICalBuilder($app['currentSite'], "UTC", $this->parameters['user']->getUserName());
 		$ical->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$ical->build();
 		return $ical->getResponse();
@@ -70,7 +69,6 @@ class PublicUserController {
 		}
 		
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
-		$json->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$json->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
@@ -88,7 +86,6 @@ class PublicUserController {
 		}
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
-		$jsonp->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$jsonp->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -107,7 +104,6 @@ class PublicUserController {
 		}
 
 		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
-		$csv->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$csv->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();

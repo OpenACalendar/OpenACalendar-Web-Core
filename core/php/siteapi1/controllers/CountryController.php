@@ -59,7 +59,6 @@ class CountryController {
 		
 		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'], $this->parameters['country']->getTitle());
 		$ical->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$ical->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$ical->build();
 		return $ical->getResponse();
 				
@@ -77,7 +76,6 @@ class CountryController {
 		
 		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$json->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
 		return $json->getResponse();
@@ -95,7 +93,6 @@ class CountryController {
 		
 		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$jsonp->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);
@@ -113,7 +110,6 @@ class CountryController {
 
 		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$csv->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();
 		return $csv->getResponse();
@@ -131,7 +127,6 @@ class CountryController {
 		$atom->setDaysBefore($days);
 		$atom->setTitle($this->parameters['country']->getTitle());
 		$atom->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$atom->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$atom->build();
 		return $atom->getResponse();
 	}	
@@ -147,7 +142,6 @@ class CountryController {
 		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle($this->parameters['country']->getTitle());
 		$atom->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$atom->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$atom->build();
 		return $atom->getResponse();
 	}	
