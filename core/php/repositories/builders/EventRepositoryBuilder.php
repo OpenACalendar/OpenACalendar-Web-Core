@@ -221,7 +221,19 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	
 	protected $must_have_lat_lng = false;
 	
-	
+
+	protected $include_country_information= false;
+
+	/**
+	 * @param boolean $include_country_information
+	 */
+	public function setIncludeCountryInformation($include_country_information)
+	{
+		$this->include_country_information = $include_country_information;
+	}
+
+
+
 	public function setMustHaveLatLng($must_have_lat_lng) {
 		$this->must_have_lat_lng = $must_have_lat_lng;
 		if ($must_have_lat_lng) {
@@ -442,7 +454,13 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 				$this->where[] = " venue_information.lng IS NOT NULL ";
 			}
 		}
-		
+
+		if ($this->include_country_information) {
+				$this->joins[] = " LEFT JOIN country ON country.id = event_information.country_id  ";
+			$this->select[] = "  country.two_char_code AS country_two_char_code";
+			$this->select[] = "  country.title AS country_title";
+		}
+
 		if ($this->venueVirtualOnly) {
 			$this->where[] = " event_information.is_virtual = '1' ";
 		}

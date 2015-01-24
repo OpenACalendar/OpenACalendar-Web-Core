@@ -53,6 +53,9 @@ class EventModel {
 	
 	/** @var AreaModel **/
 	protected $area;
+
+	/** @var Country */
+	protected $country;
 	
 	protected $user_is_plan_attending  = false;
 	protected $user_is_plan_maybe_attending = false;
@@ -111,6 +114,11 @@ class EventModel {
 			$this->area = new AreaModel();
 			$this->area->setTitle($data['area_title']);
 			$this->area->setSlug($data['area_slug']);
+		}
+		if (isset($data['country_two_char_code'])) {
+			$this->country = new CountryModel();
+			$this->country->setTwoCharCode($data['country_two_char_code']);
+			$this->country->setTitle($data['country_title']);
 		}
 		$this->user_is_plan_attending = isset($data['user_is_plan_attending']) ? (boolean)$data['user_is_plan_attending'] : false;
 		$this->user_is_plan_maybe_attending = isset($data['user_is_plan_maybe_attending']) ? (boolean)$data['user_is_plan_maybe_attending'] : false;
@@ -499,6 +507,16 @@ class EventModel {
 	public function getArea() {
 		return $this->area;
 	}
+
+	/**
+	 * @return \models\Country
+	 */
+	public function getCountry()
+	{
+		return $this->country;
+	}
+
+
 
 	public function getUserIsPlanAttending() {
 		return $this->user_is_plan_attending;

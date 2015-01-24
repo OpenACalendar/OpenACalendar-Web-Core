@@ -49,6 +49,7 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 		global $CONFIG;
 		$this->eventRepositoryBuilder = new EventRepositoryBuilder();
 		$this->eventRepositoryBuilder->setLimit($CONFIG->api1EventListLimit);
+		$this->eventRepositoryBuilder->setIncludeCountryInformation(true);
 		$this->eventRepositoryBuilder->setIncludeAreaInformation(true);
 		$this->eventRepositoryBuilder->setIncludeVenueInformation(true);
 		if ($site) $this->eventRepositoryBuilder->setSite($site);
@@ -67,7 +68,7 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 				$mrb->setIncludeDeleted(false);
 				$eventMedias = $mrb->fetchAll();
 			}
-			$this->addEvent($event, null, $event->getVenue(), $event->getArea(), null, $eventMedias);
+			$this->addEvent($event, null, $event->getVenue(), $event->getArea(), $event->getCountry(), $eventMedias);
 		}
 	}
 		

@@ -45,7 +45,20 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 			"End UTC,".
 			"Start Timezone,".
 			"End Timezone,".
-			",".
+			"Venue Slug,".
+			"Venue Slug For URL,".
+			"Venue Title,".
+			"Venue Description,".
+			"Venue Address,".
+			"Venue Address Code,".
+			"Venue Lat,".
+			"Venue Lng,".
+			"Area Slug,".
+			"Area Slug For URL,".
+			"Area Title,".
+			"Area Description,".
+			"Country Code,".
+			"Country Title,".
 			"\n".implode("\n",$this->events);
 	}
 
@@ -76,7 +89,33 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 			$this->getCell($event->getStartAtInUTC()->format("r")) . $this->delimiter .
 			$this->getCell($event->getEndAtInUTC()->format("r")) . $this->delimiter .
 			$this->getCell($event->getStartAtInTimezone()->format("r")) . $this->delimiter .
-			$this->getCell($event->getEndAtInTimezone()->format("r")) . $this->delimiter ;
+			$this->getCell($event->getEndAtInTimezone()->format("r")) . $this->delimiter .
+			($venue ?
+
+				$this->getCell($venue->getSlug()) . $this->delimiter .
+				$this->getCell($venue->getSlugForUrl()) . $this->delimiter .
+				$this->getCell($venue->getTitle()) . $this->delimiter .
+				$this->getCell($venue->getDescription()) . $this->delimiter .
+				$this->getCell($venue->getAddress()) . $this->delimiter .
+				$this->getCell($venue->getAddressCode()) . $this->delimiter .
+				$this->getCell($venue->getLat()) . $this->delimiter .
+				$this->getCell($venue->getLng()) . $this->delimiter
+
+			: $this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter ).
+			($area ?
+
+				$this->getCell($area->getSlug()) . $this->delimiter .
+				$this->getCell($area->getSlugForUrl()) . $this->delimiter .
+				$this->getCell($area->getTitle()) . $this->delimiter .
+				$this->getCell($area->getDescription()) . $this->delimiter
+
+			: $this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter ).
+			($country ?
+
+				$this->getCell($country->getTwoCharCode()) . $this->delimiter .
+				$this->getCell($country->getTitle()) . $this->delimiter
+
+			: $this->delimiter .$this->delimiter );
 
 
 		/**
