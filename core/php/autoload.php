@@ -10,7 +10,7 @@
 
 date_default_timezone_set('UTC');
 
-define('COPYRIGHT_YEARS', '2013-2014');
+define('COPYRIGHT_YEARS', '2013-2015');
 
 define('VARCHAR_COLUMN_LENGTH_USED', 255);
 
