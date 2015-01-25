@@ -172,13 +172,6 @@ $app->match('/sysadmin/history', "sysadmin\controllers\HistoryController::index"
 $app->match('/sysadmin/history/', "sysadmin\controllers\HistoryController::index");
 
 
-$app->match('/sysadmin/contactsupport', "sysadmin\controllers\ContactSupportListController::index");
-$app->match('/sysadmin/contactsupport/', "sysadmin\controllers\ContactSupportListController::index");
-
-$app->match('/sysadmin/contactsupport/{id}/', "sysadmin\controllers\ContactSupportController::index")
-		->assert('id', '\d+');
-
-
 $app->match('/sysadmin/server', "sysadmin\controllers\ServerController::index");
 $app->match('/sysadmin/server/', "sysadmin\controllers\ServerController::index");
 

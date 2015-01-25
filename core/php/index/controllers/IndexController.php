@@ -4,15 +4,12 @@ namespace index\controllers;
 
 use Silex\Application;
 use index\forms\CreateForm;
-use index\forms\ContactForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
-use models\ContactSupportModel;
 use repositories\SiteRepository;
 use Symfony\Component\Form\FormError;
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\CountryRepository;
-use repositories\ContactSupportRepository;
 use repositories\SiteQuotaRepository;
 
 /**
@@ -147,45 +144,6 @@ class IndexController {
 			'form'=>$form->createView(),
 			'sites'=>$sites,
 		));
-		
-	}
-	
-	function contact(Application $app, Request $request) {		
-		$form = $app['form.factory']->create(new ContactForm($app['currentUser']));
-		
-		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$data = $form->getData();
-
-				$contact = new ContactSupportModel();
-				$contact->setSubject($data['subject']);
-				$contact->setMessage($data['message']);
-				$contact->setEmail($data['email']);
-				if ($app['currentUser']) {
-					$contact->setUserAccountId($app['currentUser']->getId());
-				}
-				$contact->setIp($_SERVER['REMOTE_ADDR']);
-				$contact->setBrowser($_SERVER['HTTP_USER_AGENT']);			
-				if ($request->request->get('url')) {
-					$contact->setIsSpamHoneypotFieldDetected(true);
-				}
-
-				$contactSupportRepository = new ContactSupportRepository();
-				$contactSupportRepository->create($contact);
-
-				if (!$contact->getIsSpam()) {
-					$contact->sendEmailToSupport($app, $app['currentUser']);
-				}
-
-				$app['flashmessages']->addMessage('Your message has been sent');
-				return $app->redirect('/contact');		
-			}
-		}
-		
-		return $app['twig']->render('index/index/contact.html.twig', array(
-				'form'=>$form->createView(),
-			));
 		
 	}
 	

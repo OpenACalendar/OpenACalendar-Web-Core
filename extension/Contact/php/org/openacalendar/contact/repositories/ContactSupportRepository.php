@@ -1,17 +1,18 @@
 <?php
 
 
-namespace repositories;
+namespace org\openacalendar\contact\repositories;
 
-use models\ContactSupportModel;
+
+use org\openacalendar\contact\models\ContactSupportModel;
 
 
 /**
  *
- * @package Core
+ * @package org.openacalendar.contact
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ContactSupportRepository {

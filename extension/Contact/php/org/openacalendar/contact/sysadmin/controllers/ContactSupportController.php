@@ -1,28 +1,19 @@
 <?php
 
-namespace sysadmin\controllers;
+namespace org\openacalendar\contact\sysadmin\controllers;
 
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
-use models\SiteModel;
-use models\EventModel;
-use repositories\SiteRepository;
-use repositories\EventRepository;
 use repositories\UserAccountRepository;
-use repositories\ContactSupportRepository;
-use repositories\VenueRepository;
-use repositories\builders\SiteRepositoryBuilder;
-use repositories\builders\UserAccountRepositoryBuilder;
-use sysadmin\forms\ActionForm;
-use sysadmin\ActionParser;
+use org\openacalendar\contact\repositories\ContactSupportRepository;
 
 /**
  *
- * @package Core
+ * @package org.openacalendar.contact
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ContactSupportController {

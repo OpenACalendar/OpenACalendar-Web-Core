@@ -54,5 +54,17 @@ class ExtensionManager {
 		}
 	}
 
+	public function hasExtensionID($id) {
+		if ($this->coreExtension->getId() == $id) {
+			return true;
+		}
+		foreach($this->extensions as $extension) {
+			if ($extension->getId() == $id) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
 
