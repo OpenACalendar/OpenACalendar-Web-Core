@@ -38,13 +38,16 @@
 				
 					<p class="errorPageText">Sorry, there was a problem.</p>
 					
-					<p  class="errorPageText">Please <a href="/">return to the home page and try again</a>, or <a href="/contact">contact us</> with any problems.</p>
+					<p  class="errorPageText">
+						Please <a href="/">return to the home page and try again</a>
+						{%  if extensions.hasExtensionID('org.openacalendar.contact') %}, or <a href="/contact">contact us</a> with any problems.{%  endif %}
+					</p>
 				
 				</div>
 				<div id="afterPage2Col"></div>
 			</div>
 			<div id="footer">
-				<a href="/contact">contact</a>
+				{%  if extensions.hasExtensionID('org.openacalendar.contact') %}<a href="{{ config.getWebIndexDomainSecure() }}/contact">contact</a>{% endif %}
 				<a href="/terms">terms</a>
 				<a href="/privacy">privacy</a>
 				<a href="http://jmbtechnology.co.uk/">&copy; JMB Technology Limited {{ COPYRIGHT_YEARS }}</a>

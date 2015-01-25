@@ -10,8 +10,6 @@
 
 
 
-$app->match('/contact', "index\controllers\IndexController::contact"); 
-$app->match('/contact/', "index\controllers\IndexController::contact");
 $app->match('/terms', "index\controllers\IndexController::terms"); 
 $app->match('/terms/', "index\controllers\IndexController::terms");
 $app->match('/privacy', "index\controllers\IndexController::privacy"); 
