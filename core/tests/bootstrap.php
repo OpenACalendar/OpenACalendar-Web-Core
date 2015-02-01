@@ -78,7 +78,17 @@ function createKey($minLength = 10, $maxLength = 100) {
 }
 
 function getNewTestDB() {
-	global $DB;
+	global $DB, $CONFIG;
+	foreach($CONFIG->extensions as $extensionName) {
+		$file = APP_ROOT_DIR . DIRECTORY_SEPARATOR . 'extension' . DIRECTORY_SEPARATOR . $extensionName . DIRECTORY_SEPARATOR.'sql'.DIRECTORY_SEPARATOR.'destroy.sql';
+		if (file_exists($file)) {
+			foreach(explode(";", file_get_contents($file)) as $line) {
+				if (trim($line)) {
+					$DB->query($line.';');
+				}
+			}
+		}
+	}
 	foreach(explode(";", file_get_contents(__DIR__."/../sql/destroy.sql")) as $line) {
 		if (trim($line)) {
 			$DB->query($line.';');
