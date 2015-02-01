@@ -28,7 +28,7 @@
 					<li><a href="/importurl">Import</a></li>
 				{% endif %}		
 				{% if currentUserActions.has("org.openacalendar","eventNew") %}
-					<li><a href="/event/new">New event</a></li>
+					<li><a href="/event/new">Add an event</a></li>
 				{% endif %}						
 			</ul>
 		</li>
@@ -38,7 +38,7 @@
 				{% if currentUserActions.has("org.openacalendar","groupNew") %}
 					<ul class="submenu">
 						<li><a href="/group">Groups</a></li>
-						<li><a href="/group/new">New Group</a></li>
+						<li><a href="/group/new">Add a Group</a></li>
 					</ul>
 				{% endif %}
 			</li>
@@ -65,7 +65,7 @@
 							<li><a href="/map">Map</a></li>
 						{% endif %}	
 						{% if currentUserActions.has("org.openacalendar","venueNew") %}
-							<li><a href="/venue/new">New venue</a></li>
+							<li><a href="/venue/new">Add a venue</a></li>
 						{% endif %}
 					{% endif %}
 				</ul>
