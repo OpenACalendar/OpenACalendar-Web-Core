@@ -951,6 +951,33 @@ ul.mainListImporturls li.nodata {
     margin: 5px 50px;
   }
 }
+ul.mainListUserGroups li.userGroup {
+  margin: 5px 5px;
+  border-bottom: 2px solid #E9E9E9;
+}
+ul.mainListUserGroups li.userGroup .title {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 2px 0;
+}
+ul.mainListUserGroups li.userGroup .title a {
+  color: #333;
+  text-decoration: none;
+}
+ul.mainListUserGroups li.userGroup .title a:hover {
+  color: black;
+  text-decoration: underline;
+}
+ul.mainListUserGroups li.nodata {
+  margin: 5px 5px;
+  font-style: italic;
+}
+@media screen and (min-width: 750px) {
+  ul.mainListUserGroups li.userGroup,
+  ul.mainListUserGroups li.nodata {
+    margin: 5px 50px;
+  }
+}
 ul.mainListTags li.tag {
   margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;

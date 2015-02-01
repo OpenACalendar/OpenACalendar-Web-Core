@@ -335,6 +335,42 @@ ul.mainListImporturls {
 	}
 }
 
+
+
+ul.mainListUserGroups {
+	li.userGroup {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		border-bottom: 2px solid #E9E9E9;
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+	}
+	li.nodata {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
+	}
+}
+
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListUserGroups {
+		li.userGroup, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
+
+
+
 ul.mainListTags {
 	li.tag {
 		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;

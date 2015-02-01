@@ -30,9 +30,9 @@
 		</ul>
 		<div id="innerPage">
 
-			<ul class="usergroups">
+			<ul class="mainListUserGroups">
 				{% for usergroup in usergroups %}
-					<li class="usergroup">
+					<li class="userGroup">
 						<div class="title"><a href="/admin/usergroup/{{ usergroup.id }}">{{ usergroup.title }}</a></div>
 						{{ usergroup.description | nl2br }}
 					</li>
