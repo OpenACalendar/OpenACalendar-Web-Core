@@ -33,7 +33,7 @@ class AreaRepository {
 		$this->areaDBAccess = new AreaDBAccess($DB, new \TimeSource(), $USERAGENT);
 	}
 	
-	public function create(AreaModel $area, AreaModel $parentArea = null, SiteModel $site, CountryModel $country, UserAccountModel $creator) {
+	public function create(AreaModel $area, AreaModel $parentArea = null, SiteModel $site, CountryModel $country, UserAccountModel $creator = null) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
@@ -69,7 +69,7 @@ class AreaRepository {
 					'description'=>$area->getDescription(),
 					'country_id'=>$country->getId(),
 					'parent_area_id'=>($parentArea ? $parentArea->getId() : null),
-					'user_account_id'=>$creator->getId(),				
+					'user_account_id'=>($creator ? $creator->getId() : null),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 				));
