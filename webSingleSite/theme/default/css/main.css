@@ -951,24 +951,24 @@ ul.mainListImporturls li.nodata {
     margin: 5px 50px;
   }
 }
-ul.tags li.tag {
+ul.mainListTags li.tag {
   margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
-ul.tags li.tag .title {
+ul.mainListTags li.tag .title {
   font-size: 1.1em;
   font-weight: bold;
   padding: 2px 0;
 }
-ul.tags li.tag .title a {
+ul.mainListTags li.tag .title a {
   color: #333;
   text-decoration: none;
 }
-ul.tags li.tag .title a:hover {
+ul.mainListTags li.tag .title a:hover {
   color: black;
   text-decoration: underline;
 }
-ul.tags li.tag span.tagTitleWrapper {
+ul.mainListTags li.tag span.tagTitleWrapper {
   font-size: 13pt;
   background: url('/theme/default/img/tagBackground.png') no-repeat left center #4F4F4F;
   white-space: nowrap;
@@ -985,17 +985,17 @@ ul.tags li.tag span.tagTitleWrapper {
   padding: 2px 5px 2px 20px;
   color: white;
 }
-ul.tags li.tag span.tagTitleWrapper a {
+ul.mainListTags li.tag span.tagTitleWrapper a {
   color: white;
   text-decoration: none;
 }
-ul.tags li.nodata {
+ul.mainListTags li.nodata {
   margin: 5px 5px;
   font-style: italic;
 }
 @media screen and (min-width: 750px) {
-  ul.tags li.tag,
-  ul.tags li.nodata {
+  ul.mainListTags li.tag,
+  ul.mainListTags li.nodata {
     margin: 5px 50px;
   }
 }
