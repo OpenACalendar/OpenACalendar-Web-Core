@@ -17,7 +17,13 @@ use repositories\UserAccountRememberMeRepository;
 
 $parseDomain = new ParseDomain($_SERVER['SERVER_NAME']);
 if (!$parseDomain->isCoveredByCookies()) {
-	header("Location: http://".$CONFIG->webIndexDomain);
+	if ($app['config']->isSingleSiteMode) {
+		header("Location: ".$app['config']->getWebIndexDomainSecure() . $_SERVER['REQUEST_URI'] );
+	} else {
+		// Not sure how to improve this; it's hard to work out which domain they were trying to hit.
+		header("Location: ".$app['config']->getWebIndexDomainSecure());
+
+	}
 	die("REDIRECT!");
 }
 
