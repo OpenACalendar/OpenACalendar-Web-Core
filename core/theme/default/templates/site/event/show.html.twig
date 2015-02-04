@@ -267,7 +267,7 @@
 				{% else %}
 					<p class="groupDescription">No details known.</p>
 				{% endif %}
-				{% if mediasForGroup[displayGroup.slug] %}
+				{% if mediasForGroup[displayGroup.slug] is defined and mediasForGroup[displayGroup.slug] %}
 					<ul class="mediaGrid">
 						{% for media in mediasForGroup[displayGroup.slug] %}
 							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
