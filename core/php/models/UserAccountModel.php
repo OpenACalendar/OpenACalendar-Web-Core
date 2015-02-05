@@ -184,7 +184,6 @@ class UserAccountModel {
 
 		/**
 		 * 
-		 * @param \models\EntityManager $em
 		 * @return type array(array(), array(), array(), boolean) - upcoming events, other events, user at event data, flag if any to send
 		 */
 		public function getDataForUpcomingEventsEmail() {
