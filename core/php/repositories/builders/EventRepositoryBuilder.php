@@ -395,12 +395,20 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->select[] = " user_at_event_information.is_plan_attending AS user_is_plan_attending ";
 			$this->select[] = " user_at_event_information.is_plan_maybe_attending AS user_is_plan_maybe_attending ";
 			if (!$this->userAccountIncludeAll) {
-				// we don't always want extra info on this. It is only used for filtering, so inside if statement.
-				$this->joins[] = " LEFT JOIN user_watches_group_information ON user_watches_group_information.group_id = group_information.id ".
-						"AND user_watches_group_information.user_account_id = :user_account_id AND user_watches_group_information.is_watching='1'";
-				$this->joins[] = " LEFT JOIN user_watches_site_information ON user_watches_site_information.site_id = event_information.site_id ".
-						"AND user_watches_site_information.user_account_id = :user_account_id AND user_watches_site_information.is_watching='1'";				
 				$w = array();
+				if ($this->userAccountIncludeWatching) {
+					$w[] = "  event_information.id IN (SELECT event_information.id FROM event_information ".
+						// site
+						" LEFT JOIN user_watches_site_information ON  user_watches_site_information.site_id = event_information.site_id ".
+						"AND user_watches_site_information.user_account_id = :user_account_id AND user_watches_site_information.is_watching='1' ".
+						// group
+						"  LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL ".
+						" LEFT JOIN user_watches_group_information ON user_watches_group_information.group_id = event_in_group.group_id ".
+							"AND user_watches_group_information.user_account_id = :user_account_id AND user_watches_group_information.is_watching='1' ".
+						// where
+						" WHERE user_watches_site_information.is_watching='1' OR user_watches_group_information.is_watching='1' ".
+						" )  ";
+				}
 				if ($this->userAccountIncludeAttending) {
 					if ($this->userAccountIncludePrivate) {
 						$w[] = " user_at_event_information.is_plan_attending = '1' ";
@@ -409,10 +417,6 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 						$w[] = " (user_at_event_information.is_plan_attending = '1' AND user_at_event_information.is_plan_public  = '1' )";
 						$w[] = " (user_at_event_information.is_plan_maybe_attending = '1' AND user_at_event_information.is_plan_public  = '1' )";
 					}
-				}
-				if ($this->userAccountIncludeWatching) {
-					$w[] = " user_watches_site_information.is_watching='1'  ";
-					$w[] = " user_watches_group_information.is_watching='1' ";
 				}
 				$this->where[] = "  (  ".  implode(" OR ", $w).") ";
 			}
@@ -490,8 +494,8 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	
 	protected function buildStat() {
 		global $DB;
-		
-	
+
+
 				
 		$sql = "SELECT ".  implode(",", $this->select)." FROM event_information ".
 				implode(" ",$this->joins).
