@@ -71,12 +71,26 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 		$eventRepository->create($event, $site, $user);
 
+		// test before
+
+
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userAttending, false, true, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userAttending, false, false, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		// test
 		$userAtEvent = $userAtEventRepo->loadByUserAndEventOrInstanciate($userAttending, $event);
 		$userAtEvent->setIsPlanAttending(true);
 		$userAtEvent->setIsPlanPublic(false);
 		$userAtEventRepo->save($userAtEvent);
 
-		// test
 
 		$erb = new EventRepositoryBuilder();
 		$erb->setUserAccount($userAttending, false, true, true, true);
@@ -132,12 +146,23 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 		$eventRepository->create($event, $site, $user);
 
+		// test before
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userAttending, false, true, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userAttending, false, false, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		// test
 		$userAtEvent = $userAtEventRepo->loadByUserAndEventOrInstanciate($userAttending, $event);
 		$userAtEvent->setIsPlanAttending(true);
 		$userAtEvent->setIsPlanPublic(true);
 		$userAtEventRepo->save($userAtEvent);
 
-		// test
 
 		$erb = new EventRepositoryBuilder();
 		$erb->setUserAccount($userAttending, false, true, true, true);
@@ -210,6 +235,29 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 		$eventRepository->create($event, $site, $user, $groupMain, array($groupOther));
 
+		// test before
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesMain, false, true, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesMain, false, true, true, false);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesOther, false, true, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesOther, false, true, true, false);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
 		// test watching main group gets event
 		$userWatchesGroupRepo->startUserWatchingGroup($userWatchesMain, $groupMain);
 
@@ -235,6 +283,76 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$erb->setUserAccount($userWatchesOther, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
+
+	}
+
+
+	function testUserWatchingSite() {
+
+		$DB = getNewTestDB();
+		addCountriesToTestDB();
+
+		$countryRepo = new CountryRepository();
+		$userRepo = new UserAccountRepository();
+		$siteRepo = new SiteRepository();
+		$groupRepo = new GroupRepository();
+		$eventRepository = new EventRepository();
+		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository();
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo->create($user);
+
+		$userWatchesMain = new UserAccountModel();
+		$userWatchesMain->setEmail("test1@jarofgreen.co.uk");
+		$userWatchesMain->setUsername("test1");
+		$userWatchesMain->setPassword("password1");
+
+		$userRepo->create($userWatchesMain);
+
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+
+
+		$event = new EventModel();
+		$event->setSummary("test");
+		$event->setDescription("test test");
+		$event->setStartAt(getUTCDateTime(2014,11,10,19,0,0));
+		$event->setEndAt(getUTCDateTime(2014,11,10,21,0,0));
+
+		$eventRepository->create($event, $site, $user);
+
+		// test before
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesMain, false, true, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesMain, false, true, true, false);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
+		// test watching main group gets event
+		$userWatchesSiteRepo->startUserWatchingSite($userWatchesMain, $site);
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesMain, false, true, true, true);
+		$events = $erb->fetchAll();
+		$this->assertEquals(1, count($events));
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setUserAccount($userWatchesMain, false, true, true, false);
+		$events = $erb->fetchAll();
+		$this->assertEquals(0, count($events));
+
 
 	}
 	
