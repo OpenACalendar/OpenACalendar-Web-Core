@@ -53,12 +53,15 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 			"Venue Address Code,".
 			"Venue Lat,".
 			"Venue Lng,".
+			"Venue URL,".
 			"Area Slug,".
 			"Area Slug For URL,".
 			"Area Title,".
 			"Area Description,".
+			"Area URL,".
 			"Country Code,".
 			"Country Title,".
+			"Country URL,".
 			"\n".implode("\n",$this->events);
 	}
 
@@ -66,9 +69,8 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
 		global $CONFIG;
 
-		$siteurl = $CONFIG->isSingleSiteMode ?
-			'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() :
-			'http://'.($this->site?$this->site->getSlug():$event->getSiteSlug()).".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl();
+		$siteurlbase = $CONFIG->getWebSiteDomainSecure($this->site?$this->site->getSlug():$event->getSiteSlug());
+		$siteurl = $siteurlbase.'/event/'.$event->getSlugForUrl();
 		$url = $event->getUrl() && filter_var($event->getUrl(), FILTER_VALIDATE_URL) ? $event->getUrl() : $siteurl;
 		$ticket_url = $event->getTicketUrl() && filter_var($event->getTicketUrl(), FILTER_VALIDATE_URL) ? $event->getTicketUrl() : null;
 
@@ -99,82 +101,26 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 				$this->getCell($venue->getAddress()) . $this->delimiter .
 				$this->getCell($venue->getAddressCode()) . $this->delimiter .
 				$this->getCell($venue->getLat()) . $this->delimiter .
-				$this->getCell($venue->getLng()) . $this->delimiter
+				$this->getCell($venue->getLng()) . $this->delimiter .
+				$this->getCell($siteurlbase.'/venue/'.$venue->getSlugForUrl()) . $this->delimiter
 
-			: $this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter ).
+			: $this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter  .$this->delimiter).
 			($area ?
 
 				$this->getCell($area->getSlug()) . $this->delimiter .
 				$this->getCell($area->getSlugForUrl()) . $this->delimiter .
 				$this->getCell($area->getTitle()) . $this->delimiter .
-				$this->getCell($area->getDescription()) . $this->delimiter
+				$this->getCell($area->getDescription()) . $this->delimiter .
+				$this->getCell($siteurlbase . '/area/' . $area->getSlugForUrl()) . $this->delimiter
 
-			: $this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter ).
+			: $this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter .$this->delimiter ).
 			($country ?
 
 				$this->getCell($country->getTwoCharCode()) . $this->delimiter .
-				$this->getCell($country->getTitle()) . $this->delimiter
+				$this->getCell($country->getTitle()) . $this->delimiter.
+				$this->getCell($siteurlbase . '/country/' . $country->getTwoCharCode()) . $this->delimiter
 
-			: $this->delimiter .$this->delimiter );
-
-
-		/**
-
-		if (is_array($groups)) {
-			$out['groups'] = array();
-			foreach($groups as $group) {
-				$out['groups'][] = array(
-					'slug'=>$group->getSlug(),
-					'title'=>$group->getTitle(),
-					'description'=>$group->getDescription(),
-				);
-			}
-		}
-
-		if ($venue) {
-			$out['venue'] = array(
-				'slug'=>$venue->getSlug(),
-				'title'=>$venue->getTitle(),
-				'description'=>$venue->getDescription(),
-				'address'=>$venue->getAddress(),
-				'addresscode'=>$venue->getAddressCode(),
-				'lat'=>$venue->getLat(),
-				'lng'=>$venue->getLng(),
-			);
-		}
-
-		if ($area) {
-			$out['areas'] = array(array(
-				'slug'=>$area->getSlug(),
-				'title'=>$area->getTitle(),
-			));
-		}
-
-		if ($country) {
-			$out['country'] = array(
-				'title'=>$country->getTitle(),
-			);
-		}
-
-		if (is_array($eventMedias)) {
-			$out['medias'] = array();
-			$siteurl = $CONFIG->getWebSiteDomainSecure($this->site->getSlug());
-			foreach($eventMedias as $eventMedia) {
-				$out['medias'][] = array(
-					'slug'=>$eventMedia->getSlug(),
-					'title'=>$eventMedia->getTitle(),
-					'sourceUrl'=>$eventMedia->getSourceUrl(),
-					'sourcetext'=>$eventMedia->getSourceText(),
-					'picture'=>array(
-						'fullURL'=>$siteurl.'/media/'.$eventMedia->getSlug().'/full',
-						'normalURL'=>$siteurl.'/media/'.$eventMedia->getSlug().'/normal',
-						'thumbnailURL'=>$siteurl.'/media/'.$eventMedia->getSlug().'/thumbnail',
-					)
-				);
-			}
-		}
-
-		$this->events[] = $out; **/
+			: $this->delimiter .$this->delimiter  .$this->delimiter );
 
 	}
 
