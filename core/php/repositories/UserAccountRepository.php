@@ -86,6 +86,9 @@ class UserAccountRepository {
 		}
 	}
 
+	/**
+	 * @deprecated Use method in extension instead!
+	 */
 	public function loadByOwnerOfCuratedList(CuratedListModel $curatedList) {
 		global $DB;
 		$stat = $DB->prepare("SELECT user_account_information.* FROM user_account_information ".

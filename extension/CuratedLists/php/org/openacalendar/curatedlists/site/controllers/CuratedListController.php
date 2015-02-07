@@ -9,7 +9,6 @@ use org\openacalendar\curatedlists\models\CuratedListModel;
 use org\openacalendar\curatedlists\repositories\CuratedListRepository;
 use repositories\builders\filterparams\EventFilterParams;
 use org\openacalendar\curatedlists\site\forms\CuratedListEditForm;
-use repositories\UserAccountRepository;
 use repositories\builders\UserAccountRepositoryBuilder;
 
 /**
@@ -78,7 +77,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 				
-		$userAccountRepository = new UserAccountRepository();
+		$userAccountRepository = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
 		$this->parameters['curatedlistOwner'] = $userAccountRepository->loadByOwnerOfCuratedList($this->parameters['curatedlist']);
 
 		if ($this->parameters['actionCuratedListEditCurators'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
