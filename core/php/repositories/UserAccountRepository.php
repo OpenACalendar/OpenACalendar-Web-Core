@@ -86,19 +86,6 @@ class UserAccountRepository {
 		}
 	}
 
-	public function loadByOwnerOfCuratedList(CuratedListModel $curatedList) {
-		global $DB;
-		$stat = $DB->prepare("SELECT user_account_information.* FROM user_account_information ".
-				" JOIN user_in_curated_list_information ON user_in_curated_list_information.user_account_id = user_account_information.id ".
-				"WHERE user_in_curated_list_information.curated_list_id = :id AND user_in_curated_list_information.is_owner = 't'");
-		$stat->execute(array( 'id'=>$curatedList->getId() ));
-		if ($stat->rowCount() > 0) {
-			$user = new UserAccountModel();
-			$user->setFromDataBaseRow($stat->fetch());
-			return $user;
-		}
-	}
-
 	public function verifyEmail(UserAccountModel $user) {
 		global $DB;
 		$stat = $DB->prepare("UPDATE user_account_information SET  is_email_verified='t' WHERE id =:id");
