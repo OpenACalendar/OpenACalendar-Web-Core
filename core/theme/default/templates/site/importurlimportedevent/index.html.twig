@@ -78,7 +78,6 @@
 			{% else %}
 				<li class="nodata">
 					No events found.
-					{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
 				</li>
 			{% endfor %}
 		</ul>
@@ -93,7 +92,6 @@
 			{% else %}
 				<li class="nodata">
 					No events found.
-					{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
 				</li>
 			{% endif %}
 		</ul>
