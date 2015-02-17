@@ -256,6 +256,7 @@ $app->match('/group/{slug}/stopWatchingFromEmail/{userid}/{code}', "site\control
 $app->match('/group/{slug}/newimporturl', "site\controllers\GroupController::newImportURL")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('userid', '\d+')
+                ->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite); 
 $app->match('/group/{slug}/importers', "site\controllers\GroupController::importers")
