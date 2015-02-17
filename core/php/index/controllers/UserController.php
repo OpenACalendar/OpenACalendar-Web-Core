@@ -184,10 +184,13 @@ class UserController {
 				$data = $form->getData();
 				
 				$userRepository = new UserAccountRepository();
+				$user = null;
+				// We are deliberately very forgiving about people putting the wrong thing in the wrong field.
 				if ($data['email']) {
-					$user = $userRepository->loadByEmail($data['email']);
-				} else if ($data['username']) {
-					$user = $userRepository->loadByUserName($data['username']);
+					$user = $userRepository->loadByUserNameOrEmail($data['email']);
+				}
+				if (!$user && $data['username']) {
+					$user = $userRepository->loadByUserNameOrEmail($data['username']);
 				}
 				if ($user) {
 					if ($user->checkPassword($data['password'])) {
