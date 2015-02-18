@@ -26,7 +26,7 @@
 
 		<div class="rowWrapper">
 			<div class="labelWrapper">Address</div>
-			<div class="widgetWrapperPlacementOnly"><input type="text" name="fieldAddress"  id="AddressField" value="{{ fieldAddress | e('html_attr')  }}"></div>
+			<div class="widgetWrapperPlacementOnly"><textarea name="fieldAddress">{{  fieldAddress| e }}</textarea></div>
 			<div class="after"></div>
 		</div>
 
@@ -77,6 +77,12 @@
 		<div class="rowWrapper">
 			<div class="labelWrapper">Country</div>
 			<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Any notes</div>
+			<div class="widgetWrapperPlacementOnly"><textarea name="fieldDescription">{{  fieldDescription| e }}</textarea></div>
 			<div class="after"></div>
 		</div>
 

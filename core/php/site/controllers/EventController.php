@@ -762,6 +762,7 @@ class EventController {
 		$this->parameters['fieldAreaObject'] = null;
 		$this->parameters['fieldAddress'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAddress') : $request->query->get('fieldAddress');
 		$this->parameters['fieldTitle'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldTitle') : $request->query->get('fieldTitle') ;
+		$this->parameters['fieldDescription'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldDescription') : $request->query->get('fieldDescription') ;
 
 		$this->editVenueNewGetDataIntoParameters($app);
 
@@ -775,6 +776,7 @@ class EventController {
 
 				$venue = new VenueModel();
 				$venue->setTitle($this->parameters['fieldTitle']);
+				$venue->setDescription($this->parameters['fieldDescription']);
 				$venue->setAddress($this->parameters['fieldAddress']);
 				$venue->setAddressCode($this->parameters['fieldAddressCode']);
 				$venue->setCountryId($this->parameters['country']->getId());
