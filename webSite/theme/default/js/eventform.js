@@ -39,7 +39,7 @@ var lastCountryIDSeen = -1;
 var countryDataAJAX;
 function onCountryChange() {
 	var countrySelect = $('#EventEditForm_country_id, #EventNewForm_country_id');
-	if (lastCountryIDSeen !== countrySelect.val()) {
+	if (countrySelect.attr('type') != 'hidden' && lastCountryIDSeen !== countrySelect.val()) {
 		countryDataAJAX = $.ajax({
 			url: "/country/" + countrySelect.val()+"/info.json",
 		}).success(function ( data ) {

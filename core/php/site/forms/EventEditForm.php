@@ -63,22 +63,37 @@ class EventEditForm extends AbstractType{
 			$countries[$country->getId()] = $country->getTitle();
 		}
 		// TODO if current country not in list add it now
-		$builder->add('country_id', 'choice', array(
-			'label'=>'Country',
-			'choices' => $countries,
-			'required' => true,
-		));
+		if (count($countries) != 1) {
+			$builder->add('country_id', 'choice', array(
+				'label'=>'Country',
+				'choices' => $countries,
+				'required' => true,
+			));
+		} else {
+			$countryID = array_shift(array_keys($countries));
+			$builder->add('country_id', 'hidden', array(
+				'data' => $countryID,
+			));
+		}
 		
 		$timezones = array();
 		// Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
 		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
 			$timezones[$timezone] = $timezone;
-		}		// TODO if current timezone not in list add it now
-		$builder->add('timezone', 'choice', array(
-			'label'=>'Time Zone',
-			'choices' => $timezones,
-			'required' => true,
-		));
+		}
+		// TODO if current timezone not in list add it now
+		if (count($timezones) != 1) {
+			$builder->add('timezone', 'choice', array(
+				'label'=>'Time Zone',
+				'choices' => $timezones,
+				'required' => true,
+			));
+		} else {
+			$timezone = array_pop($timezones);
+			$builder->add('timezone', 'hidden', array(
+				'data' => $timezone,
+			));
+		}
 			
 				
 		if ($this->site->getIsFeatureVirtualEvents()) {

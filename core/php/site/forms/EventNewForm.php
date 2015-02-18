@@ -65,24 +65,38 @@ class EventNewForm extends AbstractType{
 				$defaultCountry = $country->getId();
 			}			
 		}
-		
-		$builder->add('country_id', 'choice', array(
-			'label'=>'Country',
-			'choices' => $countries,
-			'required' => true,
-			'data' => $defaultCountry,
-		));
+		if (count($countries) != 1) {
+			$builder->add('country_id', 'choice', array(
+				'label'=>'Country',
+				'choices' => $countries,
+				'required' => true,
+				'data' => $defaultCountry,
+			));
+		} else {
+			$countryID = array_shift(array_keys($countries));
+			$builder->add('country_id', 'hidden', array(
+				'data' => $countryID,
+			));
+		}
+
 		
 		$timezones = array();
 		// Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
 		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
 			$timezones[$timezone] = $timezone;
 		}
-		$builder->add('timezone', 'choice', array(
-			'label'=>'Time Zone',
-			'choices' => $timezones,
-			'required' => true,
-		));
+		if (count($timezones) != 1) {
+			$builder->add('timezone', 'choice', array(
+				'label'=>'Time Zone',
+				'choices' => $timezones,
+				'required' => true,
+			));
+		} else {
+			$timezone = array_pop($timezones);
+			$builder->add('timezone', 'hidden', array(
+				'data' => $timezone,
+			));
+		}
 		
 		if ($this->site->getIsFeatureVirtualEvents()) {
 			
