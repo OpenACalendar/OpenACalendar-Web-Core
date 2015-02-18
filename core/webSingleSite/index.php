@@ -83,6 +83,10 @@ $app->before(function (Request $request) use ($app) {
 		$app['currentSiteHasOneCountry'] = $cr->loadBySite($app['currentSite']);
 		$app['twig']->addGlobal('currentSiteHasOneCountry', $app['currentSiteHasOneCountry']);	
 	}
+
+	# ////////////// Misc
+	header("X-Pingback: ". $app['config']->getWebSiteDomainSecure($app['currentSite']->getSlug())."/pingback.php");
+
 });
 
 
