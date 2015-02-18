@@ -644,6 +644,13 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'CLIAPI1Enabled'} %}</td>
 		</tr>
 		<tr>
+			<th>taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval }}
+				({{ (config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
 			<th>taskUpdateAreaBoundsCacheAutomaticUpdateInterval</th>
 			<td>{{ config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval }}
 				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)

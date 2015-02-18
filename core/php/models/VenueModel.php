@@ -9,7 +9,7 @@ namespace models;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class VenueModel {
@@ -28,6 +28,7 @@ class VenueModel {
 	protected $area_id;
 	protected $is_duplicate_of_id;
 	protected $media_venue_slugs;
+	protected $cached_future_events;
 
 
 	public function setFromDataBaseRow($data) {
@@ -44,6 +45,7 @@ class VenueModel {
 		$this->is_deleted = $data['is_deleted'];
 		$this->area_id = $data['area_id'];
 		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
+		$this->cached_future_events = $data['cached_future_events'];
 		$this->media_venue_slugs = isset($data['media_venue_slugs']) ? $data['media_venue_slugs'] : null;
 	}
 	
@@ -253,8 +255,18 @@ class VenueModel {
 		return $out;
 	}
 
+	public function getCachedFutureEvents() {
+		return $this->cached_future_events;
+	}
 
-	
+	/**
+	 * @param mixed $cached_future_events
+	 */
+	public function setCachedFutureEvents($cached_future_events)
+	{
+		$this->cached_future_events = $cached_future_events;
+	}
+
 }
 
 

@@ -15,7 +15,7 @@ use repositories\builders\EventRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class VenueRepository {
@@ -209,5 +209,22 @@ class VenueRepository {
 
 	}
 
+
+	public function updateFutureEventsCache(VenueModel $venue) {
+		global $DB;
+		$statUpdate = $DB->prepare("UPDATE venue_information SET cached_future_events=:count WHERE id=:id");
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setVenue($venue);
+		$erb->setIncludeDeleted(false);
+		$erb->setIncludeCancelled(false);
+		$erb->setAfterNow();
+		$count = count($erb->fetchAll());
+
+		$statUpdate->execute(array('count'=>$count,'id'=>$venue->getId()));
+
+		$venue->setCachedFutureEvents($count);
+	}
+	
 }
 

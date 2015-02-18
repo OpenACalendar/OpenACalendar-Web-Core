@@ -110,6 +110,7 @@ class ExtensionCore extends BaseExtension {
 
 	public function getTasks() {
 		return array(
+			new \tasks\UpdateVenueFutureEventsCacheTask($this->app),
 			new \tasks\UpdateAreaBoundsCacheTask($this->app),
 			new \tasks\UpdateAreaHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateEventHistoryChangeFlagsTask($this->app),
