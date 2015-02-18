@@ -108,4 +108,11 @@ class ExtensionCore extends BaseExtension {
 		}
 	}
 
+	public function getTasks() {
+		return array(
+			new \tasks\UpdateAreaBoundsCacheTask($this->app),
+		);
+	}
+
+
 }

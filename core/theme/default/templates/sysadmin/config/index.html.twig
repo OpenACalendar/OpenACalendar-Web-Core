@@ -643,6 +643,13 @@
 			<td>{% if config.CLIAPI1Enabled %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'CLIAPI1Enabled'} %}</td>
 		</tr>
+		<tr>
+			<th>taskUpdateAreaBoundsCacheAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval }}
+				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaBoundsCacheAutomaticUpdateInterval'} %}</td>
+		</tr>
 	</table>
 
 {% endblock %}

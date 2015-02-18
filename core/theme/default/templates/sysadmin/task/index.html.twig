@@ -1,0 +1,64 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+
+{% block pageTitle %}Tasks - {% endblock %}
+
+{% block breadcrumbs %}
+
+{% endblock %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>Extension ID</th>
+			<td>{{  task.extensionId }}</td>
+		</tr>
+		<tr>
+			<th>Task ID</th>
+			<td>{{ task.taskId }}</td>
+		</tr>
+	</table>
+
+
+	<table class="data">
+		<tr>
+			<th>Started At</th>
+			<th>Ended At</th>
+			<th>Result Data</th>
+			<th>Exception Data</th>
+		</tr>
+		{% for tasklog in tasklogs %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %} >
+				<td>
+					{{ tasklog.startedat   |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}
+				</td>
+				<td>
+					{% if tasklog.endedat %}
+						{{ tasklog.endedat   |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}
+					{% endif %}
+				</td>
+				<td>
+					{% if tasklog.endedat %}
+						{{  task.getResultDataAsString(tasklog) }}
+					{% endif %}
+				</td>
+				<td>
+					{%  if tasklog.hasExceptionData %}
+						{{  task.getExceptionDataAsString(tasklog) }}
+					{%  endif %}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}
+

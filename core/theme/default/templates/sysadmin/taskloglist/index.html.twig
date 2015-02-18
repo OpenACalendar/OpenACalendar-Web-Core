@@ -1,0 +1,51 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+
+{% block pageTitle %}tasks - {% endblock %}
+
+{% block breadcrumbs %}
+
+{% endblock %}
+
+{% block content %}
+
+	<table class="data">
+		<tr>
+			<th>Extension ID</th>
+			<th>Task ID</th>
+			<th>Started At</th>
+			<th>Ended At</th>
+			<th>Exception?</th>
+			<th>&nbsp;</th>
+		</tr>
+		{% for tasklog in tasklogs %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %} >
+				<td>{{ tasklog.extensionId }}</td>
+				<td>{{ tasklog.taskId }}</td>
+				<td>
+					{{ tasklog.startedat   |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}
+				</td>
+				<td>
+					{% if tasklog.endedat %}
+						{{ tasklog.endedat   |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}
+					{% endif %}
+				</td>
+				<td>
+					{%  if tasklog.hasExceptionData %}EXCEPTION{% endif %}
+				</td>
+				<td>
+					<a href="/sysadmin/task/{{ tasklog.extensionId }}/{{ tasklog.taskId }}" class="button">Show Task</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{% endblock %}
+

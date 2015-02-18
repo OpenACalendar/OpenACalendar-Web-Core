@@ -169,6 +169,8 @@ class Config {
 	
 	public $CLIAPI1Enabled = false;
 
+	public $taskUpdateAreaBoundsCacheAutomaticUpdateInterval = 1800; // 30 mins
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

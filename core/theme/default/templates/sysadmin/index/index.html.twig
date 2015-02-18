@@ -34,6 +34,8 @@
 		<li><a href="/sysadmin/config">Config</a></li>
 		<li><a href="/sysadmin/server">Server</a></li>
 		<li><a href="/sysadmin/api2app">API Apps</a></li>
+		<li><a href="/sysadmin/task">Tasks</a></li>
+		<li><a href="/sysadmin/tasklog">Task Log</a></li>
 		{% for extension in extensions %}
 			{%  for link in extension.sysAdminLinks %}
 				<li><a href="{{  link.url  }}">{{  link.title }}</a></li>

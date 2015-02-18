@@ -64,6 +64,8 @@ foreach($CONFIG->extensions as $extensionName) {
 }
 $app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
 $app['config'] = $CONFIG;
+$app['db'] = $DB;
+$app['timesource'] = new TimeSource();
 	
 ///////////////////////// LOGGING
 if ($CONFIG->logFile) {

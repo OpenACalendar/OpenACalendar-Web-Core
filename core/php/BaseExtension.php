@@ -14,11 +14,15 @@ use Silex\Application;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 abstract class BaseExtension {
-	
+
+	/** @var  Application */
+	protected $app;
+
 	function __construct(Application $app) {
-		
+		$this->app = $app;
 	}
-	
+
+
 	public abstract function getId();
 	
 	
@@ -106,6 +110,17 @@ abstract class BaseExtension {
 	public function getSysAdminLinks() {
 		return array();
 	}
+
+
+
+
+	/**
+	 * @return array BaseTask
+	 */
+	public function getTasks() {
+		return array();
+	}
+
 
 }
 
