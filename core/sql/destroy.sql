@@ -71,4 +71,5 @@ DROP TABLE IF EXISTS user_account_information  CASCADE;
 DROP TABLE IF EXISTS country CASCADE;
 DROP TABLE IF EXISTS site_quota_information  CASCADE;
 DROP TABLE IF EXISTS app_configuration_information  CASCADE;
+DROP TABLE IF EXISTS task_log  CASCADE;
 DROP TABLE IF EXISTS migration  CASCADE;
