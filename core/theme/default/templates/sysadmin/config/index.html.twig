@@ -650,6 +650,55 @@
 				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaBoundsCacheAutomaticUpdateInterval'} %}</td>
 		</tr>
+		<tr>
+			<th>taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval }}
+				({{ (config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval }}
+				({{ (config.taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval }}
+				({{ (config.taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval }}
+				({{ (config.taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval }}
+				({{ (config.taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval }}
+				({{ (config.taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval }}
+				({{ (config.taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval'} %}</td>
+		</tr>
 	</table>
 
 {% endblock %}

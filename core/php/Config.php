@@ -166,10 +166,18 @@ class Config {
 		
 	public $recurEventForDaysInFutureWhenWeekly = 93; // 3 * 31
 	public $recurEventForDaysInFutureWhenMonthly = 186; // 6 * 31
+
 	
 	public $CLIAPI1Enabled = false;
 
 	public $taskUpdateAreaBoundsCacheAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval = 1800; // 30 mins
 
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
