@@ -17,6 +17,15 @@
 {% endblock %}
 
 {% block actions %}
+	{% if currentUser is not null and not currentUserWatchesSite %}
+		<li class="action">
+			{% if currentUserWatchesArea %}
+				<a href="/area/{{ area.slugForUrl }}/watch/">Watching!</a>
+			{% else %}
+				<a href="/area/{{ area.slugForUrl }}/watch/">Watch?</a>
+			{% endif %}
+		</li>
+	{%  endif %}
 	{% if currentUserActions.has("org.openacalendar","actionAreaEditDetails") %}
 		<li class="action">
 			<a href="/area/{{ area.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> edit</a>

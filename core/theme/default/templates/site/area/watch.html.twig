@@ -1,0 +1,58 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/area/page.html.twig' %}
+
+
+{% block pageTitle %}Watch {{ area.title }} - {% endblock %} 
+
+
+{% block innerContent %}
+	
+	{% if currentUserWatchesArea %}
+
+		<p>By watching this area you can:</p>
+		
+		<ul class="listOfTextItems">
+			<li>Optionally receive emails whenever someone else changes anything.</li>
+			<li>Optionally receive emails whenever we are about to run out of events.</li>
+			<li>Optionally see the events on your personal calendar.</li>
+			<li>Optionally get email reminders when events are on.</li>
+		</ul>
+
+		<p>You can stop watching from a link in any email, or by pressing:</p>
+
+
+		<form action="" method="post">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="action" value="unwatch">
+			<input type="submit" value="Stop Watching">
+		</form>
+		
+	{% else %}
+		<p>Watch this area to:</p>
+		
+		<ul class="listOfTextItems">
+			<li>Optionally receive emails whenever someone else changes anything.</li>
+			<li>Optionally receive emails whenever we are about to run out of events.</li>
+			<li>Optionally see the events on your personal calendar.</li>
+			<li>Optionally get email reminders when events are on.</li>
+		</ul>
+		
+		<p>To start watching, press:</p>
+		
+		
+		
+		<form action="" method="post">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="action" value="watch">
+			<input type="submit" value="Watch">
+		</form>
+	{% endif %}
+	
+{% endblock %}
+

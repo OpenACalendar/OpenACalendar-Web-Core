@@ -405,6 +405,19 @@ $app->match('/area/{slug}/calendar/{year}/{month}/', "site\controllers\AreaContr
 $app->match('/area/{slug}/info.json', "site\controllers\AreaController::infoJson")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 
+
+$app->match('/area/{slug}/watch/', "site\controllers\AreaController::watch")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($appUserRequired)
+		->before($canChangeSite);
+
+$app->match('/area/{slug}/stopWatchingFromEmail/{userid}/{code}', "site\controllers\AreaController::stopWatchingFromEmail")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->assert('userid', '\d+')
+		->before($canChangeSite);
+
+
+
 $app->match('/watch', "site\controllers\IndexController::watch")
 		->before($appUserRequired)
 		->before($canChangeSite);

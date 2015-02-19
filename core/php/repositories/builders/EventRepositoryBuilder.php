@@ -18,7 +18,7 @@ use models\AreaModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventRepositoryBuilder extends BaseRepositoryBuilder {
@@ -417,8 +417,17 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 						"  LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL ".
 						" LEFT JOIN user_watches_group_information ON user_watches_group_information.group_id = event_in_group.group_id ".
 							"AND user_watches_group_information.user_account_id = :user_account_id AND user_watches_group_information.is_watching='1' ".
+						// area
+						" LEFT JOIN venue_information ON venue_information.id = event_information.venue_id ".
+						" LEFT JOIN cached_area_has_parent ON ( venue_information.area_id = cached_area_has_parent.area_id OR event_information.area_id = cached_area_has_parent.area_id) ".
+						" LEFT JOIN user_watches_area_information ON ( ".
+							"user_watches_area_information.area_id = event_information.area_id OR user_watches_area_information.area_id = venue_information.area_id ".
+							" OR user_watches_area_information.area_id = cached_area_has_parent.has_parent_area_id ".
+						") ".
+						"AND user_watches_area_information.user_account_id = :user_account_id AND user_watches_area_information.is_watching='1' ".
+
 						// where
-						" WHERE user_watches_site_information.is_watching='1' OR user_watches_group_information.is_watching='1' ".
+						" WHERE user_watches_site_information.is_watching='1' OR user_watches_group_information.is_watching='1'  OR user_watches_area_information.is_watching='1'".
 						" )  ";
 				}
 				if ($this->userAccountIncludeAttending) {

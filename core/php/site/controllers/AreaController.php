@@ -2,6 +2,9 @@
 
 namespace site\controllers;
 
+use repositories\UserAccountRepository;
+use repositories\UserWatchesAreaRepository;
+use repositories\UserWatchesAreaStopRepository;
 use Silex\Application;
 use site\forms\AreaNewInAreaForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class AreaController {
@@ -53,6 +56,14 @@ class AreaController {
 			array_unshift($this->parameters['parentAreas'],$checkArea);
 			$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
 		}
+		
+		
+		if ($app['currentUser']) {
+			$uwgr = new UserWatchesAreaRepository();
+			$uwg = $uwgr->loadByUserAndArea($app['currentUser'], $this->parameters['area']);
+			$this->parameters['currentUserWatchesArea'] = $uwg && $uwg->getIsWatching();
+		}
+
 		
 		$cr = new CountryRepository();
 		$this->parameters['country'] = $cr->loadById($this->parameters['area']->getCountryID());
@@ -91,7 +102,7 @@ class AreaController {
 		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
-		
+
 
 				
 		return $app['twig']->render('site/area/show.html.twig', $this->parameters);
@@ -265,6 +276,71 @@ class AreaController {
 		$response->setMaxAge($app['config']->cacheFeedsInSeconds);
 		return $response;
 	
+	}
+
+
+
+
+	function watch($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Area does not exist.");
+		}
+
+		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+			$repo = new UserWatchesAreaRepository();
+			if ($request->request->get('action') == 'watch') {
+				$repo->startUserWatchingArea($app['currentUser'], $this->parameters['area']);
+				$app['flashmessages']->addMessage("Watching!");
+			} else if ($request->request->get('action') == 'unwatch') {
+				$repo->stopUserWatchingArea($app['currentUser'], $this->parameters['area']);
+				$app['flashmessages']->addMessage("No longer watching");
+			}
+			// redirect here because if we didn't the  $this->parameters vars would be wrong (the old state)
+			// this is an easy way to get round that. Also it's nice UI to go back to the area page.
+			return $app->redirect('/area/'.$this->parameters['area']->getSlugForURL());
+		}
+
+		return $app['twig']->render('site/area/watch.html.twig', $this->parameters);
+	}
+
+	function stopWatchingFromEmail($slug, $userid, $code,Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Area does not exist.");
+		}
+
+		$userRepo = new UserAccountRepository();
+		$user = $userRepo->loadByID($userid);
+		if (!$user) {
+			$app['monolog']->addError("Failed stop watching area from email - no user ");
+			die("NO"); // TODO
+		}
+
+		$userWatchesAreaStopRepo = new UserWatchesAreaStopRepository();
+		$userWatchesAreaStop = $userWatchesAreaStopRepo->loadByUserAccountIDAndAreaIDAndAccessKey($user->getId(), $this->parameters['area']->getId(), $code);
+		if (!$userWatchesAreaStop) {
+			$app['monolog']->addError("Failed stop watching area from email - user ".$user->getId()." - code wrong");
+			die("NO"); // TODO
+		}
+
+		$userWatchesAreaRepo = new UserWatchesAreaRepository();
+		$userWatchesArea = $userWatchesAreaRepo->loadByUserAndArea($user, $this->parameters['area']);
+		if (!$userWatchesArea || !$userWatchesArea->getIsWatching()) {
+			$app['monolog']->addError("Failed stop watching area from email - user ".$user->getId()." - not watching");
+			die("You don't watch this area"); // TODO
+		}
+
+		if ($request->request->get('action') == 'unwatch' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+			$userWatchesAreaRepo->stopUserWatchingArea($user, $this->parameters['area']);
+			// redirect here because if we didn't the twig global and $app vars would be wrong (the old state)
+			// this is an easy way to get round that.
+			$app['flashmessages']->addMessage("You have stopped watching this area.");
+			return $app->redirect('/area/'.$this->parameters['area']->getSlugForURL());
+		}
+
+		$this->parameters['user'] = $user;
+
+		return $app['twig']->render('site/area/stopWatchingFromEmail.html.twig', $this->parameters);
+
 	}
 	
 }
