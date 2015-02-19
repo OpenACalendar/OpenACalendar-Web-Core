@@ -62,9 +62,9 @@ class AdminController {
 
 
 		return $app['twig']->render('site/admin/listUsers.html.twig', array(
-				'userPermissionForAnonymous'=>$upr->getPermissionsForAnonymousInSite($app['currentSite'], false, false)->getPermissions(),
-				'userPermissionForAnyUser'=>$upr->getPermissionsForAnyUserInSite($app['currentSite'], false, false)->getPermissions(),
-				'userPermissionForAnyVerifiedUser'=>$upr->getPermissionsForAnyVerifiedUserInSite($app['currentSite'], false, false)->getPermissions(),
+				'userPermissionForAnonymous'=>$upr->getPermissionsForAnonymousInSite($app['currentSite'], false, true)->getPermissions(),
+				'userPermissionForAnyUser'=>$upr->getPermissionsForAnyUserInSite($app['currentSite'], false, true)->getPermissions(),
+				'userPermissionForAnyVerifiedUser'=>$upr->getPermissionsForAnyVerifiedUserInSite($app['currentSite'], false, true)->getPermissions(),
 			));
 
 	}
