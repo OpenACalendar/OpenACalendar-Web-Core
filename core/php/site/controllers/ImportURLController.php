@@ -20,7 +20,7 @@ use repositories\builders\AreaRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class ImportURLController {
@@ -64,14 +64,14 @@ class ImportURLController {
 
 		$app['currentUserActions']->set("org.openacalendar","importURLLog",true);
 		$app['currentUserActions']->set("org.openacalendar","importURLEditDetails",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","IMPORTURL_CHANGE")
 			&& $app['currentSite']->getIsFeatureImporter());
 		$app['currentUserActions']->set("org.openacalendar","importURLDisable",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","IMPORTURL_CHANGE")
 			&& $app['currentSite']->getIsFeatureImporter()
 			&& $this->parameters['importurl']->getIsEnabled());
 		$app['currentUserActions']->set("org.openacalendar","importURLEnable",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","IMPORTURL_CHANGE")
 			&& $app['currentSite']->getIsFeatureImporter()
 			&& (!$this->parameters['importurl']->getIsEnabled() || $this->parameters['importurl']->getIsExpired()));
 

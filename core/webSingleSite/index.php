@@ -113,6 +113,92 @@ $permissionCalendarAdministratorRequired = function(Request $request, Applicatio
 
 
 
+$permissionEventsChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")) {
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
+	}
+};
+
+
+
+$permissionGroupsChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")) {
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
+	}
+};
+
+$permissionVenuesChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")) {
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
+	}
+};
+
+$permissionAreasChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")) {
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
+	}
+};
+
+$permissionTagsChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","TAGS_CHANGE")) {
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
+	}
+};
+
+$permissionImportURLsChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","IMPORTURLS_CHANGE")) {
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
+	}
+};
+
+$permissionMediasChangeRequired = function(Request $request, Application $app) {
+	global $CONFIG;
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","MEDIAS_CHANGE")) {
+		if ($app['currentUser']) {
+			return $app->abort(403); // TODO
+		} else {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+
+	}
+};
+
 $appUserRequired = function(Request $request) use ($app) {
 	global $CONFIG;
 	if (!$app['currentUser']) {

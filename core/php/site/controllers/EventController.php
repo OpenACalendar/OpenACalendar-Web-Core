@@ -46,7 +46,7 @@ use repositories\builders\filterparams\GroupFilterParams;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventController {
@@ -122,21 +122,21 @@ class EventController {
 
 		$app['currentUserActions']->set("org.openacalendar","eventHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","eventEditDetails",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled());
 		$app['currentUserActions']->set("org.openacalendar","eventEditVenue",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeaturePhysicalEvents());
 		$app['currentUserActions']->set("org.openacalendar","eventEditTags",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeatureTag());
 		$app['currentUserActions']->set("org.openacalendar","eventEditGroups",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeatureGroup());
@@ -146,30 +146,30 @@ class EventController {
 			&& !$this->parameters['event']->getIsDeleted());
 			// not && !$this->parameters['event']->getIsCancelled() because if cancelled want to remove from lists
 		$app['currentUserActions']->set("org.openacalendar","eventEditMedia",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $CONFIG->isFileStore());
 		$app['currentUserActions']->set("org.openacalendar","eventRecur",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled());
 		$app['currentUserActions']->set("org.openacalendar","eventDelete",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","eventCancel",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& !$this->parameters['event']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","eventUndelete",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
 			&& $this->parameters['event']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","eventUncancel",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
 			&& $this->parameters['event']->getIsCancelled());
 
@@ -302,7 +302,7 @@ class EventController {
 		$curatedListRepoBuilder->setContainsEvent($this->parameters['event']);
 		$curatedListRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['curatedLists'] = $curatedListRepoBuilder->fetchAll();
-		
+
 		return $app['twig']->render('site/event/show.html.twig', $this->parameters);
 	}
 	

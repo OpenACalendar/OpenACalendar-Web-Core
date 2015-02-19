@@ -27,7 +27,7 @@ use repositories\builders\AreaRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class VenueController {
@@ -85,22 +85,22 @@ class VenueController {
 
 		$app['currentUserActions']->set("org.openacalendar","venueHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","venueEditDetails",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
 			&& !$this->parameters['venue']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","venueDelete",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
 			&& !$this->parameters['venue']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","venueEditMedia",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
 			&& !$this->parameters['venue']->getIsDeleted()
 			&& $CONFIG->isFileStore());
 
 		$app['currentUserActions']->set("org.openacalendar","venueEditPushToChildAreas",
 			$this->parameters['childAreas'] &&
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
 			&& !$this->parameters['venue']->getIsDeleted());
 

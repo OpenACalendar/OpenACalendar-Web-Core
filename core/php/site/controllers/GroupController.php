@@ -38,7 +38,7 @@ use repositories\builders\filterparams\EventFilterParams;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class GroupController {
@@ -69,12 +69,12 @@ class GroupController {
 
 		$app['currentUserActions']->set("org.openacalendar","groupHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","groupEditDetails",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupEditMedia",
 			$CONFIG->isFileStore()
-			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
 		// There is curatedListGeneralEdit but we want to check details on this group to
@@ -82,7 +82,7 @@ class GroupController {
 			$app['currentUserActions']->has("org.openacalendar","curatedListGeneralEdit")
 			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupNewEvent",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
 

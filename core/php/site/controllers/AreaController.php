@@ -77,10 +77,10 @@ class AreaController {
 
 		$app['currentUserActions']->set("org.openacalendar","areaHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","actionAreaEditDetails",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")
 			&& !$this->parameters['area']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","actionAreaNew",
-			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")
 			&& !$this->parameters['area']->getIsDeleted());
 
 		return true;

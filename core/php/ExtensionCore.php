@@ -24,10 +24,11 @@ class ExtensionCore extends BaseExtension {
 
 	public function getTitle() {
 		return 'Core';
-	}	
+	}
 
 	public function getUserPermissions() {
-		return array('CREATE_SITE','CALENDAR_CHANGE','CALENDAR_ADMINISTRATE');
+		return array('CREATE_SITE','CALENDAR_CHANGE','CALENDAR_ADMINISTRATE',
+			'AREAS_CHANGE','EVENTS_CHANGE','GROUPS_CHANGE','IMPORTURL_CHANGE','TAGS_CHANGE','VENUES_CHANGE','MEDIAS_CHANGE');
 	}
 
 	public function getUserPermission($key) {
@@ -37,6 +38,20 @@ class ExtensionCore extends BaseExtension {
 			return new \userpermissions\CalendarChangeUserPermission();
 		} else if ($key == 'CALENDAR_ADMINISTRATE') {
 			return new \userpermissions\CalendarAdministrateUserPermission();
+		} else if ($key == 'AREAS_CHANGE') {
+			return new \userpermissions\AreasChangeUserPermission();
+		} else if ($key == 'EVENTS_CHANGE') {
+			return new \userpermissions\EventsChangeUserPermission();
+		} else if ($key == 'GROUPS_CHANGE') {
+			return new \userpermissions\GroupsChangeUserPermission();
+		} else if ($key == 'IMPORTURL_CHANGE') {
+			return new \userpermissions\ImportURLChangeUserPermission();
+		} else if ($key == 'TAGS_CHANGE') {
+			return new \userpermissions\TagsChangeUserPermission();
+		} else if ($key == 'VENUES_CHANGE') {
+			return new \userpermissions\VenuesChangeUserPermission();
+		} else if ($key == 'MEDIAS_CHANGE') {
+			return new \userpermissions\MediasChangeUserPermission();
 		}
 	}
 
