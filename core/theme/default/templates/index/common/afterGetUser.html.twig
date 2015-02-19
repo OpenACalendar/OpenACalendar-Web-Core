@@ -1,11 +1,24 @@
-{% if afterGetUserAddEvents|length == 1 %}
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% if afterGetUserAddEvents|length == 1 and afterGetUserAddAreas|length == 0 %}
 	{%  set event = afterGetUserAddEvents[0] %}
 	<p>Interested in {{  event.summaryDisplay }}?</p>
-{% elseif afterGetUserAddEvents|length > 0 %}
+{% elseif afterGetUserAddEvents|length == 0 and afterGetUserAddAreas|length == 1 %}
+	{%  set area = afterGetUserAddAreas[0] %}
+	<p>Interested in {{  area.title }}?</p>
+{% elseif afterGetUserAddEvents|length > 0 or afterGetUserAddAreas|length > 0 %}
 	<p>Interested?</p>
 	<ul>
 		{%  for event in afterGetUserAddEvents %}
 			<li>{{  event.summaryDisplay }}</li>
+		{%  endfor %}
+		{%  for area in afterGetUserAddAreas %}
+			<li>{{  area.title }}</li>
 		{%  endfor %}
 	</ul>
 {%  endif %}

@@ -19,7 +19,7 @@ use repositories\builders\VenueRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class AreaRepository {
@@ -80,13 +80,18 @@ class AreaRepository {
 		}
 			
 	}
-	
-	
-	
+
+
+
+
 	public function loadBySlug(SiteModel $site, $slug) {
+		return $this->loadBySiteIDAndAreaSlug($site->getId(), $slug);
+	}
+
+	public function loadBySiteIDAndAreaSlug($siteID, $slug) {
 		global $DB;
 		$stat = $DB->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid");
-		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
+		$stat->execute(array( 'sid'=>$siteID, 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$area = new AreaModel();
 			$area->setFromDataBaseRow($stat->fetch());

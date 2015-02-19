@@ -3,9 +3,11 @@
 namespace index\controllers;
 
 
+use repositories\AreaRepository;
 use repositories\EventRepository;
 use repositories\SiteRepository;
 use repositories\UserAtEventRepository;
+use repositories\UserWatchesAreaRepository;
 use Silex\Application;
 use index\forms\SignUpUserForm;
 use index\forms\LogInUserForm;
@@ -29,7 +31,7 @@ use repositories\UserAccountVerifyEmailRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserController {
@@ -48,7 +50,9 @@ class UserController {
 
 
 		$eventRepo = new EventRepository();
+		$areaRepo = new AreaRepository();
 		$event = null;
+		$area = null;
 
 		// Any events to add?
 		if ($request->query->has("event")) {
@@ -61,12 +65,35 @@ class UserController {
 					$event = $eventRepo->loadBySlug($site, $request->query->get("event"));
 				}
 			}
-			if ($event && !$event->getIsDeleted()) {
+			if ($event && $event->getIsAllowedForAfterGetUser()) {
 				if (!$app['websession']->hasArray("afterGetUserAddEvents")) {
 					$app['websession']->setArray("afterGetUserAddEvents",array($event->getId()));
 				} else {
 					if (!in_array($event->getId(),$app['websession']->getArray("afterGetUserAddEvents") )) {
 						$app['websession']->appendArray("afterGetUserAddEvents", $event->getId());
+					}
+				}
+			}
+		}
+
+
+		// Any areas to add?
+		if ($request->query->has("area")) {
+			if ($CONFIG->isSingleSiteMode) {
+				$area = $areaRepo->loadBySiteIDAndAreaSlug($CONFIG->singleSiteID, $request->query->get("area"));
+			} else {
+				$siteRepo = new SiteRepository();
+				$site = $siteRepo->loadBySlug($request->query->get("areaSite"));
+				if ($site) {
+					$area = $areaRepo->loadBySlug($site, $request->query->get("area"));
+				}
+			}
+			if ($area && $area->getIsAllowedForAfterGetUser()) {
+				if (!$app['websession']->hasArray("afterGetUserAddAreas")) {
+					$app['websession']->setArray("afterGetUserAddAreas",array($area->getId()));
+				} else {
+					if (!in_array($area->getId(),$app['websession']->getArray("afterGetUserAddAreas") )) {
+						$app['websession']->appendArray("afterGetUserAddAreas", $area->getId());
 					}
 				}
 			}
@@ -90,26 +117,57 @@ class UserController {
 
 		}
 
+		// load areas to show user
+		$this->parameters['afterGetUserAddAreas'] = array();
+		if ($app['websession']->hasArray("afterGetUserAddAreas")) {
+			foreach($app['websession']->getArray("afterGetUserAddAreas") as $areaID) {
+				if ($area != null && $areaID == $area->getId()) {
+					if ($area->getIsAllowedForAfterGetUser()) {
+						$this->parameters['afterGetUserAddAreas'][] = $area;
+					}
+				} else {
+					$areaTmp = $areaRepo->loadByID($areaID);
+					if ($areaTmp && $areaTmp->getIsAllowedForAfterGetUser()) {
+						$this->parameters['afterGetUserAddAreas'][] = $areaTmp;
+					}
+				}
+			}
+
+		}
+
 	}
 
 	protected function actionThingsToDoAfterGetUser(Application $app, UserAccountModel $user) {
 
+		// events
 		$uaerepo = new UserAtEventRepository();
 
 		$eventsAdded = false;
 		foreach($this->parameters['afterGetUserAddEvents'] as $event) {
-			$uae = $uaerepo->loadByUserAndEventOrInstanciate($user, $event);
-			if (!$uae->getIsPlanAttending() && !$uae->getIsPlanMaybeAttending()) {
-				$uae->setIsPlanMaybeAttending(true);
-				$uaerepo->save($uae);
-				$eventsAdded = true;
+			if ($event->getIsAllowedForAfterGetUser()) {
+				$uae = $uaerepo->loadByUserAndEventOrInstanciate($user, $event);
+				if (!$uae->getIsPlanAttending() && !$uae->getIsPlanMaybeAttending()) {
+					$uae->setIsPlanMaybeAttending(true);
+					$uaerepo->save($uae);
+					$eventsAdded = true;
+				}
 			}
 		}
 		if ($eventsAdded) {
 			$app['flashmessages']->addMessage("Check out your personal calendar for events you are interested in!"); // TODO add link
 		}
 
+		// areas
+		$uwarepo = new UserWatchesAreaRepository();
+		foreach($this->parameters['afterGetUserAddAreas'] as $area) {
+			if ($area->getIsAllowedForAfterGetUser()) {
+				$uwarepo->startUserWatchingArea($user, $area);
+			}
+		}
+
+		// reset
 		$app['websession']->setArray("afterGetUserAddEvents",array());
+		$app['websession']->setArray("afterGetUserAddAreas",array());
 
 	}
 

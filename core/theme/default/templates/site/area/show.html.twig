@@ -68,6 +68,27 @@
 		
 		<div  class="innerPageRight">
 
+			{%  if not currentUser %}
+				<div class="infoBoxWrapper">
+					<div class="infoBoxTitle">Get notifications?</div>
+					<div class="infoBoxContent">
+						<p>
+							Get reminders and notifications of events in this area!
+						</p>
+						<p>
+							<a href="{{ config.getWebIndexDomainSecure() }}/you/register?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
+								Create your free account
+							</a>
+						</p>
+						<p>
+							<a href="{{ config.getWebIndexDomainSecure() }}/you/login?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
+								Login
+							</a>
+						</p>
+					</div>
+				</div>
+			{% endif %}
+
 			<div id="MapWrapper">
 				<div id="Map" class="map"></div>
 				{% if currentSite.isFeatureMap %}
