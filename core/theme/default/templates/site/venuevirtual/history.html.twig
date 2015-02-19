@@ -21,12 +21,8 @@
 
 	<ul class="history">
 		{% for historyItem in historyItems %}
-			{% if historyItem is eventhistory %}
-				{% include 'site/common/eventHistoryItem.html.twig' %}
-			{% elseif historyItem is grouphistory %}
-				{% include 'site/common/groupHistoryItem.html.twig' %}</li>
-			{% elseif historyItem is venuehistory %}
-				{% include 'site/common/venueHistoryItem.html.twig' %}
+			{%  if historyItem.siteWebTemplate %}
+				{%  include historyItem.siteWebTemplate with { 'historyItem':historyItem } %}
 			{% endif %}
 		{% endfor %}
 	</ul>
