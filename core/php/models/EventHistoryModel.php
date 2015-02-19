@@ -9,10 +9,10 @@ namespace models;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventHistoryModel extends EventModel {
+class EventHistoryModel extends EventModel implements InterfaceHistoryModel {
 
 	protected $event_slug;
 	//protected $user_account_id;
@@ -258,7 +258,7 @@ class EventHistoryModel extends EventModel {
 	public function getCreatedAtTimeStamp() {
 		return $this->created_at->getTimestamp();
 	}
-	
+
 	public function getEventSlug() {
 		return $this->event_slug;
 	}
@@ -407,6 +407,16 @@ class EventHistoryModel extends EventModel {
 	public function getIsNew() {
 		return ($this->is_new == 1);
 	}
+
+	public function getSiteEmailTemplate() {
+		return '/email/common/eventHistoryItem.html.twig';
+	}
+
+	public function getSiteWebTemplate() {
+		return '/site/common/eventHistoryItem.html.twig';
+	}
+
+
 
 
 }

@@ -2,7 +2,7 @@
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% extends 'site/group/page.html.twig' %}
@@ -21,12 +21,8 @@
 
 	<ul class="history">
 		{% for historyItem in historyItems %}
-			{% if historyItem is eventhistory %}
-				{% include 'site/common/eventHistoryItem.html.twig' with { 'historyItem': historyItem} %}
-			{% elseif historyItem is grouphistory %}
-				{% include 'site/common/groupHistoryItem.html.twig' with { 'historyItem': historyItem} %}
-			{% elseif historyItem is importurlhistory %}
-				{% include 'site/common/importURLHistoryItem.html.twig' with { 'historyItem': historyItem} %}
+			{%  if historyItem.siteWebTemplate %}
+				{%  include historyItem.siteWebTemplate with { 'historyItem':historyItem } %}
 			{% endif %}
 		{% endfor %}
 	</ul>

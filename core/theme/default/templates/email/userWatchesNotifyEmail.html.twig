@@ -14,16 +14,8 @@
 	<p>Changes have been made to things you watch: {# TODO things? #}</p>
 
 	{% for historyItem in histories %}
-		{% if historyItem is eventhistory %}
-			{% include 'email/common/eventHistoryItem.html.twig' %}
-		{% elseif historyItem is grouphistory %}
-			{% include 'email/common/groupHistoryItem.html.twig' %}
-		{% elseif historyItem is venuehistory %}
-			{% include 'email/common/venueHistoryItem.html.twig' %}
-		{% elseif historyItem is importurlhistory %}
-			{% include 'email/common/importURLHistoryItem.html.twig' %}
-		{% elseif historyItem is areahistory %}
-			{% include 'email/common/areaHistoryItem.html.twig' %}
+		{%  if historyItem.siteEmailTemplate %}
+			{%  include historyItem.siteEmailTemplate with { 'historyItem':historyItem } %}
 		{% endif %}
 	{% endfor %}
 

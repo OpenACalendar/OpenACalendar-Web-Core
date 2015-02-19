@@ -11,10 +11,10 @@ use repositories\ImportURLRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ImportURLHistoryModel extends ImportURLModel {
+class ImportURLHistoryModel extends ImportURLModel implements InterfaceHistoryModel {
 	
 	
 	protected $import_url_slug;
@@ -170,6 +170,16 @@ class ImportURLHistoryModel extends ImportURLModel {
 	public function getImportURLSlug() {
 		return $this->import_url_slug;
 	}
+
+	public function getSiteEmailTemplate() {
+		return '/email/common/importURLHistoryItem.html.twig';
+	}
+
+	public function getSiteWebTemplate() {
+		return '/site/common/importURLHistoryItem.html.twig';
+	}
+
+
 
 }
 
