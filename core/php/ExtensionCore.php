@@ -150,6 +150,14 @@ class ExtensionCore extends BaseExtension {
 			}
 		}
 
+
+		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository();
+		$data = $userWatchesAreaRepo->getUserNotifyContentForSiteAndUser($site, $userAccountModel);
+		if ($data) {
+			$out = array_merge($out, $data);
+		}
+
+
 		return $out;
 	}
 

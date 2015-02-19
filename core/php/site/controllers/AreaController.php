@@ -75,6 +75,7 @@ class AreaController {
 		$areaRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 
+		$app['currentUserActions']->set("org.openacalendar","areaHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","actionAreaEditDetails",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& !$this->parameters['area']->getIsDeleted());
@@ -278,7 +279,20 @@ class AreaController {
 	
 	}
 
-
+	function history($slug, Request $request, Application $app) {
+		
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Area does not exist.");
+		}
+		
+		
+		
+		$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+		$historyRepositoryBuilder->getHistoryRepositoryBuilderConfig()->setArea($this->parameters['area']);
+		$this->parameters['historyItems'] = $historyRepositoryBuilder->fetchAll();
+		
+		return $app['twig']->render('site/area/history.html.twig', $this->parameters);
+	}
 
 
 	function watch($slug, Request $request, Application $app) {

@@ -17,233 +17,189 @@ use models\AreaHistoryModel;
 use models\TagHistoryModel;
 use models\ImportURLHistoryModel;
 use models\API2ApplicationModel;
+use repositories\builders\config\HistoryRepositoryBuilderConfig;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class HistoryRepositoryBuilder {
 
-	protected $includeTagHistory = true;
-	protected $includeEventHistory = true;
-	protected $includeGroupHistory = true;
-	protected $includeVenueHistory = true;
-	protected $includeAreaHistory = true;
-	protected $includeImportURLHistory = true;
+	/** @var \repositories\builders\config\HistoryRepositoryBuilderConfig  */
+	protected $historyRepositoryBuilderConfig;
 
+	function __construct(HistoryRepositoryBuilderConfig $historyRepositoryBuilderConfig = null)
+	{
+		$this->historyRepositoryBuilderConfig = $historyRepositoryBuilderConfig ? $historyRepositoryBuilderConfig : new HistoryRepositoryBuilderConfig();
+	}
+
+	/**
+	 * @return \repositories\builders\config\HistoryRepositoryBuilderConfig
+	 */
+	public function getHistoryRepositoryBuilderConfig()
+	{
+		return $this->historyRepositoryBuilderConfig;
+	}
 
 	public function getIncludeEventHistory() {
-		return $this->includeEventHistory;
+		return $this->historyRepositoryBuilderConfig->getIncludeEventHistory();
 	}
 
 	public function setIncludeEventHistory($includeEventHistory) {
-		$this->includeEventHistory = $includeEventHistory;
+		$this->historyRepositoryBuilderConfig->setIncludeEventHistory($includeEventHistory);
 	}
 
 	public function getIncludeGroupHistory() {
-		return $this->includeGroupHistory;
+		return $this->historyRepositoryBuilderConfig->getIncludeGroupHistory();
 	}
 
 	public function setIncludeGroupHistory($includeGroupHistory) {
-		$this->includeGroupHistory = $includeGroupHistory;
+		$this->historyRepositoryBuilderConfig->setIncludeGroupHistory($includeGroupHistory);
 	}
 
 	public function getIncludeTagHistory() {
-		return $this->includeTagHistory;
+		return $this->historyRepositoryBuilderConfig->getIncludeTagHistory();
 	}
 
 	public function setIncludeTagHistory($includeTagHistory) {
-		$this->includeTagHistory = $includeTagHistory;
+		$this->historyRepositoryBuilderConfig->setIncludeTagHistory($includeTagHistory);
 	}
 
 	public function getIncludeVenueHistory() {
-		return $this->includeVenueHistory;
+		return $this->historyRepositoryBuilderConfig->getIncludeVenueHistory();
 	}
 
 	public function setIncludeVenueHistory($includeVenueHistory) {
-		$this->includeVenueHistory = $includeVenueHistory;
+		$this->historyRepositoryBuilderConfig->setIncludeVenueHistory($includeVenueHistory);
 	}
 	
 	public function getIncludeAreaHistory() {
-		return $this->includeAreaHistory;
+		return $this->historyRepositoryBuilderConfig->getIncludeAreaHistory();
 	}
 
 	public function setIncludeAreaHistory($includeAreaHistory) {
-		$this->includeAreaHistory = $includeAreaHistory;
+		$this->historyRepositoryBuilderConfig->setIncludeAreaHistory($includeAreaHistory);
 	}
 
 	public function getIncludeImportURLHistory() {
-		return $this->includeImportURLHistory;
+		return $this->historyRepositoryBuilderConfig->getIncludeImportURLHistory();
 	}
 
 	public function setIncludeImportURLHistory($includeImportURLHistory) {
-		$this->includeImportURLHistory = $includeImportURLHistory;
+		$this->historyRepositoryBuilderConfig->setIncludeImportURLHistory($includeImportURLHistory);
 	}
 
-			
-	protected $since;
-	
 	public function setSince($since) {
-		$this->since = $since;
+		$this->historyRepositoryBuilderConfig->setSince($since);
 	}
-	
-	/** @var SiteModel **/
-	protected $site;
+
 	
 	public function setSite(SiteModel $site) {
-		$this->site = $site;
-		$this->includeEventHistory = true;
-		$this->includeGroupHistory = true;
-		$this->includeVenueHistory = true;
-		$this->includeAreaHistory = true;
-		$this->includeTagHistory = true;
-		$this->includeImportURLHistory = true;
+		$this->historyRepositoryBuilderConfig->setSite($site);
 	}
 
 
-	/** @var GroupModel **/
-	protected $group;
 	
 	public function setGroup(GroupModel $group) {
-		$this->group = $group;
-		$this->includeEventHistory = true;
-		$this->includeGroupHistory = true;
-		$this->includeVenueHistory = false;
-		$this->includeAreaHistory = false;
-		$this->includeTagHistory = false;
-		$this->includeImportURLHistory = true;
+		$this->historyRepositoryBuilderConfig->setGroup($group);
 	}
 
-	/** @var EventModel **/
-	protected $event;
-	
 	public function setEvent(EventModel $event) {
-		$this->event = $event;
-		$this->includeEventHistory = true;
-		$this->includeGroupHistory = true;
-		$this->includeVenueHistory = true;
-		$this->includeAreaHistory = false;
-		$this->includeTagHistory = false;
-		$this->includeImportURLHistory = false;
+		$this->historyRepositoryBuilderConfig->setEvent($event);
 	}
 
-	/** @var VenueModel **/
-	protected $venue;
-	
 	public function setVenue(VenueModel $venue) {
-		$this->venue = $venue;
-		$this->includeEventHistory = true;
-		$this->includeGroupHistory = false;
-		$this->includeVenueHistory = true;
-		$this->includeAreaHistory = false;
-		$this->includeTagHistory = false;
-		$this->includeImportURLHistory = false;
+		$this->historyRepositoryBuilderConfig->setVenue($venue);
 	}
-	
-	/** @var TagModel **/
-	protected $tag;
-	
+
 	public function setTag(TagModel $tag) {
-		$this->tag = $tag;
-		$this->includeEventHistory = false;
-		$this->includeGroupHistory = false;
-		$this->includeVenueHistory = false;
-		$this->includeAreaHistory = false;
-		$this->includeTagHistory = true;
-		$this->includeImportURLHistory = false;
+		$this->historyRepositoryBuilderConfig->setTag($tag);
 	}
-	
-	
-	protected $venueVirtualOnly = false;
-	
+
 	
 	public function setVenueVirtualOnly($value) {
-		$this->venueVirtualOnly = $value;
-		if ($value) {
-			$this->includeEventHistory = true;
-			$this->includeGroupHistory = false;
-			$this->includeVenueHistory = false;
-			$this->includeAreaHistory = false;
-			$this->includeTagHistory = false;
-			$this->includeImportURLHistory = false;
-		}
+		$this->historyRepositoryBuilderConfig->setVenueVirtualOnly($value);
 	}
-	
-	/** @var UserModel **/
-	protected $notUser;
-	
+
 	public function setNotUser(UserAccountModel $notUser) {
-		$this->notUser = $notUser;
+		$this->historyRepositoryBuilderConfig->setNotUser($notUser);
 	}
-	
-	/** @var API2ApplicationModel **/
-	protected $api2app;
-	
+
 	public function setAPI2Application(API2ApplicationModel $api2app) {
-		$this->api2app = $api2app;
+		$this->historyRepositoryBuilderConfig->setAPI2Application($api2app);
 	}
-
-		
-
-
-	protected $limit = 50;
 	
 	public function fetchAll() {
-		global $DB;
+		global $DB, $app;
 		
 		$results = array();
 		
 	
 		/////////////////////////// Events History
 		
-		if ($this->includeEventHistory) {
+		if ($this->historyRepositoryBuilderConfig->getIncludeEventHistory()) {
 			$where = array();
 			$joins = array();
 			$params = array();
 
-			if ($this->event) {
+			if ($this->historyRepositoryBuilderConfig->getEvent()) {
 				$where[] = 'event_information.id=:event';
-				$params['event'] = $this->event->getId();
+				$params['event'] = $this->historyRepositoryBuilderConfig->getEvent()->getId();
 			}
 
-			if ($this->group) {
+			if ($this->historyRepositoryBuilderConfig->getGroup()) {
 				// We use a seperate table here so if event is in 2 groups and we select events in 1 group that isn't the main group only, 
 				// the normal event_in_group table still shows the main group.
 				$joins[] =  " JOIN event_in_group AS event_in_group_select ON event_in_group_select.event_id = event_information.id ".
 					"AND event_in_group_select.removed_at IS NULL AND event_in_group_select.group_id = :group_id ";
-				$params['group_id'] = $this->group->getId();
+				$params['group_id'] = $this->historyRepositoryBuilderConfig->getGroup()->getId();
 			}
 
-			if ($this->site) {
+			if ($this->historyRepositoryBuilderConfig->getSite()) {
 				$where[] = 'event_information.site_id =:site';
-				$params['site'] = $this->site->getId();
+				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
 			}
 
-			if ($this->venue) {
+			if ($this->historyRepositoryBuilderConfig->getVenue()) {
 				$where[] = 'event_information.venue_id = :venue';
-				$params['venue'] = $this->venue->getId();
+				$params['venue'] = $this->historyRepositoryBuilderConfig->getVenue()->getId();
 			}
 			
-			if ($this->since) {
+			if ($this->historyRepositoryBuilderConfig->getSince()) {
 				$where[] = ' event_history.created_at >= :since ';
-				$params['since'] = $this->since->format("Y-m-d H:i:s");
+				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");
 			}
 			
-			if ($this->notUser) {
+			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'event_history.user_account_id != :userid ';
-				$params['userid'] = $this->notUser->getId();
+				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
 			
-			if ($this->api2app) {
+			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
 				$where[] = 'event_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->api2app->getId();
+				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
-			
-			if ($this->venueVirtualOnly) {
+
+			if ($this->historyRepositoryBuilderConfig->getArea()) {
+
+				$areaids = array( $this->historyRepositoryBuilderConfig->getArea()->getId() );
+
+				$this->statAreas = $DB->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
+				$this->statAreas->execute(array('id'=>$this->historyRepositoryBuilderConfig->getArea()->getId()));
+				while($d = $this->statAreas->fetch()) {
+					$areaids[] = $d['area_id'];
+				}
+
+				$joins[] = " LEFT JOIN venue_information ON  event_information.venue_id = venue_information.id ";
+				$where[] = ' (event_information.area_id IN ('.  implode(",", $areaids).')  OR venue_information.area_id IN ('.  implode(",", $areaids).') ) ';
+
+			}
+
+			if ($this->historyRepositoryBuilderConfig->getVenueVirtualOnly()) {
 				// we check both on an OR, that way we get both
 				// a) events that were not virtual and became virtual, we get their full history
 				// b) events that were virtual and now aren't, we get some of their history
@@ -257,7 +213,7 @@ class HistoryRepositoryBuilder {
 					" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 					implode(" ",$joins).
 					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY event_history.created_at DESC LIMIT ".$this->limit;
+					" ORDER BY event_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -273,43 +229,43 @@ class HistoryRepositoryBuilder {
 		
 		/////////////////////////// Group History
 
-		if ($this->includeGroupHistory) {
+		if ($this->historyRepositoryBuilderConfig->getIncludeGroupHistory()) {
 			$where = array();
 			$params = array();
 			
-			if ($this->event && $this->event->getGroupId()) {
+			if ($this->historyRepositoryBuilderConfig->getEvent() && $this->historyRepositoryBuilderConfig->getEvent()->getGroupId()) {
 				$where[] = 'group_information.id=:group';
-				$params['group'] = $this->event->getGroupId();
-			} else if ($this->group) {
+				$params['group'] = $this->historyRepositoryBuilderConfig->getEvent()->getGroupId();
+			} else if ($this->historyRepositoryBuilderConfig->getGroup()) {
 				$where[] = 'group_information.id =:group';
-				$params['group'] = $this->group->getId();
+				$params['group'] = $this->historyRepositoryBuilderConfig->getGroup()->getId();
 			}
 
-			if ($this->site) {
+			if ($this->historyRepositoryBuilderConfig->getSite()) {
 				$where[] = 'group_information.site_id =:site';
-				$params['site'] = $this->site->getId();
+				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
 			}
 			
-			if ($this->since) {
+			if ($this->historyRepositoryBuilderConfig->getSince()) {
 				$where[] = ' group_history.created_at >= :since ';
-				$params['since'] = $this->since->format("Y-m-d H:i:s");
+				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");
 			}
 			
-			if ($this->notUser) {
+			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'group_history.user_account_id != :userid ';
-				$params['userid'] = $this->notUser->getId();
+				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
 			
-			if ($this->api2app) {
+			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
 				$where[] = 'group_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->api2app->getId();
+				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 			
 			$sql = "SELECT group_history.*, group_information.slug AS group_slug, user_account_information.username AS user_account_username FROM group_history ".
 					" LEFT JOIN user_account_information ON user_account_information.id = group_history.user_account_id ".
 					" LEFT JOIN group_information ON group_information.id = group_history.group_id ".
 					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY group_history.created_at DESC LIMIT ".$this->limit;
+					" ORDER BY group_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -326,43 +282,43 @@ class HistoryRepositoryBuilder {
 		
 		/////////////////////////// Venue History
 
-		if ($this->includeVenueHistory) {
+		if ($this->historyRepositoryBuilderConfig->getIncludeVenueHistory()) {
 			$where = array();
 			$params = array();
 			
-			if ($this->event && $this->event->getVenueId()) {
+			if ($this->historyRepositoryBuilderConfig->getEvent() && $this->historyRepositoryBuilderConfig->getEvent()->getVenueId()) {
 				$where[] = 'venue_information.id=:venue';
-				$params['venue'] = $this->event->getVenueId();
-			} else if ($this->venue) {
+				$params['venue'] = $this->historyRepositoryBuilderConfig->getEvent()->getVenueId();
+			} else if ($this->historyRepositoryBuilderConfig->getVenue()) {
 				$where[] = 'venue_information.id=:venue';
-				$params['venue'] = $this->venue->getId();
+				$params['venue'] = $this->historyRepositoryBuilderConfig->getVenue()->getId();
 			}
 
-			if ($this->site) {
+			if ($this->historyRepositoryBuilderConfig->getSite()) {
 				$where[] = 'venue_information.site_id =:site';
-				$params['site'] = $this->site->getId();
+				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
 			}
 			
-			if ($this->since) {
+			if ($this->historyRepositoryBuilderConfig->getSince()) {
 				$where[] = ' venue_history.created_at >= :since ';
-				$params['since'] = $this->since->format("Y-m-d H:i:s");
+				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");
 			}
 			
-			if ($this->notUser) {
+			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'venue_history.user_account_id != :userid ';
-				$params['userid'] = $this->notUser->getId();
+				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
 			
-			if ($this->api2app) {
+			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
 				$where[] = 'venue_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->api2app->getId();
+				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 			
 			$sql = "SELECT venue_history.*, venue_information.slug AS venue_slug, user_account_information.username AS user_account_username FROM venue_history ".
 					" LEFT JOIN user_account_information ON user_account_information.id = venue_history.user_account_id ".
 					" LEFT JOIN venue_information ON venue_information.id = venue_history.venue_id ".
 					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY venue_history.created_at DESC LIMIT ".$this->limit;
+					" ORDER BY venue_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -379,36 +335,46 @@ class HistoryRepositoryBuilder {
 		
 		/////////////////////////// Area History
 
-		if ($this->includeAreaHistory) {
+		if ($this->historyRepositoryBuilderConfig->getIncludeAreaHistory()) {
 			$where = array();
 			$params = array();
+			$joins = array();
 			
+			if ($this->historyRepositoryBuilderConfig->getArea()) {
 
-			if ($this->site) {
+				// Will this produce dupes? No evidence so far but there was a note in EventRepositoryBuilder that said so.
+
+				$joins[] = " LEFT JOIN cached_area_has_parent ON cached_area_has_parent.area_id = area_information.id ";
+				$where[] = ' (area_information.id =:area OR cached_area_has_parent.has_parent_area_id =:area )';
+				$params['area'] = $this->historyRepositoryBuilderConfig->getArea()->getId();
+			}
+
+			if ($this->historyRepositoryBuilderConfig->getSite()) {
 				$where[] = 'area_information.site_id =:site';
-				$params['site'] = $this->site->getId();
+				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
 			}
 			
-			if ($this->since) {
+			if ($this->historyRepositoryBuilderConfig->getSince()) {
 				$where[] = ' area_history.created_at >= :since ';
-				$params['since'] = $this->since->format("Y-m-d H:i:s");
+				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");
 			}
 			
-			if ($this->notUser) {
+			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'area_history.user_account_id != :userid ';
-				$params['userid'] = $this->notUser->getId();
+				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
 			
-			if ($this->api2app) {
+			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
 				$where[] = 'area_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->api2app->getId();
+				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 			
 			$sql = "SELECT area_history.*, area_information.slug AS area_slug, user_account_information.username AS user_account_username FROM area_history ".
 					" LEFT JOIN user_account_information ON user_account_information.id = area_history.user_account_id ".
 					" LEFT JOIN area_information ON area_information.id = area_history.area_id ".
+					implode(" ", $joins).
 					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY area_history.created_at DESC LIMIT ".$this->limit;
+					" ORDER BY area_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -425,36 +391,36 @@ class HistoryRepositoryBuilder {
 		
 		/////////////////////////// Tags History
 
-		if ($this->includeTagHistory) {
+		if ($this->historyRepositoryBuilderConfig->getIncludeTagHistory()	) {
 			$where = array();
 			$params = array();
 			
 
-			if ($this->site) {
+			if ($this->historyRepositoryBuilderConfig->getSite()) {
 				$where[] = 'tag_information.site_id =:site';
-				$params['site'] = $this->site->getId();
+				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
 			}
 			
-			if ($this->since) {
+			if ($this->historyRepositoryBuilderConfig->getSince()) {
 				$where[] = ' tag_history.created_at >= :since ';
-				$params['since'] = $this->since->format("Y-m-d H:i:s");
+				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");
 			}
 			
-			if ($this->notUser) {
+			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'tag_history.user_account_id != :userid ';
-				$params['userid'] = $this->notUser->getId();
+				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
 			
-			if ($this->api2app) {
+			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
 				$where[] = 'tag_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->api2app->getId();
+				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 			
 			$sql = "SELECT tag_history.*, tag_information.slug AS tag_slug, user_account_information.username AS user_account_username FROM tag_history ".
 					" LEFT JOIN user_account_information ON user_account_information.id = tag_history.user_account_id ".
 					" LEFT JOIN tag_information ON tag_information.id = tag_history.tag_id ".
 					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY tag_history.created_at DESC LIMIT ".$this->limit;
+					" ORDER BY tag_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -473,38 +439,38 @@ class HistoryRepositoryBuilder {
 		
 		/////////////////////////// Import URL History
 
-		if ($this->includeImportURLHistory) {
+		if ($this->historyRepositoryBuilderConfig->getIncludeImportURLHistory()) {
 			$where = array();
 			$params = array();
 			
 
-			if ($this->site) {
+			if ($this->historyRepositoryBuilderConfig->getSite()) {
 				$where[] = 'import_url_information.site_id =:site';
-				$params['site'] = $this->site->getId();
+				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
 			}
 			
 			
 
-			if ($this->group) {
+			if ($this->historyRepositoryBuilderConfig->getGroup()) {
 				$where[] = 'import_url_information.group_id =:group';
-				$params['group'] = $this->group->getId();
+				$params['group'] = $this->historyRepositoryBuilderConfig->getGroup()->getId();
 			}
 			
 			
 			
-			if ($this->since) {
+			if ($this->historyRepositoryBuilderConfig->getSince()) {
 				$where[] = ' import_url_history.created_at >= :since ';
-				$params['since'] = $this->since->format("Y-m-d H:i:s");
+				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");
 			}
 			
-			if ($this->notUser) {
+			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'import_url_history.user_account_id != :userid ';
-				$params['userid'] = $this->notUser->getId();
+				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
 			
-			if ($this->api2app) {
+			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
 				$where[] = 'import_url_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->api2app->getId();
+				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 			
 			$sql = "SELECT import_url_history.*, import_url_information.slug AS import_url_slug, ".
@@ -513,7 +479,7 @@ class HistoryRepositoryBuilder {
 					" LEFT JOIN user_account_information ON user_account_information.id = import_url_history.user_account_id ".
 					" LEFT JOIN import_url_information ON import_url_information.id = import_url_history.import_url_id ".
 					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY import_url_history.created_at DESC LIMIT ".$this->limit;
+					" ORDER BY import_url_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -529,8 +495,8 @@ class HistoryRepositoryBuilder {
 		}
 		
 		
-		
-		
+
+
 		////////////////////// Finally sort & truncate
 
 		$usort = function($a, $b) {
@@ -545,7 +511,7 @@ class HistoryRepositoryBuilder {
 		
 		usort($results, $usort);
 		
-		array_slice($results, 0, $this->limit);
+		array_slice($results, 0, $this->historyRepositoryBuilderConfig->getLimit());
 		
 		return $results;
 		

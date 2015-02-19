@@ -389,7 +389,10 @@ $app->match('/area/{slug}/edit/details', "site\controllers\AreaController::editD
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionCalendarChangeRequired)
 		->before($featurePhysicalEventsRequired)
-		->before($canChangeSite); 
+		->before($canChangeSite);
+
+$app->match('/area/{slug}/history', "site\controllers\AreaController::history")
+		->assert('slug', FRIENDLY_SLUG_REGEX);
 $app->match('/area/{slug}/calendar', "site\controllers\AreaController::calendarNow")
 		->assert('slug', FRIENDLY_SLUG_REGEX) ; 
 $app->match('/area/{slug}/calendar/', "site\controllers\AreaController::calendarNow") 
