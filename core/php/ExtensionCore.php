@@ -177,4 +177,20 @@ class ExtensionCore extends BaseExtension {
 	}
 
 
+	public function getNewsFeedModel( $interfaceHistoryModel) { // TODO can't set type InterfaceHistoryModel!!!!!!!
+		if ($interfaceHistoryModel instanceof \models\AreaHistoryModel) {
+			return new \newsfeedmodels\AreaHistoryNewsFeedModel($interfaceHistoryModel);
+		} else if ($interfaceHistoryModel instanceof \models\EventHistoryModel) {
+			return new \newsfeedmodels\EventHistoryNewsFeedModel($interfaceHistoryModel);
+		} else if ($interfaceHistoryModel instanceof \models\GroupHistoryModel) {
+			return new \newsfeedmodels\GroupHistoryNewsFeedModel($interfaceHistoryModel);
+		} else if ($interfaceHistoryModel instanceof \models\ImportURLHistoryModel) {
+			return new \newsfeedmodels\ImportURLHistoryNewsFeedModel($interfaceHistoryModel);
+		} else if ($interfaceHistoryModel instanceof \models\TagHistoryModel) {
+			return new \newsfeedmodels\TagHistoryNewsFeedModel($interfaceHistoryModel);
+		} else if ($interfaceHistoryModel instanceof \models\VenueHistoryModel) {
+			return new \newsfeedmodels\VenueHistoryNewsFeedModel($interfaceHistoryModel);
+		}
+	}
+
 }
