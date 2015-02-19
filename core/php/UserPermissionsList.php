@@ -38,36 +38,38 @@ class UserPermissionsList {
 		}
 		// now add children
 		if ($includeChildrenPermissions) {
+			$loopCount = 0;
 			do {
+				$loopCount++;
 				$addedAny = false;
 				foreach($extensionManager->getExtensionsIncludingCore() as $extension) {
 					foreach($extension->getUserPermissions() as $possibleChildID) {
 						$possibleChildPermission = $extension->getUserPermission($possibleChildID);
-						$addThisOne = false;
-						foreach($possibleChildPermission->getParentPermissionsIDs() as $parentData) {
-							if (!$addThisOne && $this->hasPermission($parentData[0],$parentData[1])) {
-								$addThisOne = true;
+						if (!$this->hasPermission($extension->getId(), $possibleChildID)) {
+							$addThisOne = false;
+							foreach($possibleChildPermission->getParentPermissionsIDs() as $parentData) {
+								if (!$addThisOne && $this->hasPermission($parentData[0],$parentData[1])) {
+									$addThisOne = true;
+								}
 							}
-						}
-						if ($addThisOne) {
-							$this->addPermission($possibleChildPermission);
+							if ($addThisOne) {
+								$this->addPermission($possibleChildPermission);
+								$addedAny = true;
+							}
 						}
 					}
 				}
-
-			} while ($addedAny);
+			} while ($addedAny && $loopCount < 100);
 		}
 	}
 
+	/** @return Boolean did it add? */
 	protected function addPermission(BaseUserPermission $permission = null) {
 		// The permission could be from a extension that has now been removed
-		if (!$permission) return;
+		if (!$permission) return false;
 
-		foreach($this->permissions as $existingPermission) {
-			if ($existingPermission->getUserPermissionExtensionID() == $permission->getUserPermissionExtensionID() &&
-				$existingPermission->getUserPermissionKey() == $permission->getUserPermissionKey()) {
-				return true;
-			}
+		if ($this->hasPermission($permission->getUserPermissionExtensionID(), $permission->getUserPermissionKey())) {
+			return false;
 		}
 		$add = true;
 		if ($permission->requiresUser() && !$this->has_user) {
@@ -79,7 +81,9 @@ class UserPermissionsList {
 		}
 		if ($add) {
 			$this->permissions[] = $permission;
+			return true;
 		}
+		return false;
 	}
 
 	function hasPermission($extId, $key) {
