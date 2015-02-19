@@ -13,6 +13,10 @@ $(document).ready(function() {
 		loadDupes();
 	});	
 	loadDupes();
+
+	$('#EventEditForm_country_id, #EventNewForm_country_id').change(function() {
+		$('#AreaRow').remove();
+	});
 });
 
 function loadDupes() {

@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use repositories\AreaRepository;
 use Silex\Application;
 use site\forms\EventNewForm;
 use site\forms\EventEditForm;
@@ -49,7 +50,10 @@ class EventNewController {
 			}
 		}
 
-
+		if ($request->query->has("area")) {
+			$areaRepo = new AreaRepository();
+			$params['area'] = $areaRepo->loadBySlug($app['currentSite'], $request->query->get("area"));
+		}
 
 		if ($app['currentSite']->getIsFeatureGroup()) {
 			return $app['twig']->render('site/eventnew/new.groups.html.twig', $params);
@@ -62,11 +66,14 @@ class EventNewController {
 	function newEventGo(Request $request, Application $app) {		
 		$parseResult = null;
 
+		$params = array('area'=>null);
 
 		$event = new EventModel();
+		// what
 		if (isset($_GET['what']) && trim($_GET['what'])) {
 			$event->setSummary($_GET['what']);
 		}
+		// when
 		if (isset($_GET['when']) && trim($_GET['when'])) {
 			$parse = new ParseDateTimeRangeString(\TimeSource::getDateTime(), $app['currentTimeZone']);
 			$parseResult = $parse->parse($_GET['when']);
@@ -85,6 +92,13 @@ class EventNewController {
 				$event->setEndAt($end);
 			}
 		}
+		// where
+		if ($request->query->has("area")) {
+			$areaRepo = new AreaRepository();
+			$params['area'] = $areaRepo->loadBySlug($app['currentSite'], $request->query->get("area"));
+			$event->setAreaId($params['area']->getId());
+		}
+
 		$event->setDefaultOptionsFromSite($app['currentSite']);
 
 		$timezone = isset($_POST['EventNewForm']) && isset($_POST['EventNewForm']['timezone']) ? $_POST['EventNewForm']['timezone'] : $app['currentTimeZone'];
@@ -144,11 +158,10 @@ class EventNewController {
 				
 			}
 		}
-		
 
-		return $app['twig']->render('site/eventnew/newGo.html.twig', array(
-				'form'=>$form->createView(),
-			));
+		$params['form'] = $form->createView();
+		
+		return $app['twig']->render('site/eventnew/newGo.html.twig', $params);
 		
 	}
 	

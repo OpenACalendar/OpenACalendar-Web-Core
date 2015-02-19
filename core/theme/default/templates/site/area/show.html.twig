@@ -2,7 +2,7 @@
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% extends 'site/area/page.html.twig' %}
@@ -35,6 +35,9 @@
 		<li class="action">
 			<a href="/area/{{ area.slugForUrl }}/new"><div class="iconPencilSmall"></div> new</a>
 		</li>
+	{% endif %}
+	{% if currentUserActions.has("org.openacalendar","eventNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","eventNew") ) %}
+		<li class="action"><a href="/event/new?area={{  area.slug }}"><div class="iconPencilSmall"></div>Add an event</a></li>
 	{% endif %}
 {% endblock %}
 
