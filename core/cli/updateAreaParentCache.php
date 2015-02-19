@@ -9,9 +9,8 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-tasks\UpdateAreaParentCache::update(true);
-
+print "\n\nUSE runTasksAutomatically.php now!\n\n";

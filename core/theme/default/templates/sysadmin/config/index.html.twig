@@ -651,11 +651,11 @@
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval'} %}</td>
 		</tr>
 		<tr>
-			<th>taskUpdateAreaBoundsCacheAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval }}
-				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaBoundsCacheAutomaticUpdateInterval'} %}</td>
+			<th>taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval }}
+				({{ (config.taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval'} %}</td>
 		</tr>
 		<tr>
 			<th>taskSendUserWatchesNotifyAutomaticUpdateInterval</th>
@@ -663,6 +663,27 @@
 				({{ (config.taskSendUserWatchesNotifyAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
 				({{ (config.taskSendUserWatchesNotifyAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskSendUserWatchesNotifyAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateAreaBoundsCacheAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval }}
+				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaBoundsCacheAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateAreaParentCacheAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateAreaParentCacheAutomaticUpdateInterval }}
+				({{ (config.taskUpdateAreaParentCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateAreaParentCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaParentCacheAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
+			<th>taskUpdateSiteCacheAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateSiteCacheAutomaticUpdateInterval }}
+				({{ (config.taskUpdateSiteCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateSiteCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateSiteCacheAutomaticUpdateInterval'} %}</td>
 		</tr>
 		<tr>
 			<th>taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval</th>

@@ -133,7 +133,10 @@ class ExtensionCore extends BaseExtension {
 		return array(
 			new \tasks\SendUserWatchesNotifyTask($this->app),
 			new \tasks\UpdateVenueFutureEventsCacheTask($this->app),
+			new \tasks\UpdateAreaFutureEventsCacheTask($this->app),
 			new \tasks\UpdateAreaBoundsCacheTask($this->app),
+			new \tasks\UpdateAreaParentCacheTask($this->app),
+			new \tasks\UpdateSiteCacheTask($this->app),
 			new \tasks\UpdateAreaHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateEventHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateGroupHistoryChangeFlagsTask($this->app),
