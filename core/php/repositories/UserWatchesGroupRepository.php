@@ -5,13 +5,16 @@ namespace repositories;
 use models\UserAccountModel;
 use models\GroupModel;
 use models\UserWatchesGroupModel;
+use repositories\builders\GroupRepositoryBuilder;
+use repositories\builders\HistoryRepositoryBuilder;
+use usernotifications\UserWatchesGroupNotifyContent;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserWatchesGroupRepository {
@@ -115,6 +118,74 @@ class UserWatchesGroupRepository {
 		}
 		
 	}
-	
+
+
+	/**
+	 * @return array
+	 */
+	public function getUserNotifyContentForSiteAndUser(\models\SiteModel $siteModel, UserAccountModel $userAccountModel) {
+		global $CONFIG;
+
+		if (!$siteModel->getIsFeatureGroup()) {
+			return array();
+		}
+
+		$out = array();
+
+		$grb = new GroupRepositoryBuilder();
+		$grb->setSite($siteModel);
+		$grb->setLimit(1000000); // TODO all! No limit
+
+		// TODO  don't we still want to do this? How will user A get a notification if user B deletes group? but then so far most group deletetions are by admins.
+		$grb->setIncludeDeleted(false);
+
+		foreach($grb->fetchAll() as $group) {
+
+			$uwg = $this->loadByUserAndGroup($userAccountModel, $group);
+			if ($uwg && $uwg->getIsWatching()) {
+
+				$dateSince = $uwg->getSinceDateForNotifyChecking();
+
+				$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+				$historyRepositoryBuilder->setGroup($group);
+				$historyRepositoryBuilder->setSince($dateSince);
+				$historyRepositoryBuilder->setNotUser($userAccountModel);
+				// Only admins can change tags at the moment so don't include
+				$historyRepositoryBuilder->setIncludeTagHistory(false);
+
+				$histories = $historyRepositoryBuilder->fetchAll();
+
+				if ($histories) {
+
+					$content = new UserWatchesGroupNotifyContent();
+					$content->setHistories($histories);
+
+					$userWatchesGroupStopRepository = new UserWatchesGroupStopRepository();
+					$userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($userAccountModel, $group);
+					$content->setUnwatchURL($CONFIG->getWebSiteDomainSecure($siteModel->getSlug()).
+						'/group/'. $group->getSlugForURL().
+						'/stopWatchingFromEmail/'. $userAccountModel->getId().'/'.$userWatchesGroupStop->getAccessKey());
+
+					$content->setUserAccount($userAccountModel);
+					$content->setSite($siteModel);
+					$content->setGroup($group);
+					$content->setWatchedThingTitle($group->getTitle());
+					$content->setWatchedThingURL($CONFIG->getWebSiteDomainSecure($siteModel->getSlug()).'/group/'. $group->getSlugForURL().'/history');
+
+					$out[] = $content;
+
+				}
+
+			}
+
+		}
+
+		return $out;
+
+	}
+
+
+
 }
+
 

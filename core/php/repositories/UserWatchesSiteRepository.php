@@ -6,13 +6,15 @@ use models\UserAccountModel;
 use models\SiteModel;
 use models\UserWatchesSiteModel;
 use models\GroupModel;
+use repositories\builders\HistoryRepositoryBuilder;
+use usernotifications\UserWatchesSiteNotifyContent;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class UserWatchesSiteRepository {
@@ -93,7 +95,49 @@ class UserWatchesSiteRepository {
 		$data = $stat->fetch();
 		return $data['c'] ? new \DateTime($data['c'], new \DateTimeZone("UTC")) : null;
 	}
-	
+
+	/**
+	 * @return BaseUserWatchesNotifyContent|null
+	 */
+	public function getUserNotifyContentForSiteAndUser(SiteModel $siteModel, UserAccountModel $userAccountModel) {
+		global $CONFIG;
+
+		$userWatchesSite = $this->loadByUserAndSite($userAccountModel, $siteModel);
+		if ($userWatchesSite && $userWatchesSite->getIsWatching()) {
+
+			$dateSince = $userWatchesSite->getSinceDateForNotifyChecking();
+			$checkTime = \TimeSource::getDateTime();
+
+			$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+			$historyRepositoryBuilder->setSite($siteModel);
+			$historyRepositoryBuilder->setSince($dateSince);
+			$historyRepositoryBuilder->setNotUser($userAccountModel);
+			// Only admins can change tags at the moment so don't include
+			$historyRepositoryBuilder->setIncludeTagHistory(false);
+
+			$histories = $historyRepositoryBuilder->fetchAll();
+
+			if ($histories) {
+
+				$content = new UserWatchesSiteNotifyContent();
+				$content->setHistories($histories);
+
+				$userWatchesSiteStopRepository = new UserWatchesSiteStopRepository();
+				$userWatchesSiteStop = $userWatchesSiteStopRepository->getForUserAndSite($userAccountModel, $siteModel);
+				$content->setUnwatchURL($CONFIG->getWebSiteDomainSecure($siteModel->getSlug()).'/stopWatchingFromEmail/'. $userAccountModel->getId().'/'.$userWatchesSiteStop->getAccessKey());
+
+				$content->setUserAccount($userAccountModel);
+				$content->setSite($siteModel);
+				$content->setWatchedThingTitle($siteModel->getTitle());
+				$content->setWatchedThingURL($CONFIG->getWebSiteDomainSecure($siteModel->getSlug()).'/history');
+
+				return $content;
+
+			}
+
+		}
+
+	}
 	
 }
 

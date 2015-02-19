@@ -9,6 +9,7 @@ use usernotifications\models\UserWatchesGroupNotifyNotificationModel;
 
 /**
  *
+ * @deprecated Use Type UserWatchesNotify instead!
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD

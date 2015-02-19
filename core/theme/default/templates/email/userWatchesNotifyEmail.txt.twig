@@ -1,0 +1,25 @@
+{% extends 'email/email.txt.twig' %}
+
+{% block content %}
+	
+Hello {{ user.username }}
+
+{%  for content in contents %}
+You watch {{ content.watchedThingTitle }}, and changes have been made.
+
+To see the full history please visit:
+{{  content.watchedThingURL }}
+
+To stop watching {{ content.watchedThingTitle }}:
+{{ content.unwatchURL }}
+
+{%  endfor %}
+
+To change which emails you get:
+{{ unsubscribeURL }}
+
+
+Thanks,
+{{ config.siteTitle }}
+
+{% endblock %}

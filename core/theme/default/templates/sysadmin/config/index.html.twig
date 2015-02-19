@@ -658,6 +658,13 @@
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaBoundsCacheAutomaticUpdateInterval'} %}</td>
 		</tr>
 		<tr>
+			<th>taskSendUserWatchesNotifyAutomaticUpdateInterval</th>
+			<td>{{ config.taskSendUserWatchesNotifyAutomaticUpdateInterval }}
+				({{ (config.taskSendUserWatchesNotifyAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskSendUserWatchesNotifyAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskSendUserWatchesNotifyAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
 			<th>taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval</th>
 			<td>{{ config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval }}
 				({{ (config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)

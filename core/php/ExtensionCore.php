@@ -5,13 +5,15 @@ use import\ImportURLMeetupHandler;
 use import\ImportURLEventbriteHandler;
 use import\ImportURLLanyrdHandler;
 use import\ImportURLICalHandler;
+use models\SiteModel;
+use models\UserAccountModel;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ExtensionCore extends BaseExtension {
@@ -41,7 +43,7 @@ class ExtensionCore extends BaseExtension {
 	public function getUserNotificationTypes() {
 		return array('UpcomingEvents','UserWatchesGroupPrompt','UserWatchesGroupNotify',
 			'UserWatchesSiteNotify','UserWatchesSiteGroupPrompt','UserWatchesSitePrompt',
-			'ImportURLExpired','UserRequestsAccessNotifyAdmin');
+			'ImportURLExpired','UserRequestsAccessNotifyAdmin','UserWatchesNotify');
 	}
 	
 	public function getUserNotificationType($type) {
@@ -49,9 +51,13 @@ class ExtensionCore extends BaseExtension {
 			return new usernotifications\types\UpcomingEventsUserNotificationType();
 		} else if ($type == 'UserWatchesGroupPrompt') {
 			return new usernotifications\types\UserWatchesGroupPromptNotificationType();
+		} else if ($type == 'UserWatchesNotify') {
+			return new usernotifications\types\UserWatchesNotifyNotificationType();
 		} else if ($type == 'UserWatchesGroupNotify') {
+			// deprecated !!!!!!!
 			return new usernotifications\types\UserWatchesGroupNotifyNotificationType();
 		} else if ($type == 'UserWatchesSiteNotify') {
+			// deprecated !!!!!!!
 			return new usernotifications\types\UserWatchesSiteNotifyNotificationType();
 		} else if ($type == 'UserWatchesSiteGroupPrompt') {
 			return new usernotifications\types\UserWatchesSiteGroupPromptNotificationType();
@@ -110,6 +116,7 @@ class ExtensionCore extends BaseExtension {
 
 	public function getTasks() {
 		return array(
+			new \tasks\SendUserWatchesNotifyTask($this->app),
 			new \tasks\UpdateVenueFutureEventsCacheTask($this->app),
 			new \tasks\UpdateAreaBoundsCacheTask($this->app),
 			new \tasks\UpdateAreaHistoryChangeFlagsTask($this->app),
@@ -120,6 +127,30 @@ class ExtensionCore extends BaseExtension {
 			new \tasks\UpdateTagHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateVenueHistoryChangeFlagsTask($this->app),
 		);
+	}
+
+	/**
+	 * @return array BaseUserWatchesNotifyContent
+	 */
+	public function getUserNotifyContents(SiteModel $site, UserAccountModel $userAccountModel) {
+		$out = array();
+
+		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository();
+		$data = $userWatchesSiteRepo->getUserNotifyContentForSiteAndUser($site, $userAccountModel);
+		if ($data) {
+			// no point carrying on; someone watching a site overrides any data contained within
+			return array($data);
+		}
+
+		if ($site->getIsFeatureGroup()) {
+			$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
+			$data = $userWatchesGroupRepo->getUserNotifyContentForSiteAndUser($site, $userAccountModel);
+			if ($data) {
+				$out = array_merge($out, $data);
+			}
+		}
+
+		return $out;
 	}
 
 

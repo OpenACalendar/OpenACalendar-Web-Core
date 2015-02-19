@@ -11,8 +11,8 @@
 	
 	<p>Hello {{ user.username }}</p>
 
-	<p>You watch the group {{ group.title }}, and changes have been made to that group.</p>
-	
+	<p>Changes have been made to things you watch: {# TODO things? #}</p>
+
 	{% for historyItem in histories %}
 		{% if historyItem is eventhistory %}
 			{% include 'email/common/eventHistoryItem.html.twig' %}
@@ -22,16 +22,26 @@
 			{% include 'email/common/venueHistoryItem.html.twig' %}
 		{% elseif historyItem is importurlhistory %}
 			{% include 'email/common/importURLHistoryItem.html.twig' %}
-		{% endif %}		
+		{% elseif historyItem is areahistory %}
+			{% include 'email/common/areaHistoryItem.html.twig' %}
+		{% endif %}
 	{% endfor %}
-	
-	<p>To see <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/history">the full history, click here</a>.</p>
-		
+
+	{%  for content in contents %}
+		<p>
+			You watch {{ content.watchedThingTitle }} -
+			To see <a href="{{  content.watchedThingURL }}">the full history, click here</a>.
+		</p>
+
+	{%  endfor %}
+
 	<p>Thanks,<br>
 	{{ config.siteTitle }}</p>
 		
-	<p>ps.  
-		To <a href="{{ unsubscribeURL }}">change which emails you get, click here</a>.
-		To <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ group.title }} click here</a>.</p>
+	<p>ps. To <a href="{{ unsubscribeURL }}">change which emails you get, click here</a>.</p>
+
+	{%  for content in contents %}
+		<p>ps. To <a href="{{ content.unwatchURL }}"> stop watching {{ content.watchedThingTitle }}, click here</a>.</p>
+	{%  endfor %}
 
 {% endblock %}
