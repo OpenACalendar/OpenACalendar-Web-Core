@@ -44,7 +44,7 @@ $app->match('/event/creatingThisNewEvent.json',"site\controllers\EventNewControl
 		->before($permissionCalendarChangeRequired);
 
 $app->match('/event/new', "site\controllers\EventNewController::newEvent")
-		->before($permissionEventsChangeRequired)
+		->before($permissionEventsChangeRequiredOrForAnyVerifiedUser)
 		->before($canChangeSite); 
 $app->match('/event/new/go', "site\controllers\EventNewController::newEventGo")
 		->before($permissionEventsChangeRequired)

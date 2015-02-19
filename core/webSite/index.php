@@ -60,6 +60,14 @@ $app->before(function (Request $request) use ($app) {
 	$app['twig']->addGlobal('currentUserActions', $app['currentUserActions']);
 	$app['twig']->addGlobal('currentUserWatchesSite', $app['currentUserWatchesSite']);
 
+	# ////////////// if not current user, let templates see what currentUser could do
+	if (!$app['currentUser']) {
+		// We don't pass $removeEditorPermissions here because that is about specific users being banned and this is potential users
+		$app['anyVerifiedUserPermissions'] = $userPermissionsRepo->getPermissionsForAnyVerifiedUserInSite($app['currentSite'], false, true);
+		$app['anyVerifiedUserActions'] = new UserActionsSiteList($app['currentSite'], $app['anyVerifiedUserPermissions'] );
+		$app['twig']->addGlobal('anyVerifiedUserActions', $app['anyVerifiedUserActions'] );
+	}
+
 	# ////////////// Store sites seen for this user so can do nice page in index
 	// except we don't bother doing this in the API
 	if (substr($_SERVER['REQUEST_URI'],0,4) != '/api') {
@@ -109,6 +117,19 @@ $permissionCalendarChangeRequired = function(Request $request, Application $app)
 			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
 		}
 
+	}
+};
+
+$permissionCalendarChangeRequiredOrForAnyVerifiedUser = function(Request $request, Application $app) {
+	global $CONFIG;
+	if ($app['currentUser']) {
+		if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
+			return $app->abort(403); // TODO
+		}
+	} else {
+		if (!$app['anyVerifiedUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
 	}
 };
 

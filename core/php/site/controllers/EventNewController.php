@@ -20,16 +20,24 @@ use \SearchForDuplicateEvents;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventNewController {
 	
 	
 	function newEvent(Request $request, Application $app) {
-		
-		$params = array('when'=>null, 'date'=>null);
-		
+
+		if (!$app['currentUser'] && !$app['currentUserActions']->has("org.openacalendar","eventNew") &&  $app['anyVerifiedUserActions']->has("org.openacalendar","eventNew")) {
+			return $app['twig']->render('site/eventnew/new.useraccountneeded.html.twig', array());
+		}
+
+		if (!$app['currentUser']) {
+			$app->abort(403, "Not allowed");
+		}
+
+		$params = array('when'=>null, 'date'=>null, 'area'=>null);
+
 		if (isset($_GET['date']) && trim($_GET['date'])) {
 			$bits = explode("-", $_GET['date']);
 			if (count($bits) == 3 && intval($bits[0]) && intval($bits[1]) && intval($bits[2])) {
@@ -40,20 +48,20 @@ class EventNewController {
 				$params['date'] = $_GET['date'];
 			}
 		}
-		
-		
-		
+
+
+
 		if ($app['currentSite']->getIsFeatureGroup()) {
 			return $app['twig']->render('site/eventnew/new.groups.html.twig', $params);
 		} else {
 			return $app['twig']->render('site/eventnew/new.nogroups.html.twig', $params);
 		}
-		
+
 	}
 	
 	function newEventGo(Request $request, Application $app) {		
 		$parseResult = null;
-		
+
 
 		$event = new EventModel();
 		if (isset($_GET['what']) && trim($_GET['what'])) {
@@ -137,7 +145,7 @@ class EventNewController {
 			}
 		}
 		
-		
+
 		return $app['twig']->render('site/eventnew/newGo.html.twig', array(
 				'form'=>$form->createView(),
 			));
