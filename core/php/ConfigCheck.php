@@ -37,7 +37,59 @@ class ConfigCheck {
 		if ($field == 'logToStdError' && $this->config->logToStdError && !$this->config->logFile) {
 			$out[] = 'For logToStdError to work logFile must be set';
 		}
-		
+
+		if ($field == 'taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval' && $this->config->taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskSendUserWatchesNotifyAutomaticUpdateInterval' && $this->config->taskSendUserWatchesNotifyAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval' && $this->config->taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateAreaBoundsCacheAutomaticUpdateInterval' && $this->config->taskUpdateAreaBoundsCacheAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateAreaParentCacheAutomaticUpdateInterval' && $this->config->taskUpdateAreaParentCacheAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateSiteCacheAutomaticUpdateInterval' && $this->config->taskUpdateSiteCacheAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval' && $this->config->taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval' && $this->config->taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval' && $this->config->taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval' && $this->config->taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval' && $this->config->taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval' && $this->config->taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
+		if ($field == 'taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval' && $this->config->taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval < 1) {
+			$out[] = 'This task is disabled';
+		}
+
 		return $out;
 	}
 
