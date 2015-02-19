@@ -28,7 +28,7 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
-			{% if currentUserActions.has("org.openacalendar","eventNew") %}
+			{% if currentUserActions.has("org.openacalendar","eventNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","eventNew") ) %}
 				<li class="action">
 					<a href="/event/new"><div class="iconPencilSmall"></div> Add an event</a>
 				</li>
