@@ -496,6 +496,10 @@ class HistoryRepositoryBuilder {
 		
 		
 
+		////////////////////// Others!
+		foreach($app['extensions']->getExtensions() as $ext) {
+			$results = array_merge($results, $ext->getHistoryRepositoryBuilderData($this->historyRepositoryBuilderConfig));
+		}
 
 		////////////////////// Finally sort & truncate
 

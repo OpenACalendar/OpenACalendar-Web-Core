@@ -140,6 +140,9 @@ abstract class BaseExtension {
 		return null;
 	}
 
+	public function getHistoryRepositoryBuilderData(\repositories\builders\config\HistoryRepositoryBuilderConfig $historyRepositoryBuilderConfig) {
+		return array();
+	}
 
 }
 
