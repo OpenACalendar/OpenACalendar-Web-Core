@@ -2,7 +2,7 @@
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
 	<body>
 		<div id="Map">
 		</div>
-		<div id="NoEventsNotice" {% if venueData %}style="display: none;"{% endif %}>
+		<div id="NoEventsNotice" {% if venues|length > 0 %}style="display: none;"{% endif %}>
 			We could not find any future events with a known location on the map. You can add a venue to events, then edit a venue to add it to the map.
 		</div>
 		<div id="MapInfo">
@@ -32,11 +32,12 @@
 			<a href="/"><div class="iconTimesCircleOLarge" title="Close"></div></a>
 		</div>
 		<script type="text/javascript">
-			var mapData = [ {% for vd in venueData  %}
+			var mapData = [ {% for vd in venues  %}
 				{
-					'slug':'{{ vd.venue_slug }}',
-					'lat':'{{ vd.venue_lat }}',
-					'lng':'{{ vd.venue_lng }}',
+					'slug':'{{ vd.slug }}',
+					'lat':'{{ vd.lat }}',
+					'lng':'{{ vd.lng }}',
+					'cached_events': '{{ vd.cachedFutureEvents }}'
 				},
 			{% endfor %}  ];
 			{% if country %}
@@ -59,6 +60,7 @@
 			{% endif %}
 			{% if venue and venue.hasLatLng %}
 				var venue = {
+					'slug':'{{ venue.slug }}',
 					lat: {{ venue.lat }},
 					lng: {{ venue.lng }}
 				};

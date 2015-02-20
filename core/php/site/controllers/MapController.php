@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use repositories\builders\VenueRepositoryBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use repositories\builders\EventRepositoryBuilder;
@@ -14,7 +15,7 @@ use repositories\AreaRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class MapController {
@@ -55,33 +56,14 @@ class MapController {
 				isset($_GET['venue']) ? $_GET['venue'] : null,
 				$request, $app);
 		
-		$erb = new EventRepositoryBuilder();
-		$erb->setSite($app['currentSite']);
-		$erb->setAfterNow();
-		$erb->setIncludeDeleted(false);
-		$erb->setMustHaveLatLng(true);
+		$vrb = new VenueRepositoryBuilder();
+		$vrb->setSite($app['currentSite']);
+		$vrb->setIncludeDeleted(false);
+		$vrb->setMustHaveLatLng(true);
 		
-		$events = $erb->fetchAll();
+		$venues = $vrb->fetchAll();
 		
-		$this->parameters['venueData'] = array();
-		
-		if ($this->parameters['venue']) {
-			$this->parameters['venueData'][$this->parameters['venue']->getId()] = array(
-				'venue_lat'=> $this->parameters['venue']->getLat(),
-				'venue_lng'=> $this->parameters['venue']->getLng(),
-				'venue_title'=> $this->parameters['venue']->getTitle(),
-				'venue_slug'=> $this->parameters['venue']->getSlug(),
-			);
-		}
-		
-		foreach($events as $event) {
-			$this->parameters['venueData'][$event->getVenueId()] = array(
-				'venue_lat'=> $event->getVenue()->getLat(),
-				'venue_lng'=> $event->getVenue()->getLng(),
-				'venue_title'=> $event->getVenue()->getTitle(),
-				'venue_slug'=> $event->getVenue()->getSlug(),
-			);
-		}
+		$this->parameters['venues'] = $venues;
 		
 		return $app['twig']->render('site/mapPage.html.twig', $this->parameters);
 		

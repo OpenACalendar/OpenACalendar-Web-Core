@@ -12,7 +12,7 @@ use models\AreaModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
@@ -93,7 +93,15 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 
 
-	
+
+
+	protected $must_have_lat_lng = false;
+
+
+	public function setMustHaveLatLng($must_have_lat_lng) {
+		$this->must_have_lat_lng = $must_have_lat_lng;
+	}
+
 	protected function build() {
 		global $DB;
 
@@ -158,6 +166,12 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 				" AND media_in_venue.removal_approved_at IS NULL AND media_in_venue.venue_id = venue_information.id ".
 				" GROUP BY venue_information.id ) AS media_venue_slugs ";
 		}
+
+		if ($this->must_have_lat_lng) {
+				$this->where[] = " venue_information.lat IS NOT NULL ";
+				$this->where[] = " venue_information.lng IS NOT NULL ";
+		}
+
 	}
 	
 	protected function buildStat() {

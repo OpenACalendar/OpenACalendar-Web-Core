@@ -2,23 +2,53 @@
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
 */
 var map;
 var markerGroup;
+
+var iconWithEvents;
+var iconWithNoEvents;
 
 $(document).ready(function() {
 
 	map = L.map('Map');
 	configureBasicMap(map);
 
+	iconWithNoEvents = L.icon({
+		iconUrl: '/theme/default/img/mapMarkerNoeventsIcon.png',
+		shadowUrl: '/theme/default/img/mapMarkerShadow.png',
+
+		iconSize:     [25, 41], // size of the icon
+		shadowSize:   [41, 41], // size of the shadow
+		iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+		shadowAnchor: [12, 41],  // the same for the shadow
+		popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+	});
+
+	iconWithEvents = L.icon({
+		iconUrl: '/theme/default/img/mapMarkerEventsIcon.png',
+		shadowUrl: '/theme/default/img/mapMarkerShadow.png',
+
+		iconSize:     [25, 41], // size of the icon
+		shadowSize:   [41, 41], // size of the shadow
+		iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+		shadowAnchor: [12, 41],  // the same for the shadow
+		popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+	});
+
 	var hasMarkers = false;
 	markerGroup = new L.MarkerClusterGroup();
 	map.addLayer(markerGroup);
 	for(i in mapData) {
 		if (mapData[i].lat && mapData[i].lng) {
-			var marker = L.marker([mapData[i].lat,mapData[i].lng]);
+			var marker;
+			if (mapData[i].cached_events == 0) {
+				marker = L.marker([mapData[i].lat,mapData[i].lng], { icon: iconWithNoEvents});
+			} else {
+				marker = L.marker([mapData[i].lat,mapData[i].lng], { icon: iconWithEvents});
+			}
 			marker.slug = mapData[i].slug;
 			marker.on('click', onClickMarker);
 			markerGroup.addLayer(marker);
@@ -66,9 +96,13 @@ function onClickMarker() {
 		url: "/api1/venue/"+this.slug+"/events.json"
 	}).success(function ( venuedata ) {
 		var html = '<ul class="popupListEvents">';
-		for(i in venuedata.data) {
-			var event = venuedata.data[i];
-			html += '<li class="event"><span class="time">'+event.start.displaylocal+'</span> <span class="summary">'+event.summaryDisplay+'</span></li>';
+		if (venuedata.data.length == 0) {
+			html += '<li class="nodata">No future events.</li>';
+		} else {
+			for(i in venuedata.data) {
+				var event = venuedata.data[i];
+				html += '<li class="event"><span class="time">'+event.start.displaylocal+'</span> <span class="summary">'+event.summaryDisplay+'</span></li>';
+			}
 		}
 		$('#VenuePopupEvents').html(html+'</ul>');
 		$('#VenuePopupTitle').html(venuedata.venue.title);
