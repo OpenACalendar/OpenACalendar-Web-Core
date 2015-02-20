@@ -2,7 +2,7 @@
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
 */
 //////////////////////////////////////////////////////////////////////////////// Export
@@ -315,7 +315,10 @@ function showSharePopup() {
 			text += exportData.venueTitle;	
 		} else if (exportData.hasOwnProperty("tag")) {
 			url +=  exportData.hasOwnProperty("tagSlugURL") ? "/tag/"+exportData.tagSlugURL : "/tag/"+exportData.tag;
-			text += exportData.tagTitle;	
+			text += exportData.tagTitle;
+		} else if (exportData.hasOwnProperty("area")) {
+			url +=  exportData.hasOwnProperty("areaSlugURL") ? "/area/"+exportData.areaSlugURL : "/area/"+exportData.area;
+			text += exportData.areaTitle;
 		} else if (exportData.hasOwnProperty("country")) {
 			url += "/country/"+exportData.country;
 		} else if (exportData.hasOwnProperty("curatedlist")) {
