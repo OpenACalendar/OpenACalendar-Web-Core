@@ -11,7 +11,7 @@ use models\UserAccountModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLHistoryRepository {
@@ -69,6 +69,10 @@ class ImportURLHistoryRepository {
 		if ($importurlhistory->getGroupIdChangedKnown()) {
 			$sqlFields[] = " group_id_changed = :group_id_changed ";
 			$sqlParams['group_id_changed'] = $importurlhistory->getGroupIdChanged() ? 1 : -1;
+		}
+		if ($importurlhistory->getIsManualEventsCreationChangedKnown()) {
+			$sqlFields[] = " is_manual_events_creation_changed = :is_manual_events_creation_changed ";
+			$sqlParams['is_manual_events_creation_changed'] = $importurlhistory->getIsManualEventsCreationChanged() ? 1 : -1;
 		}
 
 		$statUpdate = $DB->prepare("UPDATE import_url_history SET ".

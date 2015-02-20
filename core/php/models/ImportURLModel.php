@@ -11,7 +11,7 @@ use repositories\ImportURLRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLModel {
@@ -26,6 +26,7 @@ class ImportURLModel {
 	protected $url;
 	protected $url_canonical;
 	protected $is_enabled;
+	protected $is_manual_events_creation;
 	protected $expired_at;
 	protected $created_at;
 	
@@ -40,6 +41,7 @@ class ImportURLModel {
 		$this->url = $data['url'];
 		$this->url_canonical = $data['url_canonical'];
 		$this->is_enabled = $data['is_enabled'];
+		$this->is_manual_events_creation = $data['is_manual_events_creation'];
 		$utc = new \DateTimeZone("UTC");
 		$this->expired_at = $data['expired_at'] ? new \DateTime($data['expired_at'], $utc) : null;
 		$this->created_at = new \DateTime($data['created_at'], $utc);	
@@ -158,6 +160,22 @@ class ImportURLModel {
 
 	public function setAreaId($area_id) {
 		$this->area_id = $area_id;
+	}
+
+	/**
+	 * @param mixed $is_manual_events_creation
+	 */
+	public function setIsManualEventsCreation($is_manual_events_creation)
+	{
+		$this->is_manual_events_creation = $is_manual_events_creation;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIsManualEventsCreation()
+	{
+		return $this->is_manual_events_creation;
 	}
 
 

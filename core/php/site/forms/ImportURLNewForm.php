@@ -16,7 +16,7 @@ use models\SiteModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLNewForm extends AbstractType{
@@ -43,6 +43,14 @@ class ImportURLNewForm extends AbstractType{
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
 		));
+
+		$builder->add("is_manual_events_creation",
+			"checkbox",
+			array(
+				'required'=>false,
+				'label'=>'Do you want to create events manually from this import?',
+			)
+		);
 			
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);

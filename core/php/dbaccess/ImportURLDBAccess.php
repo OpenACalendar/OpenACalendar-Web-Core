@@ -12,7 +12,7 @@ use sysadmin\controllers\API2Application;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
@@ -35,7 +35,7 @@ class ImportURLDBAccess {
 	}
 
 
-	protected $possibleFields = array('country_id','area_id','title','is_enabled','expired_at','group_id');
+	protected $possibleFields = array('country_id','area_id','title','is_enabled','expired_at','group_id','is_manual_events_creation');
 
 	public function update(ImportURLModel $importURL, $fields, UserAccountModel $user = null ) {
 		$alreadyInTransaction = $this->db->inTransaction();
@@ -51,6 +51,8 @@ class ImportURLDBAccess {
 				$fieldsParams1['area_id'] = $importURL->getAreaId();
 			} else if ($field == 'is_enabled') {
 				$fieldsParams1['is_enabled'] = $importURL->getIsEnabled() ? 1 : 0;
+			} else if ($field == 'is_manual_events_creation') {
+				$fieldsParams1['is_manual_events_creation'] = $importURL->getIsManualEventsCreation() ? 1 : 0;
 			} else if ($field == 'country_id') {
 				$fieldsParams1['country_id'] = $importURL->getCountryId();
 			} else if ($field == 'expired_at') {
@@ -85,6 +87,8 @@ class ImportURLDBAccess {
 					$fieldsParams2['expired_at'] = $importURL->getExpiredAt() ? $importURL->getExpiredAt()->format("Y-m-d H:i:s") : null;
 				} else if ($field == 'is_enabled') {
 					$fieldsParams2['is_enabled'] = ($importURL->getIsEnabled()?1:0);
+				} else if ($field == 'is_manual_events_creation') {
+					$fieldsParams2['is_manual_events_creation'] = ($importURL->getIsManualEventsCreation()?1:0);
 				}
 				$fieldsSQL2[] = " ".$field."_changed ";
 				$fieldsSQLParams2[] = " 0 ";

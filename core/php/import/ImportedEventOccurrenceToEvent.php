@@ -22,7 +22,7 @@ use repositories\ImportedEventIsEventRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportedEventOccurrenceToEvent {
@@ -92,17 +92,21 @@ class ImportedEventOccurrenceToEvent {
 				}
 			}
 		} else {
-			// New Event From Import Event URL
-			$event = $this->newEventFromImportedEventModel($importedEventOccurrenceModel);
-			if ($this->eventRecurSet) {
-				$event->setEventRecurSetId($this->eventRecurSet->getId());
+			if (!$this->importURL->getIsManualEventsCreation()) {
+				// New Event From Import Event URL
+				$event = $this->newEventFromImportedEventModel($importedEventOccurrenceModel);
+				if ($this->eventRecurSet) {
+					$event->setEventRecurSetId($this->eventRecurSet->getId());
+				}
+				$eventRepo->create($event, $this->site, null, $this->group, null, $importedEventOccurrenceModel);
+				$this->eventsSeenIDs[] = $event->getId();
+				if (!$this->eventRecurSet && $this->makeEventRecurSetIfNone) {
+					$this->eventRecurSet = $eventRecurSetRepo->getForEvent($event);
+				}
+				return true;
+			} else {
+				return false;
 			}
-			$eventRepo->create($event, $this->site, null, $this->group, null, $importedEventOccurrenceModel);
-			$this->eventsSeenIDs[] = $event->getId();
-			if (!$this->eventRecurSet && $this->makeEventRecurSetIfNone) {
-				$this->eventRecurSet = $eventRecurSetRepo->getForEvent($event);
-			}
-			return true;
 		}
 
 		return false;

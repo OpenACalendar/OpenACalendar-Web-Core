@@ -14,7 +14,7 @@ use models\UserAccountModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLRepository {
@@ -39,8 +39,8 @@ class ImportURLRepository {
 			$data = $stat->fetch();
 			$importURL->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id,area_id, approved_at) ".
-					"VALUES (:site_id, :slug, :title,:url,:url_canonical, :created_at, :group_id,:is_enabled,:country_id,:area_id,:approved_at) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id,area_id, approved_at, is_manual_events_creation) ".
+					"VALUES (:site_id, :slug, :title,:url,:url_canonical, :created_at, :group_id,:is_enabled,:country_id,:area_id,:approved_at,:is_manual_events_creation) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$importURL->getSlug(),
@@ -53,12 +53,13 @@ class ImportURLRepository {
 					'created_at'=>\TimeSource::getFormattedForDataBase(),		
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
+					'is_manual_events_creation'=>$importURL->getIsManualEventsCreation()?1:0,
 				));
 			$data = $stat->fetch();
 			$importURL->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, approved_at, is_new) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id, :approved_at, '1')");
+			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, approved_at, is_new, is_manual_events_creation) VALUES ".
+					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id, :approved_at, '1', :is_manual_events_creation )");
 			$stat->execute(array(
 					'curated_list_id'=>$importURL->getId(),
 					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -69,6 +70,7 @@ class ImportURLRepository {
 					'created_at'=>\TimeSource::getFormattedForDataBase(),		
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
+					'is_manual_events_creation'=>$importURL->getIsManualEventsCreation()?1:0,
 				));
 			
 			
@@ -105,7 +107,7 @@ class ImportURLRepository {
 		try {
 			$DB->beginTransaction();
 
-			$fields = array('title','country_id','area_id');
+			$fields = array('title','country_id','area_id','is_manual_events_creation');
 			$this->importURLDBAccess->update($importURL, $fields, $user);
 			
 			$DB->commit();
