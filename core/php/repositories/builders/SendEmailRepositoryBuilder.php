@@ -52,8 +52,9 @@ class SendEmailRepositoryBuilder  extends BaseRepositoryBuilder {
 		
 		
 		$sql = "SELECT send_email_information.* FROM send_email_information ".
-				" WHERE ".implode(" AND ", $this->where).
-				" ORDER BY send_email_information.id ASC ";
+				" WHERE ".i/mplode(" AND ", $this->where).
+				" ORDER BY send_email_information.id ASC ".
+				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

@@ -179,7 +179,8 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 		
 		$sql = "SELECT".  implode(",", $this->select)." FROM venue_information ".
 			($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
-				" ORDER BY venue_information.title ASC ";
+				" ORDER BY venue_information.title ASC ".
+				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

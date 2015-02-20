@@ -100,7 +100,7 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		$sql = "SELECT ".  implode(",", $this->select)." FROM group_information ".
 				implode(" ",$this->joins).
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
-				" ORDER BY group_information.title ASC ";
+				" ORDER BY group_information.title ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

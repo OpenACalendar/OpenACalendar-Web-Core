@@ -75,7 +75,7 @@ class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 				implode(" ",$this->joins).
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
 				" ORDER BY user_notification.created_at DESC ".
-				" LIMIT ".$this->limit;
+				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

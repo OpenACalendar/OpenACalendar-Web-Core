@@ -77,7 +77,8 @@ class UserAtEventRepositoryBuilder  extends BaseRepositoryBuilder {
 				" JOIN user_account_information ON user_account_information.id = user_at_event_information.user_account_id ".
 				implode(" ", $this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
-				" ORDER BY user_account_information.username ASC ";
+				" ORDER BY user_account_information.username ASC ".
+				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

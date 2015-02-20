@@ -45,7 +45,8 @@ class UserWatchesSiteGroupPromptEmailRepositoryBuilder  extends BaseRepositoryBu
 		$sql = "SELECT ".  implode(", ", $this->selects)." FROM user_watches_site_group_prompt_email ".
 				implode(" ", $this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
-				" ORDER BY user_watches_site_group_prompt_email.sent_at DESC";
+				" ORDER BY user_watches_site_group_prompt_email.sent_at DESC".
+				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

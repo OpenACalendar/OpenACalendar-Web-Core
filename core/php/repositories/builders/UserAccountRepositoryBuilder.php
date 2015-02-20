@@ -146,7 +146,8 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 		$sql = "SELECT ".implode(",",$this->select)." FROM user_account_information ".
 				implode(" ", $this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
-				($this->groupNeeded ? " GROUP BY user_account_information.id ":"")." ORDER BY user_account_information.id ASC ";
+				($this->groupNeeded ? " GROUP BY user_account_information.id ":"").
+				" ORDER BY user_account_information.id ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

@@ -55,7 +55,7 @@ class CountryRepositoryBuilder  extends BaseRepositoryBuilder {
 		$sql = "SELECT ".  implode(",", $this->select)." FROM country ".
 				implode(" ",$this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
-				" ORDER BY country.title ASC ";
+				" ORDER BY country.title ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 			
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

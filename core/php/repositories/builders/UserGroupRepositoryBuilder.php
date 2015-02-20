@@ -68,7 +68,8 @@ class UserGroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		$sql = "SELECT user_group_information.* FROM user_group_information ".
 			implode(" ", $this->joins).
 			($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
-			" ORDER BY user_group_information.title ASC ";
+			" ORDER BY user_group_information.title ASC ".
+			( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

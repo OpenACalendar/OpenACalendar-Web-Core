@@ -128,7 +128,7 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 		$sql = "SELECT " . implode(", ",$this->select) . " FROM area_information ".
 				implode(" ",$this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
-				" ORDER BY area_information.title ASC LIMIT ". $this->limit;
+				" ORDER BY area_information.title ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

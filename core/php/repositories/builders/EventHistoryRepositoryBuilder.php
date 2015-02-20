@@ -52,7 +52,7 @@ class EventHistoryRepositoryBuilder  extends BaseRepositoryBuilder {
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
-				" ORDER BY ".$this->orderBy." ".$this->orderDirection;
+				" ORDER BY ".$this->orderBy." ".$this->orderDirection.( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

@@ -38,7 +38,8 @@ class UserAccountVerifyEmailRepositoryBuilder  extends BaseRepositoryBuilder {
 		
 		$sql = "SELECT user_account_verify_email.* FROM user_account_verify_email ".
 				implode(" ", $this->joins).
-				($this->where ? " WHERE ".implode(" AND ", $this->where) : "");
+				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
+				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

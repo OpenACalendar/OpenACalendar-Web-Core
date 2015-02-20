@@ -134,7 +134,7 @@ class UserWatchesGroupRepository {
 
 		$grb = new GroupRepositoryBuilder();
 		$grb->setSite($siteModel);
-		$grb->setLimit(1000000); // TODO all! No limit
+		$grb->setLimit(0); // all! No limit
 
 		// TODO  don't we still want to do this? How will user A get a notification if user B deletes group? but then so far most group deletetions are by admins.
 		$grb->setIncludeDeleted(false);

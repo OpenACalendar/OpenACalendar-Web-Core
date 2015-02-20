@@ -13,7 +13,7 @@ namespace repositories\builders;
 abstract class BaseRepositoryBuilder {
 	
 
-	protected $limit = 100;
+	protected $limit = 0;
 	
 	public function setLimit($limit) {
 		$this->limit = $limit;

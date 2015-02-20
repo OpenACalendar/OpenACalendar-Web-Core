@@ -38,7 +38,7 @@ class UpdateAreaFutureEventsCacheTask extends \BaseTask {
 		$areaRepository = new AreaRepository();
 
 		$arb = new AreaRepositoryBuilder();
-		$arb->setLimit(1000000);
+		$arb->setLimit(0);  // all of them
 		$count = 0;
 		foreach($arb->fetchAll() as $area) {
 

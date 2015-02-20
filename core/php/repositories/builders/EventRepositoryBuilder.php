@@ -527,7 +527,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		$sql = "SELECT ".  implode(",", $this->select)." FROM event_information ".
 				implode(" ",$this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
-				" ORDER BY  ".$this->orderBy." ".$this->orderDirection . " LIMIT ".$this->limit;
+				" ORDER BY  ".$this->orderBy." ".$this->orderDirection .( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

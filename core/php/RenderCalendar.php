@@ -29,7 +29,7 @@ class RenderCalendar {
 	function __construct() {
 		global $CONFIG;
 		$this->eventRepositoryBuilder = new EventRepositoryBuilder();
-		$this->eventRepositoryBuilder->setLimit(1000);
+		$this->eventRepositoryBuilder->setLimit(0); // all of them
 		$this->minYear = $CONFIG->calendarEarliestYearAllowed;
 		$this->maxYear = (\TimeSource::getDateTime()->format("Y")+ $CONFIG->eventsCantBeMoreThanYearsInFuture);
 	}

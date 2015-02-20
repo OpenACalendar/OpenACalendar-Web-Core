@@ -122,7 +122,7 @@ class UserWatchesAreaRepository {
 
 		$grb = new AreaRepositoryBuilder();
 		$grb->setSite($siteModel);
-		$grb->setLimit(1000000); // TODO all! No limit
+		$grb->setLimit(0); // all! No limit
 
 		// TODO  don't we still want to do this? How will user A get a notification if user B deletes area? but then so far most area deletetions are by admins.
 		$grb->setIncludeDeleted(false);

@@ -79,7 +79,7 @@ class TagRepositoryBuilder  extends BaseRepositoryBuilder {
 		$sql = "SELECT tag_information.* FROM tag_information ".
 				implode(" ",$this->joins).
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
-				" ORDER BY tag_information.title ASC LIMIT ". $this->limit;
+				" ORDER BY tag_information.title ASC  ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

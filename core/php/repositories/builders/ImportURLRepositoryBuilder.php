@@ -55,7 +55,7 @@ class ImportURLRepositoryBuilder  extends BaseRepositoryBuilder {
 		
 		$sql = "SELECT import_url_information.* FROM import_url_information ".
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
-				" ORDER BY import_url_information.title ASC ";
+				" ORDER BY import_url_information.title ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

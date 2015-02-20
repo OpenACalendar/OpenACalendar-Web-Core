@@ -46,7 +46,7 @@ class TaskLogRepositoryBuilder  extends BaseRepositoryBuilder {
 		$sql = "SELECT task_log.* FROM task_log ".
 				implode(" ",$this->joins).
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
-				" ORDER BY task_log.started_at DESC LIMIT ". $this->limit;
+				" ORDER BY task_log.started_at DESC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

@@ -30,7 +30,7 @@ class SiteQuotaRepositoryBuilder  extends BaseRepositoryBuilder {
 		$sql = "SELECT ".  implode(",", $this->select)." FROM site_quota_information ".
 				implode(" ",$this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
-				" ORDER BY site_quota_information.id ASC ";
+				" ORDER BY site_quota_information.id ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 			
 		$this->stat = $DB->prepare($sql);
 		$this->stat->execute($this->params);

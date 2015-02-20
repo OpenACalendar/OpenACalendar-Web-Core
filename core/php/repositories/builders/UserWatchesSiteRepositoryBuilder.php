@@ -44,7 +44,8 @@ class UserWatchesSiteRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 		$sql = "SELECT user_watches_site_information.* FROM user_watches_site_information ".
 				implode(" ", $this->joins).
-				($this->where ? " WHERE ".implode(" AND ", $this->where) : "");
+				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
+				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		
 		$this->stat = $DB->prepare($sql);
