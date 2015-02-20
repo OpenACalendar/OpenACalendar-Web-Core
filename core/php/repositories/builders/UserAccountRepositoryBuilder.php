@@ -51,6 +51,12 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 	/** @var UserGroupModel **/
 	protected $inUserGroup;
 
+	protected $isOpenBySysAdminsOnly = false;
+
+	public function setIsOpenBySysAdminsOnly($value) {
+		$this->isOpenBySysAdminsOnly = $value;
+	}
+
 	/**
 	 * @param \repositories\builders\UserGroupModel $inUserGroup
 	 */
@@ -128,7 +134,9 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->params['no_edit_permissions_in_site_id'] = $this->userHasNoEditorPermissionsInSite->getId();
 		}
 
-
+		if ($this->isOpenBySysAdminsOnly) {
+			$this->where[] = " user_account_information.is_closed_by_sys_admin = '0' ";
+		}
 
 	}
 	
