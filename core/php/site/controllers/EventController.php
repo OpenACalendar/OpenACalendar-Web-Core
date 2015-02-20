@@ -738,9 +738,6 @@ class EventController {
 
 	}
 
-
-
-
 	function editVenueNew($slug, Request $request, Application $app) {
 		//var_dump($_POST); die();
 
@@ -755,100 +752,73 @@ class EventController {
 		$areaRepository = new AreaRepository();
 
 		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
-		$this->parameters['fieldAddressCode'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAddressCode') : $request->query->get('fieldAddressCode') ;
+
+		$this->parameters['areaSearchRequired'] = false;
+		$this->parameters['areaChildSearchRequired'] = false;
+		$this->parameters['areasToSearch'] = null;
+
+		$this->parameters['fieldsSubmitted'] = (boolean)('POST' == $request->getMethod() && $request->request->get('fieldsSubmitted'));
+
+		//////////////////////////////// Set Venue Object as Much as possible!
+
+		$this->parameters['venue'] = new VenueModel() ;
+		$this->parameters['venue']->setTitle(('POST' == $request->getMethod()) ? $request->request->get('fieldTitle') : $request->query->get('fieldTitle'));
+		$this->parameters['venue']->setDescription(('POST' == $request->getMethod()) ? $request->request->get('fieldDescription') : $request->query->get('fieldDescription'));
+		$this->parameters['venue']->setAddress(('POST' == $request->getMethod()) ? $request->request->get('fieldAddress') : $request->query->get('fieldAddress'));
+		$this->parameters['venue']->setAddressCode(('POST' == $request->getMethod()) ? $request->request->get('fieldAddressCode') : $request->query->get('fieldAddressCode'));
+		$this->parameters['venue']->setCountryId($this->parameters['country']->getId());
+		$this->parameters['venue']->setLat(('POST' == $request->getMethod()) ? $request->request->get('fieldLat') : $request->query->get('fieldLat'));
+		$this->parameters['venue']->setLng(('POST' == $request->getMethod()) ? $request->request->get('fieldLng') : $request->query->get('fieldLng'));
+
+		$this->parameters['fieldAreaObject'] = null;
 		$this->parameters['fieldArea'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldArea') : $request->query->get('fieldArea');
 		$this->parameters['fieldAreaSlug'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSlug') : $request->query->get('fieldAreaSlug');
 		$this->parameters['fieldChildAreaSlug'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldChildAreaSlug') : null;
-		$this->parameters['fieldAreaObject'] = null;
-		$this->parameters['fieldAddress'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAddress') : $request->query->get('fieldAddress');
-		$this->parameters['fieldTitle'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldTitle') : $request->query->get('fieldTitle') ;
-		$this->parameters['fieldDescription'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldDescription') : $request->query->get('fieldDescription') ;
 
-		$this->editVenueNewGetDataIntoParameters($app);
+		// did the user select a child area from the list?
+		if ($this->parameters['fieldChildAreaSlug'] && $this->parameters['fieldChildAreaSlug'] != '-1') {
+			$this->parameters['fieldAreaObject'] =  $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldChildAreaSlug']);
+		}
 
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+		// Slug passed?
+		if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldAreaSlug'] && intval($this->parameters['fieldAreaSlug'])) {
+			$this->parameters['fieldAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldAreaSlug']);
+		}
 
-			$venueRepository = new VenueRepository();
-
-			$gotResult = false;
-
-			if ($this->parameters['fieldTitle'] && !$this->parameters['areaSearchRequired']) {
-
-				$venue = new VenueModel();
-				$venue->setTitle($this->parameters['fieldTitle']);
-				$venue->setDescription($this->parameters['fieldDescription']);
-				$venue->setAddress($this->parameters['fieldAddress']);
-				$venue->setAddressCode($this->parameters['fieldAddressCode']);
-				$venue->setCountryId($this->parameters['country']->getId());
-				if ($this->parameters['fieldAreaObject']) $venue->setAreaId($this->parameters['fieldAreaObject']->getId());
-
-				$venueRepository->create($venue, $app['currentSite'], $app['currentUser']);
-
-				$this->parameters['event']->setVenueId($venue->getId());
-				$this->parameters['event']->setAreaId(null);
-				$eventRepository = new EventRepository();
-				$eventRepository->edit($this->parameters['event'], $app['currentUser']);
-				$gotResult = true;
-			}
-
-			if ($gotResult) {
-				$repo = new EventRecurSetRepository();
-				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
-					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
-				} else {
-					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
-				}
+		// Free text search string passed that only has 1 result?
+		if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldArea']) {
+			$arb = new AreaRepositoryBuilder();
+			$arb->setSite($app['currentSite']);
+			$arb->setCountry($this->parameters['country']);
+			$arb->setFreeTextSearch($this->parameters['fieldArea']);
+			$arb->setIncludeParentLevels(1);
+			$this->parameters['areasToSearch'] = $arb->fetchAll();
+			if (count($this->parameters['areasToSearch']) == 1) {
+				$this->parameters['fieldAreaObject'] = $this->parameters['areasToSearch'][0];
 			}
 		}
 
+		// New we call out to extensions to add details.
+		// Slightly ackward we have to set Area ID on venue object, then when extensions have done we need to reload the area object again.
+		if ($this->parameters['fieldAreaObject']) {
+			$this->parameters['venue']->setAreaId($this->parameters['fieldAreaObject']->getId());
+		}
+		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+			$extension->addDetailsToVenue($this->parameters['venue']);
+		}
+		if ($this->parameters['venue']->getAreaId() &&
+			(!$this->parameters['fieldAreaObject'] || $this->parameters['fieldAreaObject']->getId() != $this->parameters['venue']->getAreaId())) {
+			$this->parameters['fieldAreaObject'] = $areaRepository->loadById($this->parameters['venue']->getAreaId());
+		}
 
+		//////////////////////////////// Is Child Area Search Needed?
+		// check there are any areas.
+		// We don't present any search options first time user comes to page
+		if ($this->parameters['doesCountryHaveAnyNotDeletedAreas'] && $this->parameters['fieldsSubmitted']) {
 
-
-
-		return $app['twig']->render('site/event/edit.venue.new.html.twig', $this->parameters);
-	}
-
-
-	protected function editVenueNewGetDataIntoParameters(Application $app) {
-
-		$this->parameters['areaSearchRequired'] = false;
-		$this->parameters['areas'] = null;
-		$this->parameters['childAreas'] = null;
-
-
-		if ($this->parameters['doesCountryHaveAnyNotDeletedAreas']) {
-
-			// did the user select a child area
-			if ($this->parameters['fieldChildAreaSlug'] && intval($this->parameters['fieldChildAreaSlug'])) {
-				$areaRepository = new AreaRepository();
-				$newArea = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldChildAreaSlug']);
-
-				if ($newArea) {
-					$this->parameters['fieldAreaObject'] = $newArea;
-				}
-			}
-
-			if (!$this->parameters['fieldAreaObject']) {
-				// Load an area from what we have been given, slug or text search?
-				if ($this->parameters['fieldAreaSlug'] && intval($this->parameters['fieldAreaSlug'])) {
-					$areaRepository = new AreaRepository();
-					$this->parameters['fieldAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldAreaSlug']);
-
-				} else if ($this->parameters['fieldArea']) {
-
-					$arb = new AreaRepositoryBuilder();
-					$arb->setSite($app['currentSite']);
-					$arb->setCountry($this->parameters['country']);
-					$arb->setFreeTextSearch($this->parameters['fieldArea']);
-					$arb->setIncludeParentLevels(1);
-					$areas = $arb->fetchAll();
-					if (count($areas) == 1) {
-						$this->parameters['fieldAreaObject'] = $areas[0];
-					} else {
-						$this->parameters['areas'] = $areas;
-						$this->parameters['areaSearchRequired'] = true;
-					}
-				}
+			// Did user type in text we had multiple options for?
+			if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldArea'] && count($this->parameters['areasToSearch']) > 1) {
+				$this->parameters['areaSearchRequired'] = true;
 			}
 
 			// Child areas?
@@ -866,15 +836,43 @@ class EventController {
 				}
 				$childAreas = $areaRepoBuilder->fetchAll();
 				if ($childAreas) {
-					$this->parameters['childAreas'] = $childAreas;
-					$this->parameters['areaSearchRequired'] = true;
+					$this->parameters['areasToSearch'] = $childAreas;
+					$this->parameters['areaChildSearchRequired'] = true;
 				}
 			}
-
 		}
 
-	}
+		//////////////////////////////// Save if we can!!
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() &&
+			$this->parameters['fieldsSubmitted'] &&
+			$this->parameters['venue']->getTitle() && !$this->parameters['areaSearchRequired'] && !$this->parameters['areaChildSearchRequired']) {
 
+			if ($this->parameters['fieldAreaObject']) {
+				$this->parameters['venue']->setAreaId($this->parameters['fieldAreaObject']->getId());
+			}
+
+			$venueRepository = new VenueRepository();
+			$venueRepository->create($this->parameters['venue'], $app['currentSite'], $app['currentUser']);
+
+			$this->parameters['event']->setVenueId($this->parameters['venue']->getId());
+			$this->parameters['event']->setAreaId(null);
+			$eventRepository = new EventRepository();
+			$eventRepository->edit($this->parameters['event'], $app['currentUser']);
+
+			$repo = new EventRecurSetRepository();
+			if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
+				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
+			} else {
+				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
+			}
+		}
+
+		//////////////////////////////// Or render!
+
+		$this->parameters['showAreaField'] = $this->parameters['fieldsSubmitted'] && $this->parameters['doesCountryHaveAnyNotDeletedAreas'];
+		return $app['twig']->render('site/event/edit.venue.new.html.twig', $this->parameters);
+
+	}
 
 
 

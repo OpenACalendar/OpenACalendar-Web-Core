@@ -28,11 +28,10 @@ class ExtensionAddressCodeGBOpenCodePoint extends \BaseExtension {
 		return "Translates postcodes to lat and lng";
 	}
 	
-	
-	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user) {
 
-		
-		
+
+	public function addDetailsToVenue(VenueModel $venue) {
+
 		if ($venue->getAddressCode() && (!$venue->getLat() || !$venue->getLng())) {
 			$cr = new CountryRepository();
 			$gb = $cr->loadByTwoCharCode("GB");

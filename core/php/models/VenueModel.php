@@ -164,7 +164,9 @@ class VenueModel {
 	}
 
 	public function setLat($lat) {
-		$this->lat = $lat;
+		if ($lat != '') {
+			$this->lat = $lat;
+		}
 	}
 
 	public function setLatIfDifferent($lat) {
@@ -180,7 +182,7 @@ class VenueModel {
 	}
 
 	public function setLng($lng) {
-		if ($this->lng != $lng) {
+		if ($this->lng != $lng && $lng != '') {
 			$this->lng = $lng;
 			return true;
 		}

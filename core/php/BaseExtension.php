@@ -38,6 +38,12 @@ abstract class BaseExtension {
 		
 	}
 
+
+
+	public function addDetailsToVenue(VenueModel $venue) {
+
+	}
+
 	/**
 	 * @param SiteModel $site
 	 * @param UserAccountModel $owner User who owns site. This is usually, but may not be, the user who performed the action.
