@@ -117,8 +117,9 @@ abstract class BaseExtension {
 		return array();
 	}
 
-
-
+	public function getAddContentToEventShowPages($parameters) {
+		return array();
+	}
 
 	/**
 	 * @return array BaseTask

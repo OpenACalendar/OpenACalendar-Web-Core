@@ -303,6 +303,17 @@ class EventController {
 		$curatedListRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['curatedLists'] = $curatedListRepoBuilder->fetchAll();
 
+		$this->parameters['templatesAfterDetails'] = array();
+		$this->parameters['templatesAtEnd'] = array();
+		foreach($app['extensions']->getExtensions() as $extension) {
+			foreach($extension->getAddContentToEventShowPages($this->parameters) as $addContent) {
+				$this->parameters = array_merge($this->parameters, $addContent->getParameters());
+				$this->parameters['templatesAfterDetails'] = array_merge($this->parameters['templatesAfterDetails'], $addContent->getTemplatesAfterDetails());
+				$this->parameters['templatesAtEnd'] = array_merge($this->parameters['templatesAtEnd'], $addContent->getTemplatesAtEnd());
+			}
+		}
+
+
 		return $app['twig']->render('site/event/show.html.twig', $this->parameters);
 	}
 	
