@@ -14,7 +14,6 @@ namespace models;
  */
 class EventHistoryModel extends EventModel implements InterfaceHistoryModel {
 
-	protected $event_slug;
 	//protected $user_account_id;
 	protected $created_at; 
 	protected $reverted_from_created_at;
@@ -45,7 +44,7 @@ class EventHistoryModel extends EventModel implements InterfaceHistoryModel {
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['event_id'];
-		$this->event_slug = isset($data['event_slug']) ? $data['event_slug'] : null;
+		$this->slug = isset($data['event_slug']) ? $data['event_slug'] : null;
 		$this->summary = $data['summary'];
 		$this->group_title = isset($data['group_title']) ? $data['group_title'] : null;
 		$this->description = $data['description'];
@@ -259,12 +258,18 @@ class EventHistoryModel extends EventModel implements InterfaceHistoryModel {
 		return $this->created_at->getTimestamp();
 	}
 
+	/**
+	 * @todo Is this used anywhere? Should we not be using getSlug instead?
+	 */
 	public function getEventSlug() {
-		return $this->event_slug;
+		return $this->slug;
 	}
 
+	/**
+	 * @todo Is this used anywhere? Should we not be using setSlug instead? Why do we even set a slug here?
+	 */
 	public function setEventSlug($event_slug) {
-		$this->event_slug = $event_slug;
+		$this->slug = $event_slug;
 	}
 
 	public function getUserAccountId() {
