@@ -46,6 +46,8 @@ $app->before(function (Request $request) use ($app) {
 
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+	// We do not check UserHasNoEditorPermissionsInSiteRepository(); because that is site mode only.
+	// In Single Site mode sysadmins can remove this right.
 	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite($app['currentUser'], $app['currentSite'], false, true);
 
 

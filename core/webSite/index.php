@@ -42,8 +42,8 @@ $app->before(function (Request $request) use ($app) {
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
 	$removeEditorPermissions = false;
-	$userEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
-	if ($app['currentUser'] && $userEditorPermissionsInSiteRepo->isUserInSite($app['currentUser'], $app['currentSite'])) {
+	$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+	if ($app['currentUser'] && $userHasNoEditorPermissionsInSiteRepo->isUserInSite($app['currentUser'], $app['currentSite'])) {
 		$removeEditorPermissions = true;
 	}
 	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite($app['currentUser'], $app['currentSite'], $removeEditorPermissions, true);
