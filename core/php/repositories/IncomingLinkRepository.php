@@ -28,7 +28,7 @@ class IncomingLinkRepository {
 			$stat = $DB->prepare("INSERT INTO incoming_link (site_id, extension_id, type, source_url, target_url, reporter_useragent, reporter_ip, created_at) ".
 					"VALUES (:site_id, :extension_id, :type, :source_url, :target_url, :reporter_useragent, :reporter_ip, :created_at) RETURNING id");
 			$stat->execute(array(
-					'site_id'=>$site->getId(),
+					'site_id'=>($site ? $site->getId() : null),
 					'extension_id'=>$incomingLink->getTypeExtensionID(),
 					'type'=>$incomingLink->getType(),
 					'source_url'=>$incomingLink->getSourceURL(),

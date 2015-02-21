@@ -1,5 +1,7 @@
 <?php
 namespace incominglinks;
+use models\SiteModel;
+use Silex\Application;
 
 
 /**
@@ -12,6 +14,40 @@ namespace incominglinks;
  */
 
 class WebMentionIncomingLink extends \BaseIncomingLink {
+
+
+
+
+	public static function  receive(Application $app, SiteModel $siteModel = null) {
+
+		$data = array_merge($_POST, $_GET);
+
+		if (isset($data['source']) && isset($data['target'])) {
+
+			$pbil = new \incominglinks\WebMentionIncomingLink();
+			$pbil->setSourceURL($data['source']);
+			$pbil->setTargetURL($data['target']);
+			$pbil->setReporterIp($_SERVER['REMOTE_ADDR']);
+			$pbil->setReporterUseragent($_SERVER['HTTP_USER_AGENT']);
+
+			$repo = new \repositories\IncomingLinkRepository();
+			$repo->create($pbil, $siteModel);
+
+			header("HTTP/1.0 202 ");
+
+			print "WebMention Received";
+
+		} else {
+
+			// TODO
+
+		}
+	}
+
+
+
+
+
 
 	public function getType()
 	{

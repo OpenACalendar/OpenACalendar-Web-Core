@@ -1,4 +1,5 @@
-<?php
+receivepingback.php
+receivewebmention.php<?php
 require 'localConfig.php';
 require_once (defined('COMPOSER_ROOT_DIR') ? COMPOSER_ROOT_DIR : APP_ROOT_DIR).'/vendor/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoload.php';
@@ -17,11 +18,15 @@ use repositories\SiteRepository;
  */
 
 $siteRepository = new SiteRepository();
-$site = $siteRepository->loadById($CONFIG->singleSiteID);
+$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
+if (!$site) {
+	die ("404 Not Found"); // TODO
+}
 
+if ($site->getIsClosedBySysAdmin()) {
+	die("404 Not Found"); // TODO
+}
 
 \incominglinks\PingBackIncomingLink::receive($app, $site);
-
-
 
 

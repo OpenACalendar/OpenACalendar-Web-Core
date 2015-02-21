@@ -17,11 +17,16 @@ use repositories\SiteRepository;
  */
 
 $siteRepository = new SiteRepository();
-$site = $siteRepository->loadById($CONFIG->singleSiteID);
+$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
+if (!$site) {
+	die ("404 Not Found"); // TODO
+}
+
+if ($site->getIsClosedBySysAdmin()) {
+	die("404 Not Found"); // TODO
+}
 
 
-\incominglinks\PingBackIncomingLink::receive($app, $site);
-
-
+\incominglinks\WebMentionIncomingLink::receive($app, $site);
 
 

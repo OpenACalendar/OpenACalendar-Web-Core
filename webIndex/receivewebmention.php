@@ -4,7 +4,6 @@ require_once (defined('COMPOSER_ROOT_DIR') ? COMPOSER_ROOT_DIR : APP_ROOT_DIR).'
 require_once APP_ROOT_DIR.'/core/php/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoloadWebApp.php';
 
-use repositories\SiteRepository;
 
 /**
  *
@@ -16,12 +15,7 @@ use repositories\SiteRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$siteRepository = new SiteRepository();
-$site = $siteRepository->loadById($CONFIG->singleSiteID);
 
-
-\incominglinks\PingBackIncomingLink::receive($app, $site);
-
-
+\incominglinks\WebMentionIncomingLink::receive($app, null);
 
 
