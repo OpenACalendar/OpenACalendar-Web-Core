@@ -71,20 +71,12 @@ class UserWatchesGroupRepository {
 	
 	public function markNotifyEmailSent(UserWatchesGroupModel $userWatchesGroup, $emailTime) {
 		global $DB;
-		// new way
-		$stat = $DB->prepare("INSERT INTO user_watches_group_notify_email (user_account_id,group_id,sent_at) VALUES (:user_account_id,:group_id,:sent_at)");
-		$stat->execute(array( 'user_account_id'=>$userWatchesGroup->getUserAccountId(), 'group_id'=>$userWatchesGroup->getGroupId(), 'sent_at'=>$emailTime->format("Y-m-d H:i:s") ));		
-		// old way. At some point when have enought new data remove this and just use new way
 		$stat = $DB->prepare("UPDATE user_watches_group_information SET last_notify_email_sent=:sent WHERE user_account_id =:user_account_id AND group_id=:group_id");
 		$stat->execute(array( 'user_account_id'=>$userWatchesGroup->getUserAccountId(), 'group_id'=>$userWatchesGroup->getGroupId(), 'sent'=>$emailTime->format("Y-m-d H:i:s") ));		
 	}
 	
 	public function markPromptEmailSent(UserWatchesGroupModel $userWatchesGroup, $emailTime) {
 		global $DB;
-		// new way
-		$stat = $DB->prepare("INSERT INTO user_watches_group_prompt_email (user_account_id,group_id,sent_at) VALUES (:user_account_id,:group_id,:sent_at)");
-		$stat->execute(array( 'user_account_id'=>$userWatchesGroup->getUserAccountId(), 'group_id'=>$userWatchesGroup->getGroupId(), 'sent_at'=>$emailTime->format("Y-m-d H:i:s") ));		
-		// old way. At some point when have enought new data remove this and just use new way
 		$stat = $DB->prepare("UPDATE user_watches_group_information SET last_prompt_email_sent=:sent WHERE user_account_id =:user_account_id AND group_id=:group_id");
 		$stat->execute(array( 'user_account_id'=>$userWatchesGroup->getUserAccountId(), 'group_id'=>$userWatchesGroup->getGroupId(), 'sent'=>$emailTime->format("Y-m-d H:i:s") ));		
 	}

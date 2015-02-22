@@ -128,71 +128,7 @@ class UserController {
 		
 		return $app['twig']->render('sysadmin/user/reset.html.twig', $this->parameters);
 	}
-	
-	
-	function watchesSitePromptEmail($id, Request $request, Application $app) {
-		$this->build($id, $request, $app);
-		
-		
-		$rb = new UserWatchesSitePromptEmailRepositoryBuilder();
-		$rb->setUser($this->parameters['user']);
-		$this->parameters['emails'] = $rb->fetchAll();
-		
-		
-		return $app['twig']->render('sysadmin/user/watchesSitePromptEmail.html.twig', $this->parameters);
-	}
-	
-	
-	function watchesSiteGroupPromptEmail($id, Request $request, Application $app) {
-		$this->build($id, $request, $app);
-		
-		
-		$rb = new UserWatchesSiteGroupPromptEmailRepositoryBuilder();
-		$rb->setUser($this->parameters['user']);
-		$this->parameters['emails'] = $rb->fetchAll();
-		
-		
-		return $app['twig']->render('sysadmin/user/watchesSiteGroupPromptEmail.html.twig', $this->parameters);
-	}
-	
-	
-	function watchesGroupPromptEmail($id, Request $request, Application $app) {
-		$this->build($id, $request, $app);
-		
-		
-		$rb = new UserWatchesGroupPromptEmailRepositoryBuilder();
-		$rb->setUser($this->parameters['user']);
-		$this->parameters['emails'] = $rb->fetchAll();
-		
-		
-		return $app['twig']->render('sysadmin/user/watchesGroupPromptEmail.html.twig', $this->parameters);
-	}
-	
-	
-	function watchesSiteNotifyEmail($id, Request $request, Application $app) {
-		$this->build($id, $request, $app);
-		
-		
-		$rb = new UserWatchesSiteNotifyEmailRepositoryBuilder();
-		$rb->setUser($this->parameters['user']);
-		$this->parameters['emails'] = $rb->fetchAll();
-		
-		
-		return $app['twig']->render('sysadmin/user/watchesSiteNotifyEmail.html.twig', $this->parameters);
-	}
-	
-	
-	function watchesGroupNotifyEmail($id, Request $request, Application $app) {
-		$this->build($id, $request, $app);
-		
-		
-		$rb = new UserWatchesGroupNotifyEmailRepositoryBuilder();
-		$rb->setUser($this->parameters['user']);
-		$this->parameters['emails'] = $rb->fetchAll();
-		
-		
-		return $app['twig']->render('sysadmin/user/watchesGroupNotifyEmail.html.twig', $this->parameters);
-	}
+
 	
 	function listNotifications($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);

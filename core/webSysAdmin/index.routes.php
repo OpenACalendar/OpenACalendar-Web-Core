@@ -144,16 +144,6 @@ $app->match('/sysadmin/user/{id}/verify', "sysadmin\controllers\UserController::
 		->assert('id', '\d+');
 $app->match('/sysadmin/user/{id}/reset', "sysadmin\controllers\UserController::reset")
 		->assert('id', '\d+');
-$app->match('/sysadmin/user/{id}/watchesSitePromptEmail', "sysadmin\controllers\UserController::watchesSitePromptEmail")
-		->assert('id', '\d+');
-$app->match('/sysadmin/user/{id}/watchesSiteGroupPromptEmail', "sysadmin\controllers\UserController::watchesSiteGroupPromptEmail")
-		->assert('id', '\d+');
-$app->match('/sysadmin/user/{id}/watchesGroupPromptEmail', "sysadmin\controllers\UserController::watchesGroupPromptEmail")
-		->assert('id', '\d+');
-$app->match('/sysadmin/user/{id}/watchesSiteNotifyEmail', "sysadmin\controllers\UserController::watchesSiteNotifyEmail")
-		->assert('id', '\d+');
-$app->match('/sysadmin/user/{id}/watchesGroupNotifyEmail', "sysadmin\controllers\UserController::watchesGroupNotifyEmail")
-		->assert('id', '\d+');
 $app->match('/sysadmin/user/{id}/notification', "sysadmin\controllers\UserController::listNotifications")
 		->assert('id', '\d+');
 

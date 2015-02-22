@@ -387,12 +387,6 @@ class GroupRepository {
 			$stat = $DB->prepare("UPDATE group_information SET is_duplicate_of_id=NULL WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$group->getId()));
 
-			$stat = $DB->prepare("DELETE FROM user_watches_group_notify_email WHERE group_id=:id");
-			$stat->execute(array('id'=>$group->getId()));
-
-			$stat = $DB->prepare("DELETE FROM user_watches_group_prompt_email WHERE group_id=:id");
-			$stat->execute(array('id'=>$group->getId()));
-
 			$stat = $DB->prepare("DELETE FROM user_watches_group_stop WHERE group_id=:id");
 			$stat->execute(array('id'=>$group->getId()));
 
