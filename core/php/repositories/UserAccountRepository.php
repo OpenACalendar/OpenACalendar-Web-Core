@@ -131,6 +131,22 @@ class UserAccountRepository {
 
 			
 	}
+
+	/**
+	 * This does not provide any audit logging and is for use by sys admins only.
+	 * @param UserAccountModel $user
+	 */
+	public function editEmail(UserAccountModel $user) {
+		global $DB;
+
+		$stat = $DB->prepare("UPDATE user_account_information SET  email=:email, email_canonical=:email_canonical  WHERE id =:id");
+		$stat->execute(array(
+				'id'=>$user->getId() ,
+				'email'=>substr($user->getEmail(),0,VARCHAR_COLUMN_LENGTH_USED),
+				'email_canonical'=>substr(UserAccountModel::makeCanonicalEmail($user->getEmail()),0,VARCHAR_COLUMN_LENGTH_USED),
+			));
+
+	}
 	
 	
 	

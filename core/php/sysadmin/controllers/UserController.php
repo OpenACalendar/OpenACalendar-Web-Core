@@ -93,7 +93,11 @@ class UserController {
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());	
 				} else if ($action->getCommand() == 'open') {
 					$uar->systemAdminOpens($this->parameters['user'], $app['currentUser']);
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());			
+					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+				} else if ($action->getCommand() == 'email' && filter_var($action->getParam(0), FILTER_VALIDATE_EMAIL)) {
+					$this->parameters['user']->setEmail($action->getParam(0));
+					$uar->editEmail($this->parameters['user']);
+					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
 				}
 		
 			}
