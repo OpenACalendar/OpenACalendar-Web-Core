@@ -670,6 +670,10 @@ p.ForPage {
   margin-bottom: 20px;
   line-height: 1.2;
 }
+ul.loginOrRegisterInterestedIn li {
+  margin: 3px 3px 3px 20px;
+  list-style-type: circle;
+}
 form.styled .rowWrapper {
   padding: 10px 0;
 }

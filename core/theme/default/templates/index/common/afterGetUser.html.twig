@@ -5,20 +5,38 @@
  # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% if afterGetUserAddEvents|length == 1 and afterGetUserAddAreas|length == 0 %}
-	{%  set event = afterGetUserAddEvents[0] %}
-	<p>Interested in {{  event.summaryDisplay }}?</p>
-{% elseif afterGetUserAddEvents|length == 0 and afterGetUserAddAreas|length == 1 %}
-	{%  set area = afterGetUserAddAreas[0] %}
-	<p>Interested in {{  area.title }}?</p>
-{% elseif afterGetUserAddEvents|length > 0 or afterGetUserAddAreas|length > 0 %}
-	<p>Interested?</p>
-	<ul>
-		{%  for event in afterGetUserAddEvents %}
-			<li>{{  event.summaryDisplay }}</li>
-		{%  endfor %}
-		{%  for area in afterGetUserAddAreas %}
-			<li>{{  area.title }}</li>
-		{%  endfor %}
-	</ul>
+{% if afterGetUserAddEvents|length > 0 or afterGetUserAddAreas|length > 0 %}
+	<div id="afterGetUserWrapper">
+		<h3>Interested?</h3>
+		{% if afterGetUserAddEvents|length == 1 and afterGetUserAddAreas|length == 0 %}
+			{%  set event = afterGetUserAddEvents[0] %}
+			<p class="afterGetUserEvent"  id="afterGetUserEvent{{  event.id }}">
+				Interested in {{  event.summaryDisplay }}?
+				(<a href="#" onclick="loginOrRegisterRemoveEvent({{  event.id }}); return false;">not interested</a>)
+			</p>
+		{% elseif afterGetUserAddEvents|length == 0 and afterGetUserAddAreas|length == 1 %}
+			{%  set area = afterGetUserAddAreas[0] %}
+			<p class="afterGetUserArea" id="afterGetUserArea{{  area.id }}">
+				Interested in {{  area.title }}?
+				(<a href="#" onclick="loginOrRegisterRemoveArea({{  area.id }}); return false;">not interested</a>)
+			</p>
+		{% elseif afterGetUserAddEvents|length > 0 or afterGetUserAddAreas|length > 0 %}
+			<p>Interested?</p>
+			<ul class="loginOrRegisterInterestedIn">
+				{%  for event in afterGetUserAddEvents %}
+					<li class="afterGetUserEvent"  id="afterGetUserEvent{{  event.id }}">
+						{{  event.summaryDisplay }}, {{ event.getStartAt|tolocaltimeformatted('D jS M Y, g:ia', currentTimeZone) }}
+						(<a href="#" onclick="loginOrRegisterRemoveEvent({{  event.id }}); return false;">not interested</a>)
+					</li>
+				{%  endfor %}
+				{%  for area in afterGetUserAddAreas %}
+					<li class="afterGetUserArea" id="afterGetUserArea{{  area.id }}">
+						{{  area.title }}
+						(<a href="#" onclick="loginOrRegisterRemoveArea({{  area.id }}); return false;">not interested</a>)
+					</li>
+				{%  endfor %}
+			</ul>
+		{%  endif %}
+		<h3>{% if forRegister %}Register{%  else %}Log in{%  endif %} to get updates!</h3>
+	</div>
 {%  endif %}

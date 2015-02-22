@@ -24,6 +24,7 @@ use Symfony\Component\Form\FormError;
 use repositories\UserAccountResetRepository;
 use index\forms\UserChangePasswordForm;
 use repositories\UserAccountVerifyEmailRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -99,6 +100,16 @@ class UserController {
 			}
 		}
 
+		// Remove events?
+		if ($request->query->has("removeEventId")) {
+			$app['websession']->removeValueFromArray("afterGetUserAddEvents", $request->query->has("removeEventId"));
+		}
+
+		// Remove areas?
+		if ($request->query->has("removeAreaId")) {
+			$app['websession']->removeValueFromArray("afterGetUserAddAreas", $request->query->has("removeAreaId"));
+		}
+
 		// load events to show user
 		$this->parameters['afterGetUserAddEvents'] = array();
 		if ($app['websession']->hasArray("afterGetUserAddEvents")) {
@@ -137,6 +148,7 @@ class UserController {
 
 	}
 
+
 	protected function actionThingsToDoAfterGetUser(Application $app, UserAccountModel $user) {
 
 		// events
@@ -170,6 +182,19 @@ class UserController {
 		$app['websession']->setArray("afterGetUserAddAreas",array());
 
 	}
+
+
+
+	public function afterGetUserAPI(Request $request, Application $app) {
+
+		$this->processThingsToDoAfterGetUser($request, $app);
+
+		$response = new Response(json_encode(array('result'=>'ok')));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+
+	}
+
 
 	function register(Request $request, Application $app) {
 		global $CONFIG;

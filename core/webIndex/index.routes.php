@@ -53,6 +53,9 @@ $app->match('/you/reset/{id}/{code}', "index\controllers\UserController::reset")
 $app->match('/you/emails/{id}/{code}', "index\controllers\UserController::emails")
 		->before($canChangeSite);
 
+$app->match('/you/aftergetuserapi', "index\controllers\UserController::afterGetUserAPI");
+
+
 // Logged in user actions for current user
 // ... all happen under me, as in me, the verified user!
 // (Yes, the "me" vs "you" thing is a bit idiotic, it's just a way to seperate the URLs)

@@ -11,7 +11,7 @@
 
 {% block content %}
 
-	{%  include '/index/common/afterGetUser.html.twig' %}
+	{%  include '/index/common/afterGetUser.html.twig' with { forRegister: true, forLogin: false } %}
 	
 	<form action="#" method="post" class="styled">
 
@@ -32,3 +32,11 @@
 	</form>
 
 {% endblock %}
+
+
+
+{% block scripts %}
+	<script type="text/javascript" src="/theme/default/js/loginOrRegister.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+
+
