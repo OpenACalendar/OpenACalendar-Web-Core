@@ -8,7 +8,7 @@ use models\AreaModel;
 use models\UserWatchesAreaModel;
 use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
-use usernotifications\UserWatchesAreaNotifyContent;
+use usernotifications\notifycontent\UserWatchesAreaNotifyContent;
 
 /**
  *

@@ -1,12 +1,12 @@
 <?php
 
-namespace usernotifications;
+namespace usernotifications\notifycontent;
 
 use BaseUserWatchesNotifyContent;
 use models\SiteModel;
 use models\VenueModel;
 use models\UserAccountModel;
-use repositories\UserWatchesAreaRepository;
+use repositories\UserWatchesGroupRepository;
 use repositories\UserWatchesSiteRepository;
 use Silex\Application;
 
@@ -18,7 +18,7 @@ use Silex\Application;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserWatchesAreaNotifyContent extends BaseUserWatchesNotifyContent {
+class UserWatchesGroupNotifyContent extends BaseUserWatchesNotifyContent {
 
 	/** @var  SiteModel */
 	protected $site;
@@ -39,30 +39,30 @@ class UserWatchesAreaNotifyContent extends BaseUserWatchesNotifyContent {
 		return $this->site;
 	}
 
-	/** @var AreaModel */
-	protected $area;
+	/** @var GroupModel */
+	protected $group;
 
 	/**
-	 * @param mixed $area
+	 * @param mixed $group
 	 */
-	public function setArea($area)
+	public function setGroup($group)
 	{
-		$this->area = $area;
+		$this->group = $group;
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getArea()
+	public function getGroup()
 	{
-		return $this->area;
+		return $this->group;
 	}
 
 	public function markNotificationSent(\DateTime $checkTime)
 	{
-		$userWatchesAreaRepository = new UserWatchesAreaRepository();
-		$userWatchesArea = $userWatchesAreaRepository->loadByUserAndArea($this->userAccount, $this->area);
-		$userWatchesAreaRepository->markNotifyEmailSent($userWatchesArea, $checkTime);
+		$userWatchesGroupRepository = new UserWatchesGroupRepository();
+		$userWatchesGroup = $userWatchesGroupRepository->loadByUserAndGroup($this->userAccount, $this->group);
+		$userWatchesGroupRepository->markNotifyEmailSent($userWatchesGroup, $checkTime);
 	}
 }
 

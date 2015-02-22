@@ -7,7 +7,7 @@ use models\SiteModel;
 use models\UserWatchesSiteModel;
 use models\GroupModel;
 use repositories\builders\HistoryRepositoryBuilder;
-use usernotifications\UserWatchesSiteNotifyContent;
+use usernotifications\notifycontent\UserWatchesSiteNotifyContent;
 
 /**
  *

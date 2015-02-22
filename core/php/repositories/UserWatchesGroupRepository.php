@@ -7,7 +7,7 @@ use models\GroupModel;
 use models\UserWatchesGroupModel;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
-use usernotifications\UserWatchesGroupNotifyContent;
+use usernotifications\notifycontent\UserWatchesGroupNotifyContent;
 
 /**
  *

@@ -1,7 +1,7 @@
 <?php
 use models\SiteModel;
 use models\UserAccountModel;
-use usernotifications\UserWatchesAreaNotifyContent;
+use usernotifications\notifycontent\UserWatchesAreaNotifyContent;
 use tasks\SendUserWatchesNotifyTask;
 
 /**
