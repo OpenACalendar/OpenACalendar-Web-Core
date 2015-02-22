@@ -14,7 +14,7 @@ use repositories\ImportURLRepository;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ImportURLHistoryModel extends ImportURLModel implements InterfaceHistoryModel {
+class ImportURLHistoryModel extends ImportURLModel implements \InterfaceHistoryModel {
 	
 	
 	protected $import_url_slug;

@@ -2,7 +2,7 @@
 namespace api1exportbuilders;
 
 
-use models\InterfaceHistoryModel;
+use InterfaceHistoryModel;
 use models\SiteModel;
 use models\EventModel;
 use models\EventHistoryModel;

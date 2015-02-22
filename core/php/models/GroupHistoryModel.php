@@ -12,7 +12,7 @@ namespace models;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class GroupHistoryModel extends GroupModel implements InterfaceHistoryModel {
+class GroupHistoryModel extends GroupModel implements \InterfaceHistoryModel {
 
 	protected $group_slug;
 	//protected $user_account_id;

@@ -12,7 +12,7 @@ namespace models;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class AreaHistoryModel extends AreaModel implements InterfaceHistoryModel {
+class AreaHistoryModel extends AreaModel implements \InterfaceHistoryModel {
 	
 	protected $created_at; 
 	protected $user_account_id;

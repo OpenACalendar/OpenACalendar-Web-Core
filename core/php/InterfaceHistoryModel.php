@@ -2,9 +2,6 @@
 
 
 
-namespace models;
-
-
 use Symfony\Component\HttpFoundation\Response;
 
 

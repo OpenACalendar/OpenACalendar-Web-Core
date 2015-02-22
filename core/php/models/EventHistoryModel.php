@@ -12,7 +12,7 @@ namespace models;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventHistoryModel extends EventModel implements InterfaceHistoryModel {
+class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 
 	//protected $user_account_id;
 	protected $created_at; 

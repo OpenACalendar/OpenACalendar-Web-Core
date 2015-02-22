@@ -1,7 +1,7 @@
 <?php
 namespace api1exportbuilders;
 
-use models\InterfaceHistoryModel;
+use InterfaceHistoryModel;
 use repositories\builders\HistoryRepositoryBuilder;
 use models\SiteModel;
 use models\EventHistoryModel;

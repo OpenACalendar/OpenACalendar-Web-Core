@@ -12,7 +12,7 @@ namespace models;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class VenueHistoryModel extends VenueModel implements InterfaceHistoryModel {
+class VenueHistoryModel extends VenueModel implements \InterfaceHistoryModel {
 
 	protected $venue_slug;
 	//protected $user_account_id;
