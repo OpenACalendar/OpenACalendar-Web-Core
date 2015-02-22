@@ -156,11 +156,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 			configureAppForUser($userAccountModel);
 
 			$message = \Swift_Message::newInstance();
-			if (count($contentsToSend) == 1) {
-				$message->setSubject("Changes on ".$contentsToSend[0]->getWatchedThingTitle());
-			} else {
-				$message->setSubject("Changes"); // TODO better Title
-			}
+			$message->setSubject($this->getEmailSubject($siteModel, $userAccountModel, $contentsToSend));
 			$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 			$message->setTo($userAccountModel->getEmail());
 
@@ -199,6 +195,15 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 
 	}
 
+	protected  function getEmailSubject(SiteModel $siteModel, UserAccountModel $userAccountModel, $contentsToSend) {
+		if (count($contentsToSend) ==1) {
+			return "Changes in ". $contentsToSend[0]->getWatchedThingTitle();
+		} else if (count($contentsToSend) == 2) {
+			return "Changes in ". $contentsToSend[0]->getWatchedThingTitle(). " and ".$contentsToSend[1]->getWatchedThingTitle();
+		} else {
+			return "Changes in ". $siteModel->getTitle();
+		}
+	}
 
 	public function getResultDataAsString(\models\TaskLogModel $taskLogModel) {
 		if ($taskLogModel->getIsResultDataHaveKey("result") && $taskLogModel->getResultDataValue("result") == "ok") {
