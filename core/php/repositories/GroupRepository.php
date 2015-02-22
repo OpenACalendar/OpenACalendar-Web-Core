@@ -393,9 +393,6 @@ class GroupRepository {
 			$stat = $DB->prepare("DELETE FROM user_watches_group_information WHERE group_id=:id");
 			$stat->execute(array('id'=>$group->getId()));
 
-			$stat = $DB->prepare("DELETE FROM user_watches_group_notify_email WHERE group_id=:id");
-			$stat->execute(array('id'=>$group->getId()));
-
 			$stat = $DB->prepare("DELETE FROM event_in_group WHERE group_id=:id");
 			$stat->execute(array('id'=>$group->getId()));
 
