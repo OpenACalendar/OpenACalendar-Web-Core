@@ -202,6 +202,7 @@ class ExtensionCore extends BaseExtension {
 			new reports\seriesreports\UsersWithEventEditsSeriesReport(),
 			new reports\seriesreports\UsersWithEventsEditedSeriesReport(),
 			new reports\seriesreports\GroupsWithUsersWatching(),
+			new reports\seriesreports\AreasWithUsersDirectlyWatching(),
 			new reports\seriesreports\EventsStartAtByImportedOrNotSeriesReport(),
 		);
 	}
