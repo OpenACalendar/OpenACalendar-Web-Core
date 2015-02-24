@@ -1,0 +1,56 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	<h2>{{  report.reportTitle }}</h2>
+
+	 <table class="data">
+		 {%  if report.hasFilterTime %}
+			 <tr>
+				 <td>Start</td>
+				 <td>{%  if filterStartAt %}{{  filterStartAt | tolocaltimeformatted('Y-m-d H:i:s', 'Europe/London')  }}{%  endif %}</td>
+			 </tr>
+			 <tr>
+				 <td>End</td>
+				 <td>{%  if filterEndAt %}{{  filterEndAt | tolocaltimeformatted('Y-m-d H:i:s', 'Europe/London')  }}{%  endif %}</td>
+			 </tr>
+		 {%  endif %}
+		 {%  if report.hasFilterSite %}
+			 <tr>
+				 <td>Site ID</td>
+				 <td>{%  if filterSiteId %}{{  filterSiteId  }}{%  endif %}</td>
+			 </tr>
+		 {%  endif %}
+	 </table>
+
+
+	<table class="data">
+		<tr>
+			<th>Label</th>
+			<th>Data</th>
+		</tr>
+		{% for data in report.data %}
+			<tr>
+				<td>
+					{%  if data.labelURL %}<a href="{{  data.labelURL }}">{%  endif  %}
+						{{  data.labelText }}
+					{%  if data.labelURL %}</a>{%  endif  %}
+				</td>
+				<td>
+					{{  data.data }}
+				</td>
+			</tr>
+		{%  endfor %}
+	</table>
+
+{% endblock %}
+
+

@@ -1,0 +1,49 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	<h2>{{  report.reportTitle }} By Time</h2>
+
+	 <table class="data">
+		 <tr>
+			 <td>Start</td>
+			 <td>{%  if startAt %}{{  startAt | tolocaltimeformatted('Y-m-d H:i:s', 'Europe/London')  }}{%  endif %}</td>
+		 </tr>
+		 <tr>
+			 <td>End</td>
+			 <td>{%  if endAt %}{{  endAt | tolocaltimeformatted('Y-m-d H:i:s', 'Europe/London')  }}{%  endif %}</td>
+		 </tr>
+	 </table>
+
+
+	<table class="data">
+		<tr>
+			<th>Label</th>
+			{%  for key,value in reportDataKeys %}
+				<th>Data {{  value.labelText }}</th>
+			{%  endfor %}
+		</tr>
+		{% for data in reportData %}
+			<tr>
+				<td>
+					{{  data.labelText }}
+				</td>
+				{%  for key,value in reportDataKeys %}
+					<td>
+						{%  if key in data.data|keys %}{{  data.data[key].data }}{%  endif %}
+					</td>
+				{%  endfor %}
+			</tr>
+		{%  endfor %}
+	</table>
+
+{% endblock %}
+
+

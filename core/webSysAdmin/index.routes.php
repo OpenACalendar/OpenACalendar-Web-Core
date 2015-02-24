@@ -196,3 +196,30 @@ $app->match('/sysadmin/tasklog', "sysadmin\controllers\TaskLogListController::in
 
 $app->match('/sysadmin/task/{extid}/{taskid}', "sysadmin\controllers\TaskController::index");
 
+
+$app->match('/sysadmin/report', 'sysadmin\controllers\ReportListController::index');
+$app->match('/sysadmin/report/', 'sysadmin\controllers\ReportListController::index');
+
+
+$app->match('/sysadmin/report/series/{extid}/{reportid}' , 'sysadmin\controllers\SeriesReportController::index');
+$app->match('/sysadmin/report/series/{extid}/{reportid}/' , 'sysadmin\controllers\SeriesReportController::index');
+
+$app->match('/sysadmin/report/series/{extid}/{reportid}/run' , 'sysadmin\controllers\SeriesReportController::run');
+
+
+
+$app->match('/sysadmin/report/value/{extid}/{reportid}' , 'sysadmin\controllers\ValueReportController::index');
+$app->match('/sysadmin/report/value/{extid}/{reportid}/' , 'sysadmin\controllers\ValueReportController::index');
+
+$app->match('/sysadmin/report/value/{extid}/{reportid}/run' , 'sysadmin\controllers\ValueReportController::run');
+
+
+$app->match('/sysadmin/report/valuebytime/{extid}/{reportid}' , 'sysadmin\controllers\ValueByTimeReportController::index');
+$app->match('/sysadmin/report/valuebytime/{extid}/{reportid}/' , 'sysadmin\controllers\ValueByTimeReportController::index');
+
+$app->match('/sysadmin/report/valuebytime/{extid}/{reportid}/run' , 'sysadmin\controllers\ValueByTimeReportController::run');
+
+$app->match('/sysadmin/report/seriesbytime/{extid}/{reportid}' , 'sysadmin\controllers\SeriesByTimeReportController::index');
+$app->match('/sysadmin/report/seriesbytime/{extid}/{reportid}/' , 'sysadmin\controllers\SeriesByTimeReportController::index');
+
+$app->match('/sysadmin/report/seriesbytime/{extid}/{reportid}/run' , 'sysadmin\controllers\SeriesByTimeReportController::run');

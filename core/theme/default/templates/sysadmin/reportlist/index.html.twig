@@ -1,0 +1,42 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	<p>Series</p>
+
+	<ul class="menuOnPage">
+		{%  for report in reportsSeries %}
+			<li>
+				<a href="/sysadmin/report/series/{{  report.extensionID }}/{{  report.reportId }}/">{{  report.reportTitle }}</a>
+				{%  if report.getHasFilterTime %}
+					(<a href="/sysadmin/report/seriesbytime/{{  report.extensionID }}/{{  report.reportId }}/">By Time</a>)
+				{%  endif %}
+			</li>
+		{%  endfor %}
+	</ul>
+
+	<p>Value</p>
+
+	<ul class="menuOnPage">
+		{%  for report in reportsValue %}
+			<li>
+				<a href="/sysadmin/report/value/{{  report.extensionID }}/{{  report.reportId }}/">{{  report.reportTitle }}</a>
+				{%  if report.getHasFilterTime %}
+					(<a href="/sysadmin/report/valuebytime/{{  report.extensionID }}/{{  report.reportId }}/">By Time</a>)
+				{%  endif %}
+			</li>
+		{%  endfor %}
+	</ul>
+
+
+
+{% endblock %}
+
+

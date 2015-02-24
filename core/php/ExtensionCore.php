@@ -196,4 +196,26 @@ class ExtensionCore extends BaseExtension {
 		}
 	}
 
+	public function getSeriesReports() {
+		return array(
+			new reports\seriesreports\UsersWithNotificationsSeriesReport(),
+			new reports\seriesreports\UsersWithEventEditsSeriesReport(),
+			new reports\seriesreports\UsersWithEventsEditedSeriesReport(),
+			new reports\seriesreports\GroupsWithUsersWatching(),
+			new reports\seriesreports\EventsStartAtByImportedOrNotSeriesReport(),
+		);
+	}
+
+	public function getValueReports() {
+		return array(
+			new reports\valuereports\EventsCreatedReport(),
+			new reports\valuereports\GroupsCreatedReport(),
+			new reports\valuereports\VenuesCreatedReport(),
+			new reports\valuereports\UsersCreatedReport(),
+			new reports\valuereports\EventsEditedReport(),
+			new reports\valuereports\GroupsEditedReport(),
+			new reports\valuereports\VenuesEditedReport(),
+		);
+	}
+
 }

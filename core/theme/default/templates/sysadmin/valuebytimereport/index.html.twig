@@ -1,0 +1,25 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block content %}
+
+	<h2>{{  report.reportTitle }} By Time</h2>
+
+
+	<form action="/sysadmin/report/valuebytime/{{  report.extensionID }}/{{ report.reportID }}/run" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" value="Run Report Now" />
+	</form>
+
+
+{% endblock %}
+
+
