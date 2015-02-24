@@ -138,6 +138,13 @@ class TagHistoryModel extends TagModel implements \InterfaceHistoryModel {
 	}
 
 
+	/** @return boolean */
+	public function isEqualTo(\InterfaceHistoryModel $otherHistoryModel) {
+		return $otherHistoryModel instanceof $this &&
+		$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
+		$otherHistoryModel->getId() == $this->getId();
+	}
+
 
 }
 

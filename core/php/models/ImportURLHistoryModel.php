@@ -196,7 +196,12 @@ class ImportURLHistoryModel extends ImportURLModel implements \InterfaceHistoryM
 		return '/site/common/importURLHistoryItem.html.twig';
 	}
 
-
+	/** @return boolean */
+	public function isEqualTo(\InterfaceHistoryModel $otherHistoryModel) {
+		return $otherHistoryModel instanceof $this &&
+			$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
+			$otherHistoryModel->getId() == $this->getId();
+	}
 
 }
 

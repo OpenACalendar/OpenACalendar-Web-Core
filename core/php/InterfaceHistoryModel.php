@@ -22,4 +22,7 @@ interface InterfaceHistoryModel {
 	/** @return \DateTime */
 	public function getCreatedAt();
 
+
+	/** @return boolean */
+	public function isEqualTo(InterfaceHistoryModel $otherHistoryModel);
 }

@@ -164,6 +164,13 @@ class AreaHistoryModel extends AreaModel implements \InterfaceHistoryModel {
 		return '/site/common/areaHistoryItem.html.twig';
 	}
 
+	/** @return boolean */
+	public function isEqualTo(\InterfaceHistoryModel $otherHistoryModel) {
+		return $otherHistoryModel instanceof $this &&
+		$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
+		$otherHistoryModel->getId() == $this->getId();
+	}
+
 
 }
 

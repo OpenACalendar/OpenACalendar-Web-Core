@@ -421,6 +421,13 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		return '/site/common/eventHistoryItem.html.twig';
 	}
 
+	/** @return boolean */
+	public function isEqualTo(\InterfaceHistoryModel $otherHistoryModel) {
+		return $otherHistoryModel instanceof $this &&
+		$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
+		$otherHistoryModel->getId() == $this->getId();
+	}
+
 
 
 

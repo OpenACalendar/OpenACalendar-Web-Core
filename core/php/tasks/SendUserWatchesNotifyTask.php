@@ -108,7 +108,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		$histories = array();
 		foreach($contentsToSend as $contentToSend) {
 			foreach($contentToSend->getHistories() as $history) {
-				if (true) { // TODO only if not already there!!!!!!!!!!
+				if (!$this->isHistoryInHistories($history, $histories)) {
 					$histories[] = $history;
 				}
 			}
@@ -126,6 +126,15 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		usort($histories, $usort);
 		// TODO pick out new data items!
 		return array(array(),$histories);
+	}
+
+	protected function isHistoryInHistories($history, $histories) {
+		foreach($histories as $considerHistory) {
+			if (get_class($history) == get_class($considerHistory) && $history->isEqualTo($considerHistory)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected function sendFor(SiteModel $siteModel, UserAccountModel $userAccountModel, $contentsToSend) {
