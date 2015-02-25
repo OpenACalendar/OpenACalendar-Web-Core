@@ -2,6 +2,7 @@
 
 namespace sysadmin\controllers;
 
+use repositories\builders\UserAccountRepositoryBuilder;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,7 @@ use sysadmin\ActionParser;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class AreaController {
@@ -120,10 +121,26 @@ class AreaController {
 		return $app['twig']->render('sysadmin/area/index.html.twig', $this->parameters);		
 	
 	}
-	
-	
-	
-	
+
+
+
+
+	function watchers($siteid, $slug, Request $request, Application $app) {
+
+		$this->build($siteid, $slug, $request, $app);
+
+
+		$uarb = new UserAccountRepositoryBuilder();
+		$uarb->setWatchesArea($this->parameters['area']);
+		$this->parameters['watchers'] = $uarb->fetchAll();
+
+
+		return $app['twig']->render('sysadmin/area/watchers.html.twig', $this->parameters);
+
+	}
+
+
+
 }
 
 

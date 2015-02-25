@@ -92,6 +92,9 @@ $app->match('/sysadmin/site/{siteid}/area/{slug}', "sysadmin\controllers\AreaCon
 $app->match('/sysadmin/site/{siteid}/area/{slug}/', "sysadmin\controllers\AreaController::index")
 		->assert('siteid', '\d+')
 		->assert('slug', '\d+');
+$app->match('/sysadmin/site/{siteid}/area/{slug}/watchers', "sysadmin\controllers\AreaController::watchers")
+	->assert('siteid', '\d+')
+	->assert('slug', '\d+');
 
 
 $app->match('/sysadmin/site/{siteid}/tag', "sysadmin\controllers\TagListController::index")

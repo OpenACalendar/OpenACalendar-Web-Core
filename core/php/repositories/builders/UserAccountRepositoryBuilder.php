@@ -2,6 +2,7 @@
 
 namespace repositories\builders;
 
+use models\AreaModel;
 use models\UserAccountModel;
 use models\SiteModel;
 use models\GroupModel;
@@ -12,7 +13,7 @@ use org\openacalendar\curatedlists\models\CuratedListModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
@@ -43,6 +44,14 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 	public function setWatchesGroup(GroupModel $watchesGroup) {
 		$this->watchesGroup = $watchesGroup;
+		return $this;
+	}
+
+	/** @var AreaModel **/
+	protected $watchesArea;
+	
+	public function setWatchesArea(AreaModel $watchesArea) {
+		$this->watchesArea = $watchesArea;
 		return $this;
 	}
 
@@ -119,6 +128,14 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 					"user_watches_group_information.group_id = :group_id AND ".
 					"user_watches_group_information.is_watching = '1'";
 			$this->params['group_id'] = $this->watchesGroup->getId();
+		}
+
+		if ($this->watchesArea) {
+			$this->joins[] = " JOIN user_watches_area_information ON ".
+					"user_watches_area_information.user_account_id = user_account_information.id  AND ".
+					"user_watches_area_information.area_id = :area_id AND ".
+					"user_watches_area_information.is_watching = '1'";
+			$this->params['area_id'] = $this->watchesArea->getId();
 		}
 
 		if ($this->inUserGroup) {
