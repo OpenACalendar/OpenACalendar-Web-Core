@@ -2,6 +2,7 @@
 
 namespace tasks;
 
+use models\EventHistoryModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use repositories\AreaHistoryRepository;
@@ -9,6 +10,7 @@ use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
 use repositories\EventHistoryRepository;
+use repositories\EventRepository;
 use repositories\GroupHistoryRepository;
 use repositories\ImportURLHistoryRepository;
 use repositories\SiteRepository;
@@ -89,16 +91,27 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		$importURLHistoryRepository = new ImportURLHistoryRepository;
 		foreach($contentsToSend as $contentToSend) {
 			foreach($contentToSend->getHistories() as $history) {
-				if ($history instanceof EventHistoryModel) {
+				$found = false;
+				if ($history instanceof \models\EventHistoryModel) {
 					$eventHistoryRepository->ensureChangedFlagsAreSet($history);
-				} elseif ($history instanceof GroupHistoryModel) {
+					$found = true;
+				} elseif ($history instanceof \models\GroupHistoryModel) {
 					$groupHistoryRepository->ensureChangedFlagsAreSet($history);
-				} elseif ($history instanceof VenueHistoryModel) {
+					$found = true;
+				} elseif ($history instanceof \models\VenueHistoryModel) {
 					$venueHistoryRepository->ensureChangedFlagsAreSet($history);
-				} elseif ($history instanceof AreaHistoryModel) {
+					$found = true;
+				} elseif ($history instanceof \models\AreaHistoryModel) {
 					$areaHistoryRepository->ensureChangedFlagsAreSet($history);
-				} elseif ($history instanceof ImportURLHistoryModel) {
+					$found = true;
+				} elseif ($history instanceof \models\ImportURLHistoryModel) {
 					$importURLHistoryRepository->ensureChangedFlagsAreSet($history);
+					$found = true;
+				}
+				if (!$found) {
+					foreach($this->app['extensions']->getExtensions() as $extension) {
+						$extension->makeSureHistoriesAreCorrect($history);
+					}
 				}
 			}
 		}
@@ -124,8 +137,14 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 			}
 		};
 		usort($histories, $usort);
-		// TODO pick out new data items!
-		return array(array(),$histories);
+		$newEvents = array();
+		$eventRepo = new EventRepository();
+		foreach($histories as $history)  {
+			if ($history instanceof EventHistoryModel && $history->getIsNew()) {
+				$newEvents[] = $eventRepo->loadByID($history->getId());
+			}
+		}
+		return array($newEvents,$histories);
 	}
 
 	protected function isHistoryInHistories($history, $histories) {
@@ -155,7 +174,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		if ($userNotification->getIsEmail()) {
 
 
-			list($newDataItems, $histories) = $this->getNewAndHistoriesForContentsToSend($contentsToSend);
+			list($newEvents, $histories) = $this->getNewAndHistoriesForContentsToSend($contentsToSend);
 
 			$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($userAccountModel);
@@ -171,7 +190,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 
 			$messageText = $this->app['twig']->render('email/userWatchesNotifyEmail.txt.twig', array(
 				'user'=>$userAccountModel,
-				'newDataItems'=>$newDataItems,
+				'newEvents'=>$newEvents,
 				'histories'=>$histories,
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
 				'unsubscribeURL'=>$unsubscribeURL,
@@ -182,7 +201,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 
 			$messageHTML = $this->app['twig']->render('email/userWatchesNotifyEmail.html.twig', array(
 				'user'=>$userAccountModel,
-				'newDataItems'=>$newDataItems,
+				'newEvents'=>$newEvents,
 				'histories'=>$histories,
 				'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
 				'unsubscribeURL'=>$unsubscribeURL,

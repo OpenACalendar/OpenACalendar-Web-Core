@@ -145,5 +145,9 @@ abstract class BaseExtension {
 		return array();
 	}
 
+
+	public function makeSureHistoriesAreCorrect($interfaceHistoryModel) {  // @TODO InterfaceHistoryModel type!!!!!!
+
+	}
 }
 

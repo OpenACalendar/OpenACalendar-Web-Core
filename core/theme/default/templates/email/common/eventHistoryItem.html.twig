@@ -6,85 +6,85 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div style="padding: 5px; margin: 5px 0 5px 0; background:  {{ themeVariables.colourHistoryEventBackground  }}; border-radius: 5px;">
-	<div style="font-weight: bold;">Event: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/{{ historyItem.eventSlug }}">{{ historyItem.summaryDisplay }}</a></div>
+	<div style="font-weight: bold;">{%  if historyItem.isNew %}New {%  endif %}Event: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/{{ historyItem.eventSlug }}">{{ historyItem.summaryDisplay }}</a></div>
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.description | nl2br  }}</div>
 	{% else %}
 		{% if historyItem.getSummaryChanged %}
 			<div>
-				<div>Summary changed:</div>
+				<div>Summary{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{{ historyItem.summary }}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getDescriptionChanged %}
 			<div>
-				<div>Description changed:</div>
+				<div>Description{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{{ historyItem.description | nl2br }}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getUrlChanged %}
 			<div>
-				<div>URL changed:</div>
+				<div>URL{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{{ historyItem.url }}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getStartAtChanged %}
 			<div>
-				<div>Start changed:</div>
+				<div>Start{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{{ historyItem.startAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, historyItem.timezone) }} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getEndAtChanged %}
 			<div>
-				<div>End changed:</div>
+				<div>End{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{{ historyItem.endAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, historyItem.timezone)}} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getCountryIdChanged %}
 			<div>
-				<div>Country changed:</div>
+				<div>Country{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">changed{# TODO #}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getTimezoneChanged %}
 			<div>
-				<div>Timezone changed:</div>
+				<div>Timezone{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{{ historyItem.timezone }}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getAreaIdChanged %}
 			<div>
-				<div>Area changed:</div>
+				<div>Area{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">changed{# TODO #}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getVenueIdChanged %}
 			<div>
-				<div>Venue changed:</div>
+				<div>Venue{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">changed{# TODO #}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getIsVirtualChanged %}
 			<div>
-				<div>Is Virtual changed:</div>
+				<div>Is Virtual{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{% if historyItem.isVirtual %}Yes{% else %}No{% endif %}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getIsPhysicalChanged %}
 			<div>
-				<div>Is Physical changed:</div>
+				<div>Is Physical {%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{% if historyItem.isPhysical %}Yes{% else %}No{% endif %}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getIsDeletedChanged %}
 			<div>
-				<div>Deleted Status changed:</div>
+				<div>Deleted Status{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{% if historyItem.getIsDeleted %}Deleted!{% else %}Restored!{% endif %}</div>
 			</div>
 		{%endif %}
 		{% if historyItem.getIsCancelledChanged %}
 			<div>
-				<div>Cancelled Status changed:</div>
+				<div>Cancelled Status{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{% if historyItem.getIsCancelled %}Cancelled!{% else %}Restored!{% endif %}</div>
 			</div>
 		{%endif %}

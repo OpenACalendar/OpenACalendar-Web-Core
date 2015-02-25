@@ -6,37 +6,37 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div style="padding: 5px; margin: 5px 0 5px 0; background:  {{ themeVariables.colourHistoryImportURLBackground  }}; border-radius: 5px;">
-	<div style="font-weight: bold;">Import URL: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/importurl/{{ historyItem.slug }}">{{ historyItem.title }}</a></div>
+	<div style="font-weight: bold;">{%  if historyItem.isNew %}New {%  endif %}Import URL: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/importurl/{{ historyItem.slug }}">{{ historyItem.title }}</a></div>
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.title | nl2br  }}</div>
 	{% else %}
 		{% if historyItem.getTitleChanged %}
 			<div>
-				<div>Title changed:</div>
+				<div>Title{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{{ historyItem.title }}</div>
 			</div>
 		{%endif %}
 		{% if historyItem.getCountryIdChanged %}
 			<div>
-				<div>Country changed:</div>
+				<div>Country{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">changed{# TODO #}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getAreaIdChanged %}
 			<div>
-				<div>Area changed:</div>
+				<div>Area{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">changed{# TODO #}</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getIsEnabled %}
 			<div>
-				<div>Enabled changed:</div>
+				<div>Enabled{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{% if historyItem.getIsEnabled %}Enabled!{% else %}Disabled!{% endif %}</div>
 			</div>
 		{%endif %}
 		{% if historyItem.getExpiredAt %}
 			<div>
-				<div>Expired changed:</div>
+				<div>Expired{%  if not historyItem.isNew %} changed{%  endif %}:</div>
 				<div style="font-size: 10pt;">{% if historyItem.getExpiredAt %}Expired!{% else %}Not Expired!{% endif %}</div>
 			</div>
 		{%endif %}
