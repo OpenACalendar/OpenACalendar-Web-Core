@@ -506,6 +506,7 @@ class EventController {
 		$this->parameters['searchAreaObject'] = $request->query->get('searchAreaObject');
 		$this->parameters['searchAddress'] = $request->query->get('searchAddress');
 		$this->parameters['searchTitle'] = $request->query->get('searchTitle');
+		$this->parameters['searchFieldsSubmitted'] = $request->query->get('fieldsSubmitted') == '1';
 
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 
@@ -560,6 +561,8 @@ class EventController {
 		$this->parameters['searchAreaObject'] = $request->query->get('searchAreaObject');
 		$this->parameters['searchAddress'] = $request->query->get('searchAddress');
 		$this->parameters['searchTitle'] = $request->query->get('searchTitle');
+		$this->parameters['searchFieldsSubmitted'] = $request->query->get('fieldsSubmitted') == '1';
+
 
 		$this->editVenueGetDataIntoParameters($app);
 
@@ -602,6 +605,7 @@ class EventController {
 		$this->parameters['venueSearchDone'] = false;
 
 
+
 		if ($this->parameters['doesCountryHaveAnyNotDeletedAreas']) {
 			// Area search
 			if ($this->parameters['searchArea']) {
@@ -627,6 +631,13 @@ class EventController {
 				}
 			}
 		}
+
+		// If user has not added any search fields. and the event is in a area. let's search by area by default.
+		if (!$this->parameters['searchFieldsSubmitted'] && !$this->parameters['searchAreaObject'] && $this->parameters['area']) {
+			$this->parameters['searchAreaObject'] = $this->parameters['area'];
+			$this->parameters['searchArea'] = $this->parameters['area']->getTitle();
+		}
+
 
 		// venue search
 		if ($this->parameters['searchAddressCode'] || $this->parameters['searchAddress'] || $this->parameters['searchTitle'] || $this->parameters['searchAreaObject']) {
