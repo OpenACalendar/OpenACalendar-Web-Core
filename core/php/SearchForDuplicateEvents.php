@@ -54,7 +54,8 @@ class SearchForDuplicateEvents {
 		## Get events
 		$eventRepositoryBuilder = new EventRepositoryBuilder();
 		$eventRepositoryBuilder->setSite($this->site);
-		
+		$eventRepositoryBuilder->setIncludeAreaInformation(true);
+
 		$eventRepositoryBuilder->setIncludeDeleted(true);
 		
 		$after = clone $this->event->getStartAt();
@@ -141,8 +142,11 @@ class SearchForDuplicateEvents {
 		}
 		if ($this->event->getAreaId() && $this->event->getAreaId() == $event->getAreaId()) {
 			$score++;
+		} elseif ($this->event->getAreaId() && $event->getArea() && $this->event->getAreaId() == $event->getArea()->getId()) {
+			$score++;
 		}
-		
+
+
 		return $score;
 	}
 	

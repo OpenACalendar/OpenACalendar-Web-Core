@@ -277,6 +277,50 @@ class SearchForDuplicateEventsTest  extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, $score);
 	}
 
+	function testScoreAreaSameButByVenue() {
+		$site = new SiteModel();
+
+		$eventNew = new models\EventModel();
+		$eventNew->setStartAt(new \DateTime("12th April 2012 10:00:00"));
+		$eventNew->setEndAt(new \DateTime("12th April 2012 13:00:00"));
+		$eventNew->setAreaId(34);
+
+		$eventExisting = new models\EventModel();
+		$eventExisting->setFromDataBaseRow(array(
+			'id'=>1,
+			'site_id'=>1,
+			'slug'=>1,
+			'summary'=>'Cat',
+			'description'=>'Cat',
+			'start_at'=>'2014:01:01 01:01:01',
+			'end_at'=>'2014:01:01 01:01:01',
+			'created_at'=>'2013:01:01 01:01:01',
+			'is_deleted'=>0,
+			'is_cancelled'=>0,
+			'event_recur_set_id'=>null,
+			'country_id'=>1,
+			'venue_id'=>12,
+			'area_id'=>null,
+			'timezone'=>'Europe/London',
+			'import_id'=>null,
+			'import_url_id'=>null,
+			'url'=>null,
+			'ticket_url'=>null,
+			'area_information_id'=>34,
+			'area_title'=>'Edinburgh',
+			'area_slug'=>'1',
+			'is_virtual'=>0,
+			'is_physical'=>0,
+			'is_duplicate_of_id'=>null,
+		));
+
+		$sfde = new SearchForDuplicateEvents($eventNew, $site);
+
+		$score = $sfde->getScoreForConsideredEvent($eventExisting);
+
+		$this->assertEquals(1, $score);
+	}
+
 	
 }
 

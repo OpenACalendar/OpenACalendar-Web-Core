@@ -112,6 +112,7 @@ class EventModel {
 		
 		if (isset($data['area_slug'])) {
 			$this->area = new AreaModel();
+			$this->area->setId($data['area_information_id']);
 			$this->area->setTitle($data['area_title']);
 			$this->area->setSlug($data['area_slug']);
 		}

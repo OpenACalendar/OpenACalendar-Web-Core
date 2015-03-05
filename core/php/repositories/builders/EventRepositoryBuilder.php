@@ -461,6 +461,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 				$this->joins[] = " LEFT JOIN area_information ON area_information.id = event_information.area_id OR area_information.id = venue_information.area_id";
 				$this->select[] = "  area_information.title AS area_title";
 				$this->select[] = "  area_information.slug AS area_slug";
+				$this->select[] = "  area_information.id AS area_information_id"; // we already have a area_id so called something different
 			}
 			if ($this->must_have_lat_lng) {
 				$this->where[] = " venue_information.lat IS NOT NULL ";

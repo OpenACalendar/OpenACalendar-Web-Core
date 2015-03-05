@@ -186,6 +186,12 @@ class EventNewController {
 				}
 			}
 
+			if ($request->request->has("area")) {
+				$areaRepo = new AreaRepository();
+				$params['area'] = $areaRepo->loadBySlug($app['currentSite'], $request->request->get("area"));
+				$event->setAreaId($params['area']->getId());
+			}
+
 			$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite'], 
 					$app['config']->findDuplicateEventsShow, $app['config']->findDuplicateEventsThreshhold);
 			$searchForDuplicateEvents->setNotDuplicateSlugs($notDuplicateSlugs);
