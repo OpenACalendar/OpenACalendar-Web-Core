@@ -30,4 +30,10 @@ class ExtensionCuratedLists extends \BaseExtension {
 		);
 	}
 
+	public function getAddContentToEventShowPages($parameters) {
+		return array(
+			new AddContentToEventShowPage($parameters, $this->app),
+		);
+	}
+
 }

@@ -42,7 +42,7 @@
 				{% if currentUserActions.has("org.openacalendar","eventEditGroups") %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/groups">Edit Groups</a></li>
 				{% endif %}
-				{% if currentUserActions.has("org.openacalendar","eventEditCuratedLists") %}
+				{% if currentUserActions.has("org.openacalendar.curatedlists","eventEditCuratedLists") %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/curatedlists">Edit Curated Lists</a></li>
 				{% endif %}
 				{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
@@ -236,18 +236,6 @@
 				</div>
 			</div>
 
-			{%  if curatedLists|length > 0 %}
-				<div class="infoBoxWrapper">
-					<div class="infoBoxTitle">Is in Curated Lists</div>
-					<div class="infoBoxContent">
-						<ul class="infoBoxListCuratedLists">
-							{% for curatedList in curatedLists %}
-								<li class="curatedlist"><a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a></li>
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
-			{%  endif %}
 
 		</div>
 

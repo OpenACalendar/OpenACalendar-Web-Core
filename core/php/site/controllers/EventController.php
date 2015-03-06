@@ -34,7 +34,6 @@ use repositories\MediaInEventRepository;
 use repositories\MediaRepository;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\EventHistoryRepositoryBuilder;
-use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
 use repositories\builders\UserAtEventRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
@@ -140,11 +139,6 @@ class EventController {
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
 			&& $app['currentSite']->getIsFeatureGroup());
-		// There is curatedListGeneralEdit but we want to check details on this event to
-		$app['currentUserActions']->set("org.openacalendar","eventEditCuratedLists",
-			$app['currentUserActions']->has("org.openacalendar","curatedListGeneralEdit")
-			&& !$this->parameters['event']->getIsDeleted());
-			// not && !$this->parameters['event']->getIsCancelled() because if cancelled want to remove from lists
 		$app['currentUserActions']->set("org.openacalendar","eventEditMedia",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
@@ -298,10 +292,6 @@ class EventController {
 		}
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
-		$curatedListRepoBuilder->setContainsEvent($this->parameters['event']);
-		$curatedListRepoBuilder->setIncludeDeleted(false);
-		$this->parameters['curatedLists'] = $curatedListRepoBuilder->fetchAll();
 
 		$this->parameters['templatesAfterDetails'] = array();
 		$this->parameters['templatesAtEnd'] = array();
