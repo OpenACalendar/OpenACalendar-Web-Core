@@ -1,20 +1,28 @@
 {#
+ #
+ # In this file we have to carefully use a combination of all 3 of:
+ #   - in twig tags http://twig.sensiolabs.org/doc/templates.html#whitespace-control
+ #   spaceless
+ #   putting the title on thte same line as the opening <a tag
+ #
+ # To make the HTML come out with no new lines in the HTML, and that is essential to make it render properly in FireFox.
+ #
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
+{% set value = 'no spaces' %}
 <ul class="areas">
 	{% for areaToList in areasToList %}
 			<li class="area">
 				{% spaceless %}
 					<span class="content{% if areaToList.cachedFutureEvents %}WithEvents{% else %}WithNoEvents{% endif %}">
-						<a href="/area/{{ areaToList.slugForUrl }}">
-							{{ areaToList.title }}
-							{% if areaToList.cachedFutureEvents %}
+						<a href="/area/{{ areaToList.slugForUrl }}">{{ areaToList.title }}
+							{%- if areaToList.cachedFutureEvents -%}
 								<span title="{{areaToList.cachedFutureEvents}} future events"> ({{areaToList.cachedFutureEvents}})</span>
-							{% endif %}
+							{%- endif -%}
 						</a>
 					</span>
 				{% endspaceless %}
