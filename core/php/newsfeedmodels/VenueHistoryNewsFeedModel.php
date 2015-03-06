@@ -61,7 +61,7 @@ class VenueHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 			$txt .= 'New! '."\n";
 		}
 		if ($this->venueHistoryModel->isAnyChangeFlagsUnknown()) {
-			$txt .= $this->getDescription();
+			$txt .= $this->venueHistoryModel->getDescription();
 		} else {
 			if ($this->venueHistoryModel->getTitleChanged()) {
 				$txt .= 'Title Changed. '."\n";

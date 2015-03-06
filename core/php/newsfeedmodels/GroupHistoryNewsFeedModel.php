@@ -59,7 +59,7 @@ class GroupHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 			$txt .= 'New! '."\n";
 		}
 		if ($this->groupHistoryModel->isAnyChangeFlagsUnknown()) {
-			$txt .= $this->getDescription();
+			$txt .= $this->groupHistoryModel->getDescription();
 		} else {
 			if ($this->groupHistoryModel->getTitleChanged()) {
 				$txt .= 'Title Changed. '."\n";
