@@ -184,6 +184,8 @@ class Config {
 	public $taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval = 1800; // 30 mins
 
+	public $formWidgetTimeMinutesMultiples = 1;
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

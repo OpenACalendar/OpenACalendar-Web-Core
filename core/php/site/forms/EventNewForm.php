@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -24,14 +25,17 @@ class EventNewForm extends AbstractType{
 	protected $timeZoneName;
 	/** @var SiteModel **/
 	protected $site;
-	
-	function __construct(SiteModel $site, $timeZoneName) {
+
+	protected $formWidgetTimeMinutesMultiples;
+
+	function __construct(SiteModel $site, $timeZoneName, Application $application) {
 		$this->site = $site;
 		$this->timeZoneName = $timeZoneName;
+		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
+
 		$builder->add('summary', 'text', array(
 			'label'=>'Summary',
 			'required'=>true, 
@@ -134,28 +138,42 @@ class EventNewForm extends AbstractType{
 		}
 		
 		$years = array( date('Y'), date('Y')+1 );
-		
-		$builder->add('start_at', 'datetime' ,array(
-				'label'=>'Start Date & Time',
-				'date_widget'=> 'single_text',
-				'date_format'=>'d/M/y',
-				'model_timezone' => 'UTC',
-				'view_timezone' => $this->timeZoneName,
-				'years' => $years,
-				'attr' => array('class' => 'dateInput'),
-				'required'=>true
-			));
 
-		$builder->add('end_at', 'datetime' ,array(
-				'label'=>'End Date & Time',
-				'date_widget'=> 'single_text',
-				'date_format'=>'d/M/y',
-				'model_timezone' => 'UTC',
-				'view_timezone' => $this->timeZoneName,
-				'years' => $years,
-				'attr' => array('class' => 'dateInput'),
-				'required'=>true
-			));
+		$startOptions = array(
+			'label'=>'Start Date & Time',
+			'date_widget'=> 'single_text',
+			'date_format'=>'d/M/y',
+			'model_timezone' => 'UTC',
+			'view_timezone' => $this->timeZoneName,
+			'years' => $years,
+			'attr' => array('class' => 'dateInput'),
+			'required'=>true
+		);
+		if ($this->formWidgetTimeMinutesMultiples > 1) {
+			$startOptions['minutes'] = array();
+			for ($i = 0; $i <= 59; $i=$i+$this->formWidgetTimeMinutesMultiples) {
+				$startOptions['minutes'][] = $i;
+			}
+		}
+		$builder->add('start_at', 'datetime' ,$startOptions);
+
+		$endOptions = array(
+			'label'=>'End Date & Time',
+			'date_widget'=> 'single_text',
+			'date_format'=>'d/M/y',
+			'model_timezone' => 'UTC',
+			'view_timezone' => $this->timeZoneName,
+			'years' => $years,
+			'attr' => array('class' => 'dateInput'),
+			'required'=>true
+		);
+		if ($this->formWidgetTimeMinutesMultiples > 1) {
+			$endOptions['minutes'] = array();
+			for ($i = 0; $i <= 59; $i=$i+$this->formWidgetTimeMinutesMultiples) {
+				$endOptions['minutes'][] = $i;
+			}
+		}
+		$builder->add('end_at', 'datetime' ,$endOptions);
 				
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){

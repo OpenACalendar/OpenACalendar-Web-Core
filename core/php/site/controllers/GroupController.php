@@ -351,7 +351,7 @@ class GroupController {
 			}
 		}
 		
-		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone']), $event);
+		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone'], $app), $event);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
