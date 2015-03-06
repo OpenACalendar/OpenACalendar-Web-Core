@@ -169,6 +169,8 @@ class Config {
 	
 	public $CLIAPI1Enabled = false;
 
+	public $formWidgetTimeMinutesMultiples = 1;
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

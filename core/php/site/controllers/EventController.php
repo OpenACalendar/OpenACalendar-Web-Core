@@ -427,7 +427,7 @@ class EventController {
 		if ($this->parameters['event']->getIsImported()) {
 			$form = $app['form.factory']->create(new EventImportedEditForm($app['currentSite'], $timeZone), $this->parameters['event']);
 		} else {
-			$form = $app['form.factory']->create(new EventEditForm($app['currentSite'], $timeZone), $this->parameters['event']);
+			$form = $app['form.factory']->create(new EventEditForm($app['currentSite'], $timeZone, $app), $this->parameters['event']);
 		}
 		
 		if ('POST' == $request->getMethod()) {
@@ -1363,7 +1363,7 @@ class EventController {
 		$newEventState = clone $this->parameters['event'];
 		$newEventState->setFromHistory($this->parameters['eventHistory']);
 		
-		$form = $app['form.factory']->create(new EventEditForm($app['currentSite'],$app['currentTimeZone']), $newEventState);
+		$form = $app['form.factory']->create(new EventEditForm($app['currentSite'],$app['currentTimeZone'], $app), $newEventState);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

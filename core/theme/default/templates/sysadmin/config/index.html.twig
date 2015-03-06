@@ -627,6 +627,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th>formWidgetTimeMinutesMultiples</th>
+			<td>{{ config.formWidgetTimeMinutesMultiples }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'formWidgetTimeMinutesMultiples'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>recurEventForDaysInFutureWhenWeekly</th>
 			<td>{{ config.recurEventForDaysInFutureWhenWeekly }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'recurEventForDaysInFutureWhenWeekly'} %}

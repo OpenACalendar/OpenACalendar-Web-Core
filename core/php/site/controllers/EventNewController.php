@@ -80,7 +80,7 @@ class EventNewController {
 		$event->setDefaultOptionsFromSite($app['currentSite']);
 
 		$timezone = isset($_POST['EventNewForm']) && isset($_POST['EventNewForm']['timezone']) ? $_POST['EventNewForm']['timezone'] : $app['currentTimeZone'];
-		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $timezone), $event);
+		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $timezone, $app), $event);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -154,7 +154,7 @@ class EventNewController {
 
 			$event = new EventModel();
 			$event->setDefaultOptionsFromSite($app['currentSite']);
-			$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone']), $event);
+			$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone'], $app), $event);
 			$form->bind($request);
 
 			if ($request->request->get('group_slug')) {
