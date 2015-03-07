@@ -159,65 +159,37 @@
 				{% endif %}
 			</div>
 
+			{% if event.isImported %}
+				<p>Imported From: <a href="/importurl/{{ importurl.slug }}">{{ importurl.url | linkinfo }}</a></p>
+			{% endif %}
+
 		</div>
 
 		<div class="innerPageRight">
 
-			{% if event.url %}
-				<div class="innerPageRightLinkWrapper">
-					<div class="innerPageRightLinkHeader">More details</div>
-					<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
-				</div>
-			{% endif %}
+			{%  set showMoreInfoPromptSignUp = currentUser is null and not event.isInPast and not event.isDeleted and not event.isCancelled and not event.ticketUrl  %}
 
-			{% if event.ticketUrl %}
-				<div class="innerPageRightLinkWrapper">
-					<div class="innerPageRightLinkHeader">Get Tickets From</div>
-					<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></div>
-				</div>
-			{% endif %}
+			{%  if showMoreInfoPromptSignUp or event.url or event.ticketUrl %}
+				<div class="infoBoxWrapper">
+					<div class="infoBoxTitle">More Information</div>
+					<div class="infoBoxContent">
 
-			{% if event.isImported %}
-				<div class="innerPageRightLinkWrapper">
-					<div class="innerPageRightLinkHeader">Imported From</div>
-					<div class="innerPageRightLinkContent"><a href="/importurl/{{ importurl.slug }}">{{ importurl.url | linkinfo }}</a></div>
-				</div>
-			{% endif %}
 
-			<div class="infoBoxWrapper">
-				<div class="infoBoxTitle">People</div>
-				<div class="infoBoxContent">
-					{% if currentUser is not null %}
-						{% if not event.isInPast %}
-							<form method="post" action="/event/{{ event.slug }}/myAttendance.json" class="UserAttendingOptions">
-								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-								You
-								<select name="attending">
-									<option value="no" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}selected{% endif %}>are not</option>
-									<option value="maybe" {% if userAtEvent.isPlanMaybeAttending %}selected{% endif %}>might be</option>
-									<option value="yes" {% if userAtEvent.isPlanAttending %}selected{% endif %}>will be</option>
-								</select> attending.
-							<span class="UserAttendingPrivacyOptionsWrapper" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}style="display:none;"{% endif %}>
-								This is
-								<select name="privacy">
-									<option value="private" {% if not userAtEvent.isPlanPublic %}selected{% endif %}>private</option>
-									<option value="public" {% if userAtEvent.isPlanPublic %}selected{% endif %}>public</option>
-								</select>.
-							</span>
-							<span class="savingIndicator" style="display:none;">
-								<img src="/theme/default/img/ajaxLoading.gif?v={{ config.assetsVersion }}"> Saving ...
-							</span>
-								<span class="savedIndicator" style="display:none;"> Saved!</span>
-							</form>
+						{% if event.url %}
+							<div class="innerPageRightLinkWrapper">
+								<div class="innerPageRightLinkHeader">More details</div>
+								<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
+							</div>
 						{% endif %}
 
-						<div id="UserAttendingListAjaxWrapper">
-							{% include 'site/common/eventUsersAttending.html.twig' with {} %}
-						</div>
-					{% else %}
 						{% if event.ticketUrl %}
-							Get your tickets from <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a>
-						{%  else  %}
+							<div class="innerPageRightLinkWrapper">
+								<div class="innerPageRightLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
+								<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></div>
+							</div>
+						{% endif %}
+
+						{% if showMoreInfoPromptSignUp %}
 							<p>
 								Get reminders and notifications of this event and start to build up your personal calendar!
 							</p>
@@ -231,11 +203,39 @@
 									Login
 								</a>
 							</p>
-						{% endif %}
-					{% endif %}
-				</div>
-			</div>
+						{%  endif %}
 
+					</div>
+				</div>
+			{%  endif %}
+
+
+			{% if currentUser is not null and not event.isInPast %}
+				<form method="post" action="/event/{{ event.slug }}/myAttendance.json" class="UserAttendingOptions">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					You
+					<select name="attending">
+						<option value="no" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}selected{% endif %}>are not</option>
+						<option value="maybe" {% if userAtEvent.isPlanMaybeAttending %}selected{% endif %}>might be</option>
+						<option value="yes" {% if userAtEvent.isPlanAttending %}selected{% endif %}>will be</option>
+					</select> attending.
+				<span class="UserAttendingPrivacyOptionsWrapper" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}style="display:none;"{% endif %}>
+					This is
+					<select name="privacy">
+						<option value="private" {% if not userAtEvent.isPlanPublic %}selected{% endif %}>private</option>
+						<option value="public" {% if userAtEvent.isPlanPublic %}selected{% endif %}>public</option>
+					</select>.
+				</span>
+				<span class="savingIndicator" style="display:none;">
+					<img src="/theme/default/img/ajaxLoading.gif?v={{ config.assetsVersion }}"> Saving ...
+				</span>
+					<span class="savedIndicator" style="display:none;"> Saved!</span>
+				</form>
+			{% endif %}
+
+			<div id="UserAttendingListAjaxWrapper">
+				{% include 'site/common/eventUsersAttending.html.twig' with {} %}
+			</div>
 
 		</div>
 
