@@ -10,6 +10,7 @@ use models\GroupModel;
 use models\VenueModel;
 use models\UserAccountModel;
 use \models\ImportedEventModel;
+use repositories\builders\UserAtEventRepositoryBuilder;
 use repositories\UserWatchesGroupRepository;
 use dbaccess\EventDBAccess;
 
@@ -499,7 +500,21 @@ class EventRepository {
 			$duplicateEvent->setIsDuplicateOfId($originalEvent->getId());
 			$this->eventDBAccess->update($duplicateEvent, array('is_deleted','is_duplicate_of_id'), $user);
 
-			// TODO users attending event
+			$uaeRepo = new UserAtEventRepository();
+			$uaerb = new UserAtEventRepositoryBuilder();
+			$uaerb->setEventOnly($duplicateEvent);
+			foreach($uaerb->fetchAll() as $uaeDuplicate) {
+				if ($uaeDuplicate->getIsPlanAttending() || $uaeDuplicate->getIsPlanMaybeAttending()) {
+					$uaeOriginal = $uaeRepo->loadByUserIDAndEventOrInstanciate($uaeDuplicate->getUserAccountId(), $originalEvent);
+					// does user already have plans for this event? If so leave them.
+					if (!$uaeOriginal->getIsPlanAttending() && !$uaeOriginal->getIsPlanMaybeAttending()) {
+						$uaeOriginal->setIsPlanAttending($uaeDuplicate->getIsPlanAttending());
+						$uaeOriginal->setIsPlanMaybeAttending($uaeDuplicate->getIsPlanMaybeAttending());
+						$uaeOriginal->setIsPlanPublic($uaeDuplicate->getIsPlanPublic());
+						$uaeRepo->save($uaeOriginal);
+					}
+				}
+			}
 
 			$DB->commit();
 		} catch (Exception $e) {

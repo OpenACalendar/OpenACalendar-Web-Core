@@ -22,9 +22,14 @@ class UserAtEventRepository {
 	
 	/** @return UserAtEventModel **/
 	public function loadByUserAndEvent(UserAccountModel $user, EventModel $event) {
+		return $this->loadByUserIDAndEvent($user->getId(), $event);
+	}
+
+	/** @return UserAtEventModel **/
+	public function loadByUserIDAndEvent($userId, EventModel $event) {
 		global $DB;
 		$stat = $DB->prepare("SELECT user_at_event_information.* FROM user_at_event_information WHERE user_account_id =:user_account_id AND event_id=:event_id");
-		$stat->execute(array( 'user_account_id'=>$user->getId(), 'event_id'=>$event->getId() ));
+		$stat->execute(array( 'user_account_id'=>$userId, 'event_id'=>$event->getId() ));
 		if ($stat->rowCount() > 0) {
 			$uaem = new UserAtEventModel();
 			$uaem->setFromDataBaseRow($stat->fetch());
@@ -34,11 +39,16 @@ class UserAtEventRepository {
 
 	/** @return UserAtEventModel **/
 	public function loadByUserAndEventOrInstanciate(UserAccountModel $user, EventModel $event) {
-		$uaem = $this->loadByUserAndEvent($user, $event);
+		return $this->loadByUserIDAndEventOrInstanciate($user->getId(), $event);
+	}
+
+	/** @return UserAtEventModel **/
+	public function loadByUserIDAndEventOrInstanciate($userId, EventModel $event) {
+		$uaem = $this->loadByUserIDAndEvent($userId, $event);
 		if (!$uaem) {
 			$uaem = new UserAtEventModel();
 			$uaem->setEventId($event->getId());
-			$uaem->setUserAccountId($user->getId());
+			$uaem->setUserAccountId($userId);
 		}
 		return $uaem;
 	}
