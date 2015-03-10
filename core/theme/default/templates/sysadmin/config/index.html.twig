@@ -591,6 +591,11 @@
 			</td>
 		</tr>
 		<tr>
+			<th>findDuplicateEventsNoMatchSummary</th>
+			<td>{{ config.findDuplicateEventsNoMatchSummary  | join(", ")}}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'findDuplicateEventsNoMatchSummary'} %}</td>
+		</tr>
+		<tr>
 			<th>SMTPPort</th>
 			<td>{{ config.SMTPPort }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPort'} %}

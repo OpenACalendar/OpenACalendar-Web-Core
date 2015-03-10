@@ -23,12 +23,15 @@ class SearchForDuplicateEvents {
 	protected $showEventsCount = 3;
 	
 	protected $showEventsThreshhold = 2;
+
+	protected $wordsNotToMatchInSummary = array();
 			
-	function __construct(EventModel $event, SiteModel $site, $showEventsCount=3, $showEventsThreshhold=2) {
+	function __construct(EventModel $event, SiteModel $site, $showEventsCount=3, $showEventsThreshhold=2, $wordsNotToMatchInSummary=array()) {
 		$this->event = $event;
 		$this->site = $site;
 		$this->showEventsCount = $showEventsCount;
 		$this->showEventsThreshhold = $showEventsThreshhold;
+		$this->wordsNotToMatchInSummary = $wordsNotToMatchInSummary;
 	}
 	
 	protected $notTheseSlugs = array();
@@ -131,7 +134,7 @@ class SearchForDuplicateEvents {
 				$bits2 = explode(" ", strtolower($event->getSummary()));
 				$flag = false;
 				foreach($bits1 as $bit) {
-					if ($bit && in_array($bit, $bits2)) {
+					if ($bit && in_array($bit, $bits2) && !in_array($bit, $this->wordsNotToMatchInSummary)) {
 						$flag = true;
 					}
 				}

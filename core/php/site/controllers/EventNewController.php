@@ -192,8 +192,13 @@ class EventNewController {
 				$event->setAreaId($params['area']->getId());
 			}
 
-			$searchForDuplicateEvents = new SearchForDuplicateEvents($event, $app['currentSite'], 
-					$app['config']->findDuplicateEventsShow, $app['config']->findDuplicateEventsThreshhold);
+			$searchForDuplicateEvents = new SearchForDuplicateEvents(
+				$event,
+				$app['currentSite'],
+				$app['config']->findDuplicateEventsShow,
+				$app['config']->findDuplicateEventsThreshhold,
+				is_array($app['config']->findDuplicateEventsNoMatchSummary) ? $app['config']->findDuplicateEventsNoMatchSummary : array()
+			);
 			$searchForDuplicateEvents->setNotDuplicateSlugs($notDuplicateSlugs);
 
 			$timeZone = new \DateTimeZone($event->getTimezone());

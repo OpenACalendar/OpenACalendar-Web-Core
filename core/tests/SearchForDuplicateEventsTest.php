@@ -235,7 +235,38 @@ class SearchForDuplicateEventsTest  extends \PHPUnit_Framework_TestCase {
 		$score = $sfde->getScoreForConsideredEvent($eventExisting);
 		
 		$this->assertEquals($scoreExpected, $score);
-	}	
+	}
+
+	function dataForTestScoreSummaryCompareWithNoMatchList() {
+		return array(
+				array('wibble hustings','wobble hustings',array(), 1),
+				array('wibble hustings','wobble hustings',array('hustings'), 0),
+				array('wibble hustings','wobble hustings',array('husting'), 1),
+			);
+	}
+
+	/**
+     * @dataProvider dataForTestScoreSummaryCompareWithNoMatchList
+     */
+	function testScoreSummaryCompareWithNoMatchList($summary1, $summary2, $noMatchList, $scoreExpected) {
+		$site = new SiteModel();
+
+		$eventNew = new models\EventModel();
+		$eventNew->setStartAt(new \DateTime("12th Feb 2012 10:00:00"));
+		$eventNew->setEndAt(new \DateTime("12th Feb 2012 13:00:00"));
+		$eventNew->setSummary($summary1);
+
+		$eventExisting = new models\EventModel();
+		$eventExisting->setStartAt(new \DateTime("12th March 2012 10:00:00"));
+		$eventExisting->setEndAt(new \DateTime("12th March 2012 13:00:00"));
+		$eventExisting->setSummary($summary2);
+
+		$sfde = new SearchForDuplicateEvents($eventNew, $site, 3, 2, $noMatchList);
+
+		$score = $sfde->getScoreForConsideredEvent($eventExisting);
+
+		$this->assertEquals($scoreExpected, $score);
+	}
 
 	function testScoreVenueSame() {
 		$site = new SiteModel();

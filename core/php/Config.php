@@ -156,7 +156,8 @@ class Config {
 
 	public $findDuplicateEventsShow = 3;
 	public $findDuplicateEventsThreshhold = 2;
-	
+	public $findDuplicateEventsNoMatchSummary = array();
+
 	public $SMTPPort = 25;
 	public $SMTPHost = "localhost";
 	public $SMTPUsername = null;
