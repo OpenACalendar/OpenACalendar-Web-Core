@@ -33,6 +33,12 @@
 		</ul>
 	{% endif %}
 
+	{%  if eventIsDuplicateOf %}
+		<div class="flash-notice">
+			This event is a duplicate of <a href="/event/{{  eventIsDuplicateOf.slugForURL }}">{{  eventIsDuplicateOf.summaryDisplay }}</a>.
+		</div>
+	{% endif %}
+
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}

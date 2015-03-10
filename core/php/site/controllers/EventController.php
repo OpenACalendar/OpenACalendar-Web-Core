@@ -62,7 +62,8 @@ class EventController {
 			'area'=>null, 
 			'parentAreas'=>array(), 
 			'childAreas'=>array(),
-			'importurl'=>null, 			
+			'importurl'=>null,
+			'eventIsDuplicateOf'=>null,
 		);
 
 		if (strpos($slug, "-")) {
@@ -117,6 +118,10 @@ class EventController {
 					$this->parameters['group'] = $group;
 				}
 			}
+		}
+
+		if ($this->parameters['event']->getIsDuplicateOfId()) {
+			$this->parameters['eventIsDuplicateOf'] = $eventRepository->loadByID($this->parameters['event']->getIsDuplicateOfId());
 		}
 
 		$app['currentUserActions']->set("org.openacalendar","eventHistory",true);
