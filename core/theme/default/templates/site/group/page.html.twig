@@ -22,7 +22,13 @@
 	{% endif %}
 		
 	<h2>{{  group.title }}</h2>
-	
+
+	{%  if groupIsDuplicateOf %}
+		<div class="flash-notice">
+			This group is a duplicate of <a href="/group/{{  groupIsDuplicateOf.slugForURL }}">{{  groupIsDuplicateOf.title }}</a>.
+		</div>
+	{% endif %}
+
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}

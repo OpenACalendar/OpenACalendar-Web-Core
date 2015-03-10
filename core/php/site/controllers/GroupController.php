@@ -48,7 +48,9 @@ class GroupController {
 	
 	protected function build($slug, Request $request, Application $app) {
 		global $CONFIG;
-		$this->parameters = array('currentUserWatchesGroup'=>false);
+		$this->parameters = array(
+			'currentUserWatchesGroup'=>false,
+			'groupIsDuplicateOf'=>null);
 		
 		if (strpos($slug, "-")) {
 			$slug = array_shift(explode("-", $slug, 2));
@@ -66,6 +68,9 @@ class GroupController {
 			$this->parameters['currentUserWatchesGroup'] = $uwg && $uwg->getIsWatching();
 		}
 
+		if ($this->parameters['group']->getIsDuplicateOfId()) {
+			$this->parameters['groupIsDuplicateOf'] = $gr->loadByID($this->parameters['group']->getIsDuplicateOfId());
+		}
 
 		$app['currentUserActions']->set("org.openacalendar","groupHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","groupEditDetails",
