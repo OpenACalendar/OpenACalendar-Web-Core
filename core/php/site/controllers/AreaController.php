@@ -39,7 +39,11 @@ class AreaController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		$this->parameters = array('country'=>null,'parentAreas'=>array());
+		$this->parameters = array(
+			'country'=>null,
+			'parentAreas'=>array(),
+			'areaIsDuplicateOf'=>null,
+		);
 		
 		if (strpos($slug, "-")) {
 			$slug = array_shift(explode("-", $slug, 2));
@@ -75,6 +79,10 @@ class AreaController {
 		$areaRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 
+		if ($this->parameters['area']->getIsDuplicateOfId()) {
+			$this->parameters['areaIsDuplicateOf'] = $ar->loadByID($this->parameters['area']->getIsDuplicateOfId());
+		}
+		
 		$app['currentUserActions']->set("org.openacalendar","areaHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","actionAreaEditDetails",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")

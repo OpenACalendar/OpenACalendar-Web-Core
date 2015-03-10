@@ -26,6 +26,12 @@
 		
 	<h2>{{  area.title }}</h2>
 	
+	{%  if areaIsDuplicateOf %}
+		<div class="flash-notice">
+			This area is a duplicate of <a href="/area/{{  areaIsDuplicateOf.slugForURL }}">{{  areaIsDuplicateOf.title }}</a>.
+		</div>
+	{% endif %}
+	
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
