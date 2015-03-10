@@ -37,7 +37,12 @@ class VenueController {
 	
 	protected function build($slug, Request $request, Application $app) {
 		global $CONFIG;
-		$this->parameters = array('country'=>null,'area'=>null, 'parentAreas'=>array(), 'childAreas'=>array());
+		$this->parameters = array(
+			'country'=>null,
+			'area'=>null,
+			'parentAreas'=>array(),
+			'childAreas'=>array(),
+			'venueIsDuplicateOf'=>null,);
 		
 		if (strpos($slug, "-")) {
 			$slug = array_shift(explode("-", $slug, 2));
@@ -80,6 +85,10 @@ class VenueController {
 			$areaRepoBuilder->setNoParentArea(true);
 			$areaRepoBuilder->setIncludeDeleted(false);
 			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
+		}
+
+		if ($this->parameters['venue']->getIsDuplicateOfId()) {
+			$this->parameters['venueIsDuplicateOf'] = $vr->loadByID($this->parameters['venue']->getIsDuplicateOfId());
 		}
 
 

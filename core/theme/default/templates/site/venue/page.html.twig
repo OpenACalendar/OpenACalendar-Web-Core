@@ -26,7 +26,13 @@
 		
 		
 	<h2>{{  venue.title }}</h2>
-	
+
+	{%  if venueIsDuplicateOf %}
+		<div class="flash-notice">
+			This venue is a duplicate of <a href="/venue/{{  venueIsDuplicateOf.slugForURL }}">{{  venueIsDuplicateOf.title }}</a>.
+		</div>
+	{% endif %}
+
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
