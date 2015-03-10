@@ -102,7 +102,7 @@ class EventNewController {
 
 					$handle = fopen($app['config']->logFileParseDateTimeRange, "a");
 					$now = \TimeSource::getDateTime();
-					var_dump(fputcsv($handle, array(
+					fputcsv($handle, array(
 						'Site',
 						$app['currentSite']->getId(),
 						$app['currentSite']->getSlug(),
@@ -123,7 +123,7 @@ class EventNewController {
 						'Got End UTC',
 						$parseEnd->format("c"),
 						($success ? 'SUCCESS' : 'FAIL'),
-					)));
+					));
 					fclose($handle);
 				}
 
