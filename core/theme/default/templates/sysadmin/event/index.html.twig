@@ -30,7 +30,7 @@
 		</tr>
 		<tr>
 			<th>Is Duplicate of</th>
-			<td>{% if event.isDuplicateOfId %}<a href="/sysadmin/site/{{ site.id }}/event/{{ eventisduplicateof.slug }}/">{{ eventisduplicateof.title }}</a>{% else %}-{% endif %}</td>
+			<td>{% if event.isDuplicateOfId %}<a href="/sysadmin/site/{{ site.id }}/event/{{ eventisduplicateof.slug }}/">{{ eventisduplicateof.summary }}</a>{% else %}-{% endif %}</td>
 		</tr>
 		<tr>
 			<th>Summary</th>
