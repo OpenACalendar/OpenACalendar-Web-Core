@@ -4,6 +4,7 @@ namespace repositories\builders;
 
 use models\SiteModel;
 use models\UserAccountModel;
+
 /**
  *
  * @package Core
@@ -35,11 +36,25 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 	protected function build() {
 		if ($this->userInterestedIn) {
+			// user watches site
 			$this->joins[] = " LEFT JOIN user_watches_site_information ON user_watches_site_information.site_id = site_information.id AND user_watches_site_information.user_account_id = :user_in_site ";
 			$this->params['user_in_site'] = $this->userInterestedIn->getId();
-			$this->where[] = " (   user_watches_site_information.is_watching = '1')";
-			// TODO could do user_watches_group_information to?
-			// TODO permissions?
+
+			// TODO could do user_watches_group_information to? https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/355
+
+			// TODO could do user_watches_area_information to? https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/356
+
+			// TODO user at event. https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/357
+
+			// Permissions
+			$inner = "SELECT user_group_in_site.site_id AS site_id, user_in_user_group.user_account_id AS user_account_id FROM user_group_in_site ".
+				"LEFT JOIN user_in_user_group ON user_in_user_group.user_group_id = user_group_in_site.user_group_id ".
+				"WHERE user_group_in_site.removed_at IS NULL AND user_in_user_group.removed_at IS NULL AND user_in_user_group.user_account_id = :user_in_site ".
+				"GROUP BY user_group_in_site.site_id, user_in_user_group.user_account_id ";
+			$this->joins[] = " LEFT JOIN (".$inner.") AS user_permission_in_site ON user_permission_in_site.site_id = site_information.id  ";
+
+			// put it all together
+			$this->where[] = " (   user_watches_site_information.is_watching = '1' OR user_permission_in_site.user_account_id = :user_in_site)";
 		}
 
 		if ($this->isListedInIndexOnly) {
