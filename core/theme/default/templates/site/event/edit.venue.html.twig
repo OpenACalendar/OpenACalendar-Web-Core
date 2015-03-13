@@ -90,8 +90,8 @@
 				<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="oneActionFormRight">
 					<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
 					<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
-					<input type="hidden" name="fieldArea" value="{{ searchArea | e('html_attr') }}">
 					<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
+					<input type="hidden" name="fieldAreaSearchText" value="{{ searchArea | e('html_attr') }}">
 					<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
 					<input type="submit" value="New">
 				</form>

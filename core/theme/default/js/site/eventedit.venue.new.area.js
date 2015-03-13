@@ -11,5 +11,6 @@
 
 
 function clearArea() {
-	$('#AreaFieldsWrapper').html('<input type="hidden" name="fieldAreaSlug" value="">');
+	$('#AreaFieldsWrapper').html('<input type="hidden" name="fieldAreaSearchText" value=""><input type="hidden" name="fieldAreaSlug" value=""><input type="hidden" name="fieldAreaSlugSelected" value="">');
+	$('#NewVenueForm').submit();
 }

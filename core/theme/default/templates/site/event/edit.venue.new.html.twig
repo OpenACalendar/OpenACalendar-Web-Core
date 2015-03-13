@@ -17,7 +17,7 @@
 
 	<form action="" method="post" class="styled" id="NewVenueForm">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="fieldsSubmitted" value="1">
+		<input type="hidden" name="newVenueFieldsSubmitted" value="1">
 
 		<div class="rowWrapper">
 			<div class="labelWrapper">Venue Name</div>
@@ -31,42 +31,18 @@
 			<div class="after"></div>
 		</div>
 
-		{% if showAreaField %}
+		{% if fieldAreaObject %}
 			<div class="rowWrapper">
 				<div class="labelWrapper">City/Area</div>
 				<div class="widgetWrapperPlacementOnly" id="AreaFieldsWrapper">
-					{% if fieldAreaObject is null %}
-						<input type="text" name="fieldArea"  id="AreaField" value="{{ fieldArea | e('html_attr') }}">
-						{% if areaSearchRequired and areasToSearch %}
-							<ul class="formErrors">
-								<li>Did you mean?</li>
-							</ul>
-							<ul>
-								{%  for area in areasToSearch %}
-									<li><label><input type="radio" name="fieldAreaSlug" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{%  endif %}</label></li>
-								{%  endfor %}
-								<li><label><input type="radio" name="fieldAreaSlug" value="-1">None of the above</label></li>
-							</ul>
-						{%  endif %}
-					{% else %}
 						{{  fieldAreaObject.title }}
 						<a href="#" onclick="clearArea(); return false;">Clear</a>
 						<input type="hidden" name="fieldAreaSlug" value="{{ fieldAreaObject.slug  }}">
-					{%  endif %}
-					{% if areaChildSearchRequired and areasToSearch %}
-						<ul class="formErrors">
-							<li>Can you be more exact? This helps people find events.</li>
-						</ul>
-						<ul>
-							{%  for area in areasToSearch %}
-								<li><label><input type="radio" name="fieldChildAreaSlug" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{% endif %}</label></li>
-							{%  endfor %}
-							<li><label><input type="radio" name="fieldChildAreaSlug" value="-1">None of the above</label></li>
-						</ul>
-					{%  endif %}
 				</div>
 				<div class="after"></div>
 			</div>
+		{%  else %}
+			<input type="hidden" name="fieldAreaSearchText" value="{{  fieldAreaSearchText | e('html_attr') }}">
 		{%  endif %}
 
 		<div class="rowWrapper">

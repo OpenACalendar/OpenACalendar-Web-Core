@@ -1,0 +1,106 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %}
+
+{% block innerContent %}
+
+
+	<p>Create a New Venue</p>
+
+	<form action="" method="post" class="styled" id="NewVenueForm">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="newVenueFieldsSubmitted" value="1">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Venue Name</div>
+			<div class="widgetWrapperPlacementOnly">{{ venue.title }}</div>
+			<div class="after"></div>
+		</div>
+		<input type="hidden" name="fieldTitle" value="{{ venue.title | e('html_attr') }}">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Address</div>
+			<div class="widgetWrapperPlacementOnly">{{  venue.address  | e('html_attr') }}</div>
+			<div class="after"></div>
+		</div>
+		<input type="hidden" name="fieldAddress" value="{{  venue.address  | e('html_attr') }}">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Post Code</div>
+			<div class="widgetWrapperPlacementOnly">{{ venue.addressCode  | e('html_attr')  }}</div>
+			<div class="after"></div>
+		</div>
+		<input type="hidden" name="fieldAddressCode" value="{{ venue.addressCode  | e('html_attr')  }}">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Country</div>
+			<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">Any notes</div>
+			<div class="widgetWrapperPlacementOnly">{{  venue.description | e }}</div>
+			<div class="after"></div>
+		</div>
+		<input type="hidden" name="fieldDescription" value="{{  venue.description | e('html_attr') }}">
+
+		<input type="hidden" name="fieldLat" value="{{  venue.lat }}">
+		<input type="hidden" name="fieldLng" value="{{  venue.lng }}">
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">City/Area</div>
+			<div class="widgetWrapperPlacementOnly" id="AreaFieldsWrapper">
+
+				{%  if fieldAreaObject %}
+					{{  fieldAreaObject.title }}
+					<a href="#" onclick="clearArea(); return false;">Clear</a>
+					<input type="hidden" name="fieldAreaSlug" value="{{ fieldAreaObject.slug  }}">
+				{%  else %}
+					<input type="text" name="fieldAreaSearchText"  id="AreaField" value="{{ fieldAreaSearchText | e('html_attr') }}">
+				{%  endif %}
+				{% if areasToSelectSearch %}
+					<ul class="formErrors">
+						<li>Did you mean?</li>
+					</ul>
+					<ul>
+						{%  for area in areasToSelectSearch %}
+							<li><label><input type="radio" name="fieldAreaSlugSelected" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{%  endif %}</label></li>
+						{%  endfor %}
+						<li><label><input type="radio" name="fieldAreaSlugSelected" value="-1">None of the above</label></li>
+					</ul>
+				{% elseif areasToSelectChildren %}
+					<ul class="formErrors">
+						<li>Can you be more exact? This helps people find events.</li>
+					</ul>
+					<ul>
+						{%  for area in areasToSelectChildren %}
+							<li><label><input type="radio" name="fieldAreaSlugSelected" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{% endif %}</label></li>
+						{%  endfor %}
+						<li><label><input type="radio" name="fieldAreaSlugSelected" value="-1">None of the above</label></li>
+					</ul>
+				{%  endif %}
+			</div>
+			<div class="after"></div>
+		</div>
+
+		<div class="actionWrapperBig"><input type="submit" value="Save"></div>
+	</form>
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script type="text/javascript" src="/theme/default/js/eventedit.venue.new.area.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+

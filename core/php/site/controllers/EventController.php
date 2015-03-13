@@ -768,15 +768,12 @@ class EventController {
 
 		$areaRepository = new AreaRepository();
 
-		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
+		$this->parameters['shouldWeAskForArea'] = $app['currentSite']->getIsFeaturePhysicalEvents() &&
+			$areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 
-		$this->parameters['areaSearchRequired'] = false;
-		$this->parameters['areaChildSearchRequired'] = false;
-		$this->parameters['areasToSearch'] = null;
+		$this->parameters['newVenueFieldsSubmitted'] = (boolean)('POST' == $request->getMethod() && $request->request->get('newVenueFieldsSubmitted'));
 
-		$this->parameters['fieldsSubmitted'] = (boolean)('POST' == $request->getMethod() && $request->request->get('fieldsSubmitted'));
-
-		//////////////////////////////// Set Venue Object as Much as possible!
+		//=====================================  Set Venue Object as Much as possible from what user passed!
 
 		$this->parameters['venue'] = new VenueModel() ;
 		$this->parameters['venue']->setTitle(('POST' == $request->getMethod()) ? $request->request->get('fieldTitle') : $request->query->get('fieldTitle'));
@@ -787,35 +784,63 @@ class EventController {
 		$this->parameters['venue']->setLat(('POST' == $request->getMethod()) ? $request->request->get('fieldLat') : $request->query->get('fieldLat'));
 		$this->parameters['venue']->setLng(('POST' == $request->getMethod()) ? $request->request->get('fieldLng') : $request->query->get('fieldLng'));
 
-		$this->parameters['fieldAreaObject'] = null;
-		$this->parameters['fieldArea'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldArea') : $request->query->get('fieldArea');
-		$this->parameters['fieldAreaSlug'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSlug') : $request->query->get('fieldAreaSlug');
-		$this->parameters['fieldChildAreaSlug'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldChildAreaSlug') : null;
+		$this->parameters['noneOfAboveSelected'] = false;
+		$this->parameters['areasToSelectSearch'] = false;
+		$this->parameters['areasToSelectChildren'] = false;
 
-		// did the user select a child area from the list?
-		if ($this->parameters['fieldChildAreaSlug'] && $this->parameters['fieldChildAreaSlug'] != '-1') {
-			$this->parameters['fieldAreaObject'] =  $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldChildAreaSlug']);
-		}
+		if ($this->parameters['shouldWeAskForArea']) {
 
-		// Slug passed?
-		if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldAreaSlug'] && intval($this->parameters['fieldAreaSlug'])) {
-			$this->parameters['fieldAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $this->parameters['fieldAreaSlug']);
-		}
+			// has area already been passed?
+			$this->parameters['fieldAreaObject'] = null;
+			$this->parameters['fieldAreaSearchText'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSearchText') : $request->query->get('fieldAreaSearchText');
 
-		// Free text search string passed that only has 1 result?
-		if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldArea']) {
-			$arb = new AreaRepositoryBuilder();
-			$arb->setSite($app['currentSite']);
-			$arb->setCountry($this->parameters['country']);
-			$arb->setFreeTextSearch($this->parameters['fieldArea']);
-			$arb->setIncludeParentLevels(1);
-			$this->parameters['areasToSearch'] = $arb->fetchAll();
-			if (count($this->parameters['areasToSearch']) == 1) {
-				$this->parameters['fieldAreaObject'] = $this->parameters['areasToSearch'][0];
+			$this->parameters['fieldAreaSlug'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSlug') : $request->query->get('fieldAreaSlug');
+			$this->parameters['fieldAreaSlugSelected'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSlugSelected') : null;
+
+			// Did the user select a area from a list?
+			// -1 indicates skip, must check for that
+			// we must check this before we check fieldAreaSlug so that this can override fieldAreaSlug
+			if ($this->parameters['fieldAreaSlugSelected']) {
+				$fass = intval($this->parameters['fieldAreaSlugSelected']);
+				if ($fass == -1) {
+					$this->parameters['noneOfAboveSelected'] = true;
+				} elseif($fass > 0) {
+					$this->parameters['fieldAreaObject'] =  $areaRepository->loadBySlug($app['currentSite'], $fass);
+				}
 			}
+
+			// Slug passed?
+			// -1 indicates skip, must check for that
+			if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldAreaSlug']) {
+				$fas = intval($this->parameters['fieldAreaSlug']);
+				if ($fas == -1) {
+					$this->parameters['noneOfAboveSelected'] = true;
+				} else if ($fas > 0) {
+					$this->parameters['fieldAreaObject'] = $areaRepository->loadBySlug($app['currentSite'], $fas);
+					if ($this->parameters['fieldAreaObject']) {
+						$this->parameters['fieldArea'] =  $this->parameters['fieldAreaObject']->getTitle();
+					}
+				}
+			}
+
+			// Free text search string passed that only has 1 result?
+			if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldAreaSearchText']) {
+				$arb = new AreaRepositoryBuilder();
+				$arb->setSite($app['currentSite']);
+				$arb->setCountry($this->parameters['country']);
+				$arb->setFreeTextSearch($this->parameters['fieldAreaSearchText']);
+				$arb->setIncludeParentLevels(1);
+				$this->parameters['areasToSelectSearch'] = $arb->fetchAll();
+				if (count($this->parameters['areasToSelectSearch']) == 1) {
+					$this->parameters['fieldAreaObject'] = $this->parameters['areasToSelectSearch'][0];
+				}
+			}
+
 		}
 
-		// New we call out to extensions to add details.
+		//=====================================  Call out to extensions to add details
+
+
 		// Slightly ackward we have to set Area ID on venue object, then when extensions have done we need to reload the area object again.
 		if ($this->parameters['fieldAreaObject']) {
 			$this->parameters['venue']->setAreaId($this->parameters['fieldAreaObject']->getId());
@@ -828,19 +853,28 @@ class EventController {
 			$this->parameters['fieldAreaObject'] = $areaRepository->loadById($this->parameters['venue']->getAreaId());
 		}
 
-		//////////////////////////////// Is Child Area Search Needed?
-		// check there are any areas.
-		// We don't present any search options first time user comes to page
-		if ($this->parameters['doesCountryHaveAnyNotDeletedAreas'] && $this->parameters['fieldsSubmitted']) {
+		//===================================== User gets to add details?
+
+		// Check newVenueFieldsSubmitted because we always show the fields to user once
+		// also title is a required field.
+
+		if (!$this->parameters['newVenueFieldsSubmitted'] || !trim($this->parameters['venue']->getTitle())) {
+			return $app['twig']->render('site/event/edit.venue.new.html.twig', $this->parameters);
+		}
+
+		//===================================== Do we prompt the user for more?
+
+		if ($this->parameters['shouldWeAskForArea']) {
 
 			// Did user type in text we had multiple options for?
-			if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldArea'] && count($this->parameters['areasToSearch']) > 1) {
-				$this->parameters['areaSearchRequired'] = true;
+			if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldAreaSearchText'] && !$this->parameters['noneOfAboveSelected']
+				&& count($this->parameters['areasToSelectSearch']) > 1) {
+				return $app['twig']->render('site/event/edit.venue.new.area.html.twig', $this->parameters);
 			}
 
 			// Child areas?
 			// -1 indicates "none of the above", so don't prompt the user again.
-			if (!$this->parameters['areaSearchRequired'] && $this->parameters['fieldChildAreaSlug'] != '-1') {
+			if (!$this->parameters['noneOfAboveSelected']) {
 				$areaRepoBuilder = new AreaRepositoryBuilder();
 				$areaRepoBuilder->setSite($app['currentSite']);
 				$areaRepoBuilder->setCountry($this->parameters['country']);
@@ -853,45 +887,32 @@ class EventController {
 				}
 				$childAreas = $areaRepoBuilder->fetchAll();
 				if ($childAreas) {
-					$this->parameters['areasToSearch'] = $childAreas;
-					$this->parameters['areaChildSearchRequired'] = true;
+					$this->parameters['areasToSelectChildren'] = $childAreas;
+					return $app['twig']->render('site/event/edit.venue.new.area.html.twig', $this->parameters);
 				}
 			}
+
+
 		}
 
-		//////////////////////////////// Save if we can!!
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() &&
-			$this->parameters['fieldsSubmitted'] &&
-			$this->parameters['venue']->getTitle() && !$this->parameters['areaSearchRequired'] && !$this->parameters['areaChildSearchRequired']) {
+		//===================================== No prompt? We can  save!
 
-			if ($this->parameters['fieldAreaObject']) {
-				$this->parameters['venue']->setAreaId($this->parameters['fieldAreaObject']->getId());
-			}
+		$venueRepository = new VenueRepository();
+		$venueRepository->create($this->parameters['venue'], $app['currentSite'], $app['currentUser']);
 
-			$venueRepository = new VenueRepository();
-			$venueRepository->create($this->parameters['venue'], $app['currentSite'], $app['currentUser']);
+		$this->parameters['event']->setVenueId($this->parameters['venue']->getId());
+		$this->parameters['event']->setAreaId(null);
+		$eventRepository = new EventRepository();
+		$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 
-			$this->parameters['event']->setVenueId($this->parameters['venue']->getId());
-			$this->parameters['event']->setAreaId(null);
-			$eventRepository = new EventRepository();
-			$eventRepository->edit($this->parameters['event'], $app['currentUser']);
-
-			$repo = new EventRecurSetRepository();
-			if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
-				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
-			} else {
-				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
-			}
+		$repo = new EventRecurSetRepository();
+		if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
+			return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
+		} else {
+			return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 		}
-
-		//////////////////////////////// Or render!
-
-		$this->parameters['showAreaField'] = $this->parameters['fieldsSubmitted'] && $this->parameters['doesCountryHaveAnyNotDeletedAreas'];
-		return $app['twig']->render('site/event/edit.venue.new.html.twig', $this->parameters);
 
 	}
-
-
 
 
 	function editFuture($slug, Request $request, Application $app) {		
@@ -1009,8 +1030,8 @@ class EventController {
 		}
 		
 	}
-	
-	
+
+
 	function recur($slug, Request $request, Application $app) {		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
