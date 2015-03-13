@@ -784,6 +784,7 @@ class EventController {
 		$this->parameters['venue']->setLat(('POST' == $request->getMethod()) ? $request->request->get('fieldLat') : $request->query->get('fieldLat'));
 		$this->parameters['venue']->setLng(('POST' == $request->getMethod()) ? $request->request->get('fieldLng') : $request->query->get('fieldLng'));
 
+		$this->parameters['fieldAreaObject'] = null;
 		$this->parameters['noneOfAboveSelected'] = false;
 		$this->parameters['areasToSelectSearch'] = false;
 		$this->parameters['areasToSelectChildren'] = false;
@@ -791,7 +792,6 @@ class EventController {
 		if ($this->parameters['shouldWeAskForArea']) {
 
 			// has area already been passed?
-			$this->parameters['fieldAreaObject'] = null;
 			$this->parameters['fieldAreaSearchText'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSearchText') : $request->query->get('fieldAreaSearchText');
 
 			$this->parameters['fieldAreaSlug'] = ('POST' == $request->getMethod()) ? $request->request->get('fieldAreaSlug') : $request->query->get('fieldAreaSlug');
