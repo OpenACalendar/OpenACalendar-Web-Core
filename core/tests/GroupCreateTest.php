@@ -13,13 +13,12 @@ use repositories\builders\GroupRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class GroupCreateTest extends \PHPUnit_Framework_TestCase {
+class GroupCreateTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -34,7 +33,7 @@ class GroupCreateTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");

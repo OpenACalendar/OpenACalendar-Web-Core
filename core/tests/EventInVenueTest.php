@@ -19,10 +19,10 @@ use repositories\builders\EventRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventInVenueTest extends \PHPUnit_Framework_TestCase {
+class EventInVenueTest extends \BaseAppWithDBTest {
 	
 	
 	public function mktime($year=2012, $month=1, $day=1, $hour=0, $minute=0, $second=0) {
@@ -35,8 +35,7 @@ class EventInVenueTest extends \PHPUnit_Framework_TestCase {
 	
 	
 	function testInVenue() {
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 		
 		TimeSource::mock(2013,7,1,7,0,0);
 		
@@ -53,7 +52,7 @@ class EventInVenueTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$area1 = new AreaModel();
 		$area1->setTitle("scotland");
@@ -135,10 +134,9 @@ class EventInVenueTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	function testMoveAllFutureEventsAtVenueToNoSetVenue() {
-		
-		
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+
+
+		$this->addCountriesToTestDB();
 		
 		TimeSource::mock(2013,7,1,7,0,0);
 		
@@ -155,7 +153,7 @@ class EventInVenueTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$area = new AreaModel();
 		$area->setTitle("scotland");
@@ -205,10 +203,9 @@ class EventInVenueTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	function testMoveAllFutureEventsAtVenueToNoSetVenueWithNoArea() {
-		
-		
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+
+
+		$this->addCountriesToTestDB();
 		
 		TimeSource::mock(2013,7,1,7,0,0);
 		
@@ -225,7 +222,7 @@ class EventInVenueTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$countryRepo = new CountryRepository();
 		

@@ -17,13 +17,12 @@ use repositories\builders\GroupRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class GroupPurgeTest extends \PHPUnit_Framework_TestCase {
+class GroupPurgeTest extends \BaseAppWithDBTest {
 	
 	function testMultiple() {
-		$DB = getNewTestDB();
 
 		TimeSource::mock(2013,7,1,7,0,0);
 		
@@ -40,7 +39,7 @@ class GroupPurgeTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");

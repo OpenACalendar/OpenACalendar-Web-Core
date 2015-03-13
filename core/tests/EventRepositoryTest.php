@@ -14,21 +14,21 @@ use repositories\EventHistoryRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
 
 
 
-class EventRepositoryTest  extends \PHPUnit_Framework_TestCase {
+class EventRepositoryTest  extends \BaseAppWithDBTest {
 
 	function testLoadEventJustBeforeEdit() {
 		
 		\TimeSource::mock(2014,1,1,1,1,1);
-		
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+
+
+		$this->addCountriesToTestDB();
 		
 		$countryRepo = new CountryRepository();
 		$userRepo = new UserAccountRepository();
@@ -48,7 +48,7 @@ class EventRepositoryTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 		
 		#### Create Event
 	

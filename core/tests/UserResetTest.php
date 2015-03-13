@@ -9,13 +9,12 @@ use repositories\UserAccountResetRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserResetTest extends \PHPUnit_Framework_TestCase {
+class UserResetTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -55,7 +54,6 @@ class UserResetTest extends \PHPUnit_Framework_TestCase {
 	
 	
 	function test2() {
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");

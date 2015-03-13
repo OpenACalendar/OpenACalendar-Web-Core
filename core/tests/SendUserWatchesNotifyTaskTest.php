@@ -12,7 +12,7 @@ use tasks\SendUserWatchesNotifyTask;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class TestSendUserWatchesNotifyTask extends SendUserWatchesNotifyTask {
+class TestSendUserWatchesNotifyTask extends tasks\SendUserWatchesNotifyTask {
 	public function testGetEmailSubject(SiteModel $siteModel, UserAccountModel $userAccountModel, $contentsToSend) {
 		return $this->getEmailSubject($siteModel, $userAccountModel, $contentsToSend);
 	}
@@ -29,7 +29,7 @@ class TestSendUserWatchesNotifyTask extends SendUserWatchesNotifyTask {
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class SendUserWatchesNotifyTaskTest  extends \PHPUnit_Framework_TestCase {
+class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 
 
 

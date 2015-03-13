@@ -8,14 +8,12 @@ use repositories\UserNotificationPreferenceRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserNotificationPreferenceRepositoryTest extends \PHPUnit_Framework_TestCase {
+class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 	
 	function testGetDefault() {
-			
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -37,8 +35,7 @@ class UserNotificationPreferenceRepositoryTest extends \PHPUnit_Framework_TestCa
 	
 	
 	function testSetOldWayFalseThenGet() {
-			
-		$DB = getNewTestDB();
+
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -52,9 +49,9 @@ class UserNotificationPreferenceRepositoryTest extends \PHPUnit_Framework_TestCa
 		$prefRepo = new UserNotificationPreferenceRepository();
 		
 		### Set
-		$stat = $DB->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '0' NOT NULL");
+		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '0' NOT NULL");
 		$stat->execute();
-		$stat = $DB->prepare("ALTER TABLE user_account_information ADD is_email_watch_prompt boolean default '0' NOT NULL");
+		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_prompt boolean default '0' NOT NULL");
 		$stat->execute();
 		
 		### Test
@@ -67,7 +64,6 @@ class UserNotificationPreferenceRepositoryTest extends \PHPUnit_Framework_TestCa
 	
 	function testSetOldWayTrueThenGet() {
 			
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -81,9 +77,9 @@ class UserNotificationPreferenceRepositoryTest extends \PHPUnit_Framework_TestCa
 		$prefRepo = new UserNotificationPreferenceRepository();
 		
 		### Set
-		$stat = $DB->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '1' NOT NULL");
+		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '1' NOT NULL");
 		$stat->execute();
-		$stat = $DB->prepare("ALTER TABLE user_account_information ADD is_email_watch_prompt boolean default '1' NOT NULL");
+		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_prompt boolean default '1' NOT NULL");
 		$stat->execute();
 		
 		### Test
@@ -96,7 +92,6 @@ class UserNotificationPreferenceRepositoryTest extends \PHPUnit_Framework_TestCa
 	
 	function testSetThenGet() {
 			
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");

@@ -9,18 +9,16 @@ use repositories\UserAccountResetRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserPermissionsSiteTest extends \PHPUnit_Framework_TestCase {
+class UserPermissionsSiteTest extends \BaseAppWithDBTest {
 
 
 	function testSiteOwnerAllEdit() {
 		global $CONFIG;
 		$CONFIG->newUsersAreEditors = true;
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
-		$app = getNewTestApp();
+		$this->addCountriesToTestDB();
 
 		$userOwner = new UserAccountModel();
 		$userOwner->setEmail("test@jarofgreen.co.uk");
@@ -49,7 +47,7 @@ class UserPermissionsSiteTest extends \PHPUnit_Framework_TestCase {
 		$userVerified = $userRepo->loadByUserName($userVerified->getUsername());
 		$userUnverified = $userRepo->loadByUserName($userUnverified->getUsername());
 
-		$extensionsManager = new ExtensionManager($app);
+		$extensionsManager = new ExtensionManager($this->app);
 		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
 
 		$siteModel = new \models\SiteModel();
@@ -58,11 +56,11 @@ class UserPermissionsSiteTest extends \PHPUnit_Framework_TestCase {
 
 		$siteRepository = new \repositories\SiteRepository();
 		$countryRepository = new \repositories\CountryRepository();
-		$siteRepository->create($siteModel, $userOwner, array($countryRepository->loadByTwoCharCode("GB")), getSiteQuotaUsedForTesting(), true);
+		$siteRepository->create($siteModel, $userOwner, array($countryRepository->loadByTwoCharCode("GB")), $this->getSiteQuotaUsedForTesting(), true);
 
 		## Check!
 
-		$extensionsManager = new ExtensionManager($app);
+		$extensionsManager = new ExtensionManager($this->app);
 		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
 
 		$permissions = $userPerRepo->getPermissionsForUserInSite($userOwner, $siteModel, false);
@@ -97,9 +95,7 @@ class UserPermissionsSiteTest extends \PHPUnit_Framework_TestCase {
 	function testSiteOwnerSpecificEdit() {
 		global $CONFIG;
 		$CONFIG->newUsersAreEditors = true;
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
-		$app = getNewTestApp();
+		$this->addCountriesToTestDB();
 
 		$userOwner = new UserAccountModel();
 		$userOwner->setEmail("test@jarofgreen.co.uk");
@@ -128,7 +124,7 @@ class UserPermissionsSiteTest extends \PHPUnit_Framework_TestCase {
 		$userVerified = $userRepo->loadByUserName($userVerified->getUsername());
 		$userUnverified = $userRepo->loadByUserName($userUnverified->getUsername());
 
-		$extensionsManager = new ExtensionManager($app);
+		$extensionsManager = new ExtensionManager($this->app);
 		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
 
 		$siteModel = new \models\SiteModel();
@@ -137,11 +133,11 @@ class UserPermissionsSiteTest extends \PHPUnit_Framework_TestCase {
 
 		$siteRepository = new \repositories\SiteRepository();
 		$countryRepository = new \repositories\CountryRepository();
-		$siteRepository->create($siteModel, $userOwner, array($countryRepository->loadByTwoCharCode("GB")), getSiteQuotaUsedForTesting(), false);
+		$siteRepository->create($siteModel, $userOwner, array($countryRepository->loadByTwoCharCode("GB")), $this->getSiteQuotaUsedForTesting(), false);
 
 		## Check!
 
-		$extensionsManager = new ExtensionManager($app);
+		$extensionsManager = new ExtensionManager($this->app);
 		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
 
 		$permissions = $userPerRepo->getPermissionsForUserInSite($userOwner, $siteModel, false);

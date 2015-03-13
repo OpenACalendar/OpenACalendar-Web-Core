@@ -16,13 +16,12 @@ use repositories\UserAtEventRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserGetDataForUpcomingEventsEmailTest  extends \PHPUnit_Framework_TestCase { 
+class UserGetDataForUpcomingEventsEmailTest  extends \BaseAppWithDBTest {
 
 	function testBlank() {
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -67,7 +66,6 @@ class UserGetDataForUpcomingEventsEmailTest  extends \PHPUnit_Framework_TestCase
      */	
 	function test1($emailOption, $goingOption, $result) {	
 	
-		$DB = getNewTestDB();
 		TimeSource::mock(2013,8,1,7,0,0);
 		
 		$user = new UserAccountModel();
@@ -84,7 +82,7 @@ class UserGetDataForUpcomingEventsEmailTest  extends \PHPUnit_Framework_TestCase
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
 		$event->setSummary("test");

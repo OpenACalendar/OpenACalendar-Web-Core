@@ -11,13 +11,12 @@ use repositories\SiteRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class SiteEditTest extends \PHPUnit_Framework_TestCase {
+class SiteEditTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -33,7 +32,7 @@ class SiteEditTest extends \PHPUnit_Framework_TestCase {
 		
 		$siteRepo = new SiteRepository();
 		\TimeSource::mock(2012, 1,1,1,0,0);
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$site->setTitle("TEST ME");
 		\TimeSource::mock(2012, 1,1,1,0,1);

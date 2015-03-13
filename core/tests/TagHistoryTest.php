@@ -15,14 +15,13 @@ use \repositories\builders\HistoryRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class TagHistoryTest extends \PHPUnit_Framework_TestCase {
+class TagHistoryTest extends \BaseAppWithDBTest {
 
 	
 	function testIntegration1() {
-		$DB = getNewTestDB();
 		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
 		
 		$user = new UserAccountModel();
@@ -38,7 +37,7 @@ class TagHistoryTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		## Create tag
 		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
@@ -58,7 +57,7 @@ class TagHistoryTest extends \PHPUnit_Framework_TestCase {
 		
 		## Now save changed flags on these .....
 		$tagHistoryRepo = new TagHistoryRepository();
-		$stat = $DB->prepare("SELECT * FROM tag_history");
+		$stat = $this->app['db']->prepare("SELECT * FROM tag_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
 			$tagHistory = new TagHistoryModel();
@@ -92,7 +91,6 @@ class TagHistoryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	function testIntegration2() {
-		$DB = getNewTestDB();
 		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
 
 		$user = new UserAccountModel();
@@ -108,7 +106,7 @@ class TagHistoryTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		## Create tag
 		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
@@ -127,7 +125,7 @@ class TagHistoryTest extends \PHPUnit_Framework_TestCase {
 
 		## Now save changed flags on these .....
 		$tagHistoryRepo = new TagHistoryRepository();
-		$stat = $DB->prepare("SELECT * FROM tag_history");
+		$stat = $this->app['db']->prepare("SELECT * FROM tag_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
 			$tagHistory = new TagHistoryModel();

@@ -26,14 +26,13 @@ use repositories\builders\EventRepositoryBuilder;
 
 
 
-class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
+class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 
 
 	function testUserAttendingEventNoWatches() {
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$userRepo = new UserAccountRepository();
@@ -61,7 +60,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
 		$event->setSummary("test");
@@ -107,8 +106,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 	function testUserAttendingEventPublicallyNoWatches() {
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$userRepo = new UserAccountRepository();
@@ -136,7 +134,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
 		$event->setSummary("test");
@@ -179,8 +177,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 	function testUserWatchingGroupsWithAnEventInTwoGroups() {
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$userRepo = new UserAccountRepository();
@@ -214,7 +211,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$groupMain = new GroupModel();
 		$groupMain->setTitle("test");
@@ -289,8 +286,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 	function testUserWatchingSite() {
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$userRepo = new UserAccountRepository();
@@ -318,7 +314,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 
 		$event = new EventModel();
@@ -360,8 +356,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 		TimeSource::mock(2014,01,01,9,0,0);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$areaRepo = new AreaRepository();
@@ -391,7 +386,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$area =  new AreaModel();
 		$area->setTitle("Scotland");
@@ -442,8 +437,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 		TimeSource::mock(2014,01,01,9,0,0);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$areaRepo = new AreaRepository();
@@ -473,7 +467,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$area =  new AreaModel();
 		$area->setTitle("Scotland");
@@ -531,8 +525,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 		TimeSource::mock(2014,01,01,9,0,0);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$areaRepo = new AreaRepository();
@@ -562,7 +555,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$area =  new AreaModel();
 		$area->setTitle("Scotland");
@@ -619,8 +612,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 
 		TimeSource::mock(2014,01,01,9,0,0);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$areaRepo = new AreaRepository();
@@ -650,7 +642,7 @@ class EventRepositoryBuilderUserTest  extends \PHPUnit_Framework_TestCase {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$area =  new AreaModel();
 		$area->setTitle("Scotland");

@@ -21,10 +21,10 @@ use repositories\builders\EventRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
+class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 
 	function testRRule1() {
 		global $CONFIG;
@@ -32,7 +32,6 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2014, 11, 17, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
 
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -47,7 +46,7 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -223,7 +222,6 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2015, 3, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
 
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -238,7 +236,7 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -327,7 +325,6 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2015, 1, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
 
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -342,7 +339,7 @@ class ImportURLICALRecurringTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("test");

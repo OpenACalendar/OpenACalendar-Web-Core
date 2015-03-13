@@ -17,12 +17,12 @@ use cliapi1\CreateEvent;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
 
-class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
+class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 
 	/**
 	 * Default country and timezone
@@ -31,8 +31,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 		
 		\TimeSource::mock(2014,06,01,00,00,00);
 		
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$country = $countryRepo->loadByTwoCharCode("GB");
@@ -50,7 +49,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -113,8 +112,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 
 		\TimeSource::mock(2014,06,01,00,00,00);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$countryRepo = new CountryRepository();
 		$country = $countryRepo->loadByTwoCharCode("DE");
@@ -132,7 +130,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -235,8 +233,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 
 		\TimeSource::mock(2014,06,01,00,00,00);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$json = json_decode('{
 	"event":{
@@ -274,8 +271,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 
 		\TimeSource::mock(2014,06,01,00,00,00);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$json = json_decode('{
 	"event":{
@@ -306,8 +302,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 		
 		\TimeSource::mock(2014,06,01,00,00,00);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$json = json_decode('{
 	"event":{
@@ -338,8 +333,7 @@ class CLIAPI1CreateEventTest  extends \PHPUnit_Framework_TestCase {
 		
 		\TimeSource::mock(2014,06,01,00,00,00);
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 
 		$json = json_decode('{
 	"event":{

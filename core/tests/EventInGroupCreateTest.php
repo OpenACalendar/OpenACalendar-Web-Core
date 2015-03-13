@@ -16,10 +16,10 @@ use repositories\builders\GroupRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class EventInGroupCreateTest extends \PHPUnit_Framework_TestCase {
+class EventInGroupCreateTest extends \BaseAppWithDBTest {
 	
 	
 	public function mktime($year=2012, $month=1, $day=1, $hour=0, $minute=0, $second=0) {
@@ -30,7 +30,6 @@ class EventInGroupCreateTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	function testMultiple() {
-		$DB = getNewTestDB();
 
 		TimeSource::mock(2013,7,1,7,0,0);
 		
@@ -47,7 +46,7 @@ class EventInGroupCreateTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group1 = new GroupModel();
 		$group1->setTitle("test");

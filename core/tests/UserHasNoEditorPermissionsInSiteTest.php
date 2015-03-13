@@ -16,17 +16,14 @@ use repositories\VenueRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserHasNoEditorPermissionsInSiteTest extends \PHPUnit_Framework_TestCase {
+class UserHasNoEditorPermissionsInSiteTest extends \BaseAppWithDBTest {
 
 	function testAddAndRemove() {
 
-		global $CONFIG;
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
-		$app = getNewTestApp();
+		$this->addCountriesToTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -43,7 +40,7 @@ class UserHasNoEditorPermissionsInSiteTest extends \PHPUnit_Framework_TestCase {
 
 		$siteRepository = new \repositories\SiteRepository();
 		$countryRepository = new \repositories\CountryRepository();
-		$siteRepository->create($siteModel, $user, array($countryRepository->loadByTwoCharCode("GB")), getSiteQuotaUsedForTesting(), true);
+		$siteRepository->create($siteModel, $user, array($countryRepository->loadByTwoCharCode("GB")), $this->getSiteQuotaUsedForTesting(), true);
 
 		// ########################################## Not there
 

@@ -19,15 +19,19 @@ use repositories\TagRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventPurgeTest extends \PHPUnit_Framework_TestCase {
+class EventPurgeTest extends \BaseAppWithDBTest {
 	
-	
+
+	function __construct()
+	{
+		$this->extensions = array('CuratedLists');
+	}
+
 	
 	function test1() {
-		$DB = getNewTestDB();
 
 		TimeSource::mock(2014,5,1,7,0,0);
 		
@@ -44,7 +48,7 @@ class EventPurgeTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");

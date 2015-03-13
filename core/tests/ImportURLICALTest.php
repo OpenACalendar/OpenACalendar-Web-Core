@@ -21,10 +21,10 @@ use repositories\builders\EventRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
+class ImportURLICALTest extends \BaseAppWithDBTest {
 
 	
 	function testBasicThenDeletedByFlag() {
@@ -33,8 +33,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
 		
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 		$countryRepo = new CountryRepository();
 
 		$user = new UserAccountModel();
@@ -50,7 +49,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), $this->getSiteQuotaUsedForTesting());
 		
 		
 		$areaRepo = new AreaRepository();
@@ -135,8 +134,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
 
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 		$countryRepo = new CountryRepository();
 
 		$user = new UserAccountModel();
@@ -152,7 +150,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), $this->getSiteQuotaUsedForTesting());
 
 
 		$areaRepo = new AreaRepository();
@@ -237,7 +235,6 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
 		
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -252,7 +249,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -328,7 +325,6 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
 		
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -343,7 +339,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -388,7 +384,6 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		\TimeSource::mock(2012, 9, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000; 
 		
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -403,7 +398,7 @@ class ImportURLICALTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");

@@ -14,13 +14,12 @@ use repositories\builders\UserWatchesSiteRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserWatchesSiteTest extends \PHPUnit_Framework_TestCase {
+class UserWatchesSiteTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		$DB = getNewTestDB();
 		
 		$userOwner = new UserAccountModel();
 		$userOwner->setEmail("test2@jarofgreen.co.uk");
@@ -41,7 +40,7 @@ class UserWatchesSiteTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $userOwner, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$userWatchesSiteRepo = new UserWatchesSiteRepository();
 		

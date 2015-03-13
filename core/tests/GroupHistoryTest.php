@@ -15,14 +15,13 @@ use \repositories\builders\HistoryRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
+class GroupHistoryTest extends \BaseAppWithDBTest {
 
 	
 	function testIntegration1() {
-		$DB = getNewTestDB();
 		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
 		
 		$user = new UserAccountModel();
@@ -38,7 +37,7 @@ class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		## Create group
 		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
@@ -59,7 +58,7 @@ class GroupHistoryTest extends \PHPUnit_Framework_TestCase {
 		
 		## Now save changed flags on these .....
 		$groupHistoryRepo = new GroupHistoryRepository();
-		$stat = $DB->prepare("SELECT * FROM group_history");
+		$stat = $this->app['db']->prepare("SELECT * FROM group_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
 			$groupHistory = new GroupHistoryModel();

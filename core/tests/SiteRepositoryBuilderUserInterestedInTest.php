@@ -13,11 +13,10 @@ use repositories\UserAccountRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-class SiteRepositoryBuilderUserInterestedInTest extends \PHPUnit_Framework_TestCase {
+class SiteRepositoryBuilderUserInterestedInTest extends \BaseAppWithDBTest {
 
 	function testBasic() {
 
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -39,7 +38,7 @@ class SiteRepositoryBuilderUserInterestedInTest extends \PHPUnit_Framework_TestC
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		// User who added site is there
 		$srb = new \repositories\builders\SiteRepositoryBuilder();
@@ -57,8 +56,6 @@ class SiteRepositoryBuilderUserInterestedInTest extends \PHPUnit_Framework_TestC
 
 	function testUserWatchesSite() {
 
-		$DB = getNewTestDB();
-
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
@@ -79,7 +76,7 @@ class SiteRepositoryBuilderUserInterestedInTest extends \PHPUnit_Framework_TestC
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository();
 		$userWatchesSiteRepo->startUserWatchingSite($userTest, $site);
@@ -95,7 +92,6 @@ class SiteRepositoryBuilderUserInterestedInTest extends \PHPUnit_Framework_TestC
 
 	function testUserIsUserGroup() {
 
-		$DB = getNewTestDB();
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -117,7 +113,7 @@ class SiteRepositoryBuilderUserInterestedInTest extends \PHPUnit_Framework_TestC
 		$site->setSlug("test");
 
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 
 		$usrb = new \repositories\builders\UserGroupRepositoryBuilder();

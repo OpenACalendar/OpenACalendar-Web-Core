@@ -6,10 +6,10 @@
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class TraitCSVTest extends \PHPUnit_Framework_TestCase {
+class TraitCSVTest extends \BaseAppTest {
 
 	use \api1exportbuilders\TraitCSV;
 

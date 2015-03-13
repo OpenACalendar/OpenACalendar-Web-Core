@@ -13,14 +13,12 @@ use repositories\UserInAPI2ApplicationRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
+class UserInAPI2ApplicationRepositoryTest extends \BaseAppWithDBTest {
 	
 	function testStartGrantedThenRemovePermissionIsWriteCalendar() {
-		
-		$DB = getNewTestDB();
 
 		$userAdmin = new UserAccountModel();
 		$userAdmin->setEmail("admin@jarofgreen.co.uk");
@@ -41,7 +39,7 @@ class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $userAdmin, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $userAdmin, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$api2appRepo = new API2ApplicationRepository();
 		$api2app = $api2appRepo->create($userAdmin, "Title");
@@ -85,8 +83,6 @@ class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	function testStartRefusedThenGrantPermissionIsWriteCalendar() {
-		
-		$DB = getNewTestDB();
 
 		$userAdmin = new UserAccountModel();
 		$userAdmin->setEmail("admin@jarofgreen.co.uk");
@@ -107,7 +103,7 @@ class UserInAPI2ApplicationRepositoryTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $userAdmin, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $userAdmin, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$api2appRepo = new API2ApplicationRepository();
 		$api2app = $api2appRepo->create($userAdmin, "Title");

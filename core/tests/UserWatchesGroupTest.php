@@ -17,14 +17,13 @@ use repositories\builders\UserWatchesGroupRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class UserWatchesGroupTest extends \PHPUnit_Framework_TestCase {
+class UserWatchesGroupTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		$DB = getNewTestDB();
-		
+
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
@@ -44,7 +43,7 @@ class UserWatchesGroupTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $userOwner, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -97,8 +96,7 @@ class UserWatchesGroupTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	function test2() {
-		$DB = getNewTestDB();
-		
+
 		$userOwner = new UserAccountModel();
 		$userOwner->setEmail("test2@jarofgreen.co.uk");
 		$userOwner->setUsername("test2");
@@ -118,7 +116,7 @@ class UserWatchesGroupTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $userOwner, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -169,8 +167,7 @@ class UserWatchesGroupTest extends \PHPUnit_Framework_TestCase {
 
 	
 	function test3() {
-		$DB = getNewTestDB();
-		
+
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
@@ -190,7 +187,7 @@ class UserWatchesGroupTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $userOwner, array(), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
 		$group->setTitle("test");

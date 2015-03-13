@@ -24,7 +24,8 @@ class ExtensionManager {
 	}
 	
 	public function addExtension($dir, BaseExtension $extension) {
-		$this->extensions[array_pop(explode("/",$dir))] = $extension;
+		$bits = explode("/",$dir);
+		$this->extensions[array_pop($bits)] = $extension;
 	}
 	
 	public function getExtensions() {

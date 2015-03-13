@@ -15,14 +15,13 @@ use repositories\AreaRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class AreaCreateTest extends \PHPUnit_Framework_TestCase {
+class AreaCreateTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		$DB = getNewTestDB();
-		addCountriesToTestDB();
+		$this->addCountriesToTestDB();
 		$countryRepo = new CountryRepository();
 		$areaRepo = new AreaRepository();
 		
@@ -39,7 +38,7 @@ class AreaCreateTest extends \PHPUnit_Framework_TestCase {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), getSiteQuotaUsedForTesting());
+		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		### No areas
 		$this->assertFalse($areaRepo->doesCountryHaveAnyNotDeletedAreas($site, $countryRepo->loadByTwoCharCode('GB') ));
@@ -56,7 +55,7 @@ class AreaCreateTest extends \PHPUnit_Framework_TestCase {
 		$this->checkAreaInTest1($areaRepo->loadBySlug($site, $area->getSlug()));
 
 		// no parents. Cache should be empty.
-		$stat = $DB->prepare("SELECT * FROM cached_area_has_parent");
+		$stat = $this->app['db']->prepare("SELECT * FROM cached_area_has_parent");
 		$stat->execute();
 		$this->assertEquals(0, $stat->rowCount());
 
@@ -80,7 +79,7 @@ class AreaCreateTest extends \PHPUnit_Framework_TestCase {
 		$this->checkChildAreaInTest1($areaRepo->loadBySlug($site, $areaChild->getSlug()));	
 		
 		// Check Cache
-		$stat = $DB->prepare("SELECT * FROM cached_area_has_parent WHERE area_id=".$areaChild->getId()." AND has_parent_area_id=".$area->getId());
+		$stat = $this->app['db']->prepare("SELECT * FROM cached_area_has_parent WHERE area_id=".$areaChild->getId()." AND has_parent_area_id=".$area->getId());
 		$stat->execute();
 		$this->assertEquals(1, $stat->rowCount());
 
