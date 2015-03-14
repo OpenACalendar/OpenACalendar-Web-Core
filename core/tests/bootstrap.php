@@ -44,6 +44,14 @@ spl_autoload_register(function($class) {
 	}
 });
 
+// The config file should have extensions set to any extensions who tests will be run for.
+// This will then always be used for each test.
+// (We have to do this after registering spl_autoload_register otherwise Config won't load!)
+$CONFIG = new \Config();
+require APP_ROOT_DIR."config.test.php";
+$EXTENSIONSTOLOAD = $CONFIG->extensions;
+
+
 require_once 'BaseAppTest.php';
 require_once 'BaseAppWithDBTest.php';
 

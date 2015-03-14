@@ -19,10 +19,6 @@ use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBu
 class CuratedListCreateTest extends \BaseAppWithDBTest {
 
 
-	function __construct()
-	{
-		$this->extensions = array('CuratedLists');
-	}
 
 	function test1() {
 

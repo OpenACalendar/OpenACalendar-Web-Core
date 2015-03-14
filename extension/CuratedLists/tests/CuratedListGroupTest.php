@@ -23,11 +23,6 @@ use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBu
 class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
-	function __construct()
-	{
-		$this->extensions = array('CuratedLists');
-	}
-
 	function test1() {
 
 		TimeSource::mock(2014,5,1,7,0,0);
