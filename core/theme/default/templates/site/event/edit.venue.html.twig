@@ -22,7 +22,14 @@
 		{% include 'site/common/eventLocationLine.html.twig' %}
 	</div>
 
-	<p>Filter list of venues.</p>
+	{%  if venue %}{# TODO and edit venue user permission #}
+		<form action="/venue/{{  venue.slugForURL }}/edit/details" class="oneActionFormRight" method="get">
+			<input type="submit" value="Edit details of this venue">
+		</form>
+		<div class="afterOneActionFormRight"></div>
+	{%  endif %}
+
+	<p>{%  if venue %}Or change venue{%  else %}Search for a venue{%  endif %}</p>
 
 	<form action="" method="get" class="styled" id="EditEventVenueForm">
 		<input type="hidden" name="fieldsSubmitted" value="1">
