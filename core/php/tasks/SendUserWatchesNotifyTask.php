@@ -141,7 +141,10 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		$eventRepo = new EventRepository();
 		foreach($histories as $history)  {
 			if ($history instanceof EventHistoryModel && $history->getIsNew()) {
-				$newEvents[] = $eventRepo->loadByID($history->getId());
+				$event =  $eventRepo->loadByID($history->getId());
+				if ($event && !$event->getIsDeleted() && !$event->getIsCancelled()) {
+					$newEvents[] = $event;
+				}
 			}
 		}
 		return array($newEvents,$histories);
