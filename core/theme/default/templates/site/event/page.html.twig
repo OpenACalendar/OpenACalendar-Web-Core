@@ -18,7 +18,7 @@
 	{% elseif currentSite.isFeaturePhysicalEvents %}
 		{%  if currentSite.getCachedIsMultipleCountries %}<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>{%  endif %}
 		{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></li>{% endfor %}
-		<li><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>
+		{% if area %}<li><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>{% endif %}
 	{% endif %}
 	<li class="current"><a href="/event/{{ event.slugForUrl }}">{{ event.summary }}</a></li>
 {% endblock %}
