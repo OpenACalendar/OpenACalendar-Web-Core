@@ -24,7 +24,7 @@
 
 	{%  if venue %}{# TODO and edit venue user permission #}
 		<form action="/venue/{{  venue.slugForURL }}/edit/details" class="oneActionFormRight" method="get">
-			<input type="submit" value="Edit details of this venue">
+			<input type="submit" value="Edit details of {{ venue.title|e('html_attr') }}">
 		</form>
 		<div class="afterOneActionFormRight"></div>
 	{%  endif %}
