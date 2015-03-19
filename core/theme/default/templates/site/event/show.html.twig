@@ -125,7 +125,26 @@
 				</div>
 			{% endif %}
 
-			<p class="description" itemprop="description">{{ event.description | nl2br  | linkify }}</p>
+			<p class="description" itemprop="description">
+				{%  if event.description %}
+					{{ event.description | nl2br  | linkify }}
+				{%  else %}
+
+				{% if event.url %}
+					<p>
+						More details: <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a>
+					</p>
+				{% endif %}
+
+				{% if event.ticketUrl %}
+					<p>
+						{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a>
+					</p>
+				{% endif %}
+
+
+				{%  endif %}
+			</p>
 
 			{% if tags %}
 				<div class="inlineTags">
