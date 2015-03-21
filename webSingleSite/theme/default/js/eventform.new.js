@@ -86,9 +86,13 @@ function showEventPopup(eventSlug) {
 		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
 		if (event.venue) {
 			$('#EventPopupVenueWrapper').html(
-					'<div class="title">Venue '+escapeHTML(event.venue.title)+'</div>'+
+					'<div class="title">Venue: '+escapeHTML(event.venue.title)+'</div>'+
 					'<div class="description">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 300) : '')+'</div>'+
-					'<div class="address">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
+					'<div class="address">'+
+					(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300)+'<br>' : '')+
+					(event.areas && event.areas.length > 0 ? escapeHTML(event.areas[0].title)  +'<br>': '')+
+					(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+
+					'</div>'
 				);
 		} else {
 			$('#EventPopupVenueWrapper').html('&nbsp;');
