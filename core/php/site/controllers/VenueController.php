@@ -187,6 +187,10 @@ class VenueController {
 					$this->parameters['venue']->setAreaId(null);
 				}
 
+				foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+					$extension->addDetailsToVenue($this->parameters['venue']);
+				}
+
 				$venueEditMetaData = new VenueEditMetaDataModel();
 				$venueEditMetaData->setUserAccount($app['currentUser']);
 				if ($form->has('edit_comment')) {
