@@ -41,7 +41,7 @@
 				</div>
 				<div class="after"></div>
 			</div>
-		{%  else %}
+		{%  elseif shouldWeAskForArea %}
 			<input type="hidden" name="fieldAreaSearchText" value="{{  fieldAreaSearchText | e('html_attr') }}">
 		{%  endif %}
 
