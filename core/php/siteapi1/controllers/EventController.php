@@ -65,10 +65,13 @@ class EventController {
 		if ($this->parameters['event']->getAreaID()) {
 			$ar = new AreaRepository();
 			$this->parameters['area'] = $ar->loadById($this->parameters['event']->getAreaID());
+		} elseif ($this->parameters['venue'] && $this->parameters['venue']->getAreaId()) {
+			$ar = new AreaRepository();
+			$this->parameters['area'] = $ar->loadById($this->parameters['venue']->getAreaID());
 		}
 		
 		
-		if ($this->parameters['event']->getVenueID()) {
+		if ($this->parameters['event']->getCountryID()) {
 			$cr = new CountryRepository();
 			$this->parameters['country'] = $cr->loadById($this->parameters['event']->getCountryID());
 		}
