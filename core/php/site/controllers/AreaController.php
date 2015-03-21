@@ -178,7 +178,9 @@ class AreaController {
 
 				$areaEditMetaDataModel = new AreaEditMetaDataModel();
 				$areaEditMetaDataModel->setUserAccount($app['currentUser']);
-				$areaEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
+				if ($form->has('edit_comment')) {
+					$areaEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
+				}
 
 				$areaRepository = new AreaRepository();
 				$areaRepository->editWithMetaData($this->parameters['area'], $areaEditMetaDataModel);

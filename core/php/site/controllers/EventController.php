@@ -444,7 +444,9 @@ class EventController {
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
-				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				if ($form->has('edit_comment')) {
+					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				}
 
 				$eventRepository = new EventRepository();
 				$eventRepository->editWithMetaData($this->parameters['event'], $eventEditMetaData);
@@ -1288,7 +1290,9 @@ class EventController {
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
-				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				if ($form->has('edit_comment')) {
+					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				}
 
 				$eventRepository = new EventRepository();
 				$eventRepository->deleteWithMetaData($this->parameters['event'], $eventEditMetaData);
@@ -1351,7 +1355,9 @@ class EventController {
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
-				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				if ($form->has('edit_comment')) {
+					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				}
 
 				$eventRepository = new EventRepository();
 				$eventRepository->cancelWithMetaData($this->parameters['event'], $eventEditMetaData);
@@ -1426,7 +1432,9 @@ class EventController {
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
-				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				if ($form->has('edit_comment')) {
+					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				}
 				$eventEditMetaData->setRevertedFromHistoryCreatedAt($this->parameters['eventHistory']->getCreatedAt());
 
 				$eventRepository = new EventRepository();

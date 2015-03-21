@@ -297,7 +297,9 @@ class GroupController {
 
 				$groupEditMetaDataModel = new GroupEditMetaDataModel();
 				$groupEditMetaDataModel->setUserAccount($app['currentUser']);
-				$groupEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
+				if ($form->has('edit_comment')) {
+					$groupEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
+				}
 
 				$groupRepository = new GroupRepository();
 				$groupRepository->editWithMetaData($this->parameters['group'], $groupEditMetaDataModel);
@@ -371,7 +373,9 @@ class GroupController {
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
-				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				if ($form->has('edit_comment')) {
+					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				}
 
 				$eventRepository = new EventRepository();
 				$eventRepository->createWithMetaData($event, $app['currentSite'], $eventEditMetaData, $this->parameters['group']);
