@@ -1,0 +1,49 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/event/page.html.twig' %}
+
+
+{% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
+
+{% block htmlHeader %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
+{% block innerContent %}
+
+	<p>Current Venue:</p>
+
+	<div class="dateAndLocationWrapper">
+		{% include 'site/common/eventLocationLine.html.twig' %}
+	</div>
+
+	{%  if venue %}{# TODO and edit venue user permission #}
+		<form action="/venue/{{  venue.slugForURL }}/edit/details" class="oneActionFormRight" method="get">
+			<input type="submit" value="Edit details of {{ venue.title|e('html_attr') }}">
+		</form>
+		<div class="afterOneActionFormRight"></div>
+	{%  endif %}
+
+	<form action="/event/{{  event.slugForURL }}/edit/venue/search" class="oneActionFormRight" method="get">
+		<input type="submit" value="Change to a different venue">
+	</form>
+	<div class="afterOneActionFormRight"></div>
+
+	<form action="/event/{{  event.slugForURL }}/edit/area" class="oneActionFormRight" method="get">
+		<input type="submit" value="Exact venue not known">
+	</form>
+	<div class="afterOneActionFormRight"></div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}
+
