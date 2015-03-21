@@ -94,7 +94,7 @@
 				</li>
 			{% endfor %}
 			<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
-				<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="oneActionFormRight">
+				<form action="/event/{{  event.slugForURL }}/edit/venue/new" class="oneActionFormRight" onsubmit="onSubmitNewVenue();">
 					<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
 					<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
 					<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">

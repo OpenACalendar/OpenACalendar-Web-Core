@@ -169,6 +169,15 @@ function mapToLatLng(lat, lng) {
 	map.setView([lat,lng], 15);
 }
 
+/** We make sure we are sending the latest the user typed to the next page, even if the search AJAX hasn't loaded yet. **/
+function onSubmitNewVenue() {
+	$('#VenueNewWrapper form input[name="fieldTitle"]').val($('#TitleField').val());
+	$('#VenueNewWrapper form input[name="fieldAddress"]').val($('#AddressField').val());
+	$('#VenueNewWrapper form input[name="fieldAreaSearchText"]').val($('#AreaField').val());
+	$('#VenueNewWrapper form input[name="fieldAddressCode"]').val($('#AddressCodeField').val());
+	$('#VenueNewWrapper form input[name="fieldAreaSlug"]').val(data.searchAreaSlug);
+}
+
 function mapToBounds(minLat, maxLat, minLng, maxLng) {
 	if (minLat == maxLat || minLng == maxLng) {
 		map.setView([minLat,minLng], 13);
