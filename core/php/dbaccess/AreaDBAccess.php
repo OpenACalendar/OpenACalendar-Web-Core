@@ -3,6 +3,7 @@
 
 namespace dbaccess;
 
+use models\AreaEditMetaDataModel;
 use models\UserAccountModel;
 use models\AreaModel;
 use sysadmin\controllers\API2Application;
@@ -12,7 +13,7 @@ use sysadmin\controllers\API2Application;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
@@ -36,7 +37,7 @@ class AreaDBAccess {
 
 	protected $possibleFields = array('title','description','parent_area_id','is_duplicate_of_id','is_deleted','country_id');
 
-	public function update(AreaModel $area, $fields, UserAccountModel $user = null ) {
+	public function update(AreaModel $area, $fields, AreaEditMetaDataModel $areaEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data
@@ -64,10 +65,15 @@ class AreaDBAccess {
 		$fieldsSQLParams2 = array(':area_id',':user_account_id',':created_at',':approved_at');
 		$fieldsParams2 = array(
 			'area_id'=>$area->getId(),
-			'user_account_id'=>($user ? $user->getId() : null),
+			'user_account_id'=>($areaEditMetaDataModel->getUserAccount() ? $areaEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
 		);
+		if ($areaEditMetaDataModel->getEditComment()) {
+			$fieldsSQL2[] = ' edit_comment ';
+			$fieldsSQLParams2[] = ' :edit_comment ';
+			$fieldsParams2['edit_comment'] = $areaEditMetaDataModel->getEditComment();
+		}
 		foreach($this->possibleFields as $field) {
 			if (in_array($field, $fields) || $field == 'title') {
 				$fieldsSQL2[] = " ".$field." ";

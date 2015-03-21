@@ -3,6 +3,7 @@
 
 namespace dbaccess;
 
+use models\GroupEditMetaDataModel;
 use models\UserAccountModel;
 use models\GroupModel;
 use sysadmin\controllers\API2Application;
@@ -12,7 +13,7 @@ use sysadmin\controllers\API2Application;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
@@ -37,7 +38,7 @@ class GroupDBAccess {
 	protected $possibleFields = array('title','description','url','twitter_username','is_deleted','is_duplicate_of_id');
 
 
-	public function update(GroupModel $group, $fields, UserAccountModel $user = null ) {
+	public function update(GroupModel $group, $fields, GroupEditMetaDataModel $groupEditMetaDataModel) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 
@@ -66,10 +67,15 @@ class GroupDBAccess {
 		$fieldsSQLParams2 = array(':group_id',':user_account_id',':created_at',':approved_at');
 		$fieldsParams2 = array(
 			'group_id'=>$group->getId(),
-			'user_account_id'=>($user ? $user->getId() : null),
+			'user_account_id'=>($groupEditMetaDataModel->getUserAccount() ? $groupEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
 		);
+		if ($groupEditMetaDataModel->getEditComment()) {
+			$fieldsSQL2[] = ' edit_comment ';
+			$fieldsSQLParams2[] = ' :edit_comment ';
+			$fieldsParams2['edit_comment'] = $groupEditMetaDataModel->getEditComment();
+		}
 		foreach($this->possibleFields as $field) {
 			if (in_array($field, $fields) || $field == 'title') {
 				$fieldsSQL2[] = " ".$field." ";

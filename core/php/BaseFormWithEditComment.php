@@ -1,9 +1,5 @@
 <?php
 
-namespace site\forms;
-
-
-use BaseFormWithEditComment;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,28 +16,29 @@ use Symfony\Component\Form\FormError;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventDeleteForm extends BaseFormWithEditComment {
+abstract class  BaseFormWithEditComment  extends AbstractType
+{
 
-	public function buildForm(FormBuilderInterface $builder, array $options) {
-		parent::buildForm($builder, $options);
-		
-		$builder->add("agree",
-				"checkbox",
-					array(
-						'required'=>true,
-						'label'=>'Delete this event'
-					)
-			    );
-		
+
+	protected $formEditComments = false;
+
+
+	function __construct(Application $application)
+	{
+		$this->formEditComments = $application['currentSiteFeatures']->has('org.openacalendar', 'EditComments');
 	}
-	
-	public function getName() {
-		return 'EventDeleteForm';
+
+	public function buildForm(FormBuilderInterface $builder, array $options)
+	{
+
+		if ($this->formEditComments) {
+			$builder->add('edit_comment', 'text', array(
+				'label'=>'Your Comment (public)',
+				'required'=>false,
+				'mapped'=>false,
+			));
+		}
+
+
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }

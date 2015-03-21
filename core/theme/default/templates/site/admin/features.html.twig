@@ -18,6 +18,27 @@
 {% block content %}
 
 
+
+	{% for feature in currentSiteFeatures.asList %}
+
+		<h3>{{ feature.title }}</h3>
+		<p>{{  feature.description }}</p>
+		<form action="#" method="post"  class="styled">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="extension" value="{{ feature.extensionID | e('html_attr') }}">
+			<input type="hidden" name="feature" value="{{ feature.featureID | e('html_attr') }}">
+			{% if feature.on %}
+				<input type="hidden" name="action" value="off">
+				<input type="submit" value="Turn Off">
+			{%  else %}
+				<input type="hidden" name="action" value="on">
+				<input type="submit" value="Turn On">
+			{%  endif %}
+		</form>
+	{% endfor %}
+
+	{# Below is legacy way #}
+
 	<form action="#" method="post"  class="styled">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 		<input type="hidden" name="submitted" value="yes">
@@ -106,6 +127,7 @@
 		<input type="submit"  value="Save" />	
 
 	</form>
+
 
 {% endblock %}
 

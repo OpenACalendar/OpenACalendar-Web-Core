@@ -18,10 +18,10 @@ use repositories\builders\VenueRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class EventEditForm extends AbstractType{
+class EventEditForm extends \BaseFormWithEditComment {
 
 	protected $timeZoneName;
 	/** @var SiteModel **/
@@ -29,7 +29,9 @@ class EventEditForm extends AbstractType{
 
 	protected $formWidgetTimeMinutesMultiples;
 
+
 	function __construct(SiteModel $site, $timeZoneName, Application $application) {
+		parent::__construct($application);
 		$this->site = $site;
 		$this->timeZoneName = $timeZoneName;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
@@ -37,29 +39,31 @@ class EventEditForm extends AbstractType{
 
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
+		parent::buildForm($builder, $options);
+
+
 		$builder->add('summary', 'text', array(
 			'label'=>'Summary',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
+			'required'=>true,
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
 			'attr' => array('autofocus' => 'autofocus')
 		));
-		
+
 		$builder->add('description', 'textarea', array(
 			'label'=>'Description',
 			'required'=>false
 		));
-		
+
 		$builder->add('url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Information Web Page URL',
 			'required'=>false
 		));
-		
+
 		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Tickets Web Page URL',
 			'required'=>false
 		));
-		
+
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);
 		$countries = array();
@@ -79,7 +83,7 @@ class EventEditForm extends AbstractType{
 				'data' => $countryID,
 			));
 		}
-		
+
 		$timezones = array();
 		// Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
 		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
@@ -98,13 +102,13 @@ class EventEditForm extends AbstractType{
 				'data' => $timezone,
 			));
 		}
-			
-				
+
+
 		if ($this->site->getIsFeatureVirtualEvents()) {
-			
+
 			//  if both are an option, user must check which one.
 			if ($this->site->getIsFeaturePhysicalEvents()) {
-			
+
 				$builder->add("is_virtual",
 					"checkbox",
 						array(
@@ -113,15 +117,15 @@ class EventEditForm extends AbstractType{
 						)
 					);
 			}
-			
+
 		}
 
-		
+
 		if ($this->site->getIsFeaturePhysicalEvents()) {
-			
+
 			// if both are an option, user must check which one.
 			if ($this->site->getIsFeatureVirtualEvents()) {
-				
+
 				$builder->add("is_physical",
 					"checkbox",
 						array(
@@ -129,11 +133,11 @@ class EventEditForm extends AbstractType{
 							'label'=>'Does the event happen at a place?'
 						)
 					);
-				
+
 			}
 
 		}
-		
+
 		$years = array( date('Y'), date('Y')+1 );
 
 		$startOptions = array(
@@ -171,7 +175,7 @@ class EventEditForm extends AbstractType{
 			}
 		}
 		$builder->add('end_at', 'datetime' , $endOptions);
-				
+
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
 			global $CONFIG;

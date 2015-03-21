@@ -17,10 +17,10 @@ use repositories\builders\VenueRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventNewForm extends AbstractType{
+class EventNewForm extends \BaseFormWithEditComment {
 
 	protected $timeZoneName;
 	/** @var SiteModel **/
@@ -28,13 +28,15 @@ class EventNewForm extends AbstractType{
 
 	protected $formWidgetTimeMinutesMultiples;
 
-	function __construct(SiteModel $site, $timeZoneName, Application $application) {
-		$this->site = $site;
+	function __construct($timeZoneName, Application $application) {
+		parent::__construct($application);
+		$this->site = $application['currentSite'];
 		$this->timeZoneName = $timeZoneName;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
+		parent::buildForm($builder, $options);
 
 		$builder->add('summary', 'text', array(
 			'label'=>'Summary',

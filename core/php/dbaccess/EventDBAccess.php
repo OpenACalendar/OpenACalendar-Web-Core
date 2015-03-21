@@ -3,6 +3,7 @@
 
 namespace dbaccess;
 
+use models\EventEditMetaDataModel;
 use models\UserAccountModel;
 use models\EventModel;
 use models\EventHistoryModel;
@@ -13,7 +14,7 @@ use sysadmin\controllers\API2Application;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
@@ -37,7 +38,7 @@ class EventDBAccess {
 		'url','ticket_url','is_physical','is_virtual','is_cancelled','is_deleted','is_duplicate_of_id');
 
 
-	public function update(EventModel $event, $fields, UserAccountModel $user = null, EventHistoryModel $fromHistory = null ) {
+	public function update(EventModel $event, $fields, EventEditMetaDataModel $eventEditMetaDataModel) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 
@@ -84,10 +85,20 @@ class EventDBAccess {
 		$fieldsSQLParams2 = array(':event_id',':user_account_id',':created_at',':approved_at');
 		$fieldsParams2 = array(
 			'event_id'=>$event->getId(),
-			'user_account_id'=>($user ? $user->getId() : null),
+			'user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
 		);
+		if ($eventEditMetaDataModel->getRevertedFromHistoryCreatedAt()) {
+			$fieldsSQL2[] = ' reverted_from_created_at ';
+			$fieldsSQLParams2[] = ' :reverted_from_created_at ';
+			$fieldsParams2['reverted_from_created_at'] = $eventEditMetaDataModel->getRevertedFromHistoryCreatedAt()->format("Y-m-d H:i:s");
+		}
+		if ($eventEditMetaDataModel->getEditComment()) {
+			$fieldsSQL2[] = ' edit_comment ';
+			$fieldsSQLParams2[] = ' :edit_comment ';
+			$fieldsParams2['edit_comment'] = $eventEditMetaDataModel->getEditComment();
+		}
 		foreach($this->possibleFields as $field) {
 			if (in_array($field, $fields) || $field == 'summary') {
 				$fieldsSQL2[] = " ".$field." ";

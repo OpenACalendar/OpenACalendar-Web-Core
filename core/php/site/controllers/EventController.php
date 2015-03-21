@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\EventEditMetaDataModel;
 use repositories\builders\VenueRepositoryBuilder;
 use Silex\Application;
 use site\forms\EventNewForm;
@@ -440,10 +441,13 @@ class EventController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+				$eventEditMetaData = new EventEditMetaDataModel();
+				$eventEditMetaData->setUserAccount($app['currentUser']);
+				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+
 				$eventRepository = new EventRepository();
-				$eventRepository->edit($this->parameters['event'], $app['currentUser']);
-				
+				$eventRepository->editWithMetaData($this->parameters['event'], $eventEditMetaData);
 				
 				$repo = new EventRecurSetRepository();
 				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
@@ -1275,15 +1279,19 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		$form = $app['form.factory']->create(new EventDeleteForm());
+		$form = $app['form.factory']->create(new EventDeleteForm($app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+				$eventEditMetaData = new EventEditMetaDataModel();
+				$eventEditMetaData->setUserAccount($app['currentUser']);
+				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+
 				$eventRepository = new EventRepository();
-				$eventRepository->delete($this->parameters['event'], $app['currentUser']);
+				$eventRepository->deleteWithMetaData($this->parameters['event'], $eventEditMetaData);
 
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 				
@@ -1334,15 +1342,19 @@ class EventController {
 			die("No"); // TODO
 		}
 
-		$form = $app['form.factory']->create(new EventCancelForm());
+		$form = $app['form.factory']->create(new EventCancelForm($app));
 
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
 
+				$eventEditMetaData = new EventEditMetaDataModel();
+				$eventEditMetaData->setUserAccount($app['currentUser']);
+				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+
 				$eventRepository = new EventRepository();
-				$eventRepository->cancel($this->parameters['event'], $app['currentUser']);
+				$eventRepository->cancelWithMetaData($this->parameters['event'], $eventEditMetaData);
 
 				$repo = new EventRecurSetRepository();
 				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
@@ -1412,8 +1424,13 @@ class EventController {
 				$newEventState->setIsCancelled(false);
 				$newEventState->setIsDeleted(false);
 
+				$eventEditMetaData = new EventEditMetaDataModel();
+				$eventEditMetaData->setUserAccount($app['currentUser']);
+				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				$eventEditMetaData->setRevertedFromHistoryCreatedAt($this->parameters['eventHistory']->getCreatedAt());
+
 				$eventRepository = new EventRepository();
-				$eventRepository->edit($newEventState, $app['currentUser'], $this->parameters['eventHistory']);
+				$eventRepository->editWithMetaData($newEventState,  $eventEditMetaData);
 				
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
 				

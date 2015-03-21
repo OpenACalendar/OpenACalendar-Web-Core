@@ -6,10 +6,13 @@ namespace repositories;
 use dbaccess\VenueDBAccess;
 use dbaccess\AreaDBAccess;
 use dbaccess\EventDBAccess;
+use models\AreaEditMetaDataModel;
 use models\AreaModel;
+use models\EventEditMetaDataModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use models\CountryModel;
+use models\VenueEditMetaDataModel;
 use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
@@ -175,12 +178,21 @@ class AreaRepository {
 			$DB->rollBack();
 		}
 	}
-	
-	
-	/** 
-	 * This will undelete the area to.
+
+
+	/**
+	 * @deprecated
 	 */
 	public function edit(AreaModel $area, UserAccountModel $user) {
+		$areaEditMetaDataModel = new AreaEditMetaDataModel();
+		$areaEditMetaDataModel->setUserAccount($user);
+		$this->editWithMetaData($area, $areaEditMetaDataModel);
+	}
+
+	/**
+	 * This will undelete the area to.
+	 */
+	public function editWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
 		global $DB, $USERAGENT;
 		try {
 			$DB->beginTransaction();
@@ -189,15 +201,24 @@ class AreaRepository {
 
 			$fields = array('title','description','is_deleted');
 
-			$this->areaDBAccess->update($area, $fields, $user);
+			$this->areaDBAccess->update($area, $fields, $areaEditMetaDataModel);
 
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function editParentArea(AreaModel $area, UserAccountModel $user) {
+		$areaEditMetaDataModel = new AreaEditMetaDataModel();
+		$areaEditMetaDataModel->setUserAccount($user);
+		$this->editWithMetaData($area, $areaEditMetaDataModel);
+	}
+
+	public function editParentAreaWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
 		global $DB;
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted area!");
@@ -205,7 +226,7 @@ class AreaRepository {
 		try {
 			$DB->beginTransaction();
 
-			$this->areaDBAccess->update($area, array('parent_area_id'), $user);
+			$this->areaDBAccess->update($area, array('parent_area_id'), $areaEditMetaDataModel);
 
 			// new must clear caches
 			$this->deleteParentCacheForArea($area);
@@ -216,7 +237,16 @@ class AreaRepository {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function delete(AreaModel $area, UserAccountModel $user) {
+		$areaEditMetaDataModel = new AreaEditMetaDataModel();
+		$areaEditMetaDataModel->setUserAccount($user);
+		$this->deleteWithMetaData($area, $areaEditMetaDataModel);
+	}
+
+	public function deleteWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
 		global $DB;
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't delete deleted area!");
@@ -225,7 +255,7 @@ class AreaRepository {
 			$DB->beginTransaction();
 
 			$area->setIsDeleted(true);
-			$this->areaDBAccess->update($area, array('is_deleted'), $user);
+			$this->areaDBAccess->update($area, array('is_deleted'), $areaEditMetaDataModel);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -233,13 +263,22 @@ class AreaRepository {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function undelete(AreaModel $area, UserAccountModel $user) {
+		$areaEditMetaDataModel = new AreaEditMetaDataModel();
+		$areaEditMetaDataModel->setUserAccount($user);
+		$this->undeleteWithMetaData($area, $user);
+	}
+
+	public function undeleteWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$area->setIsDeleted(false);
-			$this->areaDBAccess->update($area, array('is_deleted'), $user);
+			$this->areaDBAccess->update($area, array('is_deleted'), $areaEditMetaDataModel);
 
 			$DB->commit();
 		} catch (Exception $e) {
@@ -310,8 +349,17 @@ class AreaRepository {
 		return ($stat->rowCount() > 0);
 	}
 
-
+	/**
+	 * @deprecated
+	 */
 	public function markDuplicate(AreaModel $duplicateArea, AreaModel $originalArea, UserAccountModel $user=null) {
+		$areaEditMetaDataModel = new AreaEditMetaDataModel();
+		$areaEditMetaDataModel->setUserAccount($user);
+		$this->markDuplicateWithMetaData($duplicateArea, $originalArea, $areaEditMetaDataModel);
+
+	}
+
+	public function markDuplicateWithMetaData(AreaModel $duplicateArea, AreaModel $originalArea, AreaEditMetaDataModel $areaEditMetaDataModel) {
 		global $DB;
 
 		if ($duplicateArea->getId() == $originalArea->getId()) return;
@@ -322,28 +370,32 @@ class AreaRepository {
 
 			$duplicateArea->setIsDuplicateOfId($originalArea->getId());
 			$duplicateArea->setIsDeleted(true);
-			$this->areaDBAccess->update($duplicateArea, array('is_duplicate_of_id','is_deleted'), $user);
+			$this->areaDBAccess->update($duplicateArea, array('is_duplicate_of_id','is_deleted'), $areaEditMetaDataModel);
 
 
 			// Move Venues
 			$venueDBAccess = new VenueDBAccess($DB, new \TimeSource());
 			$vrb = new VenueRepositoryBuilder();
 			$vrb->setArea($duplicateArea);
+			$venueEditMetaData = new VenueEditMetaDataModel();
+			$venueEditMetaData->setUserAccount($areaEditMetaDataModel->getUserAccount());
 			foreach($vrb->fetchAll() as $venue) {
 				$venue->setAreaId($originalArea->getId());
-				$venueDBAccess->update($venue, array('area_id'),$user);
+				$venueDBAccess->update($venue, array('area_id'),$venueEditMetaData);
 			}
 
 			// Move Events
 			$eventRepoBuilder = new EventRepositoryBuilder();
 			$eventRepoBuilder->setArea($duplicateArea);
 			$eventDBAccess = new EventDBAccess($DB, new \TimeSource());
+			$eventEditMetaData = new EventEditMetaDataModel();
+			$eventEditMetaData->setUserAccount($areaEditMetaDataModel->getUserAccount());
 			foreach($eventRepoBuilder->fetchAll() as $event) {
 				// Check Area actually matches here because we may get events at a venue.
 				// Based on the order we do things in (ie Move Venue, Move Event) we shouldn't but let's be safe.
 				if ($event->getAreaId() == $duplicateArea->getId() && $event->getVenueId() == null) {
 					$event->setAreaId($originalArea->getId());
-					$eventDBAccess->update($event, array('area_id'), $user, null);
+					$eventDBAccess->update($event, array('area_id'), $eventEditMetaData);
 				}
 			}
 
@@ -356,7 +408,7 @@ class AreaRepository {
 				// lets just double check we haven't got any child areas.
 				if ($area->getParentAreaId() == $duplicateArea->getId()) {
 					$area->setParentAreaId($originalArea->getId());
-					$this->areaDBAccess->update($area, array('parent_area_id'), $user);
+					$this->areaDBAccess->update($area, array('parent_area_id'), $areaEditMetaDataModel);
 					$flag = true;
 				}
 			}

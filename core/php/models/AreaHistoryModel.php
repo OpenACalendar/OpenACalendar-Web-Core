@@ -25,6 +25,8 @@ class AreaHistoryModel extends AreaModel implements \InterfaceHistoryModel {
 	protected $is_deleted_changed = 0;
 	protected $is_duplicate_of_id_changed = 0;
 
+	protected $edit_comment;
+
 	protected $is_new = 0;
 
 
@@ -47,6 +49,7 @@ class AreaHistoryModel extends AreaModel implements \InterfaceHistoryModel {
 		$this->is_deleted_changed  = $data['is_deleted_changed'];
 		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 		$this->is_duplicate_of_id_changed = isset($data['is_duplicate_of_id_changed']) ? $data['is_duplicate_of_id_changed'] : 0;
+		$this->edit_comment = isset($data['edit_comment']) ? $data['edit_comment'] : null;
 	}
 	
 		
@@ -169,6 +172,12 @@ class AreaHistoryModel extends AreaModel implements \InterfaceHistoryModel {
 		return $otherHistoryModel instanceof $this &&
 		$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
 		$otherHistoryModel->getId() == $this->getId();
+	}
+
+
+	public function getEditComment()
+	{
+		return $this->edit_comment;
 	}
 
 

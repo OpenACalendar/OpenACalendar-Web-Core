@@ -42,11 +42,14 @@ class BaseAppWithDBTest extends \PHPUnit_Framework_TestCase {
 
 		$EXTENSIONHOOKRUNNER = new ExtensionHookRunner();
 
-		/** @var PDO **/
-		$DB = new PDO('pgsql:host='.$CONFIG->databaseHost.';dbname='.$CONFIG->databaseName, $CONFIG->databaseUser, $CONFIG->databasePassword);
-		$DB->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-		$DB->exec("SET CLIENT_ENCODING TO 'utf8'");
-		$DB->exec("SET NAMES 'utf8'");
+		/** @var PDO * */
+		if (!$DB)
+		{
+			$DB = new PDO('pgsql:host=' . $CONFIG->databaseHost . ';dbname=' . $CONFIG->databaseName, $CONFIG->databaseUser, $CONFIG->databasePassword);
+			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$DB->exec("SET CLIENT_ENCODING TO 'utf8'");
+			$DB->exec("SET NAMES 'utf8'");
+		}
 
 		$this->app = new Silex\Application();
 		$app = $this->app;

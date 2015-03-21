@@ -30,6 +30,7 @@ class GroupHistoryModel extends GroupModel implements \InterfaceHistoryModel {
 	protected $is_new = 0;
 
 
+	protected $edit_comment;
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['group_id'];
@@ -39,6 +40,7 @@ class GroupHistoryModel extends GroupModel implements \InterfaceHistoryModel {
 		$this->description = $data['description'];
 		$this->twitter_username = $data['twitter_username'];
 		$this->is_deleted = $data['is_deleted'];
+		$this->edit_comment = isset($data['edit_comment']) ? $data['edit_comment'] : null;
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->user_account_id = $data['user_account_id'];
@@ -189,6 +191,11 @@ class GroupHistoryModel extends GroupModel implements \InterfaceHistoryModel {
 		return $otherHistoryModel instanceof $this &&
 		$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
 		$otherHistoryModel->getId() == $this->getId();
+	}
+
+	public function getEditComment()
+	{
+		return $this->edit_comment;
 	}
 
 

@@ -347,3 +347,14 @@ function showSharePopup() {
 	showPopup();
 }
 
+//////////////////////////////////////////////////////////////////////////////// Edit Comment
+function onClickFormRowEditCommentToggler() {
+	var wrapper = $('#formRowEditCommentWrapper');
+	if (wrapper.is(":visible")) {
+		wrapper.hide();
+		$('#formRowEditCommentToggler .arrow').html('&#x25B2;');
+	} else  {
+		wrapper.show();
+		$('#formRowEditCommentToggler .arrow').html('&#x25BC;');
+	}
+}

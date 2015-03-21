@@ -60,6 +60,8 @@
 			</div>
 		{% endif %}
 
+		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
 		{{ form_rest(form) }}
 
 		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">

@@ -42,7 +42,12 @@
 				
 			</div>
 		{% endif %}
+
+		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
 		{{ form_rest(form) }}
+
+
 
 		<input type="submit"  value="Save" />	
 	</form>

@@ -19,8 +19,33 @@
 
 		{{ form_row(form.summary) }}
 		{{ form_row(form.description) }}
+		{{ form_row(form.url) }}
+		{{ form_row(form.ticket_url) }}
 		{{ form_row(form.start_at) }}
 		{{ form_row(form.end_at) }}
+		{{ form_row(form.country_id) }}
+		{{ form_row(form.timezone) }}
+		{% if currentSite.isFeatureVirtualEvents %}
+			{#  if both are an option, user must check which one.  #}
+			{% if currentSite.isFeaturePhysicalEvents %}
+				{{ form_row(form.is_virtual) }}
+			{% endif %}
+			{# Secondly, any options for virtual events? ... nope #}
+		{% endif %}
+		{% if currentSite.isFeaturePhysicalEvents %}
+			{#  if both are an option, user must check which one.  #}
+			{% if currentSite.isFeatureVirtualEvents %}
+				{{ form_row(form.is_physical) }}
+			{% endif %}
+			{# Secondly, any options for physical events? #}
+			<div id="physicalEventOptions">
+
+			</div>
+		{% endif %}
+
+
+		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
 		{{ form_rest(form) }}
 
 		{% if event.isDeleted and event.isCancelled %}

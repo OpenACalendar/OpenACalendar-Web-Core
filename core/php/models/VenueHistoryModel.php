@@ -31,6 +31,8 @@ class VenueHistoryModel extends VenueModel implements \InterfaceHistoryModel {
 	protected $address_code_changed = 0;
 	protected $is_duplicate_of_id_changed = 0;
 
+	protected $edit_comment;
+
 	protected $is_new = 0;
 
 
@@ -48,6 +50,7 @@ class VenueHistoryModel extends VenueModel implements \InterfaceHistoryModel {
 		$this->area_id = $data['area_id'];
 		$this->is_deleted = $data['is_deleted'];
 		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
+		$this->edit_comment = isset($data['edit_comment']) ? $data['edit_comment'] : null;
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->user_account_id = isset($data['user_account_id']) ? $data['user_account_id'] : null;
@@ -259,6 +262,12 @@ class VenueHistoryModel extends VenueModel implements \InterfaceHistoryModel {
 		$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
 		$otherHistoryModel->getId() == $this->getId();
 	}
+
+	public function getEditComment()
+	{
+		return $this->edit_comment;
+	}
+
 
 }
 

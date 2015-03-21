@@ -37,6 +37,8 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 	protected $area_id_changed   = 0;
 	protected $is_duplicate_of_id_changed = 0;
 
+	protected $edit_comment;
+
 	protected $is_new = 0;
 
 	
@@ -64,6 +66,7 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		$this->is_physical  = $data['is_physical'];
 		$this->area_id  = $data['area_id'];
 		$this->user_account_id = $data['user_account_id'];
+		$this->edit_comment = isset($data['edit_comment']) ? $data['edit_comment'] : null;
 		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
 		$this->summary_changed  = isset($data['summary_changed']) ? $data['summary_changed'] : 0;
 		$this->description_changed  = isset($data['description_changed']) ? $data['description_changed'] : 0;
@@ -426,6 +429,12 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		return $otherHistoryModel instanceof $this &&
 		$otherHistoryModel->getCreatedAtTimeStamp() == $this->getCreatedAtTimeStamp() &&
 		$otherHistoryModel->getId() == $this->getId();
+	}
+
+
+	public function getEditComment()
+	{
+		return $this->edit_comment;
 	}
 
 

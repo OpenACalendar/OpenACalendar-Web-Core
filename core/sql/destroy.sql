@@ -61,6 +61,8 @@ DROP TABLE IF EXISTS country_in_site_information CASCADE;
 DROP TABLE IF EXISTS site_profile_media_information CASCADE;
 DROP TABLE IF EXISTS site_profile_media_history CASCADE;
 DROP TABLE IF EXISTS media_information CASCADE;
+DROP TABLE IF EXISTS site_feature_information CASCADE;
+DROP TABLE IF EXISTS site_feature_history CASCADE;
 DROP TABLE IF EXISTS incoming_link CASCADE;
 DROP TABLE IF EXISTS site_history  CASCADE;
 DROP TABLE IF EXISTS site_information  CASCADE;

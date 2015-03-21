@@ -3,6 +3,7 @@
 
 namespace repositories;
 
+use models\TagEditMetaDataModel;
 use models\TagModel;
 use models\SiteModel;
 use models\EventModel;
@@ -14,7 +15,7 @@ use dbaccess\TagDBAccess;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class TagRepository {
@@ -93,10 +94,19 @@ class TagRepository {
 			return $tag;
 		}
 	}
-	
-	
-	
+
+
+
+	/*
+	* @deprecated
+	*/
 	public function edit(TagModel $tag, UserAccountModel $user) {
+		$tagEditMetaDataModel = new TagEditMetaDataModel();
+		$tagEditMetaDataModel->setUserAccount($user);
+		$this->editWithMetaData($tag, $tagEditMetaDataModel);
+	}
+
+	public function editWithMetaData(TagModel $tag, TagEditMetaDataModel $tagEditMetaDataModel) {
 		global $DB;
 		if ($tag->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted tag!");
@@ -106,22 +116,31 @@ class TagRepository {
 
 			$fields = array('title','description','is_deleted');
 			$tag->setIsDeleted(false);
-			$this->tagDBAccess->update($tag, $fields, $user);
+			$this->tagDBAccess->update($tag, $fields, $tagEditMetaDataModel);
 			
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
 	}
-	
-	
-	public function delete(TagModel $tag, UserAccountModel $user) {
+
+	/*
+	* @deprecated
+	*/
+	public function delete(TagModel $tag, UserAccountModel $user)
+	{
+		$tagEditMetaDataModel = new TagEditMetaDataModel();
+		$tagEditMetaDataModel->setUserAccount($user);
+		$this->deleteWithMetaData($tag, $tagEditMetaDataModel);
+	}
+
+	public function deleteWithMetaData(TagModel $tag, TagEditMetaDataModel $tagEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$tag->setIsDeleted(true);
-			$this->tagDBAccess->update($tag, array('is_deleted'), $user);
+			$this->tagDBAccess->update($tag, array('is_deleted'), $tagEditMetaDataModel);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -129,14 +148,22 @@ class TagRepository {
 		}
 	}
 
-
+	/*
+	* @deprecated
+	*/
 	public function undelete(TagModel $tag, UserAccountModel $user) {
+		$tagEditMetaDataModel = new TagEditMetaDataModel();
+		$tagEditMetaDataModel->setUserAccount($user);
+		$this->undeleteWithMetaData($tag, $tagEditMetaDataModel);
+	}
+
+	public function undeleteWithMetaData(TagModel $tag, TagEditMetaDataModel $tagEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$tag->setIsDeleted(false);
-			$this->tagDBAccess->update($tag, array('is_deleted'), $user);
+			$this->tagDBAccess->update($tag, array('is_deleted'), $tagEditMetaDataModel);
 
 			$DB->commit();
 		} catch (Exception $e) {

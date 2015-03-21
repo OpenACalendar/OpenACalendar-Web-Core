@@ -20,6 +20,10 @@
 
 		{{ form_errors(form) }}
 
+		{{ form_row(form.agree) }}
+
+		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
 		{{ form_rest(form) }}
 
 		<input type="submit"  value="Delete" />	

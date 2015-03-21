@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\VenueEditMetaDataModel;
 use Silex\Application;
 use site\forms\VenueNewForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,7 +66,7 @@ class VenueNewController {
 		
 		
 		
-		$form = $app['form.factory']->create(new VenueNewForm($app['currentSite'], $app['currentTimeZone']), $venue);
+		$form = $app['form.factory']->create(new VenueNewForm($app['currentTimeZone'], $app), $venue);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -98,8 +99,12 @@ class VenueNewController {
 					$extension->addDetailsToVenue($venue);
 				}
 
+				$venueEditMetaData = new VenueEditMetaDataModel();
+				$venueEditMetaData->setUserAccount($app['currentUser']);
+				$venueEditMetaData->setEditComment($form->get('edit_comment')->getData());
+
 				$venueRepository = new VenueRepository();
-				$venueRepository->create($venue, $app['currentSite'], $app['currentUser']);
+				$venueRepository->createWithMetaData($venue, $app['currentSite'], $venueEditMetaData);
 				
 				return $app->redirect("/venue/".$venue->getSlug());
 				

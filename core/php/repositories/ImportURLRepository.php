@@ -4,6 +4,7 @@
 namespace repositories;
 
 use dbaccess\ImportURLDBAccess;
+use models\ImportURLEditMetaDataModel;
 use models\ImportURLModel;
 use models\SiteModel;
 use models\UserAccountModel;
@@ -101,23 +102,41 @@ class ImportURLRepository {
 			return $iurl;
 		}
 	}
-	
+
+	/*
+	* @deprecated
+	*/
 	public function edit(ImportURLModel $importURL, UserAccountModel $user) {
+		$importURLEditMetaDataModel = new ImportURLEditMetaDataModel();
+		$importURLEditMetaDataModel->setUserAccount($user);
+		$this->editWithMetaData($importURL, $importURLEditMetaDataModel);
+	}
+
+	public function editWithMetaData(ImportURLModel $importURL, ImportURLEditMetaDataModel $importURLEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$fields = array('title','country_id','area_id','is_manual_events_creation');
-			$this->importURLDBAccess->update($importURL, $fields, $user);
+			$this->importURLDBAccess->update($importURL, $fields, $importURLEditMetaDataModel);
 			
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
 	}
-	
-	
+
+
+	/*
+	* @deprecated
+	*/
 	public function enable(ImportURLModel $importURL, UserAccountModel $user) {
+		$importURLEditMetaDataModel = new ImportURLEditMetaDataModel();
+		$importURLEditMetaDataModel->setUserAccount($user);
+		$this->enableWithMetaData($importURL, $importURLEditMetaDataModel);
+	}
+
+	public function enableWithMetaData(ImportURLModel $importURL, ImportURLEditMetaDataModel $importURLEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
@@ -125,7 +144,7 @@ class ImportURLRepository {
 			$importURL->setIsEnabled(true);
 			$importURL->setExpiredAt(null);
 
-			$this->importURLDBAccess->update($importURL, array('is_enabled','expired_at'), $user);
+			$this->importURLDBAccess->update($importURL, array('is_enabled','expired_at'), $importURLEditMetaDataModel);
 
 
 			$DB->commit();
@@ -133,8 +152,17 @@ class ImportURLRepository {
 			$DB->rollBack();
 		}
 	}
-	
+
+	/*
+	* @deprecated
+	*/
 	public function disable(ImportURLModel $importURL, UserAccountModel $user) {
+		$importURLEditMetaDataModel = new ImportURLEditMetaDataModel();
+		$importURLEditMetaDataModel->setUserAccount($user);
+		$this->disableWithMetaData($importURL, $importURLEditMetaDataModel);
+	}
+
+	public function disableWithMetaData(ImportURLModel $importURL, ImportURLEditMetaDataModel $importURLEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
@@ -143,7 +171,7 @@ class ImportURLRepository {
 			$importURL->setIsEnabled(false);
 			$importURL->setExpiredAt(null);
 
-			$this->importURLDBAccess->update($importURL, array('is_enabled','expired_at'), $user);
+			$this->importURLDBAccess->update($importURL, array('is_enabled','expired_at'), $importURLEditMetaDataModel);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -176,7 +204,10 @@ class ImportURLRepository {
 			$importURL->setExpiredAt(\TimeSource::getDateTime());
 
 
-			$this->importURLDBAccess->update($importURL, array('expired_at'), null);
+			$importURLEditMetaData = new ImportURLEditMetaDataModel();
+			$importURLEditMetaData->setUserAccount(null);
+
+			$this->importURLDBAccess->update($importURL, array('expired_at'), $importURLEditMetaData);
 
 			$DB->commit();
 		} catch (Exception $e) {

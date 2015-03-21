@@ -2,6 +2,8 @@
 
 namespace site\controllers;
 
+use models\EventEditMetaDataModel;
+use models\GroupEditMetaDataModel;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -286,15 +288,19 @@ class GroupController {
 		}
 		
 		
-		$form = $app['form.factory']->create(new GroupEditForm(), $this->parameters['group']);
+		$form = $app['form.factory']->create(new GroupEditForm($app), $this->parameters['group']);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+				$groupEditMetaDataModel = new GroupEditMetaDataModel();
+				$groupEditMetaDataModel->setUserAccount($app['currentUser']);
+				$groupEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
+
 				$groupRepository = new GroupRepository();
-				$groupRepository->edit($this->parameters['group'], $app['currentUser']);
+				$groupRepository->editWithMetaData($this->parameters['group'], $groupEditMetaDataModel);
 				
 				return $app->redirect("/group/".$this->parameters['group']->getSlugForUrl());
 				
@@ -356,16 +362,19 @@ class GroupController {
 			}
 		}
 		
-		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone'], $app), $event);
+		$form = $app['form.factory']->create(new EventNewForm($app['currentTimeZone'], $app), $event);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+				$eventEditMetaData = new EventEditMetaDataModel();
+				$eventEditMetaData->setUserAccount($app['currentUser']);
+				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+
 				$eventRepository = new EventRepository();
-				$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group']);
-				
+				$eventRepository->createWithMetaData($event, $app['currentSite'], $eventEditMetaData, $this->parameters['group']);
 				
 				if ($parseResult && $app['config']->logFileParseDateTimeRange && 
 						($parseResult->getStart()->getTimestamp() != $event->getStartAt()->getTimestamp() 

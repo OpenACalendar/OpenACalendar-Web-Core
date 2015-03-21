@@ -149,5 +149,12 @@ abstract class BaseExtension {
 	public function makeSureHistoriesAreCorrect($interfaceHistoryModel) {  // @TODO InterfaceHistoryModel type!!!!!!
 
 	}
+
+
+	public function getSiteFeatures(\models\SiteModel $siteModel = null) {
+		return array();
+	}
+
+
 }
 

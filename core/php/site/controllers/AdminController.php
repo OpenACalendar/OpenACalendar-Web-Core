@@ -4,6 +4,7 @@ namespace site\controllers;
 
 use models\UserGroupModel;
 use repositories\builders\UserGroupRepositoryBuilder;
+use repositories\SiteFeatureRepository;
 use repositories\UserGroupRepository;
 use repositories\UserHasNoEditorPermissionsInSiteRepository;
 use repositories\UserPermissionsRepository;
@@ -33,7 +34,7 @@ use site\forms\AdminUsersAddForm;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class AdminController {
@@ -164,8 +165,10 @@ class AdminController {
 			));
 	}
 		
-	function features(Request $request, Application $app) {		
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+	function features(Request $request, Application $app) {
+
+		// This is the legacy way .......
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('submitted') == 'yes') {
 				
 			$app['currentSite']->setIsFeatureGroup($request->request->get('isFeatureGroup') == '1');
 			$app['currentSite']->setIsFeatureMap($request->request->get('isFeatureMap') == '1');
@@ -182,8 +185,35 @@ class AdminController {
 			return $app->redirect("/admin/");
 			
 		}
-		
-		return $app['twig']->render('site/admin/features.html.twig', array(
+
+		// This is the new way .......
+		$siteFeatureRepository = new SiteFeatureRepository($app);
+
+		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('action') == 'on') {
+			$ext = $app['extensions']->getExtensionById($request->request->get('extension'));
+			if ($ext) {
+				foreach($ext->getSiteFeatures($app['currentSite']) as $feature) {
+					if ($feature->getFeatureId() == $request->request->get('feature')) {
+						$siteFeatureRepository->setFeature($app['currentSite'], $feature, true, $app['currentUser']);
+						$app['flashmessages']->addMessage("Feature turned on.");
+						return $app->redirect("/admin/features");
+					}
+				}
+			}
+		} else if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('action') == 'off') {
+			$ext = $app['extensions']->getExtensionById($request->request->get('extension'));
+			if ($ext) {
+				foreach($ext->getSiteFeatures($app['currentSite']) as $feature) {
+					if ($feature->getFeatureId() == $request->request->get('feature')) {
+						$siteFeatureRepository->setFeature($app['currentSite'], $feature, false, $app['currentUser']);
+						$app['flashmessages']->addMessage("Feature turned off.");
+						return $app->redirect("/admin/features");
+					}
+				}
+			}
+		}
+
+			return $app['twig']->render('site/admin/features.html.twig', array(
 			));
 	}
 		

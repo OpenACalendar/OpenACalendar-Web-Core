@@ -5,6 +5,8 @@ namespace repositories;
 
 use dbaccess\VenueDBAccess;
 use dbaccess\EventDBAccess;
+use models\EventEditMetaDataModel;
+use models\VenueEditMetaDataModel;
 use models\VenueModel;
 use models\SiteModel;
 use models\UserAccountModel;
@@ -30,10 +32,21 @@ class VenueRepository {
 		$this->venueDBAccess = new VenueDBAccess($DB, new \TimeSource());
 	}
 
-	public function create(VenueModel $venue, SiteModel $site, UserAccountModel $creator) {
+
+	/*
+	* @deprecated
+	*/
+	public function create(VenueModel $venue, SiteModel $site, UserAccountModel $creator)
+	{
+		$venueEditMetaDataModel = new VenueEditMetaDataModel();
+		$venueEditMetaDataModel->setUserAccount($creator);
+		$this->createWithMetaData($venue, $site, $venueEditMetaDataModel);
+	}
+
+	public function createWithMetaData(VenueModel $venue, SiteModel $site, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		global $DB, $EXTENSIONHOOKRUNNER;
 		
-		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$creator);
+		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$venueEditMetaDataModel->getUserAccount());
 		
 		try {
 			$DB->beginTransaction();
@@ -64,8 +77,8 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new, is_deleted) VALUES ".
-					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1', '0')");
+			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new, is_deleted, edit_comment) VALUES ".
+					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1', '0', :edit_comment)");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -74,11 +87,12 @@ class VenueRepository {
 					'description'=>$venue->getDescription(),
 					'address'=>$venue->getAddress(),
 					'address_code'=>$venue->getAddressCode(),
-					'user_account_id'=>$creator->getId(),				
+					'user_account_id'=>($venueEditMetaDataModel->getUserAccount() ? $venueEditMetaDataModel->getUserAccount()->getId() : null),
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'edit_comment'=>$venueEditMetaDataModel->getEditComment(),
 				));
 			$data = $stat->fetch();
 			
@@ -114,33 +128,70 @@ class VenueRepository {
 			return $venue;
 		}
 	}
-	
+
+	/*
+	* @deprecated
+	*/
 	public function edit(VenueModel $venue, UserAccountModel $user) {
+		$venueEditMetaDataModel = new VenueEditMetaDataModel();
+		$venueEditMetaDataModel->setUserAccount($user);
+		$this->editWithMetaData($venue, $venueEditMetaDataModel);
+	}
+
+	public function editWithMetaData(VenueModel $venue, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		global $DB, $EXTENSIONHOOKRUNNER;
 		
 		if ($venue->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted venue!");
 		}
 		
-		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$user);
+		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$venueEditMetaDataModel->getUserAccount());
 
 
 		$fields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_deleted');
 
-		$this->venueDBAccess->update($venue,$fields,$user);
+		$this->venueDBAccess->update($venue,$fields,$venueEditMetaDataModel);
 	}
-	
+
+	/*
+	* @deprecated
+	*/
 	public function delete(VenueModel $venue, UserAccountModel $user) {
+		$venueEditMetaDataModel = new VenueEditMetaDataModel();
+		$venueEditMetaDataModel->setUserAccount($user);
+		$this->deleteWithMetaData($venue, $venueEditMetaDataModel);
+	}
+
+	public function deleteWithMetaData(VenueModel $venue, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		$venue->setIsDeleted(true);
-		$this->venueDBAccess->update($venue,array('is_deleted'),$user);
+		$this->venueDBAccess->update($venue,array('is_deleted'),$venueEditMetaDataModel);
 	}
 
+	/*
+	* @deprecated
+	*/
 	public function undelete(VenueModel $venue, UserAccountModel $user) {
-		$venue->setIsDeleted(false);
-		$this->venueDBAccess->update($venue,array('is_deleted'),$user);
+		$venueEditMetaDataModel = new VenueEditMetaDataModel();
+		$venueEditMetaDataModel->setUserAccount($user);
+		$this->undeleteWithMetaData($venue, $venueEditMetaDataModel);
 	}
 
+	public function undeleteWithMetaData(VenueModel $venue, VenueEditMetaDataModel $venueEditMetaDataModel) {
+		$venue->setIsDeleted(false);
+		$this->venueDBAccess->update($venue,array('is_deleted'),$venueEditMetaDataModel);
+	}
+
+
+	/*
+	* @deprecated
+	*/
 	public function markDuplicate(VenueModel $duplicateVenue, VenueModel $originalVenue, UserAccountModel $user=null) {
+		$venueEditMetaDataModel = new VenueEditMetaDataModel();
+		$venueEditMetaDataModel->setUserAccount($user);
+		$this->markDuplicateWithMetaData($duplicateVenue, $originalVenue, $venueEditMetaDataModel);
+	}
+
+	public function markDuplicateWithMetaData(VenueModel $duplicateVenue, VenueModel $originalVenue, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		global $DB;
 
 		if ($duplicateVenue->getId() == $originalVenue->getId()) return;
@@ -150,15 +201,18 @@ class VenueRepository {
 
 			$duplicateVenue->setIsDeleted(true);
 			$duplicateVenue->setIsDuplicateOfId($originalVenue->getId());
-			$this->venueDBAccess->update($duplicateVenue,array('is_deleted','is_duplicate_of_id'),$user);
+			$this->venueDBAccess->update($duplicateVenue,array('is_deleted','is_duplicate_of_id'),$venueEditMetaDataModel);
 
 			// Move any Events
+			$eventEditMetaData = new EventEditMetaDataModel();
+			$eventEditMetaData->setUserAccount($venueEditMetaDataModel->getUserAccount());
+
 			$eventRepoBuilder = new EventRepositoryBuilder();
 			$eventRepoBuilder->setVenue($duplicateVenue);
 			$eventDBAccess = new EventDBAccess($DB, new \TimeSource());
 			foreach($eventRepoBuilder->fetchAll() as $event) {
 				$event->setVenueId($originalVenue->getId());
-				$eventDBAccess->update($event, array('venue_id'), $user, null);
+				$eventDBAccess->update($event, array('venue_id'), $eventEditMetaData);
 			}
 
 			$DB->commit();

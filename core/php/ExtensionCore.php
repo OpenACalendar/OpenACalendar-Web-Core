@@ -219,4 +219,10 @@ class ExtensionCore extends BaseExtension {
 		);
 	}
 
+	public function getSiteFeatures(\models\SiteModel $siteModel = null) {
+		return array(
+			new sitefeatures\EditCommentsFeature(),
+		);
+	}
+
 }

@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\EventEditMetaDataModel;
 use repositories\AreaRepository;
 use Silex\Application;
 use site\forms\EventNewForm;
@@ -102,15 +103,19 @@ class EventNewController {
 		$event->setDefaultOptionsFromSite($app['currentSite']);
 
 		$timezone = isset($_POST['EventNewForm']) && isset($_POST['EventNewForm']['timezone']) ? $_POST['EventNewForm']['timezone'] : $app['currentTimeZone'];
-		$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $timezone, $app), $event);
+		$form = $app['form.factory']->create(new EventNewForm($timezone, $app), $event);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+				$eventEditMetaData = new EventEditMetaDataModel();
+				$eventEditMetaData->setUserAccount($app['currentUser']);
+				$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+
 				$eventRepository = new EventRepository();
-				$eventRepository->create($event, $app['currentSite'], $app['currentUser']);
+				$eventRepository->createWithMetaData($event, $app['currentSite'], $eventEditMetaData);
 				
 				if ($parseResult && $app['config']->logFileParseDateTimeRange) {
 
@@ -175,7 +180,7 @@ class EventNewController {
 
 			$event = new EventModel();
 			$event->setDefaultOptionsFromSite($app['currentSite']);
-			$form = $app['form.factory']->create(new EventNewForm($app['currentSite'], $app['currentTimeZone'], $app), $event);
+			$form = $app['form.factory']->create(new EventNewForm($app['currentTimeZone'], $app), $event);
 			$form->bind($request);
 
 			if ($request->request->get('group_slug')) {

@@ -3,6 +3,7 @@
 
 namespace dbaccess;
 
+use models\TagEditMetaDataModel;
 use models\UserAccountModel;
 use models\TagModel;
 use sysadmin\controllers\API2Application;
@@ -12,7 +13,7 @@ use sysadmin\controllers\API2Application;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
@@ -34,7 +35,7 @@ class TagDBAccess {
 	protected $possibleFields = array('title','description','is_deleted');
 
 
-	public function update(TagModel $tag, $fields, UserAccountModel $user = null ) {
+	public function update(TagModel $tag, $fields, TagEditMetaDataModel $tagEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data
@@ -56,10 +57,15 @@ class TagDBAccess {
 		$fieldsSQLParams2 = array(':tag_id',':user_account_id',':created_at',':approved_at');
 		$fieldsParams2 = array(
 			'tag_id'=>$tag->getId(),
-			'user_account_id'=>($user ? $user->getId() : null),
+			'user_account_id'=>($tagEditMetaDataModel->getUserAccount() ? $tagEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
 		);
+		if ($tagEditMetaDataModel->getEditComment()) {
+			$fieldsSQL2[] = ' edit_comment ';
+			$fieldsSQLParams2[] = ' :edit_comment ';
+			$fieldsParams2['edit_comment'] = $tagEditMetaDataModel->getEditComment();
+		}
 		foreach($this->possibleFields as $field) {
 			if (in_array($field, $fields) || $field == 'title') {
 				$fieldsSQL2[] = " ".$field." ";

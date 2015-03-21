@@ -3,6 +3,7 @@
 
 namespace dbaccess;
 
+use models\ImportURLEditMetaDataModel;
 use models\UserAccountModel;
 use models\ImportURLModel;
 use sysadmin\controllers\API2Application;
@@ -37,7 +38,7 @@ class ImportURLDBAccess {
 
 	protected $possibleFields = array('country_id','area_id','title','is_enabled','expired_at','group_id','is_manual_events_creation');
 
-	public function update(ImportURLModel $importURL, $fields, UserAccountModel $user = null ) {
+	public function update(ImportURLModel $importURL, $fields, ImportURLEditMetaDataModel $importURLEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data
@@ -67,10 +68,15 @@ class ImportURLDBAccess {
 		$fieldsSQLParams2 = array(':import_url_id',':user_account_id',':created_at',':approved_at');
 		$fieldsParams2 = array(
 			'import_url_id'=>$importURL->getId(),
-			'user_account_id'=>($user ? $user->getId() : null),
+			'user_account_id'=>($importURLEditMetaDataModel->getUserAccount() ? $importURLEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
 		);
+		if ($importURLEditMetaDataModel->getEditComment()) {
+			$fieldsSQL2[] = ' edit_comment ';
+			$fieldsSQLParams2[] = ' :edit_comment ';
+			$fieldsParams2['edit_comment'] = $importURLEditMetaDataModel->getEditComment();
+		}
 		foreach($this->possibleFields as $field) {
 			if (in_array($field, $fields) || $field == 'title') {
 				$fieldsSQL2[] = " ".$field." ";

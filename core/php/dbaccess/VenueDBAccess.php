@@ -4,6 +4,7 @@
 namespace dbaccess;
 
 use models\UserAccountModel;
+use models\VenueEditMetaDataModel;
 use models\VenueModel;
 use sysadmin\controllers\API2Application;
 
@@ -12,7 +13,7 @@ use sysadmin\controllers\API2Application;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
@@ -34,7 +35,7 @@ class VenueDBAccess {
 
 	protected $possibleFields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_duplicate_of_id','is_deleted');
 
-	public function update(VenueModel $venue, $fields, UserAccountModel $user = null ) {
+	public function update(VenueModel $venue, $fields, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data
@@ -70,10 +71,15 @@ class VenueDBAccess {
 		$fieldsSQLParams2 = array(':venue_id',':user_account_id',':created_at',':approved_at');
 		$fieldsParams2 = array(
 			'venue_id'=>$venue->getId(),
-			'user_account_id'=>($user ? $user->getId() : null),
+			'user_account_id'=>($venueEditMetaDataModel->getUserAccount() ? $venueEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
 		);
+		if ($venueEditMetaDataModel->getEditComment()) {
+			$fieldsSQL2[] = ' edit_comment ';
+			$fieldsSQLParams2[] = ' :edit_comment ';
+			$fieldsParams2['edit_comment'] = $venueEditMetaDataModel->getEditComment();
+		}
 		foreach($this->possibleFields as $field) {
 			if (in_array($field, $fields) || $field == 'title') {
 				$fieldsSQL2[] = " ".$field." ";

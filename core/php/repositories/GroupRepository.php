@@ -4,6 +4,7 @@
 namespace repositories;
 
 use dbaccess\GroupDBAccess;
+use models\GroupEditMetaDataModel;
 use models\GroupModel;
 use models\EventModel;
 use models\SiteModel;
@@ -17,7 +18,7 @@ use repositories\UserWatchesGroupRepository;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class GroupRepository {
@@ -103,8 +104,17 @@ class GroupRepository {
 			return $group;
 		}
 	}
-	
+
+	/*
+	* @deprecated
+	*/
 	public function edit(GroupModel $group, UserAccountModel $user) {
+		$groupEditMetaDataModel = new GroupEditMetaDataModel();
+		$groupEditMetaDataModel->setUserAccount($user);
+		$this->editWithMetaData($group, $groupEditMetaDataModel);
+	}
+
+	public function editWithMetaData(GroupModel $group, GroupEditMetaDataModel $groupEditMetaDataModel) {
 		global $DB;
 		if ($group->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted group!");
@@ -113,29 +123,38 @@ class GroupRepository {
 			$DB->beginTransaction();
 
 			$fields = array('title','url','twitter_username','description');
-			$this->groupDBAccess->update($group, $fields, $user);
+			$this->groupDBAccess->update($group, $fields, $groupEditMetaDataModel);
 
 			$ufgr = new UserWatchesGroupRepository();
-			$ufgr->startUserWatchingGroupIfNotWatchedBefore($user, $group);
+			$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel->getUserAccount(), $group);
 			
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
 	}
-	
-	
+
+
+	/*
+	* @deprecated
+	*/
 	public function delete(GroupModel $group, UserAccountModel $user) {
+		$groupEditMetaDataModel = new GroupEditMetaDataModel();
+		$groupEditMetaDataModel->setUserAccount($user);
+		$this->deleteWithMetaData($group, $groupEditMetaDataModel);
+	}
+
+	public function deleteWithMetaData(GroupModel $group,  GroupEditMetaDataModel $groupEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 
 			$group->setIsDeleted(true);
-			$this->groupDBAccess->update($group, array('is_deleted'), $user);
+			$this->groupDBAccess->update($group, array('is_deleted'), $groupEditMetaDataModel);
 
 			$ufgr = new UserWatchesGroupRepository();
-			$ufgr->startUserWatchingGroupIfNotWatchedBefore($user, $group);
+			$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel->getUserAccount(), $group);
 			
 			$DB->commit();
 		} catch (Exception $e) {
@@ -143,17 +162,26 @@ class GroupRepository {
 		}
 	}
 
+	/*
+	* @deprecated
+	*/
 	public function undelete(GroupModel $group, UserAccountModel $user) {
+		$groupEditMetaDataModel = new GroupEditMetaDataModel();
+		$groupEditMetaDataModel->setUserAccount($user);
+		$this->undelete($group, $groupEditMetaDataModel);
+	}
+
+	public function undeleteWithMetaData(GroupModel $group,  GroupEditMetaDataModel $groupEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 
 			$group->setIsDeleted(false);
-			$this->groupDBAccess->update($group, array('is_deleted'), $user);
+			$this->groupDBAccess->update($group, array('is_deleted'), $groupEditMetaDataModel);
 
 			$ufgr = new UserWatchesGroupRepository();
-			$ufgr->startUserWatchingGroupIfNotWatchedBefore($user, $group);
+			$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel, $group);
 
 			$DB->commit();
 		} catch (Exception $e) {
@@ -322,7 +350,16 @@ class GroupRepository {
 		return 2;
 	}
 
+	/*
+	* @deprecated
+	*/
 	public function markDuplicate(GroupModel $duplicateGroup, GroupModel $originalGroup, UserAccountModel $user=null) {
+		$groupEditMetaDataModel = new GroupEditMetaDataModel();
+		$groupEditMetaDataModel->setUserAccount($user);
+		$this->markDuplicateWithMetaData($duplicateGroup, $originalGroup, $groupEditMetaDataModel);
+	}
+
+	public function markDuplicateWithMetaData(GroupModel $duplicateGroup, GroupModel $originalGroup, GroupEditMetaDataModel $groupEditMetaDataModel) {
 		global $DB;
 
 		if ($duplicateGroup->getId() == $originalGroup->getId()) return;
@@ -332,7 +369,7 @@ class GroupRepository {
 
 			$duplicateGroup->setIsDeleted(true);
 			$duplicateGroup->setIsDuplicateOfId($originalGroup->getId());
-			$this->groupDBAccess->update($duplicateGroup, array('is_deleted','is_duplicate_of_id'), $user);
+			$this->groupDBAccess->update($duplicateGroup, array('is_deleted','is_duplicate_of_id'), $groupEditMetaDataModel);
 
 			// Users Watching Group
 			$ufgr = new UserWatchesGroupRepository();

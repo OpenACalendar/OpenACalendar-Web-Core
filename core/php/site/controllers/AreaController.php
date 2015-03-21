@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\AreaEditMetaDataModel;
 use repositories\UserAccountRepository;
 use repositories\UserWatchesAreaRepository;
 use repositories\UserWatchesAreaStopRepository;
@@ -167,15 +168,20 @@ class AreaController {
 			die("No"); // TODO
 		}
 		
-		$form = $app['form.factory']->create(new AreaEditForm(), $this->parameters['area']);
+		$form = $app['form.factory']->create(new AreaEditForm($app), $this->parameters['area']);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+
+				$areaEditMetaDataModel = new AreaEditMetaDataModel();
+				$areaEditMetaDataModel->setUserAccount($app['currentUser']);
+				$areaEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
+
 				$areaRepository = new AreaRepository();
-				$areaRepository->edit($this->parameters['area'], $app['currentUser']);
+				$areaRepository->editWithMetaData($this->parameters['area'], $areaEditMetaDataModel);
 				
 				return $app->redirect("/area/".$this->parameters['area']->getSlugForURL());
 				

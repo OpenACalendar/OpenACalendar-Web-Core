@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -16,20 +17,23 @@ use repositories\builders\CountryRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class VenueEditForm extends AbstractType{
+class VenueEditForm extends \BaseFormWithEditComment {
 
 	/** @var SiteModel **/
 	protected $site;
 	
-	function __construct(SiteModel $site) {
-		$this->site = $site;
+	function __construct(Application $application) {
+		parent::__construct($application);
+		$this->site = $application['currentSite'];
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
+		parent::buildForm($builder, $options);
+
+
 		$builder->add('title', 'text', array(
 			'label'=>'Title',
 			'required'=>true, 

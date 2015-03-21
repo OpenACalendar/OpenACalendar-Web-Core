@@ -40,6 +40,9 @@
 		
 		{{ form_row(form.title) }}
 		{{ form_row(form.description) }}
+
+		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
 		{{ form_rest(form) }}
 		
 

@@ -1870,6 +1870,13 @@ div.filterListImportedEventWrapper form.filterListImportedEvent div.submitField 
   border-radius: 2px;
   cursor: pointer;
 }
+#formRowEditCommentToggler .title,
+#formRowEditCommentToggler .arrow {
+  font-size: 12px;
+}
+#formRowEditCommentToggler .title {
+  text-decoration: underline;
+}
 html {
   background-color: #B7CFB7;
 }

@@ -3,6 +3,7 @@
 
 namespace repositories;
 
+use models\EventEditMetaDataModel;
 use models\EventModel;
 use models\EventHistoryModel;
 use models\SiteModel;
@@ -19,7 +20,7 @@ use dbaccess\EventDBAccess;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class EventRepository {
@@ -36,7 +37,19 @@ class EventRepository {
 	}
 
 
+	/**
+	 * @deprecated
+	 */
 	public function create(EventModel $event, SiteModel $site, UserAccountModel $creator = null, 
+			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null, $tags=array(), $medias=array())
+	{
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($creator);
+		$this->createWithMetaData($event, $site, $eventEditMetaDataModel, $group, $additionalGroups, $importedEvent, $tags, $medias);
+	}
+
+
+	public function createWithMetaData(EventModel $event, SiteModel $site, EventEditMetaDataModel $eventEditMetaDataModel,
 			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null, $tags=array(), $medias=array()) {
 		global $DB;
 		try {
@@ -77,17 +90,17 @@ class EventRepository {
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
 				" user_account_id  , created_at,venue_id,country_id,timezone,".
-				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at, is_deleted, is_cancelled) VALUES ".
+				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at, is_deleted, is_cancelled, edit_comment) VALUES ".
 					" (:event_id, :summary, :description, :start_at, :end_at, ".
 						" :user_account_id  , :created_at,:venue_id,:country_id,:timezone,".
-						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, '1', :approved_at, '0', '0')");
+						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, '1', :approved_at, '0', '0', :edit_comment)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$event->getDescription(),
 					'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
 					'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
-					'user_account_id'=>($creator ? $creator->getId(): null),				
+					'user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId(): null),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
 					'approved_at'=>\TimeSource::getFormattedForDataBase(),
 					'country_id'=>$event->getCountryId(),
@@ -98,6 +111,7 @@ class EventRepository {
 					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
+					'edit_comment'=>$eventEditMetaDataModel->getEditComment(),
 				));
 			
 			if ($group || $additionalGroups) {
@@ -107,7 +121,7 @@ class EventRepository {
 					$stat->execute(array(
 							'group_id'=>$group->getId(),
 							'event_id'=>$event->getId(),
-							'added_by_user_account_id'=>($creator ? $creator->getId(): null),
+							'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId(): null),
 							'added_at'=>\TimeSource::getFormattedForDataBase(),
 							'addition_approved_at'=>\TimeSource::getFormattedForDataBase(),
 							'is_main_group'=>1,
@@ -119,7 +133,7 @@ class EventRepository {
 							$stat->execute(array(
 									'group_id'=>$additionalGroup->getId(),
 									'event_id'=>$event->getId(),
-									'added_by_user_account_id'=>($creator ? $creator->getId(): null),
+									'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId(): null),
 									'added_at'=>\TimeSource::getFormattedForDataBase(),
 									'addition_approved_at'=>\TimeSource::getFormattedForDataBase(),
 									'is_main_group'=>0,
@@ -130,10 +144,10 @@ class EventRepository {
 			}
 			
 			
-			if ($creator) {
+			if ($eventEditMetaDataModel->getUserAccount()) {
 				if ($event->getGroupId()) {
 					$ufgr = new UserWatchesGroupRepository();
-					$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($creator, $event->getGroupId());
+					$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($eventEditMetaDataModel->getUserAccount(), $event->getGroupId());
 				} else {
 					// TODO watch site?
 				}
@@ -156,7 +170,7 @@ class EventRepository {
 						$stat->execute(array(
 							'tag_id'=>$tag->getId(),
 							'event_id'=>$event->getId(),
-							'added_by_user_account_id'=>($creator?$creator->getId():null),
+							'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount()?$eventEditMetaDataModel->getUserAccount()->getId():null),
 							'added_at'=>  \TimeSource::getFormattedForDataBase(),
 							'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
 						));
@@ -170,7 +184,7 @@ class EventRepository {
 					$stat->execute(array(
 						'event_id'=>$event->getId(),
 						'media_id'=>$media->getId(),
-						'added_by_user_account_id'=>($creator?$creator->getId():null),
+						'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount()?$eventEditMetaDataModel->getUserAccount()->getId():null),
 						'added_at'=>  \TimeSource::getFormattedForDataBase(),
 						'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
 					));
@@ -266,9 +280,20 @@ class EventRepository {
 	 * @global type $DB
 	 * @param EventModel $event
 	 * @param UserAccountModel $creator
-	 * @param EventHistoryModel $fromHistory 
+	 * @param EventHistoryModel $fromHistory
+	 * @deprecated
 	 */
-	public function edit(EventModel $event,  UserAccountModel $user = null, EventHistoryModel $fromHistory = null ) {
+	public function edit(EventModel $event,  UserAccountModel $user = null, EventHistoryModel $fromHistory = null )
+	{
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($user);
+		if ($fromHistory) {
+			$eventEditMetaDataModel->setRevertedFromHistoryCreatedAt($fromHistory->getCreatedAt());
+		}
+		$this->editWithMetaData($event, $eventEditMetaDataModel);
+	}
+
+	public function editWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel ) {
 		if ($event->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted events!");
 		}
@@ -280,13 +305,13 @@ class EventRepository {
 			$fields = array('summary','description','start_at','end_at','venue_id','area_id','country_id','timezone',
 				'url','ticket_url','is_physical','is_virtual','is_deleted','is_cancelled');
 
-			$this->eventDBAccess->update($event, $fields, $user, $fromHistory);
+			$this->eventDBAccess->update($event, $fields, $eventEditMetaDataModel);
 			
 			
-			if ($user) {
+			if ($eventEditMetaDataModel->getUserAccount()) {
 				if ($event->getGroupId()) {
 					$ufgr = new UserWatchesGroupRepository();
-					$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($user, $event->getGroupId());
+					$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($eventEditMetaDataModel->getUserAccount(), $event->getGroupId());
 				} else {
 					// TODO watch site?
 				}
@@ -297,15 +322,23 @@ class EventRepository {
 			$DB->rollBack();
 		}
 	}
-	
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function delete(EventModel $event,  UserAccountModel $user=null) {
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($user);
+		$this->deleteWithMetaData($event, $eventEditMetaDataModel);
+	}
+
+	public function deleteWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$event->setIsDeleted(true);
-			$this->eventDBAccess->update($event, array('is_deleted'), $user, null);
+			$this->eventDBAccess->update($event, array('is_deleted'), $eventEditMetaDataModel);
 
 
 			// TODO if in group, watch
@@ -317,13 +350,22 @@ class EventRepository {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function undelete(EventModel $event,  UserAccountModel $user=null) {
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($user);
+		$this->undeleteWithMetaData($event, $eventEditMetaDataModel);
+	}
+
+	public function undeleteWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$event->setIsDeleted(false);
-			$this->eventDBAccess->update($event, array('is_deleted'), $user, null);
+			$this->eventDBAccess->update($event, array('is_deleted'), $eventEditMetaDataModel);
 
 
 			// TODO if in group, watch
@@ -336,13 +378,22 @@ class EventRepository {
 	}
 
 
+	/**
+	 * @deprecated
+	 */
 	public function cancel(EventModel $event,  UserAccountModel $user=null) {
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($user);
+		$this->cancelWithMetaData($event, $eventEditMetaDataModel);
+	}
+
+	public function cancelWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$event->setIsCancelled(true);
-			$this->eventDBAccess->update($event, array('is_cancelled'), $user, null);
+			$this->eventDBAccess->update($event, array('is_cancelled'), $eventEditMetaDataModel);
 
 
 			// TODO if in group, watch
@@ -354,13 +405,22 @@ class EventRepository {
 		}
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function uncancel(EventModel $event,  UserAccountModel $user=null) {
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($user);
+		$this->uncancelWithMetaData($event, $eventEditMetaDataModel);
+	}
+
+	public function uncancelWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
 		global $DB;
 		try {
 			$DB->beginTransaction();
 
 			$event->setIsCancelled(false);
-			$this->eventDBAccess->update($event, array('is_cancelled'), $user, null);
+			$this->eventDBAccess->update($event, array('is_cancelled'), $eventEditMetaDataModel);
 
 
 			// TODO if in group, watch
@@ -441,10 +501,18 @@ class EventRepository {
 			return $event;
 		}
 	}
-	
-	
-	
+
+
+	/**
+	 * @deprecated
+	 */
 	public function moveAllFutureEventsAtVenueToNoSetVenue(VenueModel $venue, UserAccountModel $user) {
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($user);
+		$this->moveAllFutureEventsAtVenueToNoSetVenueWithMetaData($venue, $eventEditMetaDataModel);
+	}
+
+	public function moveAllFutureEventsAtVenueToNoSetVenueWithMetaData(VenueModel $venue, EventEditMetaDataModel $eventEditMetaDataModel) {
 			global $DB;
 			
 			$statFetch = $DB->prepare("SELECT event_information.* FROM event_information WHERE venue_id = :venue_id AND start_at > :start_at AND is_deleted='0'");
@@ -455,7 +523,7 @@ class EventRepository {
 				$event->setVenueId(null);
 				$event->setAreaId($venue->getAreaId());
 
-				$this->eventDBAccess->update($event, array('venue_id','area_id'), $user, null);
+				$this->eventDBAccess->update($event, array('venue_id','area_id'), $eventEditMetaDataModel);
 			}
 		
 	}
@@ -486,8 +554,17 @@ class EventRepository {
 		
 		return $eventOut;
 	}
-	
+
+	/**
+	 * @deprecated
+	 */
 	public function markDuplicate(EventModel $duplicateEvent, EventModel $originalEvent, UserAccountModel $user=null) {
+		$eventEditMetaDataModel = new EventEditMetaDataModel();
+		$eventEditMetaDataModel->setUserAccount($user);
+		$this->markDuplicateWithMetaData($duplicateEvent, $originalEvent, $eventEditMetaDataModel);
+	}
+
+	public function markDuplicateWithMetaData(EventModel $duplicateEvent, EventModel $originalEvent, EventEditMetaDataModel $eventEditMetaDataModel) {
 		global $DB;
 
 		if ($duplicateEvent->getId() == $originalEvent->getId()) return;
@@ -498,7 +575,7 @@ class EventRepository {
 
 			$duplicateEvent->setIsDeleted(true);
 			$duplicateEvent->setIsDuplicateOfId($originalEvent->getId());
-			$this->eventDBAccess->update($duplicateEvent, array('is_deleted','is_duplicate_of_id'), $user);
+			$this->eventDBAccess->update($duplicateEvent, array('is_deleted','is_duplicate_of_id'), $eventEditMetaDataModel);
 
 			$uaeRepo = new UserAtEventRepository();
 			$uaerb = new UserAtEventRepositoryBuilder();

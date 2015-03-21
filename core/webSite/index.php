@@ -39,6 +39,11 @@ $app->before(function (Request $request) use ($app) {
 		return new Response($app['twig']->render('site/closed_by_sys_admin.html.twig', array()));
 	}
 
+	# ////////////// Features
+	$siteFeaturesRepo = new repositories\SiteFeatureRepository($app);
+	$app['currentSiteFeatures'] = new SiteFeaturesList($siteFeaturesRepo->getForSiteAsTree($app['currentSite']));
+	$app['twig']->addGlobal('currentSiteFeatures', $app['currentSiteFeatures']);
+
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
 	$removeEditorPermissions = false;
