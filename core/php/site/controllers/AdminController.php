@@ -297,11 +297,6 @@ class AdminController {
 	
 	
 	function media(Request $request, Application $app) {
-
-
-		$form = $app['form.factory']->create(new AdminVisibilityPublicForm(), $app['currentSite']);
-		
-				
 		
 		$mrb = new MediaRepositoryBuilder();
 		$mrb->setIncludeDeleted(false);
