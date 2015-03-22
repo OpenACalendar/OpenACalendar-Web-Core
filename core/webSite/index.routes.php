@@ -71,6 +71,10 @@ $app->match('/event/{slug}/edit/details', "site\controllers\EventController::edi
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
+$app->match('/event/{slug}/edit/details/editing.json', "site\controllers\EventController::editDetailsEditingJSON")
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionEventsChangeRequired)
+		->before($canChangeSite);
 
 $app->match('/event/{slug}/edit/venue', "site\controllers\EventController::editVenue")
 		->assert('slug', FRIENDLY_SLUG_REGEX)

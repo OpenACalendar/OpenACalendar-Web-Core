@@ -175,16 +175,23 @@ class EventNewController {
 	
 	public function creatingThisNewEvent(Request $request, Application $app) {		
 		$notDuplicateSlugs = isset($_GET['notDuplicateSlugs']) ? explode(",", $_GET['notDuplicateSlugs']) : array();
-		
+
+		$event = new EventModel();
+		$event->setDefaultOptionsFromSite($app['currentSite']);
+		$timezone = isset($_POST['EventNewForm']) && isset($_POST['EventNewForm']['timezone']) ? $_POST['EventNewForm']['timezone'] : $app['currentTimeZone'];
+		$form = $app['form.factory']->create(new EventNewForm($timezone, $app), $event);
+		$form->bind($request);
+
 		$data = array('duplicates'=>array());
+
+		if ($event->getStartAtInUTC()->getTimestamp() > $event->getEndAtInUTC()->getTimestamp()) {
+			$data['readableStartEndRange'] = "(The start is after the end)";
+		} else {
+			$data['readableStartEndRange'] = $app['twig']->render('site/eventnew/startendrange.html.twig', array('event' => $event));
+		}
 
 		if ($app['config']->findDuplicateEventsShow > 0) {
 
-			$event = new EventModel();
-			$event->setDefaultOptionsFromSite($app['currentSite']);
-			$timezone = isset($_POST['EventNewForm']) && isset($_POST['EventNewForm']['timezone']) ? $_POST['EventNewForm']['timezone'] : $app['currentTimeZone'];
-			$form = $app['form.factory']->create(new EventNewForm($timezone, $app), $event);
-			$form->bind($request);
 
 			if ($request->request->get('group_slug')) {
 				$gr = new GroupRepository();

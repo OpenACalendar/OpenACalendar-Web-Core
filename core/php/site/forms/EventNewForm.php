@@ -142,7 +142,7 @@ class EventNewForm extends \BaseFormWithEditComment {
 		$years = array( date('Y'), date('Y')+1 );
 
 		$startOptions = array(
-			'label'=>'Start Date & Time',
+			'label'=>'Start',
 			'date_widget'=> 'single_text',
 			'date_format'=>'d/M/y',
 			'model_timezone' => 'UTC',
@@ -160,7 +160,7 @@ class EventNewForm extends \BaseFormWithEditComment {
 		$builder->add('start_at', 'datetime' ,$startOptions);
 
 		$endOptions = array(
-			'label'=>'End Date & Time',
+			'label'=>'End',
 			'date_widget'=> 'single_text',
 			'date_format'=>'d/M/y',
 			'model_timezone' => 'UTC',

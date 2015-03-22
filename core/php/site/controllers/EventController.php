@@ -473,6 +473,41 @@ class EventController {
 	}
 
 	/**
+	 * Used for non-imported events only.
+	 * @param $slug
+	 * @param Request $request
+	 * @param Application $app
+	 * @return Response
+	 */
+	function editDetailsEditingJSON($slug, Request $request, Application $app)
+	{
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+
+		if ($this->parameters['event']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+
+		$data = array();
+
+		$timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
+		$form = $app['form.factory']->create(new EventEditForm($app['currentSite'], $timeZone, $app), $this->parameters['event']);
+		$form->bind($request);
+
+		if ($this->parameters['event']->getStartAtInUTC()->getTimestamp() > $this->parameters['event']->getEndAtInUTC()->getTimestamp()) {
+			$data['readableStartEndRange'] = "(The start is after the end)";
+		} else {
+			$data['readableStartEndRange'] = $app['twig']->render('site/event/edit.details.startendrange.html.twig', array('event' => $this->parameters['event']));
+		}
+
+		$response = new Response(json_encode($data));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+
+	}
+
+	/**
 	 * Event Edit Venue - remove "the" from start of search words to get more matches
 	 * eg "Pear Tree" exists, user searches for "The Pear Tree"
 	 *

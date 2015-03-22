@@ -13,7 +13,7 @@
 {% block innerContent %}
 
 	{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
-	<form action="#" method="post" class="styled" novalidate="novalidate">
+	<form action="#" method="post" class="styled" id="EditEventForm" novalidate="novalidate">
 
 		{{ form_errors(form) }}
 
@@ -21,6 +21,12 @@
 		{{ form_row(form.description) }}
 		{{ form_row(form.url) }}
 		{{ form_row(form.ticket_url) }}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Date/Time</div>
+			<div class="widgetWrapper" id="ReadableDateTimeRange">
+			</div>
+			<div class="after"></div>
+		</div>
 		{{ form_row(form.start_at) }}
 		{{ form_row(form.end_at) }}
 		{{ form_row(form.country_id) }}
@@ -54,8 +60,14 @@
 	</form>
 {% endblock %}
 
+{% block scriptsForState %}
+	<script type="text/javascript">
+		var editingEventSlug = {{  event.slug }};
+	</script>
+{%  endblock %}
 
 {% block scripts %}
 	<script type="text/javascript" src="/theme/default/js/eventform.js?v={{ config.assetsVersion }}"></script>
+	<script type="text/javascript" src="/theme/default/js/eventform.edit.js?v={{ config.assetsVersion }}"></script>
 {% endblock %}
 

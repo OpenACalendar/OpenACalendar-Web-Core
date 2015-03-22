@@ -10,18 +10,23 @@ var notDuplicateOfEventSlugs = "";
 
 $(document).ready(function() {
 	$('#NewEventForm').change(function() {
-		loadDupes();
-	});	
-	loadDupes();
+		loadData();
+	});
+	loadData();
 
 	$('#EventEditForm_country_id, #EventNewForm_country_id').change(function() {
 		$('#AreaRow').remove();
 	});
 });
 
-function loadDupes() {
+var loadDataAJAX;
+
+function loadData() {
 	var dataIn = $('#NewEventForm').serialize();
-	$.post('/event/creatingThisNewEvent.json?notDuplicateSlugs='+notDuplicateOfEventSlugs, dataIn,function(data) {
+	if (loadDataAJAX) {
+		loadDataAJAX.abort();
+	}
+	loadDataAJAX = $.post('/event/creatingThisNewEvent.json?notDuplicateSlugs='+notDuplicateOfEventSlugs, dataIn,function(data) {
 		if (data.duplicates.length == 0) {
 			$('#DuplicateEventsContainer').hide();
 		} else {
@@ -47,6 +52,7 @@ function loadDupes() {
 			$('#DuplicateEventsList').empty().append(html);
 			$('#DuplicateEventsContainer').show();
 		}
+		$('#ReadableDateTimeRange').html(data.readableStartEndRange);
 	});
 }
 
@@ -116,7 +122,7 @@ function showEventPopup(eventSlug) {
 function notDuplicateOfEvent(eventSlug) {
 	notDuplicateOfEventSlugs += eventSlug+",";
 	closePopup();
-	loadDupes();
+	loadData();
 }
 
 
