@@ -2741,6 +2741,32 @@ ul.usernotifications li.usernotificationunread a.title {
     display: block;
   }
 }
+form .bigSubmitActionWrapper {
+  float: right;
+  display: inline;
+  padding: 6px;
+  margin: 0;
+  line-height: 1.8;
+  text-align: right;
+}
+form .bigSubmitActionWrapper input[type="submit"] {
+  display: inline;
+  background: #36C036;
+  padding: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  margin: 1px;
+  color: #333;
+  font-size: 1.20em;
+  text-decoration: none;
+}
+form .bigSubmitActionWrapper input[type="submit"]:hover {
+  color: black;
+  text-decoration: underline;
+}
+form .afterBigSubmitActionWrapper {
+  clear: right;
+}
 #PopupMask {
   position: fixed;
   top: 0px;
