@@ -51,7 +51,7 @@
 			{% include 'site/pageFooter.html.twig' %}
 		</div>
 		{% block scriptsForState %}{% endblock %}
-		<script src="/info.js.php?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/info.js.php?v={{ config.assetsVersion }}{% if currentUser %}&u={{  currentUser.username|e('url') }}{%  endif %}" type="text/javascript"></script>
 		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
 		<script src="/jqueryui/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
 		<script src="/theme/default/js/general.js?v={{ config.assetsVersion }}" type="text/javascript"></script>

@@ -16,8 +16,12 @@ use repositories\SiteRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-header('Content-Type: application/javascript');
+// ================ cache for a bit
+// the v and u passed to this have no effect here - they are just cache busters
+header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 30*60));
 
+// ================ Data!
+header('Content-Type: application/javascript');
 $data  = array();
 // TODO would like to depreceate httpDomain and get scripts to just use httpDomainIndex & httpDomainSite for clarity
 $data['httpDomain'] = $CONFIG->webIndexDomain;
