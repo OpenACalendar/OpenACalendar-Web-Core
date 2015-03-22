@@ -71,7 +71,9 @@ function onCountryChanged() {
 						// Must have a breaking space between items to stop it becoming one long line.
 						html += ' ';
 					}
-					html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Create new</a></span><span class="aftercontent">&nbsp;</span></li>'
+					if (config['currentUserPermissions']['org.openacalendar']['AREAS_CHANGE']) {
+						html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Create new</a></span><span class="aftercontent">&nbsp;</span></li>'
+					}
 					html += '</ul></li>';
 				}
 				$('#ChangeVenueAreaList').html(html);
@@ -126,7 +128,9 @@ function loadNextArea(areaSlug, includeCurrentArea) {
 						// Must have a breaking space between items to stop it becoming one long line.
 						html += ' ';
 					}
-					html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Create new</a></span><span class="aftercontent">&nbsp;</span></li>'
+					if (config['currentUserPermissions']['org.openacalendar']['AREAS_CHANGE']) {
+						html += '<li class="area"><span class="content"><a href="#" onclick="newAreaChoosen(); return false;">Create new</a></span><span class="aftercontent">&nbsp;</span></li>'
+					}
 					html += '</ul></li>';
 				}
 				$('#ChangeVenueAreaList').append(html);

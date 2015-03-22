@@ -5,6 +5,7 @@ require_once APP_ROOT_DIR.'/core/php/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoloadWebApp.php';
 
 use repositories\SiteRepository;
+use repositories\UserHasNoEditorPermissionsInSiteRepository;
 
 /**
  *
@@ -16,8 +17,8 @@ use repositories\SiteRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-//$siteRepository = new SiteRepository();
-//$site = $siteRepository->loadById($CONFIG->singleSiteID);
+$siteRepository = new SiteRepository();
+$site = $siteRepository->loadById($CONFIG->singleSiteID);
 
 // ================ cache for a bit
 // the v and u passed to this have no effect here - they are just cache busters
@@ -48,6 +49,17 @@ if ($user) {
 } else {
 	$data['currentUser'] = false;
 }
+
+
+$removeEditorPermissions = false;
+$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+if ($app['currentUser'] && $userHasNoEditorPermissionsInSiteRepo->isUserInSite($app['currentUser'], $site)) {
+	$removeEditorPermissions = true;
+}
+
+$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+$currentUserPermissions = $userPermissionsRepo->getPermissionsForUserInSite($user, $site, $removeEditorPermissions, true);
+$data['currentUserPermissions'] = $currentUserPermissions->getAsArrayForJSON();
 
 header('Content-Type: application/javascript');
 print "var config = ".json_encode($data);

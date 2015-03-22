@@ -5,6 +5,7 @@ require_once APP_ROOT_DIR.'/core/php/autoload.php';
 require_once APP_ROOT_DIR.'/core/php/autoloadWebApp.php';
 
 use repositories\SiteRepository;
+use repositories\UserHasNoEditorPermissionsInSiteRepository;
 
 /**
  *
@@ -54,7 +55,17 @@ if (!$site) {
 	} else {
 		$data['currentUser'] = false;
 	}
-	
+
+	$removeEditorPermissions = false;
+	$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+	if ($app['currentUser'] && $userHasNoEditorPermissionsInSiteRepo->isUserInSite($app['currentUser'], $site)) {
+		$removeEditorPermissions = true;
+	}
+
+	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+	$currentUserPermissions = $userPermissionsRepo->getPermissionsForUserInSite($user, $site, $removeEditorPermissions, true);
+	$data['currentUserPermissions'] = $currentUserPermissions->getAsArrayForJSON();
+
 	print "var config = ".json_encode($data);
 	
 }

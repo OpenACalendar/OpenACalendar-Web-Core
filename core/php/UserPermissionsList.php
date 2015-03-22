@@ -103,5 +103,16 @@ class UserPermissionsList {
 		return $this->permissions;
 	}
 
+	public function getAsArrayForJSON() {
+		$out = array();
+		foreach($this->permissions as $permission) {
+			if (!isset($out[$permission->getUserPermissionExtensionID()])) {
+				$out[$permission->getUserPermissionExtensionID()] = array();
+			}
+			$out[$permission->getUserPermissionExtensionID()][$permission->getUserPermissionKey()] = true;
+		}
+		return $out;
+	}
+
 }
 

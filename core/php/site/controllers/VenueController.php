@@ -171,7 +171,7 @@ class VenueController {
 					foreach ($request->request->get('areas') as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
-						} else if (substr($areaCode, 0, 4) == 'NEW:') {
+						} else if (substr($areaCode, 0, 4) == 'NEW:' && $app['currentUserPermissions']->hasPermission('org.openacalendar','AREAS_CHANGE')) {
 							$newArea = new AreaModel();
 							$newArea->setTitle(substr($areaCode, 4));
 							$areaRepository->create($newArea, $area, $app['currentSite'], $this->parameters['country'] , $app['currentUser']);
