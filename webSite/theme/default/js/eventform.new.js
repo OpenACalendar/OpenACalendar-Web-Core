@@ -21,11 +21,33 @@ $(document).ready(function() {
 
 var loadDataAJAX;
 
+var startDate, startHours, startMins, endDate, endHours, endMins, timezone;
+
 function loadData() {
-	var dataIn = $('#NewEventForm').serialize();
+	// cancel old loads
 	if (loadDataAJAX) {
 		loadDataAJAX.abort();
 	}
+	// set loading indicators
+	var currentStartDate = $('#EventNewForm_start_at_date').val();
+	var currentStartHours = $('#EventNewForm_start_at_time_hour').val();
+	var currentStartMins = $('#EventNewForm_start_at_time_minute').val();
+	var currentEndDate = $('#EventNewForm_end_at_date').val();
+	var currentEndHours = $('#EventNewForm_end_at_time_hour').val();
+	var currentEndMins = $('#EventNewForm_end_at_time_minute').val();
+	var currentTimezone = $('#EventNewForm_timezone').val();
+	if (currentStartDate != startDate || currentStartHours != startHours || currentStartMins != startMins || currentEndDate != endDate || currentEndHours != endHours || currentEndMins != endMins || currentTimezone != timezone) {
+		$('#ReadableDateTimeRange').html('&nbsp;');
+		startDate = currentStartDate;
+		startHours = currentStartHours;
+		startMins = currentStartMins;
+		endDate = currentEndDate;
+		endHours = currentEndHours;
+		endMins = currentEndMins;
+		timezone = currentTimezone;
+	}
+	// load
+	var dataIn = $('#NewEventForm').serialize();
 	loadDataAJAX = $.post('/event/creatingThisNewEvent.json?notDuplicateSlugs='+notDuplicateOfEventSlugs, dataIn,function(data) {
 		if (data.duplicates.length == 0) {
 			$('#DuplicateEventsContainer').hide();

@@ -18,11 +18,33 @@ $(document).ready(function() {
 
 var loadDataAJAX;
 
+var startDate, startHours, startMins, endDate, endHours, endMins, timezone;
+
 function loadData() {
-	var dataIn = $('#EditEventForm').serialize();
+	// cancel old loads
 	if (loadDataAJAX) {
 		loadDataAJAX.abort();
 	}
+	// set loading indicators
+	var currentStartDate = $('#EventEditForm_start_at_date').val();
+	var currentStartHours = $('#EventEditForm_start_at_time_hour').val();
+	var currentStartMins = $('#EventEditForm_start_at_time_minute').val();
+	var currentEndDate = $('#EventEditForm_end_at_date').val();
+	var currentEndHours = $('#EventEditForm_end_at_time_hour').val();
+	var currentEndMins = $('#EventEditForm_end_at_time_minute').val();
+	var currentTimezone = $('#EventEditForm_timezone').val();
+	if (currentStartDate != startDate || currentStartHours != startHours || currentStartMins != startMins || currentEndDate != endDate || currentEndHours != endHours || currentEndMins != endMins || currentTimezone != timezone) {
+		$('#ReadableDateTimeRange').html('&nbsp;');
+		startDate = currentStartDate;
+		startHours = currentStartHours;
+		startMins = currentStartMins;
+		endDate = currentEndDate;
+		endHours = currentEndHours;
+		endMins = currentEndMins;
+		timezone = currentTimezone;
+	}
+	// load
+	var dataIn = $('#EditEventForm').serialize();
 	loadDataAJAX = $.post('/event/'+editingEventSlug+'/edit/details/editing.json', dataIn,function(data) {
 		$('#ReadableDateTimeRange').html(data.readableStartEndRange);
 	});
