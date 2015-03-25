@@ -2,6 +2,7 @@
 
 namespace sysadmin\controllers;
 
+use models\EventEditMetaDataModel;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -150,6 +151,14 @@ class EventController {
 						$er->markDuplicate($this->parameters['event'], $originalEvent, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 					}
+				} else if ($action->getCommand() == 'isnotduplicate') {
+
+					$er = new EventRepository();
+					$eventEditMetaData = new EventEditMetaDataModel();
+					$eventEditMetaData->setUserAccount($app['currentUser']);
+					$er->markNotDuplicateWithMetaData($this->parameters['event'], $eventEditMetaData);
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+
 
 				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeEventPassword && $CONFIG->sysAdminExtraPurgeEventPassword == $action->getParam(0)) {
 

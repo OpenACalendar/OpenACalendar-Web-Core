@@ -600,7 +600,15 @@ class EventRepository {
 
 
 	}
-	
+
+	public function markNotDuplicateWithMetaData(EventModel $notDuplicateEvent, EventEditMetaDataModel $eventEditMetaDataModel) {
+		global $DB;
+
+		$notDuplicateEvent->setIsDuplicateOfId(null);
+		$this->eventDBAccess->update($notDuplicateEvent, array('is_duplicate_of_id'), $eventEditMetaDataModel);
+
+	}
+
 	public function purge(EventModel $event) {
 		global $DB;
 		try {
