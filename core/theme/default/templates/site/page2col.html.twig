@@ -29,7 +29,7 @@
 					</div>				
 				{% elseif currentUser is not null and not currentUser.isEmailVerified %}
 					<div class="flash-notice">
-						Please check your email for instructions on how to verify your account. Until you do, some features are not available.
+						Please check your email for instructions on how to verify your account. Until you do, some features are not available. (Remember it may be in your spam folder.)
 						<a href="{{ config.getWebIndexDomainSecure() }}/me/resendverifyemail">Click here to resend the email</a>.
 					</div>
 				{% endif %}
