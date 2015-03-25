@@ -61,8 +61,12 @@
 				{{ form_row(form.is_physical) }}
 			{% endif %}
 			{# Secondly, any options for physical events? #}
-			<div id="physicalEventOptions">
-				
+			<div id="physicalEventOptions" style="display: none;">
+				<div class="rowWrapper">
+					<div class="labelWrapper">&nbsp;</div>
+					<div class="widgetWrapper">(You can set the venue in the next step.)</div>
+					<div class="after"></div>
+				</div>
 			</div>
 		{% endif %}
 

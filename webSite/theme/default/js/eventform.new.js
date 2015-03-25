@@ -46,6 +46,16 @@ function loadData() {
 		endMins = currentEndMins;
 		timezone = currentTimezone;
 	}
+	// change form
+	var physicalEventOption = $('#EventNewForm_is_physical');
+	if (physicalEventOption.length) {
+		if (physicalEventOption.is(':checked')) {
+			$('#physicalEventOptions').show();
+		} else {
+			$('#physicalEventOptions').hide();
+		}
+	}
+
 	// load
 	var dataIn = $('#NewEventForm').serialize();
 	loadDataAJAX = $.post('/event/creatingThisNewEvent.json?notDuplicateSlugs='+notDuplicateOfEventSlugs, dataIn,function(data) {
