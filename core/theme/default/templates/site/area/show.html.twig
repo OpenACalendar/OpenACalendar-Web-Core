@@ -112,7 +112,14 @@
 				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 			{% else %}
 				<li class="nodata">
-					No events found.
+					{%  set eventsDefaultCount = area|futureeventscount %}
+					{%  if not eventListFilterParams.isDefaultFilters and eventsDefaultCount == 1 %}
+						No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the one future event</a> instead?
+					{%  elseif not eventListFilterParams.isDefaultFilters and eventsDefaultCount > 1 %}
+						No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
+					{%  else %}
+						No events found.
+					{%  endif %}
 				</li>
 			{% endfor %}
 		</ul>

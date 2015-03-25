@@ -30,6 +30,11 @@ class EventFilterParams {
 		return $this->eventRepositoryBuilder;
 	}
 
+
+	public function isDefaultFilters() {
+		return  !$this->freeTextSearch && $this->fromNow && !$this->include_deleted;
+	}
+
 	// ############################### optional controls; turn on and off
 	
 	protected $freeTextSearch = null;

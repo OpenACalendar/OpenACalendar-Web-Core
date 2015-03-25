@@ -553,5 +553,18 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 		
 	}
 
+	public function fetchCount() {
+
+		$this->buildStart();
+
+		$this->select = array('event_information.id');
+
+		$this->build();
+		$this->buildStat();
+
+		return $this->stat->rowCount();
+
+	}
+
 }
 
