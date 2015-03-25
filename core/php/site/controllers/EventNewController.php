@@ -70,6 +70,9 @@ class EventNewController {
 		$params = array('area'=>null);
 
 		$event = new EventModel();
+		$event->setStartAt(\TimeSource::getDateTime());
+		$event->setEndAt(\TimeSource::getDateTime());
+
 		// what
 		if (isset($_GET['what']) && trim($_GET['what'])) {
 			$event->setSummary($_GET['what']);
@@ -78,8 +81,11 @@ class EventNewController {
 		if (isset($_GET['when']) && trim($_GET['when'])) {
 			$parse = new ParseDateTimeRangeString(\TimeSource::getDateTime(), $app['currentTimeZone']);
 			$parseResult = $parse->parse($_GET['when']);
-			$event->setStartAt($parseResult->getStart());
-			$event->setEndAt($parseResult->getEnd());
+			if ($parseResult->getStart()) {
+				$event->setStartAt($parseResult->getStart());
+				// If no end is returned, just set start as sensible default
+				$event->setEndAt($parseResult->getEnd() ? $parseResult->getEnd() : $parseResult->getStart());
+			}
 		} else if (isset($_GET['date']) && trim($_GET['date'])) {
 			$bits = explode("-", $_GET['date']);
 			if (count($bits) == 3 && intval($bits[0]) && intval($bits[1]) && intval($bits[2])) {
