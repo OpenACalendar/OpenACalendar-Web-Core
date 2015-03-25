@@ -24,6 +24,7 @@ class HistoryController {
 
 		$historyRepositoryBuilder = new HistoryRepositoryBuilder();
 		$historyRepositoryBuilder->setSite($app['currentSite']);
+		$historyRepositoryBuilder->getHistoryRepositoryBuilderConfig()->setLimit(200);
 		
 		
 		
