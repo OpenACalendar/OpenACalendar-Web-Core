@@ -15,13 +15,21 @@
 	
 	{% if currentUserWatchesArea %}
 
-		<p>By watching this area you can:</p>
+		<p>By watching this area you:</p>
 		
 		<ul class="listOfTextItems">
-			<li>Optionally receive emails whenever someone else changes anything.</li>
-			<li>Optionally receive emails whenever we are about to run out of events.</li>
-			<li>Optionally see the events on your personal calendar.</li>
-			<li>Optionally get email reminders when events are on.</li>
+			<li>
+				Receive a notification {%  if preferences['org.openacalendar']['WatchNotify'].email %} and email {% endif %} whenever someone else changes anything.
+			</li>
+			<li>
+				Receive a notification {%  if preferences['org.openacalendar']['WatchPrompt'].email %} and email {% endif %} whenever we are about to run out of events.
+			</li>
+			<li>
+				Optionally see the events on your personal calendar.
+			</li>
+			<li>
+				Receive a notification {%  if preferences['org.openacalendar']['UpcomingEvents'].email %} and email {% endif %} to remind you when events are on.
+			</li>
 		</ul>
 
 		<p>You can stop watching from a link in any email, or by pressing:</p>
@@ -30,27 +38,35 @@
 		<form action="" method="post">
 			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 			<input type="hidden" name="action" value="unwatch">
-			<input type="submit" value="Stop Watching">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Stop Watching" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 		
 	{% else %}
 		<p>Watch this area to:</p>
 		
 		<ul class="listOfTextItems">
-			<li>Optionally receive emails whenever someone else changes anything.</li>
-			<li>Optionally receive emails whenever we are about to run out of events.</li>
-			<li>Optionally see the events on your personal calendar.</li>
-			<li>Optionally get email reminders when events are on.</li>
+			<li>
+				Receive a notification {%  if preferences['org.openacalendar']['WatchNotify'].email %} and email {% endif %} whenever someone else changes anything.
+			</li>
+			<li>
+				Receive a notification {%  if preferences['org.openacalendar']['WatchPrompt'].email %} and email {% endif %} whenever we are about to run out of events.
+			</li>
+			<li>
+				Optionally see the events on your personal calendar.
+			</li>
+			<li>
+				Receive a notification {%  if preferences['org.openacalendar']['UpcomingEvents'].email %} and email {% endif %} to remind you when events are on.
+			</li>
 		</ul>
-		
-		<p>To start watching, press:</p>
-		
+
 		
 		
 		<form action="" method="post">
 			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 			<input type="hidden" name="action" value="watch">
-			<input type="submit" value="Watch">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Start Watching" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>	
 		</form>
 	{% endif %}
 	

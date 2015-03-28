@@ -64,8 +64,22 @@ class IndexController {
 			// this is an easy way to get round that.
 			return $app->redirect('/watch');
 		}
-		
+
+		$repo = new \repositories\UserNotificationPreferenceRepository();
+		$preferences = array();
+
+		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+			if (!isset($preferences[$extension->getId()])) {
+				$preferences[$extension->getId()] = array();
+			}
+			foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+				$userPref = $repo->load($app['currentUser'],$extension->getId() ,$type);
+				$preferences[$extension->getId()][$type] = array('email'=>$userPref->getIsEmail());
+			}
+		}
+
 		return $app['twig']->render('site/index/watch.html.twig', array(
+			'preferences'=>$preferences,
 			));
 	}
 	

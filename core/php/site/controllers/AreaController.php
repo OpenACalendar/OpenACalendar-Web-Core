@@ -330,6 +330,18 @@ class AreaController {
 			return $app->redirect('/area/'.$this->parameters['area']->getSlugForURL());
 		}
 
+		$repo = new \repositories\UserNotificationPreferenceRepository();
+		$this->parameters['preferences'] = array();
+		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+			if (!isset($this->parameters['preferences'][$extension->getId()])) {
+				$this->parameters['preferences'][$extension->getId()] = array();
+			}
+			foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+				$userPref = $repo->load($app['currentUser'],$extension->getId() ,$type);
+				$this->parameters['preferences'][$extension->getId()][$type] = array('email'=>$userPref->getIsEmail());
+			}
+		}
+
 		return $app['twig']->render('site/area/watch.html.twig', $this->parameters);
 	}
 

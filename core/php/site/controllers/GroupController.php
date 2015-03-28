@@ -473,6 +473,18 @@ class GroupController {
 			// this is an easy way to get round that. Also it's nice UI to go back to the group page.
 			return $app->redirect('/group/'.$this->parameters['group']->getSlugForURL());
 		}
+
+		$repo = new \repositories\UserNotificationPreferenceRepository();
+		$this->parameters['preferences'] = array();
+		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+			if (!isset($this->parameters['preferences'][$extension->getId()])) {
+				$this->parameters['preferences'][$extension->getId()] = array();
+			}
+			foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+				$userPref = $repo->load($app['currentUser'],$extension->getId() ,$type);
+				$this->parameters['preferences'][$extension->getId()][$type] = array('email'=>$userPref->getIsEmail());
+			}
+		}
 		
 		return $app['twig']->render('site/group/watch.html.twig', $this->parameters);
 	}
