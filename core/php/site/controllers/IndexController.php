@@ -36,7 +36,8 @@ class IndexController {
 		$erb->setIncludeMediasSlugs(true);
 		if ($app['currentUser']) {
 			$erb->setUserAccount($app['currentUser'], true);
-		}		
+		}
+		$erb->setLimit(100);
 		$events = $erb->fetchAll();
 		
 		return $app['twig']->render('site/index/index.html.twig', array(
