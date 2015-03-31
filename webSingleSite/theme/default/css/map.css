@@ -760,7 +760,7 @@ h2 a {
   padding: 4px 0;
 }
 .popupBox ul.popupListEvents li.event .time {
-  color: #ec2327;
+  color: black;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
@@ -774,7 +774,7 @@ h2 a {
   padding: 5px 0;
 }
 .popupBox .popupShowEvent .times {
-  color: #ec2327;
+  color: black;
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }

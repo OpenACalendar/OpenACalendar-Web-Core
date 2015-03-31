@@ -1235,20 +1235,20 @@ div.mainShowEvent .GetTicket {
 }
 .dateAndLocationWrapper div.date {
   display: block;
-  color: #ec2327;
+  color: black;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
 .dateAndLocationWrapper div.location {
   display: block;
-  color: #ec2327;
+  color: black;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterLocationIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
 .dateAndLocationWrapper div.location a {
-  color: #ec2327;
+  color: black;
   text-decoration: none;
 }
 div.mainShowVenue .locationWrapper,
@@ -1260,14 +1260,14 @@ div.mainShowArea .locationWrapper {
 div.mainShowVenue .locationWrapper div.location,
 div.mainShowArea .locationWrapper div.location {
   display: block;
-  color: #ec2327;
+  color: black;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterLocationIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
 div.mainShowVenue .locationWrapper div.location a,
 div.mainShowArea .locationWrapper div.location a {
-  color: #ec2327;
+  color: black;
   text-decoration: none;
 }
 div.mainShowVenue .map,
@@ -1722,7 +1722,7 @@ form .afterBigSubmitActionWrapper {
   padding: 4px 0;
 }
 .popupBox ul.popupListEvents li.event .time {
-  color: #ec2327;
+  color: black;
   font-weight: 400;
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
@@ -1736,7 +1736,7 @@ form .afterBigSubmitActionWrapper {
   padding: 5px 0;
 }
 .popupBox .popupShowEvent .times {
-  color: #ec2327;
+  color: black;
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;
 }
