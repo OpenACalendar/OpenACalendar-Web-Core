@@ -31,9 +31,16 @@ abstract class BaseIncomingLink {
 
 	protected $data;
 
-	/**
-	 * public function setData($data) <-- Classes that extend this should do this in their own way
-	 **/
+	public function setFromDataBaseRow($data)
+	{
+		$this->id = $data['id'];
+		$this->reporter_useragent = $data['reporter_useragent'];
+		$this->reporter_ip = $data['reporter_ip'];
+		$this->sourceURL = $data['source_url'];
+		$this->targetURL = $data['target_url'];
+		$this->is_verified = $data['is_verified'];
+		$this->data = $data['data'];
+	}
 
 	/**
 	 * @return mixed
