@@ -80,7 +80,7 @@
 			<div class="iconDownloadSmall"></div> export
 		</a>
 	</li>
-	{% if currentSite.getIsWebRobotsAllowed %}
+	{% if currentSite.getIsWebRobotsAllowed and not event.isdeleted %}
 		<li class="action">
 			<a href="#" onclick="showSharePopup(); return false;">
 				<div class="iconShareSmall"></div>  share
