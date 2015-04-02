@@ -31,6 +31,11 @@ abstract class BaseTask {
 		return false;
 	}
 
+	/** @return boolean */
+	public function getCanRunManuallyNow() {
+		return true;
+	}
+
 	/** @return Array Ready to be made into JSON */
 	abstract protected function run();
 
@@ -58,6 +63,55 @@ abstract class BaseTask {
 
 	public function runAutomaticallyNowIfShould($logVerbosePrint = false) {
 		if ($this->getShouldRunAutomaticallyNow()) {
+
+			$this->logVerbosePrint = $logVerbosePrint;
+
+			$startedAt = $this->app['timesource']->getFormattedForDataBase();
+			$this->logVerbose("Starting ".$startedAt);
+
+			$stat = $this->app['db']->prepare("INSERT INTO task_log (extension_id, task_id, started_at) VALUES (:extension_id, :task_id, :started_at)");
+			$stat->execute(array(
+				'extension_id'=>$this->getExtensionId(),
+				'task_id'=>$this->getTaskId(),
+				'started_at'=>$startedAt,
+			));
+
+			$exceptionData = null;
+			$data = null;
+
+			try {
+				$data = $this->run();
+			} catch(Exception $e) {
+				$exceptionData = array(
+					'message'=>$e->getMessage(),
+					'code'=>$e->getCode(),
+					'file'=>$e->getFile(),
+					'line'=>$e->getLine(),
+				);
+				$this->logVerbose("EXCEPTION ".$e->getMessage());
+			}
+
+			$endedAt = $this->app['timesource']->getFormattedForDataBase();
+			$this->logVerbose("Finished ".$endedAt);
+
+			$stat = $this->app['db']->prepare("UPDATE task_log SET ended_at=:ended_at, result_data=:result_data, exception_data=:exception_data ".
+				"WHERE extension_id=:extension_id AND task_id=:task_id AND started_at=:started_at");
+			$stat->execute(array(
+				'extension_id'=>$this->getExtensionId(),
+				'task_id'=>$this->getTaskId(),
+				'started_at'=>$startedAt,
+				'ended_at'=>$endedAt,
+				'result_data'=>$data ? json_encode($data) : null,
+				'exception_data'=>$exceptionData ? json_encode($exceptionData) : null,
+			));
+
+		}
+
+	}
+
+
+	public function runManuallyNowIfShould($logVerbosePrint = false) {
+		if ($this->getCanRunManuallyNow()) {
 
 			$this->logVerbosePrint = $logVerbosePrint;
 
