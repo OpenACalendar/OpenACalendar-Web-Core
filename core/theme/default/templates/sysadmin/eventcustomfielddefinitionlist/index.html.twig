@@ -1,0 +1,59 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Events - {% endblock %}
+
+{% block breadcrumbs %}
+	<li><a href="/sysadmin/site/{{ site.id }}/">{{ site.title }}</a></li>
+	<li class="current"><a href="/sysadmin/site/{{ site.id }}/eventcustomfielddefinition">event custom field definitions</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+
+	<table class="data">
+		<tr>
+			<th>ID</th>
+			<th>Key</th>
+			<th>Extension</th>
+			<th>Type</th>
+			<th>Label</th>
+			<th>Active</th>
+			<th>&nbsp;</th>
+		</tr>
+		{% for field in fields %}
+			<tr {% if loop.index is even %}class="alternative"{% endif %} >
+				<td>{{ field.id }}</td>
+				<td>{{ field.key }}</td>
+				<td>{{ field.extensionID }}</td>
+				<td>{{ field.type }}</td>
+				<td>{{ field.label }}</td>
+				<td>{% if field.isActive %}Active{% else %}inactive{% endif %}</td>
+				<td>
+					<a href="/sysadmin/site/{{ site.id }}/eventcustomfielddefinition/{{ field.id }}" class="button">Show</a>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>addtextsingleline  <span class="param">key</a></li>
+		<li>addtextmultiline  <span class="param">key</a></li>
+	</ul>
+
+{% endblock %}
+

@@ -433,15 +433,20 @@ class EventController {
 		
 		$timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
 		if ($this->parameters['event']->getIsImported()) {
-			$form = $app['form.factory']->create(new EventImportedEditForm($app['currentSite'], $timeZone), $this->parameters['event']);
+			$ourForm = new EventImportedEditForm($app['currentSite'], $timeZone);
 		} else {
-			$form = $app['form.factory']->create(new EventEditForm($app['currentSite'], $timeZone, $app), $this->parameters['event']);
+			$ourForm = new EventEditForm($app['currentSite'], $timeZone, $app);
 		}
+		$form = $app['form.factory']->create($ourForm, $this->parameters['event']);
 
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
+
+				foreach($ourForm->getCustomFields() as $customField) {
+					$this->parameters['event']->setCustomField(  $customField, $form->get('custom_'.$customField->getKey())->getData() );
+				}
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
@@ -463,7 +468,12 @@ class EventController {
 		}
 
 		$this->parameters['form'] = $form->createView();
-		
+		if ($this->parameters['event']->getIsImported()) {
+			$this->parameters['formCustomFields'] = array();
+		} else {
+			$this->parameters['formCustomFields'] = $ourForm->getCustomFields();
+		}
+
 		if ($this->parameters['event']->getIsImported()) {
 			return $app['twig']->render('site/event/edit.details.imported.html.twig', $this->parameters);
 		} else {
@@ -1033,7 +1043,8 @@ class EventController {
 		if (!$this->parameters['eventRecurSet']) {
 			return false; // TODO
 		}
-		
+		$this->parameters['eventRecurSet']->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
+
 		// Load history we are working with
 		$eventHistoryRepo = new EventHistoryRepository();
 		$this->parameters['eventHistory'] = $eventHistoryRepo->loadByEventAndlastEditByUser($this->parameters['event'], $app['currentUser']);
@@ -1105,7 +1116,12 @@ class EventController {
 					}
 					if ($proposedChanges->getStartEndAtChangePossible()) {
 						$proposedChanges->setStartEndAtChangePossible($request->request->get("eventSlug".$futureEvent->getSlug().'fieldStartEnd') == 1);
-					} 
+					}
+					foreach($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
+						if ($proposedChanges->getCustomFieldChangePossible($customField)) {
+							$proposedChanges->setCustomFieldChangeSelected($customField, $request->request->get("eventSlug".$futureEvent->getSlug().'fieldCustom'.$customField->getKey()) == 1);
+						}
+					}
 					if ($proposedChanges->applyToEvent($futureEvent, $this->parameters['event'])) {
 						$eventRepo->edit($futureEvent, $app['currentUser'], $this->parameters['eventHistory']);
 						$countEvents++;
@@ -1222,6 +1238,7 @@ class EventController {
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
+		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
 		$this->parameters['newEvents'] = $eventRecurSet->getNewWeeklyEventsFilteredForExisting($this->parameters['event'], $app['config']->recurEventForDaysInFutureWhenWeekly);
 		
 		if ($request->request->get('submitted') == 'yes' && $app['websession']->getCSFRToken() == $app['websession']->getCSFRToken()) {
@@ -1277,6 +1294,7 @@ class EventController {
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
+		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
 		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnSetDayInWeekFilteredForExisting($this->parameters['event'], $app['config']->recurEventForDaysInFutureWhenMonthly);
 		
 		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
@@ -1331,6 +1349,7 @@ class EventController {
 		}
 		
 		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);

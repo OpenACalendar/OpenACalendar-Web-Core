@@ -12,7 +12,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class SiteModel {
@@ -59,6 +59,8 @@ class SiteModel {
 
 	protected $created_at;
 
+	protected $cached_event_custom_field_definitions;
+
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
 		$this->title = $data['title'];
@@ -83,7 +85,8 @@ class SiteModel {
 		$this->is_feature_group = (boolean)$data['is_feature_group'];
 		$this->is_feature_tag = (boolean)$data['is_feature_tag'];
 		$utc = new \DateTimeZone("UTC");
-		$this->created_at = new \DateTime($data['created_at'], $utc);		
+		$this->created_at = new \DateTime($data['created_at'], $utc);
+		$this->cached_event_custom_field_definitions = $data['cached_event_custom_field_definitions'];
 	}
 	
 	public function getId() {
@@ -302,6 +305,26 @@ class SiteModel {
 		$this->created_at = $created_at;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getCachedEventCustomFieldDefinitionsAsModels()
+	{
+		$out = array();
+		if ($this->cached_event_custom_field_definitions) {
+			foreach(json_decode($this->cached_event_custom_field_definitions) as $def) {
+				$m = new EventCustomFieldDefinitionModel();
+				$m->setId($def->id);
+				$m->setExtensionId($def->extension_id);
+				$m->setType($def->type);
+				$m->setKey($def->key);
+				$m->setLabel($def->label);
+				$m->setIsActive($def->is_active);
+				$out[] = $m;
+			}
+		}
+		return $out;
+	}
 
 }
 

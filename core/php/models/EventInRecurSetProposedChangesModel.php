@@ -9,7 +9,7 @@ namespace models;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventInRecurSetProposedChangesModel {
@@ -34,7 +34,11 @@ class EventInRecurSetProposedChangesModel {
 	protected $start_end_at_change_selected = false;
 	protected $is_cancelled_change_possible = false;
 	protected $is_cancelled_change_selected = false;
-	
+
+	protected $custom_fields_change_possible = array();
+	protected $custom_fields_change_selected = array();
+	protected $custom_fields = array();
+
 	protected $summary;
 	
 	/** @var \DateTime **/
@@ -222,7 +226,7 @@ class EventInRecurSetProposedChangesModel {
 
 
 	public function isAnyChangesPossible() {
-		return $this->summary_change_possible ||
+		if ($this->summary_change_possible ||
 				$this->description_change_possible ||
 				$this->timezone_change_possible ||
 				$this->country_area_venue_id_change_possible ||
@@ -231,7 +235,15 @@ class EventInRecurSetProposedChangesModel {
 				$this->is_virtual_change_possible ||
 				$this->is_physical_change_possible ||
 				$this->start_end_at_change_possible ||
-				$this->is_cancelled_change_possible;
+				$this->is_cancelled_change_possible) {
+			return true;
+		}
+		foreach($this->custom_fields_change_possible as $k=>$v) {
+			if ($v) {
+				return true;
+			}
+		}
+		return false;
 	}
 			
 	public function getSummary() {
@@ -257,6 +269,26 @@ class EventInRecurSetProposedChangesModel {
 	public function setEndAt(\DateTime $end_at) {
 		$this->end_at = $end_at;
 	}
+
+	public function setCustomFieldChangePossible(EventCustomFieldDefinitionModel $customFieldDefinitionModel, $value) {
+		$this->custom_fields_change_possible[$customFieldDefinitionModel->getId()] = $value;
+		$this->custom_fields[$customFieldDefinitionModel->getId()] = $customFieldDefinitionModel;
+	}
+
+	public function setCustomFieldChangeSelected(EventCustomFieldDefinitionModel $customFieldDefinitionModel, $value) {
+		$this->custom_fields_change_selected[$customFieldDefinitionModel->getId()] = $value;
+		$this->custom_fields[$customFieldDefinitionModel->getId()] = $customFieldDefinitionModel;
+	}
+
+	public function getCustomFieldChangePossible(EventCustomFieldDefinitionModel $customFieldDefinitionModel) {
+		return isset($this->custom_fields_change_possible[$customFieldDefinitionModel->getId()]) ? $this->custom_fields_change_possible[$customFieldDefinitionModel->getId()] : false;
+	}
+
+	public function getCustomFieldChangeSelected(EventCustomFieldDefinitionModel $customFieldDefinitionModel) {
+		return isset($this->custom_fields_change_selected[$customFieldDefinitionModel->getId()]) ? $this->custom_fields_change_selected[$customFieldDefinitionModel->getId()] : false;
+	}
+
+
 
 	public function applyToEvent(EventModel $event, EventModel $originalEvent) {
 		$changes = false;
@@ -304,7 +336,12 @@ class EventInRecurSetProposedChangesModel {
 			$event->setIsCancelled($originalEvent->getIsCancelled());
 			$changes = true;
 		}
-		
+		foreach($this->custom_fields as $customField) {
+			if ($this->getCustomFieldChangePossible($customField) && $this->getCustomFieldChangeSelected($customField)) {
+				$event->setCustomField($customField, $originalEvent->getCustomField($customField));
+				$changes = true;
+			}
+		}
 		return $changes;
 	}
 	

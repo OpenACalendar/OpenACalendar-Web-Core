@@ -28,13 +28,19 @@ class EventNewForm extends \BaseFormWithEditComment {
 
 	protected $formWidgetTimeMinutesMultiples;
 
+	/** @var  ExtensionManager */
+	protected $extensionManager;
+
 	function __construct($timeZoneName, Application $application) {
 		parent::__construct($application);
 		$this->site = $application['currentSite'];
 		$this->timeZoneName = $timeZoneName;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
+		$this->extensionManager = $application['extensions'];
 	}
-	
+
+	protected $customFields;
+
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		parent::buildForm($builder, $options);
 
@@ -176,7 +182,25 @@ class EventNewForm extends \BaseFormWithEditComment {
 			}
 		}
 		$builder->add('end_at', 'datetime' ,$endOptions);
-				
+
+
+		$this->customFields = array();
+		foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
+			if ($customField->getIsActive()) {
+				$extension = $this->extensionManager->getExtensionById($customField->getExtensionId());
+				if ($extension) {
+					$fieldType = $extension->getEventCustomFieldByType($customField->getType());
+					if ($fieldType) {
+						$this->customFields[] = $customField;
+						$options = $fieldType->getSymfonyFormOptions($customField);
+						$options['mapped'] = false;
+						$options['data'] = $builder->getData()->getCustomField($customField);
+						$builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
+					}
+				}
+			}
+		}
+
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
 			global $CONFIG;
@@ -232,6 +256,14 @@ class EventNewForm extends \BaseFormWithEditComment {
 	public function getDefaultOptions(array $options) {
 		return array(
 		);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCustomFields()
+	{
+		return $this->customFields;
 	}
 
 }

@@ -41,7 +41,9 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 
 	protected $is_new = 0;
 
-	
+
+	protected $custom_fields_changed = 0;
+
 
 
 	public function setFromDataBaseRow($data) {
@@ -66,6 +68,14 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		$this->is_physical  = $data['is_physical'];
 		$this->area_id  = $data['area_id'];
 		$this->user_account_id = $data['user_account_id'];
+
+		if ($data['custom_fields'] && $data['custom_fields'] != '[]') {
+			$obj = json_decode($data['custom_fields']);
+			foreach(get_object_vars($obj) as $k=>$v) {
+				$this->custom_fields[$k] = $v;
+			}
+		}
+
 		$this->edit_comment = isset($data['edit_comment']) ? $data['edit_comment'] : null;
 		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
 		$this->summary_changed  = isset($data['summary_changed']) ? $data['summary_changed'] : 0;
@@ -84,6 +94,21 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		$this->area_id_changed  = isset($data['area_id_changed']) ? $data['area_id_changed'] : 0;
 		$this->is_new = isset($data['is_new']) ? $data['is_new'] : 0;
 		$this->is_duplicate_of_id_changed = isset($data['is_duplicate_of_id_changed']) ? $data['is_duplicate_of_id_changed'] : 0;
+
+
+		if (is_null($data['custom_fields_changed'])) {
+			$this->custom_fields_changed = 0;
+		} else if (is_int($data['custom_fields_changed']) && $data['custom_fields_changed'] == 0) {
+			$this->custom_fields_changed = 0;
+		} else if ((is_int($data['custom_fields_changed']) && $data['custom_fields_changed'] == -2) || $data['custom_fields_changed'] == "-2") {
+			$this->custom_fields_changed = -2;
+		} else if ($data['custom_fields_changed'] && $data['custom_fields_changed'] != '[]') {
+			$this->custom_fields_changed = array();
+			$obj = json_decode($data['custom_fields_changed']);
+			foreach(get_object_vars($obj) as $k=>$v) {
+				$this->custom_fields_changed[$k] = $v;
+			}
+		}
 	}
 
 
@@ -200,6 +225,10 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		$this->area_id_changed = $this->area_id ? 1 : -1;
 		$this->is_duplicate_of_id_changed = $this->is_duplicate_of_id ? 1 : -1;
 		$this->is_new = 1;
+		$this->custom_fields_changed = array();
+		foreach($this->custom_fields as $k=>$v) {
+			$this->custom_fields_changed[$k] = $this->custom_fields[$k] ? 1 : -1;
+		}
 	}
 	
 	public function setChangedFlagsFromLast(EventHistoryModel $last) {
@@ -249,8 +278,25 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 			$this->is_duplicate_of_id_changed = ($this->is_duplicate_of_id != $last->is_duplicate_of_id) ? 1 : -1;
 		}
 		$this->is_new = 0;
+
+		if ($this->custom_fields_changed == 0  && $last->custom_fields_changed != -2) {
+			$this->custom_fields_changed = array();
+			foreach(array_keys($this->custom_fields) as $k) {
+				if (isset($this->custom_fields[$k]) && is_array($last->custom_fields) && isset($last->custom_fields[$k])) {
+					$this->custom_fields_changed[$k] = ($this->custom_fields[$k] != $last->custom_fields[$k]) ? 1 : -1;
+				} else {
+					$this->custom_fields_changed[$k] = 1;
+				}
+			}
+			foreach(array_keys($last->custom_fields) as $k) {
+				if (isset($this->custom_fields[$k]) && is_array($last->custom_fields) && isset($last->custom_fields[$k])) {
+					$this->custom_fields_changed[$k] = ($this->custom_fields[$k] != $last->custom_fields[$k]) ? 1 : -1;
+				} else {
+					$this->custom_fields_changed[$k] = 1;
+				}
+			}
+		}
 	}
-	
 	
 	public function getCreatedAt() {
 		return $this->created_at;
@@ -437,8 +483,27 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		return $this->edit_comment;
 	}
 
+	public function getCustomFieldsChangedForDataBase() {
+		if ($this->custom_fields_changed == -2) {
+			return -2;
+		} else {
+			return json_encode($this->custom_fields_changed);
+		}
+	}
 
+	public function getCustomFieldChangedKnown(EventCustomFieldDefinitionModel $customField) {
+		return ($this->custom_fields_changed != -2);
+	}
 
+	public function getCustomFieldChanged(EventCustomFieldDefinitionModel $customField) {
+		if ($this->custom_fields_changed == -2) {
+			return false;
+		} else if (isset($this->custom_fields_changed[$customField->getId()])) {
+			return $this->custom_fields_changed[$customField->getId()] > -1;
+		} else {
+			return false;
+		}
+	}
 
 }
 

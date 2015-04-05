@@ -9,7 +9,7 @@ namespace models;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventModel {
@@ -64,6 +64,8 @@ class EventModel {
 	protected $in_curated_list_group_id;
 	protected $in_curated_list_group_slug;
 	protected $in_curated_list_group_title;
+
+	protected $custom_fields = array();
 
 	public function setDefaultOptionsFromSite(SiteModel $site) {
 		if ($site->getIsFeaturePhysicalEvents() && !$site->getIsFeatureVirtualEvents()) {
@@ -133,6 +135,12 @@ class EventModel {
 		$this->media_event_slugs = isset($data['media_event_slugs']) ? $data['media_event_slugs'] : null;
 		$this->media_group_slugs = isset($data['media_group_slugs']) ? $data['media_group_slugs'] : null;
 		$this->media_venue_slugs = isset($data['media_venue_slugs']) ? $data['media_venue_slugs'] : null;
+		if ($data['custom_fields'] && $data['custom_fields'] != '[]') {
+			$obj = json_decode($data['custom_fields']);
+			foreach(get_object_vars($obj) as $k=>$v) {
+				$this->custom_fields[$k] = $v;
+			}
+		}
 	}
 	
 	public function setFromHistory(EventHistoryModel $ehm) {
@@ -639,7 +647,29 @@ class EventModel {
 		return !$this->is_deleted; // TODO add check for events in past to
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getCustomFields()
+	{
+		return $this->custom_fields;
+	}
 
+	/**
+	 * @param mixed $custom_fields
+	 */
+	public function setCustomField(EventCustomFieldDefinitionModel $customField , $value)
+	{
+		$this->custom_fields[$customField->getId()] = $value;
+	}
+
+	public function hasCustomField(EventCustomFieldDefinitionModel $customField) {
+		return isset($this->custom_fields[$customField->getId()]) && $this->custom_fields[$customField->getId()];
+	}
+
+	public function getCustomField(EventCustomFieldDefinitionModel $customField) {
+		return isset($this->custom_fields[$customField->getId()]) ? $this->custom_fields[$customField->getId()] : null;
+	}
 	
 }
 

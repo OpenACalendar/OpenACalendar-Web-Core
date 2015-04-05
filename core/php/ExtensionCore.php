@@ -225,4 +225,13 @@ class ExtensionCore extends BaseExtension {
 		);
 	}
 
+	/** @return InterfaceEventCustomFieldType */
+	public function getEventCustomFieldByType($type) {
+		if ($type == 'TextSingleLine') {
+			return new \customfieldtypes\event\TextSingleLineEventCustomFieldType();
+		} else if ($type == 'TextMultiLine') {
+			return new \customfieldtypes\event\TextMultiLineEventCustomFieldType();
+		}
+	}
+
 }

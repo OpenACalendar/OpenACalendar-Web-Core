@@ -86,6 +86,8 @@ class EventRecurSetModelProposedChangesTest extends \BaseAppTest {
 			'is_physical_changed'=>'-1',
 			'area_id_changed'=>'-1',
 			'is_new'=>'-1',
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,
 		));
 		$eventSet->setInitalEventLastChange($eventHistory);
 		
@@ -247,6 +249,8 @@ class EventRecurSetModelProposedChangesTest extends \BaseAppTest {
 			'is_physical_changed'=>'-1',
 			'area_id_changed'=>'-1',
 			'is_new'=>'-1',
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,
 		));
 		$eventSet->setInitalEventLastChange($eventHistory);
 		
@@ -403,6 +407,8 @@ class EventRecurSetModelProposedChangesTest extends \BaseAppTest {
 			'is_physical_changed'=>'-1',
 			'area_id_changed'=>'-1',
 			'is_new'=>'-1',
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,
 		));
 		$eventSet->setInitalEventLastChange($eventHistory);
 		

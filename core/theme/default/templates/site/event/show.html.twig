@@ -130,20 +130,28 @@
 					{{ event.description | nl2br  | linkify }}
 				{%  else %}
 
-				{% if event.url %}
-					<p>
-						More details: <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a>
-					</p>
-				{% endif %}
+					{% if event.url %}
+						<p>
+							More details: <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a>
+						</p>
+					{% endif %}
 
-				{% if event.ticketUrl %}
-					<p>
-						{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a>
-					</p>
-				{% endif %}
-
+					{% if event.ticketUrl %}
+						<p>
+							{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a>
+						</p>
+					{% endif %}
 
 				{%  endif %}
+
+				{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
+					{% if customField.isActive and event.hasCustomField(customField) %}
+						<p>
+							{{  customField.label }}:<br>
+							{{ event.getCustomField(customField) | nl2br | linkify }}
+						</p>
+					{%  endif %}
+				{%  endfor %}
 			</p>
 
 			{% if tags %}

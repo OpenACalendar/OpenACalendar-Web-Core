@@ -46,37 +46,42 @@ class EventDBAccess {
 		$fieldsSQL1 = array();
 		$fieldsParams1 = array( 'id'=>$event->getId() );
 		foreach($fields as $field) {
-			$fieldsSQL1[] = " ".$field."=:".$field." ";
-			if ($field == 'summary') {
-				$fieldsParams1['summary'] = substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED);
-			} else if ($field == 'description') {
-				$fieldsParams1['description'] = $event->getDescription();
-			} else if ($field == 'start_at') {
-				$fieldsParams1['start_at'] = $event->getStartAt()->format("Y-m-d H:i:s");
-			} else if ($field == 'end_at') {
-				$fieldsParams1['end_at'] = $event->getEndAt()->format("Y-m-d H:i:s");
-			} else if ($field == 'venue_id') {
-				$fieldsParams1['venue_id'] = $event->getVenueId();
-			} else if ($field == 'area_id') {
-				$fieldsParams1['area_id'] = $event->getAreaId();
-			} else if ($field == 'country_id') {
-				$fieldsParams1['country_id'] = $event->getCountryId();
-			} else if ($field == 'timezone') {
-				$fieldsParams1['timezone'] = substr($event->getTimezone(),0,VARCHAR_COLUMN_LENGTH_USED);
-			} else if ($field == 'url') {
-				$fieldsParams1['url'] = substr($event->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
-			} else if ($field == 'ticket_url') {
-				$fieldsParams1['ticket_url'] = substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED);
-			} else if ($field == 'is_physical') {
-				$fieldsParams1['is_physical'] = $event->getIsPhysical() ? 1 : 0;
-			} else if ($field == 'is_virtual') {
-				$fieldsParams1['is_virtual'] = $event->getIsVirtual() ? 1 : 0;
-			} else if ($field == 'is_cancelled') {
-				$fieldsParams1['is_cancelled'] = $event->getIsCancelled() ? 1 : 0;
-			} else if ($field == 'is_deleted') {
-				$fieldsParams1['is_deleted'] = $event->getIsDeleted() ? 1 : 0;
-			} else if ($field == 'is_duplicate_of_id') {
-				$fieldsParams1['is_duplicate_of_id'] = $event->getIsDuplicateOfId();
+			if ($field == 'custom') {
+				$fieldsSQL1[] = " custom_fields = :custom_fields ";
+				$fieldsParams1['custom_fields'] = json_encode($event->getCustomFields());
+			} else {
+				$fieldsSQL1[] = " " . $field . "=:" . $field . " ";
+				if ($field == 'summary') {
+					$fieldsParams1['summary'] = substr($event->getSummary(), 0, VARCHAR_COLUMN_LENGTH_USED);
+				} else if ($field == 'description') {
+					$fieldsParams1['description'] = $event->getDescription();
+				} else if ($field == 'start_at') {
+					$fieldsParams1['start_at'] = $event->getStartAt()->format("Y-m-d H:i:s");
+				} else if ($field == 'end_at') {
+					$fieldsParams1['end_at'] = $event->getEndAt()->format("Y-m-d H:i:s");
+				} else if ($field == 'venue_id') {
+					$fieldsParams1['venue_id'] = $event->getVenueId();
+				} else if ($field == 'area_id') {
+					$fieldsParams1['area_id'] = $event->getAreaId();
+				} else if ($field == 'country_id') {
+					$fieldsParams1['country_id'] = $event->getCountryId();
+				} else if ($field == 'timezone') {
+					$fieldsParams1['timezone'] = substr($event->getTimezone(), 0, VARCHAR_COLUMN_LENGTH_USED);
+				} else if ($field == 'url') {
+					$fieldsParams1['url'] = substr($event->getUrl(), 0, VARCHAR_COLUMN_LENGTH_USED);
+				} else if ($field == 'ticket_url') {
+					$fieldsParams1['ticket_url'] = substr($event->getTicketUrl(), 0, VARCHAR_COLUMN_LENGTH_USED);
+				} else if ($field == 'is_physical') {
+					$fieldsParams1['is_physical'] = $event->getIsPhysical() ? 1 : 0;
+				} else if ($field == 'is_virtual') {
+					$fieldsParams1['is_virtual'] = $event->getIsVirtual() ? 1 : 0;
+				} else if ($field == 'is_cancelled') {
+					$fieldsParams1['is_cancelled'] = $event->getIsCancelled() ? 1 : 0;
+				} else if ($field == 'is_deleted') {
+					$fieldsParams1['is_deleted'] = $event->getIsDeleted() ? 1 : 0;
+				} else if ($field == 'is_duplicate_of_id') {
+					$fieldsParams1['is_duplicate_of_id'] = $event->getIsDuplicateOfId();
+				}
 			}
 		}
 
@@ -141,7 +146,16 @@ class EventDBAccess {
 				$fieldsSQLParams2[] = " -2 ";
 			}
 		}
-
+		if (in_array("custom",$fields)) {
+			$fieldsSQL2[] = " custom_fields ";
+			$fieldsSQLParams2[] = " :custom_fields ";
+			$fieldsParams2['custom_fields'] = json_encode($event->getCustomFields());
+			$fieldsSQL2[] = " custom_fields_changed ";
+			$fieldsSQLParams2[] = " 0 ";
+		} else {
+			$fieldsSQL2[] = " custom_fields_changed ";
+			$fieldsSQLParams2[] = " -2 ";
+		}
 
 
 		try {

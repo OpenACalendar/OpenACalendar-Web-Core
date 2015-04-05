@@ -109,7 +109,8 @@ class EventNewController {
 		$event->setDefaultOptionsFromSite($app['currentSite']);
 
 		$timezone = isset($_POST['EventNewForm']) && isset($_POST['EventNewForm']['timezone']) ? $_POST['EventNewForm']['timezone'] : $app['currentTimeZone'];
-		$form = $app['form.factory']->create(new EventNewForm($timezone, $app), $event);
+		$ourForm = new EventNewForm($timezone, $app);
+		$form = $app['form.factory']->create($ourForm, $event);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -120,6 +121,10 @@ class EventNewController {
 				$eventEditMetaData->setUserAccount($app['currentUser']);
 				if ($form->has('edit_comment')) {
 					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				}
+
+				foreach($ourForm->getCustomFields() as $customField) {
+					$event->setCustomField(  $customField, $form->get('custom_'.$customField->getKey())->getData() );
 				}
 
 				$eventRepository = new EventRepository();
@@ -173,6 +178,7 @@ class EventNewController {
 		}
 
 		$params['form'] = $form->createView();
+		$params['formCustomFields'] = $ourForm->getCustomFields();
 		
 		return $app['twig']->render('site/eventnew/newGo.html.twig', $params);
 		

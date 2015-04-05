@@ -155,6 +155,10 @@ abstract class BaseExtension {
 		return array();
 	}
 
+	/** @return InterfaceEventCustomFieldType */
+	public function getEventCustomFieldByType($type) {
+
+	}
 
 }
 

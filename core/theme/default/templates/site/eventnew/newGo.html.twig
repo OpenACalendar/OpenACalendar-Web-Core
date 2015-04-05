@@ -70,6 +70,10 @@
 			</div>
 		{% endif %}
 
+		{%  for customField in formCustomFields %}
+			{{ form_row(form['custom_' ~ customField.key]) }}
+		{%  endfor %}
+
 		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
 
 		{{ form_rest(form) }}

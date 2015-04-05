@@ -11,7 +11,7 @@ use repositories\builders\EventRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventRecurSetModel {
@@ -34,6 +34,7 @@ class EventRecurSetModel {
 			
 	protected $futureEventsProposedChanges = array();
 
+	protected $customFields = array();
 
 	public function getTimeZoneName() {
 		return $this->timeZoneName;
@@ -135,6 +136,11 @@ class EventRecurSetModel {
 					$newEvent->setDescription($event->getDescription());
 					$newEvent->setStartAt($start);
 					$newEvent->setEndAt($end);
+					foreach($this->customFields as $customField) {
+						if ($event->hasCustomField($customField)) {
+							$newEvent->setCustomField($customField, $event->getCustomField($customField));
+						}
+					}
 					
 					$out[] = $newEvent;
 				}
@@ -230,6 +236,11 @@ class EventRecurSetModel {
 					$newEvent->setDescription($event->getDescription());
 					$newEvent->setStartAt($startInMonth);
 					$newEvent->setEndAt($endInMonth);
+					foreach($this->customFields as $customField) {
+						if ($event->hasCustomField($customField)) {
+							$newEvent->setCustomField($customField, $event->getCustomField($customField));
+						}
+					}
 
 					if (stripos($newEvent->getSummary(),$currentMonthLong) !== false) {
 						$newEvent->setSummary(str_ireplace($currentMonthLong, $newEvent->getStartAt()->format('F'), $newEvent->getSummary()));
@@ -314,6 +325,11 @@ class EventRecurSetModel {
 						$newEvent->setDescription($event->getDescription());
 						$newEvent->setStartAt($start);
 						$newEvent->setEndAt($end);
+						foreach($this->customFields as $customField) {
+							if ($event->hasCustomField($customField)) {
+								$newEvent->setCustomField($customField, $event->getCustomField($customField));
+							}
+						}
 						
 						if (stripos($newEvent->getSummary(),$currentMonthLong) !== false) {
 							$newEvent->setSummary(str_ireplace($currentMonthLong, $newEvent->getStartAt()->format('F'), $newEvent->getSummary()));
@@ -374,7 +390,17 @@ class EventRecurSetModel {
 	public function getNewMonthlyEventsOnLastDayInWeekFilteredForExisting(EventModel $event,  $daysInAdvance = 186) {
 		return $this->filterEventsForExisting($event, $this->getNewMonthlyEventsOnLastDayInWeek($event, $daysInAdvance));
 	}
-	
+
+	/**
+	 * @param array $customFields
+	 */
+	public function setCustomFields($customFields)
+	{
+		$this->customFields = $customFields;
+	}
+
+
+
 	public function applyChangeToFutureEvents() {
 		$startDiff = $this->initalEvent->getStartAtInUTC()->diff($this->initialEventJustBeforeLastChange->getStartAtInUTC());
 		$endDiff = $this->initalEvent->getEndAtInUTC()->diff($this->initialEventJustBeforeLastChange->getEndAtInUTC());
@@ -462,6 +488,14 @@ class EventRecurSetModel {
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setStartEndAtChangeSelected(true);
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setStartAt($start);
 				$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setEndAt($end);
+			}
+			foreach ($this->customFields as $customField) {
+				if ($this->initalEventLastChange->hasCustomField($customField) && $this->initalEvent->getCustomField($customField) != $futureEvent->getCustomField($customField)) {
+					$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setCustomFieldChangePossible($customField, true);
+					if ($this->initialEventJustBeforeLastChange->getCustomField($customField) == $futureEvent->getCustomField($customField)) {
+						$this->futureEventsProposedChanges[$futureEvent->getSlug()]->setCustomFieldChangeSelected($customField, true);
+					}
+				}
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use ExtensionManager;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,18 +25,24 @@ use repositories\builders\VenueRepositoryBuilder;
 class EventEditForm extends \BaseFormWithEditComment {
 
 	protected $timeZoneName;
+
 	/** @var SiteModel **/
 	protected $site;
 
 	protected $formWidgetTimeMinutesMultiples;
 
+	/** @var  ExtensionManager */
+	protected $extensionManager;
 
 	function __construct(SiteModel $site, $timeZoneName, Application $application) {
 		parent::__construct($application);
 		$this->site = $site;
 		$this->timeZoneName = $timeZoneName;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
+		$this->extensionManager = $application['extensions'];
 	}
+
+	protected $customFields;
 
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
@@ -176,6 +183,23 @@ class EventEditForm extends \BaseFormWithEditComment {
 		}
 		$builder->add('end_at', 'datetime' , $endOptions);
 
+		$this->customFields = array();
+		foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
+			if ($customField->getIsActive()) {
+				$extension = $this->extensionManager->getExtensionById($customField->getExtensionId());
+				if ($extension) {
+					$fieldType = $extension->getEventCustomFieldByType($customField->getType());
+					if ($fieldType) {
+						$this->customFields[] = $customField;
+						$options = $fieldType->getSymfonyFormOptions($customField);
+						$options['mapped'] = false;
+						$options['data'] = $builder->getData()->getCustomField($customField);
+						$builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
+					}
+				}
+			}
+		}
+
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
 			global $CONFIG;
@@ -236,6 +260,16 @@ class EventEditForm extends \BaseFormWithEditComment {
 		return array(
 		);
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCustomFields()
+	{
+		return $this->customFields;
+	}
+
+
 	
 }
 

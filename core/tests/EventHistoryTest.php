@@ -137,6 +137,8 @@ class EventHistoryTest extends \BaseAppWithDBTest {
 				'is_virtual_changed'=>0,
 				'is_physical_changed'=>0,
 				'area_id_changed'=>0,
+				'custom_fields'=>null,
+				'custom_fields_changed'=>null,
 			));
 		
 		$eventHistory->setChangedFlagsFromNothing();
@@ -190,7 +192,9 @@ class EventHistoryTest extends \BaseAppWithDBTest {
 				'url_changed'=>0,
 				'is_virtual_changed'=>0,
 				'is_physical_changed'=>0,
-				'area_id_changed'=>0,		));
+				'area_id_changed'=>0,
+				'custom_fields'=>null,
+				'custom_fields_changed'=>null,	));
 		
 		$eventHistory = new EventHistoryModel();
 		$eventHistory->setFromDataBaseRow(array(
@@ -222,7 +226,9 @@ class EventHistoryTest extends \BaseAppWithDBTest {
 				'url_changed'=>0,
 				'is_virtual_changed'=>0,
 				'is_physical_changed'=>0,
-				'area_id_changed'=>0,		));
+				'area_id_changed'=>0,
+				'custom_fields'=>null,
+				'custom_fields_changed'=>null,		));
 		
 		$eventHistory->setChangedFlagsFromLast($lastHistory);
 		
@@ -276,7 +282,9 @@ class EventHistoryTest extends \BaseAppWithDBTest {
 				'url_changed'=>0,
 				'is_virtual_changed'=>0,
 				'is_physical_changed'=>0,
-				'area_id_changed'=>0,		));
+				'area_id_changed'=>0,
+				'custom_fields'=>null,
+				'custom_fields_changed'=>null,	));
 
 		$eventHistory = new EventHistoryModel();
 		$eventHistory->setFromDataBaseRow(array(
@@ -308,7 +316,9 @@ class EventHistoryTest extends \BaseAppWithDBTest {
 			'url_changed'=>0,
 			'is_virtual_changed'=>0,
 			'is_physical_changed'=>0,
-			'area_id_changed'=>0,		));
+			'area_id_changed'=>0,
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,	));
 
 		$eventHistory->setChangedFlagsFromLast($lastHistory);
 
@@ -361,7 +371,9 @@ class EventHistoryTest extends \BaseAppWithDBTest {
 				'url_changed'=>0,
 				'is_virtual_changed'=>0,
 				'is_physical_changed'=>0,
-				'area_id_changed'=>0,		));
+				'area_id_changed'=>0,
+				'custom_fields'=>null,
+				'custom_fields_changed'=>null,	));
 
 		$eventHistory = new EventHistoryModel();
 		$eventHistory->setFromDataBaseRow(array(
@@ -393,7 +405,9 @@ class EventHistoryTest extends \BaseAppWithDBTest {
 			'url_changed'=>0,
 			'is_virtual_changed'=>0,
 			'is_physical_changed'=>0,
-			'area_id_changed'=>0,		));
+			'area_id_changed'=>0,
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,	));
 
 		$eventHistory->setChangedFlagsFromLast($lastHistory);
 

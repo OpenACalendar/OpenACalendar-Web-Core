@@ -14,7 +14,7 @@ use models\CountryModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventListJSONBuilder extends BaseEventListBuilder {
@@ -52,6 +52,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 			'cancelled'=> (boolean)$event->getIsCancelled(),
 			'is_physical'=> (boolean)$event->getIsPhysical(),
 			'is_virtual'=> (boolean)$event->getIsVirtual(),
+			'custom_fields'=> array(),
 		);
 		
 		$out['siteurl'] = $CONFIG->isSingleSiteMode ?
@@ -160,6 +161,12 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 						'thumbnailURL'=>$siteurl.'/media/'.$eventMedia->getSlug().'/thumbnail',
 					)
 				);
+			}
+		}
+
+		if ($this->site) {
+			foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
+				$out['custom_fields'][$customField->getKey()] = $event->getCustomField($customField);
 			}
 		}
 

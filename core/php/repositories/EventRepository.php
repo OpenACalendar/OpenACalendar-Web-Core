@@ -62,10 +62,10 @@ class EventRepository {
 
 			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, summary,description,start_at,end_at,".
 				" created_at, event_recur_set_id,venue_id,country_id,timezone, ".
-				" url, ticket_url, is_physical, is_virtual, area_id, approved_at, is_deleted, is_cancelled) ".
+				" url, ticket_url, is_physical, is_virtual, area_id, approved_at, is_deleted, is_cancelled, custom_fields) ".
 					" VALUES (:site_id, :slug, :summary, :description, :start_at, :end_at, ".
 						" :created_at, :event_recur_set_id,:venue_id,:country_id,:timezone, ".
-						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at, '0', '0') RETURNING id");
+						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at, '0', '0', :custom_fields) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$event->getSlug(),
@@ -84,16 +84,17 @@ class EventRepository {
 					'ticket_url'=>substr($event->getTicketUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
+					'custom_fields'=>json_encode($event->getCustomFields()),
 				));
 			$data = $stat->fetch();
 			$event->setId($data['id']);
 			
 			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
 				" user_account_id  , created_at,venue_id,country_id,timezone,".
-				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at, is_deleted, is_cancelled, edit_comment) VALUES ".
+				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at, is_deleted, is_cancelled, edit_comment, custom_fields) VALUES ".
 					" (:event_id, :summary, :description, :start_at, :end_at, ".
 						" :user_account_id  , :created_at,:venue_id,:country_id,:timezone,".
-						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, '1', :approved_at, '0', '0', :edit_comment)");
+						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, '1', :approved_at, '0', '0', :edit_comment, :custom_fields)");
 			$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -112,6 +113,7 @@ class EventRepository {
 					'is_physical'=>$event->getIsPhysical()?1:0,
 					'is_virtual'=>$event->getIsVirtual()?1:0,
 					'edit_comment'=>$eventEditMetaDataModel->getEditComment(),
+					'custom_fields'=>json_encode($event->getCustomFields()),
 				));
 			
 			if ($group || $additionalGroups) {
@@ -303,7 +305,7 @@ class EventRepository {
 			$DB->beginTransaction();
 
 			$fields = array('summary','description','start_at','end_at','venue_id','area_id','country_id','timezone',
-				'url','ticket_url','is_physical','is_virtual','is_deleted','is_cancelled');
+				'url','ticket_url','is_physical','is_virtual','is_deleted','is_cancelled','custom');
 
 			$this->eventDBAccess->update($event, $fields, $eventEditMetaDataModel);
 			

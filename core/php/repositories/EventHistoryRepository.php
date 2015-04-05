@@ -11,7 +11,7 @@ use models\UserAccountModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventHistoryRepository {
@@ -125,6 +125,9 @@ class EventHistoryRepository {
 			$sqlFields[] = " is_duplicate_of_id_changed = :is_duplicate_of_id_changed ";
 			$sqlParams['is_duplicate_of_id_changed'] = $eventhistory->getIsDuplicateOfIdChanged() ? 1 : -1;
 		}
+
+		$sqlFields[] = " custom_fields_changed=:custom_fields_changed ";
+		$sqlParams['custom_fields_changed'] = $eventhistory->getCustomFieldsChangedForDataBase();
 
 
 		$statUpdate = $DB->prepare("UPDATE event_history SET ".

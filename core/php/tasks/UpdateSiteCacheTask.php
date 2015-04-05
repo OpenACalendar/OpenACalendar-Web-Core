@@ -5,6 +5,7 @@ namespace tasks;
 
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\CountryRepositoryBuilder;
+use repositories\EventCustomFieldDefinitionRepository;
 use repositories\SiteRepository;
 
 /**
@@ -36,6 +37,8 @@ class UpdateSiteCacheTask extends \BaseTask {
 
 		$siteRepository = new SiteRepository();
 
+		$eventCustomFieldsRepo = new EventCustomFieldDefinitionRepository();
+
 		$siteRepositoryBuilder = new SiteRepositoryBuilder();
 		$count = 0;
 		foreach($siteRepositoryBuilder->fetchAll() as $site) {
@@ -55,6 +58,8 @@ class UpdateSiteCacheTask extends \BaseTask {
 			$site->setCachedIsMultipleCountries(count($countries) > 1);
 
 			$siteRepository->editCached($site);
+
+			$eventCustomFieldsRepo->updateSiteCache($site);
 
 			++$count;
 		}

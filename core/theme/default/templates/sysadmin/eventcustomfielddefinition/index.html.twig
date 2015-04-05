@@ -1,0 +1,58 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+{% block pageTitle %}Event Custom Field  - {% endblock %}
+
+{% block content %}
+
+
+	<table class="oneData">
+		<tr>
+			<th>ID</th>
+			<td>{{ field.id }}</td>
+		</tr>
+		<tr>
+			<th>Key</th>
+			<td>{{ field.key }}</td>
+		</tr>
+		<tr>
+			<th>Extension ID</th>
+			<td>{{ field.extensionId }}</td>
+		</tr>
+		<tr>
+			<th>Type</th>
+			<td>{{ field.type }}</td>
+		</tr>
+		<tr>
+			<th>Label</th>
+			<td>{{ field.label }}</td>
+		</tr>
+		<tr>
+			<th>Active</th>
+			<td>{% if field.isActive %}Active{% else %}inactive{% endif %}</td>
+		</tr>
+	</table>
+
+
+
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>label  <span class="param">slug</a></li>
+		<li>activate</li>
+		<li>deactivate</li>
+	</ul>
+
+{% endblock %}
+
+

@@ -25,6 +25,7 @@
 		{{ form_row(form.start_at) }}
 		{{ form_row(form.end_at) }}
 		{{ form_row(form.country_id) }}
+		{{ form_row(form.timezone) }}
 		
 		{% if currentSite.isFeatureVirtualEvents %}
 			{# Firstly, if both are an option, user must check which one.  #}
@@ -43,8 +44,11 @@
 
 			</div>
 		{% endif %}
-		
-		{{ form_row(form.timezone) }}
+
+
+		{%  for customField in formCustomFields %}
+			{{ form_row(form['custom_' ~ customField.key]) }}
+		{%  endfor %}
 
 		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
 

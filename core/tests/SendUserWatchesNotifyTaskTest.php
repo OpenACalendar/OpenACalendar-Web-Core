@@ -131,6 +131,8 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 			'is_physical_changed'=>'-1',
 			'area_id_changed'=>'-1',
 			'is_new'=>'-1',
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,
 		));
 
 		$content1 = new UserWatchesAreaNotifyContent();
@@ -183,6 +185,8 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 			'is_physical_changed'=>'-1',
 			'area_id_changed'=>'-1',
 			'is_new'=>'-1',
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,
 		));
 
 		$content1 = new UserWatchesAreaNotifyContent();
@@ -222,6 +226,8 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 			'is_physical_changed'=>'-1',
 			'area_id_changed'=>'-1',
 			'is_new'=>'-1',
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,
 		));
 
 		$content2 = new UserWatchesAreaNotifyContent();
@@ -276,6 +282,8 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 			'is_physical_changed'=>'-1',
 			'area_id_changed'=>'-1',
 			'is_new'=>'-1',
+			'custom_fields'=>null,
+			'custom_fields_changed'=>null,
 		);
 
 		$eventHistoryModel1 = new \models\EventHistoryModel();

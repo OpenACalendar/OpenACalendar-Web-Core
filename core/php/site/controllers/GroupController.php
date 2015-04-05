@@ -363,8 +363,9 @@ class GroupController {
 				$event->setEndAt($end);
 			}
 		}
-		
-		$form = $app['form.factory']->create(new EventNewForm($app['currentTimeZone'], $app), $event);
+
+		$ourForm = new EventNewForm($app['currentTimeZone'], $app);
+		$form = $app['form.factory']->create($ourForm, $event);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -375,6 +376,10 @@ class GroupController {
 				$eventEditMetaData->setUserAccount($app['currentUser']);
 				if ($form->has('edit_comment')) {
 					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
+				}
+
+				foreach($ourForm->getCustomFields() as $customField) {
+					$event->setCustomField(  $customField, $form->get('custom_'.$customField->getKey())->getData() );
 				}
 
 				$eventRepository = new EventRepository();
@@ -407,6 +412,7 @@ class GroupController {
 		}
 		
 		$this->parameters['form'] = $form->createView();
+		$this->parameters['formCustomFields'] = $ourForm->getCustomFields();
 		return $app['twig']->render('site/group/newEventGo.html.twig', $this->parameters);
 	}
 

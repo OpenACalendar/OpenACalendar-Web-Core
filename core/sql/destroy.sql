@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS event_custom_field_definition_history CASCADE;
+DROP TABLE IF EXISTS event_custom_field_definition_information CASCADE;
 DROP TABLE IF EXISTS user_has_no_editor_permissions_in_site CASCADE;
 DROP TABLE IF EXISTS permission_in_user_group CASCADE;
 DROP TABLE IF EXISTS user_in_user_group CASCADE;

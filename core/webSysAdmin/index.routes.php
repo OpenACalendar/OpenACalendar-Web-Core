@@ -41,6 +41,14 @@ $app->match('/sysadmin/site/{siteid}/event/{slug}', "sysadmin\controllers\EventC
 		->assert('siteid', '\d+')
 		->assert('slug', '\d+');
 
+$app->match('/sysadmin/site/{siteid}/eventcustomfielddefinition', "sysadmin\controllers\EventCustomFieldDefinitionListController::index")
+		->assert('siteid', '\d+');
+$app->match('/sysadmin/site/{siteid}/eventcustomfielddefinition/', "sysadmin\controllers\EventCustomFieldDefinitionListController::index")
+		->assert('siteid', '\d+');
+$app->match('/sysadmin/site/{siteid}/eventcustomfielddefinition/{fieldid}', "sysadmin\controllers\EventCustomFieldDefinitionController::index")
+		->assert('siteid', '\d+')
+		->assert('slug', '\d+');
+
 
 $app->match('/sysadmin/site/{siteid}/venue', "sysadmin\controllers\VenueListController::index")
 		->assert('siteid', '\d+');
