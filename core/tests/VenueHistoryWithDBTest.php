@@ -19,7 +19,7 @@ use \repositories\builders\HistoryRepositoryBuilder;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class VenueHistoryTest extends \BaseAppWithDBTest {
+class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 
 	function testIntegration1() {
 

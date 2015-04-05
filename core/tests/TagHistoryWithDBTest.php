@@ -18,7 +18,7 @@ use \repositories\builders\HistoryRepositoryBuilder;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class TagHistoryTest extends \BaseAppWithDBTest {
+class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 
 	
 	function testIntegration1() {
