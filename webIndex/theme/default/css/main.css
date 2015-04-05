@@ -662,7 +662,8 @@ p.FrontPage {
 p.FrontPage a {
   color: #333;
 }
-p.FrontPage a:hover {
+p.FrontPage a:hover,
+p.FrontPage a:focus {
   color: black;
 }
 p.ForPage {
@@ -814,7 +815,8 @@ body {
   padding: 5px;
   display: inline-block;
 }
-#header .title a:hover {
+#header .title a:hover,
+#header .title a:focus {
   color: black;
   text-decoration: underline;
 }
@@ -880,7 +882,8 @@ body {
   padding: 5px;
   display: inline-block;
 }
-#header ul.menu li ul.submenu li a:hover {
+#header ul.menu li ul.submenu li a:hover,
+#header ul.menu li ul.submenu li a:focus {
   color: black;
   text-decoration: underline;
 }
@@ -980,7 +983,8 @@ ul.mainListEvents li.export a {
   color: #333;
   text-decoration: none;
 }
-ul.mainListEvents li.export a:hover {
+ul.mainListEvents li.export a:hover,
+ul.mainListEvents li.export a:focus {
   color: black;
   text-decoration: underline;
 }
@@ -1111,7 +1115,9 @@ div.mainShowEvent div.title a {
   text-decoration: none;
 }
 ul.mainListEvents li.event div.title a:hover,
-div.mainShowEvent div.title a:hover {
+ul.mainListEvents li.event div.title a:focus,
+div.mainShowEvent div.title a:hover,
+div.mainShowEvent div.title a:focus {
   color: black;
   text-decoration: underline;
 }
@@ -1143,13 +1149,21 @@ div.mainShowEvent p.countryTitle a {
   text-decoration: none;
 }
 ul.mainListEvents li.event p.groupTitle a:hover,
+ul.mainListEvents li.event p.groupTitle a:focus,
 ul.mainListEvents li.event p.venueTitle a:hover,
+ul.mainListEvents li.event p.venueTitle a:focus,
 ul.mainListEvents li.event p.areaTitle a:hover,
+ul.mainListEvents li.event p.areaTitle a:focus,
 ul.mainListEvents li.event p.countryTitle a:hover,
+ul.mainListEvents li.event p.countryTitle a:focus,
 div.mainShowEvent p.groupTitle a:hover,
+div.mainShowEvent p.groupTitle a:focus,
 div.mainShowEvent p.venueTitle a:hover,
+div.mainShowEvent p.venueTitle a:focus,
 div.mainShowEvent p.areaTitle a:hover,
-div.mainShowEvent p.countryTitle a:hover {
+div.mainShowEvent p.areaTitle a:focus,
+div.mainShowEvent p.countryTitle a:hover,
+div.mainShowEvent p.countryTitle a:focus {
   text-decoration: underline;
 }
 ul.mainListEvents li.event p.groupDescription,
@@ -1168,9 +1182,13 @@ div.mainShowEvent p.venueDescription a {
   text-decoration: none;
 }
 ul.mainListEvents li.event p.groupDescription a:hover,
+ul.mainListEvents li.event p.groupDescription a:focus,
 ul.mainListEvents li.event p.venueDescription a:hover,
+ul.mainListEvents li.event p.venueDescription a:focus,
 div.mainShowEvent p.groupDescription a:hover,
-div.mainShowEvent p.venueDescription a:hover {
+div.mainShowEvent p.groupDescription a:focus,
+div.mainShowEvent p.venueDescription a:hover,
+div.mainShowEvent p.venueDescription a:focus {
   text-decoration: underline;
 }
 ul.mainListEvents li.event .map,
@@ -1341,7 +1359,9 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   text-decoration: none;
 }
 #innerPageWrapper #innerPageActions li.action a:hover,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu a:hover {
+#innerPageWrapper #innerPageActions li.action a:focus,
+#innerPageWrapper #innerPageActions li.actionWithSubMenu a:hover,
+#innerPageWrapper #innerPageActions li.actionWithSubMenu a:focus {
   color: black;
   text-decoration: underline;
 }
@@ -1375,7 +1395,8 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   padding: 5px;
   display: inline-block;
 }
-#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a:hover {
+#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a:hover,
+#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a:focus {
   color: black;
   text-decoration: underline;
 }
@@ -1402,7 +1423,8 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   color: black;
   text-decoration: none;
 }
-#innerPageWrapper #innerPageActions li.tab a:hover {
+#innerPageWrapper #innerPageActions li.tab a:hover,
+#innerPageWrapper #innerPageActions li.tab a:focus {
   color: blue;
   text-decoration: underline;
 }
@@ -1420,7 +1442,8 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   border-bottom: 1px solid #fff;
 }
 #innerPageWrapper #innerPageActions li.currentTab a,
-#innerPageWrapper #innerPageActions li.currentTab a:hover {
+#innerPageWrapper #innerPageActions li.currentTab a:hover,
+#innerPageWrapper #innerPageActions li.currentTab a:focus {
   color: black;
   text-decoration: none;
 }
@@ -1441,7 +1464,8 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   color: black;
   text-decoration: none;
 }
-#innerPageWrapper #innerPage .innerPageLeftRightTitle .title a:hover {
+#innerPageWrapper #innerPage .innerPageLeftRightTitle .title a:hover,
+#innerPageWrapper #innerPage .innerPageLeftRightTitle .title a:focus {
   text-decoration: underline;
 }
 @media screen and (min-width: 750px) {
@@ -1542,12 +1566,14 @@ ul.breadcrumbs li a {
   text-decoration: none;
   color: black;
 }
-ul.breadcrumbs li a:hover {
+ul.breadcrumbs li a:hover,
+ul.breadcrumbs li a:focus {
   text-decoration: underline;
   color: black;
 }
 ul.breadcrumbs li.current a,
-ul.breadcrumbs li.current a:hover {
+ul.breadcrumbs li.current a:hover,
+ul.breadcrumbs li.current a:focus {
   text-decoration: none;
   color: #555;
 }
@@ -1565,7 +1591,8 @@ ul.actionList li a {
   color: #333;
   text-decoration: none;
 }
-ul.actionList li a:hover {
+ul.actionList li a:hover,
+ul.actionList li a:focus {
   color: black;
   text-decoration: underline;
 }
@@ -1584,7 +1611,8 @@ p.errorPageText {
 p.errorPageText a {
   color: #333;
 }
-p.errorPageText a:hover {
+p.errorPageText a:hover,
+p.errorPageText a:focus {
   color: black;
 }
 ul.usernotifications li.usernotificationunread,
@@ -1598,7 +1626,9 @@ ul.usernotifications li.usernotificationread a.title {
   color: #333;
 }
 ul.usernotifications li.usernotificationunread a.title:hover,
-ul.usernotifications li.usernotificationread a.title:hover {
+ul.usernotifications li.usernotificationunread a.title:focus,
+ul.usernotifications li.usernotificationread a.title:hover,
+ul.usernotifications li.usernotificationread a.title:focus {
   color: black;
 }
 ul.usernotifications li.usernotificationunread div.timesince,
@@ -1627,7 +1657,8 @@ ul.usernotifications li.usernotificationunread a.title {
 #footer a {
   color: #333;
 }
-#footer a:hover {
+#footer a:hover,
+#footer a:focus {
   color: black;
 }
 #footer ul li {
@@ -1659,7 +1690,8 @@ form .bigSubmitActionWrapper input[type="submit"] {
   font-size: 1.20em;
   text-decoration: none;
 }
-form .bigSubmitActionWrapper input[type="submit"]:hover {
+form .bigSubmitActionWrapper input[type="submit"]:hover,
+form .bigSubmitActionWrapper input[type="submit"]:focus {
   color: black;
   text-decoration: underline;
 }
@@ -1799,7 +1831,8 @@ form .afterBigSubmitActionWrapper {
   text-decoration: none;
   font-weight: bold;
 }
-.popupBox ul#ExportPopupMenu li .wrapper:hover {
+.popupBox ul#ExportPopupMenu li .wrapper:hover,
+.popupBox ul#ExportPopupMenu li .wrapper:focus {
   background: #f2f2f2;
 }
 .popupBox ul#ExportPopupMenu li .wrapper img {

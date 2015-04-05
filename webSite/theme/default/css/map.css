@@ -837,7 +837,8 @@ h2 a {
   text-decoration: none;
   font-weight: bold;
 }
-.popupBox ul#ExportPopupMenu li .wrapper:hover {
+.popupBox ul#ExportPopupMenu li .wrapper:hover,
+.popupBox ul#ExportPopupMenu li .wrapper:focus {
   background: #f2f2f2;
 }
 .popupBox ul#ExportPopupMenu li .wrapper img {

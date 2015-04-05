@@ -218,7 +218,8 @@ table.data a.button {
   display: block;
   text-decoration: none;
 }
-table.data a.button:hover {
+table.data a.button:hover,
+table.data a.button:focus {
   color: red;
   text-decoration: underline;
 }
@@ -504,12 +505,14 @@ ul.breadcrumbs li a {
   text-decoration: none;
   color: black;
 }
-ul.breadcrumbs li a:hover {
+ul.breadcrumbs li a:hover,
+ul.breadcrumbs li a:focus {
   text-decoration: underline;
   color: black;
 }
 ul.breadcrumbs li.current a,
-ul.breadcrumbs li.current a:hover {
+ul.breadcrumbs li.current a:hover,
+ul.breadcrumbs li.current a:focus {
   text-decoration: none;
   color: #555;
 }
