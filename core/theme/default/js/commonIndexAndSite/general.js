@@ -68,22 +68,6 @@ function closePopup() {
 	$(document).unbind('keyup.close_popup');
 }
 
-
-//////////////////////////////////////////////////////////////////////////////// Help
-
-function showHelpPopup(html) {
-	if ($('#HelpPopup').size() == 0) {
-		var htmlOut = '<div id="HelpPopup" class="popupBox" style="display: none">';
-		htmlOut +=	'<div id="HelpPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
-		htmlOut += '<div id="HelpPopupContents" class="popupBoxContent">'+html+'</div>';
-		htmlOut += '</div>';
-		$('body').append(htmlOut);
-	}
-	$('#HelpPopupContents').html(html);
-	$('#HelpPopup').fadeIn(500);
-	showPopup();
-}
-
 //////////////////////////////////////////////////////////////////////////////// Notifications
 
 function loadNotifications() {

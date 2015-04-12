@@ -115,7 +115,13 @@ class EventRepository {
 					'edit_comment'=>$eventEditMetaDataModel->getEditComment(),
 					'custom_fields'=>json_encode($event->getCustomFields()),
 				));
-			
+
+			// Group can be passed as model or as field on event!
+			if (!$group && $event->getGroupId()) {
+				$group = new GroupModel();
+				$group->setId($event->getGroupId());
+			}
+
 			if ($group || $additionalGroups) {
 				$stat = $DB->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,is_main_group,addition_approved_at) ".
 						"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,:is_main_group,:addition_approved_at)");
@@ -192,7 +198,24 @@ class EventRepository {
 					));
 				}
 			}
-			
+
+			if ($eventEditMetaDataModel->getCreatedFromNewEventDraftID()) {
+				$stat = $DB->prepare("UPDATE new_event_draft_information SET event_id=:event_id WHERE id=:id");
+				$stat->execute(array(
+					'event_id'=>$event->getId(),
+					'id'=>$eventEditMetaDataModel->getCreatedFromNewEventDraftID(),
+				));
+
+				$stat = $DB->prepare("INSERT INTO new_event_draft_history (new_event_draft_id, event_id, user_account_id,created_at,details_changed,was_existing_event_id_changed,not_duplicate_events_changed) ".
+					"VALUES (:new_event_draft_id, :event_id, :user_account_id,:created_at,-2,-2,-2 )");
+				$stat->execute(array(
+					'new_event_draft_id'=>$eventEditMetaDataModel->getCreatedFromNewEventDraftID(),
+					'event_id'=>$event->getId(),
+					'user_account_id'=>($eventEditMetaDataModel->getUserAccount()?$eventEditMetaDataModel->getUserAccount()->getId():null),
+					'created_at'=>\TimeSource::getFormattedForDataBase(),
+				));
+			}
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();

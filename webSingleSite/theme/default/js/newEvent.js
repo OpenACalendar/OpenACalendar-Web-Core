@@ -8,20 +8,15 @@
 
 var notDuplicateOfEventSlugs = "";
 
-$(document).ready(function() {
-	$('#NewEventForm').change(function() {
-		loadData();
-	});
-	loadData();
-
-	$('#EventEditForm_country_id, #EventNewForm_country_id').change(function() {
-		$('#AreaRow').remove();
-	});
-});
-
 var loadDataAJAX;
 
-var startDate, startHours, startMins, endDate, endHours, endMins, timezone;
+function loadDataSetLoadingIndicators() {
+
+}
+
+function loadDataGotData(data) {
+
+}
 
 function loadData() {
 	// cancel old loads
@@ -29,36 +24,10 @@ function loadData() {
 		loadDataAJAX.abort();
 	}
 	// set loading indicators
-	var currentStartDate = $('#EventNewForm_start_at_date').val();
-	var currentStartHours = $('#EventNewForm_start_at_time_hour').val();
-	var currentStartMins = $('#EventNewForm_start_at_time_minute').val();
-	var currentEndDate = $('#EventNewForm_end_at_date').val();
-	var currentEndHours = $('#EventNewForm_end_at_time_hour').val();
-	var currentEndMins = $('#EventNewForm_end_at_time_minute').val();
-	var currentTimezone = $('#EventNewForm_timezone').val();
-	if (currentStartDate != startDate || currentStartHours != startHours || currentStartMins != startMins || currentEndDate != endDate || currentEndHours != endHours || currentEndMins != endMins || currentTimezone != timezone) {
-		$('#ReadableDateTimeRange').html('&nbsp;');
-		startDate = currentStartDate;
-		startHours = currentStartHours;
-		startMins = currentStartMins;
-		endDate = currentEndDate;
-		endHours = currentEndHours;
-		endMins = currentEndMins;
-		timezone = currentTimezone;
-	}
-	// change form
-	var physicalEventOption = $('#EventNewForm_is_physical');
-	if (physicalEventOption.length) {
-		if (physicalEventOption.is(':checked')) {
-			$('#physicalEventOptions').show();
-		} else {
-			$('#physicalEventOptions').hide();
-		}
-	}
-
+	loadDataSetLoadingIndicators();
 	// load
 	var dataIn = $('#NewEventForm').serialize();
-	loadDataAJAX = $.post('/event/creatingThisNewEvent.json?notDuplicateSlugs='+notDuplicateOfEventSlugs, dataIn,function(data) {
+	loadDataAJAX = $.post('/event/new/'+newEventDraftSlug+'/'+currentStepID+'/creating.json?notDuplicateSlugs='+notDuplicateOfEventSlugs, dataIn,function(data) {
 		if (data.duplicates.length == 0) {
 			$('#DuplicateEventsContainer').hide();
 		} else {
@@ -84,7 +53,7 @@ function loadData() {
 			$('#DuplicateEventsList').empty().append(html);
 			$('#DuplicateEventsContainer').show();
 		}
-		$('#ReadableDateTimeRange').html(data.readableStartEndRange);
+		loadDataGotData(data);
 	});
 }
 
@@ -112,7 +81,7 @@ function showEventPopup(eventSlug) {
 			'<div id="EventPopupGroupsWrapper"></div>'+
 			'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
 			'<div id="EventPopupTimes" class="times"></div>'+
-			'<div class="popupLink" id="EventPopupLinkYes"><a href="/event/' + eventSlug + '">Yes, this is the event!</a></div>'+
+			'<div class="popupLink" id="EventPopupLinkYes"><a href="/event/new/'+newEventDraftSlug+'/isdupeof/' + eventSlug + '">Yes, this is the event!</a></div>'+
 			'<div class="popupLink" id="EventPopupLinkNo"><a href="#" onclick="notDuplicateOfEvent(' + eventSlug + '); return false;">No, this is a different event!</a></div>'+
 			'</div>');
 	$.ajax({

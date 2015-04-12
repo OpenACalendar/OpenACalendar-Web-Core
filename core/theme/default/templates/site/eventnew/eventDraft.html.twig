@@ -1,0 +1,82 @@
+{#
+# @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+# @license http://ican.openacalendar.org/license.html 3-clause BSD
+# @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+# @author James Baster <james@jarofgreen.co.uk>
+#}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}Add an Event - {% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/event">events</a></li>
+{% endblock %}
+
+{% block htmlHeader %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+{% endblock %}
+
+{% block content %}
+
+	<h3>Add an event</h3>
+
+	<div class="wizardProgressWrapper">
+		<ul class="steps">
+			{%  for step in stepsUI %}
+				<li class="step">
+					{%  if step.jumpBack %}
+						<a href="/event/new/{{ draft.slug }}/{{ step.jumpBack }}">{{  step.title }}</a>
+					{%  else %}
+						{{  step.title }}
+					{%  endif %}
+					{%  if step.done %}<div class="iconCheckSquareOSmall"></div>{% else %}<div class="iconSquareOSmall"></div>{% endif %}
+				</li>
+			{%  endfor %}
+		</ul>
+	</div>
+
+
+	{%  set process = true %}
+	{%  for step in steps %}
+		{%  if step.stepID == currentStep.stepID  %}
+			{%  include step.onThisStepGetViewName %}
+			{%  set process = false %}
+		{% endif %}
+		{%  if process %}
+			{%  if step.stepDoneGetMinimalViewName %}
+				{%  include step.stepDoneGetMinimalViewName %}
+			{%  elseif step.stepDoneGetViewName %}
+				{%  include step.stepDoneGetViewName %}
+			{%  endif %}
+		{%  endif %}
+	{% endfor %}
+
+	<div class="likeFormStyled">
+		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
+			<div class="labelWrapper">&nbsp;</div>
+			<div class="widgetWrapperPlacementOnly">
+				<div class="highlightInfoBoxWrapper">
+					<div class="highlightInfoBoxTitle">Duplicate?</div>
+					<div class="highlightInfoBoxContent">
+						<p>Wait, is this event maybe a duplicate of one of these? Click for more information - you won't lose what you have already entered.</p>
+						<ul id="DuplicateEventsList" class="mainListEvents"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="after"></div>
+		</div>
+	</div>
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	<script type="text/javascript">var newEventDraftSlug = {{ draft.slug }}; var currentStepID = '{{  currentStep.stepID }}'; </script>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="/theme/default/js/newEvent.js"></script>
+	{%  if currentStep and currentStep.onThisStepGetViewJavascriptName %}{%  include currentStep.onThisStepGetViewJavascriptName %}{%  endif %}
+{% endblock %}
+

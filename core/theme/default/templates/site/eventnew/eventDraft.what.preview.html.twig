@@ -1,0 +1,77 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+
+<div class="likeFormStyled">
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">&nbsp;</div>
+		<div class="widgetWrapper"><div class="sectionHeader">What</div></div>
+		<div class="after"></div>
+	</div>
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Summary</div>
+		<div class="widgetWrapper">{{  draft.getDetailsValue('event.summary') }}</div>
+		<div class="after"></div>
+	</div>
+
+	{%  if draft.hasDetailsValue('event.description') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Description</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('event.description') | nl2br }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{%  if draft.hasDetailsValue('event.url') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">URL</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('event.url')  }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{%  if draft.hasDetailsValue('event.ticket_url') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Ticket URL</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('event.ticket_url') }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
+		{%  if draft.hasDetailsValueForCustomField(customField) %}
+			<div class="rowWrapper">
+				<div class="labelWrapper">{{ customField.label }}</div>
+				<div class="widgetWrapper">{{ draft.getDetailsValueForCustomField(customField) | nl2br }}</div>
+				<div class="after"></div>
+			</div>
+		{% endif %}
+	{%  endfor %}
+
+	{%  if currentSite.isFeaturePhysicalEvents %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Does the event happen at a place?</div>
+			<div class="widgetWrapper">{%  if draft.getDetailsValue('event.is_physical') %}Yes{%  else %}No{%  endif %}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{%  if currentSite.isFeatureVirtualEvents %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Is event accessible online?</div>
+			<div class="widgetWrapper">{%  if draft.getDetailsValue('event.is_virtual') %}Yes{%  else %}No{%  endif %}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+
+</div>
+
+

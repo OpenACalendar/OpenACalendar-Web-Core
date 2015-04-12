@@ -1,0 +1,98 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+<form action="" method="post" class="styled" id="NewEventForm">
+	<input type="hidden" name="action" value="setthisnewvenue">
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Venue Name</div>
+		<div class="widgetWrapperPlacementOnly">
+			{% if titleRequired %}
+			<ul class="formErrors">
+				<li>This is required!</li>
+			</ul>
+			{%  endif %}
+			<input type="text" name="fieldTitle"  id="TitleField" value="{{ fieldTitle | e('html_attr') }}" autocomplete="off">
+		</div>
+		<div class="after"></div>
+	</div>
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Address</div>
+		<div class="widgetWrapperPlacementOnly"><input type="text" name="fieldAddress"  id="AddressField" value="{{ fieldAddress | e('html_attr')  }}" autocomplete="off"></div>
+		<div class="after"></div>
+	</div>
+
+	{% if doesCountryHaveAnyNotDeletedAreas %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">City/Area</div>
+			<div class="widgetWrapperPlacementOnly" id="AreaFieldsWrapper">
+				{% if fieldAreaObject is null %}
+					<input type="text" name="fieldAreaSearchText"  id="AreaField" value="{{ fieldArea | e('html_attr') }}">
+					{% if areaSearchRequired and areas %}
+						<ul class="formErrors">
+							<li>Did you mean?</li>
+						</ul>
+						<ul>
+							<li><label><input type="radio" name="fieldAreaSlug" value="-1">None of the below</label></li>
+							{%  for area in areas %}
+								<li><label><input type="radio" name="fieldAreaSlug" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{%  endif %}</label></li>
+							{%  endfor %}
+						</ul>
+					{%  endif %}
+				{% else %}
+					{{  fieldAreaObject.title }}
+					<a href="#" onclick="clearArea(); return false;">Clear</a>
+					<input type="hidden" name="fieldAreaSlug" value="{{ fieldAreaObject.slug  }}">
+				{%  endif %}
+				{% if areaSearchRequired and childAreas %}
+					<ul class="formErrors">
+						<li>Can you be more exact? This helps people find events.</li>
+					</ul>
+					<ul>
+						<li><label><input type="radio" name="fieldChildAreaSlug" value="-1">None of the below</label></li>
+						{%  for area in childAreas %}
+							<li><label><input type="radio" name="fieldChildAreaSlug" value="{{  area.slug  }}">{{  area.title }}{%  if area.parent1title %}, {{ area.parent1title }}{% endif %}</label></li>
+						{%  endfor %}
+					</ul>
+				{%  endif %}
+
+			</div>
+			<div class="after"></div>
+		</div>
+	{% endif %}
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Post Code</div>
+		<div class="widgetWrapperPlacementOnly"><input type="text" name="fieldAddressCode"  id="AddressCodeField" value="{{ fieldAddressCode | e('html_attr')  }}" autocomplete="off"></div>
+		<div class="after"></div>
+	</div>
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Country</div>
+		<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
+		<div class="after"></div>
+	</div>
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Any notes about venue</div>
+		<div class="widgetWrapperPlacementOnly"><textarea name="fieldDescription">{{ fieldDescription }}</textarea></div>
+		<div class="after"></div>
+	</div>
+
+	<div class="actionWrapperBig"><input type="submit" value="Next"></div>
+</form>
+
+
+
+<form action="" class="styled" method="POST">
+	<input type="hidden" name="action" value="setarea">
+	<div class="bigSubmitActionWrapper"><input type="submit" value="Actually, the exact Venue is not known" class="bigSubmitAction"/></div>
+	<div class="afterBigSubmitActionWrapper"></div>
+</form>
+

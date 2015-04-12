@@ -1,0 +1,21 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+
+<div class="likeFormStyledMinimal">
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">When</div>
+		<div class="widgetWrapper">{% include 'site/common/eventFromToLine.html.twig' with {'startAt': draft.getDetailsValueAsDateTime('event.start_at'), 'endAt': draft.getDetailsValueAsDateTime('event.end_at'), 'timezone':draft.getDetailsValue('event.timezone'), 'showTimeZone':false} %}</div>
+		<div class="after"></div>
+	</div>
+
+
+</div>
+
+

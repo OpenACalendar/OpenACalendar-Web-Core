@@ -247,6 +247,20 @@ table {
     -moz-background-size: 16px 16px;
   }
 }
+.iconCheckSquareOSmall {
+  background-image: url('/theme/default/img/checksquareo16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconCheckSquareOSmall {
+    background-image: url('/theme/default/img/checksquareo32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconDesktopSmall {
   background-image: url('/theme/default/img/desktop16.png');
   width: 16px;
@@ -485,6 +499,20 @@ table {
     -moz-background-size: 16px 16px;
   }
 }
+.iconSquareOSmall {
+  background-image: url('/theme/default/img/squareo16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconSquareOSmall {
+    background-image: url('/theme/default/img/squareo32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconTagsSmall {
   background-image: url('/theme/default/img/tags16.png');
   width: 16px;
@@ -675,62 +703,77 @@ ul.loginOrRegisterInterestedIn li {
   margin: 3px 3px 3px 20px;
   list-style-type: circle;
 }
-form.styled .rowWrapper {
+form.styled .rowWrapper,
+.likeFormStyled .rowWrapper {
   padding: 10px 0;
 }
-form.styled .rowWrapper .labelWrapper {
+form.styled .rowWrapper .labelWrapper,
+.likeFormStyled .rowWrapper .labelWrapper {
   padding: 0px 5px 0px 0px;
   text-align: right;
   display: block;
   width: 20%;
   float: left;
 }
-form.styled .rowWrapper .widgetWrapper {
+form.styled .rowWrapper .widgetWrapper,
+.likeFormStyled .rowWrapper .widgetWrapper {
   display: block;
   width: 70%;
   float: left;
 }
-form.styled .rowWrapper .widgetWrapper input[type="text"] {
+form.styled .rowWrapper .widgetWrapper input[type="text"],
+.likeFormStyled .rowWrapper .widgetWrapper input[type="text"] {
   width: 80%;
 }
-form.styled .rowWrapper .widgetWrapper div.dateInput input[type="text"] {
+form.styled .rowWrapper .widgetWrapper div.dateInput input[type="text"],
+.likeFormStyled .rowWrapper .widgetWrapper div.dateInput input[type="text"] {
   width: 100px;
 }
-form.styled .rowWrapper .widgetWrapper input[type="url"] {
+form.styled .rowWrapper .widgetWrapper input[type="url"],
+.likeFormStyled .rowWrapper .widgetWrapper input[type="url"] {
   width: 80%;
 }
-form.styled .rowWrapper .widgetWrapper textarea {
+form.styled .rowWrapper .widgetWrapper textarea,
+.likeFormStyled .rowWrapper .widgetWrapper textarea {
   width: 80%;
   height: 100px;
 }
-form.styled .rowWrapper .widgetWrapperPlacementOnly {
+form.styled .rowWrapper .widgetWrapperPlacementOnly,
+.likeFormStyled .rowWrapper .widgetWrapperPlacementOnly {
   display: block;
   width: 70%;
   float: left;
 }
-form.styled .rowWrapper .after {
+form.styled .rowWrapper .after,
+.likeFormStyled .rowWrapper .after {
   clear: both;
 }
-form.styled ul.formErrors li {
+form.styled ul.formErrors li,
+.likeFormStyled ul.formErrors li {
   margin: 5px 0;
   background: #eb6c6c;
   border: 2px solid #6f1818;
   padding: 5px;
 }
-form.styled input[type="url"] {
+form.styled input[type="url"],
+.likeFormStyled input[type="url"] {
   width: 80%;
 }
-form.styled input[type="text"] {
+form.styled input[type="text"],
+.likeFormStyled input[type="text"] {
   width: 80%;
 }
-form.styled textarea {
+form.styled textarea,
+.likeFormStyled textarea {
   width: 80%;
   height: 100px;
 }
-form.styled .smallInputs input[type="text"] {
+form.styled .smallInputs input[type="text"],
+.likeFormStyled .smallInputs input[type="text"] {
   width: 40%;
 }
-form.styled p.information {
+form.styled p.information,
+.likeFormStyled p.information {
   font-style: italic;
   font-size: 0.8em;
 }
@@ -906,6 +949,11 @@ h3 {
   font-weight: bold;
   font-size: 1.2em;
   padding: 10px 0;
+}
+ul.normal li {
+  padding: 3px 3px 3px 20px;
+  list-style-type: disc;
+  list-style-position: inside;
 }
 #bodyLeft,
 #bodyRight {
@@ -1496,10 +1544,6 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
 #innerPageWrapper #innerPage .innerPageRight .innerPageRightLinkWrapper .innerPageRightLinkContent a {
   font-size: 0.8em;
 }
-.helpPopupLink img {
-  max-width: 20px;
-  max-height: 20px;
-}
 ul.timezones li {
   width: 200px;
   margin: 5px 5px 5px 30px;
@@ -1697,6 +1741,30 @@ form .bigSubmitActionWrapper input[type="submit"]:focus {
 }
 form .afterBigSubmitActionWrapper {
   clear: right;
+}
+.wizardProgressWrapper {
+  margin: 10px 5px;
+  padding: 10px 5px;
+  text-align: center;
+  background: #72DA72;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+.wizardProgressWrapper ul.steps li.step {
+  display: inline;
+  padding: 3px 10px;
+}
+.wizardProgressWrapper ul.steps li.step a {
+  text-decoration: none;
+  color: black;
+}
+.wizardProgressWrapper ul.steps li.step a:hover,
+.wizardProgressWrapper ul.steps li.step a:active {
+  text-decoration: underline;
+  color: black;
 }
 #PopupMask {
   position: fixed;

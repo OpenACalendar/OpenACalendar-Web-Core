@@ -14,5 +14,24 @@ namespace models;
 class EventEditMetaDataModel extends \BaseEditMetaDataModel
 {
 
+	protected $createdFromNewEventDraftID;
+
+	/**
+	 * @return mixed
+	 */
+	public function getCreatedFromNewEventDraftID()
+	{
+		return $this->createdFromNewEventDraftID;
+	}
+
+	/**
+	 * @param mixed $createdFromNewEventDraftID
+	 */
+	public function setCreatedFromNewEventDraftID($createdFromNewEventDraftID)
+	{
+		$this->createdFromNewEventDraftID = $createdFromNewEventDraftID;
+	}
+
+
 
 }

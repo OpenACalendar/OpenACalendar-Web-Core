@@ -1,0 +1,38 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
+<form action="#" method="post" class="styled" novalidate="novalidate" id="NewEventForm">
+
+	{{ form_errors(form) }}
+
+	{{ form_row(form.summary) }}
+	{{ form_row(form.description) }}
+	{{ form_row(form.url) }}
+	{{ form_row(form.ticket_url) }}
+
+	{%  for customField in formCustomFields %}
+		{{ form_row(form['custom_' ~ customField.key]) }}
+	{%  endfor %}
+
+	{%  if currentSite.isFeaturePhysicalEvents %}
+		{{ form_row(form.is_physical) }}
+	{%  endif %}
+
+	{%  if currentSite.isFeatureVirtualEvents %}
+		{{ form_row(form.is_virtual) }}
+	{%  endif %}
+
+	{{ form_rest(form) }}
+
+	<div class="bigSubmitActionWrapper"><input type="submit"  value="Next" class="bigSubmitAction"/></div>
+	<div class="afterBigSubmitActionWrapper"></div>
+
+</form>
+
+

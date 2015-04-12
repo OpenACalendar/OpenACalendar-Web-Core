@@ -1,0 +1,108 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+<form action="" method="post" class="styled" id="NewEventForm">
+	<input type="hidden" name="action" value="searchVenues">
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Venue Name</div>
+		<div class="widgetWrapperPlacementOnly"><input type="text" name="searchTitle"  id="TitleField" value="{{ searchTitle | e('html_attr') }}" autocomplete="off"></div>
+		<div class="after"></div>
+	</div>
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Address</div>
+		<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddress"  id="AddressField" value="{{ searchAddress | e('html_attr')  }}" autocomplete="off"></div>
+		<div class="after"></div>
+	</div>
+
+	{% if doesCountryHaveAnyNotDeletedAreas %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">City/Area</div>
+			<div class="widgetWrapperPlacementOnly">
+				<input type="text" name="searchArea"  id="AreaField" value="{{ searchArea | e('html_attr') }}" autocomplete="off">
+				<ul id="AreaList">
+					{%  for area in areas %}
+						<li><label><input type="radio" name="searchAreaSlug" value="{{  area.slug  }}" {% if searchAreaObject and searchAreaObject.slug == area.slug %}checked="checked"{%  endif %}>{{  area.title }}</label></li>
+					{%  endfor %}
+				</ul>
+			</div>
+			<div class="after"></div>
+		</div>
+	{% endif %}
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Post Code</div>
+		<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddressCode"  id="AddressCodeField" value="{{ searchAddressCode | e('html_attr')  }}" autocomplete="off"></div>
+		<div class="after"></div>
+	</div>
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">Country</div>
+		<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
+		<div class="after"></div>
+	</div>
+
+	<div class="actionWrapperBig"><input type="submit" value="Search"></div>
+</form>
+
+
+<div id="innerPageWrapper">
+	<div id="innerPage">
+
+
+		<div class="innerPageLeft">
+			<ul class="mainListVenues" id="EditEventVenueSearchResults">
+				{% for venue in venues %}
+					<li class="venue result">
+						<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight">
+							<input type="hidden" name="action" value="setthisvenue">
+							<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
+							<input type="submit" value="Select {{ venue.title }}">
+						</form>
+						<div class="title">{{ venue.title }}</div>
+						{%  if venue.address %}<div>{{  venue.address | nl2br }}</div>{%  endif %}
+						{%  if venue.addressCode %}<div>{{  venue.addressCode }}</div>{%  endif %}
+						<div class="afterOneActionFormRight"></div>
+					</li>
+				{% endfor %}
+				<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
+					<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight" onsubmit="onSubmitNewVenue();">
+						<input type="hidden" name="action" value="setnewvenue">
+						<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
+						<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
+						<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
+						<input type="hidden" name="fieldAreaSearchText" value="{{ searchArea | e('html_attr') }}">
+						<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
+						<input type="submit" value="New">
+					</form>
+					<div class="title">This is a new venue</div>
+					<div class="afterOneActionFormRight"></div>
+				</li>
+				<li class="venue">
+					<form method="post" action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" class="oneActionFormRight">
+						<input type="hidden" name="action" value="setarea">
+						<input type="submit" value="Not Known">
+					</form>
+					<div class="title">The exact venue is not known</div>
+					<div class="afterOneActionFormRight"></div>
+				</li>
+			</ul>
+		</div>
+
+
+		<div class="innerPageRight hideIfOneCol">
+			<div id="MapWrapper">
+				<div id="Map" class="fullWidth"></div>
+			</div>
+		</div>
+
+		<div class="afterInnerPageContent"></div>
+
+	</div>
+</div>

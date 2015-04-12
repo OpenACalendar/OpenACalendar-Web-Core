@@ -2,12 +2,11 @@
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
 */
 $( document ).ready( function() {
-	$('#GroupFindFallback').hide();
-	$('#GroupSearchForm').show();
+	$('#GroupSearchForm input[type="submit"]').hide();
 	$('#GroupSearchText').change(function() { groupSearchChanged(); });
 	$('#GroupSearchText').keyup(function() { groupSearchChanged(); });
 });
@@ -17,7 +16,6 @@ var groupSearchAJAX;
 
 function groupSearchChanged() {
 	var groupSearchValue = $('#GroupSearchText').val();
-	$('#NewGroupLink').attr('href','/group/new?title='+encodeURIComponent(groupSearchValue));
 	if (groupSearchValue == '') {
 		lastGroupSearchValue = '';
 		$('#GroupSearchList').empty();
@@ -36,20 +34,22 @@ function groupSearchChanged() {
                     for(i in data.data) {
                         var group = data.data[i];
                         out += '<li class="group">';
-                        out += '<div class="oneActionFormRight">';
-                        if (dateForEvent) {
-                            out += '<a class="button" href="/group/'+group.slug+'/newevent/go?date='+dateForEvent+'">Create event in this group</a>';
-                        } else {
-                            out += '<a class="button" href="/group/'+group.slug+'/newevent">Create event in this group</a>';
-                        }
-                        out += '</div>';
-                        out += '<div class="title">'+escapeHTML(group.title)+'</div>';
-                        out += '<div class="afterOneActionFormRight"></div></li>';
+						out += '<div class="title">'+escapeHTML(group.title)+'</div>';
+                        out += '<form method="post"><input type="hidden" name="action" value="selectgroup"><input type="hidden" name="group" value="'+group.slug+'">';
+						out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event in this Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
+                        out += '</form>';
+                        out += '</li>';
                     }
                 } else {
                     out += '<li class="group"><div class="notfound">Sorry, nothing found.</div></li>';
                 }
 				$('#GroupSearchList').empty();
+				out += '<li class="nodata">';
+				out += '<div class="title">Not these groups</div>';
+				out += '<form method="get" action="/group/new">';
+				out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Add A Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
+				out += '</form>';
+				out += '</li>';
 				$('#GroupSearchList').append(out);
 			});
 

@@ -702,6 +702,7 @@ class EventController {
 		if (!$this->parameters['searchFieldsSubmitted'] && !$this->parameters['searchAreaObject'] && $this->parameters['area']) {
 			$this->parameters['searchAreaObject'] = $this->parameters['area'];
 			$this->parameters['searchArea'] = $this->parameters['area']->getTitle();
+			$this->parameters['searchAreaSlug'] = $this->parameters['area']->getSlug();
 		}
 
 

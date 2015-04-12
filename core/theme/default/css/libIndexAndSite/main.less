@@ -147,6 +147,14 @@ h3 {
 	padding: 10px 0;
 }
 
+ul.normal {
+	li {
+		padding: 3px 3px 3px 20px;
+		list-style-type: disc;
+		list-style-position: inside;
+	}
+}
+
 #bodyLeft, #bodyRight {
 	padding: 10px 2px;
 	img {
@@ -651,13 +659,6 @@ div.filterListEventWrapper {
 
 
 
-.helpPopupLink {
-	img {
-		max-width: 20px;
-		max-height: 20px;
-	}
-}
-
 ul.timezones {	
 	li {
 		width: 200px;
@@ -860,6 +861,28 @@ form {
 	}
 	.afterBigSubmitActionWrapper {
 		clear:right;
+	}
+}
+
+.wizardProgressWrapper {
+	margin: 10px 5px;
+	padding: 10px 5px;
+	text-align: center;
+	background: @colourLighter2;
+	.rounded-corners(5px);
+	ul.steps {
+		li.step {
+			display: inline;
+			padding: 3px 10px;
+			a {
+				text-decoration: none;
+				color: black;
+			}
+			a:hover, a:active {
+				text-decoration: underline;
+				color: black;
+			}
+		}
 	}
 }
 

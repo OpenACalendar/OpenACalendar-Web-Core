@@ -42,6 +42,8 @@ DROP TABLE IF EXISTS user_watches_area_information CASCADE;
 DROP TABLE IF EXISTS user_account_private_feed_key CASCADE;
 DROP TABLE IF EXISTS user_at_event_information  CASCADE;
 DROP TABLE IF EXISTS user_account_remember_me  CASCADE;
+DROP TABLE IF EXISTS new_event_draft_history  CASCADE;
+DROP TABLE IF EXISTS new_event_draft_information  CASCADE;
 DROP TABLE IF EXISTS event_in_group CASCADE;
 DROP TABLE IF EXISTS event_history  CASCADE;
 DROP TABLE IF EXISTS event_information CASCADE;

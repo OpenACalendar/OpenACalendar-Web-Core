@@ -1,0 +1,24 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{%  if currentSiteFeatures.has('org.openacalendar','EditComments') %}
+	<div class="rowWrapper" id="formRowEditCommentToggler" onclick="onClickFormRowEditCommentToggler(); return false;">
+		<div class="labelWrapper">&nbsp;</div>
+		<div class="widgetWrapperPlacementOnly">
+			<span class="arrow">&#x25B2;</span>
+			<span class="title">Add a comment on this change</span>
+		</div>
+		<div class="after"></div>
+	</div>
+	<div id="formRowEditCommentWrapper" class="rowWrapper" style="display: none;">
+		<div class="labelWrapper">&nbsp;</div>
+		<div class="widgetWrapperPlacementOnly">
+			<span class="title"><input type="text" name="edit_comment"></span>
+		</div>
+		<div class="after"></div>
+	</div>
+{% endif %}

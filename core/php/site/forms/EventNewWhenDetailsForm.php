@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use models\NewEventDraftModel;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,9 +21,10 @@ use repositories\builders\VenueRepositoryBuilder;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventNewForm extends \BaseFormWithEditComment {
+class EventNewWhenDetailsForm extends AbstractType {
 
 	protected $timeZoneName;
+
 	/** @var SiteModel **/
 	protected $site;
 
@@ -31,67 +33,52 @@ class EventNewForm extends \BaseFormWithEditComment {
 	/** @var  ExtensionManager */
 	protected $extensionManager;
 
-	function __construct($timeZoneName, Application $application) {
-		parent::__construct($application);
+
+	/** @var  NewEventDraftModel */
+	protected $eventDraft;
+
+	protected $defaultCountry;
+
+	function __construct($timeZoneName, Application $application, NewEventDraftModel $newEventDraftModel ) {
 		$this->site = $application['currentSite'];
-		$this->timeZoneName = $timeZoneName;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
+		$this->timeZoneName = $timeZoneName;
 		$this->extensionManager = $application['extensions'];
+		$this->eventDraft = $newEventDraftModel;
 	}
 
 	protected $customFields;
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		parent::buildForm($builder, $options);
 
-		$builder->add('summary', 'text', array(
-			'label'=>'Summary',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
-		));
-		
-		$builder->add('description', 'textarea', array(
-			'label'=>'Description',
-			'required'=>false
-		));
-		
-		
-		$builder->add('url', new \symfony\form\MagicUrlType(), array(
-			'label'=>'Information Web Page URL',
-			'required'=>false
-		));
-		
-		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
-			'label'=>'Tickets Web Page URL',
-			'required'=>false
-		));
-		
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);
-		$countries = array();
-		$defaultCountry = null;
-		foreach($crb->fetchAll() as $country) {
-			$countries[$country->getId()] = $country->getTitle();
-			if ($defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
-				$defaultCountry = $country->getId();
-			}			
-		}
-		if (count($countries) != 1) {
+		$this->defaultCountry = null;
+		$defaultCountryID = null;
+		$countries = $crb->fetchAll();
+		if (count($countries) > 1) {
+			$countriesForSelect = array();
+			foreach($countries as $country) {
+				$countriesForSelect[$country->getId()] = $country->getTitle();
+				if ($this->defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
+					$this->defaultCountry = $country;
+					$defaultCountryID = $country->getId();
+				}
+			}
 			$builder->add('country_id', 'choice', array(
 				'label'=>'Country',
-				'choices' => $countries,
+				'choices' => $countriesForSelect,
 				'required' => true,
-				'data' => $defaultCountry,
+				'data' => $defaultCountryID,
 			));
-		} else {
-			$countryID = array_shift(array_keys($countries));
+		} else if (count($countries) == 1) {
+			$this->defaultCountry = $countries[0];
 			$builder->add('country_id', 'hidden', array(
-				'data' => $countryID,
+				'data' => $this->defaultCountry->getId(),
 			));
 		}
 
-		
+
 		$timezones = array();
 		// Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
 		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
@@ -109,43 +96,17 @@ class EventNewForm extends \BaseFormWithEditComment {
 				'data' => $timezone,
 			));
 		}
-		
-		if ($this->site->getIsFeatureVirtualEvents()) {
-			
-			//  if both are an option, user must check which one.
-			if ($this->site->getIsFeaturePhysicalEvents()) {
-			
-				$builder->add("is_virtual",
-					"checkbox",
-						array(
-							'required'=>false,
-							'label'=>'Is event accessible online?'
-						)
-					);
-			}
-			
-		}
 
-		
-		if ($this->site->getIsFeaturePhysicalEvents()) {
-			
-			//  if both are an option, user must check which one.
-			if ($this->site->getIsFeatureVirtualEvents()) {
-				
-				$builder->add("is_physical",
-					"checkbox",
-						array(
-							'required'=>false,
-							'label'=>'Does the event happen at a place?'
-						)
-					);
-				
-			}
-
-
-		}
-		
 		$years = array( date('Y'), date('Y')+1 );
+
+		$data = null;
+		if ($this->eventDraft->hasDetailsValue('event.start_at')) {
+			$data = $this->eventDraft->getDetailsValueAsDateTime('event.start_at');
+		} else if ($this->eventDraft->hasDetailsValue('event.start_end_freetext.start')) {
+			$data = $this->eventDraft->getDetailsValueAsDateTime('event.start_end_freetext.start');
+		} else if ($this->eventDraft->hasDetailsValue('incoming.event.start_at')) {
+			$data = $this->eventDraft->getDetailsValueAsDateTime('incoming.event.start_at');
+		}
 
 		$startOptions = array(
 			'label'=>'Start',
@@ -155,7 +116,8 @@ class EventNewForm extends \BaseFormWithEditComment {
 			'view_timezone' => $this->timeZoneName,
 			'years' => $years,
 			'attr' => array('class' => 'dateInput'),
-			'required'=>true
+			'required'=>true,
+			'data' => $data,
 		);
 		if ($this->formWidgetTimeMinutesMultiples > 1) {
 			$startOptions['minutes'] = array();
@@ -165,15 +127,25 @@ class EventNewForm extends \BaseFormWithEditComment {
 		}
 		$builder->add('start_at', 'datetime' ,$startOptions);
 
+		$data = null;
+		if ($this->eventDraft->hasDetailsValue('event.end_at')) {
+			$data = $this->eventDraft->getDetailsValueAsDateTime('event.end_at');
+		} else if ($this->eventDraft->hasDetailsValue('event.start_end_freetext.end')) {
+			$data = $this->eventDraft->getDetailsValueAsDateTime('event.start_end_freetext.end');
+		} else if ($this->eventDraft->hasDetailsValue('incoming.event.end_at')) {
+			$data = $this->eventDraft->getDetailsValueAsDateTime('incoming.event.end_at');
+		}
+
 		$endOptions = array(
 			'label'=>'End',
 			'date_widget'=> 'single_text',
 			'date_format'=>'d/M/y',
 			'model_timezone' => 'UTC',
-			'view_timezone' => $this->timeZoneName,
+			'view_timezone' =>  $this->timeZoneName,
 			'years' => $years,
 			'attr' => array('class' => 'dateInput'),
-			'required'=>true
+			'required'=>true,
+			'data' => $data,
 		);
 		if ($this->formWidgetTimeMinutesMultiples > 1) {
 			$endOptions['minutes'] = array();
@@ -184,22 +156,6 @@ class EventNewForm extends \BaseFormWithEditComment {
 		$builder->add('end_at', 'datetime' ,$endOptions);
 
 
-		$this->customFields = array();
-		foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
-			if ($customField->getIsActive()) {
-				$extension = $this->extensionManager->getExtensionById($customField->getExtensionId());
-				if ($extension) {
-					$fieldType = $extension->getEventCustomFieldByType($customField->getType());
-					if ($fieldType) {
-						$this->customFields[] = $customField;
-						$options = $fieldType->getSymfonyFormOptions($customField);
-						$options['mapped'] = false;
-						$options['data'] = $builder->getData()->getCustomField($customField);
-						$builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
-					}
-				}
-			}
-		}
 
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
@@ -216,43 +172,36 @@ class EventNewForm extends \BaseFormWithEditComment {
 			$max->add(new \DateInterval(("P".$CONFIG->eventsCantBeMoreThanYearsInFuture."Y")));
 			if ($myExtraFieldStart > $max) {
 				$form['start_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
-						" in the future."));
+					($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
+					" in the future."));
 			}
 			if ($myExtraFieldEnd > $max) {
 				$form['end_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
-						" in the future."));			}
+					($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
+					" in the future."));			}
 			// validate not to far in past
 			$min = \TimeSource::getDateTime();
 			$min->sub(new \DateInterval(("P".$CONFIG->eventsCantBeMoreThanYearsInPast."Y")));
 			if ($myExtraFieldStart < $min) {
 				$form['start_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
-						" in the past."));
+					($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
+					" in the past."));
 			}
 			if ($myExtraFieldEnd < $min) {
 				$form['end_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
-						" in the past."));
-			}
-			// URL validation. We really can't do much except verify ppl haven't put a space in, which they might do if they just type in Google search terms (seen it done)
-			if (strpos($form->get("url")->getData(), " ") !== false) {
-				$form['url']->addError(new FormError("Please enter a URL"));
-			}
-			if (strpos($form->get("ticket_url")->getData(), " ") !== false) {
-				$form['ticket_url']->addError(new FormError("Please enter a URL"));
+					($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
+					" in the past."));
 			}
 		};
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);	
+		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
 	}
-	
+
 	public function getName() {
-		return 'EventNewForm';
+		return 'EventNewWhenDetailsForm';
 	}
-	
+
 	public function getDefaultOptions(array $options) {
 		return array(
 		);
@@ -265,6 +214,16 @@ class EventNewForm extends \BaseFormWithEditComment {
 	{
 		return $this->customFields;
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDefaultCountry()
+	{
+		return $this->defaultCountry;
+	}
+
+
 
 }
 

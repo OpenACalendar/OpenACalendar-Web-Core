@@ -1,0 +1,62 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+
+<div class="likeFormStyled">
+
+	{% if draft.getDetailsValue('venue.title') or draft.getDetailsValue('area.title') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">&nbsp;</div>
+			<div class="widgetWrapper"><div class="sectionHeader">Where</div></div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{% if draft.getDetailsValue('venue.title') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Venue</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('venue.title') }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{% if draft.getDetailsValue('venue.address') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Address</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('venue.address') | nl2br }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{% if draft.getDetailsValue('area.title') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Area</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('area.title') }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{% if draft.getDetailsValue('venue.address_code') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Address Code</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('venue.address_code') | nl2br }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{% if draft.getDetailsValue('venue.description') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Notes about venue</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('venue.description') | nl2br }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+</div>
+
+

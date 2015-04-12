@@ -1,0 +1,43 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+
+<div class="likeFormStyled">
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">&nbsp;</div>
+		<div class="widgetWrapper"><div class="sectionHeader">When</div></div>
+		<div class="after"></div>
+	</div>
+
+	{%  if currentSite.getCachedIsMultipleCountries and country %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Country</div>
+			<div class="widgetWrapper">{{  country.title }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	{%  if currentSite.getCachedTimezonesAsList|length > 1 %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">Timezone</div>
+			<div class="widgetWrapper">{{  draft.getDetailsValue('event.timezone') }}</div>
+			<div class="after"></div>
+		</div>
+	{%  endif %}
+
+	<div class="rowWrapper">
+		<div class="labelWrapper">When</div>
+		<div class="widgetWrapper">{% include 'site/common/eventFromToLine.html.twig' with {'startAt': draft.getDetailsValueAsDateTime('event.start_at'), 'endAt': draft.getDetailsValueAsDateTime('event.end_at'), 'timezone':draft.getDetailsValue('event.timezone'), 'showTimeZone':false} %}</div>
+		<div class="after"></div>
+	</div>
+
+
+</div>
+
+

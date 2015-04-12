@@ -5,9 +5,6 @@
  # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{%  if currentSite.cachedIsMultipleTimezones %}
-	{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}
-{%  else %}
-	{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':false} %}
-{%  endif %}
+
+{% include 'site/common/eventFromToLine.html.twig' with {'startAt': start, 'endAt': end, 'timezone':timezone ,'showTimeZone':false } %}
 

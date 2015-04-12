@@ -247,6 +247,20 @@ table {
     -moz-background-size: 16px 16px;
   }
 }
+.iconCheckSquareOSmall {
+  background-image: url('/theme/default/img/checksquareo16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconCheckSquareOSmall {
+    background-image: url('/theme/default/img/checksquareo32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconDesktopSmall {
   background-image: url('/theme/default/img/desktop16.png');
   width: 16px;
@@ -480,6 +494,20 @@ table {
 @media (-webkit-min-device-pixel-ratio: 2) {
   .iconShareSmall {
     background-image: url('/theme/default/img/share32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
+.iconSquareOSmall {
+  background-image: url('/theme/default/img/squareo16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconSquareOSmall {
+    background-image: url('/theme/default/img/squareo32.png');
     background-size: 16px 16px;
     -webkit-background-size: 16px 16px;
     -moz-background-size: 16px 16px;

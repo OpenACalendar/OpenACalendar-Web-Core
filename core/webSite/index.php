@@ -228,7 +228,7 @@ $permissionTagsChangeRequired = function(Request $request, Application $app) {
 
 $permissionImportURLsChangeRequired = function(Request $request, Application $app) {
 	global $CONFIG;
-	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","IMPORTURLS_CHANGE")) {
+	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","IMPORTURL_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {

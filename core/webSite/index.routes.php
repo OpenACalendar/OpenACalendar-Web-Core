@@ -40,15 +40,25 @@ $app->match('/event/calendar/{year}/{month}/', "site\controllers\EventListContro
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
 
-$app->match('/event/creatingThisNewEvent.json',"site\controllers\EventNewController::creatingThisNewEvent")
-		->before($permissionEventsChangeRequired);
-
 $app->match('/event/new', "site\controllers\EventNewController::newEvent")
 		->before($permissionEventsChangeRequiredOrForAnyVerifiedUser)
-		->before($canChangeSite); 
-$app->match('/event/new/go', "site\controllers\EventNewController::newEventGo")
+		->before($canChangeSite);
+$app->match('/event/new/', "site\controllers\EventNewController::newEvent")
+		->before($permissionEventsChangeRequiredOrForAnyVerifiedUser)
+		->before($canChangeSite);
+$app->match('/event/new/{draftslug}/{stepid}', "site\controllers\EventNewController::newEventDraft")
+		->assert('draftid', '\d+')
 		->before($permissionEventsChangeRequired)
-		->before($canChangeSite); 
+		->before($canChangeSite);
+$app->match('/event/new/{draftslug}/{stepid}/creating.json', "site\controllers\EventNewController::newEventDraftJSON")
+	->assert('draftid', '\d+')
+	->before($permissionEventsChangeRequired)
+	->before($canChangeSite);
+$app->match('/event/new/{draftslug}/isdupeof/{eventslug}', "site\controllers\EventNewController::newEventIsDupeOf")
+		->assert('draftid', '\d+')
+		->assert('eventslug', '\d+')
+		->before($permissionEventsChangeRequired)
+		->before($canChangeSite);
 
 $app->match('/event/{slug}', "site\controllers\EventController::show")
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
@@ -228,17 +238,7 @@ $app->match('/group/{slug}/edit/details', "site\controllers\GroupController::edi
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionGroupsChangeRequired)
 		->before($featureGroupRequired)
-		->before($canChangeSite); 
-$app->match('/group/{slug}/newevent', "site\controllers\GroupController::newEvent")
-		->assert('slug', FRIENDLY_SLUG_REGEX)
-		->before($permissionEventsChangeRequired)
-		->before($featureGroupRequired)
-		->before($canChangeSite); 
-$app->match('/group/{slug}/newevent/go', "site\controllers\GroupController::newEventGo")
-		->assert('slug', FRIENDLY_SLUG_REGEX)
-		->before($permissionEventsChangeRequired)
-		->before($featureGroupRequired)
-		->before($canChangeSite); 
+		->before($canChangeSite);
 $app->match('/group/{slug}/watch', "site\controllers\GroupController::watch")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appUserRequired)
