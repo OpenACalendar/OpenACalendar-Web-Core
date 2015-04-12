@@ -243,7 +243,7 @@
 			{%  endif %}
 
 
-			{% if currentUser is not null and not event.isInPast %}
+			{% if currentUser is not null and not event.isInPast and not event.isDeleted and not event.isCancelled %}
 				<form method="post" action="/event/{{ event.slug }}/myAttendance.json" class="UserAttendingOptions">
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					You
