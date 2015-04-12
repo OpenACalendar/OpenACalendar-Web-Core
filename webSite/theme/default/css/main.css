@@ -149,6 +149,20 @@ table {
     -moz-background-size: 32px 32px;
   }
 }
+.iconArrowRightSmall {
+  background-image: url('/theme/default/img/arrowright16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconArrowRightSmall {
+    background-image: url('/theme/default/img/arrowright32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconArrowRightLarge {
   background-image: url('/theme/default/img/arrowright32.png');
   width: 32px;
@@ -2930,6 +2944,10 @@ form .afterBigSubmitActionWrapper {
 .wizardProgressWrapper ul.steps li.step a:active {
   text-decoration: underline;
   color: black;
+}
+.wizardProgressWrapper ul.steps li.arrow {
+  display: inline;
+  padding: 3px;
 }
 #PopupMask {
   position: fixed;
