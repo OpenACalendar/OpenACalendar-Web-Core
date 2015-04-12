@@ -113,12 +113,21 @@
 			{% else %}
 				<li class="nodata">
 					{%  set eventsDefaultCount = area|futureeventscount %}
-					{%  if not eventListFilterParams.isDefaultFilters and eventsDefaultCount == 1 %}
-						No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the one future event</a> instead?
-					{%  elseif not eventListFilterParams.isDefaultFilters and eventsDefaultCount > 1 %}
-						No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
-					{%  else %}
-						No events found.
+						<p>
+						{%  if not eventListFilterParams.isDefaultFilters and eventsDefaultCount == 1 %}
+							No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the one future event</a> instead?
+						{%  elseif not eventListFilterParams.isDefaultFilters and eventsDefaultCount > 1 %}
+							No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
+						{%  else %}
+							No events found.
+						{%  endif %}
+					</p>
+
+					{%  set eventsPastCount = area|pasteventscount %}
+					{%  if eventsPastCount == 1 %}
+						<p>Sorry, you've already missed 1 event here.</p>
+					{% elseif eventsPastCount > 1 %}
+						<p>Sorry, you've already missed {{ eventsPastCount  }} events here.</p>
 					{%  endif %}
 				</li>
 			{% endfor %}

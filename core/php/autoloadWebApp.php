@@ -73,7 +73,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addExtension(new twig\extensions\TruncateExtension($app));
     $twig->addExtension(new twig\extensions\LinkInfoExtension($app));
     $twig->addExtension(new twig\extensions\TimeSinceInWordsExtension($app));
-    $twig->addExtension(new twig\extensions\FutureEventsExtension($app));
+    $twig->addExtension(new twig\extensions\EventsCountExtension($app));
 	$twig->addGlobal('config', $CONFIG);
 	$twig->addGlobal('extensions', $app['extensions']);
 	$twig->addGlobal('COPYRIGHT_YEARS', COPYRIGHT_YEARS);
