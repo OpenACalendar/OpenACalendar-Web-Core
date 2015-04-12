@@ -152,6 +152,19 @@ $app->match('/sysadmin/site/{siteid}/incominglink/', "sysadmin\controllers\Incom
 
 
 
+$app->match('/sysadmin/site/{siteid}/neweventdraft', "sysadmin\controllers\NewEventDraftListController::listForSite")
+		->assert('siteid', '\d+');
+$app->match('/sysadmin/site/{siteid}/neweventdraft/', "sysadmin\controllers\NewEventDraftListController::listForSite")
+		->assert('siteid', '\d+');
+
+
+$app->match('/sysadmin/site/{siteid}/neweventdraft/{slug}', "sysadmin\controllers\NewEventDraftController::show")
+		->assert('siteid', '\d+');
+$app->match('/sysadmin/site/{siteid}/neweventdraft/{slug}', "sysadmin\controllers\NewEventDraftController::show")
+		->assert('siteid', '\d+');
+
+
+
 
 
 $app->match('/sysadmin/user', "sysadmin\controllers\UserListController::index");

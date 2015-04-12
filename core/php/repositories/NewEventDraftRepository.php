@@ -78,6 +78,19 @@ class NewEventDraftRepository
 		}
 	}
 
+
+	public function loadBySlugForSite($slug, SiteModel $siteModel) {
+		global $DB;
+		$stat = $DB->prepare("SELECT new_event_draft_information.*  FROM new_event_draft_information ".
+			" WHERE new_event_draft_information.slug =:slug AND new_event_draft_information.site_id = :site_id ");
+		$stat->execute(array( 'slug'=>$slug, 'site_id'=>$siteModel->getId()));
+		if ($stat->rowCount() > 0) {
+			$event = new NewEventDraftModel();
+			$event->setFromDataBaseRow($stat->fetch());
+			return $event;
+		}
+	}
+
 	public function saveProgress(NewEventDraftModel $newEventDraftModel) {
 		global $DB;
 
