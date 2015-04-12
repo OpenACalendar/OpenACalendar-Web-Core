@@ -125,7 +125,7 @@ function loadSearchResults() {
 					}
 					if (resultsBoundsValid) map.fitBounds(resultsBounds);
 				} else {
-					html += '<li class="nodata">Sorry, nothing found.</li>'
+					html += '<li class="nodata">Sorry, we don\'t know about that venue yet.</li>'
 				}
 				$('#VenueNewWrapper').show();
 			} else {
