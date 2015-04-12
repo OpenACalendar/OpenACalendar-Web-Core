@@ -95,6 +95,12 @@
 	<div class="mainShowEvent" itemscope itemtype="http://schema.org/Event">
 		<meta itemprop="name" content="{{ event.summaryDisplay|e('html_attr') }}" />
 
+		{% if event.isdeleted %}
+			<p class="descriptionDeleted">This event has been deleted!</p>
+		{% elseif event.isCancelled %}
+			<p class="descriptionCancelled">This event has been cancelled!</p>
+		{%  endif %}
+
 		<div class="innerPageLeft">
 
 

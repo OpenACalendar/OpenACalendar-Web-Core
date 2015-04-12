@@ -2487,6 +2487,16 @@ div.mainShowEvent div.title a:focus {
   color: black;
   text-decoration: underline;
 }
+ul.mainListEvents li.event .descriptionDeleted,
+ul.mainListEvents li.event .descriptionCancelled,
+div.mainShowEvent .descriptionDeleted,
+div.mainShowEvent .descriptionCancelled {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 24pt;
+  text-align: center;
+  padding: 10px 0;
+}
 ul.mainListEvents li.event p.description,
 div.mainShowEvent p.description {
   padding: 0px 0px 0px 0px;
