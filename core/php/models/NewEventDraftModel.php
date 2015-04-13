@@ -28,6 +28,9 @@ class NewEventDraftModel {
 	protected $not_duplicate_events = array();
 
 
+	protected $created_at;
+	protected $updated_at;
+
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
 		$this->site_id = $data['site_id'];
@@ -37,6 +40,9 @@ class NewEventDraftModel {
 		$this->details = (array)json_decode($data['details']);
 		$this->user_account_id = $data['user_account_id'];
 		$this->not_duplicate_events = explode(",", $data['not_duplicate_events']);
+		$utc = new \DateTimeZone("UTC");
+		$this->created_at = new \DateTime($data['created_at'], $utc);
+		$this->updated_at = new \DateTime($data['updated_at'], $utc);
 	}
 
 
@@ -227,6 +233,22 @@ class NewEventDraftModel {
 			}
 		}
 		return $new;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCreatedAt()
+	{
+		return $this->created_at;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getUpdatedAt()
+	{
+		return $this->updated_at;
 	}
 
 

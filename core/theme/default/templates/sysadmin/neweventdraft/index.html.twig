@@ -57,6 +57,14 @@
 			<td><a href="/sysadmin/site/{{  site.id }}/event/{{  eventDupe.slug }}">{{  eventDupe.summaryDisplay }}</a></td>
 		</tr>
 	{%  endif %}
+	<tr>
+		<th>Created</th>
+		<td>{{ draft.createdAt |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}</td>
+	</tr>
+	<tr>
+		<th>Updated</th>
+		<td>{{ draft.updatedAt |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}</td>
+	</tr>
 </table>
 
 {%  endblock %}
