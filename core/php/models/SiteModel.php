@@ -86,7 +86,7 @@ class SiteModel {
 		$this->is_feature_tag = (boolean)$data['is_feature_tag'];
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);
-		$this->cached_event_custom_field_definitions = $data['cached_event_custom_field_definitions'];
+		$this->cached_event_custom_field_definitions = isset($data['cached_event_custom_field_definitions']) ? $data['cached_event_custom_field_definitions'] : json_encode(array());
 	}
 	
 	public function getId() {
