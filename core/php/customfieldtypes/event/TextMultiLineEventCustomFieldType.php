@@ -23,6 +23,7 @@ class TextMultiLineEventCustomFieldType implements InterfaceEventCustomFieldType
 		return array(
 			'label'=>$eventCustomFieldDefinitionModel->getLabel(),
 			'mapped'=>false,
+			'required'=>false,
 		);
 	}
 
