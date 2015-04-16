@@ -734,6 +734,10 @@ form.styled input[type="url"],
 .likeFormStyled input[type="url"] {
   width: 80%;
 }
+form.styled label .required,
+.likeFormStyled label .required {
+  color: #004300;
+}
 form.styled textarea,
 .likeFormStyled textarea {
   width: 80%;
