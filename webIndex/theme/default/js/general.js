@@ -47,6 +47,10 @@ $(document).ready(function() {
 		loadNotifications();
 		setInterval(loadNotifications,300000);
 	}
+	checkScreenSizeAndUpdate();
+	$(window).resize(function() {
+		checkScreenSizeAndUpdate();
+	});
 });
 
 //////////////////////////////////////////////////////////////////////////////// General Popup
@@ -123,3 +127,32 @@ function escapeHTML(str) {
 	return div.innerHTML;
 }
 
+
+//////////////////////////////////////////////////////////////////////////////// Mobile
+
+var isSmallScreenSize = false;
+
+function checkScreenSizeAndUpdate() {
+	var screenWidth = $('body').innerWidth();
+	if (screenWidth < 500 && !isSmallScreenSize) {
+		// Time to add options!
+		var container = $('#innerPageActions');
+		if (container.length == 1) {
+			container.before('<div id="innerPageActionsShow" onclick="innerPageActionsShow(); return false;"><div class="iconBarsSmall"></div> Show Options</div>');
+			container.hide();
+			container.prepend('<li class="hide" onclick="innerPageActionsHide(); return false;"><div class="iconBarsSmall"></div> Hide Options</li>');
+			isSmallScreenSize = true;
+		}
+	}
+}
+
+function innerPageActionsShow() {
+	$('#innerPageActions').show();
+	$('#innerPageActionsShow').hide();
+}
+
+function innerPageActionsHide() {
+	$('#innerPageActions').hide();
+	$('#innerPageActions ul.submenu').hide();
+	$('#innerPageActionsShow').show();
+}

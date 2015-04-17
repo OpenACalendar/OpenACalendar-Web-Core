@@ -177,6 +177,20 @@ table {
     -moz-background-size: 32px 32px;
   }
 }
+.iconBarsSmall {
+  background-image: url('/theme/default/img/bars16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconBarsSmall {
+    background-image: url('/theme/default/img/bars32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconBellOSmall {
   background-image: url('/theme/default/img/bello16.png');
   width: 16px;

@@ -527,10 +527,23 @@ div.filterListEventWrapper {
 
 #innerPageWrapper {
 	clear: both;
+	#innerPageActionsShow {
+		padding: 0px 5px;
+		display: block;
+		text-align: right;
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover, a:focus {
+			color: black;
+			text-decoration: underline;
+		}
+	}
 	#innerPageActions {
 		padding: 10px 0 6px 0;
 		border-bottom: 1px solid #666;
-		li.action, li.actionWithSubMenu {
+		li.action, li.actionWithSubMenu, li.hide {
 			padding: 0px 5px;
 			display: inline;
 			float: right;
@@ -547,6 +560,9 @@ div.filterListEventWrapper {
 				float: none;
 				margin: 15px 0;
 			}
+		}
+		li.hide {
+			text-align: right;
 		}
 		li.actionWithSubMenu ul.submenu {
 			padding:0;

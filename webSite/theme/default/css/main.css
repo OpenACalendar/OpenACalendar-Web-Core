@@ -177,6 +177,20 @@ table {
     -moz-background-size: 32px 32px;
   }
 }
+.iconBarsSmall {
+  background-image: url('/theme/default/img/bars16.png');
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .iconBarsSmall {
+    background-image: url('/theme/default/img/bars32.png');
+    background-size: 16px 16px;
+    -webkit-background-size: 16px 16px;
+    -moz-background-size: 16px 16px;
+  }
+}
 .iconBellOSmall {
   background-image: url('/theme/default/img/bello16.png');
   width: 16px;
@@ -2580,35 +2594,57 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
 #innerPageWrapper {
   clear: both;
 }
+#innerPageWrapper #innerPageActionsShow {
+  padding: 0px 5px;
+  display: block;
+  text-align: right;
+}
+#innerPageWrapper #innerPageActionsShow a {
+  color: #333;
+  text-decoration: none;
+}
+#innerPageWrapper #innerPageActionsShow a:hover,
+#innerPageWrapper #innerPageActionsShow a:focus {
+  color: black;
+  text-decoration: underline;
+}
 #innerPageWrapper #innerPageActions {
   padding: 10px 0 6px 0;
   border-bottom: 1px solid #666;
 }
 #innerPageWrapper #innerPageActions li.action,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu {
+#innerPageWrapper #innerPageActions li.actionWithSubMenu,
+#innerPageWrapper #innerPageActions li.hide {
   padding: 0px 5px;
   display: inline;
   float: right;
 }
 #innerPageWrapper #innerPageActions li.action a,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu a {
+#innerPageWrapper #innerPageActions li.actionWithSubMenu a,
+#innerPageWrapper #innerPageActions li.hide a {
   color: #333;
   text-decoration: none;
 }
 #innerPageWrapper #innerPageActions li.action a:hover,
 #innerPageWrapper #innerPageActions li.action a:focus,
 #innerPageWrapper #innerPageActions li.actionWithSubMenu a:hover,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu a:focus {
+#innerPageWrapper #innerPageActions li.actionWithSubMenu a:focus,
+#innerPageWrapper #innerPageActions li.hide a:hover,
+#innerPageWrapper #innerPageActions li.hide a:focus {
   color: black;
   text-decoration: underline;
 }
 @media screen and (max-width: 500px) {
   #innerPageWrapper #innerPageActions li.action,
-  #innerPageWrapper #innerPageActions li.actionWithSubMenu {
+  #innerPageWrapper #innerPageActions li.actionWithSubMenu,
+  #innerPageWrapper #innerPageActions li.hide {
     display: block;
     float: none;
     margin: 15px 0;
   }
+}
+#innerPageWrapper #innerPageActions li.hide {
+  text-align: right;
 }
 #innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu {
   padding: 0;

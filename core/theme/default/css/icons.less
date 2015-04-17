@@ -77,6 +77,20 @@
 	}
 }
 
+.iconBarsSmall {
+	background-image: url('/theme/default/img/bars16.png');
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2) {
+	.iconBarsSmall {
+		background-image: url('/theme/default/img/bars32.png');
+		.icon-background-size-16();
+	}
+}
+
 .iconBellOSmall {
 	background-image: url('/theme/default/img/bello16.png');
 	width: 16px;
