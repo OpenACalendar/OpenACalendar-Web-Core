@@ -62,7 +62,8 @@ $app->match('/you/aftergetuserapi', "index\controllers\UserController::afterGetU
 $app->match('/me', "index\controllers\CurrentUserController::index")
 		->before($appUserRequired);
 $app->match('/me/', "index\controllers\CurrentUserController::index")
-		->before($appUserRequired);  
+		->before($appUserRequired);
+// Do NOT require a user here. If you look in the controller you'll notice we do a redirect so we need this to be open to all.
 $app->match('/me/logout', "index\controllers\CurrentUserController::logout"); 
 $app->match('/me/verifyneeded', "index\controllers\CurrentUserController::verifyNeeded")
 		->before($appUnverifiedUserRequired);

@@ -36,11 +36,15 @@ class CurrentUserController {
 	
 	
 	function logout(Application $app) {
-		userLogOut();
-		
-		return $app['twig']->render('index/user/logout.html.twig', array(
-				'currentUser'=>null,
-			));
+		if ($app['currentUser']) {
+			userLogOut();
+			// We do this redirect so the page view can be set up again from fresh with the correct enviroment
+			// Maybe we could store in the user session which user it was here ...
+			return $app->redirect('/me/logout');
+		} else {
+			// ... so here we can get user out of the session and pass to template so goodbye message can be personalised?
+			return $app['twig']->render('index/user/logout.html.twig', array( ));
+		}
 	}
 	
 	function verifyNeeded(Application  $app) {
