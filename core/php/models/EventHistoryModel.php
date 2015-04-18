@@ -205,7 +205,8 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 			$this->is_virtual_changed == 0 ||
 			$this->is_physical_changed == 0 ||
 			$this->area_id_changed == 0 ||
-			$this->is_duplicate_of_id_changed == 0;
+			$this->is_duplicate_of_id_changed == 0 ||
+			$this->custom_fields_changed == 0;
 	}
 	
 	public function setChangedFlagsFromNothing() {
@@ -282,15 +283,19 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 		if ($this->custom_fields_changed == 0  && $last->custom_fields_changed != -2) {
 			$this->custom_fields_changed = array();
 			foreach(array_keys($this->custom_fields) as $k) {
-				if (isset($this->custom_fields[$k]) && is_array($last->custom_fields) && isset($last->custom_fields[$k])) {
+				if (array_key_exists($k, $this->custom_fields) && is_array($last->custom_fields) && array_key_exists($k, $last->custom_fields)) {
 					$this->custom_fields_changed[$k] = ($this->custom_fields[$k] != $last->custom_fields[$k]) ? 1 : -1;
+				} else if (array_key_exists($k, $this->custom_fields)) {
+					$this->custom_fields_changed[$k] = $this->custom_fields[$k] ? 1 : -1;
 				} else {
 					$this->custom_fields_changed[$k] = 1;
 				}
 			}
 			foreach(array_keys($last->custom_fields) as $k) {
-				if (isset($this->custom_fields[$k]) && is_array($last->custom_fields) && isset($last->custom_fields[$k])) {
+				if (array_key_exists($k, $this->custom_fields) && is_array($last->custom_fields) && array_key_exists($k, $last->custom_fields)) {
 					$this->custom_fields_changed[$k] = ($this->custom_fields[$k] != $last->custom_fields[$k]) ? 1 : -1;
+				} else if (array_key_exists($k, $this->custom_fields)) {
+					$this->custom_fields_changed[$k] = $this->custom_fields[$k] ? 1 : -1;
 				} else {
 					$this->custom_fields_changed[$k] = 1;
 				}
