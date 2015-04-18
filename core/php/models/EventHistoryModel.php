@@ -98,6 +98,8 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 
 		if (is_null($data['custom_fields_changed'])) {
 			$this->custom_fields_changed = 0;
+		} else if ($data['custom_fields_changed'] == "[]") {
+			$this->custom_fields_changed = -1;
 		} else if (is_int($data['custom_fields_changed']) && $data['custom_fields_changed'] == 0) {
 			$this->custom_fields_changed = 0;
 		} else if ((is_int($data['custom_fields_changed']) && $data['custom_fields_changed'] == -2) || $data['custom_fields_changed'] == "-2") {
