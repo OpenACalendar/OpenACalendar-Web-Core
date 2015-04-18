@@ -7,6 +7,12 @@
  #}
 {% extends 'site/page.html.twig' %}
 
+{% block htmlHeader %}
+	{%  if country %}<meta name="openacalendar:country:code" content="{{  country.twoCharCode }}" />{% endif %}
+	{%  if area %}<meta name="openacalendar:area:slug" content="{{  area.slugForURL}}" />{%  endif %}
+	{%  if venue %}<meta name="openacalendar:venue:slug" content="{{  venue.slugForURL}}" />{%  endif %}
+	<meta name="openacalendar:event:slug" content="{{  event.slugForURL}}" />
+{%  endblock %}
 
 {% block breadcrumbs %}
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}

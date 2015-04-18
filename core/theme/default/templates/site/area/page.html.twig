@@ -8,6 +8,11 @@
 {% extends 'site/page.html.twig' %}
 
 
+{% block htmlHeader %}
+	{%  if country %}<meta name="openacalendar:country:code" content="{{  country.twoCharCode }}" />{% endif %}
+	<meta name="openacalendar:area:slug" content="{{  area.slugForURL}}" />
+{%  endblock %}
+
 {% block breadcrumbs %}
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}

@@ -14,6 +14,7 @@
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/" />
 	{% if not currentSite.isWebRobotsAllowed or area.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
+	{{ parent() }}
 {% endblock %}
 
 {% block actions %}

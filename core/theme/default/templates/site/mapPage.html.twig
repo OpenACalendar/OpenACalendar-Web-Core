@@ -19,7 +19,7 @@
 		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/map" />
 		{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="webmention" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/receivewebmention.php" />
+		{%  include 'site/ourMetaTags.html.twig' %}
 	</head>
 	<body>
 		<div id="Map">

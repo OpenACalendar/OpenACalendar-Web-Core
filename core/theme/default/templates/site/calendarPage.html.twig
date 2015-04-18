@@ -75,7 +75,12 @@
 			{% endif %}				
 		{% endif %}
 		{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
-		<link rel="webmention" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/receivewebmention.php" />
+		{%  include 'site/ourMetaTags.html.twig' %}
+		{% if group is defined and group %}<meta name="openacalendar:group:slug" content="{{  group.slugForURL}}" />{%  endif %}
+		{% if country is defined and country %}<meta name="openacalendar:country:code" content="{{  country.twoCharCode }}" />{% endif %}
+		{% if area is defined and area %}<meta name="openacalendar:area:slug" content="{{  area.slugForURL}}" />{%  endif %}
+		{% if venue is defined and venue %}<meta name="openacalendar:venue:slug" content="{{  venue.slugForURL}}" />{%  endif %}
+		{% if venueVirtual is defined and venueVirtual %}<meta name="openacalendar:venuevirtual" content="true" />{%  endif %}
 	</head>
 	<body>
 		<div id="header">

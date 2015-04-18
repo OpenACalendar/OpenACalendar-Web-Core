@@ -16,6 +16,7 @@
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slug }}/" />
 	{% if not currentSite.isWebRobotsAllowed or curatedlist.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{{ parent() }}
 {% endblock %}
 
 

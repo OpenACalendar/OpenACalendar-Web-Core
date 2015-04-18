@@ -16,6 +16,7 @@
 	{% if not currentSite.isWebRobotsAllowed or event.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
 	<link rel="stylesheet" type="text/css" href="/theme/default/css/curatedlists.css?v={{ config.assetsVersion }}">
+	{{ parent() }}
 {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
