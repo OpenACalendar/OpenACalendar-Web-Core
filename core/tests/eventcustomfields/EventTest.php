@@ -334,17 +334,21 @@ class EventTest extends BaseAppWithDBTest
 
 
 		$historyCreate = $histories[0];
+		// Check isAnyChangeFlagsUnknown() to test https://github.com/OpenACalendar/OpenACalendar-Web-Core/commit/b2beb50c2c95175db74abe5fef0903ce202f91fa
+		$this->assertFalse($historyCreate->isAnyChangeFlagsUnknown());
 		$this->assertTrue($historyCreate->getCustomFieldChangedKnown($customFieldDefinition1));
 		$this->assertFalse($historyCreate->getCustomFieldChanged($customFieldDefinition1));
 		$this->assertFalse($historyCreate->getCustomFieldChanged($customFieldDefinition2));
 
 		$historyEditField1 = $histories[1];
+		$this->assertFalse($historyEditField1->isAnyChangeFlagsUnknown());
 		$this->assertTrue($historyEditField1->getCustomFieldChangedKnown($customFieldDefinition1));
 		$this->assertTrue($historyEditField1->getCustomFieldChanged($customFieldDefinition1));
 		$this->assertFalse($historyEditField1->getCustomFieldChanged($customFieldDefinition2));
 		$this->assertFalse($historyEditField1->getIsDeletedChanged());
 
 		$historyEditField2 = $histories[2];
+		$this->assertFalse($historyEditField2->isAnyChangeFlagsUnknown());
 		$this->assertTrue($historyEditField2->getCustomFieldChangedKnown($customFieldDefinition1));
 		$this->assertFalse($historyEditField2->getCustomFieldChanged($customFieldDefinition1));
 		$this->assertTrue($historyEditField2->getCustomFieldChanged($customFieldDefinition2));
@@ -352,6 +356,7 @@ class EventTest extends BaseAppWithDBTest
 
 
 		$historyDelete = $histories[3];
+		$this->assertFalse($historyDelete->isAnyChangeFlagsUnknown());
 		$this->assertFalse($historyDelete->getCustomFieldChangedKnown($customFieldDefinition1));
 		$this->assertFalse($historyDelete->getCustomFieldChanged($customFieldDefinition1));
 		$this->assertFalse($historyDelete->getCustomFieldChanged($customFieldDefinition2));
