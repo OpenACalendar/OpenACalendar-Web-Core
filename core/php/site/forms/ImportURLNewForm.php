@@ -44,6 +44,7 @@ class ImportURLNewForm extends AbstractType{
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
 		));
 
+		/**
 		$builder->add("is_manual_events_creation",
 			"checkbox",
 			array(
@@ -51,6 +52,7 @@ class ImportURLNewForm extends AbstractType{
 				'label'=>'Do you want to create events manually from this import?',
 			)
 		);
+		 * **/
 			
 		$crb = new CountryRepositoryBuilder();
 		$crb->setSiteIn($this->site);

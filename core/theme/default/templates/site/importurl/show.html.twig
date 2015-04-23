@@ -36,11 +36,11 @@
 
 		<p>Imported from: {{ importurl.url }}</p>
 
-		{%  if importurl.isManualEventsCreation %}
+		{# %  if importurl.isManualEventsCreation %}
 			<p>Do you want to create events manually from this import: Yes</p>
 		{%  else %}
 			<p>Do you want to create events manually from this import: No</p>
-		{%  endif %}
+		{%  endif % #}
 
 		{% if country %}
 			<p>
