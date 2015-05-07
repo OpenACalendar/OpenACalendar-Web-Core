@@ -515,10 +515,7 @@ class HistoryRepositoryBuilder {
 		
 		usort($results, $usort);
 		
-		array_slice($results, 0, $this->historyRepositoryBuilderConfig->getLimit());
-		
-		return $results;
-		
+		return array_slice($results, 0, $this->historyRepositoryBuilderConfig->getLimit());
 		
 	}
 		
