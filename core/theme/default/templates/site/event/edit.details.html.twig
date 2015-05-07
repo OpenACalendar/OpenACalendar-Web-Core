@@ -10,6 +10,11 @@
 
 {% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
 
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{{ parent() }}
+{% endblock %}
+
 {% block innerContent %}
 
 	{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}

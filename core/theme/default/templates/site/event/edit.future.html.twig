@@ -10,6 +10,11 @@
 
 {% block pageTitle %}Edit {{ event.summaryDisplay }} - {% endblock %} 
 
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{{ parent() }}
+{% endblock %}
+
 {% block innerContent %}
 
 	<form action="#" method="post" class="styled">

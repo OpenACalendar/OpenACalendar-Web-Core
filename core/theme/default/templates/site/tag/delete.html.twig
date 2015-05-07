@@ -12,6 +12,8 @@
 {% block pageTitle %}Delete {{ tag.title }} - {% endblock %} 
 
 {% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{{ parent() }}
 {% endblock %}
 
 {% block actions %}

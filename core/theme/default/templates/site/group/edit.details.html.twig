@@ -9,6 +9,11 @@
 
 {% block pageTitle %}Edit {{ group.title }} - {% endblock %} 
 
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{{ parent() }}
+{% endblock %}
+
 
 {% block innerContent %}
 
