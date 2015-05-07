@@ -26,6 +26,8 @@ foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
 		if ($verbosePrint) {
 			print "    Task ".$task->getTaskId()."\n";
 		}
+		// If we get an exception from runAutomaticallyNowIfShould() we want to crash out so no more tasks are run.
+		// The Exception may have left the DB or other resources in a bad state.
 		$task->runAutomaticallyNowIfShould($verbosePrint);
 	}
 }

@@ -105,6 +105,11 @@ abstract class BaseTask {
 				'exception_data'=>$exceptionData ? json_encode($exceptionData) : null,
 			));
 
+			// The Exception may have left the DB or other resources in a bad state. Throw exception upwards so calling script knows.
+			if ($exceptionData) {
+				throw new \Exception("Exception Running Task!");
+			}
+
 		}
 
 	}
