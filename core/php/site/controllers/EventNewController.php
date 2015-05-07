@@ -115,7 +115,15 @@ class EventNewController {
 
 		$steps = $this->getSteps($request, $app, $newEventDraft);
 
-		return $app->redirect('/event/new/'.$newEventDraft->getSlug()."/".$steps[0]->getStepID());
+		$firstStepIdx = 0;
+
+		// The first step is WHO but if group is already set we already know, and we want to jump straight to the next step!
+		$steps[0]->processIsAllInformationGathered();
+		if ($steps[0]->getIsAllInformationGathered()) {
+			$firstStepIdx = 1;
+		}
+
+		return $app->redirect('/event/new/'.$newEventDraft->getSlug()."/".$steps[$firstStepIdx]->getStepID());
 
 	}
 
