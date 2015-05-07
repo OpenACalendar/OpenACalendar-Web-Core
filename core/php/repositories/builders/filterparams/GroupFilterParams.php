@@ -20,6 +20,7 @@ class GroupFilterParams {
 
 	function __construct() {
 		$this->groupRepositoryBuilder = new GroupRepositoryBuilder();
+		$this->groupRepositoryBuilder->setLimit(100);
 	}
 
 	

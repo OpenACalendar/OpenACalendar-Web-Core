@@ -20,6 +20,7 @@ class VenueFilterParams {
 
 	function __construct() {
 		$this->venueRepositoryBuilder = new VenueRepositoryBuilder();
+		$this->venueRepositoryBuilder->setLimit(100);
 	}
 
 	

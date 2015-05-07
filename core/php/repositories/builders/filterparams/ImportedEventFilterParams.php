@@ -16,7 +16,12 @@ use repositories\builders\ImportedEventRepositoryBuilder;
 class ImportedEventFilterParams {
 
 	function __construct(EventRepositoryBuilder $erb = null) {
-		$this->importedEventRepositoryBuilder = $erb ? $erb : new ImportedEventRepositoryBuilder();
+		if ($erb) {
+			$this->eventRepositoryBuilder = $erb;
+		} else {
+			$this->eventRepositoryBuilder = new EventRepositoryBuilder();
+			$this->eventRepositoryBuilder->setLimit(100);
+		}
 	}
 
 	

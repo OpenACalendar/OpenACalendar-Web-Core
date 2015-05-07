@@ -32,8 +32,6 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 	public function __construct(Application $application, SiteModel $site = null, $timeZone  = null) {
 		parent::__construct($site, $timeZone);
 		$this->app = $application;
-		$this->historyRepositoryBuilder = new HistoryRepositoryBuilder();
-		$this->historyRepositoryBuilder->setSite($site);
 	}
 
 	

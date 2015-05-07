@@ -20,7 +20,12 @@ use repositories\builders\EventRepositoryBuilder;
 class EventFilterParams {
 
 	function __construct(EventRepositoryBuilder $erb = null) {
-		$this->eventRepositoryBuilder = $erb ? $erb : new EventRepositoryBuilder();
+		if ($erb) {
+			$this->eventRepositoryBuilder = $erb;
+		} else {
+			$this->eventRepositoryBuilder = new EventRepositoryBuilder();
+			$this->eventRepositoryBuilder->setLimit(100);
+		}
 	}
 
 	
