@@ -128,6 +128,7 @@ class ImportedEventsToEvents {
 			// if no country set on importer, we just pick first one at random :-/
 			$crb = new \repositories\builders\CountryRepositoryBuilder();
 			$crb->setSiteIn($this->site);
+			$crb->setLimit(1);
 			$countries = $crb->fetchAll();
 			if (count($countries) > 0) {
 				$country = $countries[0];
