@@ -4,6 +4,7 @@
 namespace dbaccess;
 
 use models\UserAccountModel;
+use models\UserGroupEditMetaDataModel;
 use models\UserGroupModel;
 use sysadmin\controllers\API2Application;
 
@@ -12,7 +13,7 @@ use sysadmin\controllers\API2Application;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
@@ -34,7 +35,7 @@ class UserGroupDBAccess {
 	protected $possibleFields = array('title','description','is_deleted','is_in_index','is_includes_anonymous','is_includes_users','is_includes_verified_users');
 
 
-	public function update(UserGroupModel $userGroup, $fields, UserAccountModel $user = null ) {
+	public function update(UserGroupModel $userGroup, $fields, UserGroupEditMetaDataModel $userGroupEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data
@@ -64,7 +65,7 @@ class UserGroupDBAccess {
 		$fieldsSQLParams2 = array(':user_group_id',':user_account_id',':created_at');
 		$fieldsParams2 = array(
 			'user_group_id'=>$userGroup->getId(),
-			'user_account_id'=>($user ? $user->getId() : null),
+			'user_account_id'=>($userGroupEditMetaDataModel->getUserAccount() ? $userGroupEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 		);
 		foreach($this->possibleFields as $field) {

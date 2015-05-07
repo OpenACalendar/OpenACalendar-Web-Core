@@ -6,6 +6,7 @@ namespace repositories;
 use dbaccess\UserGroupDBAccess;
 use models\SiteModel;
 use models\UserAccountModel;
+use models\UserGroupEditMetaDataModel;
 use models\UserGroupModel;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
@@ -15,7 +16,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserGroupRepository {
@@ -243,17 +244,27 @@ class UserGroupRepository {
 
 	}
 
-	public function editIsIncludesAnonymous(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel = null) {
-		$this->userGroupDBAccess->update($userGroupModel, array('is_includes_anonymous'), $userAccountModel);
-	}
+    public function editIsIncludesAnonymous(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel = null) {
+        $meta = new UserGroupEditMetaDataModel();
+        $meta->setUserAccount($userAccountModel);
+        $this->userGroupDBAccess->update($userGroupModel, array('is_includes_anonymous'), $meta);
+    }
 
-	public function editIsIncludesUser(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel = null) {
-		$this->userGroupDBAccess->update($userGroupModel, array('is_includes_users'), $userAccountModel);
-	}
+    public function editIsIncludesUser(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel = null) {
+        $meta = new UserGroupEditMetaDataModel();
+        $meta->setUserAccount($userAccountModel);
+        $this->userGroupDBAccess->update($userGroupModel, array('is_includes_users'), $meta);
+    }
 
-	public function editIsIncludesVerifiedUser(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel = null) {
-		$this->userGroupDBAccess->update($userGroupModel, array('is_includes_verified_users'), $userAccountModel);
-	}
+    public function editIsIncludesVerifiedUser(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel = null) {
+        $meta = new UserGroupEditMetaDataModel();
+        $meta->setUserAccount($userAccountModel);
+        $this->userGroupDBAccess->update($userGroupModel, array('is_includes_verified_users'), $meta);
+    }
+
+    public function editTitleWithMetaData(UserGroupModel $userGroupModel, UserGroupEditMetaDataModel $userGroupEditMetaDataModel) {
+        $this->userGroupDBAccess->update($userGroupModel, array('title'), $userGroupEditMetaDataModel);
+    }
 
 	public function loadByIdInIndex($id) {
 		global $DB;

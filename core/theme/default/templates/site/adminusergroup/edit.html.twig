@@ -1,0 +1,30 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/adminusergroup/page.html.twig' %}
+
+
+{% block pageTitle %}User Group Admin - {% endblock %}
+
+
+{% block innerContent %}
+
+
+	<form action="#" method="post" class="styled">
+
+		{{ form_errors(form) }}
+
+		{{ form_row(form.title) }}
+		{{ form_rest(form) }}
+
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
+	</form>
+
+
+
+{% endblock %}

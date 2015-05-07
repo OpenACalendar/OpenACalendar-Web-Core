@@ -2,11 +2,13 @@
 
 namespace site\controllers;
 
+use models\UserGroupEditMetaDataModel;
 use repositories\builders\UserAccountRepositoryBuilder;
 use repositories\UserAccountRepository;
 use repositories\UserGroupRepository;
 use repositories\UserPermissionsRepository;
 use Silex\Application;
+use site\forms\UserGroupEditForm;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -15,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class AdminUserGroupController {
@@ -174,6 +176,35 @@ class AdminUserGroupController {
 	}
 
 
+    function edit($id, Request $request, Application $app)
+    {
+
+        if (!$this->build($id, $request, $app)) {
+            $app->abort(404, "User Group does not exist.");
+        }
+
+        $form = $app['form.factory']->create(new UserGroupEditForm($app), $this->parameters['usergroup']);
+
+        if ('POST' == $request->getMethod()) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+
+                $ugr = new UserGroupRepository();
+                $meta = new UserGroupEditMetaDataModel();
+                $meta->setUserAccount($app['currentUser']);
+                $ugr->editTitleWithMetaData($this->parameters['usergroup'], $meta);
+
+                return $app->redirect("/admin/usergroup/".$this->parameters['usergroup']->getId());
+
+            }
+        }
+
+        $this->parameters['form'] = $form->createView();
+        return $app['twig']->render('site/adminusergroup/edit.html.twig', $this->parameters);
+
+
+    }
 
 }
 
