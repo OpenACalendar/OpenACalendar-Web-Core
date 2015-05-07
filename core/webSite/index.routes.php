@@ -444,10 +444,29 @@ $app->match('/watch/', "site\controllers\IndexController::watch")
 
 
 $app->match('/tag', "site\controllers\TagListController::index"); 
-$app->match('/tag/', "site\controllers\TagListController::index"); 
+$app->match('/tag/', "site\controllers\TagListController::index");
 
-$app->match('/tag/{slug}', "site\controllers\TagController::show"); 
-$app->match('/tag/{slug}/', "site\controllers\TagController::show"); 
+$app->match('/tag/new', "site\controllers\TagNewController::newTag")
+    ->before($permissionTagsChangeRequired)
+    ->before($canChangeSite);
+
+$app->match('/tag/{slug}', "site\controllers\TagController::show")
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/tag/{slug}/', "site\controllers\TagController::show")
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
+
+$app->match('/tag/{slug}/edit', "site\controllers\TagController::edit")
+    ->before($permissionTagsChangeRequired)
+    ->before($canChangeSite)
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/tag/{slug}/delete', "site\controllers\TagController::delete")
+    ->before($permissionTagsChangeRequired)
+    ->before($canChangeSite)
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/tag/{slug}/undelete', "site\controllers\TagController::undelete")
+    ->before($permissionTagsChangeRequired)
+    ->before($canChangeSite)
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
 
 $app->match('/admin', "site\controllers\AdminController::index")
 		->before($permissionCalendarAdministratorRequired);
@@ -497,27 +516,6 @@ $app->match('/admin/areas/{countryslug}/new', "site\controllers\AdminAreasContro
 $app->match('/admin/areas/{countryslug}/action', "site\controllers\AdminAreasController::action")
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-
-$app->match('/admin/tag/', "site\controllers\AdminController::listTags")
-		->before($permissionCalendarAdministratorRequired);
-$app->match('/admin/tag/new', "site\controllers\AdminController::newTag")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-$app->match('/admin/tag/{slug}', "site\controllers\AdminTagController::show")
-		->before($permissionCalendarAdministratorRequired)
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/admin/tag/{slug}/edit', "site\controllers\AdminTagController::edit")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite)
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/admin/tag/{slug}/delete', "site\controllers\AdminTagController::delete")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite)
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/admin/tag/{slug}/undelete', "site\controllers\AdminTagController::undelete")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite)
-		->assert('slug', FRIENDLY_SLUG_REGEX); 
 
 $app->match('/admin/usergroup/', "site\controllers\AdminController::listUserGroups")
 		->before($permissionCalendarAdministratorRequired);

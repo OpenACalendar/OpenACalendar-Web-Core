@@ -2,7 +2,7 @@
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% extends 'site/page2col.html.twig' %}
@@ -39,10 +39,6 @@
 		
 		{% if currentSite.isFeaturePhysicalEvents %}
 			<li><a href="/admin/areas"><div class="iconGlobeLarge"></div> Areas in a country</a></li>
-		{% endif %}
-		
-		{% if currentSite.getIsFeatureTag %}
-			<li><a href="/admin/tag"><div class="iconTagsLarge"></div> Tags</a></li>
 		{% endif %}
 		
 		<li><a href="/admin/sendemail"><div class="iconEnvelopeOLarge"></div> Send Email with Events</a></li>

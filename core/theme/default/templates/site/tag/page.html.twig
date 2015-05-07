@@ -2,7 +2,7 @@
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% extends 'site/page.html.twig' %}
@@ -25,6 +25,15 @@
 	
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
+			{% if currentUserActions.has("org.openacalendar","tagEdit") %}
+				<li class="action"><a href="/tag/{{ tag.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a></li>
+			{% endif %}
+			{% if currentUserActions.has("org.openacalendar","tagDelete") %}
+				<li class="action"><a href="/tag/{{ tag.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
+			{% endif %}
+			{% if currentUserActions.has("org.openacalendar","tagUndelete") %}
+				<li class="action"><a href="/tag/{{ tag.slugForUrl }}/undelete"><div class="iconTrashOSmall"></div> undelete</a></li>
+			{% endif %}
 			{% block actions %}{% endblock %}
 			<li class="action">
 				<a href="/api1/tag/{{ tag.slug }}/events.ical" onclick="showExportPopup(); return false;">

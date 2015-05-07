@@ -3,7 +3,7 @@
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% extends 'site/page.html.twig' %}
@@ -25,6 +25,11 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
+			{% if currentUserActions.has("org.openacalendar","tagNew") %}
+				<li class="action">
+					<a href="/tag/new"><div class="iconPencilSmall"></div> Add a tag</a>
+				</li>
+			{% endif %}
 			<li class="action">
 				<li class="tab currentTab"><a href="/tag">Tags</a></li>
 			</li>

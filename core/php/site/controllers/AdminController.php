@@ -323,47 +323,8 @@ class AdminController {
 				'countries'=>$countries,
 			));
 	}
-	
-	function listTags(Application $app) {
-		
-		$trb = new TagRepositoryBuilder();
-		$trb->setSite($app['currentSite']);
-		$trb->setIncludeDeleted(true);
-		$tags = $trb->fetchAll();
-		
-		return $app['twig']->render('site/admin/listTags.html.twig', array(	
-				'tags'=>$tags,
-			));
-	}
-	
-	function newTag(Request $request, Application $app) {
 
 
-		$tag = new TagModel();
-
-		$form = $app['form.factory']->create(new AdminTagNewForm(), $tag);
-		
-		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
-
-			if ($form->isValid()) {
-
-				$tagRepo = new TagRepository();
-				$tagRepo->create($tag, $app['currentSite'], $app['currentUser']);
-				
-				return $app->redirect('/admin/tag/'.$tag->getSlugForUrl());
-				
-			}
-		}
-
-
-
-		return $app['twig']->render('site/admin/newTag.html.twig', array(
-				'form' => $form->createView(),	
-			));
-
-
-	}
 		
 	
 }
