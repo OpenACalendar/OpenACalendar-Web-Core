@@ -602,6 +602,9 @@ div.filterListEventWrapper {
 			a {
 				color: black;
 				text-decoration: none;
+				@media screen and (max-width: @narrowScreensMakeEverythingHorizontalIntoVerticalBoundary) {
+					display:block;
+				}
 			}
 			a:hover, a:focus {
 				color: blue;

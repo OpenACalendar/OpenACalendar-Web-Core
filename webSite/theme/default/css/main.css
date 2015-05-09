@@ -2696,6 +2696,11 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   color: black;
   text-decoration: none;
 }
+@media screen and (max-width: 500px) {
+  #innerPageWrapper #innerPageActions li.tab a {
+    display: block;
+  }
+}
 #innerPageWrapper #innerPageActions li.tab a:hover,
 #innerPageWrapper #innerPageActions li.tab a:focus {
   color: blue;
