@@ -89,14 +89,12 @@
 		{#  the class user is used by JS to move the menu to the left #}
 		<li class="user">
 			{% if currentUser is null %}
-				<a href="/currentuser">Your details</a>
-				<ul class="submenu">
-					{% if currentSite.cachedIsMultipleTimezones %}
-						<li><a href="/mytimezone">{{ currentTimeZone }}</a></li>
-					{% endif %}
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a></li>
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register">Register</a></li>
-				</ul>			
+				<li class="user">
+					<a href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a>
+				</li>
+				<li class="user">
+					<a href="{{ config.getWebIndexDomainSecure() }}/you/register">Sign up</a>
+				</li>
 			{% else %}
 				<a href="/currentuser">{{ currentUser.username }}</a>
 				<ul class="submenu">
