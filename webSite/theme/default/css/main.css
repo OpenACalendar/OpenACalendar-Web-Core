@@ -781,32 +781,6 @@ form.styled p.information,
   font-style: italic;
   font-size: 0.8em;
 }
-form.styled .actionWrapperBig,
-.likeFormStyled .actionWrapperBig {
-  padding: 6px;
-  margin: 0;
-  line-height: 1.8;
-  text-align: right;
-}
-form.styled .actionWrapperBig input[type="submit"],
-.likeFormStyled .actionWrapperBig input[type="submit"] {
-  display: inline;
-  background: #36C036;
-  padding: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  margin: 1px;
-  color: #333;
-  font-size: 1.20em;
-  text-decoration: none;
-}
-form.styled .actionWrapperBig input[type="submit"]:hover,
-form.styled .actionWrapperBig input[type="submit"]:focus,
-.likeFormStyled .actionWrapperBig input[type="submit"]:hover,
-.likeFormStyled .actionWrapperBig input[type="submit"]:focus {
-  color: black;
-  text-decoration: underline;
-}
 .likeFormStyledMinimal {
   color: #666666;
   font-size: 90%;
