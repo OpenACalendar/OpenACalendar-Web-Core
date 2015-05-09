@@ -208,7 +208,7 @@ class UserAccountModel {
 			$erb = new EventRepositoryBuilder();
 			$erb->setAfterNow();
 			$erb->setIncludeDeleted(false);
-			$erb->setIncludeCancelled(false);
+			$erb->setIncludeCancelled(true);
 			$erb->setUserAccount($this, false, true);
 			foreach ($erb->fetchAll() as $event) {
 				$userAtEvent[$event->getId()] = $userAtEventRepo->loadByUserAndEvent($this, $event);
