@@ -11,7 +11,7 @@ namespace sitefeatures;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EditCommentsFeature extends \BaseSiteFeature {
+class PhysicalEventsFeature extends \BaseSiteFeature {
 
 	function __construct()
 	{
@@ -25,16 +25,16 @@ class EditCommentsFeature extends \BaseSiteFeature {
 
 	public function getFeatureId()
 	{
-		return 'EditComments';
+		return 'PhysicalEvents';
 	}
 
 
 	public function getTitle() {
-		return 'Edit Comments';
+		return 'Physical Events';
 	}
 
 	public function getDescription() {
-		return 'On every edit, the user can optionaly put a comment that will appear in the history.';
+		return 'Events happen in a place. Venues can me set and browsed.';
 	}
 
 }

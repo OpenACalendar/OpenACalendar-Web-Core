@@ -167,26 +167,6 @@ class AdminController {
 		
 	function features(Request $request, Application $app) {
 
-		// This is the legacy way .......
-		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('submitted') == 'yes') {
-				
-			$app['currentSite']->setIsFeatureGroup($request->request->get('isFeatureGroup') == '1');
-			$app['currentSite']->setIsFeatureMap($request->request->get('isFeatureMap') == '1');
-			$app['currentSite']->setIsFeatureCuratedList($request->request->get('isFeatureCuratedList')== '1');
-			$app['currentSite']->setisFeatureVirtualEvents($request->request->get('isFeatureVirtualEvents') == '1');
-			$app['currentSite']->setisFeaturePhysicalEvents($request->request->get('isFeaturePhysicalEvents') == '1');
-			$app['currentSite']->setIsFeatureImporter($request->request->get('isFeatureImporter') == '1');
-			$app['currentSite']->setIsFeatureTag($request->request->get('isFeatureTag') == '1');
-
-			$siteRepository = new SiteRepository();
-			$siteRepository->edit($app['currentSite'], $app['currentUser']);
-
-			$app['flashmessages']->addMessage("Details saved.");
-			return $app->redirect("/admin/");
-			
-		}
-
-		// This is the new way .......
 		$siteFeatureRepository = new SiteFeatureRepository($app);
 
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('action') == 'on') {
@@ -213,8 +193,9 @@ class AdminController {
 			}
 		}
 
-			return $app['twig']->render('site/admin/features.html.twig', array(
-			));
+		return $app['twig']->render('site/admin/features.html.twig', array(
+		));
+
 	}
 		
 	function settings(Request $request, Application $app) {		

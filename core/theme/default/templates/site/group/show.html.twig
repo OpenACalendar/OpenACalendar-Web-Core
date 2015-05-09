@@ -43,7 +43,7 @@
 			<a href="/event/new?group={{ group.slug }}"><div class="iconPencilSmall"></div> new event</a>
 		</li>
 	{% endif %}
-	{% if currentSite.isFeatureImporter and currentUserActions.has("org.openacalendar","groupNewEvent") %}{# TODO #}
+	{% if currentSiteFeatures.has('org.openacalendar','Importer') and currentUserActions.has("org.openacalendar","groupNewEvent") %}{# TODO #}
 		<li class="action">
 			<a href="/group/{{ group.slugForURL }}/newimporturl"><div class="iconPencilSmall"></div> import an event</a>
 		</li>

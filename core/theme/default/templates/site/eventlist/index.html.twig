@@ -34,15 +34,15 @@
 				</li>
 			{% endif %}
 			{# lists link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
-			{% if currentSite.isFeatureCuratedList %}
+			{% if currentSiteFeatures.has('org.openacalendar.curatedlists','CuratedList') %}
 				<li class="action"><a href="/curatedlist"><div class="iconListSmall"></div> Lists</a></li>
 			{% endif %}	
 			{# tags link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
-			{% if currentSite.isFeatureTag %}
+			{% if currentSiteFeatures.has('org.openacalendar','Tag') %}
 				<li class="action"><a href="/tag"><div class="iconTagsSmall"></div> Tags</a></li>
 			{% endif %}
 			{# imports link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
-			{% if currentSite.isFeatureImporter %}
+			{% if currentSiteFeatures.has('org.openacalendar','Importer') %}
 				<li class="action"><a href="/importurl"><div class="iconCloundDownloadSmall"></div> Imports</a></li>
 			{% endif %}
 			<li class="action">

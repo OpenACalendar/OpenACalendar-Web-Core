@@ -20,11 +20,11 @@
 		{{ form_row(form['custom_' ~ customField.key]) }}
 	{%  endfor %}
 
-	{%  if currentSite.isFeaturePhysicalEvents %}
+	{%  if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 		{{ form_row(form.is_physical) }}
 	{%  endif %}
 
-	{%  if currentSite.isFeatureVirtualEvents %}
+	{%  if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 		{{ form_row(form.is_virtual) }}
 	{%  endif %}
 

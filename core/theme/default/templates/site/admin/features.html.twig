@@ -17,8 +17,6 @@
 
 {% block content %}
 
-
-
 	{% for feature in currentSiteFeatures.asList %}
 
 		<h3>{{ feature.title }}</h3>
@@ -29,105 +27,14 @@
 			<input type="hidden" name="feature" value="{{ feature.featureID | e('html_attr') }}">
 			{% if feature.on %}
 				<input type="hidden" name="action" value="off">
-				<input type="submit" value="Turn Off">
+				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn Off"></div>
 			{%  else %}
 				<input type="hidden" name="action" value="on">
-				<input type="submit" value="Turn On">
+				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn On"></div>
 			{%  endif %}
+			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 	{% endfor %}
-
-	{# Below is legacy way #}
-
-	<form action="#" method="post"  class="styled">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="submitted" value="yes">
-
-		<div class="rowWrapper">
-			<div class="labelWrapper">Groups</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<label><input type="checkbox" name="isFeatureGroup" value="1" {% if currentSite.isFeatureGroup %}checked="checked"{% endif %}>Use Groups</label>
-				<p class="information">
-					Events can be grouped by organiser to make it easy to find other events from the same people.
-				</p>
-			</div>
-			<div class="after"></div>
-		</div>
-		
-
-		<div class="rowWrapper">
-			<div class="labelWrapper">Physical Events</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<label><input type="checkbox" name="isFeaturePhysicalEvents" value="1" {% if currentSite.isFeaturePhysicalEvents %}checked="checked"{% endif %}>Use Physical Events</label>
-				<p class="information">
-					Events happen in a place. Venues can me set and browsed.
-				</p>
-			</div>
-			<div class="after"></div>
-		</div>
-
-		<div class="rowWrapper">
-			<div class="labelWrapper">Virtual Events</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<label><input type="checkbox" name="isFeatureVirtualEvents" value="1" {% if currentSite.isFeatureVirtualEvents %}checked="checked"{% endif %}>Use Virtual Events</label>
-				<p class="information">
-					Events can be marked as virtual if they are accessible online from anywhere.
-				</p>
-			</div>
-			<div class="after"></div>
-		</div>
-		
-
-		<div class="rowWrapper">
-			<div class="labelWrapper">Map</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<label><input type="checkbox" name="isFeatureMap" value="1" {% if currentSite.isFeatureMap %}checked="checked"{% endif %}>Use Map Feature</label>
-				<p class="information">
-					Maps shows you events on a map to browse around. 
-					We recommend you only turn this on if you have lots of venues in different places.
-				</p>
-			</div>
-			<div class="after"></div>
-		</div>
-		
-		
-		<div class="rowWrapper">
-			<div class="labelWrapper">Curated Lists</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<label><input type="checkbox" name="isFeatureCuratedList" value="1" {% if currentSite.isFeatureCuratedList %}checked="checked"{% endif %}>Use Curated List Feature</label>
-				<p class="information">
-					Curated Lists allow users to build lists of events and share them with others.
-					We recommend you only turn this on if you have lots of events.
-				</p>
-			</div>
-			<div class="after"></div>
-		</div>
-		
-		<div class="rowWrapper">
-			<div class="labelWrapper">Importer</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<label><input type="checkbox" name="isFeatureImporter" value="1" {% if currentSite.getIsFeatureImporter %}checked="checked"{% endif %}>Use Importer Feature</label>
-				<p class="information">
-					Events can be imported directly from other sites.
-				</p>
-			</div>
-			<div class="after"></div>
-		</div>
-		
-		<div class="rowWrapper">
-			<div class="labelWrapper">Tags</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<label><input type="checkbox" name="isFeatureTag" value="1" {% if currentSite.getIsFeatureTag %}checked="checked"{% endif %}>Use Tag Feature</label>
-				<p class="information">
-					Events can be tagged for easy filtering.
-				</p>
-			</div>
-			<div class="after"></div>
-		</div>
-		<input type="submit"  value="Save" />	
-
-	</form>
-
 
 {% endblock %}
 

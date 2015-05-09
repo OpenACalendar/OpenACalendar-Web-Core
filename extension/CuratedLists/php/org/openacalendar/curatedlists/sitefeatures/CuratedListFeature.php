@@ -1,7 +1,7 @@
 <?php
 
 
-namespace sitefeatures;
+namespace org\openacalendar\curatedlists\sitefeatures;
 
 /**
  *
@@ -11,7 +11,7 @@ namespace sitefeatures;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EditCommentsFeature extends \BaseSiteFeature {
+class CuratedListFeature extends \BaseSiteFeature {
 
 	function __construct()
 	{
@@ -20,21 +20,21 @@ class EditCommentsFeature extends \BaseSiteFeature {
 
 	public function getExtensionId()
 	{
-		return 'org.openacalendar';
+		return 'org.openacalendar.curatedlists';
 	}
 
 	public function getFeatureId()
 	{
-		return 'EditComments';
+		return 'CuratedList';
 	}
 
 
 	public function getTitle() {
-		return 'Edit Comments';
+		return 'Curated Lists';
 	}
 
 	public function getDescription() {
-		return 'On every edit, the user can optionaly put a comment that will appear in the history.';
+		return 'Curated Lists allow users to build lists of events and share them with others.';
 	}
 
 }

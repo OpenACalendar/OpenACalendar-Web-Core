@@ -82,37 +82,9 @@ class SiteHistoryRepository {
 			$sqlFields[] = " is_listed_in_index_changed = :is_listed_in_index_changed ";
 			$sqlParams['is_listed_in_index_changed'] = $sitehistory->getIsListedInIndexChanged() ? 1 : -1;
 		}
-		if ($sitehistory->getIsFeatureImporterChangedKnown()) {
-			$sqlFields[] = " is_feature_importer_changed = :is_feature_importer_changed ";
-			$sqlParams['is_feature_importer_changed'] = $sitehistory->getIsFeatureImporterChanged() ? 1 : -1;
-		}
-		if ($sitehistory->getIsFeatureCuratedListChangedKnown()) {
-			$sqlFields[] = " is_feature_curated_list_changed = :is_feature_curated_list_changed ";
-			$sqlParams['is_feature_curated_list_changed'] = $sitehistory->getIsFeatureCuratedListChanged() ? 1 : -1;
-		}
-		if ($sitehistory->getIsFeatureMapChangedKnown()) {
-			$sqlFields[] = " is_feature_map_changed = :is_feature_map_changed ";
-			$sqlParams['is_feature_map_changed'] = $sitehistory->getIsFeatureMapChanged() ? 1 : -1;
-		}
-		if ($sitehistory->getIsFeatureVirtualEventsChangedKnown()) {
-			$sqlFields[] = " is_feature_virtual_events_changed = :is_feature_virtual_events_changed ";
-			$sqlParams['is_feature_virtual_events_changed'] = $sitehistory->getIsFeatureVirtualEventsChanged() ? 1 : -1;
-		}
-		if ($sitehistory->getIsFeaturePhysicalEventsChangedKnown()) {
-			$sqlFields[] = " is_feature_physical_events_changed = :is_feature_physical_events_changed ";
-			$sqlParams['is_feature_physical_events_changed'] = $sitehistory->getIsFeaturePhysicalEventsChanged() ? 1 : -1;
-		}
-		if ($sitehistory->getIsFeatureGroupChangedKnown()) {
-			$sqlFields[] = " is_feature_group_changed = :is_feature_group_changed ";
-			$sqlParams['is_feature_group_changed'] = $sitehistory->getIsFeatureGroupChanged() ? 1 : -1;
-		}
 		if ($sitehistory->getPromptEmailsDaysInAdvanceChangedKnown()) {
 			$sqlFields[] = " prompt_emails_days_in_advance_changed = :prompt_emails_days_in_advance_changed ";
 			$sqlParams['prompt_emails_days_in_advance_changed'] = $sitehistory->getPromptEmailsDaysInAdvanceChanged() ? 1 : -1;
-		}
-		if ($sitehistory->getIsFeatureTagChangedKnown()) {
-			$sqlFields[] = " is_feature_tag_changed = :is_feature_tag_changed ";
-			$sqlParams['is_feature_tag_changed'] = $sitehistory->getIsFeatureTagChanged() ? 1 : -1;
 		}
 
 		$statUpdate = $DB->prepare("UPDATE site_history SET ".

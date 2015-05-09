@@ -27,7 +27,7 @@ $app->before(function (Request $request) use ($app) {
 	if (!$site) {
 		die ("404 Not Found"); // TODO
 	}
-	
+
 	$app['twig']->addGlobal('currentSite', $site);	
 	$app['currentSite'] = $site;
 	
@@ -43,6 +43,7 @@ $app->before(function (Request $request) use ($app) {
 	$siteFeaturesRepo = new repositories\SiteFeatureRepository($app);
 	$app['currentSiteFeatures'] = new SiteFeaturesList($siteFeaturesRepo->getForSiteAsTree($app['currentSite']));
 	$app['twig']->addGlobal('currentSiteFeatures', $app['currentSiteFeatures']);
+	$app['currentSiteFeatures']->setFeaturesOnSite($app['currentSite']);
 
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);

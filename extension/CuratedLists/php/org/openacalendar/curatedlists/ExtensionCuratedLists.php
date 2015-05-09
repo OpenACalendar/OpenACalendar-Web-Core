@@ -36,4 +36,9 @@ class ExtensionCuratedLists extends \BaseExtension {
 		);
 	}
 
+	public function getSiteFeatures(\models\SiteModel $siteModel = null) {
+		return array(
+			new \org\openacalendar\curatedlists\sitefeatures\CuratedListFeature(),
+		);
+	}
 }

@@ -51,12 +51,6 @@ $site->setSlug($slug);
 $site->setTitle($slug);
 $site->setIsListedInIndex(true);
 $site->setIsWebRobotsAllowed(true);
-$site->setIsFeatureCuratedList($CONFIG->newSiteHasFeatureCuratedList);
-$site->setIsFeatureImporter($CONFIG->newSiteHasFeatureImporter);
-$site->setIsFeatureMap($CONFIG->newSiteHasFeatureMap);
-$site->setIsFeatureVirtualEvents($CONFIG->newSiteHasFeatureVirtualEvents);
-$site->setIsFeaturePhysicalEvents($CONFIG->newSiteHasFeaturePhysicalEvents);
-$site->setIsFeatureGroup($CONFIG->newSiteHasFeatureGroup);
 $site->setPromptEmailsDaysInAdvance($CONFIG->newSitePromptEmailsDaysInAdvance);
 
 $siteRepository = new SiteRepository();

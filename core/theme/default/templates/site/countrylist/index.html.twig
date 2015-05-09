@@ -42,7 +42,7 @@
 	<div id="bodyRight">
 		<div id="MapWrapper">
 			<div id="Map" class="fullWidth"></div>
-			{% if currentSite.isFeatureMap %}
+			{% if currentSiteFeatures.has('org.openacalendar','Map') %}
 				<ul class="actionList">
 					<li><a href="/map"><div class="iconEyeLarge"></div> View larger map</a></li>
 				</ul>

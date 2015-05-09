@@ -37,12 +37,12 @@ class IndexController {
 					'description_text'=>$app['currentSite']->getDescriptionText(),
 					'footer_text'=>$app['currentSite']->getFooterText(),
 					'timezones'=>$app['currentSite']->getCachedTimezonesAsList(),
-					'is_feature_map'=>$app['currentSite']->getIsFeatureMap(),
-					'is_feature_importer'=>$app['currentSite']->getIsFeatureImporter(),
-					'is_feature_curated_list'=>$app['currentSite']->getIsFeatureCuratedList(),
-					'is_feature_virtual_events'=>$app['currentSite']->getIsFeatureVirtualEvents(),
-					'is_feature_physical_events'=>$app['currentSite']->getIsFeaturePhysicalEvents(),
-					'is_feature_group'=>$app['currentSite']->getIsFeatureGroup(),
+					'is_feature_map'=>$app['currentSiteFeatures']->has('org.openacalendar','Map'),
+					'is_feature_importer'=>$app['currentSiteFeatures']->has('org.openacalendar','Importer'),
+					'is_feature_curated_list'=>$app['currentSiteFeatures']->has('org.openacalendar.curatedlists','CuratedList'),
+					'is_feature_virtual_events'=>$app['currentSiteFeatures']->has('org.openacalendar','VirtualEvents'),
+					'is_feature_physical_events'=>$app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'),
+					'is_feature_group'=>$app['currentSiteFeatures']->has('org.openacalendar','Group'),
 				),
 			);
 		

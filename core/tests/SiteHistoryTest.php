@@ -46,14 +46,7 @@ class SiteHistoryTest extends \BaseAppTest {
 		$this->assertEquals(true,  $siteHistory->getIsClosedBySysAdminChanged());
 		$this->assertEquals(false,  $siteHistory->getClosedBySyAdminReasonChanged());
 		$this->assertEquals(true,  $siteHistory->getIsListedInIndexChanged());
-		$this->assertEquals(true,  $siteHistory->getIsFeatureMapChanged());
-		$this->assertEquals(true,  $siteHistory->getIsFeatureImporterChanged());
-		$this->assertEquals(true,  $siteHistory->getIsFeatureCuratedListChanged());
 		$this->assertEquals(true,  $siteHistory->getPromptEmailsDaysInAdvanceChanged());
-		$this->assertEquals(true,  $siteHistory->getIsFeatureVirtualEventsChanged());
-		$this->assertEquals(true,  $siteHistory->getIsFeaturePhysicalEventsChanged());
-		$this->assertEquals(true,  $siteHistory->getIsFeatureGroupChanged());
-		$this->assertEquals(true,  $siteHistory->getIsFeatureTagChanged());
 		$this->assertEquals(true, $siteHistory->getIsNew());
 	}
 	
@@ -90,14 +83,7 @@ class SiteHistoryTest extends \BaseAppTest {
 		$this->assertEquals(false,  $siteHistory->getIsClosedBySysAdminChanged());
 		$this->assertEquals(false,  $siteHistory->getClosedBySyAdminReasonChanged());
 		$this->assertEquals(false,  $siteHistory->getIsListedInIndexChanged());
-		$this->assertEquals(false,  $siteHistory->getIsFeatureMapChanged());
-		$this->assertEquals(false,  $siteHistory->getIsFeatureImporterChanged());
-		$this->assertEquals(false,  $siteHistory->getIsFeatureCuratedListChanged());
 		$this->assertEquals(false,  $siteHistory->getPromptEmailsDaysInAdvanceChanged());
-		$this->assertEquals(false,  $siteHistory->getIsFeatureVirtualEventsChanged());
-		$this->assertEquals(false,  $siteHistory->getIsFeaturePhysicalEventsChanged());
-		$this->assertEquals(false,  $siteHistory->getIsFeatureGroupChanged());
-		$this->assertEquals(false,  $siteHistory->getIsFeatureTagChanged());
 		$this->assertEquals(false, $siteHistory->getIsNew());
 	}
 	

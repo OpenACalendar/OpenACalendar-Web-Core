@@ -48,6 +48,7 @@ $app->before(function (Request $request) use ($app) {
 	$siteFeaturesRepo = new repositories\SiteFeatureRepository($app);
 	$app['currentSiteFeatures'] = new SiteFeaturesList($siteFeaturesRepo->getForSiteAsTree($app['currentSite']));
 	$app['twig']->addGlobal('currentSiteFeatures', $app['currentSiteFeatures']);
+	$app['currentSiteFeatures']->setFeaturesOnSite($app['currentSite']);
 
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);

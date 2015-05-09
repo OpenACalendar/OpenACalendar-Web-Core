@@ -95,7 +95,7 @@
 
 			<div id="MapWrapper">
 				<div id="Map" class="map"></div>
-				{% if currentSite.isFeatureMap %}
+				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
 					<ul class="actionList">
 						<li><a href="/map?area={{ area.slug }}"><div class="iconEyeLarge"></div> View larger map</a></li>
 					</ul>

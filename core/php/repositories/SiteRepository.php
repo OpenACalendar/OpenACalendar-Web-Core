@@ -56,16 +56,14 @@ class SiteRepository {
 
 			$stat = $DB->prepare("INSERT INTO site_information (title, slug, slug_canonical, ".
 						"created_at,cached_is_multiple_timezones,cached_is_multiple_countries,".
-						"cached_timezones,is_feature_map,is_feature_importer,is_feature_curated_list,".
+						"cached_timezones, ".
 						"is_listed_in_index,is_web_robots_allowed, ".
-						" prompt_emails_days_in_advance,site_quota_id, ".
-						"is_feature_tag,is_feature_physical_events,is_feature_virtual_events) ".
+						" prompt_emails_days_in_advance,site_quota_id ) ".
 					"VALUES (:title, :slug, :slug_canonical, ".
 						" :created_at,:cached_is_multiple_timezones,:cached_is_multiple_countries,".
-						":cached_timezones,:is_feature_map,:is_feature_importer,:is_feature_curated_list,".
+						":cached_timezones, ".
 						":is_listed_in_index,:is_web_robots_allowed, ".
-						" :prompt_emails_days_in_advance, :site_quota_id, ".
-						":is_feature_tag,:is_feature_physical_events,:is_feature_virtual_events) RETURNING id");
+						" :prompt_emails_days_in_advance, :site_quota_id ) RETURNING id");
 			$stat->execute(array(
 					'title'=>substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED), 
 					'slug'=> $site->getSlug(), 
@@ -74,12 +72,6 @@ class SiteRepository {
 					'cached_is_multiple_countries'=>$site->getCachedIsMultipleCountries() ? 1 : 0,
 					'cached_timezones'=>$site->getCachedTimezones(),
 					'created_at'=>  $createdat,
-					'is_feature_curated_list'=>$site->getIsFeatureCuratedList() ? 1 : 0,
-					'is_feature_importer'=>$site->getIsFeatureImporter() ? 1 : 0,
-					'is_feature_map'=>$site->getIsFeatureMap() ? 1 : 0,
-					'is_feature_tag'=>$site->getIsFeatureTag() ? 1 : 0,
-					'is_feature_virtual_events'=>$site->getIsFeatureVirtualEvents() ? 1 : 0,
-					'is_feature_physical_events'=>$site->getIsFeaturePhysicalEvents() ? 1 : 0,
 					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
 					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
 					'prompt_emails_days_in_advance'=>$site->getPromptEmailsDaysInAdvance(),
@@ -89,15 +81,11 @@ class SiteRepository {
 			$site->setId($data['id']);
 			
 			$stat = $DB->prepare("INSERT INTO site_history (site_id, user_account_id, ".
-						"title, slug, slug_canonical, created_at,is_feature_map,is_feature_importer,".
-						"is_feature_curated_list,is_listed_in_index,is_web_robots_allowed, ".
-						" prompt_emails_days_in_advance, is_new,".
-						"is_feature_tag,is_feature_physical_events,is_feature_virtual_events) ".
+						"title, slug, slug_canonical, created_at,is_listed_in_index,is_web_robots_allowed, ".
+						" prompt_emails_days_in_advance, is_new ) ".
 					"VALUES (:site_id, :user_account_id, :title, ".
-						":slug, :slug_canonical,  :created_at,:is_feature_map,:is_feature_importer,".
-						":is_feature_curated_list,:is_listed_in_index,:is_web_robots_allowed, ".
-						" :prompt_emails_days_in_advance, '1', ".
-						":is_feature_tag,:is_feature_physical_events,:is_feature_virtual_events)");
+						":slug, :slug_canonical,  :created_at, :is_listed_in_index,:is_web_robots_allowed, ".
+						" :prompt_emails_days_in_advance, '1' )");
 			$stat->execute(array(
 					'site_id'=>$site->getId(),
 					'user_account_id'=>$owner->getId(),
@@ -105,12 +93,6 @@ class SiteRepository {
 					'slug'=> $site->getSlug(), 
 					'slug_canonical'=>SiteModel::makeCanonicalSlug($site->getSlug()), 
 					'created_at'=>  $createdat,
-					'is_feature_curated_list'=>$site->getIsFeatureCuratedList() ? 1 : 0,
-					'is_feature_importer'=>$site->getIsFeatureImporter() ? 1 : 0,
-					'is_feature_map'=>$site->getIsFeatureMap() ? 1 : 0,
-					'is_feature_tag'=>$site->getIsFeatureTag() ? 1 : 0,
-					'is_feature_virtual_events'=>$site->getIsFeatureVirtualEvents() ? 1 : 0,
-					'is_feature_physical_events'=>$site->getIsFeaturePhysicalEvents() ? 1 : 0,
 					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
 					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
 					'prompt_emails_days_in_advance'=>$site->getPromptEmailsDaysInAdvance(),
@@ -150,12 +132,68 @@ class SiteRepository {
 			
 			$DB->commit();
 
+			// Features
+			$statFeatureOn = $DB->prepare("INSERT INTO site_feature_information (site_id, extension_id, feature_id, is_on) VALUES (:id, :ext, :feature, '1')");
+			if($CONFIG->newSiteHasFeatureCuratedList) {
+				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar.curatedlists','feature'=>'CuratedList'));
+			}
+			if($CONFIG->newSiteHasFeatureImporter) {
+				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Importer'));
+			}
+			if($CONFIG->newSiteHasFeatureMap) {
+				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Map'));
+			}
+			if($CONFIG->newSiteHasFeatureVirtualEvents) {
+				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'VirtualEvents'));
+			}
+			if($CONFIG->newSiteHasFeaturePhysicalEvents) {
+				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'PhysicalEvents'));
+			}
+			if($CONFIG->newSiteHasFeatureGroup) {
+				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Group'));
+			}
+			if ($CONFIG->newSiteHasFeatureTag) {
+				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Tag'));
+			}
+
 			$EXTENSIONHOOKRUNNER->afterSiteCreate($site, $owner);
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
 	}
-	
+
+	/** @deprecated */
+	public function loadLegacyFeaturesOnSite(SiteModel $siteModel) {
+		global $DB;
+		$stat = $DB->prepare("SELECT extension_id,feature_id,is_on FROM site_feature_information WHERE site_id=:site_id AND is_on = '1' ");
+		$stat->execute(array(
+			'site_id'=>$siteModel->getId(),
+		));
+		while($data = $stat->fetch()) {
+			if ($data['extension_id'] == 'org.openacalendar.curatedlists' && $data['feature_id'] == 'CuratedList') {
+				$siteModel->setIsFeatureCuratedList(true);
+			}
+			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Importer') {
+				$siteModel->setIsFeatureImporter(true);
+			}
+			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Map') {
+				$siteModel->setIsFeatureMap(true);
+			}
+			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'VirtualEvents') {
+				$siteModel->setIsFeatureVirtualEvents(true);
+			}
+			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'PhysicalEvents') {
+				$siteModel->setIsFeaturePhysicalEvents(true);
+			}
+			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Group') {
+				$siteModel->setIsFeatureGroup(true);
+			}
+			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Tag') {
+				$siteModel->setIsFeatureTag(true);
+			}
+		}
+	}
+
 	public function loadByDomain($domain) {
 		global $CONFIG;
 		$compareTo = $CONFIG->webSiteDomain;
@@ -230,8 +268,6 @@ class SiteRepository {
 
 			$fields = array('title','description_text','footer_text','is_web_robots_allowed',
 				'is_closed_by_sys_admin','is_listed_in_index','closed_by_sys_admin_reason',
-				'is_feature_curated_list','is_feature_importer','is_feature_map',
-				'is_feature_tag','is_feature_virtual_events','is_feature_physical_events','is_feature_group',
 				'prompt_emails_days_in_advance');
 
 			$this->siteDBAccess->update($site, $fields, $user);

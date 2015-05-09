@@ -21,7 +21,7 @@
 
 {% block content %}
 
-	{% if not currentSite.isFeatureVirtualEvents %}
+	{% if not currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 		<div class="flash-error">This feature has been disabled on this calendar.</div>
 	{% endif %}
 		

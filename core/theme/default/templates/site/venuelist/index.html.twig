@@ -23,7 +23,7 @@
 {% block content %}
 
 		
-	{% if not currentSite.isFeaturePhysicalEvents %}
+	{% if not currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
 	{% endif %}
 		
@@ -38,7 +38,7 @@
 				</li>
 			{% endif %}
 			
-			{% if currentSite.isFeatureVirtualEvents %}
+			{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 				<li class="action">
 					<a href="/venue/virtual"><div class="iconDesktopSmall"></div> Virtual</a>
 				</li>

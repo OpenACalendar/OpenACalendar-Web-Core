@@ -17,11 +17,11 @@
 {% block breadcrumbs %}
 	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
 	<li><a href="/event">events</a></li>
-	{% if currentSite.isFeatureGroup %}
+	{% if currentSiteFeatures.has('org.openacalendar','Group') %}
 		{%  if group is not null %}
 			<li><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></li>
 		{% endif %}
-	{% elseif currentSite.isFeaturePhysicalEvents %}
+	{% elseif currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 		{%  if currentSite.getCachedIsMultipleCountries %}<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>{%  endif %}
 		{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></li>{% endfor %}
 		{% if area %}<li><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>{% endif %}

@@ -376,7 +376,7 @@
 				<div class="innerPageRight">
 					{%  if venue is not null and venue.hasLatLng %}
 						<div id="Map" class="map"></div>
-						{% if currentSite.isFeatureMap %}
+						{% if currentSiteFeatures.has('org.openacalendar','Map') %}
 							<ul class="actionList">
 								<li><a href="/map?venue={{ venue.slugForURL }}"><div class="iconEyeLarge"></div> View larger map</a></li>
 							</ul>

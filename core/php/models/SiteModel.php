@@ -39,13 +39,28 @@ class SiteModel {
 	protected $is_closed_by_sys_admin = false;
 	protected $is_listed_in_index = true;
 	protected $closed_by_sys_admin_reason;
+
+	/** @deprecated */
 	protected $is_feature_map = false;
+
+	/** @deprecated */
 	protected $is_feature_importer = false;
+
+	/** @deprecated */
 	protected $is_feature_curated_list =  false;
+
+	/** @deprecated */
 	protected $is_feature_virtual_events =  false;
+
+	/** @deprecated */
 	protected $is_feature_physical_events =  true;
+
+	/** @deprecated */
 	protected $is_feature_group =  true;
+
+	/** @deprecated */
 	protected $is_feature_tag =  false;
+
 	protected $prompt_emails_days_in_advance = 30;
 
 	protected $cached_is_multiple_timezones = false;
@@ -211,34 +226,40 @@ class SiteModel {
 		$this->logo_media_id = $logo_media_id;
 		return $this;
 	}
-	
+
+	/** @deprecated */
 	public function getIsFeatureMap() {
 		return $this->is_feature_map;
 	}
 
+	/** @deprecated */
 	public function setIsFeatureMap($is_feature_map) {
 		$this->is_feature_map = $is_feature_map;
 		return $this;
 	}
 
+	/** @deprecated */
 	public function getIsFeatureImporter() {
 		return $this->is_feature_importer;
 	}
 
+	/** @deprecated */
 	public function setIsFeatureImporter($is_feature_importer) {
 		$this->is_feature_importer = $is_feature_importer;
 		return $this;
 	}
 
+	/** @deprecated */
 	public function getIsFeatureCuratedList() {
 		return $this->is_feature_curated_list;
 	}
 
+	/** @deprecated */
 	public function setIsFeatureCuratedList($is_feature_curated_list) {
 		$this->is_feature_curated_list = $is_feature_curated_list;
 		return $this;
 	}
-	
+
 	public function getPromptEmailsDaysInAdvance() {
 		return $this->prompt_emails_days_in_advance;
 	}
@@ -249,43 +270,50 @@ class SiteModel {
 		return $this;
 	}
 
+	/** @deprecated */
 	public function getIsFeatureVirtualEvents() {
 		return $this->is_feature_virtual_events;
 	}
 
+	/** @deprecated */
 	public function setIsFeatureVirtualEvents($is_feature_virtual_events) {
 		$this->is_feature_virtual_events = $is_feature_virtual_events;
 		return $this;
 	}
 
+	/** @deprecated */
 	public function getIsFeaturePhysicalEvents() {
 		return $this->is_feature_physical_events;
 	}
 
+	/** @deprecated */
 	public function setIsFeaturePhysicalEvents($is_feature_physical_events) {
 		$this->is_feature_physical_events = $is_feature_physical_events;
 		return $this;
 	}
 
+	/** @deprecated */
 	public function getIsFeatureGroup() {
 		return $this->is_feature_group;
 	}
 
+	/** @deprecated */
 	public function setIsFeatureGroup($is_feature_group) {
 		$this->is_feature_group = $is_feature_group;
 		return $this;
 	}
-	
-	
+
+	/** @deprecated */
 	public function getIsFeatureTag() {
 		return $this->is_feature_tag;
 	}
 
+	/** @deprecated */
 	public function setIsFeatureTag($is_feature_tag) {
 		$this->is_feature_tag = $is_feature_tag;
 		return $this;
 	}
-	
+
 	
 	public function getSiteQuotaId() {
 		return $this->site_quota_id;

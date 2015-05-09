@@ -27,12 +27,12 @@
 		{% else %}
 			<li><a href="/country/{{ currentSiteHasOneCountry.twoCharCode }}"><div class="iconGlobeLarge"></div> {{ currentSiteHasOneCountry.title }}</a></li>
 		{% endif %}
-		{% if currentSite.isFeatureVirtualEvents %}
+		{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 			<li><a href="/venue/virtual"><div class="iconGlobeLarge"></div> Virtual</a></li>
 		{% endif %}
-		{% if currentSite.isFeaturePhysicalEvents %}
+		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 			<li><a href="/venue"><div class="iconGlobeLarge"></div> Venues</a></li>
-			{% if currentSite.isFeatureMap %}
+			{% if currentSiteFeatures.has('org.openacalendar','Map') %}
 				<li><a href="/map"><div class="iconGlobeLarge"></div> Map</a></li>
 			{% endif %}	
 			{% if currentUserActions.has("org.openacalendar","venueNew") %}

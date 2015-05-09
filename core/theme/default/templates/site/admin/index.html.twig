@@ -37,7 +37,7 @@
 
 		<li><a href="/admin/countries"><div class="iconGlobeLarge"></div> Countries</a></li>
 		
-		{% if currentSite.isFeaturePhysicalEvents %}
+		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 			<li><a href="/admin/areas"><div class="iconGlobeLarge"></div> Areas in a country</a></li>
 		{% endif %}
 		

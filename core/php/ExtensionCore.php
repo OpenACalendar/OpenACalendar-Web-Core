@@ -165,7 +165,8 @@ class ExtensionCore extends BaseExtension {
 			return array($data);
 		}
 
-		if ($site->getIsFeatureGroup()) {
+		$siteFeatureRepo = new \repositories\SiteFeatureRepository($this->app);
+		if ($siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($site,'org.openacalendar','Group')) {
 			$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
 			$data = $userWatchesGroupRepo->getUserNotifyContentForSiteAndUser($site, $userAccountModel);
 			if ($data) {
@@ -226,6 +227,12 @@ class ExtensionCore extends BaseExtension {
 
 	public function getSiteFeatures(\models\SiteModel $siteModel = null) {
 		return array(
+			new sitefeatures\GroupFeature(),
+			new sitefeatures\ImporterFeature(),
+			new sitefeatures\TagFeature(),
+			new sitefeatures\PhysicalEventsFeature(),
+			new sitefeatures\MapFeature(),
+			new sitefeatures\VirtualEventsFeature(),
 			new sitefeatures\EditCommentsFeature(),
 		);
 	}

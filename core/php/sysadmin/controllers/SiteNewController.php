@@ -65,14 +65,7 @@ class SiteNewController {
 						$site->setIsAllUsersEditors(false);
 						$site->setIsRequestAccessAllowed(true);
 					}
-					$site->setIsFeatureCuratedList($app['config']->newSiteHasFeatureCuratedList);
-					$site->setIsFeatureImporter($app['config']->newSiteHasFeatureImporter);
-					$site->setIsFeatureMap($app['config']->newSiteHasFeatureMap);
-					$site->setIsFeatureVirtualEvents($app['config']->newSiteHasFeatureVirtualEvents);
-					$site->setIsFeaturePhysicalEvents($app['config']->newSiteHasFeaturePhysicalEvents);
-					$site->setIsFeatureGroup($app['config']->newSiteHasFeatureGroup);
 					$site->setPromptEmailsDaysInAdvance($app['config']->newSitePromptEmailsDaysInAdvance);
-					$site->setIsFeatureTag($app['config']->newSiteHasFeatureTag);
 
 					$countryRepository = new CountryRepository();
 					$siteQuotaRepository = new SiteQuotaRepository();

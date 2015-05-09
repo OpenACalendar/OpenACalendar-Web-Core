@@ -26,7 +26,7 @@
 
 {% block content %}
 
-	{% if not currentSite.isFeaturePhysicalEvents %}
+	{% if not currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
 	{% endif %}
 		

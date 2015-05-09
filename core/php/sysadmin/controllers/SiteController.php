@@ -79,37 +79,7 @@ class SiteController {
 					$this->parameters['site']->setIsWebRobotsAllowed($action->getParamBoolean(0));
 					$sr->edit($this->parameters['site'], $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'featuremap') {
-					$this->parameters['site']->setIsFeatureMap($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'featuregroup') {
-					$this->parameters['site']->setIsFeatureGroup($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'featureimporter') {
-					$this->parameters['site']->setIsFeatureImporter($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'featurecuratedlist') {
-					$this->parameters['site']->setIsFeatureCuratedList($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], $app['currentUser']);
-					return $app->redirect('/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'featurephysicalevents') {
-					$this->parameters['site']->setIsFeaturePhysicalEvents($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
-				} else if ($action->getCommand() == 'featurevirtualevents') {
-					$this->parameters['site']->setIsFeatureVirtualEvents($action->getParamBoolean(0));
-					$sr->edit($this->parameters['site'], $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
-					
+
 				} else if ($action->getCommand() == 'listedinindex') {
 					$this->parameters['site']->setIsListedInIndex($action->getParamBoolean(0));
 					$sr->edit($this->parameters['site'], $app['currentUser']);

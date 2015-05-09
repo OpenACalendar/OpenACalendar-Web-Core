@@ -55,7 +55,7 @@
 		{% endif %}
 	{%  endfor %}
 
-	{%  if currentSite.isFeaturePhysicalEvents %}
+	{%  if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 		<div class="rowWrapper">
 			<div class="labelWrapper">Does the event happen at a place?</div>
 			<div class="widgetWrapper">{%  if draft.getDetailsValue('event.is_physical') %}Yes{%  else %}No{%  endif %}</div>
@@ -63,7 +63,7 @@
 		</div>
 	{%  endif %}
 
-	{%  if currentSite.isFeatureVirtualEvents %}
+	{%  if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 		<div class="rowWrapper">
 			<div class="labelWrapper">Is event accessible online?</div>
 			<div class="widgetWrapper">{%  if draft.getDetailsValue('event.is_virtual') %}Yes{%  else %}No{%  endif %}</div>

@@ -59,30 +59,6 @@
 				</td>
 			</tr>
 		{% endif %}
-		<tr>
-			<th>Is Feature Group</th>
-			<td>{% if site.isFeatureGroup %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>		
-		<tr>
-			<th>Is Feature Map</th>
-			<td>{% if site.isFeatureMap %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>		
-		<tr>
-			<th>Is Feature Importer</th>
-			<td>{% if site.isFeatureImporter %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>		
-		<tr>
-			<th>Is Feature Curated List</th>
-			<td>{% if site.isFeatureCuratedList %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>		
-		<tr>
-			<th>Is Feature Physical Events</th>
-			<td>{% if site.isFeaturePhysicalEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>		
-		<tr>
-			<th>Is Feature Virtual Events</th>
-			<td>{% if site.isFeatureVirtualEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}</td>
-		</tr>		
 		{% if sitequota %}
 			<tr>
 				<th>Quota</th>
@@ -170,12 +146,6 @@
 		<li>open</li>
 		<li>webrobots <span class="param">boolean</a></li>
 		<li>listedinindex <span class="param">boolean</a></li>
-		<li>featuregroup <span class="param">boolean</a></li>
-		<li>featuremap <span class="param">boolean</a></li>
-		<li>featureimporter <span class="param">boolean</a></li>
-		<li>featurecuratedlist <span class="param">boolean</a></li>
-		<li>featurevirtualevents <span class="param">boolean</a></li>
-		<li>featurephysicalevents <span class="param">boolean</a></li>
 		<li>quota <span class="param">code</a></li>
 		<li>newslug <span class="param">slug</a></li>
 	</ul>

@@ -66,6 +66,21 @@ class SiteFeatureRepository
 		return $out;
 	}
 
+	public function doesSiteHaveFeatureByExtensionAndId(SiteModel $siteModel, $extension, $feature) {
+		$stat = $this->app['db']->prepare("SELECT is_on FROM site_feature_information WHERE site_id=:site_id AND extension_id=:extension_id AND feature_id=:feature_id");
+		$stat->execute(array(
+			'site_id'=>$siteModel->getId(),
+			'extension_id'=>$extension,
+			'feature_id'=>$feature,
+		));
+		if ($stat->rowCount() == 0) {
+			return false;
+		} else {
+			$data = $stat->fetch();
+			return $data['is_on'];
+		}
+	}
+
 	public  function setFeature(SiteModel $site, \BaseSiteFeature $siteFeature, $value, UserAccountModel $userAccountModel = null) {
 		try {
 			$this->app['db']->beginTransaction();

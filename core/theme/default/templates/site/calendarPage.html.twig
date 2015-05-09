@@ -24,7 +24,7 @@
 	{% set addURL = false %}
 {% else %}
 	{% set calURL = '/event/calendar' %}
-	{% if currentSite.isFeatureGroup %}
+	{% if currentSiteFeatures.has('org.openacalendar','Group') %}
 		{% set addURL = '/event/new?' %}
 	{% else %}
 		{% set addURL = '/event/new/go?' %}

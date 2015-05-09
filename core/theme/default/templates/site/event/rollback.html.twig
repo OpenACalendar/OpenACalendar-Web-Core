@@ -30,16 +30,16 @@
 		{{ form_row(form.end_at) }}
 		{{ form_row(form.country_id) }}
 		{{ form_row(form.timezone) }}
-		{% if currentSite.isFeatureVirtualEvents %}
+		{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 			{#  if both are an option, user must check which one.  #}
-			{% if currentSite.isFeaturePhysicalEvents %}
+			{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 				{{ form_row(form.is_virtual) }}
 			{% endif %}
 			{# Secondly, any options for virtual events? ... nope #}
 		{% endif %}
-		{% if currentSite.isFeaturePhysicalEvents %}
+		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 			{#  if both are an option, user must check which one.  #}
-			{% if currentSite.isFeatureVirtualEvents %}
+			{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 				{{ form_row(form.is_physical) }}
 			{% endif %}
 			{# Secondly, any options for physical events? #}
