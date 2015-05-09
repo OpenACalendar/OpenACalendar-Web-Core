@@ -144,6 +144,11 @@ class ExtensionCore extends BaseExtension {
 			new \tasks\UpdateSiteHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateTagHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateVenueHistoryChangeFlagsTask($this->app),
+			new \tasks\SendUserWatchesSitePromptEmailsTask($this->app),
+			new \tasks\SendUserWatchesSiteGroupPromptEmailsTask($this->app),
+			new \tasks\SendUserWatchesGroupPromptEmailsTask($this->app),
+			new \tasks\SendUpcomingEventsForUsersTask($this->app),
+			new \tasks\RunImportURLsTask($this->app),
 		);
 	}
 

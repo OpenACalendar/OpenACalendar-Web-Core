@@ -23,12 +23,32 @@ use repositories\UserNotificationRepository;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class SendUserWatchesSiteGroupPromptEmailsTask {
+class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 
-	public static function run(Application $app, $verbose = false) {
+
+
+	public function getExtensionId()
+	{
+		return 'org.openacalendar';
+	}
+
+	public function getTaskId()
+	{
+		return 'SendUserWatchesSiteGroupPromptEmails';
+	}
+
+
+	public function getShouldRunAutomaticallyNow() {
+		return !$this->hasRunToday();
+	}
+
+	public function getCanRunManuallyNow() {
+		return !$this->hasRunToday();
+	}
+
+	protected function run() {
 		global $CONFIG;
-		
-		if ($verbose) print "Starting ".date("c")."\n";
+
 		
 		$userRepo = new UserAccountRepository();
 		$siteRepo = new SiteRepository();
@@ -39,7 +59,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 		$userNotificationRepo = new UserNotificationRepository();
 
 		/** @var usernotifications/UserWatchesSiteGroupPromptNotificationType **/
-		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSiteGroupPrompt');
+		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSiteGroupPrompt');
 
 		$b = new UserWatchesSiteRepositoryBuilder();
 		foreach($b->fetchAll() as $userWatchesSite) {
@@ -47,12 +67,12 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 			$user = $userRepo->loadByID($userWatchesSite->getUserAccountId());
 			$site = $siteRepo->loadById($userWatchesSite->getSiteId());
 			// to avoid flooding user we only send one group email per run
-			$anyGroupNotificationsSent = false;	
+			$anyGroupNotificationsSent = false;
 
-			if ($verbose) print date("c")." User ".$user->getEmail()." Site ".$site->getTitle()."\n";
+			$this->logVerbose(" User ".$user->getEmail()." Site ".$site->getTitle());
 
 			if ($site->getIsClosedBySysAdmin()) {
-				if ($verbose) print " ... site is closed\n";
+				$this->logVerbose( " ... site is closed");
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
 			} else if ($userWatchesSite->getIsWatching()) {
 
@@ -63,7 +83,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 
 					if (!$anyGroupNotificationsSent) {
 
-						if ($verbose) print " ... searching group ".$group->getSlug()." for data\n";
+						$this->logVerbose( " ... searching group ".$group->getSlug()." for data");
 
 						$lastEvent = $eventRepo->loadLastNonDeletedNonImportedByStartTimeInGroupId($group->getId());
 						$data = $userWatchesSite->getGroupPromptEmailData($site, $group, $lastEvent);
@@ -71,7 +91,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 						if ($data['moreEventsNeeded']) {
 
 
-							print " ... found data \n";
+							$this->logVerbose (" ... found data ");
 							///// Notification Class 
 							$userNotification = $userNotificationType->getNewNotification($user, $site);
 							$userNotification->setGroup($group);
@@ -103,7 +123,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 								$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 								$message->setTo($user->getEmail());
 
-								$messageText = $app['twig']->render('email/userWatchesSiteGroupPromptEmail.txt.twig', array(
+								$messageText = $this->app['twig']->render('email/userWatchesSiteGroupPromptEmail.txt.twig', array(
 									'user'=>$user,
 									'group'=>$group,
 									'lastEvents'=>$lastEvents,
@@ -114,7 +134,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 								if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.txt', $messageText);
 								$message->setBody($messageText);
 
-								$messageHTML = $app['twig']->render('email/userWatchesSiteGroupPromptEmail.html.twig', array(
+								$messageHTML = $this->app['twig']->render('email/userWatchesSiteGroupPromptEmail.html.twig', array(
 									'user'=>$user,
 									'group'=>$group,
 									'lastEvents'=>$lastEvents,
@@ -129,9 +149,9 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 								$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
 
 
-								if ($verbose) print " ... sending\n";
+								$this->logVerbose(" ... sending" );
 								if (!$CONFIG->isDebug) {
-									$app['mailer']->send($message);	
+									$this->app['mailer']->send($message);
 								}
 								
 								$userNotificationRepo->markEmailed($userNotification);
@@ -149,8 +169,8 @@ class SendUserWatchesSiteGroupPromptEmailsTask {
 
 		}
 
-		print "Finished ".date("c")."\n";
 
+		return array('result'=>'ok');
 	}
 	
 }

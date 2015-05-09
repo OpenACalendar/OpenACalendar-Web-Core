@@ -745,6 +745,13 @@
 				({{ (config.taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval'} %}</td>
 		</tr>
+		<tr>
+			<th>taskRunImportURLsAutomaticUpdateInterval</th>
+			<td>{{ config.taskRunImportURLsAutomaticUpdateInterval }}
+				({{ (config.taskRunImportURLsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskRunImportURLsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskRunImportURLsAutomaticUpdateInterval'} %}</td>
+		</tr>
 	</table>
 
 {% endblock %}

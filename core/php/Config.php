@@ -184,6 +184,7 @@ class Config {
 	public $taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskRunImportURLsAutomaticUpdateInterval = 1800; // 30 mins
 
 	public $formWidgetTimeMinutesMultiples = 1;
 

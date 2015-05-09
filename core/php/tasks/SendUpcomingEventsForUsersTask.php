@@ -16,30 +16,48 @@ use repositories\UserNotificationRepository;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class SendUpcomingEventsForUsersTask {
+class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 
-	public static function run(Application $app, $verbose = false) {
+
+
+	public function getExtensionId()
+	{
+		return 'org.openacalendar';
+	}
+
+	public function getTaskId()
+	{
+		return 'SendUpcomingEventsForUsers';
+	}
+
+	public function getShouldRunAutomaticallyNow() {
+		return !$this->hasRunToday();
+	}
+
+	public function getCanRunManuallyNow() {
+		return !$this->hasRunToday();
+	}
+
+	protected function run() {
 		global $CONFIG;
-		
-		if ($verbose) print "Starting ".date("c")."\n";
 
 		$userRepoBuilder = new UserAccountRepositoryBuilder();
 		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
 		$userNotificationRepo = new UserNotificationRepository();
 
 		/** @var usernotifications/UpcomingEventsUserNotificationType **/
-		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UpcomingEvents');
+		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UpcomingEvents');
 
 		configureAppForThemeVariables(null);
 
 		foreach($userRepoBuilder->fetchAll() as $user) {
 
-			if ($verbose) print date("c")." User ".$user->getEmail()."\n";
-						
-			if ($verbose) print " ... searching\n";
+			$this->logVerbose(" User ".$user->getEmail() );
+
+			$this->logVerbose(" ... searching" );
 			list($upcomingEvents, $allEvents, $userAtEvent, $flag) = $user->getDataForUpcomingEventsEmail();
 			if ($flag) {
-				if ($verbose) print " ... found data\n";
+				$this->logVerbose(" ... found data");
 
 				/**  Notification Class 
 				 * @var usernotifications/UpcomingEventsUserNotificationModel **/
@@ -63,7 +81,7 @@ class SendUpcomingEventsForUsersTask {
 					$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 					$message->setTo($user->getEmail());
 
-					$messageText = $app['twig']->render('email/upcomingEventsForUser.txt.twig', array(
+					$messageText = $this->app['twig']->render('email/upcomingEventsForUser.txt.twig', array(
 						'user'=>$user,
 						'upcomingEvents'=>$upcomingEvents,
 						'allEvents'=>$allEvents,
@@ -75,7 +93,7 @@ class SendUpcomingEventsForUsersTask {
 					if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.txt', $messageText);
 					$message->setBody($messageText);
 
-					$messageHTML = $app['twig']->render('email/upcomingEventsForUser.html.twig', array(
+					$messageHTML = $this->app['twig']->render('email/upcomingEventsForUser.html.twig', array(
 						'user'=>$user,
 						'upcomingEvents'=>$upcomingEvents,
 						'allEvents'=>$allEvents,
@@ -90,9 +108,9 @@ class SendUpcomingEventsForUsersTask {
 					$headers = $message->getHeaders();
 					$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
 
-					if ($verbose) print " ... sending\n";
+					$this->logVerbose( " ... sending" );
 					if (!$CONFIG->isDebug) {
-						$app['mailer']->send($message);	
+						$this->app['mailer']->send($message);
 					}
 					$userNotificationRepo->markEmailed($userNotification);
 					
@@ -102,8 +120,7 @@ class SendUpcomingEventsForUsersTask {
 		}
 
 
-		if ($verbose) print "Finished ".date("c")."\n";
-		
+		return array('result'=>'ok');
 	}
 	
 }

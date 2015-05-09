@@ -13,10 +13,4 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 
-$actuallySend = isset($argv[1]) && strtolower($argv[1]) == 'yes';
-if (!$actuallySend) {
-	die("Flag not set, exiting with no work done\n");
-}
-
-tasks\SendUserWatchesSiteGroupPromptEmailsTask::run($app, true);
-
+print "\n\nUSE runTasksAutomatically.php now!\n\n";

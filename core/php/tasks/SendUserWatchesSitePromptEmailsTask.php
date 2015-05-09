@@ -24,13 +24,31 @@ use repositories\UserNotificationRepository;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class SendUserWatchesSitePromptEmailsTask {
+class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 
-	public static function run(Application $app, $verbose = false) {
+
+
+	public function getExtensionId()
+	{
+		return 'org.openacalendar';
+	}
+
+	public function getTaskId()
+	{
+		return 'SendUserWatchesSitePromptEmails';
+	}
+
+	public function getShouldRunAutomaticallyNow() {
+		return !$this->hasRunToday();
+	}
+
+	public function getCanRunManuallyNow() {
+		return !$this->hasRunToday();
+	}
+
+	protected function run() {
 		global $CONFIG;
-		
-		if ($verbose) print "Starting ".date("c")."\n";
-		
+
 		$userRepo = new UserAccountRepository();
 		$siteRepo = new SiteRepository();
 		$eventRepo = new EventRepository();
@@ -39,10 +57,10 @@ class SendUserWatchesSitePromptEmailsTask {
 		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
 		$userNotificationRepo = new UserNotificationRepository();
 		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
-		$userPermissionsRepo = new UserPermissionsRepository($app['extensions']);
+		$userPermissionsRepo = new UserPermissionsRepository($this->app['extensions']);
 
 		/** @var usernotifications/UserWatchesSiteGroupPromptNotificationType **/
-		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSitePrompt');
+		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSitePrompt');
 
 		$b = new UserWatchesSiteRepositoryBuilder();
 		foreach($b->fetchAll() as $userWatchesSite) {
@@ -52,18 +70,18 @@ class SendUserWatchesSitePromptEmailsTask {
 			// This is not the most efficient as it involves DB access and the results might not be used. But it'll do for now.
 			$userPermissions = $userPermissionsRepo->getPermissionsForUserInSite($user, $site, false, true);
 
-			if ($verbose) print date("c")." User ".$user->getEmail()." Site ".$site->getTitle()."\n";
+			$this->logVerbose(" User ".$user->getEmail()." Site ".$site->getTitle() );
 
 			if ($site->getIsClosedBySysAdmin()) {
-				if ($verbose) print " ... site is closed\n";
+				$this->logVerbose(" ... site is closed");
 			} else if ($userHasNoEditorPermissionsInSiteRepo->isUserInSite($user, $site)) {
-				if ($verbose) print " ... user does not have edit permissions allowed in site\n";
+				$this->logVerbose( " ... user does not have edit permissions allowed in site");
 			} else if (!$userPermissions->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
-				if ($verbose) print " ... user does not have org.openacalendar/CALENDAR_CHANGE permission in site\n";
+				$this->logVerbose( " ... user does not have org.openacalendar/CALENDAR_CHANGE permission in site");
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
 			} else if ($userWatchesSite->getIsWatching()) {
 
-				if ($verbose) print " ... searching for data\n";
+				$this->logVerbose( " ... searching for data");
 
 				$lastEvent = $eventRepo->loadLastNonDeletedNonImportedByStartTimeInSiteId($site->getId());
 				$data = $userWatchesSite->getPromptEmailData($site, $lastEvent);
@@ -72,7 +90,7 @@ class SendUserWatchesSitePromptEmailsTask {
 				if ($data['moreEventsNeeded']) {
 
 
-					if ($verbose) print " ... found data\n";
+					$this->logVerbose( " ... found data");
 
 					///// Notification Class 
 					$userNotification = $userNotificationType->getNewNotification($user, $site);
@@ -103,7 +121,7 @@ class SendUserWatchesSitePromptEmailsTask {
 						$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 						$message->setTo($user->getEmail());
 
-						$messageText = $app['twig']->render('email/userWatchesSitePromptEmail.txt.twig', array(
+						$messageText = $this->app['twig']->render('email/userWatchesSitePromptEmail.txt.twig', array(
 							'user'=>$user,
 							'lastEvents'=>$lastEvents,
 							'stopCode'=>$userWatchesSiteStop->getAccessKey(),
@@ -113,7 +131,7 @@ class SendUserWatchesSitePromptEmailsTask {
 						if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSitePromptEmail.txt', $messageText);
 						$message->setBody($messageText);
 
-						$messageHTML = $app['twig']->render('email/userWatchesSitePromptEmail.html.twig', array(
+						$messageHTML = $this->app['twig']->render('email/userWatchesSitePromptEmail.html.twig', array(
 							'user'=>$user,
 							'lastEvents'=>$lastEvents,
 							'stopCode'=>$userWatchesSiteStop->getAccessKey(),
@@ -127,9 +145,9 @@ class SendUserWatchesSitePromptEmailsTask {
 						$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
 
 
-						if ($verbose) print " ... sending\n";
+						$this->logVerbose( " ... sending");
 						if (!$CONFIG->isDebug) {
-							$app['mailer']->send($message);	
+							$this->app['mailer']->send($message);
 						}
 						$userNotificationRepo->markEmailed($userNotification);
 					}
@@ -142,8 +160,8 @@ class SendUserWatchesSitePromptEmailsTask {
 
 		}
 
-		if ($verbose) print "Finished ".date("c")."\n";
 
+		return array('result'=>'ok');
 	}
 	
 }

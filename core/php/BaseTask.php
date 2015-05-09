@@ -60,6 +60,20 @@ abstract class BaseTask {
 
 	}
 
+	public function hasRunToday() {
+		$start = \TimeSource::getDateTime();
+		$start->setTime(0, 0, 0);
+		$stat = $this->app['db']->prepare("SELECT ended_at FROM task_log ".
+			"WHERE extension_id=:extension_id AND task_id=:task_id AND started_at > :started_at ".
+			"ORDER BY ended_at DESC LIMIT 1");
+		$stat->execute(array(
+			'extension_id'=>$this->getExtensionId(),
+			'task_id'=>$this->getTaskId(),
+			'started_at'=>$start->format("Y-m-d H:i:s")
+		));
+		return $stat->rowCount() > 0;
+	}
+
 
 	public function runAutomaticallyNowIfShould($logVerbosePrint = false) {
 		if ($this->getShouldRunAutomaticallyNow()) {

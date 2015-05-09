@@ -13,5 +13,4 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-tasks\RunImportURLsTask::run($app, true);
-
+print "\n\nUSE runTasksAutomatically.php now!\n\n";

@@ -25,12 +25,27 @@ use Silex\Application;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class RunImportURLsTask {
+class RunImportURLsTask extends \BaseTask  {
 
-	public static function run(Application $app, $verbose = false) {
+
+
+	public function getExtensionId()
+	{
+		return 'org.openacalendar';
+	}
+
+	public function getTaskId()
+	{
+		return 'RunImportURLs';
+	}
+
+	public function getShouldRunAutomaticallyNow() {
+		return $this->app['config']->taskRunImportURLsAutomaticUpdateInterval > 0 &&
+		$this->getLastRunEndedAgoInSeconds() > $this->app['config']->taskRunImportURLsAutomaticUpdateInterval;
+	}
+
+	protected function run() {
 		global $CONFIG;
-
-		if ($verbose) print "Starting ".date("c")."\n";
 
 		$siteRepo = new SiteRepository();
 		$groupRepo = new GroupRepository();
@@ -42,7 +57,7 @@ class RunImportURLsTask {
 		$userNotificationRepo = new UserNotificationRepository();
 
 		/** @var usernotifications/UpcomingEventsUserNotificationType **/
-		$userNotificationType = $app['extensions']->getCoreExtension()->getUserNotificationType('ImportURLExpired');
+		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('ImportURLExpired');
 
 		$iurlBuilder = new ImportURLRepositoryBuilder();
 
@@ -51,22 +66,22 @@ class RunImportURLsTask {
 			$site = $siteRepo->loadById($importURL->getSiteID());
 			$group = $groupRepo->loadById($importURL->getGroupId());
 
-			if ($verbose) print date("c")." ImportURL ".$importURL->getId()." ".$importURL->getTitle()." Site ".$site->getTitle()."\n";
+			$this->logVerbose(" ImportURL ".$importURL->getId()." ".$importURL->getTitle()." Site ".$site->getTitle());
 
 			if ($site->getIsClosedBySysAdmin()) {
-				if ($verbose) print " - site closed by sys admin\n";
+				$this->logVerbose( " - site closed by sys admin");
 			} else if (!$site->getIsFeatureImporter()) {
-				if ($verbose) print " - site feature disabled\n";
+				$this->logVerbose( " - site feature disabled");
 			} else if (!$group) {
-				if ($verbose) print " - no group - this should be impossible\n";
+				$this->logVerbose( " - no group - this should be impossible");
 			} else if ($group->getIsDeleted()) {
-				if ($verbose) print " - group deleted\n";
+				$this->logVerbose( " - group deleted");
 			} else if ($importURL->getExpiredAt()) {
-				if ($verbose) print " - expired\n";
+				$this->logVerbose( " - expired");
 			} else if (!$importURL->getIsEnabled()) {
-				if ($verbose) print " - not enabled\n";
+				$this->logVerbose( " - not enabled");
 			} else if ($importURL->isShouldExpireNow()) {
-				if ($verbose) print " - expiring\n";
+				$this->logVerbose( " - expiring" );
 				$importURLRepo->expire($importURL);
 
 				configureAppForSite($site);
@@ -97,7 +112,7 @@ class RunImportURLsTask {
 							$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 							$message->setTo($user->getEmail());
 
-							$messageText = $app['twig']->render('email/importURLExpired.watchesSite.txt.twig', array(
+							$messageText = $this->app['twig']->render('email/importURLExpired.watchesSite.txt.twig', array(
 								'user'=>$user,
 								'importurl'=>$importURL,
 								'stopCode'=>$userWatchesSiteStop->getAccessKey(),
@@ -106,7 +121,7 @@ class RunImportURLsTask {
 							if ($CONFIG->isDebug) file_put_contents('/tmp/importURLExpired.watchesSite.txt', $messageText);
 							$message->setBody($messageText);
 
-							$messageHTML = $app['twig']->render('email/importURLExpired.watchesSite.html.twig', array(
+							$messageHTML = $this->app['twig']->render('email/importURLExpired.watchesSite.html.twig', array(
 								'user'=>$user,
 								'importurl'=>$importURL,
 								'stopCode'=>$userWatchesSiteStop->getAccessKey(),
@@ -116,7 +131,7 @@ class RunImportURLsTask {
 							$message->addPart($messageHTML,'text/html');
 
 							if (!$CONFIG->isDebug) {
-								$app['mailer']->send($message);
+								$this->app['mailer']->send($message);
 							}		
 							$userNotificationRepo->markEmailed($userNotification);
 							
@@ -147,7 +162,7 @@ class RunImportURLsTask {
 							$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 							$message->setTo($user->getEmail());
 
-							$messageText = $app['twig']->render('email/importURLExpired.watchesGroup.txt.twig', array(
+							$messageText = $this->app['twig']->render('email/importURLExpired.watchesGroup.txt.twig', array(
 								'user'=>$user,
 								'importurl'=>$importURL,
 								'stopCode'=>$userWatchesGroupStop->getAccessKey(),
@@ -157,7 +172,7 @@ class RunImportURLsTask {
 							if ($CONFIG->isDebug) file_put_contents('/tmp/importURLExpired.watchesGroup.txt', $messageText);
 							$message->setBody($messageText);
 
-							$messageHTML = $app['twig']->render('email/importURLExpired.watchesGroup.html.twig', array(
+							$messageHTML = $this->app['twig']->render('email/importURLExpired.watchesGroup.html.twig', array(
 								'user'=>$user,
 								'importurl'=>$importURL,
 								'stopCode'=>$userWatchesGroupStop->getAccessKey(),
@@ -168,7 +183,7 @@ class RunImportURLsTask {
 							$message->addPart($messageHTML,'text/html');
 
 							if (!$CONFIG->isDebug) {
-								$app['mailer']->send($message);
+								$this->app['mailer']->send($message);
 							}
 							$userNotificationRepo->markEmailed($userNotification);
 						}
@@ -179,19 +194,19 @@ class RunImportURLsTask {
 				$lastRunDate = $importURLRepo->getLastRunDateForImportURL($importURL);
 				$nowDate = \TimeSource::getDateTime();
 				if (!$lastRunDate || ($lastRunDate->getTimestamp() < $nowDate->getTimestamp() - $CONFIG->importURLSecondsBetweenImports)) {
-					if ($verbose) print " - importing\n";
+					$this->logVerbose( " - importing");
 					$runner = new ImportURLRunner();
 					$runner->go($importURL);
 				} else {
-					if ($verbose) print " - already done on ".$lastRunDate->format("c")."\n";
+					$this->logVerbose(" - already done on ".$lastRunDate->format("c") );
 				}
 			}
 
 
 		}
 
-		if ($verbose) print "Finished ".date("c")."\n";
-		
+		return array('result'=>'ok');
+
 	}
 	
 }
