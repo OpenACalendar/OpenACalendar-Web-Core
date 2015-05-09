@@ -113,22 +113,28 @@
 				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 			{% else %}
 				<li class="nodata">
-					{%  set eventsDefaultCount = area|futureeventscount %}
-						<p>
-						{%  if not eventListFilterParams.isDefaultFilters and eventsDefaultCount == 1 %}
-							No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the one future event</a> instead?
-						{%  elseif not eventListFilterParams.isDefaultFilters and eventsDefaultCount > 1 %}
-							No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
-						{%  else %}
+					<p>
+						{%  if not eventListFilterParams.isDefaultFilters %}
+							{%  set eventsDefaultCount = area|futureeventscount %}
+							{%  if eventsDefaultCount == 1 %}
+								No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the one future event</a> instead?
+							{%  elseif eventsDefaultCount > 1 %}
+								No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
+							{%  else %}
+								No events found.
+							{%  endif %}
+						{%  else  %}
 							No events found.
 						{%  endif %}
 					</p>
 
-					{%  set eventsPastCount = area|pasteventscount %}
-					{%  if eventsPastCount == 1 %}
-						<p>Sorry, you've already missed 1 event here.</p>
-					{% elseif eventsPastCount > 1 %}
-						<p>Sorry, you've already missed {{ eventsPastCount  }} events here.</p>
+					{%  if eventListFilterParams.isDefaultFilters %}
+						{%  set eventsPastCount = area|pasteventscount %}
+						{%  if eventsPastCount == 1 %}
+							<p>(Sorry, you've already missed 1 event here.)</p>
+						{% elseif eventsPastCount > 1 %}
+							<p>(Sorry, you've already missed {{ eventsPastCount  }} events here.)</p>
+						{%  endif %}
 					{%  endif %}
 				</li>
 			{% endfor %}

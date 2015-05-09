@@ -157,20 +157,29 @@
 				{%  endif %}
 			{% else %}
 				<li class="nodata">
-					<p>No events found.</p>
-					{% if isGroupRunningOutOfFutureEvents and currentUserActions.has("org.openacalendar","groupNewEvent") %}
-						<p>
-							{# The search filters could be hiding future events, so it could be true there are no events to show BUT NOT that we don't know of future events #}
-							{% if isGroupRunningOutOfFutureEvents == 1 %}
-								We are about to run out of future events!
-							{% else %}
-								We don't know of any future events.
-							{% endif %}
-						</p>
-						<p>
-							You can <a href="/group/{{ group.slugForUrl }}/newevent">create a new event</a> or look for an old event and select "recur".
-						</p>
-					{% endif %}
+					<p>
+						{%  if not eventListFilterParams.isDefaultFilters %}
+							{%  set eventsDefaultCount = group|futureeventscount %}
+							{%  if eventsDefaultCount == 1 %}
+								No events found with that filter. Do you want to see <a href="/group/{{  group.slugForURL }}">the one future event</a> instead?
+							{%  elseif eventsDefaultCount > 1 %}
+								No events found with that filter. Do you want to see <a href="/group/{{  group.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
+							{%  else %}
+								No events found.
+							{%  endif %}
+						{%  else  %}
+							No events found.
+						{%  endif %}
+					</p>
+
+					{%  if eventListFilterParams.isDefaultFilters %}
+						{%  set eventsPastCount = group|pasteventscount %}
+						{%  if eventsPastCount == 1 %}
+							<p>(Sorry, you've already missed 1 event.)</p>
+						{% elseif eventsPastCount > 1 %}
+							<p>(Sorry, you've already missed {{ eventsPastCount  }} events.)</p>
+						{%  endif %}
+					{%  endif %}
 				</li>
 			{% endif %}
 		</ul>

@@ -62,8 +62,30 @@
 					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 				{% else %}
 					<li class="nodata">
-						No events found.
-						{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
+						<p>
+							{%  if not eventListFilterParams.isDefaultFilters %}
+								{%  set eventsDefaultCount = null|futureeventscount %}
+								{%  if eventsDefaultCount == 1 %}
+									No events found with that filter. Do you want to see <a href="/event">the one future event</a> instead?
+								{%  elseif eventsDefaultCount > 1 %}
+									No events found with that filter. Do you want to see <a href="/event">the {{ eventsDefaultCount }} future events</a> instead?
+								{%  else %}
+									No events found.
+								{%  endif %}
+							{%  else  %}
+								No events found.
+							{%  endif %}
+						</p>
+
+						{%  if eventListFilterParams.isDefaultFilters %}
+							{%  set eventsPastCount = null|pasteventscount %}
+							{%  if eventsPastCount == 1 %}
+								<p>(Sorry, you've already missed 1 event here.)</p>
+							{% elseif eventsPastCount > 1 %}
+								<p>(Sorry, you've already missed {{ eventsPastCount  }} events here.)</p>
+							{%  endif %}
+						{%  endif %}
+						{% if currentUserActions.has("org.openacalendar","eventNew") %}<p>Why not <a href="/event/new">add one</a>?</p>{% endif %}
 					</li>					
 				{% endfor %}
 			</ul>

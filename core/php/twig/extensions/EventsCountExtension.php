@@ -47,6 +47,10 @@ class EventsCountExtension  extends \Twig_Extension {
 
 		if ($data instanceof \models\AreaModel) {
 			$erb->setArea($data);
+		} else if ($data instanceof \models\GroupModel) {
+			$erb->setGroup($data);
+		} else if ($data instanceof \models\TagModel) {
+			$erb->setTag($data);
 		}
 
 		return $erb->fetchCount();
@@ -63,6 +67,10 @@ class EventsCountExtension  extends \Twig_Extension {
 
 		if ($data instanceof \models\AreaModel) {
 			$erb->setArea($data);
+		} else if ($data instanceof \models\GroupModel) {
+			$erb->setGroup($data);
+		} else if ($data instanceof \models\TagModel) {
+			$erb->setTag($data);
 		}
 
 		return $erb->fetchCount();
