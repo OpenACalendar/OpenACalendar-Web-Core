@@ -145,15 +145,16 @@
 				</li>
 			{% endfor %}
 		</ul>
-		
-		
-		<input type="submit"  value="Save" />	
+
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
 	</form>
 
 
-	<form action="#" method="post" class="styled" onsubmit="return confirm('Are you sure you want to cancel?');">
+	<form action="/event/{{  event.slugForURL }}" method="get" class="styled"">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="submitted" value="cancel">
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="Cancel" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
 		<input type="submit"  value="Cancel" />	
 	</form>
 
