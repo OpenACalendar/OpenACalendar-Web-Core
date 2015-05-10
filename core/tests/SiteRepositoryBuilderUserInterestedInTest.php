@@ -78,10 +78,17 @@ class SiteRepositoryBuilderUserInterestedInTest extends \BaseAppWithDBTest {
 		$siteRepo = new SiteRepository();
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
+		// Test user doesn't have it
+		$srb = new \repositories\builders\SiteRepositoryBuilder();
+		$srb->setUserInterestedIn($userTest);
+		$sites = $srb->fetchAll();
+		$this->assertEquals(0, count($sites));
+
+		// watch site
 		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository();
 		$userWatchesSiteRepo->startUserWatchingSite($userTest, $site);
 
-		// Test user who watches site has it!
+		// has it!
 		$srb = new \repositories\builders\SiteRepositoryBuilder();
 		$srb->setUserInterestedIn($userTest);
 		$sites = $srb->fetchAll();
@@ -122,14 +129,20 @@ class SiteRepositoryBuilderUserInterestedInTest extends \BaseAppWithDBTest {
 		$this->assertTrue(count($userGroups) > 0);
 		$userGroup = $userGroups[0];
 
-		$uiugr = new \repositories\UserGroupRepository();
-		$uiugr->addUserToGroup($userTest, $userGroup);
-
-		// Test user in user group has it
+		// Test user doesn't have it
 		$srb = new \repositories\builders\SiteRepositoryBuilder();
 		$srb->setUserInterestedIn($userTest);
 		$sites = $srb->fetchAll();
+		$this->assertEquals(0, count($sites));
 
+		// added to user group
+		$uiugr = new \repositories\UserGroupRepository();
+		$uiugr->addUserToGroup($userTest, $userGroup);
+
+		//  has it
+		$srb = new \repositories\builders\SiteRepositoryBuilder();
+		$srb->setUserInterestedIn($userTest);
+		$sites = $srb->fetchAll();
 		$this->assertEquals(1, count($sites));
 
 	}
