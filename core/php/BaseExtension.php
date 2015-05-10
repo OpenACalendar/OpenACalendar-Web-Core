@@ -137,7 +137,7 @@ abstract class BaseExtension {
 	}
 
 	/** @return InterfaceNewsFeedModel */
-	public function getNewsFeedModel($interfaceHistoryModel) { // @TODO InterfaceHistoryModel type!!!!!!
+	public function getNewsFeedModel($interfaceHistoryModel, SiteModel $siteModel) { // @TODO InterfaceHistoryModel type!!!!!!
 		return null;
 	}
 

@@ -4,6 +4,7 @@ namespace newsfeedmodels;
 
 use api1exportbuilders\TraitATOM;
 use models\AreaHistoryModel;
+use models\SiteModel;
 
 /**
  *
@@ -18,12 +19,17 @@ use models\AreaHistoryModel;
 class AreaHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 
 
+
+	/** @var SiteModel */
+	protected $siteModel;
+
 	/** @var AreaHistoryModel */
 	protected $areaHistoryModel;
 
-	function __construct($areaHistoryModel)
+	function __construct($areaHistoryModel, SiteModel $siteModel)
 	{
 		$this->areaHistoryModel = $areaHistoryModel;
+		$this->siteModel = $siteModel;
 	}
 
 
@@ -44,7 +50,7 @@ class AreaHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 		global $CONFIG;
 		return $CONFIG->isSingleSiteMode ?
 			'http://'.$CONFIG->webSiteDomain.'/area/'.$this->areaHistoryModel->getSlug() :
-			'http://'.$this->areaHistoryModel->getSiteSlug().".".$CONFIG->webSiteDomain.'/area/'.$this->areaHistoryModel->getSlug() ;
+			'http://'.$this->siteModel->getSlug().".".$CONFIG->webSiteDomain.'/area/'.$this->areaHistoryModel->getSlug() ;
 	}
 
 	public function getTitle()

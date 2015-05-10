@@ -3,8 +3,9 @@
 namespace newsfeedmodels;
 
 use models\ImportURLHistoryModel;
+use models\SiteModel;
 
-	/**
+/**
 	 *
 	 * @package Core
 	 * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
@@ -17,13 +18,18 @@ use models\ImportURLHistoryModel;
 class ImportURLHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 
 
+	/** @var SiteModel */
+	protected $siteModel;
+
+
 
 	/** @var ImportURLHistoryModel */
 	protected $importURLHistoryModel;
 
-	function __construct($importURLHistoryModel)
+	function __construct($importURLHistoryModel, SiteModel $siteModel)
 	{
 		$this->importURLHistoryModel = $importURLHistoryModel;
+		$this->siteModel = $siteModel;
 	}
 
 
@@ -44,7 +50,7 @@ class ImportURLHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 		global $CONFIG;
 		return $CONFIG->isSingleSiteMode ?
 			'http://'.$CONFIG->webSiteDomain.'/importurl/'.$this->importURLHistoryModel->getSlug() :
-			'http://'.$this->site_slug.".".$CONFIG->webSiteDomain.'/importurl/'.$this->importURLHistoryModel->getSlug() ;
+			'http://'.$this->siteModel->getSlug().".".$CONFIG->webSiteDomain.'/importurl/'.$this->importURLHistoryModel->getSlug() ;
 	}
 
 	public function getTitle()

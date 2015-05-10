@@ -2,6 +2,7 @@
 
 namespace newsfeedmodels;
 
+use models\SiteModel;
 use models\TagHistoryModel;
 
 	/**
@@ -16,12 +17,17 @@ use models\TagHistoryModel;
 class TagHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 
 
+	/** @var SiteModel */
+	protected $siteModel;
+
+
 	/** @var TagHistoryModel */
 	protected $tagHistoryModel;
 
-	function __construct($tagHistoryModel)
+	function __construct($tagHistoryModel, SiteModel $siteModel)
 	{
 		$this->tagHistoryModel = $tagHistoryModel;
+		$this->siteModel = $siteModel;
 	}
 
 
@@ -42,7 +48,7 @@ class TagHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 		global $CONFIG;
 		return $CONFIG->isSingleSiteMode ?
 			'http://'.$CONFIG->webSiteDomain.'/tag/'.$this->tagHistoryModel->getSlug() :
-			'http://'.$this->site_slug.".".$CONFIG->webSiteDomain.'/tag/'.$this->tagHistoryModel->getSlug() ;
+			'http://'.$this->siteModel->getSlug().".".$CONFIG->webSiteDomain.'/tag/'.$this->tagHistoryModel->getSlug() ;
 	}
 
 	public function getTitle()

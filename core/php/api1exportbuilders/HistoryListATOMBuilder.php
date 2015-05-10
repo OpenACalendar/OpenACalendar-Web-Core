@@ -65,7 +65,7 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 		global $CONFIG;
 		foreach($this->app['extensions']->getExtensionsIncludingCore() as $ext) {
 			/** @var $r InterfaceNewsFeedModel */
-			$r = $ext->getNewsFeedModel($history);
+			$r = $ext->getNewsFeedModel($history, $this->site);
 			if ($r) {
 				$txt = '<entry>';
 				$txt .= '<id>'.$r->getID().'</id>';
@@ -75,6 +75,7 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 				$txt .= '<updated>'.$r->getCreatedAt()->format("Y-m-d")."T".$r->getCreatedAt()->format("H:i:s")."Z</updated>";
 				$txt .= '<author><name>'.$CONFIG->siteTitle.'</name></author></entry>'." \r\n";
 				$this->histories[] = $txt;
+				return;
 			}
 		}
 	}

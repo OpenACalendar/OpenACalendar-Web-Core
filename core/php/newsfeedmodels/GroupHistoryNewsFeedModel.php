@@ -3,8 +3,9 @@
 namespace newsfeedmodels;
 
 use models\GroupHistoryModel;
+use models\SiteModel;
 
-	/**
+/**
 	 *
 	 * @package Core
 	 * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
@@ -17,10 +18,14 @@ class GroupHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 
 
 
+	/** @var SiteModel */
+	protected $siteModel;
+
+
 	/** @var GroupHistoryModel */
 	protected $groupHistoryModel;
 
-	function __construct($groupHistoryModel)
+	function __construct($groupHistoryModel, SiteModel $siteModel)
 	{
 		$this->groupHistoryModel = $groupHistoryModel;
 	}
@@ -43,7 +48,7 @@ class GroupHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 		global $CONFIG;
 		return $CONFIG->isSingleSiteMode ?
 			'http://'.$CONFIG->webSiteDomain.'/group/'.$this->groupHistoryModel->getSlug() :
-			'http://'.$this->site_slug.".".$CONFIG->webSiteDomain.'/group/'.$this->groupHistoryModel->getSlug() ;
+			'http://'.$this->siteModel->getSlug().".".$CONFIG->webSiteDomain.'/group/'.$this->groupHistoryModel->getSlug() ;
 	}
 
 	public function getTitle()

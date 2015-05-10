@@ -3,8 +3,9 @@
 namespace newsfeedmodels;
 
 use models\EventHistoryModel;
+use models\SiteModel;
 
-	/**
+/**
 	 *
 	 * @package Core
 	 * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
@@ -15,12 +16,17 @@ use models\EventHistoryModel;
 
 class EventHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 
+
+	/** @var SiteModel */
+	protected $siteModel;
+
 	/** @var EventHistoryModel */
 	protected $eventHistoryModel;
 
-	function __construct($eventHistoryModel)
+	function __construct($eventHistoryModel, SiteModel $siteModel)
 	{
 		$this->eventHistoryModel = $eventHistoryModel;
+		$this->siteModel = $siteModel;
 	}
 
 
@@ -42,7 +48,7 @@ class EventHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 		global $CONFIG;
 		return $CONFIG->isSingleSiteMode ?
 			'http://'.$CONFIG->webSiteDomain.'/event/'.$this->eventHistoryModel->getSlug() :
-			'http://'.$this->site_slug.".".$CONFIG->webSiteDomain.'/event/'.$this->eventHistoryModel->getSlug() ;
+			'http://'.$this->siteModel->getSlug().".".$CONFIG->webSiteDomain.'/event/'.$this->eventHistoryModel->getSlug() ;
 	}
 
 	public function getTitle()

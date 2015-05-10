@@ -2,6 +2,7 @@
 
 namespace newsfeedmodels;
 
+use models\SiteModel;
 use models\VenueHistoryModel;
 
 	/**
@@ -17,13 +18,16 @@ use models\VenueHistoryModel;
 class VenueHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 
 
+	/** @var SiteModel */
+	protected $siteModel;
 
 	/** @var VenueHistoryModel */
 	protected $venueHistoryModel;
 
-	function __construct($venueHistoryModel)
+	function __construct($venueHistoryModel, SiteModel $siteModel)
 	{
 		$this->venueHistoryModel = $venueHistoryModel;
+		$this->siteModel = $siteModel;
 	}
 
 
@@ -45,7 +49,7 @@ class VenueHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 		global $CONFIG;
 		return $CONFIG->isSingleSiteMode ?
 			'http://'.$CONFIG->webSiteDomain.'/venue/'.$this->venueHistoryModel->getSlug() :
-			'http://'.$this->site_slug.".".$CONFIG->webSiteDomain.'/venue/'.$this->venueHistoryModel->getSlug() ;
+			'http://'.$this->siteModel->getSlug().".".$CONFIG->webSiteDomain.'/venue/'.$this->venueHistoryModel->getSlug() ;
 	}
 
 	public function getTitle()

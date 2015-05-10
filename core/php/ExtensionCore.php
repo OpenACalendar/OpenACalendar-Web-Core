@@ -186,19 +186,19 @@ class ExtensionCore extends BaseExtension {
 	}
 
 
-	public function getNewsFeedModel( $interfaceHistoryModel) { // TODO can't set type InterfaceHistoryModel!!!!!!!
+	public function getNewsFeedModel( $interfaceHistoryModel, SiteModel $siteModel) { // TODO can't set type InterfaceHistoryModel!!!!!!!
 		if ($interfaceHistoryModel instanceof \models\AreaHistoryModel) {
-			return new \newsfeedmodels\AreaHistoryNewsFeedModel($interfaceHistoryModel);
+			return new \newsfeedmodels\AreaHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\EventHistoryModel) {
-			return new \newsfeedmodels\EventHistoryNewsFeedModel($interfaceHistoryModel);
+			return new \newsfeedmodels\EventHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\GroupHistoryModel) {
-			return new \newsfeedmodels\GroupHistoryNewsFeedModel($interfaceHistoryModel);
+			return new \newsfeedmodels\GroupHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\ImportURLHistoryModel) {
-			return new \newsfeedmodels\ImportURLHistoryNewsFeedModel($interfaceHistoryModel);
+			return new \newsfeedmodels\ImportURLHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\TagHistoryModel) {
-			return new \newsfeedmodels\TagHistoryNewsFeedModel($interfaceHistoryModel);
+			return new \newsfeedmodels\TagHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\VenueHistoryModel) {
-			return new \newsfeedmodels\VenueHistoryNewsFeedModel($interfaceHistoryModel);
+			return new \newsfeedmodels\VenueHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		}
 	}
 
