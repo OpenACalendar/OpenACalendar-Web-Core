@@ -78,7 +78,8 @@ class ImportURLNewForm extends AbstractType{
 			global $CONFIG;
 			$form = $event->getForm();
 			// URL validation. We really can't do much except verify ppl haven't put a space in, which they might do if they just type in Google search terms (seen it done)
-			if (strpos($form->get("url")->getData(), " ") !== false) {
+			// or no value
+			if (strpos($form->get("url")->getData(), " ") !== false || !trim($form->get("url")->getData())) {
 				$form['url']->addError(new FormError("Please enter a URL"));
 			}
 		};
