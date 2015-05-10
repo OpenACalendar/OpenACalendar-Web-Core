@@ -24,7 +24,7 @@
 	<ul class="history">
 		{% for historyItem in eventHistories %}
 			{%  if historyItem.siteWebTemplate %}
-				{%  include historyItem.siteWebTemplate with { 'historyItem':historyItem } %}
+				{%  include historyItem.siteWebTemplate with { 'historyItem':historyItem, 'eventRollbackLink':true , 'eventRollbackLinkEvent':event} %}
 			{% endif %}
 		{% endfor %}
 	</ul>

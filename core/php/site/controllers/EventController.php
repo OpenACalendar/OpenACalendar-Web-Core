@@ -131,6 +131,8 @@ class EventController {
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled());
+		$app['currentUserActions']->set("org.openacalendar","eventEditDetailsRollback",
+			$app['currentUserActions']->has("org.openacalendar","eventEditDetails"));
 		$app['currentUserActions']->set("org.openacalendar","eventEditVenue",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()

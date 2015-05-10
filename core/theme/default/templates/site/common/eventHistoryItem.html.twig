@@ -131,4 +131,10 @@
 		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
 		{%  if historyItem.editComment %} leaving comment: {{ historyItem.editComment }}{%  endif %}
 	</div>
+	{%  if eventRollbackLink is defined and eventRollbackLink and currentUserActions.has("org.openacalendar","eventEditDetailsRollback") %}
+		<form action="/event/{{  eventRollbackLinkEvent.slugForURL }}/rollback/{{ historyItem.createdAtTimeStamp }}" class="oneActionFormRight" method="get">
+			<input type="submit" value="Rollback to this">
+		</form>
+		<div class="afterOneActionFormRight"></div>
+	{% endif %}
 </li>
