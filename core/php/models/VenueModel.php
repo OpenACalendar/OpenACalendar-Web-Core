@@ -182,15 +182,17 @@ class VenueModel {
 	}
 
 	public function setLng($lng) {
+		if ($lng != '') {
+			$this->lng = $lng;
+		}
+	}
+
+	public function setLngIfDifferent($lng) {
 		if ($this->lng != $lng && $lng != '') {
 			$this->lng = $lng;
 			return true;
 		}
 		return false;
-	}
-
-	public function setLngIfDifferent($lng) {
-		$this->lng = $lng;
 	}
 
 	public function getCountryId() {
