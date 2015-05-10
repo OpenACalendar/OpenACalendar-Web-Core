@@ -69,7 +69,7 @@ class EventNewWhatDetailsForm extends AbstractType {
 		$builder->add('url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Information Web Page URL',
 			'required'=>false,
-			'data' => $this->eventDraft->getDetailsValue('event.ticket_url'),
+			'data' => $this->eventDraft->getDetailsValue('event.url'),
 		));
 		
 		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
@@ -88,7 +88,7 @@ class EventNewWhatDetailsForm extends AbstractType {
 					if ($fieldType) {
 						$this->customFields[] = $customField;
 						$options = $fieldType->getSymfonyFormOptions($customField);
-						// $options['data'] = TODO
+						$options['data'] = $this->eventDraft->getDetailsValue('event.custom.'.$customField->getKey());
 						$builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
 					}
 				}
