@@ -71,7 +71,7 @@ $app->before(function (Request $request) use ($app) {
 	# ////////////// if not current user, let templates see what currentUser could do
 	if (!$app['currentUser']) {
 		// We don't pass $removeEditorPermissions here because that is about specific users being banned and this is potential users
-		$app['anyVerifiedUserPermissions'] = $userPermissionsRepo->getPermissionsForAnyVerifiedUserInSite($app['currentSite'], false, false);
+		$app['anyVerifiedUserPermissions'] = $userPermissionsRepo->getPermissionsForAnyVerifiedUserInSite($app['currentSite'], false, true);
 		$app['anyVerifiedUserActions'] = new UserActionsSiteList($app['currentSite'], $app['anyVerifiedUserPermissions'] );
 		$app['twig']->addGlobal('anyVerifiedUserActions', $app['anyVerifiedUserActions'] );
 	}
