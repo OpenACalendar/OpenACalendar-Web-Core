@@ -47,7 +47,7 @@
 			{% elseif userAtEventMaybePrivate|length > 0 %}
 				<p>Maybe attending: {{ userAtEventMaybePrivate|length }} {% if userAtEventMaybePrivate|length > 1 %}people{% else %}person{% endif %}.</p>
 			{% endif %}
-			{%  if userAtEventIsCurrentUser and event.ticketURL %}
+			{%  if userAtEventIsCurrentUser and event.ticketURL and not event.isInPast and not event.isDeleted and not event.isCancelled %}
 				<p class="GetTicket">Make sure you get your ticket from <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a>!</p>
 			{%  endif %}
 		</div>
