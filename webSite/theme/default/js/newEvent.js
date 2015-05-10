@@ -45,7 +45,15 @@ function loadData() {
 				html += '<span class="startTime">'+event.startTime+'</span>';
 				html += '</div>';
 				html += '</a></div>';
-				html += '<div class="title"><a href="#" onclick="showEventPopup('+ event.slug +'); return false;">'+escapeHTML(event.summary)+'</a></div>';
+				html += '<div class="title"><a href="#" onclick="showEventPopup('+ event.slug +'); return false;">';
+				html += escapeHTML(event.summary);
+				if (event.cancelled) {
+					html += ' [CANCELLED]';
+				}
+				if (event.deleted) {
+					html += ' [DELETED]';
+				}
+				html += '</a></div>';
 				html += '<div class="description">'+(event.description ? escapeHTMLNewLine(event.description) : '')+'</div>';
 				html += '<div class="afterEventListing"></div>';
 				html += '</li>';
@@ -88,7 +96,13 @@ function showEventPopup(eventSlug) {
 		url: "/api1/event/"+eventSlug+"/info.json"
 	}).success(function ( eventdata ) {
 		var event = eventdata.data[0];
-		$('#EventPopupTitle').text(event.summaryDisplay);
+		if (event.cancelled) {
+			$('#EventPopupTitle').text(event.summaryDisplay + ' [CANCELLED]');
+		} else if (event.deleted) {
+			$('#EventPopupTitle').text(event.summaryDisplay + ' [DELETED]');
+		} else {
+			$('#EventPopupTitle').text(event.summaryDisplay);
+		}
 		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,500));
 		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
 		if (event.venue) {

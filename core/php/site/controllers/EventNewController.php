@@ -365,6 +365,8 @@ class EventNewController {
 				'startDate' => $start->format("jS"),
 				'startMonthYear' => $start->format("M \'y"),
 				'startTime' => $start->format("g:ia"),
+				'deleted' => $dupeEvent->getIsDeleted(),
+				'cancelled' => $dupeEvent->getIsCancelled(),
 			);
 		}
 
