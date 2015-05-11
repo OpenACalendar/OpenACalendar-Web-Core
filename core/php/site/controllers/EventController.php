@@ -1693,12 +1693,12 @@ class EventController {
 		
 		}
 		
-		// TODO not ones already added.
 		$this->parameters['groupListFilterParams'] = new GroupFilterParams();
 		$this->parameters['groupListFilterParams']->set($_GET);
 		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setIncludeDeleted(false);
 		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setLimit(30);
+		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setNotEvent($this->parameters['event']);
 		$this->parameters['groupsToAdd'] = $this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->fetchAll();
 
 		return $app['twig']->render('site/event/edit.groups.html.twig', $this->parameters);

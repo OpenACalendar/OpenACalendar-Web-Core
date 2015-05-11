@@ -11,7 +11,7 @@ use models\EventModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
@@ -30,6 +30,13 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 	public function setEvent(EventModel $event) {
 		$this->event = $event;
+	}
+
+	/** @var EventModel **/
+	protected $notEvent;
+
+	public function setNotEvent(EventModel $event) {
+		$this->notEvent = $event;
 	}
 
 	protected $freeTextSearch;
@@ -70,8 +77,13 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->joins[] =  " JOIN event_in_group AS event_in_group ON event_in_group.group_id = group_information.id ".
 					"AND event_in_group.removed_at IS NULL AND event_in_group.event_id = :event_id ";
 			$this->params['event_id'] = $this->event->getId();
+		} else if ($this->notEvent) {
+			$this->joins[] =  " LEFT JOIN event_in_group AS event_in_group ON event_in_group.group_id = group_information.id ".
+					"AND event_in_group.removed_at IS NULL AND event_in_group.event_id = :event_id ";
+			$this->params['event_id'] = $this->notEvent->getId();
+			$this->where[] = '  event_in_group.event_id IS NULL ';
 		}
-		
+
 		if ($this->freeTextSearch) {
 			$this->where[] =  '(CASE WHEN group_information.title IS NULL THEN \'\' ELSE group_information.title END )  || \' \' || '.
 					'(CASE WHEN group_information.description IS NULL THEN \'\' ELSE group_information.description END )'.
