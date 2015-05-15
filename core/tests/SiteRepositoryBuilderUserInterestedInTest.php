@@ -97,6 +97,54 @@ class SiteRepositoryBuilderUserInterestedInTest extends \BaseAppWithDBTest {
 
 	}
 
+	function testUserWatchesGroup() {
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userTest = new UserAccountModel();
+		$userTest->setEmail("testtest@jarofgreen.co.uk");
+		$userTest->setUsername("testtest");
+		$userTest->setPassword("password");
+
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+		$userRepo->create($userTest);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
+
+		$group = new \models\GroupModel();
+		$group->setTitle("Test");
+
+		$groupRepo = new \repositories\GroupRepository();
+		$groupRepo->create($group, $site, $user);
+
+		// Test user doesn't have it
+		$srb = new \repositories\builders\SiteRepositoryBuilder();
+		$srb->setUserInterestedIn($userTest);
+		$sites = $srb->fetchAll();
+		$this->assertEquals(0, count($sites));
+
+		// watch group
+		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
+		$userWatchesGroupRepo->startUserWatchingGroup($userTest, $group);
+
+		// has it!
+		$srb = new \repositories\builders\SiteRepositoryBuilder();
+		$srb->setUserInterestedIn($userTest);
+		$sites = $srb->fetchAll();
+		$this->assertEquals(1, count($sites));
+
+	}
+
 	function testUserIsUserGroup() {
 
 

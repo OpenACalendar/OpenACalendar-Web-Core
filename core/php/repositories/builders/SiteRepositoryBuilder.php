@@ -36,11 +36,18 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 	protected function build() {
 		if ($this->userInterestedIn) {
-			// user watches site
-			$this->joins[] = " LEFT JOIN user_watches_site_information ON user_watches_site_information.site_id = site_information.id AND user_watches_site_information.user_account_id = :user_in_site ";
 			$this->params['user_in_site'] = $this->userInterestedIn->getId();
 
-			// TODO could do user_watches_group_information to? https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/355
+			// user watches site
+			$this->joins[] = " LEFT JOIN user_watches_site_information ON user_watches_site_information.site_id = site_information.id AND user_watches_site_information.user_account_id = :user_in_site ";
+
+			// user watches group information
+			$inner = "SELECT  group_information.site_id AS site_id, user_watches_group_information.user_account_id AS user_account_id ".
+				"FROM user_watches_group_information ".
+				" JOIN group_information ON group_information.id = user_watches_group_information.group_id ".
+				" WHERE user_watches_group_information.is_watching = '1' AND user_watches_group_information.user_account_id = :user_in_site ".
+				" GROUP BY group_information.site_id, user_watches_group_information.user_account_id ";
+			$this->joins[] = " LEFT JOIN (".$inner.") AS user_watches_group ON user_watches_group.site_id = site_information.id  ";
 
 			// TODO could do user_watches_area_information to? https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/356
 
@@ -54,7 +61,7 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->joins[] = " LEFT JOIN (".$inner.") AS user_permission_in_site ON user_permission_in_site.site_id = site_information.id  ";
 
 			// put it all together
-			$this->where[] = " (   user_watches_site_information.is_watching = '1' OR user_permission_in_site.user_account_id = :user_in_site)";
+			$this->where[] = " (   user_watches_site_information.is_watching = '1' OR user_permission_in_site.user_account_id = :user_in_site OR user_watches_group.user_account_id = :user_in_site)";
 		}
 
 		if ($this->isListedInIndexOnly) {
