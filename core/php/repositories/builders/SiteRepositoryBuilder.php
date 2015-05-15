@@ -48,8 +48,15 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 				" WHERE user_watches_group_information.is_watching = '1' AND user_watches_group_information.user_account_id = :user_in_site ".
 				" GROUP BY group_information.site_id, user_watches_group_information.user_account_id ";
 			$this->joins[] = " LEFT JOIN (".$inner.") AS user_watches_group ON user_watches_group.site_id = site_information.id  ";
+			
+			// user watches area information
+			$inner = "SELECT  area_information.site_id AS site_id, user_watches_area_information.user_account_id AS user_account_id ".
+				"FROM user_watches_area_information ".
+				" JOIN area_information ON area_information.id = user_watches_area_information.area_id ".
+				" WHERE user_watches_area_information.is_watching = '1' AND user_watches_area_information.user_account_id = :user_in_site ".
+				" GROUP BY area_information.site_id, user_watches_area_information.user_account_id ";
+			$this->joins[] = " LEFT JOIN (".$inner.") AS user_watches_area ON user_watches_area.site_id = site_information.id  ";
 
-			// TODO could do user_watches_area_information to? https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/356
 
 			// TODO user at event. https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/357
 
@@ -61,7 +68,11 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->joins[] = " LEFT JOIN (".$inner.") AS user_permission_in_site ON user_permission_in_site.site_id = site_information.id  ";
 
 			// put it all together
-			$this->where[] = " (   user_watches_site_information.is_watching = '1' OR user_permission_in_site.user_account_id = :user_in_site OR user_watches_group.user_account_id = :user_in_site)";
+			$this->where[] = " (  user_watches_site_information.is_watching = '1' ".
+				" OR user_permission_in_site.user_account_id = :user_in_site ".
+				" OR user_watches_group.user_account_id = :user_in_site ".
+				" OR user_watches_area.user_account_id = :user_in_site ".
+				" )";
 		}
 
 		if ($this->isListedInIndexOnly) {

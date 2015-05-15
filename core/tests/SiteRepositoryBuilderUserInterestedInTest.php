@@ -1,6 +1,7 @@
 <?php
 use models\SiteModel;
 use models\UserAccountModel;
+use repositories\CountryRepository;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
 
@@ -136,6 +137,57 @@ class SiteRepositoryBuilderUserInterestedInTest extends \BaseAppWithDBTest {
 		// watch group
 		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
 		$userWatchesGroupRepo->startUserWatchingGroup($userTest, $group);
+
+		// has it!
+		$srb = new \repositories\builders\SiteRepositoryBuilder();
+		$srb->setUserInterestedIn($userTest);
+		$sites = $srb->fetchAll();
+		$this->assertEquals(1, count($sites));
+
+	}
+	
+	function testUserWatchesArea() {
+		$this->addCountriesToTestDB();
+		$countryRepo = new CountryRepository();
+
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userTest = new UserAccountModel();
+		$userTest->setEmail("testtest@jarofgreen.co.uk");
+		$userTest->setUsername("testtest");
+		$userTest->setPassword("password");
+
+
+		$userRepo = new UserAccountRepository();
+		$userRepo->create($user);
+		$userRepo->create($userTest);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository();
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
+
+		$area = new \models\AreaModel();
+		$area->setTitle("Test");
+
+		$areaRepo = new \repositories\AreaRepository();
+		$areaRepo->create($area, null, $site, $countryRepo->loadByTwoCharCode('GB'), $user);
+
+		// Test user doesn't have it
+		$srb = new \repositories\builders\SiteRepositoryBuilder();
+		$srb->setUserInterestedIn($userTest);
+		$sites = $srb->fetchAll();
+		$this->assertEquals(0, count($sites));
+
+		// watch area
+		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository();
+		$userWatchesAreaRepo->startUserWatchingArea($userTest, $area);
 
 		// has it!
 		$srb = new \repositories\builders\SiteRepositoryBuilder();
