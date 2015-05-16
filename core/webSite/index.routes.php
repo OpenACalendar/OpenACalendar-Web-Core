@@ -204,7 +204,7 @@ $app->match('/group', "site\controllers\GroupListController::index");
 $app->match('/group/', "site\controllers\GroupListController::index"); 
 
 $app->match('/group/new/', "site\controllers\GroupNewController::newGroup")
-		->before($permissionGroupsChangeRequired)
+		->before($permissionGroupsChangeRequiredOrForAnyVerifiedUser)
 		->before($featureGroupRequired)
 		->before($canChangeSite); 
 

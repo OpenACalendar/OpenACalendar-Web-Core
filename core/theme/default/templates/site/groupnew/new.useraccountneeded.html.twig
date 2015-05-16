@@ -1,0 +1,30 @@
+{#
+# @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+# @license http://ican.openacalendar.org/license.html 3-clause BSD
+# @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+# @author James Baster <james@jarofgreen.co.uk>
+#}
+{% extends 'site/page.html.twig' %}
+
+{% block pageTitle %}Add a Group - {% endblock %}
+
+{% block breadcrumbs %}
+	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
+	<li class="current"><a href="/group">groups</a></li>
+{% endblock %}
+
+{% block content %}
+
+	<h3>Add a group</h3>
+
+	<p>Create an account or login to add a group</p>
+
+	<div class="bigButtonContainer">
+		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a>
+		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/register">Register</a>
+	</div>
+
+{% endblock %}
+
+
+

@@ -35,7 +35,7 @@
 		{% if currentSiteFeatures.has('org.openacalendar','Group') %}
 			<li class="menu">
 				<a href="/group">Groups</a>	
-				{% if currentUserActions.has("org.openacalendar","groupNew") %}
+				{% if currentUserActions.has("org.openacalendar","groupNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","groupNew") )  %}
 					<ul class="submenu">
 						<li><a href="/group">Groups</a></li>
 						<li><a href="/group/new">Add a Group</a></li>

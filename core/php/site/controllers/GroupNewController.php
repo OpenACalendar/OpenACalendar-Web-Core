@@ -24,7 +24,17 @@ class GroupNewController {
 	
 	
 	function newGroup(Request $request, Application $app) {
-		
+
+		/////////////////////////////////////////////////////// Check Permissions and Prompt IF NEEDED
+
+		if (!$app['currentUser'] && !$app['currentUserActions']->has("org.openacalendar","groupNew") &&  $app['anyVerifiedUserActions']->has("org.openacalendar","groupNew")) {
+			return $app['twig']->render('site/groupnew/new.useraccountneeded.html.twig', array());
+		}
+
+		/////////////////////////////////////////////////////// Carry On
+
+
+
 		$group = new GroupModel();
 		
 		$form = $app['form.factory']->create(new GroupNewForm($request->query->get('title')), $group);

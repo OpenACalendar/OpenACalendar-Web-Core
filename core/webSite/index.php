@@ -191,6 +191,19 @@ $permissionGroupsChangeRequired = function(Request $request, Application $app) {
 	}
 };
 
+$permissionGroupsChangeRequiredOrForAnyVerifiedUser = function(Request $request, Application $app) {
+	global $CONFIG;
+	if ($app['currentUser']) {
+		if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")) {
+			return $app->abort(403); // TODO
+		}
+	} else {
+		if (!$app['anyVerifiedUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")) {
+			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		}
+	}
+};
+
 $permissionVenuesChangeRequired = function(Request $request, Application $app) {
 	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")) {
