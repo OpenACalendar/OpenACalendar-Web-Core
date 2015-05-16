@@ -30,7 +30,7 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
-			{% if currentUserActions.has("org.openacalendar","groupNew") %}
+			{% if currentUserActions.has("org.openacalendar","groupNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","groupNew") )  %}
 				<li class="action">
 					<a href="/group/new"><div class="iconPencilSmall"></div> Add a group</a>
 				</li>
