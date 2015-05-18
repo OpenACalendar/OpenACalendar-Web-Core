@@ -41,6 +41,9 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 			// user watches site
 			$this->joins[] = " LEFT JOIN user_watches_site_information ON user_watches_site_information.site_id = site_information.id AND user_watches_site_information.user_account_id = :user_in_site ";
 
+			// user interested in site
+			$this->joins[] = " LEFT JOIN user_interested_in_site_information ON user_interested_in_site_information.site_id = site_information.id AND user_interested_in_site_information.user_account_id = :user_in_site ";
+
 			// user watches group information
 			$inner = "SELECT  group_information.site_id AS site_id, user_watches_group_information.user_account_id AS user_account_id ".
 				"FROM user_watches_group_information ".
@@ -72,6 +75,7 @@ class SiteRepositoryBuilder  extends BaseRepositoryBuilder {
 				" OR user_permission_in_site.user_account_id = :user_in_site ".
 				" OR user_watches_group.user_account_id = :user_in_site ".
 				" OR user_watches_area.user_account_id = :user_in_site ".
+				" OR user_interested_in_site_information.is_interested = '1' ".
 				" )";
 		}
 

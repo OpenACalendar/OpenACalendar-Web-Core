@@ -61,6 +61,7 @@ DROP TABLE IF EXISTS cached_area_has_parent  CASCADE;
 DROP TABLE IF EXISTS area_information   CASCADE;
 DROP TABLE IF EXISTS area_history  CASCADE;
 DROP TABLE IF EXISTS user_in_site_information  CASCADE;
+DROP TABLE IF EXISTS user_interested_in_site_information  CASCADE;
 DROP TABLE IF EXISTS country_in_site_information CASCADE;
 DROP TABLE IF EXISTS site_profile_media_information CASCADE;
 DROP TABLE IF EXISTS site_profile_media_history CASCADE;

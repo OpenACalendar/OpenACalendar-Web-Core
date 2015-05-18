@@ -20,8 +20,8 @@
 	<p>Create an account or login to add an event</p>
 
 	<div class="bigButtonContainer">
-		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a>
-		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/register">Register</a>
+		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/login{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Login</a>
+		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/register{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Register</a>
 	</div>
 
 {% endblock %}

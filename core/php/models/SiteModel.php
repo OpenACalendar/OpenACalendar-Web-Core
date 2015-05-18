@@ -354,5 +354,9 @@ class SiteModel {
 		return $out;
 	}
 
+	public function getIsAllowedForAfterGetUser() {
+		return !$this->is_closed_by_sys_admin;
+	}
+
 }
 

@@ -3,10 +3,12 @@
 namespace index\controllers;
 
 
+use models\UserInterestedInSiteModel;
 use repositories\AreaRepository;
 use repositories\EventRepository;
 use repositories\SiteRepository;
 use repositories\UserAtEventRepository;
+use repositories\UserInterestedInSiteRepository;
 use repositories\UserWatchesAreaRepository;
 use Silex\Application;
 use index\forms\SignUpUserForm;
@@ -49,18 +51,32 @@ class UserController {
 	protected function processThingsToDoAfterGetUser(Request $request, Application $app) {
 		global $CONFIG;
 
-
+		$siteRepo = new SiteRepository();
 		$eventRepo = new EventRepository();
 		$areaRepo = new AreaRepository();
 		$event = null;
 		$area = null;
+		$siteToAdd = null;
+
+		// Any sites of general interest?
+		if ($request->query->has("site") && !$CONFIG->isSingleSiteMode) {
+			$siteToAdd = $siteRepo->loadBySlug($request->query->get("site"));
+			if ($siteToAdd && $siteToAdd->getIsAllowedForAfterGetUser()) {
+				if (!$app['websession']->hasArray("afterGetUserAddSites")) {
+					$app['websession']->setArray("afterGetUserAddSites",array($siteToAdd->getId()));
+				} else {
+					if (!in_array($siteToAdd->getId(),$app['websession']->getArray("afterGetUserAddSites") )) {
+						$app['websession']->appendArray("afterGetUserAddSites", $siteToAdd->getId());
+					}
+				}
+			}
+		}
 
 		// Any events to add?
 		if ($request->query->has("event")) {
 			if ($CONFIG->isSingleSiteMode) {
 				$event = $eventRepo->loadBySiteIDAndEventSlug($CONFIG->singleSiteID, $request->query->get("event"));
 			} else {
-				$siteRepo = new SiteRepository();
 				$site = $siteRepo->loadBySlug($request->query->get("eventSite"));
 				if ($site) {
 					$event = $eventRepo->loadBySlug($site, $request->query->get("event"));
@@ -83,7 +99,6 @@ class UserController {
 			if ($CONFIG->isSingleSiteMode) {
 				$area = $areaRepo->loadBySiteIDAndAreaSlug($CONFIG->singleSiteID, $request->query->get("area"));
 			} else {
-				$siteRepo = new SiteRepository();
 				$site = $siteRepo->loadBySlug($request->query->get("areaSite"));
 				if ($site) {
 					$area = $areaRepo->loadBySlug($site, $request->query->get("area"));
@@ -108,6 +123,11 @@ class UserController {
 		// Remove areas?
 		if ($request->query->has("removeAreaId")) {
 			$app['websession']->removeValueFromArray("afterGetUserAddAreas", $request->query->has("removeAreaId"));
+		}
+
+		// Remove Sites?
+		if ($request->query->has("removeSiteId")) {
+			$app['websession']->removeValueFromArray("afterGetUserAddSites", $request->query->has("removeSiteId"));
 		}
 
 		// load events to show user
@@ -143,8 +163,25 @@ class UserController {
 					}
 				}
 			}
-
 		}
+
+		// load sites to show user
+		$this->parameters['afterGetUserAddSites'] = array();
+		if ($app['websession']->hasArray("afterGetUserAddSites")) {
+			foreach($app['websession']->getArray("afterGetUserAddSites") as $siteID) {
+				if ($siteToAdd != null && $siteID == $siteToAdd->getId()) {
+					if ($siteToAdd->getIsAllowedForAfterGetUser()) {
+						$this->parameters['afterGetUserAddSites'][] = $siteToAdd;
+					}
+				} else {
+					$siteTmp = $siteRepo->loadByID($siteID);
+					if ($siteTmp && $siteTmp->getIsAllowedForAfterGetUser()) {
+						$this->parameters['afterGetUserAddSites'][] = $siteTmp;
+					}
+				}
+			}
+		}
+
 
 	}
 
@@ -177,9 +214,18 @@ class UserController {
 			}
 		}
 
+		// sites
+		$uiisr = new UserInterestedInSiteRepository();
+		foreach($this->parameters['afterGetUserAddSites'] as $site) {
+			if ($site->getIsAllowedForAfterGetUser()) {
+				$uiisr->markUserInterestedInSite($user, $site);
+			}
+		}
+
 		// reset
 		$app['websession']->setArray("afterGetUserAddEvents",array());
 		$app['websession']->setArray("afterGetUserAddAreas",array());
+		$app['websession']->setArray("afterGetUserAddSites",array());
 
 	}
 

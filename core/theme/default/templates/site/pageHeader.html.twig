@@ -90,10 +90,10 @@
 		<li class="user">
 			{% if currentUser is null %}
 				<li class="user">
-					<a href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a>
+					<a href="{{ config.getWebIndexDomainSecure() }}/you/login{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Login</a>
 				</li>
 				<li class="user">
-					<a href="{{ config.getWebIndexDomainSecure() }}/you/register">Sign up</a>
+					<a href="{{ config.getWebIndexDomainSecure() }}/you/register{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Sign up</a>
 				</li>
 			{% else %}
 				<a href="/currentuser">{{ currentUser.username }}</a>
