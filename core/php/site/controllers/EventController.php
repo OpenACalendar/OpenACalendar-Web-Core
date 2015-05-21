@@ -1330,36 +1330,36 @@ class EventController {
 		
 		return $app['twig']->render('site/event/recurMonthly.html.twig', $this->parameters);
 	}
-	
-	
-	
-	
+
+
+
+
 	function recurMonthlyLast($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
 		}
-		
+
 		if (!$this->parameters['group']) {
 			die("NO");
 		}
-		
+
 		if ($this->parameters['event']->getIsDeleted()) {
 			die("No"); // TODO
 		}
-		
+
 		if ($this->parameters['event']->getIsImported()) {
 			die("No"); // TODO
 		}
-		
+
 		$eventRecurSetRepository = new EventRecurSetRepository();
-		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
-		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
+		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
+
 		$this->parameters['newEvents'] = $eventRecurSet->getNewMonthlyEventsOnLastDayInWeekFilteredForExisting($this->parameters['event'], $app['config']->recurEventForDaysInFutureWhenMonthly);
-		
+
 		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			
+
 			$data = is_array($request->request->get('new')) ? $request->request->get('new') : array();
 
 			$this->addTagsToParameters($app);
@@ -1379,18 +1379,18 @@ class EventController {
 					++$count;
 				}
 			}
-			
+
 			if ($count > 0) {
 				return $app->redirect("/group/".$this->parameters['group']->getSlug());
 			}
-			
+
 		}
-		
+
 		return $app['twig']->render('site/event/recurMonthly.html.twig', $this->parameters);
 	}
-	
-	
-	
+
+
+
 	function delete($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
