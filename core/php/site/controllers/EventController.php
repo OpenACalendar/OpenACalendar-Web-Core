@@ -1390,6 +1390,76 @@ class EventController {
 	}
 
 
+	function recurArbitrary($slug, Request $request, Application $app) {
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Event does not exist.");
+		}
+
+		if (!$this->parameters['group']) {
+			die("NO");
+		}
+
+		if ($this->parameters['event']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+
+		if ($this->parameters['event']->getIsImported()) {
+			die("No"); // TODO
+		}
+
+		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
+		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
+		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
+
+
+		if ($request->request->get('date') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+
+			$start = new \DateTime($request->request->get('date'), new \DateTimeZone($this->parameters['event']->getTimeZone()));
+
+			if ($eventRecurSet->isDateToSoonForArbitraryDate($start, $app['timesource'])) {
+
+				$app['flashmessages']->addError('That date is to soon!');
+
+			} else if  ($eventRecurSet->isDateToLateForArbitraryDate($start, $app['timesource'])) {
+
+				$app['flashmessages']->addError('That date is to late!');
+
+			} else {
+
+				$newEvents = $eventRecurSet->getNewEventOnArbitraryDateFilteredForExisting($this->parameters['event'], $start, $app['config']->recurEventForDaysInFutureWhenArbitrary);
+
+				if ($newEvents) {
+
+					$newEvent = $newEvents[0];
+
+					$this->addTagsToParameters($app);
+
+					$mrb = new MediaRepositoryBuilder();
+					$mrb->setIncludeDeleted(false);
+					$mrb->setSite($app['currentSite']);
+					$mrb->setEvent($this->parameters['event']);
+					$medias = $mrb->fetchAll();
+
+					$eventMeta = new EventEditMetaDataModel();
+					$eventMeta->setUserAccount($app['currentUser']);
+
+					$eventRepository = new EventRepository();
+
+					$eventRepository->createWithMetaData($newEvent, $app['currentSite'], $eventMeta, $this->parameters['group'], $this->parameters['groups'],
+						null, $this->parameters['tags'], $medias);
+
+					return $app->redirect("/event/".$newEvent->getSlugForURL());
+
+				}
+			}
+
+		}
+
+		return $app['twig']->render('site/event/recur.arbitrary.html.twig', $this->parameters);
+	}
+
+
 
 	function delete($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {

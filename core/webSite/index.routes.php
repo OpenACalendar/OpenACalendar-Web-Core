@@ -168,6 +168,14 @@ $app->match('/event/{slug}/recur/monthlyLast/', "site\controllers\EventControlle
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
+$app->match('/event/{slug}/recur/arbitrary', "site\controllers\EventController::recurArbitrary")
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($permissionEventsChangeRequired)
+	->before($canChangeSite);
+$app->match('/event/{slug}/recur/arbitrary/', "site\controllers\EventController::recurArbitrary")
+	->assert('slug', FRIENDLY_SLUG_REGEX)
+	->before($permissionEventsChangeRequired)
+	->before($canChangeSite);
 $app->match('/event/{slug}/moveToArea', "site\controllers\EventController::moveToArea")
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)

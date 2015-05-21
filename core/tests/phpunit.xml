@@ -19,6 +19,7 @@
             <directory>.</directory>
             <directory>eventcustomfields</directory>
             <directory>repositories/builders</directory>
+            <directory>models</directory>
             <directory>../../extension/CuratedLists/tests/</directory>
         </testsuite>
     </testsuites>

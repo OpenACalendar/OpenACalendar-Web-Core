@@ -347,7 +347,60 @@ class EventRecurSetModel {
 		}
 		return $out;
 	}
-	
+
+	public function isDateToSoonForArbitraryDate(\DateTime $newDate, \TimeSource $timeSource) {
+
+		$now = $timeSource->getDateTime();
+
+		// Add one day just to stop random errors with time.
+		$now->add(new \DateInterval('P1D'));
+
+		return $newDate < $now;
+	}
+
+	public function isDateToLateForArbitraryDate(\DateTime $newDate, \TimeSource $timeSource,  $daysInAdvance = 186) {
+
+		$now = $timeSource->getDateTime();
+
+		// Add one day just to stop random errors with time.
+		$now->add(new \DateInterval('P'.$daysInAdvance.'D'));
+
+		return $newDate > $now;
+	}
+
+	public function getNewEventOnArbitraryDate(EventModel $event, \DateTime $newDate) {
+
+		$timeZoneUTC = new \DateTimeZone("UTC");
+		$timeZone = new \DateTimeZone($this->timeZoneName);
+
+		$start = clone $newDate;
+		$start->setTimezone($timeZone);
+		$start->setTime($event->getStartAtInTimezone()->format('G'), $event->getStartAtInTimezone()->format('i'), $event->getStartAtInTimezone()->format('s'));
+		$start->setTimezone($timeZoneUTC);
+
+		$end = clone $start;
+		$end->add($event->getStartAtInUTC()->diff($event->getEndAtInUTC(), true));
+
+		$newEvent = new EventModel();
+		$newEvent->setGroupId($event->getGroupId());
+		$newEvent->setVenueId($event->getVenueId());
+		$newEvent->setCountryId($event->getCountryId());
+		$newEvent->setEventRecurSetId($this->id);
+		$newEvent->setSummary($event->getSummary());
+		$newEvent->setDescription($event->getDescription());
+		$newEvent->setStartAt($start);
+		$newEvent->setEndAt($end);
+		foreach($this->customFields as $customField) {
+			if ($event->hasCustomField($customField)) {
+				$newEvent->setCustomField($customField, $event->getCustomField($customField));
+			}
+		}
+
+		return $newEvent;
+
+	}
+
+
 	/**
 	 * This function takes a set of proposed new events in. It looks for any duplicate events already saved and filters them out.
 	 * @return Array New proposed events where duplicates don't exist.
@@ -389,6 +442,13 @@ class EventRecurSetModel {
 	
 	public function getNewMonthlyEventsOnLastDayInWeekFilteredForExisting(EventModel $event,  $daysInAdvance = 186) {
 		return $this->filterEventsForExisting($event, $this->getNewMonthlyEventsOnLastDayInWeek($event, $daysInAdvance));
+	}
+
+	public function getNewEventOnArbitraryDateFilteredForExisting(EventModel $event, \DateTime $newDate,  $daysInAdvance = 186) {
+		$newEvent = $this->getNewEventOnArbitraryDate($event, $newDate);
+		if ($newEvent) {
+			return $this->filterEventsForExisting($event, array ( $newEvent ));
+		}
 	}
 
 	/**

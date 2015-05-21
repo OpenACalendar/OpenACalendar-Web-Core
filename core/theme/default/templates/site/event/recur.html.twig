@@ -36,7 +36,9 @@
 		<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/monthlyLast">monthly 
 				on the last {{ event.getStartAt|tolocaltimeformatted('l', currentTimeZone)  }} in the month</a>?</p>
 	{% endif %}
-	
-	
+
+
+	<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/arbitrary">at a set date</a>?</p>
+
 {% endblock %}
 
