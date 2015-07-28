@@ -83,6 +83,7 @@ if (!$site) die("NO SITE?\n");
 $calendar = new \RenderCalendar();
 $calendar->getEventRepositoryBuilder()->setSite($site);
 $calendar->getEventRepositoryBuilder()->setIncludeDeleted(false);
+$calendar->getEventRepositoryBuilder()->setIncludeCancelled(true);
 
 // ######################################################### Set Start and End
 $start = \TimeSource::getDateTime();

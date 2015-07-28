@@ -13,10 +13,10 @@
 
 {% if d.dayOfWeek == 1 %}Mon{% elseif d.dayOfWeek == 2 %}Tue{% elseif d.dayOfWeek == 3 %}Wed{% elseif d.dayOfWeek == 4 %}Thu{% elseif d.dayOfWeek == 5 %}Fri{% elseif d.dayOfWeek == 6 %}SAT{% elseif d.dayOfWeek == 7 %}SUN{% endif %} {{ d.display }}
 {% for event in d.eventsContinuing %}
-- {{ event.summaryDisplay }}
+- {{ event.summaryDisplay }}{% if event.isCancelled %} [CANCELLED]{% endif %}
 {% endfor %}
 {% for event in d.events %}
-- {{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }} {{ event.summaryDisplay }}
+- {{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }} {{ event.summaryDisplay }}{% if event.isCancelled %} [CANCELLED]{% endif %}
 {% endfor %}
 
 {% endfor %}
