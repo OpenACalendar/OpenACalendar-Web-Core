@@ -17,7 +17,7 @@
 	</p>
 	
 	{% if lastEvents %}
-		<p>Is one of these events a recuring event? If so, you can easily add more.</p>
+		<p>Is one of these events a recurring event? If so, you can easily add more.</p>
 
 		{% for event in lastEvents %}
 			{% include 'email/common/promptEmailEventToRecur.html.twig' with { event: event } %}
