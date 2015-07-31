@@ -126,7 +126,17 @@ function escapeHTML(str) {
 	div.appendChild(document.createTextNode(str));
 	return div.innerHTML;
 }
-
+function escapeHTMLAttribute(str) {
+	return str
+		.replace(/&/g, '&amp;')
+		.replace(/'/g, '&apos;')
+		.replace(/"/g, '&quot;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/\r/g, '')
+		.replace(/\n/g, '');
+	;
+}
 
 //////////////////////////////////////////////////////////////////////////////// Mobile
 

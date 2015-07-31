@@ -45,9 +45,11 @@ function groupSearchChanged() {
                 }
 				$('#GroupSearchList').empty();
 				out += '<li class="nodata">';
-				out += '<div class="title">Not these groups</div>';
-				out += '<form method="get" action="/group/new">';
-				out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Add A Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
+				out += '<div class="title">Not these groups!</div>';
+				out += '<form method="post">';
+				out += '<input type="hidden" name="action" value="selectnewgroup">';
+				out += '<div>It\'s a new group called: <input type="text" name="newgrouptitle" value="'+escapeHTMLAttribute(groupSearchValue)+'"></div>'
+				out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Add This Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
 				out += '</form>';
 				out += '</li>';
 				$('#GroupSearchList').append(out);

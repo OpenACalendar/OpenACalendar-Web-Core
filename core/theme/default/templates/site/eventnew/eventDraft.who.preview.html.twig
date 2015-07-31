@@ -9,7 +9,19 @@
 
 <div class="likeFormStyled">
 
-	{%  if draft.hasDetailsValue('group.title') %}
+	{%  if draft.hasDetailsValue('group.new') and draft.getDetailsValue('group.new') %}
+		<div class="rowWrapper">
+			<div class="labelWrapper">&nbsp;</div>
+			<div class="widgetWrapper"><div class="sectionHeader">Who</div></div>
+			<div class="after"></div>
+		</div>
+
+		<div class="rowWrapper">
+			<div class="labelWrapper">New Group</div>
+			<div class="widgetWrapper">{{ draft.getDetailsValue('group.title') }}</div>
+			<div class="after"></div>
+		</div>
+	{%  elseif draft.hasDetailsValue('group.title') %}
 
 		<div class="rowWrapper">
 			<div class="labelWrapper">&nbsp;</div>
