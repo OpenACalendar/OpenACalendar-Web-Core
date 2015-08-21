@@ -14,7 +14,6 @@ namespace models;
  */
 class GroupHistoryModel extends GroupModel implements \InterfaceHistoryModel {
 
-	protected $group_slug;
 	//protected $user_account_id;
 	protected $created_at; 
 	protected $user_account_id;
@@ -34,7 +33,7 @@ class GroupHistoryModel extends GroupModel implements \InterfaceHistoryModel {
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['group_id'];
-		$this->group_slug = isset($data['group_slug']) ? $data['group_slug'] : null;
+		$this->slug = isset($data['group_slug']) ? $data['group_slug'] : null;
 		$this->title = $data['title'];
 		$this->url = $data['url'];
 		$this->description = $data['description'];
@@ -64,11 +63,11 @@ class GroupHistoryModel extends GroupModel implements \InterfaceHistoryModel {
 	}
 	
 	public function getGroupSlug() {
-		return $this->group_slug;
+		return $this->slug;
 	}
 
 	public function setGroupSlug($group_slug) {
-		$this->group_slug = $group_slug;
+		$this->slug = $group_slug;
 	}
 
 	public function getUserAccountId() {
