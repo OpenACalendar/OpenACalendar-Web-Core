@@ -2,6 +2,11 @@
 
 namespace sysadmin\controllers;
 
+use repositories\builders\AreaRepositoryBuilder;
+use repositories\builders\EventRepositoryBuilder;
+use repositories\builders\GroupRepositoryBuilder;
+use repositories\builders\HistoryRepositoryBuilder;
+use repositories\builders\VenueRepositoryBuilder;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -143,6 +148,55 @@ class UserController {
 		$this->parameters['notifications'] = $rb->fetchAll();
 
 		return $app['twig']->render('/sysadmin/user/notifications.html.twig', $this->parameters);
+	}
+
+	function eventEdited($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+
+		$erb = new EventRepositoryBuilder();
+		$erb->setEditedByUser($this->parameters['user']);
+		$erb->setOrderByStartAt(true);
+		$this->parameters['events'] = $erb->fetchAll();
+
+
+
+		return $app['twig']->render('/sysadmin/user/event.edited.html.twig', $this->parameters);
+	}
+
+	function areaEdited($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+
+		$arb = new AreaRepositoryBuilder();
+		$arb->setEditedByUser($this->parameters['user']);
+		$this->parameters['areas'] = $arb->fetchAll();
+
+
+
+		return $app['twig']->render('/sysadmin/user/area.edited.html.twig', $this->parameters);
+	}
+
+	function venueEdited($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+
+		$vrb = new VenueRepositoryBuilder();
+		$vrb->setEditedByUser($this->parameters['user']);
+		$this->parameters['venues'] = $vrb->fetchAll();
+
+
+
+		return $app['twig']->render('/sysadmin/user/venue.edited.html.twig', $this->parameters);
+	}
+
+	function groupEdited($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+
+		$grb = new GroupRepositoryBuilder();
+		$grb->setEditedByUser($this->parameters['user']);
+		$this->parameters['groups'] = $grb->fetchAll();
+
+
+
+		return $app['twig']->render('/sysadmin/user/group.edited.html.twig', $this->parameters);
 	}
 }
 

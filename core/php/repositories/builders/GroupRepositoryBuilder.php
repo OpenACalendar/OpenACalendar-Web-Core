@@ -5,6 +5,7 @@ namespace repositories\builders;
 use models\SiteModel;
 use models\GroupModel;
 use models\EventModel;
+use models\UserAccountModel;
 
 /**
  *
@@ -63,6 +64,18 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 
 
+	/** @var UserAccountModel  */
+	protected $editedByUser = null;
+
+	/**
+	 * @param UserAccountModel $editedByUser
+	 */
+	public function setEditedByUser(UserAccountModel $editedByUser)
+	{
+		$this->editedByUser = $editedByUser;
+	}
+
+
 
 	protected function build() {
 
@@ -101,6 +114,11 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 				" WHERE media_information.deleted_at IS NULL AND media_information.is_file_lost='0' ".
 				" AND media_in_group.removal_approved_at IS NULL AND media_in_group.group_id = group_information.id ".
 				" GROUP BY group_information.id ) AS media_group_slugs ";
+		}
+
+		if ($this->editedByUser) {
+			$this->where[] = " group_information.id IN (SELECT group_id FROM group_history WHERE user_account_id = :editedByUser) ";
+			$this->params['editedByUser'] = $this->editedByUser->getId();
 		}
 	}
 	

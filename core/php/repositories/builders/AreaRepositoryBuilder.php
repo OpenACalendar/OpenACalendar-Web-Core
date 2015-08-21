@@ -3,6 +3,7 @@
 namespace repositories\builders;
 
 use models\SiteModel;
+use models\UserAccountModel;
 use models\VenueModel;
 use models\CountryModel;
 use models\AreaModel;
@@ -80,6 +81,18 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 
 
+	/** @var UserAccountModel  */
+	protected $editedByUser = null;
+
+	/**
+	 * @param UserAccountModel $editedByUser
+	 */
+	public function setEditedByUser(UserAccountModel $editedByUser)
+	{
+		$this->editedByUser = $editedByUser;
+	}
+
+
 
 	protected function build() {
 
@@ -118,6 +131,11 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 		if ($this->include_parent_levels > 0) {
 			$this->joins[] = " LEFT JOIN area_information AS area_information_parent_1 ON area_information.parent_area_id = area_information_parent_1.id ";
 			$this->select[] = " area_information_parent_1.title AS parent_1_title";
+		}
+
+		if ($this->editedByUser) {
+			$this->where[] = " area_information.id IN (SELECT area_id FROM area_history WHERE user_account_id = :editedByUser) ";
+			$this->params['editedByUser'] = $this->editedByUser->getId();
 		}
 	}
 	

@@ -3,6 +3,7 @@
 namespace repositories\builders;
 
 use models\SiteModel;
+use models\UserAccountModel;
 use models\VenueModel;
 use models\CountryModel;
 use models\AreaModel;
@@ -102,6 +103,18 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->must_have_lat_lng = $must_have_lat_lng;
 	}
 
+	/** @var UserAccountModel  */
+	protected $editedByUser = null;
+
+	/**
+	 * @param UserAccountModel $editedByUser
+	 */
+	public function setEditedByUser(UserAccountModel $editedByUser)
+	{
+		$this->editedByUser = $editedByUser;
+	}
+
+
 	protected function build() {
 		global $DB;
 
@@ -172,6 +185,10 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 				$this->where[] = " venue_information.lng IS NOT NULL ";
 		}
 
+		if ($this->editedByUser) {
+			$this->where[] = " venue_information.id IN (SELECT venue_id FROM venue_history WHERE user_account_id = :editedByUser) ";
+			$this->params['editedByUser'] = $this->editedByUser->getId();
+		}
 	}
 	
 	protected function buildStat() {

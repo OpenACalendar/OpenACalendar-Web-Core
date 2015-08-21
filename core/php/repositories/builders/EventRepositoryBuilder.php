@@ -227,7 +227,20 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 	
 	protected $must_have_lat_lng = false;
-	
+
+
+	/** @var UserAccountModel  */
+	protected $editedByUser = null;
+
+	/**
+	 * @param UserAccountModel $editedByUser
+	 */
+	public function setEditedByUser(UserAccountModel $editedByUser)
+	{
+		$this->editedByUser = $editedByUser;
+	}
+
+
 
 	protected $include_country_information= false;
 
@@ -527,6 +540,11 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 				" WHERE media_information.deleted_at IS NULL AND media_information.is_file_lost='0' ".
 				" AND media_in_venue.removal_approved_at IS NULL AND media_in_venue.venue_id = event_information.venue_id ".
 				" GROUP BY event_information.venue_id ) AS media_venue_slugs ";
+		}
+
+		if ($this->editedByUser) {
+			$this->where[] = " event_information.id IN (SELECT event_id FROM event_history WHERE user_account_id = :editedByUser) ";
+			$this->params['editedByUser'] = $this->editedByUser->getId();
 		}
 	}
 	
