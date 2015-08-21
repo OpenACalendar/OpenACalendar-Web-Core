@@ -22,10 +22,13 @@ class ActionParser {
 		$bits = explode(" ", $in, 2);
 		$this->command = $bits[0];
 		$this->params = isset($bits[1]) ? array( $bits[1] ) : array();
-	}	
-	
+	}
+
+	/**
+	 * @return mixed In Lower Case
+	 */
 	public function getCommand() {
-		return $this->command;
+		return strtolower($this->command);
 	}
 
 	public function getParam($idx) {

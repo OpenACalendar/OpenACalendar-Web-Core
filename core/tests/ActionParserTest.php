@@ -16,6 +16,7 @@ class ActionParserTest extends BaseAppTest {
 	function noParamDataProvider() {
 		return array(
 			array("cat   ","cat"),
+			array("CAT   ","cat"),
 		);
 	}
 	
@@ -30,6 +31,7 @@ class ActionParserTest extends BaseAppTest {
 	function oneParamDataProvider() {
 		return array(
 			array("cat tabby","cat","tabby"),
+			array("CAT tabby","cat","tabby"),
 		);
 	}
 	
@@ -56,6 +58,7 @@ class ActionParserTest extends BaseAppTest {
 			array("test 0  ",false),
 			array("test 111  ",true),
 			array("test 000  ",false),
+			array("TEST 000  ",false),
 		);
 	}
 	
