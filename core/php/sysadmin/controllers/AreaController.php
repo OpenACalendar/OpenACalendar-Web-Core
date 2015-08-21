@@ -41,12 +41,12 @@ class AreaController {
 		$ar = new AreaRepository();
 		$this->parameters['area'] = $ar->loadBySlug($this->parameters['site'], $slug);
 
-		$this->parameters['areaisduplicateof'] = $this->parameters['area']->getIsDuplicateOfId() ? $ar->loadById($this->parameters['area']->getIsDuplicateOfId()) : null;
-
 		if (!$this->parameters['area']) {
 			$app->abort(404);
 		}
-		
+
+		$this->parameters['areaisduplicateof'] = $this->parameters['area']->getIsDuplicateOfId() ? $ar->loadById($this->parameters['area']->getIsDuplicateOfId()) : null;
+
 		if ($this->parameters['area']->getParentAreaId()) {
 			$this->parameters['parentarea'] = $ar->loadById($this->parameters['area']->getParentAreaId());
 		}
