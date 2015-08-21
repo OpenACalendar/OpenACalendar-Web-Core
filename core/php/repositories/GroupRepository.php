@@ -168,7 +168,7 @@ class GroupRepository {
 	public function undelete(GroupModel $group, UserAccountModel $user) {
 		$groupEditMetaDataModel = new GroupEditMetaDataModel();
 		$groupEditMetaDataModel->setUserAccount($user);
-		$this->undelete($group, $groupEditMetaDataModel);
+		$this->undeleteWithMetaData($group, $groupEditMetaDataModel);
 	}
 
 	public function undeleteWithMetaData(GroupModel $group,  GroupEditMetaDataModel $groupEditMetaDataModel) {
@@ -180,8 +180,10 @@ class GroupRepository {
 			$group->setIsDeleted(false);
 			$this->groupDBAccess->update($group, array('is_deleted'), $groupEditMetaDataModel);
 
-			$ufgr = new UserWatchesGroupRepository();
-			$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel, $group);
+			if ($groupEditMetaDataModel->getUserAccount()) {
+				$ufgr = new UserWatchesGroupRepository();
+				$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel->getUserAccount(), $group);
+			}
 
 			$DB->commit();
 		} catch (Exception $e) {
