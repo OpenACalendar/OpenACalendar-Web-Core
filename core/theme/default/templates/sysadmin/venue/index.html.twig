@@ -48,7 +48,15 @@
 		<tr>
 			<th>Position</th>
 			<td>{{ venue.lat }},{{ venue.lng }}</td>
-		</tr>	
+		</tr>
+		<tr>
+			<th>More</th>
+			<td>
+				<ul>
+					<li><a href="{{  config.getWebSiteDomainSecure(site.slug) }}/venue/{{ venue.slug }}">View On Site</a></li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 
 
