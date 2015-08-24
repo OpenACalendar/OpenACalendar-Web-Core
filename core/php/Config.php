@@ -82,7 +82,9 @@ class Config {
 	
 	
 	public $userAccountVerificationSecondsBetweenAllowedSends = 900;  // 15 mins
-	
+
+	public $googleAnalyticsTracking = null;
+
 	public $piwikServerHTTP = null;
 	public $piwikServerHTTPS = null;
 	public $piwikSiteID = null;
