@@ -51,7 +51,13 @@ abstract class BaseExtension {
 	public function afterSiteCreate(SiteModel $site, UserAccountModel $owner) {
 
 	}
-	
+
+	/**
+	 */
+	public function afterUserAccountCreate(UserAccountModel $userAccountModel) {
+
+	}
+
 	public function getUserNotificationTypes() {
 		return array();
 	}

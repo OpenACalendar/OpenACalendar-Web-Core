@@ -20,7 +20,7 @@ class UserAccountRepository {
 	
 	
 	public function create(UserAccountModel $user) {
-		global $DB, $CONFIG;
+		global $DB, $CONFIG, $EXTENSIONHOOKRUNNER;
 		
 		
 		// TODO should check email and username not already exist and nice error
@@ -39,6 +39,9 @@ class UserAccountRepository {
 			));
 		$data = $stat->fetch();
 		$user->setId($data['id']);
+
+
+		$EXTENSIONHOOKRUNNER->afterUserAccountCreate($user);
 	}
 	
 	

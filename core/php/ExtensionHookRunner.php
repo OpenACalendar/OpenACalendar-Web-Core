@@ -29,8 +29,14 @@ class ExtensionHookRunner {
 			$app['extensions']->getExtensionByDir($extensionDir)->afterSiteCreate($site, $owner);
 		}
 	}
-	
-	
+
+	public function afterUserAccountCreate(UserAccountModel $user) {
+		global $app, $CONFIG;
+		foreach($CONFIG->extensions as $extensionDir) {
+			$app['extensions']->getExtensionByDir($extensionDir)->afterUserAccountCreate($user);
+		}
+	}
+
 }
 
 
