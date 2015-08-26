@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS sysadmin_comment_about_user CASCADE;
+DROP TABLE IF EXISTS sysadmin_comment_information CASCADE;
 DROP TABLE IF EXISTS event_custom_field_definition_history CASCADE;
 DROP TABLE IF EXISTS event_custom_field_definition_information CASCADE;
 DROP TABLE IF EXISTS user_has_no_editor_permissions_in_site CASCADE;
