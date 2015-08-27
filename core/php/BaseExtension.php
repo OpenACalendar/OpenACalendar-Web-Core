@@ -1,5 +1,7 @@
 <?php
 
+use models\AreaModel;
+use models\GroupModel;
 use models\SiteModel;
 use models\VenueModel;
 use models\UserAccountModel;
@@ -38,6 +40,13 @@ abstract class BaseExtension {
 		
 	}
 
+	public function beforeGroupSave(GroupModel $venue, UserAccountModel $user) {
+
+	}
+
+	public function beforeAreaSave(AreaModel $venue, UserAccountModel $user) {
+
+	}
 
 
 	public function addDetailsToVenue(VenueModel $venue) {

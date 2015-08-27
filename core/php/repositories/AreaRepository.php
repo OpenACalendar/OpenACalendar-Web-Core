@@ -37,7 +37,10 @@ class AreaRepository {
 	}
 	
 	public function create(AreaModel $area, AreaModel $parentArea = null, SiteModel $site, CountryModel $country, UserAccountModel $creator = null) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+
+		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$creator);
+
 		try {
 			$DB->beginTransaction();
 
@@ -193,7 +196,8 @@ class AreaRepository {
 	 * This will undelete the area to.
 	 */
 	public function editWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB, $USERAGENT;
+		global $DB, $EXTENSIONHOOKRUNNER;
+		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		try {
 			$DB->beginTransaction();
 
@@ -219,7 +223,8 @@ class AreaRepository {
 	}
 
 	public function editParentAreaWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted area!");
 		}
@@ -247,7 +252,8 @@ class AreaRepository {
 	}
 
 	public function deleteWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't delete deleted area!");
 		}
@@ -273,7 +279,8 @@ class AreaRepository {
 	}
 
 	public function undeleteWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		try {
 			$DB->beginTransaction();
 

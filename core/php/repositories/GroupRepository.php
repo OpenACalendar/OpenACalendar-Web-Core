@@ -34,7 +34,10 @@ class GroupRepository {
 
 	
 	public function create(GroupModel $group, SiteModel $site, UserAccountModel $creator) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+
+		$EXTENSIONHOOKRUNNER->beforeGroupSave($group,$creator);
+
 		try {
 			$DB->beginTransaction();
 
@@ -115,10 +118,13 @@ class GroupRepository {
 	}
 
 	public function editWithMetaData(GroupModel $group, GroupEditMetaDataModel $groupEditMetaDataModel) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
 		if ($group->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted group!");
 		}
+
+		$EXTENSIONHOOKRUNNER->beforeGroupSave($group,$groupEditMetaDataModel->getUserAccount());
+
 		try {
 			$DB->beginTransaction();
 
@@ -145,7 +151,10 @@ class GroupRepository {
 	}
 
 	public function deleteWithMetaData(GroupModel $group,  GroupEditMetaDataModel $groupEditMetaDataModel) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+
+		$EXTENSIONHOOKRUNNER->beforeGroupSave($group,$groupEditMetaDataModel->getUserAccount());
+
 		try {
 			$DB->beginTransaction();
 
@@ -172,7 +181,10 @@ class GroupRepository {
 	}
 
 	public function undeleteWithMetaData(GroupModel $group,  GroupEditMetaDataModel $groupEditMetaDataModel) {
-		global $DB;
+		global $DB, $EXTENSIONHOOKRUNNER;
+
+		$EXTENSIONHOOKRUNNER->beforeGroupSave($group,$groupEditMetaDataModel->getUserAccount());
+
 		try {
 			$DB->beginTransaction();
 

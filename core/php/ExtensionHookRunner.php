@@ -1,6 +1,8 @@
 <?php
 
 
+use models\AreaModel;
+use models\GroupModel;
 use models\SiteModel;
 use models\VenueModel;
 use models\UserAccountModel;
@@ -20,6 +22,20 @@ class ExtensionHookRunner {
 		global $app, $CONFIG;
 		foreach($CONFIG->extensions as $extensionDir) {
 			$app['extensions']->getExtensionByDir($extensionDir)->beforeVenueSave($venue, $user);
+		}
+	}
+
+	public function beforeGroupSave(GroupModel $group, UserAccountModel $user) {
+		global $app, $CONFIG;
+		foreach($CONFIG->extensions as $extensionDir) {
+			$app['extensions']->getExtensionByDir($extensionDir)->beforeGroupSave($group, $user);
+		}
+	}
+
+	public function beforeAreaSave(AreaModel $area, UserAccountModel $user) {
+		global $app, $CONFIG;
+		foreach($CONFIG->extensions as $extensionDir) {
+			$app['extensions']->getExtensionByDir($extensionDir)->beforeAreaSave($area, $user);
 		}
 	}
 
