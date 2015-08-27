@@ -300,6 +300,7 @@ class GroupController {
 				if ($form->has('edit_comment')) {
 					$groupEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
 				}
+				$groupEditMetaDataModel->setFromRequest($request);
 
 				$groupRepository = new GroupRepository();
 				$groupRepository->editWithMetaData($this->parameters['group'], $groupEditMetaDataModel);

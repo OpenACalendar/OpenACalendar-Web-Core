@@ -63,13 +63,14 @@ class GroupDBAccess {
 		}
 
 		// Make History Data
-		$fieldsSQL2 = array('group_id','user_account_id','created_at','approved_at');
-		$fieldsSQLParams2 = array(':group_id',':user_account_id',':created_at',':approved_at');
+		$fieldsSQL2 = array('group_id','user_account_id','created_at','approved_at','from_ip');
+		$fieldsSQLParams2 = array(':group_id',':user_account_id',':created_at',':approved_at',':from_ip');
 		$fieldsParams2 = array(
 			'group_id'=>$group->getId(),
 			'user_account_id'=>($groupEditMetaDataModel->getUserAccount() ? $groupEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+			'from_ip'=>$groupEditMetaDataModel->getIp(),
 		);
 		if ($groupEditMetaDataModel->getEditComment()) {
 			$fieldsSQL2[] = ' edit_comment ';

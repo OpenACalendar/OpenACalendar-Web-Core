@@ -193,6 +193,7 @@ class AdminUserGroupController {
                 $ugr = new UserGroupRepository();
                 $meta = new UserGroupEditMetaDataModel();
                 $meta->setUserAccount($app['currentUser']);
+				$meta->setFromRequest($request);
                 $ugr->editTitleWithMetaData($this->parameters['usergroup'], $meta);
 
                 return $app->redirect("/admin/usergroup/".$this->parameters['usergroup']->getId());

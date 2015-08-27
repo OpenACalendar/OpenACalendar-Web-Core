@@ -156,6 +156,7 @@ class EventController {
 					$er = new EventRepository();
 					$eventEditMetaData = new EventEditMetaDataModel();
 					$eventEditMetaData->setUserAccount($app['currentUser']);
+					$eventEditMetaData->setFromRequest($request);
 					$er->markNotDuplicateWithMetaData($this->parameters['event'], $eventEditMetaData);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 

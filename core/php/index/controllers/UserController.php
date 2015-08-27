@@ -3,6 +3,7 @@
 namespace index\controllers;
 
 
+use models\UserAccountEditMetaDataModel;
 use models\UserInterestedInSiteModel;
 use repositories\AreaRepository;
 use repositories\EventRepository;
@@ -279,8 +280,11 @@ class UserController {
 				$user->setEmail($data['email']);
 				$user->setUsername($data['username']);
 				$user->setPassword($data['password1']);
-				
-				$userRepository->create($user);
+
+				$userAccountMeta = new UserAccountEditMetaDataModel();
+				$userAccountMeta->setFromRequest($request);
+
+				$userRepository->create($user, $userAccountMeta);
 				
 				$repo = new UserAccountVerifyEmailRepository();
 				$userVerify = $repo->create($user);
@@ -357,7 +361,7 @@ class UserController {
 	}	
 	
 	
-	function verify($id, $code, Application  $app) {
+	function verify($id, $code, Application  $app, Request $request) {
 		
 		$userRepository = new UserAccountRepository();
 		
@@ -384,7 +388,7 @@ class UserController {
 		
 		if ($userVerifyCode) {
 			// new way of generating access codes
-			$repo->markVerifiedByUserAccountIDAndAccessKey($id, $code);
+			$repo->markVerifiedByUserAccountIDAndAccessKey($id, $code, $request->server->get('REMOTE_ADDR'));
 			$user->setIsEmailVerified(true);
 			return $app['twig']->render('index/user/verifyDone.html.twig', array());
 		} else if ($user->getEmailVerifyCode() && $user->getEmailVerifyCode() == $code) {

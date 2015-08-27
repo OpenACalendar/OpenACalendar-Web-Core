@@ -196,6 +196,7 @@ class VenueController {
 				if ($form->has('edit_comment')) {
 					$venueEditMetaData->setEditComment($form->get('edit_comment')->getData());
 				}
+				$venueEditMetaData->setFromRequest($request);
 
 				$venueRepository = new VenueRepository();
 				$venueRepository->editWithMetaData($this->parameters['venue'],$venueEditMetaData);

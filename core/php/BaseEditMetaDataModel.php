@@ -21,6 +21,15 @@ class BaseEditMetaDataModel {
 	/** @var  \DateTime */
 	protected $revertedFromHistoryCreatedAt;
 
+	protected $ip;
+
+
+	public function setForSecondaryEditFromPrimaryEditMeta(BaseEditMetaDataModel $baseEditMetaDataModel) {
+		$this->userAccount = $baseEditMetaDataModel->getUserAccount();
+		$this->ip = $baseEditMetaDataModel->getIp();
+		// Not doing $this->editComment because the comment applies to the primary edit and wouldn't make sense to apply to primary
+	}
+
 	/**
 	 * @return mixed
 	 */
@@ -70,6 +79,19 @@ class BaseEditMetaDataModel {
 	public function setRevertedFromHistoryCreatedAt(\DateTime $revertedFromHistoryCreatedAt)
 	{
 		$this->revertedFromHistoryCreatedAt = $revertedFromHistoryCreatedAt;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIp()
+	{
+		return $this->ip;
+	}
+
+
+	public function setFromRequest(\Symfony\Component\HttpFoundation\Request $request) {
+		$this->ip = $request->server->get('REMOTE_ADDR');
 	}
 
 

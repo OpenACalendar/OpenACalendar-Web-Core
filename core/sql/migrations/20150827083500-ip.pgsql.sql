@@ -1,0 +1,11 @@
+ALTER TABLE user_account_information ADD created_from_ip  INET NULL;
+ALTER TABLE user_account_verify_email ADD verified_from_ip  INET NULL;
+ALTER TABLE event_history ADD from_ip  INET NULL;
+ALTER TABLE group_history ADD from_ip  INET NULL;
+ALTER TABLE area_history ADD from_ip  INET NULL;
+ALTER TABLE venue_history ADD from_ip  INET NULL;
+ALTER TABLE tag_history ADD from_ip  INET NULL;
+ALTER TABLE media_history ADD from_ip  INET NULL;
+ALTER TABLE site_history ADD from_ip  INET NULL;
+ALTER TABLE user_group_history ADD from_ip  INET NULL;
+ALTER TABLE import_url_history ADD from_ip  INET NULL;

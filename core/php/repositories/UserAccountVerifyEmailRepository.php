@@ -10,7 +10,7 @@ use models\UserAccountVerifyEmailModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class UserAccountVerifyEmailRepository {
@@ -50,14 +50,14 @@ class UserAccountVerifyEmailRepository {
 		}
 	}
 	
-	public function markVerifiedByUserAccountIDAndAccessKey($id, $access) {
+	public function markVerifiedByUserAccountIDAndAccessKey($id, $access, $fromIP = null) {
 		global $DB;
 		
 		try {
 			$DB->beginTransaction();	
 			
-			$stat = $DB->prepare("UPDATE user_account_verify_email SET verified_at=:verified_at WHERE user_account_id =:user_account_id AND access_key=:access_key");
-			$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access, 'verified_at'=> \TimeSource::getFormattedForDataBase()));
+			$stat = $DB->prepare("UPDATE user_account_verify_email SET verified_at=:verified_at, verified_from_ip=:verified_from_ip WHERE user_account_id =:user_account_id AND access_key=:access_key");
+			$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access, 'verified_at'=> \TimeSource::getFormattedForDataBase(), 'verified_from_ip'=>$fromIP));
 			
 			$stat = $DB->prepare("UPDATE user_account_information SET  is_email_verified='1' WHERE id =:id");
 			$stat->execute(array( 'id'=>$id ));

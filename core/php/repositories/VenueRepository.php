@@ -205,7 +205,7 @@ class VenueRepository {
 
 			// Move any Events
 			$eventEditMetaData = new EventEditMetaDataModel();
-			$eventEditMetaData->setUserAccount($venueEditMetaDataModel->getUserAccount());
+			$eventEditMetaData->setForSecondaryEditFromPrimaryEditMeta($venueEditMetaDataModel);
 
 			$eventRepoBuilder = new EventRepositoryBuilder();
 			$eventRepoBuilder->setVenue($duplicateVenue);

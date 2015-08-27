@@ -378,7 +378,7 @@ class AreaRepository {
 			$vrb = new VenueRepositoryBuilder();
 			$vrb->setArea($duplicateArea);
 			$venueEditMetaData = new VenueEditMetaDataModel();
-			$venueEditMetaData->setUserAccount($areaEditMetaDataModel->getUserAccount());
+			$venueEditMetaData->setForSecondaryEditFromPrimaryEditMeta($areaEditMetaDataModel);
 			foreach($vrb->fetchAll() as $venue) {
 				$venue->setAreaId($originalArea->getId());
 				$venueDBAccess->update($venue, array('area_id'),$venueEditMetaData);
@@ -389,7 +389,7 @@ class AreaRepository {
 			$eventRepoBuilder->setArea($duplicateArea);
 			$eventDBAccess = new EventDBAccess($DB, new \TimeSource());
 			$eventEditMetaData = new EventEditMetaDataModel();
-			$eventEditMetaData->setUserAccount($areaEditMetaDataModel->getUserAccount());
+			$eventEditMetaData->setForSecondaryEditFromPrimaryEditMeta($areaEditMetaDataModel);
 			foreach($eventRepoBuilder->fetchAll() as $event) {
 				// Check Area actually matches here because we may get events at a venue.
 				// Based on the order we do things in (ie Move Venue, Move Event) we shouldn't but let's be safe.

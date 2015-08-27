@@ -181,6 +181,7 @@ class AreaController {
 				if ($form->has('edit_comment')) {
 					$areaEditMetaDataModel->setEditComment($form->get('edit_comment')->getData());
 				}
+				$areaEditMetaDataModel->setFromRequest($request);
 
 				$areaRepository = new AreaRepository();
 				$areaRepository->editWithMetaData($this->parameters['area'], $areaEditMetaDataModel);

@@ -368,6 +368,7 @@ class NewEventWhereDetails extends BaseNewEvent
 
 			$vee = new VenueEditMetaDataModel();
 			$vee->setUserAccount($this->application['currentUser']);
+			// TODO $vee->setFromRequest();
 
 			$venueRepository = new VenueRepository();
 			$venueRepository->createWithMetaData($venueModel, $this->site, $vee);

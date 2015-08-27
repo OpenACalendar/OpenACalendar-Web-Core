@@ -230,6 +230,7 @@ class EventNewController {
 				if ($request->request->get('edit_comment')) {
 					$eventEditMetaData->setEditComment($request->request->get('edit_comment'));
 				}
+				$eventEditMetaData->setFromRequest($request);
 
 				$repo = new EventRepository();
 				$repo->createWithMetaData($event, $app['currentSite'], $eventEditMetaData);

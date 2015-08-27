@@ -3,6 +3,7 @@
 
 namespace repositories;
 
+use models\UserAccountEditMetaDataModel;
 use models\UserAccountModel;
 use models\UserAccountResetModel;
 use models\SiteModel;
@@ -13,21 +14,21 @@ use org\openacalendar\curatedlists\models\CuratedListModel;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserAccountRepository {
 	
 	
-	public function create(UserAccountModel $user) {
+	public function create(UserAccountModel $user, UserAccountEditMetaDataModel $userAccountEditMetaDataModel = null) {
 		global $DB, $CONFIG, $EXTENSIONHOOKRUNNER;
 		
 		
 		// TODO should check email and username not already exist and nice error
 			
 		
-		$stat = $DB->prepare("INSERT INTO user_account_information (username, username_canonical, email, email_canonical, password_hash, created_at, is_editor) ".
-				"VALUES (:username, :username_canonical, :email, :email_canonical, :password_hash, :created_at, :is_editor) RETURNING id");
+		$stat = $DB->prepare("INSERT INTO user_account_information (username, username_canonical, email, email_canonical, password_hash, created_at, is_editor, created_from_ip) ".
+				"VALUES (:username, :username_canonical, :email, :email_canonical, :password_hash, :created_at, :is_editor, :created_from_ip) RETURNING id");
 		$stat->execute(array(
 				'username'=>substr($user->getUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
 				'username_canonical'=> substr(UserAccountModel::makeCanonicalUserName($user->getUsername()),0,VARCHAR_COLUMN_LENGTH_USED), 
@@ -36,6 +37,7 @@ class UserAccountRepository {
 				'password_hash'=>$user->getPasswordHash(),
 				'created_at'=>\TimeSource::getFormattedForDataBase(),
 				'is_editor'=> $CONFIG->newUsersAreEditors?1:0,
+				'created_from_ip' => ($userAccountEditMetaDataModel ? $userAccountEditMetaDataModel->getIp() : null),
 			));
 		$data = $stat->fetch();
 		$user->setId($data['id']);

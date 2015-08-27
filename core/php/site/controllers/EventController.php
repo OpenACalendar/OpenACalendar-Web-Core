@@ -452,6 +452,7 @@ class EventController {
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
+				$eventEditMetaData->setFromRequest($request);
 				if ($form->has('edit_comment')) {
 					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
 				}
@@ -764,6 +765,7 @@ class EventController {
 						if ($form->has('edit_comment')) {
 							$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
 						}
+						$eventEditMetaData->setFromRequest($request);
 
 						$eventRepository = new EventRepository();
 						$eventRepository->editWithMetaData($this->parameters['event'], $eventEditMetaData);
@@ -1443,6 +1445,7 @@ class EventController {
 
 					$eventMeta = new EventEditMetaDataModel();
 					$eventMeta->setUserAccount($app['currentUser']);
+					$eventMeta->setFromRequest($request);
 
 					$eventRepository = new EventRepository();
 
@@ -1486,6 +1489,7 @@ class EventController {
 				if ($form->has('edit_comment')) {
 					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
 				}
+				$eventEditMetaData->setFromRequest($request);
 
 				$eventRepository = new EventRepository();
 				$eventRepository->deleteWithMetaData($this->parameters['event'], $eventEditMetaData);
@@ -1551,6 +1555,7 @@ class EventController {
 				if ($form->has('edit_comment')) {
 					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
 				}
+				$eventEditMetaData->setFromRequest($request);
 
 				$eventRepository = new EventRepository();
 				$eventRepository->cancelWithMetaData($this->parameters['event'], $eventEditMetaData);
@@ -1629,6 +1634,7 @@ class EventController {
 					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
 				}
 				$eventEditMetaData->setRevertedFromHistoryCreatedAt($this->parameters['eventHistory']->getCreatedAt());
+				$eventEditMetaData->setFromRequest($request);
 
 				$eventRepository = new EventRepository();
 				$eventRepository->editWithMetaData($newEventState,  $eventEditMetaData);

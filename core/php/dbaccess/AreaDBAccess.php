@@ -61,13 +61,14 @@ class AreaDBAccess {
 		}
 
 		// Make History Data
-		$fieldsSQL2 = array('area_id','user_account_id','created_at','approved_at');
-		$fieldsSQLParams2 = array(':area_id',':user_account_id',':created_at',':approved_at');
+		$fieldsSQL2 = array('area_id','user_account_id','created_at','approved_at','from_ip');
+		$fieldsSQLParams2 = array(':area_id',':user_account_id',':created_at',':approved_at',':from_ip');
 		$fieldsParams2 = array(
 			'area_id'=>$area->getId(),
 			'user_account_id'=>($areaEditMetaDataModel->getUserAccount() ? $areaEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+			'from_ip'=>$areaEditMetaDataModel->getIp(),
 		);
 		if ($areaEditMetaDataModel->getEditComment()) {
 			$fieldsSQL2[] = ' edit_comment ';

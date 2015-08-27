@@ -86,13 +86,14 @@ class EventDBAccess {
 		}
 
 		// Make History Data
-		$fieldsSQL2 = array('event_id','user_account_id','created_at','approved_at');
-		$fieldsSQLParams2 = array(':event_id',':user_account_id',':created_at',':approved_at');
+		$fieldsSQL2 = array('event_id','user_account_id','created_at','approved_at','from_ip');
+		$fieldsSQLParams2 = array(':event_id',':user_account_id',':created_at',':approved_at',':from_ip');
 		$fieldsParams2 = array(
 			'event_id'=>$event->getId(),
 			'user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
 			'approved_at'=>$this->timesource->getFormattedForDataBase(),
+			'from_ip'=>$eventEditMetaDataModel->getIp(),
 		);
 		if ($eventEditMetaDataModel->getRevertedFromHistoryCreatedAt()) {
 			$fieldsSQL2[] = ' reverted_from_created_at ';

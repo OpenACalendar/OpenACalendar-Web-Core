@@ -61,12 +61,13 @@ class UserGroupDBAccess {
 		}
 
 		// Make History Data
-		$fieldsSQL2 = array('user_group_id','user_account_id','created_at');
-		$fieldsSQLParams2 = array(':user_group_id',':user_account_id',':created_at');
+		$fieldsSQL2 = array('user_group_id','user_account_id','created_at','from_ip');
+		$fieldsSQLParams2 = array(':user_group_id',':user_account_id',':created_at',':from_ip');
 		$fieldsParams2 = array(
 			'user_group_id'=>$userGroup->getId(),
 			'user_account_id'=>($userGroupEditMetaDataModel->getUserAccount() ? $userGroupEditMetaDataModel->getUserAccount()->getId() : null),
 			'created_at'=>$this->timesource->getFormattedForDataBase(),
+			'from_ip'=>$userGroupEditMetaDataModel->getIp(),
 		);
 		foreach($this->possibleFields as $field) {
 			if (in_array($field, $fields) || $field == 'title') {
