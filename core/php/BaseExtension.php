@@ -36,15 +36,15 @@ abstract class BaseExtension {
 
 
 
-	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user) {
+	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user = null) {
 		
 	}
 
-	public function beforeGroupSave(GroupModel $venue, UserAccountModel $user) {
+	public function beforeGroupSave(GroupModel $venue, UserAccountModel $user = null) {
 
 	}
 
-	public function beforeAreaSave(AreaModel $venue, UserAccountModel $user) {
+	public function beforeAreaSave(AreaModel $venue, UserAccountModel $user = null) {
 
 	}
 

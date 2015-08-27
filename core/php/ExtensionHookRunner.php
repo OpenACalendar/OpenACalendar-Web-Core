@@ -18,21 +18,21 @@ use models\UserAccountModel;
 class ExtensionHookRunner {
 	
 	
-	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user) {
+	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user = null) {
 		global $app, $CONFIG;
 		foreach($CONFIG->extensions as $extensionDir) {
 			$app['extensions']->getExtensionByDir($extensionDir)->beforeVenueSave($venue, $user);
 		}
 	}
 
-	public function beforeGroupSave(GroupModel $group, UserAccountModel $user) {
+	public function beforeGroupSave(GroupModel $group, UserAccountModel $user = null) {
 		global $app, $CONFIG;
 		foreach($CONFIG->extensions as $extensionDir) {
 			$app['extensions']->getExtensionByDir($extensionDir)->beforeGroupSave($group, $user);
 		}
 	}
 
-	public function beforeAreaSave(AreaModel $area, UserAccountModel $user) {
+	public function beforeAreaSave(AreaModel $area, UserAccountModel $user = null) {
 		global $app, $CONFIG;
 		foreach($CONFIG->extensions as $extensionDir) {
 			$app['extensions']->getExtensionByDir($extensionDir)->beforeAreaSave($area, $user);
