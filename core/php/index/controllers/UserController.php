@@ -380,25 +380,34 @@ class UserController {
 		}
 		if ($user->getIsEmailVerified()) {
 			$app['monolog']->addError("Failed verifying account - user ".$user->getId()." - already verified");
-			return $app['twig']->render('index/user/verifyDone.html.twig', array());
+			return $app['twig']->render('index/user/verifyDone.html.twig', array('user'=>$user));
 		}
-		
+
 		$repo = new UserAccountVerifyEmailRepository();
 		$userVerifyCode = $repo->loadByUserAccountIDAndAccessKey($id, $code);
 		
 		if ($userVerifyCode) {
 			// new way of generating access codes
-			$repo->markVerifiedByUserAccountIDAndAccessKey($id, $code, $request->server->get('REMOTE_ADDR'));
-			$user->setIsEmailVerified(true);
-			return $app['twig']->render('index/user/verifyDone.html.twig', array());
 		} else if ($user->getEmailVerifyCode() && $user->getEmailVerifyCode() == $code) {
 			// old way of generating access codes
-			$userRepository->verifyEmail($user);
-			$user->setIsEmailVerified(true);
-			return $app['twig']->render('index/user/verifyDone.html.twig', array());
 		} else {
 			$app['monolog']->addError("Failed verifying account - user ".$user->getId());
 			return $app['twig']->render('index/user/verifyFail.html.twig', array());
+		}
+
+		if ($request->getMethod() == 'POST' && $request->request->get('action') == 'verify' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+			if ($userVerifyCode) {
+				// new way of generating access codes
+				$repo->markVerifiedByUserAccountIDAndAccessKey($id, $code, $request->server->get('REMOTE_ADDR'));
+				$user->setIsEmailVerified(true);
+			} else if ($user->getEmailVerifyCode() && $user->getEmailVerifyCode() == $code) {
+				// old way of generating access codes
+				$userRepository->verifyEmail($user);
+				$user->setIsEmailVerified(true);
+			}
+			return $app['twig']->render('index/user/verifyDone.html.twig', array('user'=>$user));
+		} else {
+			return $app['twig']->render('index/user/verify.html.twig', array('user'=>$user));
 		}
 
 	}
