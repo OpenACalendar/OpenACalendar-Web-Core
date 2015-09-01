@@ -45,6 +45,9 @@ class UserAccountModel {
 		protected $is_closed_by_sys_admin = false;
 		protected $closed_by_sys_admin_reason;
 
+
+		protected $created_from_ip;
+
 		/** secondary attributes **/
 		protected $is_site_owner = false;
 		protected $is_site_administrator = false;
@@ -72,6 +75,7 @@ class UserAccountModel {
 			$this->closed_by_sys_admin_reason = $data['closed_by_sys_admin_reason'];
 			$utc = new \DateTimeZone("UTC");
 			$this->created_at = $data['created_at'] ? new \DateTime($data['created_at'], $utc) : '';
+			$this->created_from_ip = $data['created_from_ip'];
 		}
 		
 		public function getId() {
@@ -271,6 +275,14 @@ class UserAccountModel {
 		public function getCreatedAt() {
 			return $this->created_at;
 		}
+
+	/**
+	 * @return String|null the IP address
+	 */
+	public function getCreatedFromIp()
+	{
+		return $this->created_from_ip;
+	}
 
 
 		

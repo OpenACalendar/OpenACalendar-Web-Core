@@ -18,6 +18,7 @@ class UserAccountVerifyEmailModel {
 	protected $access_key;
 	protected $created_at;
 	protected $verified_at;
+	protected $verified_from_ip;
 
 
 	public function getUserAccountId() {
@@ -70,6 +71,7 @@ class UserAccountVerifyEmailModel {
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = $data['created_at'] ? new \DateTime($data['created_at'], $utc) : null;
 		$this->verified_at = $data['verified_at'] ? new \DateTime($data['verified_at'], $utc) : null;
+		$this->verified_from_ip = $data['verified_from_ip'];
 	}
 	
 	public function getIsAlreadyUsed() {
@@ -103,5 +105,15 @@ class UserAccountVerifyEmailModel {
 		if (!$CONFIG->isDebug) $app['mailer']->send($message);
 		
 	}
+
+	/**
+	 * @return String|null the IP address
+	 */
+	public function getVerifiedFromIp()
+	{
+		return $this->verified_from_ip;
+	}
+
+
 }
 

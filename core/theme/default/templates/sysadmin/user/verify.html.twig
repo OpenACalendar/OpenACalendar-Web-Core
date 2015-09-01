@@ -16,6 +16,7 @@
 		<tr>
 			<th>Created</th>
 			<th>Verified</th>
+			<th>Verified From IP</th>
 		</tr>
 		{% for verify in verifies %}
 			<tr {% if loop.index is even %}class="alternative"{% endif %} >
@@ -24,6 +25,9 @@
 					{% if verify.getVerifiedAt %}
 						{{ verify.getVerifiedAt  |tolocaltimeformatted('D H:i jS M Y', currentTimeZone )}}
 					{% endif %}
+				</td>
+				<td>
+					{{  verify.verifiedFromIP }}
 				</td>
 			</tr>
 		{% endfor %}
