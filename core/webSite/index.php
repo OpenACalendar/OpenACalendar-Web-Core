@@ -36,6 +36,8 @@ $app->before(function (Request $request) use ($app) {
 		$app['twig']->addGlobal('currentUserInSite', null);
 		$app['twig']->addGlobal('currentUserCanAdminSite', false);
 		$app['twig']->addGlobal('currentUserCanEditSite', false);
+		$app['twig']->addGlobal('currentSiteFeatures', new SiteFeaturesList(array()));
+		$app['twig']->addGlobal('currentUserActions', new UserActionsSiteList($app['currentSite'], new UserPermissionsList($app['extensions'], array())));
 		return new Response($app['twig']->render('site/closed_by_sys_admin.html.twig', array()));
 	}
 
