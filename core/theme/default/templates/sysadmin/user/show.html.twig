@@ -2,7 +2,7 @@
  # @package Core
  # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% extends 'sysadmin/page.html.twig' %}
@@ -86,6 +86,16 @@
 			</td>
 		</tr>		
 	</table>
+
+	{%  if comments %}
+		<ul class="sysadmincomments">
+			{% for comment in comments  %}
+				<li class="sysadmincomment">
+					<div class="comment">{{  comment.comment | nl2br }}</div>
+				</li>
+			{% endfor %}
+		</ul>
+	{%  endif %}
 
 	<form action="#" method="post" class="action">
 		{{ form_errors(form) }}

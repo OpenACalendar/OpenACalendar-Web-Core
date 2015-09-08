@@ -6,6 +6,7 @@ use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
+use repositories\builders\SysadminCommentRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
 use Silex\Application;
 use site\forms\NewEventForm;
@@ -30,7 +31,7 @@ use repositories\builders\UserNotificationRepositoryBuilder;
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserController {
@@ -110,7 +111,11 @@ class UserController {
 		}
 		
 		$this->parameters['form'] = $form->createView();
-		
+
+		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb->setUser($this->parameters['user']);
+		$this->parameters['comments'] = $sacrb->fetchAll();
+
 		return $app['twig']->render('sysadmin/user/show.html.twig', $this->parameters);
 	}
 	

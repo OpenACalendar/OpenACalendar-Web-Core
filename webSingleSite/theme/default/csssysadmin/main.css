@@ -443,6 +443,19 @@ ul.usernotifications li.usernotificationunread div.title {
 ul.usernotifications li.usernotificationunread div.title {
   font-size: 1.1em;
 }
+ul.sysadmincomments {
+  margin: 10px 0;
+}
+ul.sysadmincomments li.sysadmincomment {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  background: #ddd;
+  padding: 10px;
+  margin-bottom: 5px;
+}
 ul.areasAdmin {
   padding: 10px 5px 10px 20px;
   font-weight: 200;
