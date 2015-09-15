@@ -8,6 +8,7 @@ use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\SysadminCommentRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
+use repositories\SysAdminCommentRepository;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,7 @@ use sysadmin\forms\ActionForm;
 use sysadmin\ActionParser;
 use repositories\UserAccountVerifyEmailRepository;
 use repositories\builders\UserNotificationRepositoryBuilder;
+use sysadmin\forms\ActionWithCommentForm;
 
 /**
  *
@@ -58,7 +60,7 @@ class UserController {
 		$this->build($id, $request, $app);
 		
 		
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(new ActionWithCommentForm());
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -69,40 +71,51 @@ class UserController {
 				$action = new ActionParser($data['action']);
 				$uar = new UserAccountRepository();
 
+				$redirect = false;
+
+				if ($data['comment']) {
+					$scr = new SysAdminCommentRepository();
+					$scr->createAboutUser($this->parameters['user'], $data['comment'], $app['currentUser']);
+					$redirect = true;
+				}
+
 				if ($action->getCommand() == 'editor' && $action->getParam(0) == 'yes') {
 					$this->parameters['user']->setIsEditor(true);
 					$uar->edit($this->parameters['user']);
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+					$redirect = true;
 				} else if ($action->getCommand() == 'editor' && $action->getParam(0) == 'no') {
 					$this->parameters['user']->setIsEditor(false);
 					$uar->edit($this->parameters['user']);
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+					$redirect = true;
 				} else if ($action->getCommand() == 'sysadmin' && $action->getParam(0) == 'yes') {
 					$this->parameters['user']->setIsSystemAdmin(true);
 					$uar->edit($this->parameters['user']);
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+					$redirect = true;
 				} else if ($action->getCommand() == 'sysadmin' && $action->getParam(0) == 'no') {
 					$this->parameters['user']->setIsSystemAdmin(false);
 					$uar->edit($this->parameters['user']);
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+					$redirect = true;
 				} else if ($action->getCommand() == 'verifyemail') {
 					$uar->verifyEmail($this->parameters['user']);
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());					
+					$redirect = true;
 				} else if ($action->getCommand() == 'resendverificationemail' && !$this->parameters['user']->getIsEmailVerified()) {
 					$repo = new UserAccountVerifyEmailRepository();
 					$verify = $repo->create($this->parameters['user']);
 					$verify->sendEmail($app, $this->parameters['user']);
 					$app['flashmessages']->addMessage('Sent');
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());	
+					$redirect = true;
 				} else if ($action->getCommand() == 'close') {
 					$uar->systemAdminShuts($this->parameters['user'], $app['currentUser'], $action->getParam(0));
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());	
+					$redirect = true;
 				} else if ($action->getCommand() == 'open') {
 					$uar->systemAdminOpens($this->parameters['user'], $app['currentUser']);
-					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
+					$redirect = true;
 				} else if ($action->getCommand() == 'email' && filter_var($action->getParam(0), FILTER_VALIDATE_EMAIL)) {
 					$this->parameters['user']->setEmail($action->getParam(0));
-					$uar->editEmail($this->parameters['user']);
+					$redirect = true;
+				}
+
+				if ($redirect) {
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
 				}
 		
