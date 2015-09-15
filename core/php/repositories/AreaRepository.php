@@ -219,7 +219,7 @@ class AreaRepository {
 	public function editParentArea(AreaModel $area, UserAccountModel $user) {
 		$areaEditMetaDataModel = new AreaEditMetaDataModel();
 		$areaEditMetaDataModel->setUserAccount($user);
-		$this->editWithMetaData($area, $areaEditMetaDataModel);
+		$this->editParentAreaWithMetaData($area, $areaEditMetaDataModel);
 	}
 
 	public function editParentAreaWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
