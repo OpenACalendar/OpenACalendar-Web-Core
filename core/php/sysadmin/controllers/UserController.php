@@ -112,6 +112,7 @@ class UserController {
 					$redirect = true;
 				} else if ($action->getCommand() == 'email' && filter_var($action->getParam(0), FILTER_VALIDATE_EMAIL)) {
 					$this->parameters['user']->setEmail($action->getParam(0));
+					$uar->editEmail($this->parameters['user']);
 					$redirect = true;
 				}
 
