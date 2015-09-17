@@ -42,7 +42,7 @@ class EventNewController {
 		}
 		$out[] = new NewEventWhatDetails($newEventDraftModel, $app, $request);
 		$out[] = new NewEventWhenDetails($newEventDraftModel, $app, $request);
-		if ($app['currentSite']->getIsFeaturePhysicalEvents() && (!$newEventDraftModel->hasDetailsValue('event.is_physical') || $newEventDraftModel->getDetailsValue('event.is_physical') )) {
+		if ($app['currentSite']->getIsFeaturePhysicalEvents() && (!$newEventDraftModel->hasDetailsValue('event.is_virtual') || $newEventDraftModel->getDetailsValue('event.is_physical') )) {
 			$out[] = new NewEventWhereDetails($newEventDraftModel, $app, $request);
 		}
 		$out[] = new NewEventPreview($newEventDraftModel, $app, $request);
