@@ -337,6 +337,8 @@ function showSharePopup() {
 			emailSubject = exportData.curatedlistTitle;
 		} else {
 			url += "/";
+			text = config.siteTitle;
+			emailSubject = config.siteTitle;
 		}
 
 
