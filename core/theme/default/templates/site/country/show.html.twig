@@ -21,11 +21,18 @@
 
 
 {% block actions %}
-	<li class="action">
-		{% if currentUserActions.has("org.openacalendar","areaNew") %}
+	{% if currentUserActions.has("org.openacalendar","areaNew") %}
+		<li class="action">
 			<a href="/country/{{ country.twoCharCode }}/new"><div class="iconPencilSmall"></div> new</a>
-		{%  endif  %}
-	</li>
+		</li>
+	{%  endif  %}
+	{% if currentSite.getIsWebRobotsAllowed %}
+		<li class="action">
+			<a href="#" onclick="showSharePopup(); return false;">
+				<div class="iconShareSmall"></div>  share
+			</a>
+		</li>
+	{% endif %}
 {% endblock %}
 	
 	

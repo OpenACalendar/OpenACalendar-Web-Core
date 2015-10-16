@@ -321,6 +321,7 @@ function showSharePopup() {
 			text += exportData.areaTitle;
 		} else if (exportData.hasOwnProperty("country")) {
 			url += "/country/"+exportData.country;
+			text += exportData.country;
 		} else if (exportData.hasOwnProperty("curatedlist")) {
 			url += exportData.hasOwnProperty("curatedlistSlugURL") ? "/curatedlist/"+exportData.curatedlistSlugURL : "/curatedlist/"+exportData.curatedlist;
 			text = exportData.curatedlistTitle;	
