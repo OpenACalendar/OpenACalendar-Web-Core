@@ -303,44 +303,55 @@ function showSharePopup() {
 	if (div.size() == 0) {
 		var url = "http://" + config.httpDomain;
 		var text = "";
+		var emailSubject = "";
+		var emailBody = "";
 		/** Sometimes more than one will be set (eg event and group) so must check most important one first **/
 		if (exportData.hasOwnProperty("event")) {
 			url += exportData.hasOwnProperty("eventSlugURL") ? "/event/"+exportData.eventSlugURL :  "/event/"+exportData.event ;
 			text = exportData.eventTitle;
+			emailSubject = exportData.eventTitle;
+			emailBody = exportData.eventTitle + "\n" + exportData.eventStartLocal + "\n\n" + url;
 		} else if (exportData.hasOwnProperty("group")) {
-			url += exportData.hasOwnProperty("groupSlugURL") ? "/group/"+exportData.groupSlugURL : "/group/"+exportData.group;	
+			url += exportData.hasOwnProperty("groupSlugURL") ? "/group/"+exportData.groupSlugURL : "/group/"+exportData.group;
 			text = exportData.hasOwnProperty("groupTwitterUsername") && exportData.groupTwitterUsername ? exportData.groupTitle + " @" + exportData.groupTwitterUsername :  exportData.groupTitle;
+			emailSubject = exportData.groupTitle;
 		} else if (exportData.hasOwnProperty("venue")) {
 			url +=  exportData.hasOwnProperty("venueSlugURL") ? "/venue/"+exportData.venueSlugURL : "/venue/"+exportData.venue;
-			text += exportData.venueTitle;	
+			text = exportData.venueTitle;
+			emailSubject = exportData.venueTitle;
 		} else if (exportData.hasOwnProperty("tag")) {
 			url +=  exportData.hasOwnProperty("tagSlugURL") ? "/tag/"+exportData.tagSlugURL : "/tag/"+exportData.tag;
-			text += exportData.tagTitle;
+			text = exportData.tagTitle;
+			emailSubject = exportData.tagtitle;
 		} else if (exportData.hasOwnProperty("area")) {
 			url +=  exportData.hasOwnProperty("areaSlugURL") ? "/area/"+exportData.areaSlugURL : "/area/"+exportData.area;
-			text += exportData.areaTitle;
+			text = exportData.areaTitle;
+			emailSubject = exportData.areaTitle;
 		} else if (exportData.hasOwnProperty("country")) {
 			url += "/country/"+exportData.country;
-			text += exportData.country;
+			text = exportData.country;
+			emailSubject = exportData.country;
 		} else if (exportData.hasOwnProperty("curatedlist")) {
 			url += exportData.hasOwnProperty("curatedlistSlugURL") ? "/curatedlist/"+exportData.curatedlistSlugURL : "/curatedlist/"+exportData.curatedlist;
-			text = exportData.curatedlistTitle;	
+			text = exportData.curatedlistTitle;
+			emailSubject = exportData.curatedlistTitle;
 		} else {
 			url += "/";
-		}	
-		
-		
+		}
+
+
 		var html = '<div id="SharePopup" class="popupBox" style="display: none;">';
 		html +=	'<div id="SharePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
-		
+
 		html += '<ul class="SharePopupOptions">'
-		
+
+		html += '<li><a href="mailto:?subject='+encodeURIComponent(emailSubject)+'&body='+encodeURIComponent(emailBody ? emailBody : text+"\n\n"+url)+'" title="Email"><div class="iconEnvelopeOLarge" title="Email"></div></li>';
 		html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><div class="iconTwitterLarge" title="Twitter"></div></li>';
 		html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><div class="iconFacebookSquareLarge" title="Facebook"></div></a></li>';
 		html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><div class="iconGoogleLarge" title="Google Plus"></div></a></li>';
-		
+
 		html += '</ul>'
-		
+
 		html += '</div>';
 		$('body').append(html);
 	}
