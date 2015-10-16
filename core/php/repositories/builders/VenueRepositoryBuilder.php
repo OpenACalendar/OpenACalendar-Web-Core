@@ -50,6 +50,7 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 	protected $freeTextSearchTitle;
 	protected $freeTextSearchAddress;
 	protected $freeTextSearchAddressCode;
+	protected $freeTextSearchAddressCodeRemoveSpaces = true;
 
 	/**
 	 * @param mixed $freeTextSearchAddress
@@ -62,9 +63,10 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 	/**
 	 * @param mixed $freeTextSearchAddressCode
 	 */
-	public function setFreeTextSearchAddressCode($freeTextSearchAddressCode)
+	public function setFreeTextSearchAddressCode($freeTextSearchAddressCode, $freeTextSearchAddressCodeRemoveSpaces = true)
 	{
 		$this->freeTextSearchAddressCode = $freeTextSearchAddressCode;
+		$this->freeTextSearchAddressCodeRemoveSpaces = $freeTextSearchAddressCodeRemoveSpaces;
 	}
 
 	/**
@@ -154,8 +156,13 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 		}
 
 		if ($this->freeTextSearchAddressCode) {
-			$this->where[] =  ' venue_information.address_code ILIKE :free_text_search_address_code ';
-			$this->params['free_text_search_address_code'] = "%".strtolower($this->freeTextSearchAddressCode)."%";
+			if ($this->freeTextSearchAddressCodeRemoveSpaces) {
+				$this->where[] = 'replace(venue_information.address_code, \' \',\'\') ILIKE :free_text_search_address_code ';
+				$this->params['free_text_search_address_code'] = "%" . strtolower(str_replace($this->freeTextSearchAddressCode, " ","")) . "%";
+			} else {
+				$this->where[] = 'venue_information.address_code ILIKE :free_text_search_address_code ';
+				$this->params['free_text_search_address_code'] = "%" . strtolower($this->freeTextSearchAddressCode) . "%";
+			}
 		}
 
 		if ($this->freeTextSearchAddress) {
