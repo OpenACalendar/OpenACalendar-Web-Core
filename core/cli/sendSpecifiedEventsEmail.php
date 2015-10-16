@@ -70,7 +70,7 @@ if (substr($argv[1], 0,1) == '/') {
 }
 $thisconfig = new IniConfigWithEnvironment($environment, $argv[1]);
 
-foreach(array('SiteID','Subject','FromEmail','FromName','TimeZone','IntroTXTFile','IntroHTMLFile') as $key) {
+foreach(array('SiteID','Subject','FromEmail','FromName','TimeZone','IntroTXTFile','IntroHTMLFile','To') as $key) {
 	if (!$thisconfig->hasValue($key)) {
 		die("NO CONFIG ". $key." ?\n");
 	}
