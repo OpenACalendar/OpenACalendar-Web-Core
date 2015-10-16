@@ -22,7 +22,7 @@ use TimeSource;
  * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppWithDBTest
+class GroupRepositoryBuilderTest extends \BaseAppWithDBTest
 {
 
 
