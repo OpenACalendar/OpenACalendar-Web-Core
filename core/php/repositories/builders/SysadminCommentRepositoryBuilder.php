@@ -34,6 +34,8 @@ class SysadminCommentRepositoryBuilder extends BaseRepositoryBuilder {
 	protected function build() {
 
 		$this->select[] = 'sysadmin_comment_information.*';
+		$this->joins[] = ' LEFT JOIN user_account_information ON user_account_information.id = sysadmin_comment_information.user_account_id ';
+		$this->select[] = ' user_account_information.username AS user_account_username';
 
 		if ($this->user) {
 			$this->joins[] = "  JOIN sysadmin_comment_about_user ON sysadmin_comment_about_user.sysadmin_comment_id = sysadmin_comment_information.id  ";
