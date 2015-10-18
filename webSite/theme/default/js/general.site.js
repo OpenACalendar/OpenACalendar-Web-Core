@@ -14,7 +14,7 @@ function showExportPopup() {
 		var html = '<div id="ExportPopup" class="popupBox" style="display: none">';
 		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
         html += '<div class="popupBoxContent">';
-		html += '<div id="ExportPopupIntroText">Export your data.';
+		html += '<div id="ExportPopupIntroText"><p>Export your data.</p>';
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label>';
 			if (exportData.hasOwnProperty("country") ) {
@@ -50,6 +50,8 @@ function showExportPopup() {
 			if (exportData.hasOwnProperty("event") ) {
 				html += '<label><input type="radio" name="ExportWhat" id="ExportEvent"> just this event</label>';
 			}
+		} else {
+			html  += '<p>Hint: if you browse round the site, you will be offered the option to export filtered feeds of only what interests you!</p>';
 		}
 		html += '</div>';
 		html += '<ul id="ExportPopupMenu">';
