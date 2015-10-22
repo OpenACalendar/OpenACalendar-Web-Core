@@ -7,6 +7,7 @@ webSingleSite/js/blank.js
 webSite/js/blank.js
 build/vendor/*
 extension/AddressCodeGBOpenCodePoint/data/*.csv
+.DS_Store
 
 
 
