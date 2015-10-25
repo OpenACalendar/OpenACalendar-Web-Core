@@ -22,9 +22,15 @@ use models\SiteModel;
  * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
+ 
+$canAnyUserVerifiedEdit = false;
+$opts = getopt('',array('write'));
+if (isset($opts['write'])) { $canAnyUserVerifiedEdit = true; }
 
-$slug = $argv[1];
-$email = $argv[2];
+$i = 1;
+while(substr($argv[$i],0,1) == '-') $i++;
+$slug = $argv[$i];
+$email = $argv[$i+1];
 if (!$slug || !$email) {
 	die("Slug and Email?\n\n");
 }
@@ -35,6 +41,7 @@ if (!SiteModel::isSlugValid($slug, $CONFIG)) {
 
 print "Slug: ". $slug."\n";
 print "Email: ". $email."\n";
+print "Can any verified user edit: ".($canAnyUserVerifiedEdit ? "true" : "false")."\n";
 
 sleep(10);
 
@@ -67,7 +74,7 @@ $siteRepository->create(
 			$user, 
 			array( $gb ), 
 			$siteQuotaRepository->loadByCode($CONFIG->newSiteHasQuotaCode),
-			false
+			$canAnyUserVerifiedEdit
 		);
 
 
