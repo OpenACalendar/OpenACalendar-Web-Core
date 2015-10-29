@@ -661,6 +661,9 @@ class EventRepository {
 			$stat = $DB->prepare("DELETE FROM event_history WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
+			$stat = $DB->prepare("DELETE FROM media_in_event WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+
 			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
 			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_event WHERE sysadmin_comment_id=:id");
 			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_event WHERE event_id=:id");

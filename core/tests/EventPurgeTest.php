@@ -115,6 +115,15 @@ class EventPurgeTest extends \BaseAppWithDBTest {
 		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
 		$sysadminCommentRepo->createAboutEvent($event, "TEST", null);
 
+		$media = new \models\MediaModel();
+		$media->setSiteId($site->getId());
+
+		$mediaRepo = new \repositories\MediaRepository();
+		$mediaRepo->create($media, $user);
+
+		$mediaInEventRepo = new \repositories\MediaInEventRepository();
+		$mediaInEventRepo->add($media, $event, $user);
+
 		## TEST
 		$this->assertNotNull($eventRepository->loadBySlug($site, $event->getSlug()));
 		
