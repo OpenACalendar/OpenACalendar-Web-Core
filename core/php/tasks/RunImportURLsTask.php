@@ -4,6 +4,7 @@ namespace tasks;
 
 
 use repositories\builders\ImportURLRepositoryBuilder;
+use repositories\SiteFeatureRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\ImportURLRepository;
@@ -48,6 +49,7 @@ class RunImportURLsTask extends \BaseTask  {
 		global $CONFIG;
 
 		$siteRepo = new SiteRepository();
+		$siteFeatureRepository = new SiteFeatureRepository($this->app);
 		$groupRepo = new GroupRepository();
 		$importURLRepo = new ImportURLRepository();
 		$userRepo = new UserAccountRepository();
@@ -64,13 +66,14 @@ class RunImportURLsTask extends \BaseTask  {
 		foreach($iurlBuilder->fetchAll() as $importURL) {
 
 			$site = $siteRepo->loadById($importURL->getSiteID());
+			$importerFeature = $siteFeatureRepository->doesSiteHaveFeatureByExtensionAndId($site, 'org.openacalendar','Importer');
 			$group = $groupRepo->loadById($importURL->getGroupId());
 
 			$this->logVerbose(" ImportURL ".$importURL->getId()." ".$importURL->getTitle()." Site ".$site->getTitle());
 
 			if ($site->getIsClosedBySysAdmin()) {
 				$this->logVerbose( " - site closed by sys admin");
-			} else if (!$site->getIsFeatureImporter()) {
+			} else if (!$importerFeature) {
 				$this->logVerbose( " - site feature disabled");
 			} else if (!$group) {
 				$this->logVerbose( " - no group - this should be impossible");
