@@ -113,28 +113,25 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		
 		// Avoid Throttling
 		sleep(1);
-		
-		$ch = curl_init();      
-		curl_setopt($ch, CURLOPT_URL, "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
-		$output = curl_exec($ch);
-		//$response = curl_getinfo( $ch );
-		curl_close($ch);
-		
-		if ($output) {
-			$data =  json_decode($output);
-			if (property_exists($data, 'code')) {
-				if ($data->code == 'not_authorized') {
+
+		$request = $this->importURLRun->getGuzzle()->get("https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain");
+		$response = $this->importURLRun->getGuzzle()->send($request);
+
+		if ($response->getStatusCode() == 200) {
+			$data =  $response->json();
+			if (isset($data['code']) && $data['code']) {
+				if ($data['code'] == 'not_authorized') {
 					throw new ImportURLMeetupHandlerAPIError("API Key is not working",1);
-				} else if ($data->code == 'throttled') {
+				} else if ($data['code'] == 'throttled') {
 					sleep(15);
 					throw new ImportURLMeetupHandlerAPIError("Our Access has been throttled",1);
-				} else if ($data->code == 'blocked') {
+				} else if ($data['code'] == 'blocked') {
 					throw new ImportURLMeetupHandlerAPIError("Our Access has been blocked temporarily because throttling failed",1);
 				}
 			}
 			return $data;
+		} else {
+			throw new ImportURLMeetupHandlerAPIError("Non 200 response - got ".$response->getStatusCode(), 1);
 		}
 		
 	}
@@ -147,32 +144,31 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		
 		// Avoid Throttling
 		sleep(1);
-		
-		$ch = curl_init();      
-		curl_setopt($ch, CURLOPT_URL, "https://api.meetup.com/2/events/?sign=true&key=".$appKey.
-				"&fields=timezone&text_format=plain&group_urlname=".
-				str_replace(array("&","?"), array("",""),$groupName));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
-		$output = curl_exec($ch);
-		//$response = curl_getinfo( $ch );
-		curl_close($ch);
-		
-		if ($output) {
-			$data =  json_decode($output);
-			if (property_exists($data, 'code')) {
-				if ($data->code == 'not_authorized') {
+
+		$url = "https://api.meetup.com/2/events/?sign=true&key=".$appKey.
+			"&fields=timezone&text_format=plain&group_urlname=".
+			str_replace(array("&","?"), array("",""),$groupName);
+
+		$request = $this->importURLRun->getGuzzle()->get($url);
+		$response = $this->importURLRun->getGuzzle()->send($request);
+
+		if ($response->getStatusCode() == 200) {
+			$data =  $response->json();
+			if (isset($data['code']) && $data['code']) {
+				if ($data['code'] == 'not_authorized') {
 					throw new ImportURLMeetupHandlerAPIError("API Key is not working",1);
-				} else if ($data->code == 'throttled') {
+				} else if ($data['code'] == 'throttled') {
 					sleep(15);
 					throw new ImportURLMeetupHandlerAPIError("Our Access has been throttled",1);
-				} else if ($data->code == 'blocked') {
+				} else if ($data['code'] == 'blocked') {
 					throw new ImportURLMeetupHandlerAPIError("Our Access has been blocked temporarily because throttling failed",1);
 				}
 			}
-			if (property_exists($data, 'results') && is_array($data->results)) {
-				return $data->results;
+			if (isset($data['results']) && is_array($data['results'])) {
+				return $data['results'];
 			}
+		} else {
+			throw new ImportURLMeetupHandlerAPIError("Non 200 response - got ".$response->getStatusCode(),1);
 		}
 
 		return array();
@@ -181,11 +177,11 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 	protected function processMeetupData($meetupData) {
 		global $CONFIG;
 		$start = new \DateTime('', new \DateTimeZone('UTC'));
-		$start->setTimestamp($meetupData->time / 1000);
-		if (property_exists($meetupData, 'duration') && $meetupData->duration) {
+		$start->setTimestamp($meetupData['time'] / 1000);
+		if (isset($meetupData['duration']) && $meetupData['duration']) {
 			$end = new \DateTime('', new \DateTimeZone('UTC'));
-			$end->setTimestamp($meetupData->time / 1000);
-			$end->add(new \DateInterval("PT".($meetupData->duration / 1000)."S"));
+			$end->setTimestamp($meetupData['time'] / 1000);
+			$end->add(new \DateInterval("PT".($meetupData['duration'] / 1000)."S"));
 		} else {
 			$end = clone $start;
 			$end->add(new \DateInterval("PT3H"));
@@ -198,12 +194,12 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 			} else {
 		
 				$importedEventRepo = new \repositories\ImportedEventRepository();
-				$id = "event_".$meetupData->id."@meetup.com";
+				$id = "event_".$meetupData['id']."@meetup.com";
 				$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importURLRun->getImportURL()->getId() ,$id);
 
 				$changesToSave = false;
 				if (!$importedEvent) {
-					if ($meetupData->status != 'cancelled') {
+					if ($meetupData['status'] != 'cancelled') {
 						++$this->countNew;
 						$importedEvent = new ImportedEventModel();						
 						$importedEvent->setImportId($id);
@@ -213,7 +209,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 					}
 				} else {
 					++$this->countExisting;
-					if ($meetupData->status == 'cancelled') {
+					if ($meetupData['status'] == 'cancelled') {
 						if (!$importedEvent->getIsDeleted()) {
 							$importedEvent->setIsDeleted(true);
 							$changesToSave = true;
@@ -248,19 +244,19 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 	
 	protected function setImportedEventFromMeetupData(ImportedEventModel $importedEvent, $meetupData) {
 		$changesToSave = false;
-		if (property_exists($meetupData, 'description')) {
-			$description =  $meetupData->description;
+		if (isset($meetupData['description'])) {
+			$description =  $meetupData['description'];
 			if ($importedEvent->getDescription() != $description) {
 				$importedEvent->setDescription($description);
 				$changesToSave = true;
 			}
 		}
 		$start = new \DateTime('', new \DateTimeZone('UTC'));
-		$start->setTimestamp($meetupData->time / 1000);
-		if (property_exists($meetupData, 'duration') && $meetupData->duration) {
+		$start->setTimestamp($meetupData['time'] / 1000);
+		if (isset($meetupData['duration']) && $meetupData['duration']) {
 			$end = new \DateTime('', new \DateTimeZone('UTC'));
-			$end->setTimestamp($meetupData->time / 1000);
-			$end->add(new \DateInterval("PT".($meetupData->duration / 1000)."S"));
+			$end->setTimestamp($meetupData['time'] / 1000);
+			$end->add(new \DateInterval("PT".($meetupData['duration'] / 1000)."S"));
 		} else {
 			$end = clone $start;
 			$end->add(new \DateInterval("PT3H"));
@@ -273,20 +269,20 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 			$importedEvent->setEndAt($end);
 			$changesToSave = true;
 		}
-		if ($importedEvent->getTitle() != $meetupData->name) {
-			$importedEvent->setTitle($meetupData->name);
+		if ($importedEvent->getTitle() != $meetupData['name']) {
+			$importedEvent->setTitle($meetupData['name']);
 			$changesToSave = true;
 		}
-		if ($importedEvent->getUrl() != $meetupData->event_url) {
-			$importedEvent->setUrl($meetupData->event_url);
+		if ($importedEvent->getUrl() != $meetupData['event_url']) {
+			$importedEvent->setUrl($meetupData['event_url']);
 			$changesToSave = true;
 		}
-		if ($importedEvent->getTimezone() != $meetupData->timezone) {
-			$importedEvent->setTimezone($meetupData->timezone);
+		if ($importedEvent->getTimezone() != $meetupData['timezone']) {
+			$importedEvent->setTimezone($meetupData['timezone']);
 			$changesToSave = true;
 		}
-		if ($importedEvent->getTicketUrl() != $meetupData->event_url) {
-			$importedEvent->setTicketUrl($meetupData->event_url);
+		if ($importedEvent->getTicketUrl() != $meetupData['event_url']) {
+			$importedEvent->setTicketUrl($meetupData['event_url']);
 			$changesToSave = true;
 		}
 		return $changesToSave;
