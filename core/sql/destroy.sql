@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS sysadmin_comment_about_site CASCADE;
+DROP TABLE IF EXISTS sysadmin_comment_about_event CASCADE;
+DROP TABLE IF EXISTS sysadmin_comment_about_group CASCADE;
+DROP TABLE IF EXISTS sysadmin_comment_about_area CASCADE;
+DROP TABLE IF EXISTS sysadmin_comment_about_venue CASCADE;
+DROP TABLE IF EXISTS sysadmin_comment_about_media CASCADE;
 DROP TABLE IF EXISTS sysadmin_comment_about_user CASCADE;
 DROP TABLE IF EXISTS sysadmin_comment_information CASCADE;
 DROP TABLE IF EXISTS event_custom_field_definition_history CASCADE;

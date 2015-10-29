@@ -67,6 +67,9 @@ class GroupPurgeTest extends \BaseAppWithDBTest {
 		$eventRepository = new EventRepository();
 		$eventRepository->create($event, $site, $user, $group);
 
+		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
+		$sysadminCommentRepo->createAboutGroup($group, "TEST", null);
+
 		## TEST
 		$this->assertNotNull($groupRepo->loadById($group->getId()));
 		

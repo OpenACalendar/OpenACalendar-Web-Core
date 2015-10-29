@@ -77,6 +77,9 @@ class VenuePurgeTest extends \BaseAppWithDBTest {
 		$eventRepository = new EventRepository();
 		$eventRepository->create($event, $site, $user);
 
+		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
+		$sysadminCommentRepo->createAboutVenue($venue, "TEST", null);
+
 		## Test
 		$this->assertNotNull($venueRepo->loadBySlug($site, $venue->getSlug()));
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());

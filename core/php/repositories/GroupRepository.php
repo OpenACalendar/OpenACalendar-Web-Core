@@ -450,6 +450,15 @@ class GroupRepository {
 			$stat = $DB->prepare("DELETE FROM group_history WHERE group_id=:id");
 			$stat->execute(array('id'=>$group->getId()));
 
+			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
+			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_group WHERE sysadmin_comment_id=:id");
+			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_group WHERE group_id=:id");
+			$stat->execute(array('id'=>$group->getId()));
+			while($data = $stat->fetch()) {
+				$statDeleteLink->execute(array($data['sysadmin_comment_id']));
+				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
+			}
+			
 			$stat = $DB->prepare("DELETE FROM group_information WHERE id=:id");
 			$stat->execute(array('id'=>$group->getId()));
 

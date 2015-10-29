@@ -87,23 +87,7 @@
 		</tr>		
 	</table>
 
-	{%  if comments %}
-		<ul class="sysadmincomments">
-			{% for comment in comments  %}
-				<li class="sysadmincomment">
-					<div class="comment">{{  comment.comment | nl2br }}</div>
-					<div class="created">
-						Created at
-						<time datetime="{{ comment.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
-							{{ comment.getCreatedAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
-							({{ comment.getCreatedAt | timesinceinwords }})
-						</time>
-						{% if comment.userAccountUsername %}by {{  comment.userAccountUsername }}{% endif %}
-					</div>
-				</li>
-			{% endfor %}
-		</ul>
-	{%  endif %}
+	{%  include 'sysadmin/common/sysadminCommentsList.html.twig' %}
 
 	<form action="#" method="post" class="action">
 		{{ form_errors(form) }}

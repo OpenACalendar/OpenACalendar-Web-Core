@@ -71,6 +71,9 @@ class AreaPurgeTest extends BaseAppWithDBTest {
 		$eventRepository = new EventRepository();
 		$eventRepository->create($event, $site, $user);
 
+		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
+		$sysadminCommentRepo->createAboutArea($area, "TEST", null);
+
 		## Test
 
 		$this->assertNotNull($areaRepo->loadById($area->getId()));

@@ -661,9 +661,18 @@ class EventRepository {
 			$stat = $DB->prepare("DELETE FROM event_history WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
+			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
+			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_event WHERE sysadmin_comment_id=:id");
+			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_event WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+			while($data = $stat->fetch()) {
+				$statDeleteLink->execute(array($data['sysadmin_comment_id']));
+				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
+			}
+
 			$stat = $DB->prepare("DELETE FROM event_information WHERE id=:id");
 			$stat->execute(array('id'=>$event->getId()));
-		
+
 			$DB->commit();
 		} catch (Exception $e) {
 			$DB->rollBack();

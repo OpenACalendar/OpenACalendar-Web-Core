@@ -17,15 +17,17 @@ use org\openacalendar\curatedlists\repositories\CuratedListRepository;
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
-use sysadmin\forms\ActionForm;
+use sysadmin\forms\ActionWithCommentForm;
 use sysadmin\ActionParser;
+use repositories\builders\SysadminCommentRepositoryBuilder;
+use repositories\SysAdminCommentRepository;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventController {
@@ -75,7 +77,7 @@ class EventController {
 		$this->build($siteid, $slug, $request, $app);
 
 			
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(new ActionWithCommentForm());
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -84,55 +86,65 @@ class EventController {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
-			
+
+
+				$redirect = false;
+
+				if ($data['comment']) {
+					$scr = new SysAdminCommentRepository();
+					$scr->createAboutEvent($this->parameters['event'], $data['comment'], $app['currentUser']);
+					$redirect = true;
+				}
+
+
 				if ($action->getCommand() == 'addgroup') {
 					$gr = new GroupRepository();
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
 						$gr->addEventToGroup($this->parameters['event'], $group, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+						$redirect = true;
 					}
 				} else if ($action->getCommand() == 'removegroup') {
 					$gr = new GroupRepository();
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
 						$gr->removeEventFromGroup($this->parameters['event'], $group, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+						$redirect = true;
 					}
 				} else if ($action->getCommand() == 'maingroup') {
 					$gr = new GroupRepository();
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
 						$gr->setMainGroupForEvent($group, $this->parameters['event'], $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+						$redirect = true;
 					}
 				} else if ($action->getCommand() == 'delete' && !$this->parameters['event']->getIsDeleted()) {
 					$er = new EventRepository();
 					$er->delete($this->parameters['event'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					$redirect = true;
 					
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['event']->getIsDeleted()) {
 					$this->parameters['event']->setIsDeleted(false);
 					$er = new EventRepository();
 					$er->undelete($this->parameters['event'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					$redirect = true;
 
 				} else if ($action->getCommand() == 'cancel' && !$this->parameters['event']->getIsDeleted()) {
 					$er = new EventRepository();
 					$er->cancel($this->parameters['event'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					$redirect = true;
 
 				} else if ($action->getCommand() == 'uncancel' && $this->parameters['event']->getIsCancelled()) {
 					$er = new EventRepository();
 					$er->uncancel($this->parameters['event'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					$redirect = true;
 
 				} else if ($action->getCommand() == 'addcuratedlist') {
 					$clr = new CuratedListRepository();
 					$curatedList = $clr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($curatedList) {
 						$clr->addEventtoCuratedList($this->parameters['event'], $curatedList, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$curatedList->getSlug());
+						$redirect = true;
 					}
 					
 				} else if ($action->getCommand() == 'removecuratedlist') {
@@ -140,7 +152,7 @@ class EventController {
 					$curatedList = $clr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($curatedList) {
 						$clr->removeEventFromCuratedList($this->parameters['event'], $curatedList, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$curatedList->getSlug());
+						$redirect = true;
 					}
 
 				} else if ($action->getCommand() == 'isduplicateof') {
@@ -149,7 +161,7 @@ class EventController {
 					$originalEvent = $er->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalEvent && $originalEvent->getId() != $this->parameters['event']->getId()) {
 						$er->markDuplicate($this->parameters['event'], $originalEvent, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+						$redirect = true;
 					}
 				} else if ($action->getCommand() == 'isnotduplicate') {
 
@@ -158,7 +170,7 @@ class EventController {
 					$eventEditMetaData->setUserAccount($app['currentUser']);
 					$eventEditMetaData->setFromRequest($request);
 					$er->markNotDuplicateWithMetaData($this->parameters['event'], $eventEditMetaData);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
+					$redirect = true;
 
 
 				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeEventPassword && $CONFIG->sysAdminExtraPurgeEventPassword == $action->getParam(0)) {
@@ -167,6 +179,11 @@ class EventController {
 					$er->purge($this->parameters['event']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/');
 
+				}
+
+				if ($redirect) {
+
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/'.$this->parameters['event']->getSlug());
 				}
 		
 			}
@@ -178,7 +195,10 @@ class EventController {
 		$this->parameters['groups'] = $groupRB->fetchAll();
 		
 		$this->parameters['form'] = $form->createView();
-			
+
+		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb->setEvent($this->parameters['event']);
+		$this->parameters['comments'] = $sacrb->fetchAll();
 		
 		return $app['twig']->render('sysadmin/event/index.html.twig', $this->parameters);		
 	

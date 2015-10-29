@@ -252,6 +252,15 @@ class VenueRepository {
 			$stat = $DB->prepare("DELETE FROM venue_history WHERE venue_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
+			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
+			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_venue WHERE sysadmin_comment_id=:id");
+			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_venue WHERE venue_id=:id");
+			$stat->execute(array('id'=>$venue->getId()));
+			while($data = $stat->fetch()) {
+				$statDeleteLink->execute(array($data['sysadmin_comment_id']));
+				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
+			}
+
 			$stat = $DB->prepare("DELETE FROM venue_information WHERE id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 

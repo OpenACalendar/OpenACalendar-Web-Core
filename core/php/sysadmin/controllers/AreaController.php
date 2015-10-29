@@ -12,8 +12,10 @@ use repositories\CountryRepository;
 use repositories\SiteRepository;
 use repositories\AreaRepository;
 use repositories\builders\SiteRepositoryBuilder;
-use sysadmin\forms\ActionForm;
+use sysadmin\forms\ActionWithCommentForm;
 use sysadmin\ActionParser;
+use repositories\builders\SysadminCommentRepositoryBuilder;
+use repositories\SysAdminCommentRepository;
 
 /**
  *
@@ -66,23 +68,33 @@ class AreaController {
 		
 				
 				
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(new ActionWithCommentForm());
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
-			
+
+
+				$redirect = false;
+
+				if ($data['comment']) {
+					$scr = new SysAdminCommentRepository();
+					$scr->createAboutArea($this->parameters['area'], $data['comment'], $app['currentUser']);
+					$redirect = true;
+				}
+
+
 				if ($action->getCommand() == 'delete' && !$this->parameters['area']->getIsDeleted()) {
 					$ar = new AreaRepository();
 					$ar->delete($this->parameters['area'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+					$redirect = true;
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['area']->getIsDeleted()) {
 					$this->parameters['area']->setIsDeleted(false);
 					$ar = new AreaRepository();
 					$ar->undelete($this->parameters['area'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+					$redirect = true;
 				} else if ($action->getCommand() == 'parentarea') {
 					$ar = new AreaRepository();
 					$newparentarea = $ar->loadBySlug($this->parameters['site'], $action->getParam(0));
@@ -91,7 +103,7 @@ class AreaController {
 						$this->parameters['area']->setParentAreaId($newparentarea->getId());
 						$ar->editParentArea($this->parameters['area'], $app['currentUser']);
 					}
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+					$redirect = true;
 
 				} else if ($action->getCommand() == 'isduplicateof') {
 
@@ -99,7 +111,7 @@ class AreaController {
 					$originalArea = $ar->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalArea && $originalArea->getId() != $this->parameters['area']->getId()) {
 						$ar->markDuplicate($this->parameters['area'], $originalArea, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+						$redirect = true;
 					}
 
 
@@ -111,12 +123,20 @@ class AreaController {
 
 
 				}
+
+				if ($redirect) {
+
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/'.$this->parameters['area']->getSlug());
+				}
 			}
 		}
 		
 		$this->parameters['form'] = $form->createView();
-			
-		
+
+
+		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb->setArea($this->parameters['area']);
+		$this->parameters['comments'] = $sacrb->fetchAll();
 		
 		return $app['twig']->render('sysadmin/area/index.html.twig', $this->parameters);		
 	

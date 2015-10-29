@@ -100,7 +100,10 @@ class EventPurgeTest extends \BaseAppWithDBTest {
 		$tagRepo = new TagRepository();
 		$tagRepo->create($tag, $site, $user);
 		$tagRepo->addTagToEvent($tag, $event, $user);
-		
+
+		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
+		$sysadminCommentRepo->createAboutEvent($event, "TEST", null);
+
 		## TEST
 		$this->assertNotNull($eventRepository->loadBySlug($site, $event->getSlug()));
 		

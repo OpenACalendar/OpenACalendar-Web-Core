@@ -6,15 +6,17 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use repositories\SiteRepository;
 use repositories\VenueRepository;
-use sysadmin\forms\ActionForm;
+use sysadmin\forms\ActionWithCommentForm;
 use sysadmin\ActionParser;
+use repositories\builders\SysadminCommentRepositoryBuilder;
+use repositories\SysAdminCommentRepository;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class VenueController {
@@ -47,31 +49,41 @@ class VenueController {
 
 		$this->build($siteid, $slug, $request, $app);
 		
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(new ActionWithCommentForm());
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
-			
+
+
+				$redirect = false;
+
+				if ($data['comment']) {
+					$scr = new SysAdminCommentRepository();
+					$scr->createAboutVenue($this->parameters['venue'], $data['comment'], $app['currentUser']);
+					$redirect = true;
+				}
+
+
 				if ($action->getCommand() == 'delete' && !$this->parameters['venue']->getIsDeleted()) {
 					$vr = new VenueRepository();
 					$vr->delete($this->parameters['venue'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
+					$redirect = true;
 
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['venue']->getIsDeleted()) {
 					$this->parameters['venue']->setIsDeleted(false);
 					$vr = new VenueRepository();
 					$vr->undelete($this->parameters['venue'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
+					$redirect = true;
 
 				} else if ($action->getCommand() == 'isduplicateof') {
 					$vr = new VenueRepository();
 					$originalVenue = $vr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalVenue && $originalVenue->getId() != $this->parameters['venue']->getId()) {
 						$vr->markDuplicate($this->parameters['venue'], $originalVenue, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
+						$redirect = true;
 					}
 
 
@@ -82,12 +94,20 @@ class VenueController {
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/');
 
 				}
+
+				if ($redirect) {
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/'.$this->parameters['venue']->getSlug());
+
+				}
 			}
 		}
 		
 		$this->parameters['form'] = $form->createView();
-			
-		
+
+
+		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb->setVenue($this->parameters['venue']);
+		$this->parameters['comments'] = $sacrb->fetchAll();
 			
 		
 		return $app['twig']->render('sysadmin/venue/index.html.twig', $this->parameters);		

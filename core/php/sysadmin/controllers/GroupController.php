@@ -11,15 +11,17 @@ use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
-use sysadmin\forms\ActionForm;
+use sysadmin\forms\ActionWithCommentForm;
 use sysadmin\ActionParser;
+use repositories\builders\SysadminCommentRepositoryBuilder;
+use repositories\SysAdminCommentRepository;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class GroupController {
@@ -54,29 +56,39 @@ class GroupController {
 		$this->build($siteid, $slug, $request, $app);
 		
 				
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(new ActionWithCommentForm());
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
-			
+
+
+				$redirect = false;
+
+				if ($data['comment']) {
+					$scr = new SysAdminCommentRepository();
+					$scr->createAboutGroup($this->parameters['group'], $data['comment'], $app['currentUser']);
+					$redirect = true;
+				}
+
+
 				if ($action->getCommand() == 'delete' && !$this->parameters['group']->getIsDeleted()) {
 					$gr = new GroupRepository();
 					$gr->delete($this->parameters['group'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
+					$redirect = true;
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['group']->getIsDeleted()) {
 					$this->parameters['group']->setIsDeleted(false);
 					$gr = new GroupRepository();
 					$gr->undelete($this->parameters['group'],  $app['currentUser']);
-					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
+					$redirect = true;
 				} else if ($action->getCommand() == 'isduplicateof') {
 					$gr = new GroupRepository();
 					$originalGroup = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalGroup && $originalGroup->getId() != $this->parameters['group']->getId()) {
 						$gr->markDuplicate($this->parameters['group'], $originalGroup, $app['currentUser']);
-						return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
+						$redirect = true;
 					}
 
 
@@ -87,12 +99,20 @@ class GroupController {
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/');
 
 				}
+
+				if ($redirect) {
+
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug());
+				}
 			}
 		}
 		
 		$this->parameters['form'] = $form->createView();
-			
-		
+
+
+		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb->setGroup($this->parameters['group']);
+		$this->parameters['comments'] = $sacrb->fetchAll();
 		
 		return $app['twig']->render('sysadmin/group/index.html.twig', $this->parameters);		
 	

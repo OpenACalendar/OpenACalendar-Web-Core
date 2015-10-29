@@ -15,15 +15,17 @@ use repositories\CountryRepository;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
-use sysadmin\forms\ActionForm;
+use sysadmin\forms\ActionWithCommentForm;
 use sysadmin\ActionParser;
+use repositories\builders\SysadminCommentRepositoryBuilder;
+use repositories\SysAdminCommentRepository;
 
 /**
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class SiteController {
@@ -51,7 +53,7 @@ class SiteController {
 		$siteQuotaRepository = new SiteQuotaRepository();
 		$userRepository = new UserAccountRepository();
 		
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(new ActionWithCommentForm());
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -62,7 +64,17 @@ class SiteController {
 				$action = new ActionParser($data['action']);
 
 				$sr = new SiteRepository();
-				
+
+
+				$redirect = false;
+
+				if ($data['comment']) {
+					$scr = new SysAdminCommentRepository();
+					$scr->createAboutSite($this->parameters['site'], $data['comment'], $app['currentUser']);
+					$redirect = true;
+				}
+
+
 				if ($action->getCommand() == 'close') {
 					$this->parameters['site']->setIsClosedBySysAdmin(true);
 					$this->parameters['site']->setClosedBySysAdminreason($action->getParam(0));
@@ -103,6 +115,10 @@ class SiteController {
 					}
 					
 				}
+
+				if ($redirect) {
+					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId());
+				}
 		
 			}
 			
@@ -114,7 +130,11 @@ class SiteController {
 		$this->parameters['sitequota'] = $this->parameters['site']->getSiteQuotaId() ?
 				$siteQuotaRepository->loadById($this->parameters['site']->getSiteQuotaId()) : 
 				null;
-		
+
+		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb->setSite($this->parameters['site']);
+		$this->parameters['comments'] = $sacrb->fetchAll();
+
 		return $app['twig']->render('sysadmin/site/show.html.twig', $this->parameters);		
 	
 	}

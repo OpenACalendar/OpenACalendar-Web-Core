@@ -487,6 +487,15 @@ class AreaRepository {
 			$stat = $DB->prepare("DELETE FROM area_history WHERE area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
+			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
+			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_area WHERE sysadmin_comment_id=:id");
+			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_area WHERE area_id=:id");
+			$stat->execute(array('id'=>$area->getId()));
+			while($data = $stat->fetch()) {
+				$statDeleteLink->execute(array($data['sysadmin_comment_id']));
+				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
+			}
+
 			$stat = $DB->prepare("DELETE FROM area_information WHERE id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
