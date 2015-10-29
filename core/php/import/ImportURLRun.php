@@ -1,6 +1,7 @@
 <?php
 
 namespace import;
+use Guzzle\Http\Client;
 use models\ImportURLModel;
 use models\SiteModel;
 use models\GroupModel;
@@ -19,6 +20,9 @@ use repositories\AreaRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLRun {
+
+	/** @var Client */
+	protected $guzzle;
 
 	/** @var ImportURLModel **/
 	protected $importURL;
@@ -46,6 +50,7 @@ class ImportURLRun {
 	protected $temporaryFileStorageFromTesting;
 	
 	function __construct(ImportURLModel $importURL, SiteModel $site = null) {
+		global $CONFIG;
 		$this->importURL = $importURL;
 		$this->realurl = $importURL->getUrl();
 		if ($site) {
@@ -64,6 +69,8 @@ class ImportURLRun {
 		}
 		$groupRepository = new GroupRepository();
 		$this->group = $groupRepository->loadById($importURL->getGroupId());
+		$this->guzzle = new Client();
+		$this->guzzle->setUserAgent('OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
 	}
 
 	public function getImportURL() {
@@ -84,37 +91,29 @@ class ImportURLRun {
 
 	public function getArea() {
 		return $this->area;
-	}	
-	
+	}
+
+	/**
+	 * @return Client
+	 */
+	public function getGuzzle()
+	{
+		return $this->guzzle;
+	}
+
 	public function downloadURLreturnFileName() {
-		global $CONFIG;
 		if ($this->temporaryFileStorageFromTesting) return $this->temporaryFileStorageFromTesting;
 		if ($this->temporaryFileStorage) return $this->temporaryFileStorage;
 		
-		$runAgain = false;
-		$downloadCount = 0;
-		$url =  $this->getRealUrl();
-		$tempName = tempnam("/tmp", "hacimport");
-		do {
-			$runAgain = false;
-			$downloadCount++;
-			$fp = fopen($tempName, "w");		
-			$ch = curl_init();      
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_FILE, $fp);
-			curl_setopt($ch, CURLOPT_USERAGENT, 'OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
-			curl_exec($ch);
-			$response = curl_getinfo( $ch );
-			curl_close($ch);
-			fclose($fp);
-			if ($response['http_code'] == 301 || $response['http_code'] == 302) {
-				$url = $response['redirect_url'];
-				$runAgain = true;
-			}
-		} while ($runAgain && $downloadCount < 5);
-		
-		$this->temporaryFileStorage = $tempName;
-		return $tempName;
+		$request = $this->guzzle->get($this->getRealUrl());
+		$response = $this->guzzle->send($request);
+		if ($response->getStatusCode() == 200) {
+			$this->temporaryFileStorage = tempnam("/tmp", "oacimport");
+			file_put_contents($this->temporaryFileStorage, $response->getBody(true));
+			return $this->temporaryFileStorage;
+		}
+
+		return null;
 	}
 	
 	public function deleteLocallyStoredURL() {
