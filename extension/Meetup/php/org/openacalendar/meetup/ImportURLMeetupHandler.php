@@ -13,11 +13,15 @@ use repositories\ImportedEventRepository;
  * @package org.openacalendar.meetup
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportURLMeetupHandler extends ImportURLHandlerBase {
-	
+
+	public function getSortOrder() {
+		return 110000;
+	}
+
 	protected $eventId;
 	protected $groupName;
 
@@ -136,7 +140,6 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 	protected function getMeetupDatasForGroupname($groupName) {
 		global $app, $CONFIG;
 		
-		
 		$extension = $app['extensions']->getExtensionById('org.openacalendar.meetup');
 		$appKey = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_key'));
 		
@@ -245,7 +248,6 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		$changesToSave = false;
 		if (property_exists($meetupData, 'description')) {
 			$description =  $meetupData->description;
-			var_dump($description);
 			if ($importedEvent->getDescription() != $description) {
 				$importedEvent->setDescription($description);
 				$changesToSave = true;

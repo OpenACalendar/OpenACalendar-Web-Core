@@ -9,7 +9,7 @@ use appconfiguration\AppConfigurationDefinition;
  * @package org.openacalendar.meetup
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) 2013-2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ExtensionMeetup extends \BaseExtension {
@@ -34,6 +34,7 @@ class ExtensionMeetup extends \BaseExtension {
 	
 	public function getImportURLHandlers() {
 		return array(
+			new ImportURLExpandShortenerHandler(),
 			new ImportURLMeetupHandler(),
 		);
 	}
