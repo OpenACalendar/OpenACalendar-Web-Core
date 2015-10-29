@@ -16,7 +16,7 @@ class ImportURLExpandShortenerHandler extends ImportURLHandlerBase
 {
 
 	public function getSortOrder() {
-		return 100000;
+		return 1000;
 	}
 
 	public function isStopAfterHandling() {

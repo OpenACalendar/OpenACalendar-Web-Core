@@ -18,8 +18,11 @@ use repositories\ImportedEventRepository;
  */
 class ImportURLMeetupHandler extends ImportURLHandlerBase {
 
+	/**
+	 * It is important this runs before ImportURLMeetupHandler in Core, as in Core we try to map URL to ICAL data. We prefer using their API if we can.
+	 */
 	public function getSortOrder() {
-		return 110000;
+		return 2000;
 	}
 
 	protected $eventId;
@@ -32,7 +35,7 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 		$appKey = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_key'));
 		
 		$urlBits = parse_url($this->importURLRun->getRealURL());
-		
+
 		if (in_array(strtolower($urlBits['host']), array('meetup.com','www.meetup.com')) && $appKey) {
 			
 			$bits = explode("/", $urlBits['path']);
@@ -104,7 +107,6 @@ class ImportURLMeetupHandler extends ImportURLHandlerBase {
 	
 	protected function getMeetupDataForEventID($id) {
 		global $app, $CONFIG;
-		
 		
 		$extension = $app['extensions']->getExtensionById('org.openacalendar.meetup');
 		$appKey = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_key'));
