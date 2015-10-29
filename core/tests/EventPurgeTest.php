@@ -57,8 +57,15 @@ class EventPurgeTest extends \BaseAppWithDBTest {
 		
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
-		
-		
+
+		$eventDraft = new \models\NewEventDraftModel();
+		$eventDraft->setSiteId($site->getId());
+
+		$eventDraftRepo = new \repositories\NewEventDraftRepository();
+		$eventDraftRepo->create($eventDraft);
+
+		TimeSource::mock(2014,5,1,8,0,0);
+
 		$event = new EventModel();
 		$event->setSummary("test");
 		$event->setDescription("test test");
@@ -67,13 +74,17 @@ class EventPurgeTest extends \BaseAppWithDBTest {
 		$event->setUrl("http://www.info.com");
 		$event->setTicketUrl("http://www.tickets.com");
 
+		$eventMeta = new \models\EventEditMetaDataModel();
+		$eventMeta->setCreatedFromNewEventDraftID($eventDraft->getId());
+		$eventMeta->setUserAccount($user);
+
 		$eventDupe = new EventModel();
 		$eventDupe->setSummary("test");
 		$eventDupe->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
 		$eventDupe->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 
 		$eventRepository = new EventRepository();
-		$eventRepository->create($event, $site, $user, $group);
+		$eventRepository->createWithMetaData($event, $site, $eventMeta, $group);
 		$eventRepository->create($eventDupe, $site, $user, $group);
 		TimeSource::mock(2014,5,1,7,1,0);
 		$eventRepository->markDuplicate($eventDupe, $event);

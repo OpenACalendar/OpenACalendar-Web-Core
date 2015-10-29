@@ -670,6 +670,15 @@ class EventRepository {
 				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
 			}
 
+			$statDeleteInfo = $DB->prepare("DELETE FROM new_event_draft_information WHERE id=:id");
+			$statDeleteHistory = $DB->prepare("DELETE FROM new_event_draft_history WHERE new_event_draft_id=:id");
+			$stat = $DB->prepare("SELECT id FROM new_event_draft_information WHERE event_id=:id");
+			$stat->execute(array('id'=>$event->getId()));
+			while($data = $stat->fetch()) {
+				$statDeleteHistory->execute(array($data['id']));
+				$statDeleteInfo->execute(array($data['id']));
+			}
+
 			$stat = $DB->prepare("DELETE FROM event_information WHERE id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
