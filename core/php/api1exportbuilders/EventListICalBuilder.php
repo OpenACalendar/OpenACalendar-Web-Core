@@ -126,7 +126,12 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		
 		$txt .= $this->getIcalLine('DTSTART',$event->getStartAt()->format("Ymd")."T".$event->getStartAt()->format("His")."Z");
 		$txt .= $this->getIcalLine('DTEND',$event->getEndAt()->format("Ymd")."T".$event->getEndAt()->format("His")."Z");
-		
+		if ($event->getCreatedAt()) {
+			$txt .= $this->getIcalLine('DTSTAMP', $event->getCreatedAt()->format("Ymd") . "T" . $event->getCreatedAt()->format("His") . "Z");
+		} else {
+			$txt .= $this->getIcalLine('DTSTAMP', "201001010T010000Z");
+		}
+
 		$txt .= $this->getIcalLine('END','VEVENT');
 		$this->events[] = $txt;
 	}
