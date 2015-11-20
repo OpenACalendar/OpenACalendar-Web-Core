@@ -4,7 +4,6 @@ use models\UserAccountModel;
 use models\SiteModel;
 use models\EventModel;
 use org\openacalendar\curatedlists\models\CuratedListModel;
-use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\EventRepository;
 use org\openacalendar\curatedlists\repositories\CuratedListRepository;
@@ -30,7 +29,9 @@ class CuratedListEventTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+        // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
+        // It extends the core one so has all methods.
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
 		$userRepo->create($user);
 
 		$site = new SiteModel();

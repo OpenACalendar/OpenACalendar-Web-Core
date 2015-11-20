@@ -5,7 +5,6 @@ use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
 use org\openacalendar\curatedlists\models\CuratedListModel;
-use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\EventRepository;
@@ -32,7 +31,9 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+        // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
+        // It extends the core one so has all methods.
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
 		$userRepo->create($user);
 
 		$site = new SiteModel();
@@ -206,7 +207,9 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+        // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
+        // It extends the core one so has all methods.
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
 		$userRepo->create($user);
 
 		$site = new SiteModel();
@@ -404,7 +407,9 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+        // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
+        // It extends the core one so has all methods.
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
 		$userRepo->create($user);
 
 		$site = new SiteModel();
@@ -608,7 +613,9 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+        // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
+        // It extends the core one so has all methods.
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
 		$userRepo->create($user);
 
 		$site = new SiteModel();
