@@ -22,7 +22,7 @@ class IndexController {
 	function contact(Application $app, Request $request) {		
 		$form = $app['form.factory']->create(new ContactForm($app['currentUser']));
 		
-		if ('POST' == $request->getMethod()) {
+		if (!$app['config']->siteReadOnly && 'POST' == $request->getMethod()) {
 			$form->bind($request);
 			if ($form->isValid()) {
 				$data = $form->getData();

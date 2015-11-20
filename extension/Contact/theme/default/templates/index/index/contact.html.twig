@@ -22,24 +22,32 @@
 		<p>Email us on {{ config.contactEmailHTML }}</p>
 	
 	{% endif %}
-	
+
 	<h2>Contact Us</h2>
-	
-	<form action="#" method="post" class="styled">
-		{{ form_errors(form) }}
 
-		{{ form_row(form.subject) }}
-		{{ form_row(form.email) }}
-		{{ form_row(form.message) }}
+	{% if config.siteReadOnly %}
 
-		{{ form_rest(form) }}
+		<p>Sorry, the contact form is not available at the moment.</p>
 
-		<div style="display: none;">
-			<label>URL<input type="text" name="url"></label>
-		</div>
-		
-		<input type="submit" value="Send Message">
-	</form>
+	{%  else %}
+
+		<form action="#" method="post" class="styled">
+			{{ form_errors(form) }}
+
+			{{ form_row(form.subject) }}
+			{{ form_row(form.email) }}
+			{{ form_row(form.message) }}
+
+			{{ form_rest(form) }}
+
+			<div style="display: none;">
+				<label>URL<input type="text" name="url"></label>
+			</div>
+
+			<input type="submit" value="Send Message">
+		</form>
+
+	{%  endif %}
 	
 	{% if config.contactTwitter or config.facebookPage or config.googlePlusPage %}
 		<h2>Social?</h2>
