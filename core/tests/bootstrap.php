@@ -8,6 +8,8 @@
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
+error_reporting( E_STRICT );
+
 define('APP_ROOT_DIR',__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
 
 require_once (defined('COMPOSER_ROOT_DIR') ? COMPOSER_ROOT_DIR : APP_ROOT_DIR).'/vendor/autoload.php';
