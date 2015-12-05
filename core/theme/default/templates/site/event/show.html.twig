@@ -288,7 +288,7 @@
 				{% if group.description  %}
 					<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
 				{% else %}
-					<p class="groupDescription">We don't know any more about {{ group.title }}.</p>
+					<p class="groupDescription">We don't know any more about {{ displayGroup.title }}.</p>
 				{% endif %}
 				{% if mediasForGroup[displayGroup.slug] is defined and mediasForGroup[displayGroup.slug] %}
 					<ul class="mediaGrid">
