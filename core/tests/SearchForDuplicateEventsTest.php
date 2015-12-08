@@ -1,11 +1,7 @@
 <?php
 
 
-use models\UserAccountModel;
 use models\SiteModel;
-use models\GroupModel;
-use models\EventModel;
-use \SearchForDuplicateEvents;
 
 /**
  *

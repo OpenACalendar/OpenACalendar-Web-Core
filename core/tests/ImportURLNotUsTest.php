@@ -38,13 +38,13 @@ class ImportURLNotUsTest  extends \BaseAppTest  {
 	/**
      * @dataProvider dataForTestIsValid
      */	
-	function testIsValid($webIndexDomain, $webSiteDomain, $hasSSL, $webSiteDomain, $webSiteDomainSSL, $url, $result) {
+	function testIsValid($webIndexDomain, $webSiteDomain, $hasSSL, $webIndexDomainSSL, $webSiteDomainSSL, $url, $result) {
 		global $CONFIG;
 		
 		$CONFIG->webIndexDomain = $webIndexDomain;
 		$CONFIG->webSiteDomain = $webSiteDomain;
 		$CONFIG->hasSSL = $hasSSL;
-		$CONFIG->webSiteDomain = $webSiteDomain;
+		$CONFIG->webIndexDomainSSL = $webIndexDomainSSL;
 		$CONFIG->webSiteDomainSSL = $webSiteDomainSSL;
 				
 		$import = new ImportURLModel();

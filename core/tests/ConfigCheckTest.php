@@ -1,8 +1,5 @@
 <?php
 
-use \ConfigCheck;
-use \Config;
-
 /**
  *
  * @package Core
