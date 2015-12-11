@@ -17,11 +17,16 @@
 
 {% block innerContent %}
 
-	<form action="#" method="post" class="styled">
+	<form action="#" method="post" class="styled" id="EditFutureForm">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 		<input type="hidden" name="submitted" value="yes">
 		
 		<p>Do you want to change these future events to?</p>
+
+		<p>
+			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', true); return false;">Select all</a>
+			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', false); return false;">Select none</a>
+		</p>
 		
 		<ul class="mainListEvents">
 			{% for event in futureEvents %}
