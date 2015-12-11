@@ -119,38 +119,52 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		}
 	}
 
-	protected function getNewAndHistoriesForContentsToSend($contentsToSend) {
-		$histories = array();
-		foreach($contentsToSend as $contentToSend) {
-			foreach($contentToSend->getHistories() as $history) {
-				if (!$this->isHistoryInHistories($history, $histories)) {
-					$histories[] = $history;
-				}
-			}
-		}
-		// sort
-		$usort = function($a, $b) {
-			if ($a->getCreatedAt()->getTimestamp() == $b->getCreatedAt()->getTimestamp()) {
-				return 0;
-			} else if ($a->getCreatedAt()->getTimestamp() > $b->getCreatedAt()->getTimestamp()) {
-				return -1;
-			} else {
-				return 1;
-			}
-		};
-		usort($histories, $usort);
-		$newEvents = array();
-		$eventRepo = new EventRepository();
-		foreach($histories as $history)  {
-			if ($history instanceof EventHistoryModel && $history->getIsNew()) {
-				$event =  $eventRepo->loadByID($history->getId());
-				if ($event && !$event->getIsDeleted() && !$event->getIsCancelled()) {
-					$newEvents[] = $event;
-				}
-			}
-		}
-		return array($newEvents,$histories);
-	}
+    protected function getNewAndHistoriesForContentsToSend($contentsToSend) {
+        // histories
+        $histories = array();
+        foreach($contentsToSend as $contentToSend) {
+            foreach($contentToSend->getHistories() as $history) {
+                if (!$this->isHistoryInHistories($history, $histories)) {
+                    $histories[] = $history;
+                }
+            }
+        }
+        // sort
+        $usortHistories = function($a, $b) {
+            if ($a->getCreatedAt()->getTimestamp() == $b->getCreatedAt()->getTimestamp()) {
+                return 0;
+            } else if ($a->getCreatedAt()->getTimestamp() > $b->getCreatedAt()->getTimestamp()) {
+                return -1;
+            } else {
+                return 1;
+            }
+        };
+        usort($histories, $usortHistories);
+        // Extract New events
+        $newEvents = array();
+        $eventRepo = new EventRepository();
+        foreach($histories as $history)  {
+            if ($history instanceof EventHistoryModel && $history->getIsNew()) {
+                $event =  $eventRepo->loadByID($history->getId());
+                if ($event && !$event->getIsDeleted() && !$event->getIsCancelled()) {
+                    $newEvents[] = $event;
+                }
+            }
+        }
+        // sort
+        $usortEvents = function($a, $b) {
+            if ($a->getStartAtInUTC()->getTimestamp() == $b->getStartAtInUTC()->getTimestamp()) {
+                return 0;
+            } else if ($a->getStartAtInUTC()->getTimestamp() < $b->getStartAtInUTC()->getTimestamp()) {
+                return -1;
+            } else {
+                return 1;
+            }
+        };
+        usort($newEvents, $usortEvents);
+        // done!
+        return array($newEvents,$histories);
+    }
 
 	protected function isHistoryInHistories($history, $histories) {
 		foreach($histories as $considerHistory) {
