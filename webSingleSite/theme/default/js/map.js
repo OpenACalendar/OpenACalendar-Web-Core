@@ -80,7 +80,7 @@ function onClickMarker() {
 	var div = $('#VenuePopup');
 	if (div.size() == 0) {
 		var html = '<div id="VenuePopup" class="popupBox" style="display: none;">';
-		html +=	'<div id="VenuePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html +=	'<div id="VenuePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
 		html += '<div id="VenuePopupContent"  class="popupBoxContent">';
 		html += '</div>';
 		html += '</div>';

@@ -20,28 +20,28 @@
 	<ul class="actionList">
 
 		{%  if currentUserActions.has("org.openacalendar","eventEditDetails") %}
-			<li><a href="/event/{{ event.slugForURL }}/edit/details"><div class="iconPencilSmall"></div> Edit Details</a></li>
+			<li><a href="/event/{{ event.slugForURL }}/edit/details"><div class="fa fa-pencil"></div> Edit Details</a></li>
 		{%  endif %}
 
 		{% if currentUserActions.has("org.openacalendar","eventEditVenue") %}
-			<li><a href="/event/{{ event.slugForUrl }}/edit/venue"><div class="iconPencilSmall"></div> Edit Venue</a></li>
+			<li><a href="/event/{{ event.slugForUrl }}/edit/venue"><div class="fa fa-pencil"></div> Edit Venue</a></li>
 		{% endif %}
 
 		{% if currentUserActions.has("org.openacalendar","eventEditTags") %}
-			<li><a href="/event/{{ event.slugForUrl }}/edit/tags"><div class="iconPencilSmall"></div> Edit Tags</a></li>
+			<li><a href="/event/{{ event.slugForUrl }}/edit/tags"><div class="fa fa-pencil"></div> Edit Tags</a></li>
 		{% endif %}
 
 		{% if currentUserActions.has("org.openacalendar","eventEditGroups") %}
-			<li><a href="/event/{{ event.slugForUrl }}/edit/groups"><div class="iconPencilSmall"></div> Edit Groups</a></li>
+			<li><a href="/event/{{ event.slugForUrl }}/edit/groups"><div class="fa fa-pencil"></div> Edit Groups</a></li>
 		{% endif %}
 
 
 		{% if currentUserActions.has("org.openacalendar","eventEditCuratedLists") %}
-			<li><a href="/event/{{ event.slugForUrl }}/edit/curatedlists"><div class="iconPencilSmall"></div> Edit Curated lists</a></li>
+			<li><a href="/event/{{ event.slugForUrl }}/edit/curatedlists"><div class="fa fa-pencil"></div> Edit Curated lists</a></li>
 		{% endif %}
 
 		{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
-			<li><a href="/event/{{ event.slugForUrl }}/edit/media"><div class="iconPencilSmall"></div> Edit Media</a></li>
+			<li><a href="/event/{{ event.slugForUrl }}/edit/media"><div class="fa fa-pencil"></div> Edit Media</a></li>
 		{% endif %}
 
 	</ul>

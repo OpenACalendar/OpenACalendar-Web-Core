@@ -19,13 +19,13 @@
 	<ul class="actionList">
 
 		{%  if currentUserActions.has("org.openacalendar","groupEditDetails") %}
-			<li><a href="/group/{{ group.slugForUrl }}/edit/details"><div class="iconPencilSmall"></div> Edit Details</a></li>
+			<li><a href="/group/{{ group.slugForUrl }}/edit/details"><div class="fa fa-pencil"></div> Edit Details</a></li>
 		{%  endif %}
 		{%  if currentUserActions.has("org.openacalendar","groupEditCuratedLists") %}
-			<li><a href="/group/{{ group.slugForUrl }}/edit/curatedlists"><div class="iconPencilSmall"></div> Edit Curated Lists</a></li>
+			<li><a href="/group/{{ group.slugForUrl }}/edit/curatedlists"><div class="fa fa-pencil"></div> Edit Curated Lists</a></li>
 		{%  endif %}
 		{%  if currentUserActions.has("org.openacalendar","groupEditMedia") %}
-			<li><a href="/group/{{ group.slugForUrl }}/edit/media"><div class="iconPencilSmall"></div> Edit Media</a></li>
+			<li><a href="/group/{{ group.slugForUrl }}/edit/media"><div class="fa fa-pencil"></div> Edit Media</a></li>
 		{%  endif %}
 	</ul>
 {% endblock %}

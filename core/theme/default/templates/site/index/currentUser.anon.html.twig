@@ -26,11 +26,11 @@
 	<ul class="actionList">
 		
 		{% if currentSite.cachedIsMultipleTimezones %}
-			<li><a href="/mytimezone"><div class="iconGlobeLarge"></div> Timezone: {{ currentTimeZone }}</a></li>
+			<li><a href="/mytimezone"><div class="fa fa-globe fa-2x"></div> Timezone: {{ currentTimeZone }}</a></li>
 		{% endif %}
 					
-		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login"><div class="iconUserLarge"></div> Login</a></li>
-		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register"><div class="iconUserLarge"></div> Register</a></li>
+		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login"><div class="fa fa-user fa-2x"></div> Login</a></li>
+		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register"><div class="fa fa-user fa-2x"></div> Register</a></li>
 
 	</ul>
 

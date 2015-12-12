@@ -39,6 +39,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<title>{{ pageTitle }} - {% if not config.isSingleSiteMode %}{{ currentSite.title }} {% endif %}{{ config.siteTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
+		<link rel="stylesheet" type="text/css" href="/font-awesome-4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 		{% if calendar.modeByMonth %}
@@ -88,19 +89,19 @@
 				<div id="actions">
 
 					<a href="#" onclick="showExportPopup(); return false;">
-						<div class="iconDownloadLarge" title="Export"></div>
+						<div class="fa fa-download fa-2x" title="Export"></div>
 					</a>
 					{% if prevYear %}
 						<a href="{{ calURL }}/{{ prevYear }}/{{ prevMonth }}">
-							<div class="iconArrowLeftLarge" title="Previous"></div>
+							<div class="fa fa-arrow-left fa-2x" title="Previous"></div>
 						</a>
 					{% endif %}
 					<a href="{{ calURL }}">
-						<div class="iconClockOLarge" title="Today"></div>
+						<div class="fa fa-clock-o fa-2x" title="Today"></div>
 					</a>
 					{% if nextYear %}
 						<a href="{{ calURL }}/{{ nextYear }}/{{ nextMonth }}">
-							<div class="iconArrowRightLarge" title="Next"></div>
+							<div class="fa fa-arrow-right fa-2x" title="Next"></div>
 						</a>
 					{% endif %}
 
@@ -121,7 +122,7 @@
 					{% else %}
 						<a href="/event/">
 					{% endif %}
-						<div class="iconHomeLarge" title="Home"></div>
+						<div class="fa fa-home fa-2x" title="Home"></div>
 					</a>							
 				</div>
 			</div>

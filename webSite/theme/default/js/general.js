@@ -148,9 +148,9 @@ function checkScreenSizeAndUpdate() {
 		// Time to add options!
 		var container = $('#innerPageActions');
 		if (container.length == 1) {
-			container.before('<div id="innerPageActionsShow" onclick="innerPageActionsShow(); return false;"><div class="iconBarsSmall"></div> Show Options</div>');
+			container.before('<div id="innerPageActionsShow" onclick="innerPageActionsShow(); return false;"><div class="fa fa-bars"></div> Show Options</div>');
 			container.hide();
-			container.prepend('<li class="hide" onclick="innerPageActionsHide(); return false;"><div class="iconBarsSmall"></div> Hide Options</li>');
+			container.prepend('<li class="hide" onclick="innerPageActionsHide(); return false;"><div class="fa fa-bars"></div> Hide Options</li>');
 			isSmallScreenSize = true;
 		}
 	}

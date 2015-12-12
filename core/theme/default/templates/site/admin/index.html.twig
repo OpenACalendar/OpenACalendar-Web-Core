@@ -23,31 +23,31 @@
 
 	<ul class="actionList">
 	
-		<li><a href="/admin/profile"><div class="iconUserLarge"></div> Profile</a></li>
+		<li><a href="/admin/profile"><div class="fa fa-user fa-2x"></div> Profile</a></li>
 
-		<li><a href="/admin/visibility"><div class="iconEyeLarge"></div> Visiblity</a></li>
+		<li><a href="/admin/visibility"><div class="fa fa-eye fa-2x"></div> Visiblity</a></li>
 
-		<li><a href="/admin/usergroup"><div class="iconUsersLarge"></div> User Groups (Permissions)</a></li>
+		<li><a href="/admin/usergroup"><div class="fa fa-users fa-2x"></div> User Groups (Permissions)</a></li>
 
-		<li><a href="/admin/user"><div class="iconUsersLarge"></div> Users (Permissions)</a></li>
+		<li><a href="/admin/user"><div class="fa fa-users fa-2x"></div> Users (Permissions)</a></li>
 
 		{%  if not config.isSingleSiteMode %}
-			<li><a href="/admin/usernoteditor"><div class="iconUsersLarge"></div> Users blocked from being editors (Permissions)</a></li>
+			<li><a href="/admin/usernoteditor"><div class="fa fa-users fa-2x"></div> Users blocked from being editors (Permissions)</a></li>
 		{% endif %}
 
-		<li><a href="/admin/countries"><div class="iconGlobeLarge"></div> Countries</a></li>
+		<li><a href="/admin/countries"><div class="fa fa-globe fa-2x"></div> Countries</a></li>
 		
 		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-			<li><a href="/admin/areas"><div class="iconGlobeLarge"></div> Areas in a country</a></li>
+			<li><a href="/admin/areas"><div class="fa fa-globe fa-2x"></div> Areas in a country</a></li>
 		{% endif %}
 		
-		<li><a href="/admin/sendemail"><div class="iconEnvelopeOLarge"></div> Send Email with Events</a></li>
+		<li><a href="/admin/sendemail"><div class="fa fa-envelope-o fa-2x"></div> Send Email with Events</a></li>
 		
-		<li><a href="/admin/features"><div class="iconGearsLarge"></div> Features</a></li>
+		<li><a href="/admin/features"><div class="fa fa-cogs fa-2x"></div> Features</a></li>
 		
-		<li><a href="/admin/settings"><div class="iconGearsLarge"></div> Settings</a></li>
+		<li><a href="/admin/settings"><div class="fa fa-cogs fa-2x"></div> Settings</a></li>
 
-		<li><a href="/admin/media"><div class="iconFileImageOLarge"></div> Media Storage</a></li>
+		<li><a href="/admin/media"><div class="fa fa-file-image-o fa-2x"></div> Media Storage</a></li>
 
 	</ul>
 

@@ -23,13 +23,13 @@
 {% block actions %}
 	{% if currentUserActions.has("org.openacalendar","areaNew") %}
 		<li class="action">
-			<a href="/country/{{ country.twoCharCode }}/new"><div class="iconPencilSmall"></div> new</a>
+			<a href="/country/{{ country.twoCharCode }}/new"><div class="fa fa-pencil"></div> new</a>
 		</li>
 	{%  endif  %}
 	{% if currentSite.getIsWebRobotsAllowed %}
 		<li class="action">
 			<a href="#" onclick="showSharePopup(); return false;">
-				<div class="iconShareSmall"></div>  share
+				<div class="fa fa-share"></div>  share
 			</a>
 		</li>
 	{% endif %}
@@ -54,7 +54,7 @@
 				<div id="Map" class="map"></div>
 				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
 					<ul class="actionList">
-						<li><a href="/map?country={{ country.twoCharCode }}"><div class="iconEyeLarge"></div> View larger map</a></li>
+						<li><a href="/map?country={{ country.twoCharCode }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
 					</ul>
 				{% endif %}
 			</div>

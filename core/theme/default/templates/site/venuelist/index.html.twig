@@ -34,13 +34,13 @@
 		<ul id="innerPageActions">
 			{% if currentUserActions.has("org.openacalendar","venueNew") %}
 				<li class="action">
-					<a href="/venue/new"><div class="iconPencilSmall"></div> Add a venue</a>
+					<a href="/venue/new"><div class="fa fa-pencil"></div> Add a venue</a>
 				</li>
 			{% endif %}
 			
 			{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 				<li class="action">
-					<a href="/venue/virtual"><div class="iconDesktopSmall"></div> Virtual</a>
+					<a href="/venue/virtual"><div class="fa fa-desktop"></div> Virtual</a>
 				</li>
 			{% endif %}
 		

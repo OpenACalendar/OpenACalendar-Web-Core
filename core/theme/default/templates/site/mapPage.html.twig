@@ -13,6 +13,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<title>Map - {{ currentSite.title }} {{ config.siteTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/map.css?v={{ config.assetsVersion }}">
+		<link rel="stylesheet" type="text/css" href="/font-awesome-4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
 		{% include 'site/common/mapLibrary.css.html.twig' %}
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
@@ -30,7 +31,7 @@
 		<div id="MapInfo">
 			<h1><a href="/">{{ currentSite.title }}</a></h1>
 			{% if not config.isSingleSiteMode %}<h2><a href="/">{{ config.siteTitle }}</a></h2>{% endif %}
-			<a href="/"><div class="iconTimesCircleOLarge" title="Close"></div></a>
+			<a href="/"><div class="fa fa-times-circle-o fa-2x" title="Close"></div></a>
 		</div>
 		<script type="text/javascript">
 			var mapData = [ {% for vd in venues  %}

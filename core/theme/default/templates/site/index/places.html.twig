@@ -23,20 +23,20 @@
 
 	<ul class="actionList">
 		{% if currentSite.cachedIsMultipleCountries %}
-			<li><a href="/country"><div class="iconGlobeLarge"></div> Countries</a></li>
+			<li><a href="/country"><div class="fa fa-globe fa-2x"></div> Countries</a></li>
 		{% else %}
-			<li><a href="/country/{{ currentSiteHasOneCountry.twoCharCode }}"><div class="iconGlobeLarge"></div> {{ currentSiteHasOneCountry.title }}</a></li>
+			<li><a href="/country/{{ currentSiteHasOneCountry.twoCharCode }}"><div class="fa fa-globe fa-2x"></div> {{ currentSiteHasOneCountry.title }}</a></li>
 		{% endif %}
 		{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
-			<li><a href="/venue/virtual"><div class="iconGlobeLarge"></div> Virtual</a></li>
+			<li><a href="/venue/virtual"><div class="fa fa-globe fa-2x"></div> Virtual</a></li>
 		{% endif %}
 		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-			<li><a href="/venue"><div class="iconGlobeLarge"></div> Venues</a></li>
+			<li><a href="/venue"><div class="fa fa-globe fa-2x"></div> Venues</a></li>
 			{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-				<li><a href="/map"><div class="iconGlobeLarge"></div> Map</a></li>
+				<li><a href="/map"><div class="fa fa-globe fa-2x"></div> Map</a></li>
 			{% endif %}	
 			{% if currentUserActions.has("org.openacalendar","venueNew") %}
-				<li><a href="/venue/new"><div class="iconGlobeLarge"></div> New venue</a></li>
+				<li><a href="/venue/new"><div class="fa fa-globe fa-2x"></div> New venue</a></li>
 			{% endif %}
 		{% endif %}
 	</ul>

@@ -31,10 +31,10 @@
 					{%  else %}
 						{{  step.title }}
 					{%  endif %}
-					{%  if step.done %}<div class="iconCheckSquareOSmall"></div>{% else %}<div class="iconSquareOSmall"></div>{% endif %}
+					{%  if step.done %}<div class="fa fa-check-square-o"></div>{% else %}<div class="fa fa-square-o"></div>{% endif %}
 				</li>
 				{%  if not loop.last %}
-					<li class="arrow"><div class="iconArrowRightSmall"></div></li>
+					<li class="arrow"><div class="fa fa-arrow-right"></div></li>
 				{%  endif %}
 			{%  endfor %}
 		</ul>

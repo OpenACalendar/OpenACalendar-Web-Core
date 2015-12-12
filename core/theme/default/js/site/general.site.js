@@ -12,7 +12,7 @@ var atomBeforeDays = 3;
 function showExportPopup() {
 	if ($('#ExportPopup').size() == 0) {
 		var html = '<div id="ExportPopup" class="popupBox" style="display: none">';
-		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
         html += '<div class="popupBoxContent">';
 		html += '<div id="ExportPopupIntroText"><p>Export your data.</p>';
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
@@ -56,8 +56,8 @@ function showExportPopup() {
 		html += '</div>';
 		html += '<ul id="ExportPopupMenu">';
 		// space needed at start, then no spaces in tag. So can get wrap to work.
-		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;"><div class="iconGoogleSmall"></div> Google Calendar</a></span></li>';
-		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="iconAppleSmall"></div> Mac/iPhone/iPad</a></span></li>';
+		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;"><div class="fa fa-google"></div> Google Calendar</a></span></li>';
+		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="fa fa-apple"></div> Mac/iPhone/iPad</a></span></li>';
 		html += ' <li class="ical" id="ExportToATOMTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToATOM\'); return false;">News reader (ATOM/RSS)</a></span></li>';
 		html += ' <li class="ical" id="ExportToICALTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToICAL\'); return false;">ics/ical file</a></span></li>';
 		html += ' <li class="ical" id="ExportToCSVTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToCSV\'); return false;">CSV</a></span></li>';
@@ -345,14 +345,14 @@ function showSharePopup() {
 
 
 		var html = '<div id="SharePopup" class="popupBox" style="display: none;">';
-		html +=	'<div id="SharePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html +=	'<div id="SharePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
 
 		html += '<ul class="SharePopupOptions">'
 
-		html += '<li><a href="mailto:?subject='+encodeURIComponent(emailSubject)+'&body='+encodeURIComponent(emailBody ? emailBody : text+"\n\n"+url)+'" title="Email"><div class="iconEnvelopeOLarge" title="Email"></div></li>';
-		html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><div class="iconTwitterLarge" title="Twitter"></div></li>';
-		html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><div class="iconFacebookSquareLarge" title="Facebook"></div></a></li>';
-		html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><div class="iconGoogleLarge" title="Google Plus"></div></a></li>';
+		html += '<li><a href="mailto:?subject='+encodeURIComponent(emailSubject)+'&body='+encodeURIComponent(emailBody ? emailBody : text+"\n\n"+url)+'" title="Email"><div class="fa fa-envelope-o fa-2x" title="Email"></div></li>';
+		html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><div class="fa fa-twitter fa-2x" title="Twitter"></div></li>';
+		html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><div class="fa fa-facebook-official fa-2x" title="Facebook"></div></a></li>';
+		html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><div class="fa fa-google-plus-square fa-2x" title="Google Plus"></div></a></li>';
 
 		html += '</ul>'
 
