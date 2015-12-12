@@ -28,7 +28,7 @@
 			{% block actions %}{% endblock %}
 			<li class="action">
 				<a href="/api1/country/{{ country.twoCharCode }}/events.ical" onclick="showExportPopup(); return false;">
-					<div class="iconDownloadSmall"></div> export
+					<div class="fa fa-download"></div> export
 				</a>
 			</li>
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/country/{{ country.twoCharCode }}">Details</a></li>

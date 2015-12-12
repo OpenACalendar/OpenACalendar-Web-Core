@@ -14,6 +14,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 		<title>Your Personal Calendar - {{ config.siteTitle  }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
+		<link rel="stylesheet" type="text/css" href="/font-awesome-4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css">
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 	</head>
@@ -22,23 +23,23 @@
 			<div id="headerOptions">
 				<div id="actions">
 					<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
-						<div class="iconDownloadLarge" title="Export"></div>
+						<div class="fa fa-download fa-2x" title="Export"></div>
 					</a>
 					{% if prevYear %}
 						<a href="/me/calendar/{{ prevYear }}/{{ prevMonth }}">
-							<div class="iconArrowLeftLarge" title="Previous"></div>
+							<div class="fa fa-arrow-left fa-2x" title="Previous"></div>
 						</a>
 					{% endif %}
 					<a href="/me/calendar/">
-						<div class="iconClockOLarge" title="Today"></div>
+						<div class="fa fa-clock-o fa-2x" title="Today"></div>
 					</a>
 					{% if nextYear %}
 						<a href="/me/calendar/{{ nextYear }}/{{ nextMonth }}">
-							<div class="iconArrowRightLarge" title="Next"></div>
+							<div class="fa fa-arrow-right fa-2x" title="Next"></div>
 						</a>
 					{% endif %}
 					<a href="/me/">
-						<div class="iconHomeLarge" title="Home"></div>
+						<div class="fa fa-home fa-2x" title="Home"></div>
 					</a>
 				</div>
 			</div>

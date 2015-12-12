@@ -2008,9 +2008,8 @@ form .afterBigSubmitActionWrapper {
   display: inline;
   padding: 10px;
 }
-.popupBox ul.SharePopupOptions li img {
-  max-width: 70px;
-  max-height: 70px;
+.popupBox ul.SharePopupOptions li a .fa {
+  color: black;
 }
 .popupBox ul.mediaGrid li.media {
   width: 50px;

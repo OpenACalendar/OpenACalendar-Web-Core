@@ -24,21 +24,21 @@
 	<ul class="actionList">
 		
 		{% if currentSite.cachedIsMultipleTimezones %}
-			<li><a href="/mytimezone"><div class="iconGlobeLarge"></div> Timezone: {{ currentTimeZone }}</a></li>
+			<li><a href="/mytimezone"><div class="fa fa-globe fa-2x"></div> Timezone: {{ currentTimeZone }}</a></li>
 		{% endif %}
 				
 		<li id="userWatchesSite">
 			{% if currentUserWatchesSite %}
-				<a href="/watch/"><div class="iconEyeLarge"></div> Watching!</a>
+				<a href="/watch/"><div class="fa fa-eye fa-2x"></div> Watching!</a>
 			{% else %}
-				<a href="/watch/"><div class="iconEyeLarge"></div> Watch?</a>
+				<a href="/watch/"><div class="fa fa-eye fa-2x"></div> Watch?</a>
 			{% endif %}
 		</li>
-		<li><a href="{{ config.getWebIndexDomainSecure() }}/me/"><div class="iconUserLarge"></div> Your account</a></li>
+		<li><a href="{{ config.getWebIndexDomainSecure() }}/me/"><div class="fa fa-user fa-2x"></div> Your account</a></li>
 		{% if currentUserActions.has("org.openacalendar","admin") %}
-			<li><a href="/admin"><div class="iconGearsLarge"></div> Calendar Admin</a></li>
+			<li><a href="/admin"><div class="fa fa-cogs fa-2x"></div> Calendar Admin</a></li>
 		{% endif %}
-		<li><a href="{{ config.getWebIndexDomainSecure() }}/me/logout"><div class="iconUserLarge"></div> Logout</a></li>
+		<li><a href="{{ config.getWebIndexDomainSecure() }}/me/logout"><div class="fa fa-user fa-2x"></div> Logout</a></li>
 		
 		
 	</ul>

@@ -22,7 +22,7 @@
 	{% if currentUserActions.has("org.openacalendar","venueEditDetails")
 		or currentUserActions.has("org.openacalendar","venueEditMedia") %}
 		<li class="actionWithSubMenu">
-			<a href="/venue/{{ venue.slugForUrl }}/edit"><div class="iconPencilSmall"></div> edit</a>
+			<a href="/venue/{{ venue.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
 			<ul class="submenu">
 				{%  if currentUserActions.has("org.openacalendar","venueEditDetails") %}
 					<li><a href="/venue/{{ venue.slugForUrl }}/edit/details">Edit Details</a></li>
@@ -34,17 +34,17 @@
 		</li>
 	{%  endif %}
 	{% if currentUserActions.has("org.openacalendar","venueDelete") %}
-		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><div class="iconTrashOSmall"></div> delete</a></li>
+		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><div class="fa fa-trash-o"></div> delete</a></li>
 	{%  endif %}
 	<li class="action">
 		<a href="/api1/venue/{{ venue.slug }}/events.ical" onclick="showExportPopup(); return false;">
-			<div class="iconDownloadSmall"></div> export
+			<div class="fa fa-download"></div> export
 		</a>
 	</li>
 	{% if currentSite.getIsWebRobotsAllowed %}
 		<li class="action">
 			<a href="#" onclick="showSharePopup(); return false;">
-				<div class="iconShareSmall"></div> share
+				<div class="fa fa-share"></div> share
 			</a>
 		</li>
 	{% endif %}
@@ -108,7 +108,7 @@
 				<div id="Map" class="map"></div>
 				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
 					<ul class="actionList">
-						<li><a href="/map?venue={{ venue.slugForURL }}"><div class="iconEyeLarge"></div> View larger map</a></li>
+						<li><a href="/map?venue={{ venue.slugForURL }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
 					</ul>
 				{% endif %}
 			{% endif %}

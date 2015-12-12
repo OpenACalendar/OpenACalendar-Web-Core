@@ -10,7 +10,7 @@
 function showExportPopup() {
 	if ($('#ExportPopup').size() == 0) {
 		var html = '<div id="ExportPopup" class="popupBox" style="display: none">';
-		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
         html += '<div class="popupBoxContent">';
 		html += '<div id="ExportPopupIntroText">Export your data.';
 		if (exportData.hasOwnProperty("user")) {
@@ -23,8 +23,8 @@ function showExportPopup() {
 		html += '</div>';
 		html += '<ul id="ExportPopupMenu">';
 		// space needed at start, then no spaces in tag. So can get wrap to work.
-		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;"><div class="iconGoogleSmall"></div> Google Calendar</a></span></li>';
-		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="iconAppleSmall"></div> Mac/iPhone/iPad</a></span></li>';
+		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;"><div class="fa fa-google"></div> Google Calendar</a></span></li>';
+		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="fa fa-apple"></div> Mac/iPhone/iPad</a></span></li>';
 		html += ' <li class="ical" id="ExportToICALTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToICAL\'); return false;">ics/ical file</a></span></li>';
 		html += '</ul>';
 		html += '<div class="content" id="ExportToGoogleCalendar">';

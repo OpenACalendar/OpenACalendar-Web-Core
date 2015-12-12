@@ -18,7 +18,7 @@
 			{% block actions %}{% endblock %}
 			<li class="action">
 				<a href="/api1/person/{{ user.username }}/events.ical" onclick="showExportPopup(); return false;">
-					<div class="iconDownloadSmall"></div> export
+					<div class="fa fa-download"></div> export
 				</a>
 			</li>				
 			<li class="tab {% block tabIndex %}currentTab{% endblock %}"><a href="/person/{{ user.username }}">Upcoming events</a></li>

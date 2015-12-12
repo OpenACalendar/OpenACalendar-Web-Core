@@ -760,6 +760,9 @@ h2 a {
   -o-border-bottom-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
+#MapInfo a {
+  color: #000000;
+}
 #PopupMask {
   position: fixed;
   top: 0px;
@@ -933,9 +936,8 @@ h2 a {
   display: inline;
   padding: 10px;
 }
-.popupBox ul.SharePopupOptions li img {
-  max-width: 70px;
-  max-height: 70px;
+.popupBox ul.SharePopupOptions li a .fa {
+  color: black;
 }
 .popupBox ul.mediaGrid li.media {
   width: 50px;
