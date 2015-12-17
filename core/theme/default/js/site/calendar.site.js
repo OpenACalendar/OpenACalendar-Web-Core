@@ -87,7 +87,7 @@ function escapeHTML(inString) {
 function showCurrentUserAttendanceForEvent(eventSlug) {
 	if ($('#EventAttendancePopup').size() == 0) {
 		var html = '<div id="EventAttendancePopup" class="popupBox" style="display: none">';
-		html +=	'<div id="EventAttendancePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html +=	'<div id="EventAttendancePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
 		html += '<div id="EventAttendancePopupContent" class="popupBoxContent">';
 		html += '</div>';
 		html += '</div>';

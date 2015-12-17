@@ -92,7 +92,7 @@ function showEventPopup(eventSlug) {
 	var div = $('#EventPopup');
 	if (div.size() == 0) {
 		var html = '<div id="EventPopup" class="popupBox">';
-		html +=	'<div id="EventPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><img src="/theme/default/img/actionClosePopup.png" alt="Close"></a></div>';
+		html +=	'<div id="EventPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
 		html += '<div class="popupBoxContent">';
 		html += '<div id="EventPopupContent">';
 		html += '</div>';
