@@ -41,14 +41,9 @@
 
 			<ul class="mainListEvents">
 				<li class="export">
-					<a href="/api1/events.ical" onclick="showExportPopup(); return false;">
-						<div class="fa fa-download"></div> export
+					<a href="/api1/events.ical" onclick="showExportSharePopup(); return false;">
+						{%  include '/site/common/actionExportShareLabel.html.twig' %}
 					</a>
-					{% if currentSite.getIsWebRobotsAllowed %}
-						<a href="#" onclick="showSharePopup(); return false;">
-							<div class="fa fa-share"></div> share
-						</a>
-					{% endif %}
 				</li>
 				{% for event in events %}
 					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}

@@ -26,11 +26,6 @@
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
-			<li class="action">
-				<a href="/api1/country/{{ country.twoCharCode }}/events.ical" onclick="showExportPopup(); return false;">
-					<div class="fa fa-download"></div> export
-				</a>
-			</li>
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/country/{{ country.twoCharCode }}">Details</a></li>
 			<li class="tab"><a href="/country/{{ country.twoCharCode }}/calendar">Calendar</a></li>
 		</ul>

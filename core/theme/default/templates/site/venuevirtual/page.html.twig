@@ -32,8 +32,8 @@
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
 			<li class="action">
-				<a href="/api1/venue/virtual/events.ical" onclick="showExportPopup(); return false;">
-					<div class="fa fa-download"></div> export
+				<a href="/api1/venue/virtual/events.ical" onclick="showExportSharePopup(); return false;">
+					{%  include '/site/common/actionExportShareLabel.html.twig' %}
 				</a>
 			</li>
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/venue/virtual">Details</a></li>
@@ -54,7 +54,7 @@
 
 {% block scriptsForState %}
 	<script type="text/javascript">
-		var exportData = { venue:'virtual' }
+		var exportData = { venue:'virtual', venueVirtual:true }
 	</script>
 {% endblock %}
 

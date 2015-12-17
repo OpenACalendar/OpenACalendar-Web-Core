@@ -9,10 +9,10 @@
 
 function showExportPopup() {
 	if ($('#ExportPopup').size() == 0) {
-		var html = '<div id="ExportPopup" class="popupBox" style="display: none">';
-		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
+		var html = '<div id="ExportSharePopup" class="popupBox" style="display: none">';
+		html +=	'<div id="ExportSharePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
         html += '<div class="popupBoxContent">';
-		html += '<div id="ExportPopupIntroText">Export your data.';
+		html += '<div id="ExportSharePopupExportIntroText"><p class="header">Export your data!</p>';
 		if (exportData.hasOwnProperty("user")) {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportUserPublic" checked> the public calendar for '+exportData.user+' (events publically attending)</label>';
 		}
@@ -21,7 +21,7 @@ function showExportPopup() {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportUserPrivateAW" checked> the private calendar for '+exportData.user+' (events attending and watching)</label>';
 		}
 		html += '</div>';
-		html += '<ul id="ExportPopupMenu">';
+		html += '<ul id="ExportSharePopupExportMenu">';
 		// space needed at start, then no spaces in tag. So can get wrap to work.
 		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;"><div class="fa fa-google"></div> Google Calendar</a></span></li>';
 		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="fa fa-apple"></div> Mac/iPhone/iPad</a></span></li>';
@@ -66,7 +66,7 @@ function showExportPopup() {
 			$('#ExportUserPrivateAW').prop('checked', true)
 		}
 	}
-	$('#ExportPopup').fadeIn(500);
+	$('#ExportSharePopup').fadeIn(500);
 	showPopup();
 	showLinksFor(showLinksForTab);
 	exportPopupTabClickNone();	
@@ -81,7 +81,7 @@ function showLinksFor(showFor) {
 	} else if (exportData.hasOwnProperty("user")  && showFor == "userpublic") {
 		icalURL += "/person/"+exportData.user+"/events.ical";
 	}
-	var div = $('#ExportPopup');
+	var div = $('#ExportSharePopup');
 	div.find('#ExportPopupIntroText a.icalexportlink').attr('href',icalURL);
 	div.find('#ExportToGoogleCalendar input.exportlink').val(icalURL);
 	div.find('#ExportToAppleCalendar a.exportlink').attr('href',icalURL.replace("http://","webcal://"));
@@ -89,16 +89,16 @@ function showLinksFor(showFor) {
 }
 
 function exportPopupTabClick(tabID) {
-	var div = $('#ExportPopup');
+	var div = $('#ExportSharePopup');
 	div.find('.content').hide();
 	div.find('#'+tabID).show();
-	div.find('ul#ExportPopupMenu li').removeClass('current');
-	div.find('ul#ExportPopupMenu li#'+tabID+'Tab').addClass('current');
+	div.find('ul#ExportSharePopupExportMenu li').removeClass('current');
+	div.find('ul#ExportSharePopupExportMenu li#'+tabID+'Tab').addClass('current');
 }
 function exportPopupTabClickNone() {
-	var div = $('#ExportPopup');
+	var div = $('#ExportSharePopup');
 	div.find('.content').hide();
-	div.find('ul#ExportPopupMenu li').removeClass('current');
+	div.find('ul#ExportSharePopupExportMenu li').removeClass('current');
 }
 
 

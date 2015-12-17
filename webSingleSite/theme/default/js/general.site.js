@@ -9,12 +9,68 @@
 
 var atomBeforeDays = 3;
 
-function showExportPopup() {
-	if ($('#ExportPopup').size() == 0) {
-		var html = '<div id="ExportPopup" class="popupBox" style="display: none">';
-		html +=	'<div id="ExportPopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
+function showExportSharePopup() {
+	if ($('#ExportSharePopup').size() == 0) {
+		var html = '<div id="ExportSharePopup" class="popupBox" style="display: none">';
+		html +=	'<div id="ExportSharePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
         html += '<div class="popupBoxContent">';
-		html += '<div id="ExportPopupIntroText"><p>Export your data.</p>';
+
+		if (config.isWebRobotsAllowed) {
+			var url = "http://" + config.httpDomain;
+			var text = "";
+			var emailSubject = "";
+			var emailBody = "";
+			/** Sometimes more than one will be set (eg event and group) so must check most important one first **/
+			if (exportData.hasOwnProperty("event")) {
+				url += exportData.hasOwnProperty("eventSlugURL") ? "/event/"+exportData.eventSlugURL :  "/event/"+exportData.event ;
+				text = exportData.eventTitle;
+				emailSubject = exportData.eventTitle;
+				emailBody = exportData.eventTitle + "\n" + exportData.eventStartLocal + "\n\n" + url;
+			} else if (exportData.hasOwnProperty("group")) {
+				url += exportData.hasOwnProperty("groupSlugURL") ? "/group/"+exportData.groupSlugURL : "/group/"+exportData.group;
+				text = exportData.hasOwnProperty("groupTwitterUsername") && exportData.groupTwitterUsername ? exportData.groupTitle + " @" + exportData.groupTwitterUsername :  exportData.groupTitle;
+				emailSubject = exportData.groupTitle;
+			} else if (exportData.hasOwnProperty("venueVirtual") && exportData.venueVirtual) {
+				url +=  "/venue/virtual";
+				text = 'Virtual Events';
+				emailSubject = 'Virtual Events';
+			} else if (exportData.hasOwnProperty("venue")) {
+				url +=  exportData.hasOwnProperty("venueSlugURL") ? "/venue/"+exportData.venueSlugURL : "/venue/"+exportData.venue;
+				text = exportData.venueTitle;
+				emailSubject = exportData.venueTitle;
+			} else if (exportData.hasOwnProperty("tag")) {
+				url +=  exportData.hasOwnProperty("tagSlugURL") ? "/tag/"+exportData.tagSlugURL : "/tag/"+exportData.tag;
+				text = exportData.tagTitle;
+				emailSubject = exportData.tagtitle;
+			} else if (exportData.hasOwnProperty("area")) {
+				url +=  exportData.hasOwnProperty("areaSlugURL") ? "/area/"+exportData.areaSlugURL : "/area/"+exportData.area;
+				text = exportData.areaTitle;
+				emailSubject = exportData.areaTitle;
+			} else if (exportData.hasOwnProperty("country")) {
+				url += "/country/"+exportData.country;
+				text = exportData.country;
+				emailSubject = exportData.country;
+			} else if (exportData.hasOwnProperty("curatedlist")) {
+				url += exportData.hasOwnProperty("curatedlistSlugURL") ? "/curatedlist/"+exportData.curatedlistSlugURL : "/curatedlist/"+exportData.curatedlist;
+				text = exportData.curatedlistTitle;
+				emailSubject = exportData.curatedlistTitle;
+			} else {
+				url += "/";
+				text = config.siteTitle;
+				emailSubject = config.siteTitle;
+			}
+			html += '<div id="ExportSharePopupShareIntroText"><p class="header">Share this:</p></div>';
+			html += '<ul class="ExportSharePopupShareMenu">'
+
+			html += '<li><a href="mailto:?subject='+encodeURIComponent(emailSubject)+'&body='+encodeURIComponent(emailBody ? emailBody : text+"\n\n"+url)+'" title="Email"><div class="fa fa-envelope-o fa-2x" title="Email"></div></li>';
+			html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><div class="fa fa-twitter fa-2x" title="Twitter"></div></li>';
+			html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><div class="fa fa-facebook-official fa-2x" title="Facebook"></div></a></li>';
+			html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><div class="fa fa-google-plus-square fa-2x" title="Google Plus"></div></a></li>';
+
+			html += '</ul>'
+
+		}
+		html += '<div id="ExportSharePopupExportIntroText"><p class="header">Export your data!</p>';
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
 			html += '<label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label>';
 			if (exportData.hasOwnProperty("country") ) {
@@ -27,7 +83,9 @@ function showExportPopup() {
 				html += (exportData.hasOwnProperty("areaTitle") ? 'area: '+ escapeHTML(exportData.areaTitle) : 'this area' );
 				html += '</label>';
 			}
-			if (exportData.hasOwnProperty("venue") ) {
+			if (exportData.hasOwnProperty("venueVirtual") && exportData.venueVirtual) {
+				html += '<label><input type="radio" name="ExportWhat" id="ExportVenueVirtual"> all virtual events</label>';
+			} else if (exportData.hasOwnProperty("venue") ) {
 				html += '<label><input type="radio" name="ExportWhat" id="ExportVenue"> all events from ';
 				html += (exportData.hasOwnProperty("venueTitle") ? 'venue: '+ escapeHTML(exportData.venueTitle) : 'this venue' );
 				html += '</label>';
@@ -54,7 +112,7 @@ function showExportPopup() {
 			html  += '<p>Hint: if you browse round the site, you will be offered the option to export filtered feeds of only what interests you!</p>';
 		}
 		html += '</div>';
-		html += '<ul id="ExportPopupMenu">';
+		html += '<ul id="ExportSharePopupExportMenu">';
 		// space needed at start, then no spaces in tag. So can get wrap to work.
 		html += ' <li class="ical" id="ExportToGoogleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToGoogleCalendar\'); return false;"><div class="fa fa-google"></div> Google Calendar</a></span></li>';
 		html += ' <li class="ical" id="ExportToAppleCalendarTab"><span class="wrapper"><a href="#" onclick="exportPopupTabClick(\'ExportToAppleCalendar\'); return false;"><div class="fa fa-apple"></div> Mac/iPhone/iPad</a></span></li>';
@@ -91,7 +149,7 @@ function showExportPopup() {
 		html += '</div>';
 		html += '</div>';
 		$('body').append(html);
-		div = $('#ExportPopup');
+		var div = $('#ExportSharePopup');
 		div.find('#ExportToGoogleCalendar input.exportlink').focus(function() { $(this).select(); } );
 		var showLinksForTab = "all";
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country")  || exportData.hasOwnProperty("venue")  || exportData.hasOwnProperty("curatedlist") ) {
@@ -118,7 +176,15 @@ function showExportPopup() {
 				showLinksForTab = "area";
 				$('#ExportArea').prop('checked', true)
 			}					
-			if (exportData.hasOwnProperty("venue") ) {
+			if (exportData.hasOwnProperty("venueVirtual") ) {
+				$('#ExportVenueVirtual').change(function() {
+					if ($(this).is(':checked')) {
+						showLinksFor("venueVirtual");
+					}
+				});
+				showLinksForTab = "venue";
+				$('#ExportVenue').prop('checked', true)
+			} else if (exportData.hasOwnProperty("venue") ) {
 				$('#ExportVenue').change(function() {
 					if ($(this).is(':checked')) {
 						showLinksFor("venue");
@@ -126,7 +192,7 @@ function showExportPopup() {
 				});
 				showLinksForTab = "venue";
 				$('#ExportVenue').prop('checked', true)
-			}	
+			}
 			if (exportData.hasOwnProperty("group") ) {
 				$('#ExportGroup').change(function() {
 					if ($(this).is(':checked')) {
@@ -165,7 +231,7 @@ function showExportPopup() {
 			}
 		}
 	}
-	$('#ExportPopup').fadeIn(500);
+	$('#ExportSharePopup').fadeIn(500);
 	showPopup();
 	showLinksFor(showLinksForTab);
 	exportPopupTabClickNone();	
@@ -197,6 +263,13 @@ function showLinksFor(showFor) {
 		jsonpURL += "/group/"+exportData.group+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/group/"+exportData.group+"/events.create.atom";
 		atomBeforeURL += "/group/"+exportData.group+"/events.before.atom?days="+atomBeforeDays;
+	} else if (exportData.hasOwnProperty("venueVirtual") && showFor == "venueVirtual") {
+		icalURL += "/venue/virtual/events.ical";
+		csvURL += "/venue/virtual/events.csv";
+		jsonURL += "/venue/virtual/events.json";
+		jsonpURL += "/venue/virtual/events.jsonp?callback=myfunc";
+		atomCreateURL += "/venue/virtual/events.create.atom";
+		atomBeforeURL += "/venue/virtual/events.before.atom?days="+atomBeforeDays;
 	} else if (exportData.hasOwnProperty("venue") && showFor == "venue") {
 		icalURL += "/venue/"+exportData.venue+"/events.ical";
         csvURL += "/venue/"+exportData.venue+"/events.csv";
@@ -240,8 +313,8 @@ function showLinksFor(showFor) {
 		atomCreateURL += "/events.create.atom";
 		atomBeforeURL += "/events.before.atom?days="+atomBeforeDays;		
 	}
-	var div = $('#ExportPopup');
-	div.find('#ExportPopupIntroText a.icalexportlink').attr('href',icalURL);
+	var div = $('#ExportSharePopup');
+	div.find('#ExportSharePopupExportIntroText a.icalexportlink').attr('href',icalURL);
 	div.find('#ExportToGoogleCalendar input.exportlink').val(icalURL);
 	div.find('#ExportToAppleCalendar a.exportlink').attr('href',icalURL.replace("http://","webcal://"));
 	div.find('#ExportToICAL a.exportlink').attr('href',icalURL);
@@ -286,82 +359,19 @@ function atomBeforeDaysIncrease() {
 }
 
 function exportPopupTabClick(tabID) {
-	var div = $('#ExportPopup');
+	var div = $('#ExportSharePopup');
 	div.find('.content').hide();
 	div.find('#'+tabID).show();
-	div.find('ul#ExportPopupMenu li').removeClass('current');
-	div.find('ul#ExportPopupMenu li#'+tabID+'Tab').addClass('current');
+	div.find('ul#ExportSharePopupExportMenu li').removeClass('current');
+	div.find('ul#ExportSharePopupExportMenu li#'+tabID+'Tab').addClass('current');
 }
 function exportPopupTabClickNone() {
-	var div = $('#ExportPopup');
+	var div = $('#ExportSharePopup');
 	div.find('.content').hide();
-	div.find('ul#ExportPopupMenu li').removeClass('current');
+	div.find('ul#ExportSharePopupExportMenu li').removeClass('current');
 }
 
 
-//////////////////////////////////////////////////////////////////////////////// Share
-function showSharePopup() {
-	var div = $('#SharePopup');
-	if (div.size() == 0) {
-		var url = "http://" + config.httpDomain;
-		var text = "";
-		var emailSubject = "";
-		var emailBody = "";
-		/** Sometimes more than one will be set (eg event and group) so must check most important one first **/
-		if (exportData.hasOwnProperty("event")) {
-			url += exportData.hasOwnProperty("eventSlugURL") ? "/event/"+exportData.eventSlugURL :  "/event/"+exportData.event ;
-			text = exportData.eventTitle;
-			emailSubject = exportData.eventTitle;
-			emailBody = exportData.eventTitle + "\n" + exportData.eventStartLocal + "\n\n" + url;
-		} else if (exportData.hasOwnProperty("group")) {
-			url += exportData.hasOwnProperty("groupSlugURL") ? "/group/"+exportData.groupSlugURL : "/group/"+exportData.group;
-			text = exportData.hasOwnProperty("groupTwitterUsername") && exportData.groupTwitterUsername ? exportData.groupTitle + " @" + exportData.groupTwitterUsername :  exportData.groupTitle;
-			emailSubject = exportData.groupTitle;
-		} else if (exportData.hasOwnProperty("venue")) {
-			url +=  exportData.hasOwnProperty("venueSlugURL") ? "/venue/"+exportData.venueSlugURL : "/venue/"+exportData.venue;
-			text = exportData.venueTitle;
-			emailSubject = exportData.venueTitle;
-		} else if (exportData.hasOwnProperty("tag")) {
-			url +=  exportData.hasOwnProperty("tagSlugURL") ? "/tag/"+exportData.tagSlugURL : "/tag/"+exportData.tag;
-			text = exportData.tagTitle;
-			emailSubject = exportData.tagtitle;
-		} else if (exportData.hasOwnProperty("area")) {
-			url +=  exportData.hasOwnProperty("areaSlugURL") ? "/area/"+exportData.areaSlugURL : "/area/"+exportData.area;
-			text = exportData.areaTitle;
-			emailSubject = exportData.areaTitle;
-		} else if (exportData.hasOwnProperty("country")) {
-			url += "/country/"+exportData.country;
-			text = exportData.country;
-			emailSubject = exportData.country;
-		} else if (exportData.hasOwnProperty("curatedlist")) {
-			url += exportData.hasOwnProperty("curatedlistSlugURL") ? "/curatedlist/"+exportData.curatedlistSlugURL : "/curatedlist/"+exportData.curatedlist;
-			text = exportData.curatedlistTitle;
-			emailSubject = exportData.curatedlistTitle;
-		} else {
-			url += "/";
-			text = config.siteTitle;
-			emailSubject = config.siteTitle;
-		}
-
-
-		var html = '<div id="SharePopup" class="popupBox" style="display: none;">';
-		html +=	'<div id="SharePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
-
-		html += '<ul class="SharePopupOptions">'
-
-		html += '<li><a href="mailto:?subject='+encodeURIComponent(emailSubject)+'&body='+encodeURIComponent(emailBody ? emailBody : text+"\n\n"+url)+'" title="Email"><div class="fa fa-envelope-o fa-2x" title="Email"></div></li>';
-		html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><div class="fa fa-twitter fa-2x" title="Twitter"></div></li>';
-		html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><div class="fa fa-facebook-official fa-2x" title="Facebook"></div></a></li>';
-		html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><div class="fa fa-google-plus-square fa-2x" title="Google Plus"></div></a></li>';
-
-		html += '</ul>'
-
-		html += '</div>';
-		$('body').append(html);
-	}
-	$('#SharePopup').fadeIn(500);
-	showPopup();
-}
 
 //////////////////////////////////////////////////////////////////////////////// Edit Comment
 function onClickFormRowEditCommentToggler() {

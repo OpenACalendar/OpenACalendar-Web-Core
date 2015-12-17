@@ -46,6 +46,7 @@ if (!$site) {
 	} else {
 		$data['hasSSL'] = false;
 	}
+    $data['isWebRobotsAllowed'] = $site->getIsWebRobotsAllowed();
 	$data['twitter'] = $CONFIG->contactTwitter;
 	$data['isSingleSiteMode'] = false;
 	$user = userGetCurrent();

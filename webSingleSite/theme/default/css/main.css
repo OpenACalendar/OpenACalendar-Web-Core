@@ -2655,24 +2655,31 @@ form .afterBigSubmitActionWrapper {
 .popupBox .popupShowVenue .address {
   padding: 5px 0;
 }
-.popupBox #ExportPopupIntroText {
+.popupBox #ExportSharePopupShareIntroText,
+.popupBox #ExportSharePopupExportIntroText {
   padding: 10px;
 }
-.popupBox #ExportPopupIntroText div {
+.popupBox #ExportSharePopupShareIntroText div,
+.popupBox #ExportSharePopupExportIntroText div {
   display: inline;
 }
-.popupBox #ExportPopupIntroText label {
+.popupBox #ExportSharePopupShareIntroText label,
+.popupBox #ExportSharePopupExportIntroText label {
   display: block;
 }
-.popupBox ul#ExportPopupMenu {
+.popupBox #ExportSharePopupShareIntroText .header,
+.popupBox #ExportSharePopupExportIntroText .header {
+  font-weight: bold;
+}
+.popupBox ul#ExportSharePopupExportMenu {
   padding: 15px 5px 5px 5px;
 }
-.popupBox ul#ExportPopupMenu li {
+.popupBox ul#ExportSharePopupExportMenu li {
   padding: 2px;
   line-height: 2.0em;
   display: inline;
 }
-.popupBox ul#ExportPopupMenu li .wrapper {
+.popupBox ul#ExportSharePopupExportMenu li .wrapper {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
@@ -2685,37 +2692,37 @@ form .afterBigSubmitActionWrapper {
   background: #d4d8db;
   line-height: 1.6;
 }
-.popupBox ul#ExportPopupMenu li .wrapper a {
+.popupBox ul#ExportSharePopupExportMenu li .wrapper a {
   white-space: nowrap;
   color: black;
   text-decoration: none;
   font-weight: bold;
 }
-.popupBox ul#ExportPopupMenu li .wrapper.current {
+.popupBox ul#ExportSharePopupExportMenu li .wrapper.current {
   font-weight: bold;
   background: #ffffff;
 }
-.popupBox ul#ExportPopupMenu li .wrapper.current a {
+.popupBox ul#ExportSharePopupExportMenu li .wrapper.current a {
   color: #333;
   text-decoration: none;
   font-weight: bold;
 }
-.popupBox ul#ExportPopupMenu li .wrapper:hover,
-.popupBox ul#ExportPopupMenu li .wrapper:focus {
+.popupBox ul#ExportSharePopupExportMenu li .wrapper:hover,
+.popupBox ul#ExportSharePopupExportMenu li .wrapper:focus {
   background: #f2f2f2;
 }
-.popupBox ul#ExportPopupMenu li .wrapper img {
+.popupBox ul#ExportSharePopupExportMenu li .wrapper img {
   max-width: 16px;
   max-height: 16px;
 }
 @media screen and (max-width: 500px) {
-  .popupBox ul#ExportPopupMenu li .wrapper {
+  .popupBox ul#ExportSharePopupExportMenu li .wrapper {
     line-height: 0.1em;
   }
-  .popupBox ul#ExportPopupMenu li .wrapper .wrapper {
+  .popupBox ul#ExportSharePopupExportMenu li .wrapper .wrapper {
     display: block;
   }
-  .popupBox ul#ExportPopupMenu li .wrapper .wrapper a {
+  .popupBox ul#ExportSharePopupExportMenu li .wrapper .wrapper a {
     display: block;
   }
 }
@@ -2733,14 +2740,14 @@ form .afterBigSubmitActionWrapper {
   padding-left: 10px;
   font-style: italic;
 }
-.popupBox ul.SharePopupOptions {
+.popupBox ul.ExportSharePopupShareMenu {
   padding: 10px;
 }
-.popupBox ul.SharePopupOptions li {
+.popupBox ul.ExportSharePopupShareMenu li {
   display: inline;
   padding: 10px;
 }
-.popupBox ul.SharePopupOptions li a .fa {
+.popupBox ul.ExportSharePopupShareMenu li a .fa {
   color: black;
 }
 .popupBox ul.mediaGrid li.media {

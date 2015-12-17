@@ -40,18 +40,6 @@
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
-			<li class="action">
-				<a href="/api1/area/{{ area.slug }}/events.ical" onclick="showExportPopup(); return false;">
-					<div class="fa fa-download"></div> export
-				</a>
-			</li>
-			{% if currentSite.getIsWebRobotsAllowed %}
-				<li class="action">
-					<a href="#" onclick="showSharePopup(); return false;">
-						<div class="fa fa-share"></div>  share
-					</a>
-				</li>
-			{% endif %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/area/{{ area.slugForUrl }}">Details</a></li>
 			<li class="tab"><a href="/area/{{ area.slugForUrl }}/calendar">Calendar</a></li>
 			{%  if currentUserActions.has("org.openacalendar","areaHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/area/{{ area.slugForUrl }}/history">History of changes</a></li>{%  endif %}

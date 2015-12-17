@@ -32,6 +32,7 @@ $data['siteTitle'] = $CONFIG->siteTitle;
 $data['httpDomain'] = $CONFIG->webSiteDomain;
 $data['httpDomainIndex'] = $CONFIG->webSiteDomain;
 $data['httpDomainSite'] = $CONFIG->webSiteDomain;
+$data['isWebRobotsAllowed'] = $site->getIsWebRobotsAllowed();
 $data['twitter'] = $CONFIG->contactTwitter;
 $data['isSingleSiteMode'] = true;
 if ($CONFIG->hasSSL) {

@@ -88,7 +88,7 @@
 			<div id="headerOptions">
 				<div id="actions">
 
-					<a href="#" onclick="showExportPopup(); return false;">
+					<a href="#" onclick="showExportSharePopup(); return false;">
 						<div class="fa fa-download fa-2x" title="Export"></div>
 					</a>
 					{% if prevYear %}
@@ -242,7 +242,7 @@
 			{% elseif venue is defined and venue %} 
 				var exportData = { venue:{{ venue.slug }}, venueTitle: "{{  venue.title | e('js') }}" };
 			{% elseif venueVirtual is defined and venueVirtual %} 
-				var exportData = { venue:'virtual' };
+				var exportData = { venue:'virtual', venueVirtual: true };
 			{% elseif area is defined and area and country is defined and country %} 
 				var exportData = { area:"{{ area.slug }}", areaTitle: "{{  area.title | e('js') }}", country:"{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  };
 			{% elseif area is defined and area %} 

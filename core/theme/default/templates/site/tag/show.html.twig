@@ -18,6 +18,11 @@
 {% block tabDetails %}currentTab{% endblock %}
 	
 {% block actions %}
+	<li class="action">
+		<a href="/api1/tag/{{ tag.slug }}/events.ical" onclick="showExportSharePopup(); return false;">
+			{%  include '/site/common/actionExportShareLabel.html.twig' %}
+		</a>
+	</li>
 {% endblock %}
 
 
