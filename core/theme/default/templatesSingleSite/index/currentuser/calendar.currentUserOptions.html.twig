@@ -6,7 +6,7 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="currentUserAttendance" id="currentUserAttendanceForEvent{{ event.slug }}">
-	<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showCurrentUserAttendanceForEvent({{ event.slug }}); return false;" class="activationLinkWrapper">
+	<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showCurrentUserAttendanceForEvent({ slug: {{ event.slug }}, site: '{{ currentSite.slug |e('js')}}' }); return false;" class="activationLinkWrapper">
 		{% if event.userIsPlanAttending %}
 			<div class="iconUserAttendingSmall" title="You are attending"></div>
 		{% elseif event.userIsPlanMaybeAttending %}
