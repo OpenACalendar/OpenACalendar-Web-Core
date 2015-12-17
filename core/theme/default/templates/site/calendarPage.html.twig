@@ -154,6 +154,8 @@
 				{% endif %}
 			{% elseif country is defined and country %}
 				<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+			{% elseif venueVirtual is defined and venueVirtual %}
+				<h3 class="venue"><a href="/venue/virtual">Virtual Events</a></h3>
 			{% endif %}
 			<div id="afterHeader"></div>
 		</div>
