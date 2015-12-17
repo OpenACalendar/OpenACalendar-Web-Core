@@ -376,23 +376,29 @@ class EventController {
 			} else if ($request->request->get('privacy') == 'private') {
 				$userAtEvent->setIsPlanPublic(false);
 			}
-			
-			if ($request->request->get('attending') == 'no') {
-				$userAtEvent->setIsPlanAttending(false);
-				$userAtEvent->setIsPlanMaybeAttending(false);
-			} else if ($request->request->get('attending') == 'maybe') {
-				$userAtEvent->setIsPlanAttending(false);
-				$userAtEvent->setIsPlanMaybeAttending(true);
-			} else if ($request->request->get('attending') == 'yes') {
-				$userAtEvent->setIsPlanAttending(true);
-				$userAtEvent->setIsPlanMaybeAttending(false);
-			}
+
+            if ($request->request->get('attending') == 'unknown') {
+                $userAtEvent->setIsPlanUnknownAttending(true);
+            } else if ($request->request->get('attending') == 'no') {
+                $userAtEvent->setIsPlanNotAttending(true);
+            } else if ($request->request->get('attending') == 'maybe') {
+                $userAtEvent->setIsPlanMaybeAttending(true);
+            } else if ($request->request->get('attending') == 'yes') {
+                $userAtEvent->setIsPlanAttending(true);
+            }
 			
 			$uaer->save($userAtEvent);
 		}
 
-		$data['attending'] = ($userAtEvent->getIsPlanAttending() ? 'yes' : ($userAtEvent->getIsPlanMaybeAttending()?'maybe':'no'));
-		$data['privacy'] = ($userAtEvent->getIsPlanPublic() ? 'public' : 'private');
+        if ($userAtEvent->getIsPlanAttending()) {
+            $data['attending'] = 'yes';
+        } else if ($userAtEvent->getIsPlanMaybeAttending()) {
+            $data['attending'] = 'maybe';
+        } else if ($userAtEvent->getIsPlanNotAttending()) {
+            $data['attending'] = 'no';
+        } else {
+            $data['attending'] = 'unknown';
+        }		$data['privacy'] = ($userAtEvent->getIsPlanPublic() ? 'public' : 'private');
 		$data['inPast'] = $this->parameters['event']->isInPast() ? 1 : 0;
 		$data['CSFRToken'] = $app['websession']->getCSFRToken();
 		

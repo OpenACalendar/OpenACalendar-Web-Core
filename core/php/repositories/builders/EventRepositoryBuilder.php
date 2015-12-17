@@ -429,6 +429,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 					"AND user_at_event_information.user_account_id = :user_account_id ";
 			$this->select[] = " user_at_event_information.is_plan_attending AS user_is_plan_attending ";
 			$this->select[] = " user_at_event_information.is_plan_maybe_attending AS user_is_plan_maybe_attending ";
+			$this->select[] = " user_at_event_information.is_plan_not_attending AS user_is_plan_not_attending ";
 			if (!$this->userAccountIncludeAll) {
 				$w = array();
 				if ($this->userAccountIncludeWatching) {

@@ -114,11 +114,15 @@ function showCurrentUserAttendanceForEventInPopup(data, contentWrapperID) {
 		
 		if (attendanceData.inPast == 1) {
 			var html = '';
-			html += 'You said you ';
-			html += (attendanceData.attending == 'no'?'wouldn\'t':'');
-			html += (attendanceData.attending == 'maybe'?'might':'');
-			html += (attendanceData.attending == 'yes'?'would':'');
-			html += ' attend.';
+			if (attendanceData.attending == 'unknown') {
+				html = 'We didn\'t know your attendance plans.'
+			} else {
+				html += 'You said you ';
+				html += (attendanceData.attending == 'no' ? 'wouldn\'t' : '');
+				html += (attendanceData.attending == 'maybe' ? 'might' : '');
+				html += (attendanceData.attending == 'yes' ? 'would' : '');
+				html += ' attend.';
+			}
 		
 			wrapper.html(html);
 		} else {
@@ -129,12 +133,13 @@ function showCurrentUserAttendanceForEventInPopup(data, contentWrapperID) {
 
 			html += 'You ';
 			html += '<select name="attending">';
+			html += '<option value="unknown" '+(attendanceData.attending == 'unknown'?'selected':'')+'>???</option>';
 			html += '<option value="no" '+(attendanceData.attending == 'no'?'selected':'')+'>are not</option>';
 			html += '<option value="maybe" '+(attendanceData.attending == 'maybe'?'selected':'')+'>might be</option>';
 			html += '<option value="yes" '+(attendanceData.attending == 'yes'?'selected':'')+'>will be</option>';
 			html += '</select> attending.';
 
-			html += '<span class="UserAttendingPrivacyOptionsWrapper" '+(attendanceData.attending == 'no'?'style="display:none;"':'')+'>';
+			html += '<span class="UserAttendingPrivacyOptionsWrapper" '+(attendanceData.attending == 'no' || attendanceData.attending == 'unknown' ?'style="display:none;"':'')+'>';
 			html += ' This is ';
 			html += '<select name="privacy">';
 			html += '<option value="private" '+(attendanceData.privacy == 'private'?'selected':'')+'>private</option>';
@@ -165,7 +170,7 @@ function showCurrentUserAttendanceForEventInPopup(data, contentWrapperID) {
 				});
 				var attendingObj = formObj.children('select[name="attending"]');
 				var privacyWrapperObj = formObj.children(".UserAttendingPrivacyOptionsWrapper");
-				if (attendingObj.val() == 'no') {
+				if (attendingObj.val() == 'no' || attendingObj.val() == 'unknown') {
 					privacyWrapperObj.hide();
 				} else {
 					privacyWrapperObj.show();
@@ -175,8 +180,10 @@ function showCurrentUserAttendanceForEventInPopup(data, contentWrapperID) {
 					imageDiv.html('<div class="iconUserAttendingSmall" title="You are attending"></div>');
 				} else if (attendingObj.val() == 'maybe') {
 					imageDiv.html('<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>');
-				} else {
+				} else if (attendingObj.val() == 'no') {
 					imageDiv.html('<div class="iconUserNotAttendingSmall" title="You are not attending"></div>');
+				} else {
+					imageDiv.html('<div class="iconUserUnknownAttendingSmall" title="Are you attending?"></div>');
 				}
 			});
 		}

@@ -59,6 +59,7 @@ class EventModel {
 	
 	protected $user_is_plan_attending  = false;
 	protected $user_is_plan_maybe_attending = false;
+	protected $user_is_plan_not_attending = false;
 
 	protected $is_event_in_curated_list = false;
 	protected $in_curated_list_group_id;
@@ -125,6 +126,7 @@ class EventModel {
 		}
 		$this->user_is_plan_attending = isset($data['user_is_plan_attending']) ? (boolean)$data['user_is_plan_attending'] : false;
 		$this->user_is_plan_maybe_attending = isset($data['user_is_plan_maybe_attending']) ? (boolean)$data['user_is_plan_maybe_attending'] : false;
+		$this->user_is_plan_not_attending = isset($data['user_is_plan_not_attending']) ? (boolean)$data['user_is_plan_not_attending'] : false;
 		$this->is_virtual = (boolean)$data['is_virtual'];
 		$this->is_physical = (boolean)$data['is_physical'];
 		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
@@ -534,6 +536,16 @@ class EventModel {
 	public function getUserIsPlanMaybeAttending() {
 		return $this->user_is_plan_maybe_attending;
 	}
+
+    /**
+     * @return boolean
+     */
+    public function getUserIsPlanNotAttending()
+    {
+        return $this->user_is_plan_not_attending;
+    }
+
+
 
 	public function getIsVirtual() {
 		return $this->is_virtual;

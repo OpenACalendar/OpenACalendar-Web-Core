@@ -242,7 +242,8 @@
 					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 					You
 					<select name="attending">
-						<option value="no" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}selected{% endif %}>are not</option>
+						<option value="unknown" {% if userAtEvent.isPlanUnknownAttending  %}selected{% endif %}>???</option>
+						<option value="no" {% if userAtEvent.isPlanNotAttending  %}selected{% endif %}>are not</option>
 						<option value="maybe" {% if userAtEvent.isPlanMaybeAttending %}selected{% endif %}>might be</option>
 						<option value="yes" {% if userAtEvent.isPlanAttending %}selected{% endif %}>will be</option>
 					</select> attending.

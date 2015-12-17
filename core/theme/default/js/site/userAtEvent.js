@@ -24,7 +24,7 @@ $(document).ready(function() {
 		});
 		var attendingObj = formObj.children('select[name="attending"]');
 		var privacyWrapperObj = formObj.children(".UserAttendingPrivacyOptionsWrapper");
-		if (attendingObj.val() == 'no') {
+		if (attendingObj.val() == 'no' || attendingObj.val() == 'unknown') {
 			privacyWrapperObj.hide();
 		} else {
 			privacyWrapperObj.show();

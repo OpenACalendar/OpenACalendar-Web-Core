@@ -19,6 +19,7 @@ class UserAtEventModel {
 	protected $event_id;
 	protected $is_plan_attending = false;
 	protected $is_plan_maybe_attending = false;
+	protected $is_plan_not_attending = false;
 	protected $is_plan_public = false;
 	
 	protected $user_username;
@@ -29,6 +30,7 @@ class UserAtEventModel {
 		$this->event_id = $data['event_id'];
 		$this->is_plan_attending = (boolean)$data['is_plan_attending'];
 		$this->is_plan_maybe_attending = (boolean)$data['is_plan_maybe_attending'];
+		$this->is_plan_not_attending = (boolean)$data['is_plan_not_attending'];
 		$this->is_plan_public = (boolean)$data['is_plan_public'];
 		$this->user_username = isset($data['user_username']) ? $data['user_username'] : 0;
 	}
@@ -49,12 +51,35 @@ class UserAtEventModel {
 		$this->event_id = $event_id;
 	}
 
+    /**
+     * @return boolean
+     */
+    public function getIsPlanUnknownAttending()
+    {
+        return !$this->is_plan_not_attending && !$this->is_plan_maybe_attending && !$this->is_plan_attending;
+    }
+
+
+    public function setIsPlanUnknownAttending($value)
+    {
+        if ($value)
+        {
+            $this->is_plan_attending = false;
+            $this->is_plan_maybe_attending = false;
+            $this->is_plan_not_attending = false;
+        }
+    }
+
 	public function getIsPlanAttending() {
 		return $this->is_plan_attending;
 	}
 
 	public function setIsPlanAttending($is_plan_attending) {
 		$this->is_plan_attending = $is_plan_attending;
+        if ($is_plan_attending) {
+            $this->is_plan_not_attending = false;
+            $this->is_plan_maybe_attending = false;
+        }
 	}
 
 	public function getIsPlanMaybeAttending() {
@@ -63,7 +88,31 @@ class UserAtEventModel {
 
 	public function setIsPlanMaybeAttending($is_plan_maybe_attending) {
 		$this->is_plan_maybe_attending = $is_plan_maybe_attending;
+        if ($is_plan_maybe_attending) {
+            $this->is_plan_not_attending = false;
+            $this->is_plan_attending = false;
+        }
 	}
+
+    /**
+     * @return boolean
+     */
+    public function getIsPlanNotAttending()
+    {
+        return $this->is_plan_not_attending;
+    }
+
+    /**
+     * @param boolean $is_plan_not_attending
+     */
+    public function setIsPlanNotAttending($is_plan_not_attending)
+    {
+        $this->is_plan_not_attending = $is_plan_not_attending;
+        if ($is_plan_not_attending) {
+            $this->is_plan_attending = false;
+            $this->is_plan_maybe_attending = false;
+        }
+    }
 
 	public function getIsPlanPublic() {
 		return $this->is_plan_public;
