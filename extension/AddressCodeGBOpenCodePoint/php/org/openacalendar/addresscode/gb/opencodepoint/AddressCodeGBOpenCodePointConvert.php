@@ -9,7 +9,7 @@ namespace org\openacalendar\addresscode\gb\opencodepoint;
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://bramp.net/blog/2008/06/04/os-easting-northing-to-lat-long/
  * @link http://bramp.net/blog/2008/06/04/os-easting-northing-to-lat-long/
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  */
 class AddressCodeGBOpenCodePointConvert {
 	

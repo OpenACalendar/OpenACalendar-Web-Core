@@ -11,7 +11,7 @@ require_once APP_ROOT_DIR.'/core/webSysAdmin/index.php';
  * 
  * 
  * @author James Baster <james@jarofgreen.co.uk>
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  * @license All rights reserved. Do not distribute.  
  */
 

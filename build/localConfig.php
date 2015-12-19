@@ -4,7 +4,7 @@
  * This allows the build scripts, web roots and the app to be in different places.
  * 
  * @author James Baster <james@jarofgreen.co.uk>
- * @copyright (c) 2013-2014, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  * @license All rights reserved. Do not distribute.  
  */
 
