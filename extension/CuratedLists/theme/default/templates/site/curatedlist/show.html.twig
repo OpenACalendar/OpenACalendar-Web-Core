@@ -14,6 +14,7 @@
 {% block tabDetails %}currentTab{% endblock %}
 	
 {% block htmlHeader %}
+	<link rel="stylesheet" type="text/css" href="/theme/default/css/curatedlists.css?v={{ config.assetsVersion }}">
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slug }}/" />
 	{% if not currentSite.isWebRobotsAllowed or curatedlist.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{{ parent() }}
@@ -54,25 +55,28 @@
 
 	<ul class="mainListEvents">
 		{% for event in events %}
-			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-			{% if actionCuratedListEditContents %}
-				<li class="info">
-					{%  if event.isEventInCuratedList %}
-						<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
-							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-							<input type="hidden" name="returnTo" value="curatedlist">
-							<input type="submit" value="Remove Event">
-						</form>
-					{% endif %}
-					{%  if event.inCuratedListGroupSlug %}
-						<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ event.inCuratedListGroupSlug }}/remove" method="post">
-							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-							<input type="hidden" name="returnTo" value="curatedlist">
-							<input type="submit" value="Remove Group {{ event.inCuratedListGroupTitle | e('html_attr') }} ">
-						</form>
-					{% endif %}
-				</li>
-			{% endif %}
+			{%  set html %}
+				{% if actionCuratedListEditContents %}
+					<div class="curatedListOptions">
+						{%  if event.isEventInCuratedList %}
+							<form action="/curatedlist/{{ curatedlist.slug }}/event/{{ event.slug }}/remove" method="post">
+								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+								<input type="hidden" name="returnTo" value="curatedlist">
+								<div class="curatedlistOptionsActionWrapper"><input type="submit" value="Remove Event"></div>
+							</form>
+						{% endif %}
+						{%  if event.inCuratedListGroupSlug %}
+							<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ event.inCuratedListGroupSlug }}/remove" method="post">
+								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+								<input type="hidden" name="returnTo" value="curatedlist">
+								<div class="curatedlistOptionsActionWrapper"><input type="submit" value="Remove Group {{ event.inCuratedListGroupTitle | e('html_attr') }}"></div>
+								<div class="afterCuratedlistOptionsActionWrapper"></div>
+							</form>
+						{% endif %}
+					</div>
+				{% endif %}
+			{%  endset %}
+			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true, extraHTMLAtEnd: html }  %}
 		{% else %}
 			<li>
 				No events found.
