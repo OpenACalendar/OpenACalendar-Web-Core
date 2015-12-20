@@ -29,13 +29,15 @@
 						<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ group.slug }}/remove" method="post">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="returnTo" value="group">
-							<input type="submit" value="Remove">
+							<div class="bigSubmitActionWrapper"><input type="submit" value="Remove from this list"></div>
+							<div class="afterBigSubmitActionWrapper"></div>
 						</form>
 					{% else %}
 						<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ group.slug }}/add" method="post">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="returnTo" value="group">
-							<input type="submit" value="Add">
+							<div class="bigSubmitActionWrapper"><input type="submit" value="Add to this list"></div>
+							<div class="afterBigSubmitActionWrapper"></div>
 						</form>
 					{% endif %}
 				</div>
