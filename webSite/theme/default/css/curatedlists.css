@@ -51,3 +51,33 @@ ul.mainListCuratedLists li.nodata {
 ul.infoBoxListCuratedLists li.curatedlist {
   font-size: 0.8em;
 }
+ul.mainListEvents li.event .curatedListOptions {
+  text-align: right;
+}
+form .curatedlistOptionsActionWrapper {
+  float: right;
+  display: inline;
+  padding: 6px;
+  margin: 0;
+  line-height: 1.2;
+  text-align: right;
+}
+form .curatedlistOptionsActionWrapper input[type="submit"] {
+  display: inline;
+  background: #72DA72;
+  padding: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  margin: 1px;
+  color: #333;
+  font-size: 1.0em;
+  text-decoration: none;
+}
+form .curatedlistOptionsActionWrapper input[type="submit"]:hover,
+form .curatedlistOptionsActionWrapper input[type="submit"]:focus {
+  color: black;
+  text-decoration: underline;
+}
+form .afterCuratedlistOptionsActionWrapper {
+  clear: right;
+}

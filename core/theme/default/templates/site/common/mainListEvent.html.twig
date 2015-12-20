@@ -74,4 +74,5 @@
 			<div class="formWrapper"></div>
 		</div>
 	{% endif %}
+	{%  if extraHTMLAtEnd is defined and extraHTMLAtEnd %}{{  extraHTMLAtEnd | raw }}{%  endif %}
 </li>
