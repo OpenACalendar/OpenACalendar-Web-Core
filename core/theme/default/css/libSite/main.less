@@ -181,9 +181,20 @@ ul.mainListGroups li.group, div.group {
 	min-height: 50px;
 	padding: 5px 0 20px 0;
 	.title {
-		font-size: 1.1em;
-		font-weight: bold;
-		padding: 2px 0;
+		padding: 2px 0 5px 0;
+		.text {
+			font-size: 1.1em;
+			font-weight: bold;
+
+		}
+		.futureEvents {
+			margin-left: 10px;
+			padding: 4px 20px;
+			font-size: 0.8em;
+			font-weight: normal;
+			background: @colourFutureEventsInMainListingTitleBackground;
+			.rounded-corners(3px);
+		}
 		a {
 			color: #333;
 			text-decoration: none;
@@ -251,12 +262,24 @@ ul.mainListCountries {
 
 ul.mainListVenues {
 	li.venue {
+		min-height: 50px;
 		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
-			font-size: 1.1em;
-			font-weight: bold;
-			padding: 2px 0;
+			padding: 2px 0 5px 0;
+			.text {
+				font-size: 1.1em;
+				font-weight: bold;
+
+			}
+			.futureEvents {
+				margin-left: 10px;
+				padding: 4px 20px;
+				font-size: 0.8em;
+				font-weight: normal;
+				background: @colourFutureEventsInMainListingTitleBackground;
+				.rounded-corners(3px);
+			}
 			a {
 				color: #333;
 				text-decoration: none;

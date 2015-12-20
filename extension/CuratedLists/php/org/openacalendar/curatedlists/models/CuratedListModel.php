@@ -24,6 +24,7 @@ class CuratedListModel {
 	protected $description;
 	protected $created_at;
 	protected $is_deleted;
+    protected $cached_future_events;
 
 	/** secondary attributes **/
 	protected $is_event_in_list;
@@ -36,6 +37,7 @@ class CuratedListModel {
 		$this->slug = $data['slug'];
 		$this->title = $data['title'];
 		$this->description = $data['description'];
+        $this->cached_future_events = $data['cached_future_events'];
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);	
 		$this->is_event_in_list = isset($data['is_event_in_list']) ? (boolean)$data['is_event_in_list'] : false;
@@ -166,6 +168,19 @@ class CuratedListModel {
 		return $this->event_in_list_via_group_id != null;
 	}
 
+
+    public function getCachedFutureEvents()
+    {
+        return $this->cached_future_events;
+    }
+
+    /**
+     * @param mixed $cached_future_events
+     */
+    public function setCachedFutureEvents($cached_future_events)
+    {
+        $this->cached_future_events = $cached_future_events;
+    }
 
 	
 }

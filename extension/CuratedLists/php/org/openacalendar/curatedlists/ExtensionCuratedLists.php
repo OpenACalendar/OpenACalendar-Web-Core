@@ -27,6 +27,7 @@ class ExtensionCuratedLists extends \BaseExtension {
 	public function getTasks() {
 		return array(
 			new \org\openacalendar\curatedlists\tasks\UpdateCuratedListHistoryChangeFlagsTask($this->app),
+			new \org\openacalendar\curatedlists\tasks\UpdateCuratedListFutureEventsCacheTask($this->app),
 		);
 	}
 

@@ -12,7 +12,16 @@
 			<div class="media"><a href="/group/{{ group.slugForUrl }}"><img src="/media/{{ mediaSlug }}/thumbnail"></a></div>
 		{% endfor %}
 	{%  endif %}
-	<div class="title"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></div>
+	<div class="title">
+		<a href="/group/{{ group.slugForUrl }}">
+			<span class="text">{{ group.title }}</span>
+			{% if group.cachedFutureEvents == 1 %}
+				<span class="futureEvents">1 Event</span>
+			{% elseif group.cachedFutureEvents > 1 %}
+				<span class="futureEvents">{{  group.cachedFutureEvents }} Events</span>
+			{%  endif %}
+		</a>
+	</div>
 	{{ group.description |  truncate(1000) | nl2br | linkify }}
 	<div class="afterGroupListing"></div>
 </li>

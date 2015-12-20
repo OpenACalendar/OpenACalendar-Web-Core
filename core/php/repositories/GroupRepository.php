@@ -468,6 +468,22 @@ class GroupRepository {
 			throw $e;
 		}
 	}
-	
+
+    public function updateFutureEventsCache(GroupModel $group) {
+        global $DB;
+        $statUpdate = $DB->prepare("UPDATE group_information SET cached_future_events=:count WHERE id=:id");
+
+        $erb = new EventRepositoryBuilder();
+        $erb->setGroup($group);
+        $erb->setIncludeDeleted(false);
+        $erb->setIncludeCancelled(false);
+        $erb->setAfterNow();
+        $count = count($erb->fetchAll());
+
+        $statUpdate->execute(array('count'=>$count,'id'=>$group->getId()));
+
+        $group->setCachedFutureEvents($count);
+    }
+
 }
 

@@ -22,7 +22,7 @@
 	<ul class="mainListCuratedLists">
 		{% for curatedlist in curatedListsUserCanEdit %}
 			<li class="curatedlist">
-				<div class="title">{{ curatedlist.title }}</div>
+				<div class="title"><span class="text">{{ curatedlist.title }}</span></div>
 				<div class="description">{{ curatedlist.description | truncate(500) | nl2br  }}</div>
 				<div class="editContentsWrapper">
 					{% if curatedlist.isEventInListViaGroup  %}

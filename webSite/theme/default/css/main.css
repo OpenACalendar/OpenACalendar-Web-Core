@@ -354,9 +354,25 @@ div.group {
 }
 ul.mainListGroups li.group .title,
 div.group .title {
+  padding: 2px 0 5px 0;
+}
+ul.mainListGroups li.group .title .text,
+div.group .title .text {
   font-size: 1.1em;
   font-weight: bold;
-  padding: 2px 0;
+}
+ul.mainListGroups li.group .title .futureEvents,
+div.group .title .futureEvents {
+  margin-left: 10px;
+  padding: 4px 20px;
+  font-size: 0.8em;
+  font-weight: normal;
+  background: #ddd;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
 }
 ul.mainListGroups li.group .title a,
 div.group .title a {
@@ -423,13 +439,28 @@ ul.mainListCountries li.country .title a:focus {
   }
 }
 ul.mainListVenues li.venue {
+  min-height: 50px;
   margin: 5px 5px;
   border-bottom: 2px solid #E9E9E9;
 }
 ul.mainListVenues li.venue .title {
+  padding: 2px 0 5px 0;
+}
+ul.mainListVenues li.venue .title .text {
   font-size: 1.1em;
   font-weight: bold;
-  padding: 2px 0;
+}
+ul.mainListVenues li.venue .title .futureEvents {
+  margin-left: 10px;
+  padding: 4px 20px;
+  font-size: 0.8em;
+  font-weight: normal;
+  background: #ddd;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
 }
 ul.mainListVenues li.venue .title a {
   color: #333;

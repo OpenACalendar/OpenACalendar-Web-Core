@@ -49,7 +49,16 @@
 			<ul class="mainListCuratedLists">
 				{% for curatedlist in curatedlists %}
 					<li class="curatedlist">
-						<div class="title"><a href="/curatedlist/{{ curatedlist.slug }}">{{ curatedlist.title }}</a></div>
+						<div class="title">
+							<a href="/curatedlist/{{ curatedlist.slug }}">
+								<span class="text">{{ curatedlist.title }}</span>
+								{% if curatedlist.cachedFutureEvents == 1 %}
+									<span class="futureEvents">1 Event</span>
+								{% elseif curatedlist.cachedFutureEvents > 1 %}
+									<span class="futureEvents">{{  curatedlist.cachedFutureEvents }} Events</span>
+								{%  endif %}
+							</a>
+						</div>
 						<div class="description">{{ curatedlist.description | truncate(500) | nl2br  }}</div>
 					</li>
 				{% else %}

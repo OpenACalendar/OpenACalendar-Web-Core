@@ -24,6 +24,7 @@ class GroupModel {
 	protected $is_deleted;
 	protected $is_duplicate_of_id;
 	protected $media_group_slugs;
+    protected $cached_future_events;
 	
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
@@ -35,6 +36,7 @@ class GroupModel {
 		$this->twitter_username = $data['twitter_username'];
 		$this->is_deleted = $data['is_deleted'];
 		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
+        $this->cached_future_events = $data['cached_future_events'];
 		$this->media_group_slugs = isset($data['media_group_slugs']) ? $data['media_group_slugs'] : null;
 	}
 	
@@ -211,6 +213,17 @@ class GroupModel {
 		return $out;
 	}
 
+    public function getCachedFutureEvents() {
+        return $this->cached_future_events;
+    }
+
+    /**
+     * @param mixed $cached_future_events
+     */
+    public function setCachedFutureEvents($cached_future_events)
+    {
+        $this->cached_future_events = $cached_future_events;
+    }
 
 	
 }

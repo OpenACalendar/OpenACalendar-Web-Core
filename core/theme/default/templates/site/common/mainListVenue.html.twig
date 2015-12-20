@@ -13,7 +13,16 @@
 			<div class="media"><a href="/venue/{{ venue.slugForUrl }}"><img src="/media/{{ mediaSlug }}/thumbnail"></a></div>
 		{% endfor %}
 	{%  endif %}
-	<div class="title"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></div>
+	<div class="title">
+		<a href="/venue/{{ venue.slugForUrl }}">
+			<span class="text">{{ venue.title }}</span>
+			{% if venue.cachedFutureEvents == 1 %}
+				<span class="futureEvents">1 Event</span>
+			{% elseif venue.cachedFutureEvents > 1 %}
+				<span class="futureEvents">{{  venue.cachedFutureEvents }} Events</span>
+			{%  endif %}
+		</a>
+	</div>
 	{{ venue.description | nl2br }}
 	<div class="afterVenueListing"></div>
 </li>

@@ -175,6 +175,7 @@ class Config {
 	public $CLIAPI1Enabled = false;
 
 	public $taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskSendUserWatchesNotifyAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateAreaBoundsCacheAutomaticUpdateInterval = 1800; // 30 mins

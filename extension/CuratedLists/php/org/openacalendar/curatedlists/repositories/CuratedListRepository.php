@@ -10,6 +10,7 @@ use models\UserAccountModel;
 use models\EventModel;
 use models\GroupModel;
 use org\openacalendar\curatedlists\dbaccess\CuratedListDBAccess;
+use repositories\builders\EventRepositoryBuilder;
 
 
 /**
@@ -289,6 +290,22 @@ class CuratedListRepository {
 		}
 
 	}
-	
+
+    public function updateFutureEventsCache(CuratedListModel $curatedListModel) {
+        global $DB;
+        $statUpdate = $DB->prepare("UPDATE curated_list_information SET cached_future_events=:count WHERE id=:id");
+
+        $erb = new EventRepositoryBuilder();
+        $erb->setCuratedList($curatedListModel, false);
+        $erb->setIncludeDeleted(false);
+        $erb->setIncludeCancelled(false);
+        $erb->setAfterNow();
+        $count = count($erb->fetchAll());
+
+        $statUpdate->execute(array('count'=>$count,'id'=>$curatedListModel->getId()));
+
+        $curatedListModel->setCachedFutureEvents($count);
+    }
+
 }
 
