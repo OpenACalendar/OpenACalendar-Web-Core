@@ -66,7 +66,7 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($event);
 		$eventRecurSet->setTimeZoneName($event->getTimezone());
 
-		$newStart = new \DateTime();
+		$newStart = new \DateTime("", new \DateTimeZone($event->getTimezone()));
 		$newStart->setDate(2015,6,1);
 
 		$newEvent = $eventRecurSet->getNewEventOnArbitraryDate($event, $newStart);
