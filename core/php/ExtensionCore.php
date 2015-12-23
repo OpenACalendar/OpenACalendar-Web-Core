@@ -247,4 +247,11 @@ class ExtensionCore extends BaseExtension {
 		}
 	}
 
+
+    public function getMessageQueWorkers() {
+        return array(
+            new \messagequeworkers\RunImportNowMessageQueWorker($this->app),
+        );
+    }
+
 }

@@ -94,7 +94,7 @@ abstract class BaseExtension {
 	public function getAppConfigurationDefinitions() {
 		return array();
 	}
-	
+
 	
 	public function getAppConfigurationDefinition($key) {
 		foreach($this->getAppConfigurationDefinitions() as $def) {
@@ -174,6 +174,10 @@ abstract class BaseExtension {
 	public function getEventCustomFieldByType($type) {
 
 	}
+
+    public function getMessageQueWorkers() {
+        return array();
+    }
 
 }
 

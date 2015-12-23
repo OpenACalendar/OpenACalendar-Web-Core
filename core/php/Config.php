@@ -190,6 +190,18 @@ class Config {
 	public $taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskRunImportURLsAutomaticUpdateInterval = 1800; // 30 mins
 
+
+    public $useBeanstalkd = false;
+    // This is the default connection if Debian package is used.
+    public $beanstalkdHost = 'localhost';
+    public $beanstalkdPort = 11300;
+    public $beanstalkdTube = 'openacalendar';
+    public $beanstalkdProducerConnectTimeOut = 5;
+    public $beanstalkdConsumerConnectTimeOut = 60;
+
+    public $messageQueConsumerProcessRunsForSeconds = 3900; // 65 * 60;
+    public $messageQueConsumerProcessChecksEverSeconds = 60;
+
 	public $formWidgetTimeMinutesMultiples = 1;
 
 	/** DEPRECATED */

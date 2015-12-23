@@ -20,13 +20,15 @@ use models\UserAccountModel;
  */
 class ImportURLRepository {
 
+    protected $app;
 
 	/** @var  \dbaccess\ImportURLDBAccess */
 	protected $importURLDBAccess;
 
 	function __construct()
 	{
-		global $DB, $USERAGENT;
+		global $DB, $USERAGENT, $app;
+        $this->app = $app;
 		$this->importURLDBAccess = new ImportURLDBAccess($DB, new \TimeSource(), $USERAGENT);
 	}
 
@@ -76,6 +78,8 @@ class ImportURLRepository {
 			
 			
 			$DB->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportURLSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
@@ -121,6 +125,8 @@ class ImportURLRepository {
 			$this->importURLDBAccess->update($importURL, $fields, $importURLEditMetaDataModel);
 			
 			$DB->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportURLSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
@@ -148,6 +154,8 @@ class ImportURLRepository {
 
 
 			$DB->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportURLSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
@@ -174,6 +182,8 @@ class ImportURLRepository {
 			$this->importURLDBAccess->update($importURL, array('is_enabled','expired_at'), $importURLEditMetaDataModel);
 			
 			$DB->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportURLSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}
@@ -210,6 +220,8 @@ class ImportURLRepository {
 			$this->importURLDBAccess->update($importURL, array('expired_at'), $importURLEditMetaData);
 
 			$DB->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportURLSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$DB->rollBack();
 		}

@@ -62,6 +62,7 @@ class BaseAppWithDBTest extends \PHPUnit_Framework_TestCase {
 		$this->app['config'] = $CONFIG;
 		$this->app['db'] = $DB;
 		$this->app['timesource'] = new TimeSource();
+        $this->app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
 
 
 

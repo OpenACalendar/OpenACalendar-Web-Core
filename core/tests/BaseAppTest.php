@@ -44,8 +44,7 @@ class BaseAppTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
 		$this->app['config'] = $CONFIG;
-
-
+        $this->app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
 
 	}
 

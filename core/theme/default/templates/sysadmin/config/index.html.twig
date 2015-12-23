@@ -758,6 +758,49 @@
 				({{ (config.taskRunImportURLsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskRunImportURLsAutomaticUpdateInterval'} %}</td>
 		</tr>
+		<tr>
+			<th>useBeanstalkd</th>
+			<td>{% if config.useBeanstalkd %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'useBeanstalkd'} %}</td>
+		</tr>
+		<tr>
+			<th>beanstalkdHost</th>
+			<td>{{ config.beanstalkdHost }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdHost'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>beanstalkdPort</th>
+			<td>{{ config.beanstalkdPort }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdPort'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>beanstalkdProducerConnectTimeOut</th>
+			<td>{{ config.beanstalkdProducerConnectTimeOut }}
+				({{ (config.beanstalkdProducerConnectTimeOut / 60) | round (0,'floor') }} mins)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdProducerConnectTimeOut'} %}</td>
+		</tr>
+		<tr>
+			<th>beanstalkdConsumerConnectTimeOut</th>
+			<td>{{ config.beanstalkdConsumerConnectTimeOut }}
+				({{ (config.beanstalkdConsumerConnectTimeOut / 60) | round (0,'floor') }} mins)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdConsumerConnectTimeOut'} %}</td>
+		</tr>
+		<tr>
+			<th>messageQueConsumerProcessRunsForSeconds</th>
+			<td>{{ config.messageQueConsumerProcessRunsForSeconds }}
+				({{ (config.messageQueConsumerProcessRunsForSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.messageQueConsumerProcessRunsForSeconds / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'messageQueConsumerProcessRunsForSeconds'} %}</td>
+		</tr>
+		<tr>
+			<th>messageQueConsumerProcessChecksEverSeconds</th>
+			<td>{{ config.messageQueConsumerProcessChecksEverSeconds }}
+				({{ (config.messageQueConsumerProcessChecksEverSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.messageQueConsumerProcessChecksEverSeconds / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'messageQueConsumerProcessChecksEverSeconds'} %}</td>
+		</tr>
 	</table>
 
 {% endblock %}

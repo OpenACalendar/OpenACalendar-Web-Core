@@ -66,6 +66,7 @@ $app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
 $app['config'] = $CONFIG;
 $app['db'] = $DB;
 $app['timesource'] = new TimeSource();
+$app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
 	
 ///////////////////////// LOGGING
 if ($CONFIG->logFile) {
