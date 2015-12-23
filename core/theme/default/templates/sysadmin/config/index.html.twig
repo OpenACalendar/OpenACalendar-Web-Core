@@ -675,6 +675,13 @@
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval'} %}</td>
 		</tr>
 		<tr>
+			<th>taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval</th>
+			<td>{{ config.taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval }}
+				({{ (config.taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+				({{ (config.taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval'} %}</td>
+		</tr>
+		<tr>
 			<th>taskSendUserWatchesNotifyAutomaticUpdateInterval</th>
 			<td>{{ config.taskSendUserWatchesNotifyAutomaticUpdateInterval }}
 				({{ (config.taskSendUserWatchesNotifyAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
