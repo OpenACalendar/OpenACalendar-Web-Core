@@ -63,9 +63,9 @@
 								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 								<input type="hidden" name="returnTo" value="curatedlist">
 								<div class="curatedlistOptionsActionWrapper"><input type="submit" value="Remove Group {{ event.inCuratedListGroupTitle | e('html_attr') }}"></div>
-								<div class="afterCuratedlistOptionsActionWrapper"></div>
 							</form>
 						{% endif %}
+						<div class="afterCuratedlistOptionsActionWrapper"></div>
 					</div>
 				{% endif %}
 			{%  endset %}
