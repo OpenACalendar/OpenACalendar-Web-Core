@@ -1,0 +1,56 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>sysAdminExtraPassword</th>
+			<td>**********</td>
+		</tr>
+		<tr>
+			<th>sysAdminExtraPurgeEventPassword</th>
+			<td>{%  if config.sysAdminExtraPurgeEventPassword %}*********{% else %}Not Set{% endif %}</td>
+		</tr>
+		<tr>
+			<th>sysAdminExtraPurgeGroupPassword</th>
+			<td>{%  if config.sysAdminExtraPurgeGroupPassword %}*********{% else %}Not Set{% endif %}</td>
+		</tr>
+		<tr>
+			<th>sysAdminExtraPurgeVenuePassword</th>
+			<td>{%  if config.sysAdminExtraPurgeVenuePassword %}*********{% else %}Not Set{% endif %}</td>
+		</tr>
+		<tr>
+			<th>sysAdminExtraPurgeAreaPassword</th>
+			<td>{%  if config.sysAdminExtraPurgeAreaPassword %}*********{% else %}Not Set{% endif %}</td>
+		</tr>
+		<tr>
+			<th>sysAdminExtraPurgeCuratedListPassword</th>
+			<td>{%  if config.sysAdminExtraPurgeCuratedListPassword %}*********{% else %}Not Set{% endif %}</td>
+		</tr>
+		<tr>
+			<th>sysAdminTimeZone</th>
+			<td>{{ config.sysAdminTimeZone }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminTimeZone'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>sysAdminLogInTimeOutSeconds</th>
+			<td>{{ config.sysAdminLogInTimeOutSeconds }}
+				({{ (config.sysAdminLogInTimeOutSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.sysAdminLogInTimeOutSeconds / 60/60) | round (0,'floor') }} hours)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminLogInTimeOutSeconds'} %}
+			</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

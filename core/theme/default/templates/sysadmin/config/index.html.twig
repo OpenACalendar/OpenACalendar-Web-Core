@@ -14,31 +14,7 @@
 	<table class="oneData">
 		<tr>
 			<th>Database</th>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<th>databaseType</th>
-			<td>{{ config.databaseType }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseType'} %}</td>
-		</tr>
-		<tr>
-			<th>databaseName</th>
-			<td>{{ config.databaseName }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseName'} %}</td>
-		</tr>
-		<tr>
-			<th>databaseHost</th>
-			<td>{{ config.databaseHost }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseHost'} %}</td>
-		</tr>
-		<tr>
-			<th>databaseUser</th>
-			<td>{{ config.databaseUser }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseUser'} %}</td>
-		</tr>
-		<tr>
-			<th>databasePassword</th>
-			<td>***********</td>
+			<td><a href="/sysadmin/config/database">More</a></td>
 		</tr>
 		<tr>
 			<th>Site Mode</th>
@@ -70,44 +46,8 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteSlugDemoSite'} %}</td>
 		</tr>
 		<tr>
-			<th>Web Addresses</th>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<th>webIndexDomain</th>
-			<td>{{ config.webIndexDomain }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webIndexDomain'} %}</td>
-		</tr>
-		<tr>
-			<th>webSiteDomain</th>
-			<td>{{ config.webSiteDomain }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomain'} %}</td>
-		</tr>
-		<tr>
-			<th>hasSSL</th>
-			<td>{% if config.hasSSL %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'hasSSL'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>webIndexDomainSSL</th>
-			<td>{{ config.webIndexDomainSSL }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webIndexDomainSSL'} %}</td>
-		</tr>
-		<tr>
-			<th>webSiteDomainSSL</th>
-			<td>{{ config.webSiteDomainSSL }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomainSSL'} %}</td>
-		</tr>
-		<tr>
-			<th>webSiteAlternateDomains</th>
-			<td>{{ config.webSiteAlternateDomains | join(", ") }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteAlternateDomains'} %}</td>
-		</tr>
-		<tr>
-			<th>webCommonSessionDomain</th>
-			<td>{{ config.webCommonSessionDomain }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webCommonSessionDomain'} %}</td>
+			<th>URLs</th>
+			<td><a href="/sysadmin/config/urls">More</a></td>
 		</tr>
 		<tr>
 			<th>Site State</th>
@@ -130,8 +70,10 @@
 		</tr>
 		<tr>
 			<th>extensions</th>
-			<td>{{ config.extensions  | join(", ")}}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'extensions'} %}</td>
+			<td>
+				<ul>{%  for ext in config.extensions %}<li>{{ ext }}</li>{% endfor  %}</ul>
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'extensions'} %}
+			</td>
 		</tr>		
 		<tr>
 			<th>Site identity and contact details</th>
@@ -184,49 +126,7 @@
 		</tr>
 		<tr>
 			<th>Media</th>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<th>fileStoreLocation</th>
-			<td>{{ config.fileStoreLocation }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'fileStoreLocation'} %}</td>
-		</tr>
-		<tr>
-			<th>mediaNormalSize</th>
-			<td>{{ config.mediaNormalSize }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaNormalSize'} %}</td>
-		</tr>
-		<tr>
-			<th>mediaThumbnailSize</th>
-			<td>{{ config.mediaThumbnailSize }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaThumbnailSize'} %}</td>
-		</tr>
-		<tr>
-			<th>mediaQualityJpeg</th>
-			<td>{{ config.mediaQualityJpeg }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaQualityJpeg'} %}</td>
-		</tr>
-		<tr>
-			<th>mediaQualityPng</th>
-			<td>{{ config.mediaQualityPng }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaQualityPng'} %}</td>
-		</tr>
-		<tr>
-			<th>mediaBrowserCacheExpiresInseconds</th>
-			<td>{{ config.mediaBrowserCacheExpiresInseconds }}
-				({{ (config.mediaBrowserCacheExpiresInseconds / 60) | round (0,'floor') }} mins)
-				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60) | round (0,'floor') }} hours)
-				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaBrowserCacheExpiresInseconds'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>cacheSiteLogoInSeconds</th>
-			<td>{{ config.cacheSiteLogoInSeconds }}
-				({{ (config.cacheSiteLogoInSeconds / 60) | round (0,'floor') }} mins)
-				({{ (config.cacheSiteLogoInSeconds / 60/60) | round (0,'floor') }} hours)
-				({{ (config.cacheSiteLogoInSeconds / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'cacheSiteLogoInSeconds'} %}</td>
+			<td><a href="/sysadmin/config/media">More</a></td>
 		</tr>
 		<tr>
 			<th>Security and Antispam</th>
@@ -260,126 +160,16 @@
 			</td>
 		</tr>
 		<tr>
-			<th>Sys admin interface</th>
-			<td>&nbsp;</td>
+			<th>Sysadmin interface</th>
+			<td><a href="/sysadmin/config/sysadminUI">More</a></td>
 		</tr>
 		<tr>
-			<th>sysAdminExtraPassword</th>
-			<td>**********</td>
-		</tr>
-		<tr>
-			<th>sysAdminExtraPurgeEventPassword</th>
-			<td>{%  if config.sysAdminExtraPurgeEventPassword %}*********{% else %}Not Set{% endif %}</td>
-		</tr>
-		<tr>
-			<th>sysAdminExtraPurgeGroupPassword</th>
-			<td>{%  if config.sysAdminExtraPurgeGroupPassword %}*********{% else %}Not Set{% endif %}</td>
-		</tr>
-		<tr>
-			<th>sysAdminExtraPurgeVenuePassword</th>
-			<td>{%  if config.sysAdminExtraPurgeVenuePassword %}*********{% else %}Not Set{% endif %}</td>
-		</tr>
-		<tr>
-			<th>sysAdminExtraPurgeAreaPassword</th>
-			<td>{%  if config.sysAdminExtraPurgeAreaPassword %}*********{% else %}Not Set{% endif %}</td>
-		</tr>
-		<tr>
-			<th>sysAdminExtraPurgeCuratedListPassword</th>
-			<td>{%  if config.sysAdminExtraPurgeCuratedListPassword %}*********{% else %}Not Set{% endif %}</td>
-		</tr>
-		<tr>
-			<th>sysAdminTimeZone</th>
-			<td>{{ config.sysAdminTimeZone }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminTimeZone'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>sysAdminLogInTimeOutSeconds</th>
-			<td>{{ config.sysAdminLogInTimeOutSeconds }}
-				({{ (config.sysAdminLogInTimeOutSeconds / 60) | round (0,'floor') }} mins)
-				({{ (config.sysAdminLogInTimeOutSeconds / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'sysAdminLogInTimeOutSeconds'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>Analytics</th>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<th>piwikServerHTTP</th>
-			<td>{{ config.piwikServerHTTP }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikServerHTTP'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>piwikServerHTTPS</th>
-			<td>{{ config.piwikServerHTTPS }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikServerHTTPS'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>piwikSiteID</th>
-			<td>{{ config.piwikSiteID }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikSiteID'} %}
-			</td>
+			<th>External Analytics</th>
+			<td><a href="/sysadmin/config/externalAnalytics">More</a></td>
 		</tr>
 		<tr>
 			<th>New Sites</th>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<th>newSiteHasFeatureMap</th>
-			<td>{% if config.newSiteHasFeatureMap %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureMap'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSiteHasFeatureCuratedList</th>
-			<td>{% if config.newSiteHasFeatureCuratedList %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureCuratedList'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSiteHasFeatureImporter</th>
-			<td>{% if config.newSiteHasFeatureImporter %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureImporter'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSiteHasFeatureGroup</th>
-			<td>{% if config.newSiteHasFeatureGroup %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureGroup'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSiteHasFeatureVirtualEvents</th>
-			<td>{% if config.newSiteHasFeatureVirtualEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureVirtualEvents'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSiteHasFeaturePhysicalEvents</th>
-			<td>{% if config.newSiteHasFeaturePhysicalEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeaturePhysicalEvents'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSiteHasFeatureTag</th>
-			<td>{% if config.newSiteHasFeatureTag %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureTag'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSitePromptEmailsDaysInAdvance</th>
-			<td>{{ config.newSitePromptEmailsDaysInAdvance }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSitePromptEmailsDaysInAdvance'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>newSiteHasQuotaCode</th>
-			<td>{{ config.newSiteHasQuotaCode }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasQuotaCode'} %}
-			</td>
+			<td><a href="/sysadmin/config/newSites">More</a></td>
 		</tr>
 		<tr>
 			<th>Misc</th>
@@ -442,24 +232,6 @@
 			<th>tmpFileCacheCreationPermissions</th>
 			<td>{{ config.tmpFileCacheCreationPermissions }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'tmpFileCacheCreationPermissions'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>logFile</th>
-			<td>{{ config.logFile }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logFile'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>logToStdError</th>
-			<td>{% if config.logToStdError %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logToStdError'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>logFileParseDateTimeRange</th>
-			<td>{{ config.logFileParseDateTimeRange }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logFileParseDateTimeRange'} %}
 			</td>
 		</tr>
 		<tr>
@@ -596,40 +368,8 @@
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'findDuplicateEventsNoMatchSummary'} %}</td>
 		</tr>
 		<tr>
-			<th>SMTPPort</th>
-			<td>{{ config.SMTPPort }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPort'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>SMTPHost</th>
-			<td>{{ config.SMTPHost }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPHost'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>SMTPUsername</th>
-			<td>{{ config.SMTPUsername }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPUsername'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>SMTPPassword</th>
-			<td>{% if config.SMTPPassword %}***{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPassword'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>SMTPEncyption</th>
-			<td>{{ config.SMTPEncyption }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPEncyption'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>SMTPAuthMode</th>
-			<td>{{ config.SMTPAuthMode }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPAuthMode'} %}
-			</td>
+			<th>SMTP</th>
+			<td><a href="/sysadmin/config/smtp">More</a></td>
 		</tr>
 		<tr>
 			<th>formWidgetTimeMinutesMultiples</th>
@@ -661,152 +401,16 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'CLIAPI1Enabled'} %}</td>
 		</tr>
 		<tr>
-			<th>taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval }}
-				({{ (config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval'} %}</td>
+			<th>Tasks</th>
+			<td><a href="/sysadmin/config/tasks">More</a></td>
 		</tr>
 		<tr>
-			<th>taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval }}
-				({{ (config.taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaFutureEventsCacheAutomaticUpdateInterval'} %}</td>
+			<th>Message Ques</th>
+			<td><a href="/sysadmin/config/messageQue">More</a></td>
 		</tr>
 		<tr>
-			<th>taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval }}
-				({{ (config.taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateGroupFutureEventsCacheAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskSendUserWatchesNotifyAutomaticUpdateInterval</th>
-			<td>{{ config.taskSendUserWatchesNotifyAutomaticUpdateInterval }}
-				({{ (config.taskSendUserWatchesNotifyAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskSendUserWatchesNotifyAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskSendUserWatchesNotifyAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateAreaBoundsCacheAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval }}
-				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateAreaBoundsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaBoundsCacheAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateAreaParentCacheAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateAreaParentCacheAutomaticUpdateInterval }}
-				({{ (config.taskUpdateAreaParentCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateAreaParentCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaParentCacheAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateSiteCacheAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateSiteCacheAutomaticUpdateInterval }}
-				({{ (config.taskUpdateSiteCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateSiteCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateSiteCacheAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval }}
-				({{ (config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateAreaHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval }}
-				({{ (config.taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateEventHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval }}
-				({{ (config.taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval }}
-				({{ (config.taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval }}
-				({{ (config.taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval }}
-				({{ (config.taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval</th>
-			<td>{{ config.taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval }}
-				({{ (config.taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>taskRunImportURLsAutomaticUpdateInterval</th>
-			<td>{{ config.taskRunImportURLsAutomaticUpdateInterval }}
-				({{ (config.taskRunImportURLsAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
-				({{ (config.taskRunImportURLsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskRunImportURLsAutomaticUpdateInterval'} %}</td>
-		</tr>
-		<tr>
-			<th>useBeanstalkd</th>
-			<td>{% if config.useBeanstalkd %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'useBeanstalkd'} %}</td>
-		</tr>
-		<tr>
-			<th>beanstalkdHost</th>
-			<td>{{ config.beanstalkdHost }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdHost'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>beanstalkdPort</th>
-			<td>{{ config.beanstalkdPort }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdPort'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>beanstalkdProducerConnectTimeOut</th>
-			<td>{{ config.beanstalkdProducerConnectTimeOut }}
-				({{ (config.beanstalkdProducerConnectTimeOut / 60) | round (0,'floor') }} mins)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdProducerConnectTimeOut'} %}</td>
-		</tr>
-		<tr>
-			<th>beanstalkdConsumerConnectTimeOut</th>
-			<td>{{ config.beanstalkdConsumerConnectTimeOut }}
-				({{ (config.beanstalkdConsumerConnectTimeOut / 60) | round (0,'floor') }} mins)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'beanstalkdConsumerConnectTimeOut'} %}</td>
-		</tr>
-		<tr>
-			<th>messageQueConsumerProcessRunsForSeconds</th>
-			<td>{{ config.messageQueConsumerProcessRunsForSeconds }}
-				({{ (config.messageQueConsumerProcessRunsForSeconds / 60) | round (0,'floor') }} mins)
-				({{ (config.messageQueConsumerProcessRunsForSeconds / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'messageQueConsumerProcessRunsForSeconds'} %}</td>
-		</tr>
-		<tr>
-			<th>messageQueConsumerProcessChecksEverSeconds</th>
-			<td>{{ config.messageQueConsumerProcessChecksEverSeconds }}
-				({{ (config.messageQueConsumerProcessChecksEverSeconds / 60) | round (0,'floor') }} mins)
-				({{ (config.messageQueConsumerProcessChecksEverSeconds / 60/60) | round (0,'floor') }} hours)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'messageQueConsumerProcessChecksEverSeconds'} %}</td>
+			<th>Logging</th>
+			<td><a href="/sysadmin/config/logging">More</a></td>
 		</tr>
 	</table>
 

@@ -1,0 +1,42 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>databaseType</th>
+			<td>{{ config.databaseType }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseType'} %}</td>
+		</tr>
+		<tr>
+			<th>databaseName</th>
+			<td>{{ config.databaseName }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseName'} %}</td>
+		</tr>
+		<tr>
+			<th>databaseHost</th>
+			<td>{{ config.databaseHost }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseHost'} %}</td>
+		</tr>
+		<tr>
+			<th>databaseUser</th>
+			<td>{{ config.databaseUser }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'databaseUser'} %}</td>
+		</tr>
+		<tr>
+			<th>databasePassword</th>
+			<td>***********</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

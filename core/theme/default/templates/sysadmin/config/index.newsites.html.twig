@@ -1,0 +1,72 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>newSiteHasFeatureMap</th>
+			<td>{% if config.newSiteHasFeatureMap %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureMap'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureCuratedList</th>
+			<td>{% if config.newSiteHasFeatureCuratedList %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureCuratedList'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureImporter</th>
+			<td>{% if config.newSiteHasFeatureImporter %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureImporter'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureGroup</th>
+			<td>{% if config.newSiteHasFeatureGroup %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureGroup'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureVirtualEvents</th>
+			<td>{% if config.newSiteHasFeatureVirtualEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureVirtualEvents'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeaturePhysicalEvents</th>
+			<td>{% if config.newSiteHasFeaturePhysicalEvents %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeaturePhysicalEvents'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSiteHasFeatureTag</th>
+			<td>{% if config.newSiteHasFeatureTag %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasFeatureTag'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSitePromptEmailsDaysInAdvance</th>
+			<td>{{ config.newSitePromptEmailsDaysInAdvance }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSitePromptEmailsDaysInAdvance'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>newSiteHasQuotaCode</th>
+			<td>{{ config.newSiteHasQuotaCode }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'newSiteHasQuotaCode'} %}
+			</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

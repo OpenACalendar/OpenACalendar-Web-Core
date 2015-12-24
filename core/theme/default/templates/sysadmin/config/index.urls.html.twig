@@ -1,0 +1,54 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>webIndexDomain</th>
+			<td>{{ config.webIndexDomain }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webIndexDomain'} %}</td>
+		</tr>
+		<tr>
+			<th>webSiteDomain</th>
+			<td>{{ config.webSiteDomain }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomain'} %}</td>
+		</tr>
+		<tr>
+			<th>hasSSL</th>
+			<td>{% if config.hasSSL %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'hasSSL'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>webIndexDomainSSL</th>
+			<td>{{ config.webIndexDomainSSL }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webIndexDomainSSL'} %}</td>
+		</tr>
+		<tr>
+			<th>webSiteDomainSSL</th>
+			<td>{{ config.webSiteDomainSSL }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteDomainSSL'} %}</td>
+		</tr>
+		<tr>
+			<th>webSiteAlternateDomains</th>
+			<td>{{ config.webSiteAlternateDomains | join(", ") }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webSiteAlternateDomains'} %}</td>
+		</tr>
+		<tr>
+			<th>webCommonSessionDomain</th>
+			<td>{{ config.webCommonSessionDomain }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webCommonSessionDomain'} %}</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

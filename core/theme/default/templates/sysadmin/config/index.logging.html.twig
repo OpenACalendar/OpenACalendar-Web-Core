@@ -1,0 +1,36 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>logFile</th>
+			<td>{{ config.logFile }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logFile'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>logToStdError</th>
+			<td>{% if config.logToStdError %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logToStdError'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>logFileParseDateTimeRange</th>
+			<td>{{ config.logFileParseDateTimeRange }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logFileParseDateTimeRange'} %}
+			</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

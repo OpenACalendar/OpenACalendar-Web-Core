@@ -1,0 +1,54 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>SMTPPort</th>
+			<td>{{ config.SMTPPort }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPort'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPHost</th>
+			<td>{{ config.SMTPHost }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPHost'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPUsername</th>
+			<td>{{ config.SMTPUsername }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPUsername'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPPassword</th>
+			<td>{% if config.SMTPPassword %}***{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPassword'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPEncyption</th>
+			<td>{{ config.SMTPEncyption }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPEncyption'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>SMTPAuthMode</th>
+			<td>{{ config.SMTPAuthMode }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPAuthMode'} %}
+			</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

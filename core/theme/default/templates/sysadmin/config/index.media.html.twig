@@ -1,0 +1,60 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>fileStoreLocation</th>
+			<td>{{ config.fileStoreLocation }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'fileStoreLocation'} %}</td>
+		</tr>
+		<tr>
+			<th>mediaNormalSize</th>
+			<td>{{ config.mediaNormalSize }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaNormalSize'} %}</td>
+		</tr>
+		<tr>
+			<th>mediaThumbnailSize</th>
+			<td>{{ config.mediaThumbnailSize }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaThumbnailSize'} %}</td>
+		</tr>
+		<tr>
+			<th>mediaQualityJpeg</th>
+			<td>{{ config.mediaQualityJpeg }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaQualityJpeg'} %}</td>
+		</tr>
+		<tr>
+			<th>mediaQualityPng</th>
+			<td>{{ config.mediaQualityPng }}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaQualityPng'} %}</td>
+		</tr>
+		<tr>
+			<th>mediaBrowserCacheExpiresInseconds</th>
+			<td>{{ config.mediaBrowserCacheExpiresInseconds }}
+				({{ (config.mediaBrowserCacheExpiresInseconds / 60) | round (0,'floor') }} mins)
+				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60) | round (0,'floor') }} hours)
+				({{ (config.mediaBrowserCacheExpiresInseconds / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'mediaBrowserCacheExpiresInseconds'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>cacheSiteLogoInSeconds</th>
+			<td>{{ config.cacheSiteLogoInSeconds }}
+				({{ (config.cacheSiteLogoInSeconds / 60) | round (0,'floor') }} mins)
+				({{ (config.cacheSiteLogoInSeconds / 60/60) | round (0,'floor') }} hours)
+				({{ (config.cacheSiteLogoInSeconds / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'cacheSiteLogoInSeconds'} %}</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

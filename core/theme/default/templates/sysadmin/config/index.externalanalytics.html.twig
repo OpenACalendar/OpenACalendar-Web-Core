@@ -1,0 +1,42 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>piwikServerHTTP</th>
+			<td>{{ config.piwikServerHTTP }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikServerHTTP'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>piwikServerHTTPS</th>
+			<td>{{ config.piwikServerHTTPS }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikServerHTTPS'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>piwikSiteID</th>
+			<td>{{ config.piwikSiteID }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'piwikSiteID'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>googleAnalyticsTracking</th>
+			<td>{{ config.googleAnalyticsTracking }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'googleAnalyticsTracking'} %}
+			</td>
+		</tr>
+	</table>
+
+{% endblock %}
+

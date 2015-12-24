@@ -22,7 +22,71 @@ class ConfigController {
 				'configCheck'=>new \ConfigCheck($app['config']),
 			));
 	}
-	
+
+	function tasks(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.tasks.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+	function messageQue(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.messageque.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+	function database(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.database.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+
+	function newSites(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.newsites.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+
+	function media(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.media.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+	function urls(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.urls.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+	function sysadminUI(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.sysadminui.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+
+	function smtp(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.smtp.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+	function logging(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.logging.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
+
+	function externalAnalytics(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.externalanalytics.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
 }
 
 
