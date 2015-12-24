@@ -34,6 +34,7 @@ class VenueFilterParams {
 	// ############################### params
 	
 	protected $freeTextSearch = null;
+    protected $withFutureEventsOnly = false;
 	
 	public function set($data) {
 		if (isset($data['venueListFilterDataSubmitted'])) {
@@ -42,13 +43,21 @@ class VenueFilterParams {
 			if (isset($data['freeTextSearch']) && trim($data['freeTextSearch'])) {
 				$this->freeTextSearch = $data['freeTextSearch'];
 			}
-			
-		}
+
+            // Future Events Only
+            if (isset($data['withFutureEventsOnly']) && $data['withFutureEventsOnly'] == '1') {
+                $this->withFutureEventsOnly = true;
+            }
+
+        }
 		
 		// apply to search
 		if ($this->freeTextSearch) {
 			$this->venueRepositoryBuilder->setFreeTextsearch($this->freeTextSearch);
 		}
+
+
+        $this->venueRepositoryBuilder->setIncludeFutureEventsOnly($this->withFutureEventsOnly);
 	}
 	
 	public function getFreeTextSearch() {
@@ -56,9 +65,13 @@ class VenueFilterParams {
 	}
 
 
-
-
-	
+    /**
+     * @return boolean
+     */
+    public function isWithFutureEventsOnly()
+    {
+        return $this->withFutureEventsOnly;
+    }
 }
 
 

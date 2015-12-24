@@ -34,6 +34,7 @@ class GroupFilterParams {
 	// ############################### params
 	
 	protected $freeTextSearch = null;
+    protected $withFutureEventsOnly = false;
 	
 	public function set($data) {
 		if (isset($data['groupListFilterDataSubmitted'])) {
@@ -42,18 +43,34 @@ class GroupFilterParams {
 			if (isset($data['freeTextSearch']) && trim($data['freeTextSearch'])) {
 				$this->freeTextSearch = $data['freeTextSearch'];
 			}
-			
-		}
+
+            // Future Events Only
+            if (isset($data['withFutureEventsOnly']) && $data['withFutureEventsOnly'] == '1') {
+                $this->withFutureEventsOnly = true;
+            }
+
+
+        }
 		
 		// apply to search
 		if ($this->freeTextSearch) {
 			$this->groupRepositoryBuilder->setFreeTextsearch($this->freeTextSearch);
 		}
+
+        $this->groupRepositoryBuilder->setIncludeFutureEventsOnly($this->withFutureEventsOnly);
 	}
 	
 	public function getFreeTextSearch() {
 		return $this->freeTextSearch;
 	}
+
+    /**
+     * @return boolean
+     */
+    public function isWithFutureEventsOnly()
+    {
+        return $this->withFutureEventsOnly;
+    }
 
 
 

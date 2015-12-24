@@ -52,8 +52,20 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->include_deleted = $value;
 	}
 
+    protected $include_future_events_only = false;
 
-	protected $includeMediasSlugs = false;
+    /**
+     * @param boolean $include_future_events_only
+     */
+    public function setIncludeFutureEventsOnly($include_future_events_only)
+    {
+        $this->include_future_events_only = $include_future_events_only;
+    }
+
+
+
+
+    protected $includeMediasSlugs = false;
 
 	/**
 	 * @param boolean $includeMediasSlugs
@@ -115,6 +127,10 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 				" AND media_in_group.removal_approved_at IS NULL AND media_in_group.group_id = group_information.id ".
 				" GROUP BY group_information.id ) AS media_group_slugs ";
 		}
+
+        if ($this->include_future_events_only) {
+            $this->where[] = " group_information.cached_future_events > 0 ";
+        }
 
 		if ($this->editedByUser) {
 			$this->where[] = " group_information.id IN (SELECT group_id FROM group_history WHERE user_account_id = :editedByUser) ";

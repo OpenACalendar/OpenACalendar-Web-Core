@@ -13,6 +13,10 @@
 			<label>Search: <input type="text" name="freeTextSearch" value="{{ venueListFilterParams.freeTextSearch }}" autocomplete="off"></label>
 		</div>
 
+		<div class="inputField">
+			<label><input type="checkbox" name="withFutureEventsOnly" value="1" {% if venueListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</label>
+		</div>
+
 		<div class="submitField">
 			<input type="submit" value="Filter">
 		</div>

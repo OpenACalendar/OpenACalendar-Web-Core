@@ -117,7 +117,18 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 
 
-	protected function build() {
+    protected $include_future_events_only = false;
+
+    /**
+     * @param boolean $include_future_events_only
+     */
+    public function setIncludeFutureEventsOnly($include_future_events_only)
+    {
+        $this->include_future_events_only = $include_future_events_only;
+    }
+
+
+    protected function build() {
 		global $DB;
 
 		$this->select[] = "  venue_information.* ";
@@ -196,7 +207,12 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->where[] = " venue_information.id IN (SELECT venue_id FROM venue_history WHERE user_account_id = :editedByUser) ";
 			$this->params['editedByUser'] = $this->editedByUser->getId();
 		}
-	}
+
+        if ($this->include_future_events_only) {
+            $this->where[] = " venue_information.cached_future_events > 0 ";
+        }
+
+    }
 	
 	protected function buildStat() {
 		global $DB;
