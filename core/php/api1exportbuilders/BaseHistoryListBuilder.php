@@ -9,7 +9,7 @@ use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
-use models\ImportURLHistoryModel;
+use models\ImportHistoryModel;
 
 /**
  *

@@ -9,7 +9,7 @@
 	{% if true %}
 		<div class="dateTimeIcon">
 			<time datetime="{{ importedEvent.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
-				<a href="/importurl/{{ importurl.slug }}/importedevent/{{ importedEvent.id }}">
+				<a href="/import/{{ import.slug }}/importedevent/{{ importedEvent.id }}">
 					<div class="dateIcon">
 						<span class="startDay">{{ importedEvent.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
 						<span class="startDate">{{ importedEvent.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
@@ -23,7 +23,7 @@
 		</div>
 	{% endif %}
 	<div class="title">
-		<a href="/importurl/{{ importurl.slug }}/importedevent/{{ importedEvent.id }}">
+		<a href="/import/{{ import.slug }}/importedevent/{{ importedEvent.id }}">
 			{{ importedEvent.title }}
 		</a>
 	</div>

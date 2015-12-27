@@ -104,7 +104,7 @@ abstract class BaseExtension {
 		}
 	}
 	
-	public function getImportURLHandlers() {
+	public function getImportHandlers() {
 		return array();
 	}
 

@@ -32,10 +32,10 @@ class ExtensionMeetup extends \BaseExtension {
 		);
 	}
 	
-	public function getImportURLHandlers() {
+	public function getImportHandlers() {
 		return array(
-			new ImportURLExpandShortenerHandler(),
-			new ImportURLMeetupHandler(),
+			new ImportExpandShortenerHandler(),
+			new ImportMeetupHandler(),
 		);
 	}
 

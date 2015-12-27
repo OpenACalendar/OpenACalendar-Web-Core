@@ -5,13 +5,13 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<li class="importurl">
+<li class="import">
 	<div class="icon">
-		<a href="/importurl/{{ historyItem.importURLSlug }}">
+		<a href="/import/{{ historyItem.importURLSlug }}">
 			<img src="/theme/default/img/historyImportURLIcon.png" alt="Tag" title="Tag">
 		</a>
 	</div>
-	<div class="title"><a href="/importurl/{{ historyItem.importURLSlug }}">{{ historyItem.title }}</a></div>
+	<div class="title"><a href="/import/{{ historyItem.importURLSlug }}">{{ historyItem.title }}</a></div>
 	{% if historyItem.getIsNew %}
 		<div class="new">New!</div>
 	{% endif %}

@@ -1,0 +1,65 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/import/page.html.twig' %}
+
+{% block pageTitle %}{{ import.title }} - {% endblock %}
+
+{% block tabDetails %}currentTab{% endblock %}
+
+{% block actions %}
+	{% if currentUserActions.has("org.openacalendar","importEditDetails") %}
+		<li class="action">
+			<a href="/import/{{ import.slug }}/edit"><div class="fa fa-pencil"></div> edit</a>
+		</li>
+	{%  endif %}
+	{% if currentUserActions.has("org.openacalendar","importEnable")  %}
+		<li class="action">
+			<a href="/import/{{ import.slug }}/enable"><div class="fa fa-pencil"></div> enable</a>
+		</li>
+	{% endif %}
+	{% if currentUserActions.has("org.openacalendar","importDisable") %}
+		<li class="action">
+			<a href="/import/{{ import.slug }}/disable"><div class="fa fa-trash-o"></div> disable</a>
+		</li>
+	{% endif %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<div  class="mainShowImportURL">
+
+		<p>Imported from: {{ import.url }}</p>
+
+		{# %  if import.isManualEventsCreation %}
+			<p>Do you want to create events manually from this import: Yes</p>
+		{%  else %}
+			<p>Do you want to create events manually from this import: No</p>
+		{%  endif % #}
+
+		{% if country %}
+			<p>
+				Events are in:
+				{% spaceless %}
+					<img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"> {{ country.title }}
+					{% for thisarea in parentAreas %}, {{ thisarea.title }}{% endfor %}
+					{% if area %}, {{ area.title }}{% endif %}
+				{% endspaceless %}
+			</p>
+		{% endif %}
+
+		{% if not hasLogEntries and  import.isEnabled %}
+			<p>This importer has not been run yet. It will be run shortly, please return soon to check on the results.</p>
+		{% endif %}
+
+	</div>
+	
+{% endblock %}
+
+
+	

@@ -4,16 +4,16 @@
 use models\UserAccountModel;
 use models\SiteModel;
 use models\GroupModel;
-use models\ImportURLModel;
+use models\ImportModel;
 use models\AreaModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
-use repositories\ImportURLRepository;
+use repositories\ImportRepository;
 use repositories\AreaRepository;
 use repositories\CountryRepository;
-use import\ImportURLRun;
-use import\ImportURLICalHandler;
+use import\ImportRun;
+use import\ImportICalHandler;
 use repositories\builders\EventRepositoryBuilder;
 
 /**
@@ -68,9 +68,9 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
 		
-		$importURLRepository = new ImportURLRepository();
+		$importRepository = new ImportRepository();
 		
-		$importURL = new ImportURLModel();
+		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
@@ -79,15 +79,15 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 		
-		$importURLRepository->create($importURL, $site, $user);
+		$importRepository->create($importURL, $site, $user);
 		
 
 		
 		// Import
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICAL.ical');		
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -110,10 +110,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 		// Import again
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICALDeleted.ical');		
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 		
@@ -169,9 +169,9 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
 
-		$importURLRepository = new ImportURLRepository();
+		$importRepository = new ImportRepository();
 
-		$importURL = new ImportURLModel();
+		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
@@ -180,15 +180,15 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 
-		$importURLRepository->create($importURL, $site, $user);
+		$importRepository->create($importURL, $site, $user);
 
 
 
 		// Import
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICAL.ical');
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -211,10 +211,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 		// Import again
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICALNoEvents.ical');
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -259,24 +259,24 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
 		
-		$importURLRepository = new ImportURLRepository();
+		$importRepository = new ImportRepository();
 		
-		$importURL = new ImportURLModel();
+		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 		
-		$importURLRepository->create($importURL, $site, $user);
+		$importRepository->create($importURL, $site, $user);
 		
 
 		
 		// Import
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart1.ical');		
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -296,10 +296,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 		// Import again
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart2.ical');		
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 		
@@ -349,24 +349,24 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
 		
-		$importURLRepository = new ImportURLRepository();
+		$importRepository = new ImportRepository();
 		
-		$importURL = new ImportURLModel();
+		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 		
-		$importURLRepository->create($importURL, $site, $user);
+		$importRepository->create($importURL, $site, $user);
 		
 
 		
 		// Import
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALNotValid.ical');		
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -408,24 +408,24 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
 		
-		$importURLRepository = new ImportURLRepository();
+		$importRepository = new ImportRepository();
 		
-		$importURL = new ImportURLModel();
+		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 		
-		$importURLRepository->create($importURL, $site, $user);
+		$importRepository->create($importURL, $site, $user);
 		
 
 		
 		// Import
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALManyEvents.ical');		
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$i->setLimitToSaveOnEachRun(2);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();

@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use models\GroupModel;
 use models\EventModel;
-use models\ImportURLModel;
+use models\ImportModel;
 use models\MediaModel;
-use repositories\ImportURLRepository;
+use repositories\ImportRepository;
 use repositories\GroupRepository;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\EventRepository;
@@ -28,9 +28,9 @@ use repositories\MediaInGroupRepository;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\MediaRepositoryBuilder;
-use repositories\builders\ImportURLRepositoryBuilder;
+use repositories\builders\ImportRepositoryBuilder;
 use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
-use site\forms\ImportURLNewForm;
+use site\forms\ImportNewForm;
 use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 
 use repositories\builders\filterparams\EventFilterParams;
@@ -123,7 +123,7 @@ class GroupController {
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
 		// we only want to link to these if there are any
-		$importurlRepoBuilder = new ImportURLRepositoryBuilder();
+		$importurlRepoBuilder = new ImportRepositoryBuilder();
 		$importurlRepoBuilder->setGroup($this->parameters['group']);
 		$this->parameters['importurls'] = $importurlRepoBuilder->fetchAll();
 		
@@ -169,7 +169,7 @@ class GroupController {
 		
 		
 		
-		$importurlRepoBuilder = new ImportURLRepositoryBuilder();
+		$importurlRepoBuilder = new ImportRepositoryBuilder();
 		$importurlRepoBuilder->setGroup($this->parameters['group']);
 		$this->parameters['importurls'] = $importurlRepoBuilder->fetchAll();
 		
@@ -440,21 +440,21 @@ class GroupController {
 		}
 		
 		
-		$importurl = new ImportURLModel();
+		$importurl = new ImportModel();
 		// we must setSiteId() here so loadClashForImportUrl() works
 		$importurl->setSiteId($app['currentSite']->getId());
 		$importurl->setGroupId($this->parameters['group']->getId());
 		
-		$form = $app['form.factory']->create(new ImportURLNewForm($app['currentSite'], $app['currentTimeZone']), $importurl);
+		$form = $app['form.factory']->create(new ImportNewForm($app['currentSite'], $app['currentTimeZone']), $importurl);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
 				
-				$importURLRepository = new ImportURLRepository();
+				$importRepository = new ImportRepository();
 				
-				$clash = $importURLRepository->loadClashForImportUrl($importurl);
+				$clash = $importRepository->loadClashForImportUrl($importurl);
 				if ($clash) {
 					$importurl->setIsEnabled(false);
 					$app['flashmessages']->addMessage("There was a problem enabling this importer. Please try to enable it for details.");
@@ -474,7 +474,7 @@ class GroupController {
 				}
 				$importurl->setAreaId($area ? $area->getId() : null);
 				
-				$importURLRepository->create($importurl, $app['currentSite'], $app['currentUser']);
+				$importRepository->create($importurl, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/importurl/".$importurl->getSlug());
 				

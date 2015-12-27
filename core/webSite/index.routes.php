@@ -561,34 +561,68 @@ $app->match('/map/time', "site\controllers\MapTimeController::index");
 $app->match('/map/time/', "site\controllers\MapTimeController::index");
 $app->match('/map/time/getdata.json', "site\controllers\MapTimeController::getDataJson");
 
-$app->match('/importurl', "site\controllers\ImportURLListController::index"); 
-$app->match('/importurl/', "site\controllers\ImportURLListController::index"); 
+// OLD IMPORT URL ROUTES
+$app->match('/importurl', "site\controllers\ImportListController::index");
+$app->match('/importurl/', "site\controllers\ImportListController::index"); 
 
-$app->match('/importurl/{slug}', "site\controllers\ImportURLController::show")
+$app->match('/importurl/{slug}', "site\controllers\ImportController::show")
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/', "site\controllers\ImportURLController::show")
+$app->match('/importurl/{slug}/', "site\controllers\ImportController::show")
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/edit', "site\controllers\ImportURLController::edit")
+$app->match('/importurl/{slug}/edit', "site\controllers\ImportController::edit")
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/enable', "site\controllers\ImportURLController::enable")
+$app->match('/importurl/{slug}/enable', "site\controllers\ImportController::enable")
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/disable', "site\controllers\ImportURLController::disable")
+$app->match('/importurl/{slug}/disable', "site\controllers\ImportController::disable")
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/log', "site\controllers\ImportURLController::log")
+$app->match('/importurl/{slug}/log', "site\controllers\ImportController::log")
 		->assert('slug', '\d+');
 
-$app->match('/importurl/{slug}/importedevent', "site\controllers\ImportURLImportedEventListController::index")
+$app->match('/importurl/{slug}/importedevent', "site\controllers\ImportImportedEventListController::index")
 		->assert('slug', '\d+');
-$app->match('/importurl/{slug}/importedevent/{id}', "site\controllers\ImportURLImportedEventController::index")
+$app->match('/importurl/{slug}/importedevent/{id}', "site\controllers\ImportImportedEventController::index")
+		->assert('slug', '\d+')
+		->assert('id', '\d+');
+
+// New IMPORT routes
+
+$app->match('/import', "site\controllers\ImportListController::index");
+$app->match('/import/', "site\controllers\ImportListController::index");
+
+$app->match('/import/{slug}', "site\controllers\ImportController::show")
+		->assert('slug', '\d+');
+$app->match('/import/{slug}/', "site\controllers\ImportController::show")
+		->assert('slug', '\d+');
+$app->match('/import/{slug}/edit', "site\controllers\ImportController::edit")
+		->before($permissionCalendarChangeRequired)
+		->before($featureImporterRequired)
+		->before($canChangeSite)
+		->assert('slug', '\d+');
+$app->match('/import/{slug}/enable', "site\controllers\ImportController::enable")
+		->before($permissionCalendarChangeRequired)
+		->before($featureImporterRequired)
+		->before($canChangeSite)
+		->assert('slug', '\d+');
+$app->match('/import/{slug}/disable', "site\controllers\ImportController::disable")
+		->before($permissionCalendarChangeRequired)
+		->before($featureImporterRequired)
+		->before($canChangeSite)
+		->assert('slug', '\d+');
+$app->match('/import/{slug}/log', "site\controllers\ImportController::log")
+		->assert('slug', '\d+');
+
+$app->match('/import/{slug}/importedevent', "site\controllers\ImportImportedEventListController::index")
+		->assert('slug', '\d+');
+$app->match('/import/{slug}/importedevent/{id}', "site\controllers\ImportImportedEventController::index")
 		->assert('slug', '\d+')
 		->assert('id', '\d+');
 

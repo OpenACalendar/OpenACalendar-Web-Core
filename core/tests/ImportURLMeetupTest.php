@@ -1,9 +1,9 @@
 <?php
 
-use models\ImportURLModel;
+use models\ImportModel;
 use models\SiteModel;
-use import\ImportURLMeetupHandler;
-use import\ImportURLRun;
+use import\ImportMeetupHandler;
+use import\ImportRun;
 
 /**
  *
@@ -28,14 +28,14 @@ class ImportURLMeetupTest extends \BaseAppTest {
      */	
 	function testIsValid($url, $result, $newURL) {
 		
-		$import = new ImportURLModel();
+		$import = new ImportModel();
 		$import->setUrl($url);
 		$site = new SiteModel();
-		$importRun = new ImportURLRun($import, $site);
+		$importRun = new ImportRun($import, $site);
 		
 		
-		$handler = new ImportURLMeetupHandler();
-		$handler->setImportURLRun($importRun);
+		$handler = new ImportMeetupHandler();
+		$handler->setImportRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 		if ($result) {
 			$this->assertEquals($newURL, $handler->getNewFeedURL());

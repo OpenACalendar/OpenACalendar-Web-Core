@@ -1,0 +1,43 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'email/email.html.twig' %}
+
+{% block content %}
+	
+	<p>
+		Hello {{ user.username }},
+	</p>
+	<p>
+		We used to import data from the following resource:
+	</p>
+	<p>
+		{{import.url}}
+	</p>
+	<p>
+		But we are not sure it is up to date. 
+	</P>
+	<p>
+		We want to make sure that the data we have is up to date, so we have temporarily disabled it.
+	</P>
+	<P>
+		If you can confirm it is up to date, 
+		<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/import/{{ import.slug }}">
+		please can you visit the site and log in and press "enable"
+		</a> 
+		to re-enable it.
+	</P>
+
+	<p>Thanks,<br>
+	{{ currentSite.title }} {{ config.siteTitle }}</p>
+		
+	<p>ps. 
+		To <a href="{{ config.getWebIndexDomainSecure() }}/you/emails/{{ user.id }}/{{ generalSecurityCode }}">change which emails you get, click here</a>.
+		 To <a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/stopWatchingFromEmail/{{ user.id }}/{{ stopCode }}">stop watching {{ currentSite.title }} click here</a>.</p>
+
+{% endblock %}
+	

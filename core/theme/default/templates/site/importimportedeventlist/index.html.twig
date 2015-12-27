@@ -1,0 +1,48 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/import/page.html.twig' %}
+
+{% block pageTitle %}{{ import.title }} - {% endblock %}
+
+{% block tabImportedEvents %}currentTab{% endblock %}
+
+{% block actions %}
+{% endblock %}
+
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block innerContent %}
+
+
+	{% include '/site/importedEventListFilterParams.html.twig' %}
+
+	<ul class="mainListImportedEvents">
+		{% for importedEvent in importedEvents %}
+			{% include '/site/common/importedEventListing.html.twig' with {'importedEvent':importedEvent , 'import':import }  %}
+		{% else %}
+			<li class="nodata">
+				No events found.
+			</li>
+		{% endfor %}
+	</ul>
+
+
+{% endblock %}
+
+
+
+
+{% block scripts %}
+	<script src="/theme/default/js/importedEventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}
+
+
+

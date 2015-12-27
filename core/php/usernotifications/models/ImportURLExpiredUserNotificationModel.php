@@ -4,8 +4,8 @@
 namespace usernotifications\models;
 
 use models\GroupModel;
-use models\ImportURLModel;
-use repositories\ImportURLRepository;
+use models\ImportModel;
+use repositories\ImportRepository;
 
 /**
  *
@@ -22,8 +22,8 @@ class ImportURLExpiredUserNotificationModel extends \BaseUserNotificationModel {
 		$this->from_user_notification_type = 'ImportURLExpired';
 	}
 	
-	function setImportURL(ImportURLModel $importURL) {
-		$this->data['importurl'] = $importURL->getId();
+	function setImport(ImportModel $import) {
+		$this->data['import'] = $import->getId();
 	}
 
 
@@ -34,26 +34,27 @@ class ImportURLExpiredUserNotificationModel extends \BaseUserNotificationModel {
 	/** @var GroupModel  **/
 	var $group;
 
-	/** @var ImportURLModel  **/
-	var $importURL;
+	/** @var ImportModel  **/
+	var $import;
 	
 	private function loadImportURLIfNeeded() {
-		if (!$this->importURL && property_exists($this->data, 'importurl') && $this->data->importurl) {
-			$repo = new ImportURLRepository;
-			$this->importURL = $repo->loadById($this->data->importurl);
+		if (!$this->import && property_exists($this->data, 'import') && $this->data->import) {
+			$repo = new ImportRepository;
+			$this->import = $repo->loadById($this->data->import);
 		}
 	}
 	
 	public function getNotificationText() {
 		$this->loadImportURLIfNeeded();
-		// Checking $this->importURL exists is related to #261 - bad data might exist that doesn't have this set
-		return "An Importer has expired: ".($this->importURL ? $this->importURL->getTitle() : null);
+        // Checking $this->import exists is related to #261 - bad data might exist that doesn't have this set
+        // The change from importurl to import in https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/520 will also cause issues.
+        return "An Importer has expired: ".($this->import ? $this->import->getTitle() : null);
 	}
 	
 	public function getNotificationURL() {
 		global $CONFIG;
 		$this->loadImportURLIfNeeded();
-		return $CONFIG->getWebSiteDomainSecure($this->site->getSlug()).'/importurl/'.$this->importURL->getSlug();
+		return $CONFIG->getWebSiteDomainSecure($this->site->getSlug()).'/import/'.$this->import->getSlug();
 	}
 	
 	

@@ -6,7 +6,7 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div style="padding: 5px; margin: 5px 0 5px 0; background:  {{ themeVariables.colourHistoryImportURLBackground  }}; border-radius: 5px;">
-	<div style="font-weight: bold;">{%  if historyItem.isNew %}New {%  endif %}Import URL: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/importurl/{{ historyItem.slug }}">{{ historyItem.title }}</a></div>
+	<div style="font-weight: bold;">{%  if historyItem.isNew %}New {%  endif %}Import URL: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/import/{{ historyItem.slug }}">{{ historyItem.title }}</a></div>
 	{% if historyItem.isAnyChangeFlagsUnknown %}
 		<div>{{ historyItem.title | nl2br  }}</div>
 	{% else %}

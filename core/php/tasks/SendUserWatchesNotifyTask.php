@@ -12,7 +12,7 @@ use repositories\builders\VenueRepositoryBuilder;
 use repositories\EventHistoryRepository;
 use repositories\EventRepository;
 use repositories\GroupHistoryRepository;
-use repositories\ImportURLHistoryRepository;
+use repositories\ImportHistoryRepository;
 use repositories\SiteRepository;
 use repositories\UserAccountGeneralSecurityKeyRepository;
 use repositories\UserNotificationRepository;
@@ -90,7 +90,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		$groupHistoryRepository = new GroupHistoryRepository;
 		$areaHistoryRepository = new AreaHistoryRepository;
 		$venueHistoryRepository = new VenueHistoryRepository;
-		$importURLHistoryRepository = new ImportURLHistoryRepository;
+		$importHistoryRepository = new ImportHistoryRepository;
 		foreach($contentsToSend as $contentToSend) {
 			foreach($contentToSend->getHistories() as $history) {
 				$found = false;
@@ -106,8 +106,8 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 				} elseif ($history instanceof \models\AreaHistoryModel) {
 					$areaHistoryRepository->ensureChangedFlagsAreSet($history);
 					$found = true;
-				} elseif ($history instanceof \models\ImportURLHistoryModel) {
-					$importURLHistoryRepository->ensureChangedFlagsAreSet($history);
+				} elseif ($history instanceof \models\ImportHistoryModel) {
+					$importHistoryRepository->ensureChangedFlagsAreSet($history);
 					$found = true;
 				}
 				if (!$found) {

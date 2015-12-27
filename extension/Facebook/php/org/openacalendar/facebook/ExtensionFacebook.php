@@ -35,9 +35,9 @@ class ExtensionFacebook extends \BaseExtension {
 	}
 	
 	
-	public function getImportURLHandlers() {
+	public function getImportHandlers() {
 		return array(
-			new ImportURLFacebookHandler(),
+			new ImportFacebookHandler(),
 		);
 	}
 

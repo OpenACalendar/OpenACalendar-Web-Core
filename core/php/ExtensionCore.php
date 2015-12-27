@@ -1,10 +1,10 @@
 <?php
 
-use import\ImportURLNotUsHandler;
-use import\ImportURLMeetupHandler;
-use import\ImportURLEventbriteHandler;
-use import\ImportURLLanyrdHandler;
-use import\ImportURLICalHandler;
+use import\ImportNotUsHandler;
+use import\ImportMeetupHandler;
+use import\ImportEventbriteHandler;
+use import\ImportLanyrdHandler;
+use import\ImportICalHandler;
 use models\SiteModel;
 use models\UserAccountModel;
 
@@ -45,7 +45,7 @@ class ExtensionCore extends BaseExtension {
 		} else if ($key == 'GROUPS_CHANGE') {
 			return new \userpermissions\GroupsChangeUserPermission();
 		} else if ($key == 'IMPORTURL_CHANGE') {
-			return new \userpermissions\ImportURLChangeUserPermission();
+			return new \userpermissions\ImportChangeUserPermission();
 		} else if ($key == 'TAGS_CHANGE') {
 			return new \userpermissions\TagsChangeUserPermission();
 		} else if ($key == 'VENUES_CHANGE') {
@@ -105,16 +105,16 @@ class ExtensionCore extends BaseExtension {
 		return null;
 	}
 	
-	public function getImportURLHandlers() {
+	public function getImportHandlers() {
 		return array(
 			// Common Sense Handler
-			new ImportURLNotUsHandler(),
+			new ImportNotUsHandler(),
 			// rewrite URL to ICAL handlers
-			new ImportURLMeetupHandler(),
-			new ImportURLEventbriteHandler(),
-			new ImportURLLanyrdHandler(),
+			new ImportMeetupHandler(),
+			new ImportEventbriteHandler(),
+			new ImportLanyrdHandler(),
 			// handlers!
-			new ImportURLICalHandler(),
+			new ImportICalHandler(),
 		);
 	}
 
@@ -141,7 +141,7 @@ class ExtensionCore extends BaseExtension {
 			new \tasks\UpdateAreaHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateEventHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateGroupHistoryChangeFlagsTask($this->app),
-			new \tasks\UpdateImportURLHistoryChangeFlagsTask($this->app),
+			new \tasks\UpdateImportHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateSiteHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateTagHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateVenueHistoryChangeFlagsTask($this->app),
@@ -149,7 +149,7 @@ class ExtensionCore extends BaseExtension {
 			new \tasks\SendUserWatchesSiteGroupPromptEmailsTask($this->app),
 			new \tasks\SendUserWatchesGroupPromptEmailsTask($this->app),
 			new \tasks\SendUpcomingEventsForUsersTask($this->app),
-			new \tasks\RunImportURLsTask($this->app),
+			new \tasks\RunImportsTask($this->app),
 		);
 	}
 
@@ -194,8 +194,8 @@ class ExtensionCore extends BaseExtension {
 			return new \newsfeedmodels\EventHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\GroupHistoryModel) {
 			return new \newsfeedmodels\GroupHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
-		} else if ($interfaceHistoryModel instanceof \models\ImportURLHistoryModel) {
-			return new \newsfeedmodels\ImportURLHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
+		} else if ($interfaceHistoryModel instanceof \models\ImportHistoryModel) {
+			return new \newsfeedmodels\ImportHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\TagHistoryModel) {
 			return new \newsfeedmodels\TagHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\VenueHistoryModel) {

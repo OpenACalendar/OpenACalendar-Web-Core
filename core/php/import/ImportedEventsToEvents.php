@@ -34,7 +34,7 @@ class ImportedEventsToEvents {
 
 	protected $importedEvents = array();
 
-	public function setFromImportURlRun(ImportURLRun $importURLRun) {
+	public function setFromImportURlRun(ImportRun $importURLRun) {
 		$this->site = $importURLRun->getSite();
 		$this->group = $importURLRun->getGroup();
 		$this->country = $importURLRun->getCountry();

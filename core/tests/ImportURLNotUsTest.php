@@ -1,9 +1,9 @@
 <?php
 
-use models\ImportURLModel;
+use models\ImportModel;
 use models\SiteModel;
-use import\ImportURLNotUsHandler;
-use import\ImportURLRun;
+use import\ImportNotUsHandler;
+use import\ImportRun;
 
 /**
  *
@@ -47,13 +47,13 @@ class ImportURLNotUsTest  extends \BaseAppTest  {
 		$CONFIG->webIndexDomainSSL = $webIndexDomainSSL;
 		$CONFIG->webSiteDomainSSL = $webSiteDomainSSL;
 				
-		$import = new ImportURLModel();
+		$import = new ImportModel();
 		$import->setUrl($url);
 		$site = new SiteModel();
-		$importRun = new ImportURLRun($import, $site);
+		$importRun = new ImportRun($import, $site);
 		
-		$handler = new ImportURLNotUsHandler();
-		$handler->setImportURLRun($importRun);
+		$handler = new ImportNotUsHandler();
+		$handler->setImportRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 	}
 	

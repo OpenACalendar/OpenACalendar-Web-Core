@@ -25,7 +25,7 @@
 					<li><a href="/tag">Tags</a></li>
 				{% endif %}
 				{% if currentSiteFeatures.has('org.openacalendar','Importer') %}
-					<li><a href="/importurl">Import</a></li>
+					<li><a href="/import">Import</a></li>
 				{% endif %}
 				{% if currentUserActions.has("org.openacalendar","eventNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","eventNew") ) %}
 					<li><a href="/event/new">Add an Event</a></li>

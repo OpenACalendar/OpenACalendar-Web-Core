@@ -349,8 +349,8 @@ ul.selectvenue {
 	}
 }
 
-ul.mainListImporturls {
-	li.importurl {
+ul.mainListImports {
+	li.import {
 		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
@@ -374,8 +374,8 @@ ul.mainListImporturls {
 }
 
 @media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListImporturls {
-		li.importurl, li.nodata {
+	ul.mainListImports {
+		li.import, li.nodata {
 			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
 		}
 	}
@@ -530,7 +530,7 @@ table.data {
 }
 
 ul.history {
-	li.event, li.group, li.venue, li.area, li.tag, li.importurl {
+	li.event, li.group, li.venue, li.area, li.tag, li.import {
 		padding: 5px;
 		margin: 5px 0 5px 0;
 		.rounded-corners (5px);
@@ -650,7 +650,7 @@ ul.history {
 	li.tag {
 		background: @colourHistoryTagBackground;
 	}
-	li.importurl {
+	li.import {
 		background: @colourHistoryImportURLBackground;
 	}
 	li.deleted {

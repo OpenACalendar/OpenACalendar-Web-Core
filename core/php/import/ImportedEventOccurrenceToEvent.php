@@ -6,7 +6,7 @@ namespace import;
 use models\EventRecurSetModel;
 use models\ImportedEventModel;
 use models\ImportedEventOccurrenceModel;
-use models\ImportURLModel;
+use models\ImportModel;
 use models\SiteModel;
 use models\GroupModel;
 use models\CountryModel;
@@ -27,7 +27,7 @@ use repositories\ImportedEventIsEventRepository;
  */
 class ImportedEventOccurrenceToEvent {
 
-	/** @var  ImportURLModel */
+	/** @var  ImportModel */
 	protected $importURL;
 
 	/** @var SiteModel **/
@@ -49,12 +49,12 @@ class ImportedEventOccurrenceToEvent {
 
 	protected $eventsSeenIDs;
 
-	public function setFromImportURlRun(ImportURLRun $importURLRun) {
+	public function setFromImportURlRun(ImportRun $importURLRun) {
 		$this->site = $importURLRun->getSite();
 		$this->group = $importURLRun->getGroup();
 		$this->country = $importURLRun->getCountry();
 		$this->area = $importURLRun->getArea();
-		$this->importURL = $importURLRun->getImportURL();
+		$this->importURL = $importURLRun->getImport();
 		$this->eventsSeenIDs = array();
 	}
 
@@ -121,7 +121,7 @@ class ImportedEventOccurrenceToEvent {
 		$eventRepo = new EventRepository();
 
 		$erb = new EventRepositoryBuilder();
-		$erb->setImportURL($this->importURL);
+		$erb->setImport($this->importURL);
 		$erb->setIncludeDeleted(false);
 		$erb->setAfterNow();
 		foreach($erb->fetchAll() as $event) {

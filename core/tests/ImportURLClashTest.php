@@ -3,11 +3,11 @@
 use models\UserAccountModel;
 use models\SiteModel;
 use models\GroupModel;
-use models\ImportURLModel;
+use models\ImportModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
-use repositories\ImportURLRepository;
+use repositories\ImportRepository;
 
 /**
  *
@@ -45,9 +45,9 @@ class ImportURLClashTest extends \BaseAppWithDBTest {
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
 		
-		$importURLRepository = new ImportURLRepository();
+		$importRepository = new ImportRepository();
 		
-		$newImportURL = new ImportURLModel();
+		$newImportURL = new ImportModel();
 		$newImportURL->setIsEnabled(true);
 		$newImportURL->setSiteId($site->getId());
 		$newImportURL->setGroupId($group->getId());
@@ -55,13 +55,13 @@ class ImportURLClashTest extends \BaseAppWithDBTest {
 		$newImportURL->setUrl("http://test.com");
 		
 		# no clash
-		$clash = $importURLRepository->loadClashForImportUrl($newImportURL);
+		$clash = $importRepository->loadClashForImportUrl($newImportURL);
 		$this->assertNull($clash);
 		
 		# save import, now clash!
-		$importURLRepository->create($newImportURL, $site, $user);
+		$importRepository->create($newImportURL, $site, $user);
 		
-		$newImportURL2 = new ImportURLModel();
+		$newImportURL2 = new ImportModel();
 		$newImportURL2->setIsEnabled(true);
 		$newImportURL2->setSiteId($site->getId());
 		$newImportURL2->setGroupId($group->getId());
@@ -69,7 +69,7 @@ class ImportURLClashTest extends \BaseAppWithDBTest {
 		$newImportURL2->setUrl("http://TEST.com");
 		
 		# no clash
-		$clash = $importURLRepository->loadClashForImportUrl($newImportURL2);
+		$clash = $importRepository->loadClashForImportUrl($newImportURL2);
 		$this->assertTrue($clash != null);	
 		
 	}

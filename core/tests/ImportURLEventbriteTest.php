@@ -1,10 +1,10 @@
 <?php
 
 
-use models\ImportURLModel;
+use models\ImportModel;
 use models\SiteModel;
-use import\ImportURLEventbriteHandler;
-use import\ImportURLRun;
+use import\ImportEventbriteHandler;
+use import\ImportRun;
 
 /**
  *
@@ -32,14 +32,14 @@ class ImportURLEventbriteTest extends \BaseAppTest {
      */	
 	function testIsValid($url, $result, $newURL) {
 
-		$import = new ImportURLModel();
+		$import = new ImportModel();
 		$import->setUrl($url);
 		$site = new SiteModel();
-		$importRun = new ImportURLRun($import, $site);
+		$importRun = new ImportRun($import, $site);
 		
 		
-		$handler = new ImportURLEventbriteHandler();
-		$handler->setImportURLRun($importRun);
+		$handler = new ImportEventbriteHandler();
+		$handler->setImportRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 		if ($result) {
 			$this->assertEquals($newURL, $handler->getNewFeedURL());

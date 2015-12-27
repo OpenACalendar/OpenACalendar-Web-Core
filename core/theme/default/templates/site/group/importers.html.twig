@@ -18,10 +18,10 @@
 {% block innerContent %}
 
 	
-	<ul class="mainListImporturls">
+	<ul class="mainListImports">
 		{% for importurl in importurls %}
-			<li class="importurl">
-				<div class="title"><a href="/importurl/{{ importurl.slug }}">{{ importurl.title }}</a></div>
+			<li class="import">
+				<div class="title"><a href="/import/{{ importurl.slug }}">{{ importurl.title }}</a></div>
 			</li>
 		{% else %}
 			<li>

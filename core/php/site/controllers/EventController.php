@@ -28,7 +28,7 @@ use repositories\CountryRepository;
 use repositories\VenueRepository;
 use repositories\EventRecurSetRepository;
 use repositories\UserAtEventRepository;
-use repositories\ImportURLRepository;
+use repositories\ImportRepository;
 use repositories\AreaRepository;
 use repositories\TagRepository;
 use repositories\UserWatchesGroupRepository;
@@ -64,7 +64,7 @@ class EventController {
 			'area'=>null, 
 			'parentAreas'=>array(), 
 			'childAreas'=>array(),
-			'importurl'=>null,
+			'import'=>null,
 			'eventIsDuplicateOf'=>null,
 		);
 
@@ -107,8 +107,8 @@ class EventController {
 		}
 		
 		if ($this->parameters['event']->getImportUrlId()) {
-			$iur = new ImportURLRepository();
-			$this->parameters['importurl'] = $iur->loadById($this->parameters['event']->getImportUrlId());
+			$iur = new ImportRepository();
+			$this->parameters['import'] = $iur->loadById($this->parameters['event']->getImportUrlId());
 		}
 		
 		$groupRB = new GroupRepositoryBuilder();

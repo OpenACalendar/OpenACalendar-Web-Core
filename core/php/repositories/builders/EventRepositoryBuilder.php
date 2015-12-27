@@ -10,7 +10,7 @@ use models\VenueModel;
 use models\UserAccountModel;
 use models\CountryModel;
 use org\openacalendar\curatedlists\models\CuratedListModel;
-use models\ImportURLModel;
+use models\ImportModel;
 use models\AreaModel;
 
 /**
@@ -106,13 +106,12 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 
 	
 
-	/** @var ImportURLModel **/
-	protected $importURL;
+	/** @var ImportModel **/
+	protected $import;
 	
-	public function setImportURL(ImportURLModel $importURL) {
-		$this->importURL = $importURL;
+	public function setImport(ImportModel $import) {
+		$this->import = $import;
 	}
-
 
 
 	/** @var ImportedEventModel **/
@@ -347,11 +346,11 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->params['venue_id'] = $this->venue->getId();
 		}
 
-		if ($this->importURL) {
+		if ($this->import) {
 			$this->joins[] = " LEFT JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id ";
 			$this->joins[] = " LEFT JOIN imported_event ON imported_event.id = imported_event_is_event.imported_event_id ";
 			$this->where[] =  " (imported_event.import_url_id = :import_url_id OR event_information.import_url_id = :import_url_id )";
-			$this->params['import_url_id'] = $this->importURL->getId();
+			$this->params['import_url_id'] = $this->import->getId();
 		}
 
 		if ($this->importedEvent) {

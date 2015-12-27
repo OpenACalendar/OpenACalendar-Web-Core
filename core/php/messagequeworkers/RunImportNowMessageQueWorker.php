@@ -1,8 +1,8 @@
 <?php
 
 namespace messagequeworkers;
-use repositories\ImportURLRepository;
-use tasks\RunImportURLsTask;
+use repositories\ImportRepository;
+use tasks\RunImportsTask;
 
 /**
  *
@@ -17,15 +17,15 @@ class RunImportNowMessageQueWorker extends BaseMessageQueWorker {
 
     function process($extension, $type, $data)
     {
-        if ($extension == 'org.openacalendar' && $type == 'ImportURLSaved') {
+        if ($extension == 'org.openacalendar' && $type == 'ImportSaved') {
 
-            $importrepo = new ImportURLRepository();
+            $importrepo = new ImportRepository();
             $import = $importrepo->loadById($data['id']);
 
             if ($import) {
 
-                $task = new RunImportURLsTask($this->app);
-                $task->runImportURL($import);
+                $task = new RunImportsTask($this->app);
+                $task->runImport($import);
 
                 return true;
             }

@@ -9,14 +9,14 @@ use models\EventModel;
 use models\GroupModel;
 use models\VenueModel;
 use models\TagModel;
-use models\ImportURLModel;
+use models\ImportModel;
 use models\UserAccountModel;
 use models\EventHistoryModel;
 use models\GroupHistoryModel;
 use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
-use models\ImportURLHistoryModel;
+use models\ImportHistoryModel;
 use models\API2ApplicationModel;
 
 /**

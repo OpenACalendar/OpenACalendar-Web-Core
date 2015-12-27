@@ -43,7 +43,7 @@
 			{% endif %}
 			{# imports link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
 			{% if currentSiteFeatures.has('org.openacalendar','Importer') %}
-				<li class="action"><a href="/importurl"><div class="fa fa-cloud-download"></div> Imports</a></li>
+				<li class="action"><a href="/import"><div class="fa fa-cloud-download"></div> Imports</a></li>
 			{% endif %}
 			<li class="action">
 				<a href="/api1/events.ical" onclick="showExportSharePopup(); return false;">

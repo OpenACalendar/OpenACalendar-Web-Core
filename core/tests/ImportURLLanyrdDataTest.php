@@ -4,13 +4,13 @@
 use models\UserAccountModel;
 use models\SiteModel;
 use models\GroupModel;
-use models\ImportURLModel;
+use models\ImportModel;
 use repositories\UserAccountRepository;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
-use repositories\ImportURLRepository;
-use import\ImportURLRun;
-use import\ImportURLICalHandler;
+use repositories\ImportRepository;
+use import\ImportRun;
+use import\ImportICalHandler;
 use repositories\builders\EventRepositoryBuilder;
 
 /**
@@ -54,25 +54,25 @@ class ImportURLLanyrdDataTest extends \BaseAppWithDBTest {
 		$groupRepo = new GroupRepository();
 		$groupRepo->create($group, $site, $user);
 		
-		$importURLRepository = new ImportURLRepository();
+		$importRepository = new ImportRepository();
 		
-		$importURL = new ImportURLModel();
+		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 		
-		$importURLRepository->create($importURL, $site, $user);
+		$importRepository->create($importURL, $site, $user);
 		
 
 		
 		// Import
-		$importURLRun = new ImportURLRun($importURL, $site);
+		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/Lanyrd1.ical');	
-		$importURLRun->setFlag(ImportURLRun::$FLAG_ADD_UIDS);
-		$i = new ImportURLICalHandler();
-		$i->setImportURLRun($importURLRun);
+		$importURLRun->setFlag(ImportRun::$FLAG_ADD_UIDS);
+		$i = new ImportICalHandler();
+		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
@@ -94,7 +94,7 @@ class ImportURLLanyrdDataTest extends \BaseAppWithDBTest {
 		// Look for event
 		$erb = new EventRepositoryBuilder();
 		$erb->setSite($site);
-		$erb->setImportURL($importURL);
+		$erb->setImport($importURL);
 		$this->assertEquals(1, count($erb->fetchAll()));
 
 	}
