@@ -46,6 +46,8 @@
 		</ul>
 		<div id="innerPage">
 
+			{% include '/site/curatedListsListFilterParams.html.twig' %}
+
 			<ul class="mainListCuratedLists">
 				{% for curatedlist in curatedlists %}
 					<li class="curatedlist">

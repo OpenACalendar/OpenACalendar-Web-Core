@@ -1080,52 +1080,6 @@ ul.mapTimeEvents li p.venueTitle {
 .afterMapTimeEvents {
   clear: both;
 }
-div.filterListGroupWrapper,
-div.filterListVenueWrapper {
-  padding: 5px 0;
-  margin: 5px 5px;
-}
-div.filterListGroupWrapper form.filterListGroup,
-div.filterListGroupWrapper form.filterListVenue,
-div.filterListVenueWrapper form.filterListGroup,
-div.filterListVenueWrapper form.filterListVenue {
-  background: #72DA72;
-  padding: 10px;
-}
-div.filterListGroupWrapper form.filterListGroup div.inputField,
-div.filterListGroupWrapper form.filterListVenue div.inputField,
-div.filterListVenueWrapper form.filterListGroup div.inputField,
-div.filterListVenueWrapper form.filterListVenue div.inputField {
-  display: inline;
-  padding: 10px;
-}
-div.filterListGroupWrapper form.filterListGroup div.submitField,
-div.filterListGroupWrapper form.filterListVenue div.submitField,
-div.filterListVenueWrapper form.filterListGroup div.submitField,
-div.filterListVenueWrapper form.filterListVenue div.submitField {
-  display: inline;
-  padding: 10px;
-}
-div.filterListGroupWrapper form.filterListGroup div.submitField input,
-div.filterListGroupWrapper form.filterListVenue div.submitField input,
-div.filterListVenueWrapper form.filterListGroup div.submitField input,
-div.filterListVenueWrapper form.filterListVenue div.submitField input {
-  background: #36C036;
-  color: black;
-  border: 2px solid #36C036;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -o-border-radius: 2px;
-  border-radius: 2px;
-  cursor: pointer;
-}
-@media screen and (min-width: 750px) {
-  div.filterListGroupWrapper,
-  div.filterListVenueWrapper {
-    margin: 5px 40px;
-  }
-}
 .bigButtonContainer {
   padding: 6px;
   margin: 0;
@@ -2168,26 +2122,26 @@ div.mainShowCountry .map {
   width: 90%;
   height: 150px;
 }
-div.filterListEventWrapper {
+div.filterListWrapper {
   padding: 5px 0;
   margin: 5px 5px;
 }
-div.filterListEventWrapper form.filterListEvent {
+div.filterListWrapper form.filterList {
   background: #72DA72;
   padding: 10px;
 }
-div.filterListEventWrapper form.filterListEvent div.inputField {
+div.filterListWrapper form.filterList div.inputField {
   display: inline;
   padding: 10px;
 }
-div.filterListEventWrapper form.filterListEvent #eventListFilterFromWrapper input {
+div.filterListWrapper form.filterList #eventListFilterFromWrapper input {
   background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
 }
-div.filterListEventWrapper form.filterListEvent div.submitField {
+div.filterListWrapper form.filterList div.submitField {
   display: inline;
   padding: 10px;
 }
-div.filterListEventWrapper form.filterListEvent div.submitField input {
+div.filterListWrapper form.filterList div.submitField input {
   background: #36C036;
   color: black;
   border: 2px solid #36C036;
@@ -2199,7 +2153,7 @@ div.filterListEventWrapper form.filterListEvent div.submitField input {
   cursor: pointer;
 }
 @media screen and (min-width: 750px) {
-  div.filterListEventWrapper {
+  div.filterListWrapper {
     margin: 5px 40px;
   }
 }

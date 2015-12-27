@@ -76,7 +76,25 @@ class CuratedListRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->include_deleted = $value;
 	}
 
-	protected function build() {
+    protected $freeTextSearch;
+
+    public function setFreeTextsearch($freeTextSearch) {
+        $this->freeTextSearch = $freeTextSearch;
+    }
+
+
+    protected $include_future_events_only = false;
+
+    /**
+     * @param boolean $include_future_events_only
+     */
+    public function setIncludeFutureEventsOnly($include_future_events_only)
+    {
+        $this->include_future_events_only = $include_future_events_only;
+    }
+
+
+    protected function build() {
 
 		$this->select[] = ' curated_list_information.* ';
 		
@@ -140,6 +158,18 @@ class CuratedListRepositoryBuilder  extends BaseRepositoryBuilder {
 		if (!$this->include_deleted) {
 			$this->where[] = " curated_list_information.is_deleted = '0' ";
 		}
+
+        if ($this->include_future_events_only) {
+            $this->where[] = " curated_list_information.cached_future_events > 0 ";
+        }
+
+
+        if ($this->freeTextSearch) {
+            $this->where[] =  '(CASE WHEN curated_list_information.title IS NULL THEN \'\' ELSE curated_list_information.title END )  || \' \' || '.
+                '(CASE WHEN curated_list_information.description IS NULL THEN \'\' ELSE curated_list_information.description END )'.
+                ' ILIKE :free_text_search ';
+            $this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
+        }
 	}
 	
 	protected function buildStat() {

@@ -790,38 +790,6 @@ ul.mapTimeEvents {
 }
 .afterMapTimeEvents { clear: both; }
 
-
-/** event is in common **/
-div.filterListGroupWrapper, div.filterListVenueWrapper {
-	padding: 5px 0;
-	margin: @listDataItemsFilterMarginTopBottom @listDataItemsFilterMarginLeftRightNarrowScreen;
-	form.filterListGroup , form.filterListVenue {
-		background: @colourLighter2;
-		padding: 10px;
-		div.inputField {
-			display: inline;
-			padding: 10px;
-		}
-		div.submitField {
-			display: inline;
-			padding: 10px;
-			input {
-				background: @colourLighter1;
-				color: black;
-				border: 2px solid @colourLighter1;
-				.rounded-corners(2px);
-				cursor:pointer;
-			}
-		}
-	}
-}
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	div.filterListGroupWrapper, div.filterListVenueWrapper  {
-		margin: @listDataItemsFilterMarginTopBottom @listDataItemsFilterMarginLeftRightWideScreen;
-	}
-}
-
-
 .bigButtonContainer {
 	padding: 6px;
 	margin: 0;
