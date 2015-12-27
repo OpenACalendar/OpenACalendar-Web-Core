@@ -12,7 +12,7 @@
 
 {% block innerContent %}
 
-	<p>You can also <a href="/group/{{ group.slugForUrl }}/newevent">add the event details by hand</a>.</p>
+	<p>You can also <a href="/event/new?group={{ group.slug }}">add the event details by hand</a>.</p>
 
 	{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
 	<form action="#" method="post" class="styled" novalidate="novalidate">
