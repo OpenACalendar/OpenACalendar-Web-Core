@@ -43,8 +43,8 @@ ul.mainListCuratedLists li.nodata {
   font-style: italic;
 }
 @media screen and (min-width: 750px) {
-  ul.mainListCuratedlists li.curatedlist,
-  ul.mainListCuratedlists li.nodata {
+  ul.mainListCuratedLists li.curatedlist,
+  ul.mainListCuratedLists li.nodata {
     margin: 5px 50px;
   }
 }
