@@ -87,6 +87,12 @@ class ConfigController {
 			));
 	}
 
+	function import(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.import.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
 }
 
 

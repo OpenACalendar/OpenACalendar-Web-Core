@@ -276,43 +276,8 @@
 			</td>
 		</tr>
 		<tr>
-			<th>importLimitToSaveOnEachRunImportedEvents</th>
-			<td>{{ config.importLimitToSaveOnEachRunImportedEvents }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importLimitToSaveOnEachRunImportedEvents'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>importLimitToSaveOnEachRunEvents</th>
-			<td>{{ config.importLimitToSaveOnEachRunEvents }}
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importLimitToSaveOnEachRunEvents'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>importURLExpireSecondsAfterLastEdit</th>
-			<td>{{ config.importURLExpireSecondsAfterLastEdit }}
-				({{ (config.importURLExpireSecondsAfterLastEdit / 60) | round (0,'floor') }} mins)
-				({{ (config.importURLExpireSecondsAfterLastEdit / 60/60) | round (0,'floor') }} hours)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>importURLSecondsBetweenImports</th>
-			<td>{{ config.importURLSecondsBetweenImports }}
-				({{ (config.importURLSecondsBetweenImports / 60) | round (0,'floor') }} mins)
-				({{ (config.importURLSecondsBetweenImports / 60/60) | round (0,'floor') }} hours)
-				({{ (config.importURLSecondsBetweenImports / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLSecondsBetweenImports'} %}
-			</td>
-		</tr>
-		<tr>
-			<th>importURLAllowEventsSecondsIntoFuture</th>
-			<td>{{ config.importURLAllowEventsSecondsIntoFuture }}
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60) | round (0,'floor') }} mins)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60 )| round (0,'floor') }} hours)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
-			</td>
+			<th>Import</th>
+			<td><a href="/sysadmin/config/import">More</a></td>
 		</tr>
 		<tr>
 			<th>upcomingEventsForUserEmailTextListsEvents</th>

@@ -220,6 +220,7 @@ $app->match('/sysadmin/config/sysadminUI', "sysadmin\controllers\ConfigControlle
 $app->match('/sysadmin/config/smtp', "sysadmin\controllers\ConfigController::smtp");
 $app->match('/sysadmin/config/logging', "sysadmin\controllers\ConfigController::logging");
 $app->match('/sysadmin/config/externalAnalytics', "sysadmin\controllers\ConfigController::externalAnalytics");
+$app->match('/sysadmin/config/import', "sysadmin\controllers\ConfigController::import");
 
 
 $app->match('/sysadmin/extension', "sysadmin\controllers\ExtensionListController::index");

@@ -1,0 +1,57 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'sysadmin/page.html.twig' %}
+
+{% block pageTitle %}Config - {% endblock %}
+
+{% block content %}
+
+	<table class="oneData">
+		<tr>
+			<th>importLimitToSaveOnEachRunImportedEvents</th>
+			<td>{{ config.importLimitToSaveOnEachRunImportedEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importLimitToSaveOnEachRunImportedEvents'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>importLimitToSaveOnEachRunEvents</th>
+			<td>{{ config.importLimitToSaveOnEachRunEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importLimitToSaveOnEachRunEvents'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>importURLExpireSecondsAfterLastEdit</th>
+			<td>{{ config.importURLExpireSecondsAfterLastEdit }}
+				({{ (config.importURLExpireSecondsAfterLastEdit / 60) | round (0,'floor') }} mins)
+				({{ (config.importURLExpireSecondsAfterLastEdit / 60/60) | round (0,'floor') }} hours)
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>importURLSecondsBetweenImports</th>
+			<td>{{ config.importURLSecondsBetweenImports }}
+				({{ (config.importURLSecondsBetweenImports / 60) | round (0,'floor') }} mins)
+				({{ (config.importURLSecondsBetweenImports / 60/60) | round (0,'floor') }} hours)
+				({{ (config.importURLSecondsBetweenImports / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLSecondsBetweenImports'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>importURLAllowEventsSecondsIntoFuture</th>
+			<td>{{ config.importURLAllowEventsSecondsIntoFuture }}
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60) | round (0,'floor') }} mins)
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60 )| round (0,'floor') }} hours)
+				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
+			</td>
+		</tr>
+	</table>
+
+{% endblock %}
+
