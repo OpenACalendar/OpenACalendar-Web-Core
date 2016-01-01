@@ -22,11 +22,9 @@ before_script:
   - echo "\$CONFIG->databasePassword = '';" >> config.test.php
   - echo "\$CONFIG->extensions = array('CuratedLists');" >> config.test.php
 
-script: phpunit --coverage-clover build/logs/clover.xml  --configuration core/tests/phpunit.xml
+script: phpunit  --configuration core/tests/phpunit.xml
 
 
-after_script:
-  - php vendor/bin/coveralls -v
 
 
 

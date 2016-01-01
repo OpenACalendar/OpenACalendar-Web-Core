@@ -19,6 +19,5 @@
 		"pda/pheanstalk":"3.1.*"
     },
     "require-dev": {
-        "satooshi/php-coveralls": "1.*"
     }
 }
