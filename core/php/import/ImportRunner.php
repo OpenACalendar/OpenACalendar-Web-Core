@@ -4,6 +4,9 @@ namespace import;
 
 use models\ImportModel;
 use models\ImportResultModel;
+use repositories\builders\ImportedEventRepositoryBuilder;
+use repositories\EventRecurSetRepository;
+use repositories\ImportedEventRepository;
 use repositories\ImportResultRepository;
 
 /**
@@ -15,16 +18,30 @@ use repositories\ImportResultRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportRunner {
-	
-	public function go(ImportModel $importURL) {
-		global $app;
-		
+
+    /** @var Application */
+    protected $app;
+
+    function __construct($app)
+    {
+        $this->app = $app;
+    }
+
+    public function go(ImportModel $importModel)
+    {
+        $importRun = new ImportRun($importModel);
+        if ($this->runHandlersSaveResult($importRun)) {
+            $this->runImportedEventsToEvents($importRun);
+        }
+    }
+
+    protected function runHandlersSaveResult(ImportRun $importRun) {
+
 		$iurlrRepo = new ImportResultRepository();
-		$importURLRun = new ImportRun($importURL);
 		$handlers = array();
 		
 		// Get
-		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+		foreach($this->app['extensions']->getExtensionsIncludingCore() as $extension) {
 			foreach($extension->getImportHandlers() as $handler) {
 				$handlers[] = $handler;
 			}
@@ -43,31 +60,75 @@ class ImportRunner {
 
 		// Run
 		foreach($handlers as $handler) {
-			$handler->setImportRun($importURLRun);
+			$handler->setImportRun($importRun);
 			if ($handler->canHandle()) {
 				if ($handler->isStopAfterHandling()) {
 					$iurlr = $handler->handle();
-					$iurlr->setImportUrlId($importURL->getId());
+					$iurlr->setImportUrlId($importRun->getImport()->getId());
 					$iurlrRepo->create($iurlr);
-					return;
+					return $iurlr->getIsSuccess();
 				} else {
 					$handler->handle();
 				}
 			}
 		}
 
-		// Log that couldn't handle feed	
-		$iurlr = new ImportResultModel();
-		$iurlr->setImportUrlId($importURL->getId());
-		$iurlr->setIsSuccess(false);
-		$iurlr->setMessage("Did not recognise data");
-		$iurlrRepo->create($iurlr);			
-	}
-	
-	
-	
+        // Log that couldn't handle feed
+        $iurlr = new ImportResultModel();
+        $iurlr->setImportUrlId($importRun->getImport()->getId());
+        $iurlr->setIsSuccess(false);
+        $iurlr->setMessage("Did not recognise data");
+        $iurlrRepo->create($iurlr);
+        return false;
+    }
 
-	
+    protected function runImportedEventsToEvents(ImportRun $importRun) {
+        $eventRecurSetRepo = new EventRecurSetRepository();
+        $importedEventRepo = new ImportedEventRepository();
+
+        $importedEventOccurrenceToEvent = new ImportedEventOccurrenceToEvent($importRun);
+        $saved = 0;
+
+        $importedEventsRepo = new ImportedEventRepositoryBuilder();
+        $importedEventsRepo->setImport($importRun->getImport());
+        $importedEventsRepo->setIncludeDeleted(true);
+        foreach($importedEventsRepo->fetchAll() as $importedEvent) {
+
+            if (!$importRun->wasImportedEventSeen($importedEvent)) {
+                // So we have this event in our store, but it wasn't seen in the last import. Mark it deleted!
+                if (!$importedEvent->getIsDeleted()) {
+                    $importedEvent->setIsDeleted(true);
+                    $importedEventRepo->delete($importedEvent);
+                }
+            }
+
+            $importedEventToImportedEventOccurrences = new ImportedEventToImportedEventOccurrences($importedEvent);
+
+            if ($importedEventToImportedEventOccurrences->getToMultiples()) {
+                $eventRecurSet = $importedEvent != null ? $eventRecurSetRepo->getForImportedEvent($importedEvent) : null;
+                $importedEventOccurrenceToEvent->setEventRecurSet($eventRecurSet, true);
+            } else {
+                $importedEventOccurrenceToEvent->setEventRecurSet(null, false);
+            }
+
+            foreach($importedEventToImportedEventOccurrences->getImportedEventOccurrences() as $importedEventOccurrence) {
+                if ($importedEventOccurrence->getEndAt()->getTimeStamp() < $this->app['timesource']->time()) {
+                    // TODO log this somewhere?
+                } else if ($importedEventOccurrence->getStartAt()->getTimeStamp() > $this->app['timesource']->time()+$this->app['config']->importURLAllowEventsSecondsIntoFuture) {
+                    // TODO log this somewhere?
+                } else if ($saved < $this->app['config']->importLimitToSaveOnEachRunEvents) {
+                    if ($importedEventOccurrenceToEvent->run($importedEventOccurrence)) {
+                        $saved++;
+                    }
+                }
+            }
+
+        }
+
+        $importedEventOccurrenceToEvent->deleteEventsNotSeenAfterRun();
+
+    }
+
 }
 
 

@@ -47,9 +47,9 @@ class ImportedEventOccurrenceToEvent {
 
 	protected $makeEventRecurSetIfNone = false;
 
-	protected $eventsSeenIDs;
+    protected $eventsSeenIDs;
 
-	public function setFromImportURlRun(ImportRun $importURLRun) {
+	public function __construct(ImportRun $importURLRun) {
 		$this->site = $importURLRun->getSite();
 		$this->group = $importURLRun->getGroup();
 		$this->country = $importURLRun->getCountry();
@@ -77,7 +77,7 @@ class ImportedEventOccurrenceToEvent {
 		}
 
 		if ($event) {
-			$this->eventsSeenIDs[] = $event->getId();
+            $this->eventsSeenIDs[] = $event->getId();
 			// Set Existing Event From Import Event URL
 			if ($importedEventOccurrenceModel->getIsDeleted()) {
 				if (!$event->getIsDeleted()) {
@@ -99,7 +99,7 @@ class ImportedEventOccurrenceToEvent {
 					$event->setEventRecurSetId($this->eventRecurSet->getId());
 				}
 				$eventRepo->create($event, $this->site, null, $this->group, null, $importedEventOccurrenceModel);
-				$this->eventsSeenIDs[] = $event->getId();
+                $this->eventsSeenIDs[] = $event->getId();
 				if (!$this->eventRecurSet && $this->makeEventRecurSetIfNone) {
 					$this->eventRecurSet = $eventRecurSetRepo->getForEvent($event);
 				}
@@ -113,26 +113,21 @@ class ImportedEventOccurrenceToEvent {
 
 	}
 
-
-	public function deleteEventsNotSeenAfterRun() {
-
-		$count = 0;
-
-		$eventRepo = new EventRepository();
-
-		$erb = new EventRepositoryBuilder();
-		$erb->setImport($this->importURL);
-		$erb->setIncludeDeleted(false);
-		$erb->setAfterNow();
-		foreach($erb->fetchAll() as $event) {
-			if (!in_array($event->getId(), $this->eventsSeenIDs)) {
-				$eventRepo->delete($event);
-				++$count;
-			}
-		}
-
-		return $count;
-	}
+    public function deleteEventsNotSeenAfterRun() {
+        $count = 0;
+        $eventRepo = new EventRepository();
+        $erb = new EventRepositoryBuilder();
+        $erb->setImport($this->importURL);
+        $erb->setIncludeDeleted(false);
+        $erb->setAfterNow();
+        foreach($erb->fetchAll() as $event) {
+            if (!in_array($event->getId(), $this->eventsSeenIDs)) {
+                $eventRepo->delete($event);
+                ++$count;
+            }
+        }
+        return $count;
+    }
 
 	/** @var EventModel **/
 	protected function loadEventForImportedEvent(ImportedEventModel $importedEvent) {

@@ -55,6 +55,15 @@ class ImportedEventRepositoryBuilder extends BaseRepositoryBuilder {
 		return $this;
 	}
 
+
+    /**
+     * This does not actually do anything yet ... but when the day comes that it does, there is calling code that needs to make sure it's set to a specific value.
+     * So best to code setting that value in the calling code now.
+     */
+    public function setIncludeDeleted($value) {
+        // TODO
+    }
+
 	protected function build() {
 		global $DB;
 

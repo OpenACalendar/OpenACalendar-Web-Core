@@ -276,6 +276,18 @@
 			</td>
 		</tr>
 		<tr>
+			<th>importLimitToSaveOnEachRunImportedEvents</th>
+			<td>{{ config.importLimitToSaveOnEachRunImportedEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importLimitToSaveOnEachRunImportedEvents'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>importLimitToSaveOnEachRunEvents</th>
+			<td>{{ config.importLimitToSaveOnEachRunEvents }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importLimitToSaveOnEachRunEvents'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>importURLExpireSecondsAfterLastEdit</th>
 			<td>{{ config.importURLExpireSecondsAfterLastEdit }}
 				({{ (config.importURLExpireSecondsAfterLastEdit / 60) | round (0,'floor') }} mins)

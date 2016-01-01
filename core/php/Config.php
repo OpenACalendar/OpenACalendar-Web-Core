@@ -134,6 +134,9 @@ class Config {
 	public $importURLExpireSecondsAfterLastEdit = 7776000; // 90 days
 	public $importURLSecondsBetweenImports = 36000; // 10 hours
 	public $importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+
+    public $importLimitToSaveOnEachRunImportedEvents = 1000;
+    public $importLimitToSaveOnEachRunEvents = 100;
 	
 	public $upcomingEventsForUserEmailTextListsEvents = 20;
 	public $upcomingEventsForUserEmailHTMLListsEvents = 5;

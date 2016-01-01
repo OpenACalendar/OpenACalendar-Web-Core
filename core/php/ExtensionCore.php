@@ -108,13 +108,13 @@ class ExtensionCore extends BaseExtension {
 	public function getImportHandlers() {
 		return array(
 			// Common Sense Handler
-			new ImportNotUsHandler(),
+			new ImportNotUsHandler($this->app),
 			// rewrite URL to ICAL handlers
-			new ImportMeetupHandler(),
-			new ImportEventbriteHandler(),
-			new ImportLanyrdHandler(),
+			new ImportMeetupHandler($this->app),
+			new ImportEventbriteHandler($this->app),
+			new ImportLanyrdHandler($this->app),
 			// handlers!
-			new ImportICalHandler(),
+			new ImportICalHandler($this->app),
 		);
 	}
 

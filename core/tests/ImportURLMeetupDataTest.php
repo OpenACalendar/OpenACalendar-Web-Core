@@ -71,10 +71,13 @@ class ImportURLMeetupDataTest extends \BaseAppWithDBTest {
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/Meetup1.ics');	
 		$importURLRun->setFlag(ImportRun::$FLAG_ADD_UIDS);
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+        
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();

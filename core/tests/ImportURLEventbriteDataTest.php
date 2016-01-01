@@ -71,10 +71,13 @@ class ImportURLEventbriteDataTest extends \BaseAppWithDBTest {
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/Eventbrite1.ical');	
 		$importURLRun->setFlag(ImportRun::$FLAG_ADD_UIDS);
 		$importURLRun->setFlag(ImportRun::$FLAG_SET_TICKET_URL_AS_URL);
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();

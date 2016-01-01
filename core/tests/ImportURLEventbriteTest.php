@@ -38,7 +38,7 @@ class ImportURLEventbriteTest extends \BaseAppTest {
 		$importRun = new ImportRun($import, $site);
 		
 		
-		$handler = new ImportEventbriteHandler();
+		$handler = new ImportEventbriteHandler($this->app);
 		$handler->setImportRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 		if ($result) {

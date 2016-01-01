@@ -32,6 +32,8 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 
 		\TimeSource::mock(2015, 1, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 10;
 
 
 		$user = new UserAccountModel();
@@ -71,13 +73,15 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		// ============================================= Import CREATE
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleDeleteByExDate1Part1.ics');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(7);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
 
-		// Is it loaded on Imported Events?
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
+
+        // Is it loaded on Imported Events?
 		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
 		$importedEvents = $ierb->fetchAll();
 		$this->assertEquals(1, count($importedEvents));
@@ -119,11 +123,13 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		// ============================================= Import With no changes
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleDeleteByExDate1Part1.ics');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(7);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Is it loaded on Imported Events?
 		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
@@ -167,11 +173,13 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		// ============================================= Import WITH ONE DELETED!
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleDeleteByExDate1Part2.ics');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(7);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Is it loaded on Imported Events?
 		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();

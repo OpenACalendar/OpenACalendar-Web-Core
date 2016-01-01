@@ -26,12 +26,11 @@ use repositories\builders\EventRepositoryBuilder;
  */
 class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 
-	function testRRule1() {
-		global $CONFIG;
-
-		\TimeSource::mock(2014, 11, 17, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
-
+    function testRRule1() {
+        $this->app['timesource']->mock(2014, 11, 17, 1, 1, 1);
+        $this->app['config']->importURLAllowEventsSecondsIntoFuture = 24*60*60*365;
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 8;
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -72,11 +71,13 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRule1.ics');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(8);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Is it loaded on Imported Events?
 		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
@@ -142,16 +143,18 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 
 
 		// ########################################################### Now move time on
-		\TimeSource::mock(2014, 12, 25, 1, 1, 1);
+        $this->app['timesource']->mock(2014, 12, 25, 1, 1, 1);
 
 		// reimport
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRule1.ics');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(8);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Now test real events
 		$erb = new EventRepositoryBuilder();
@@ -217,10 +220,10 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 	}
 
 	function testRRuleBST1() {
-		global $CONFIG;
-
-		\TimeSource::mock(2015, 3, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
+        $this->app['timesource']->mock(2015, 3, 1, 1, 1, 1);
+        $this->app['config']->importURLAllowEventsSecondsIntoFuture = 24*60*60*60;
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 7;
 
 
 		$user = new UserAccountModel();
@@ -260,11 +263,13 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRule1.ics');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(7);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Is it loaded on Imported Events?
 		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
@@ -320,10 +325,10 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 	}
 
 	function testRRuleExDate1() {
-		global $CONFIG;
-
-		\TimeSource::mock(2015, 1, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
+        $this->app['timesource']->mock(2015, 1, 1, 1, 1, 1);
+        $this->app['config']->importURLAllowEventsSecondsIntoFuture = 24*60*60*365;
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 7;
 
 
 		$user = new UserAccountModel();
@@ -363,11 +368,13 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleExDate1.ics');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(7);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Is it loaded on Imported Events?
 		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();

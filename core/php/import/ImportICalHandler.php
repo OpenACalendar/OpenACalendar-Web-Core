@@ -53,15 +53,11 @@ class ImportICalHandler extends ImportHandlerBase {
 	}
 	
 	public function handle() {
-		global $CONFIG;
-		
+
 		$this->new = $this->existing = $this->saved = $this->inpast = $this->tofarinfuture = $this->notvalid = 0;
 		
 		$this->addUIDCounter = 1;
 
-		$this->importedEventOccurrenceToEvent = new ImportedEventOccurrenceToEvent();
-		$this->importedEventOccurrenceToEvent->setFromImportURlRun($this->importRun);
-		
 		foreach ($this->icalParser->getEvents() as $icalevent) {
 			if ($this->importRun->hasFlag(ImportRun::$FLAG_ADD_UIDS) && !$icalevent->getUid()) {
 				$icalevent->setUid("ADDEDBYIMPORTER".$this->addUIDCounter);
@@ -74,8 +70,6 @@ class ImportICalHandler extends ImportHandlerBase {
 				$this->notvalid++;
 			}
 		}
-
-		$this->saved += $this->importedEventOccurrenceToEvent->deleteEventsNotSeenAfterRun();
 
 		$iurlr = new ImportResultModel();
 		$iurlr->setIsSuccess(true);
@@ -91,10 +85,8 @@ class ImportICalHandler extends ImportHandlerBase {
 
 
 	protected function processICalEvent(ICalEvent $icalevent) {
-		global $CONFIG;
 
 		$importedEventRepo = new ImportedEventRepository();
-		$eventRecurSetRepo = new EventRecurSetRepository();
 
 		$importedEventChangesToSave = false;
 		$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importRun->getImport()->getId() ,$icalevent->getUid());
@@ -123,47 +115,21 @@ class ImportICalHandler extends ImportHandlerBase {
 			}
 		}
 
-		$ietieo = new ImportedEventToImportedEventOccurrences($importedEvent);
+        if ($importedEventChangesToSave && ($this->existing + $this->new) < $this->app['config']->importLimitToSaveOnEachRunImportedEvents) {
+            if ($importedEvent->getId()) {
+                if ($importedEvent->getIsDeleted()) {
+                    $importedEventRepo->delete($importedEvent);
+                } else {
+                    $importedEventRepo->edit($importedEvent);
+                    $this->existing++;
+                }
+            } else {
+                $importedEventRepo->create($importedEvent);
+                $this->new++;
+            }
+        }
 
-		if ($ietieo->getToMultiples()) {
-			$eventRecurSet = $importedEvent != null ? $eventRecurSetRepo->getForImportedEvent($importedEvent) : null;
-			$this->importedEventOccurrenceToEvent->setEventRecurSet($eventRecurSet, true);
-		} else {
-			$this->importedEventOccurrenceToEvent->setEventRecurSet(null, false);
-		}
-
-		foreach($ietieo->getImportedEventOccurrences() as $importedEventOccurrence) {
-
-			if ($importedEventOccurrence->getEndAt()->getTimeStamp() < TimeSource::time()) {
-				$this->inpast++;
-			} else if ($importedEventOccurrence->getStartAt()->getTimeStamp() > TimeSource::time()+$CONFIG->importURLAllowEventsSecondsIntoFuture) {
-				$this->tofarinfuture++;
-			} else if ($this->saved < $this->limitToSaveOnEachRun) {
-
-				// Imported Event
-				if ($importedEventChangesToSave) {
-					if ($importedEvent->getId()) {
-						if ($importedEvent->getIsDeleted()) {
-							$importedEventRepo->delete($importedEvent);
-						} else {
-							$importedEventRepo->edit($importedEvent);
-						}
-					} else {
-						$importedEventRepo->create($importedEvent);
-						// the ID will not be set until this point. So make sure we copy over the ID below just to be sure.
-					}
-					$importedEventChangesToSave = false;
-				}
-
-				// ... and the Imported Event Occurrence becomes a real event!
-				$importedEventOccurrence->setId($importedEvent->getId());
-				if ($this->importedEventOccurrenceToEvent->run($importedEventOccurrence)) {
-					$this->saved++;
-				}
-
-			}
-
-		}
+        $this->importRun->markImportedEventSeen($importedEvent);
 	}
 
 	protected function setOurEventFromIcalEvent(ImportedEventModel $importedEvent, ICalEvent $icalevent) {

@@ -74,3 +74,10 @@ function createKey($minLength = 10, $maxLength = 100) {
         }
         return $string;
 }
+
+
+class TestsImportRunner extends \import\ImportRunner {
+    function testRunImportedEventsToEvents(\import\ImportRun $importRun) {
+        $this->runImportedEventsToEvents($importRun);
+    }
+}

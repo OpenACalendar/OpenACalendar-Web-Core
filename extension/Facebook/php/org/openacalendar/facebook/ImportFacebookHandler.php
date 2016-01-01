@@ -3,7 +3,6 @@
 namespace org\openacalendar\facebook;
 
 use import\ImportHandlerBase;
-use import\ImportedEventsToEvents;
 use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
 use Facebook\FacebookAuthorizationException;
@@ -51,9 +50,7 @@ class ImportFacebookHandler extends ImportHandlerBase {
 	}
 
 	protected $countNew, $countExisting, $countSaved, $countInPast, $countToFarInFuture, $countNotValid;
-	
-	/** @var \import\ImportedEventsToEvents **/
-	protected $importedEventsToEvents;
+
 
 	public function handle() {
 		global $app;
@@ -71,10 +68,7 @@ class ImportFacebookHandler extends ImportHandlerBase {
 		$userToken = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('user_token'));
 		
 		FacebookSession::setDefaultApplication($appID, $appSecret);
-		
-		$this->importedEventsToEvents = new ImportedEventsToEvents();
-		$this->importedEventsToEvents->setFromImportURlRun($this->importRun);
-		
+
 		$iurlr = new ImportResultModel();
 		$iurlr->setIsSuccess(true);
 		$iurlr->setMessage("Facebook data found");
@@ -92,9 +86,6 @@ class ImportFacebookHandler extends ImportHandlerBase {
 			}
 		
 		}
-
-		// Now run the thing to make imported events real events!
-		$this->importedEventsToEvents->run();
 
 		$iurlr->setNewCount($this->countNew);
 		$iurlr->setExistingCount($this->countExisting);
@@ -139,7 +130,6 @@ class ImportFacebookHandler extends ImportHandlerBase {
 	}
 	
 	protected function processFBData($id, $fbData) {
-		global $CONFIG;
 		$start = new \DateTime($fbData['start_time'], new \DateTimeZone('UTC'));
 		if ($fbData['end_time']) {
 			$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
@@ -147,48 +137,42 @@ class ImportFacebookHandler extends ImportHandlerBase {
 			$end = clone $start;
 		}
 		if ($start && $end && $start <= $end) { 
-			if ($end->getTimeStamp() < \TimeSource::time()) {
-				$this->countInPast++;
-			} else if ($start->getTimeStamp() > \TimeSource::time()+$CONFIG->importURLAllowEventsSecondsIntoFuture) {
-				$this->countToFarInFuture++;
-			} else {
-		
-				$importedEventRepo = new \repositories\ImportedEventRepository();
-				$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importRun->getImport()->getId() ,$id);
 
-				$changesToSave = false;
-				if (!$importedEvent) {
-					++$this->countNew;
-					$importedEvent = new ImportedEventModel();						
-					$importedEvent->setImportId($id);
-					$importedEvent->setImportUrlId($this->importRun->getImport()->getId());
-					$this->setImportedEventFromFBData($importedEvent, $fbData);							
-					$changesToSave = true;
-				} else {
-					++$this->countExisting;
-					$changesToSave = $this->setImportedEventFromFBData($importedEvent, $fbData);
-					// if was deleted, undelete
-					if ($importedEvent->getIsDeleted()) {
-						$importedEvent->setIsDeleted(false);
-						$changesToSave = true;
-					}
-				}
-				if ($changesToSave && $this->countSaved < $this->limitToSaveOnEachRun) {
-					++$this->countSaved;
-					$this->importedEventsToEvents->addImportedEvent($importedEvent);
+            $importedEventRepo = new \repositories\ImportedEventRepository();
+            $importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importRun->getImport()->getId() ,$id);
 
-					if ($importedEvent->getId()) {
-						if ($importedEvent->getIsDeleted()) {
-							$importedEventRepo->delete($importedEvent);
-						} else {
-							$importedEventRepo->edit($importedEvent);
-						}
-					} else {
-						$importedEventRepo->create($importedEvent);
-					}
-				}		
+            $changesToSave = false;
+            if (!$importedEvent) {
+                ++$this->countNew;
+                $importedEvent = new ImportedEventModel();
+                $importedEvent->setImportId($id);
+                $importedEvent->setImportUrlId($this->importRun->getImport()->getId());
+                $this->setImportedEventFromFBData($importedEvent, $fbData);
+                $changesToSave = true;
+            } else {
+                ++$this->countExisting;
+                $changesToSave = $this->setImportedEventFromFBData($importedEvent, $fbData);
+                // if was deleted, undelete
+                if ($importedEvent->getIsDeleted()) {
+                    $importedEvent->setIsDeleted(false);
+                    $changesToSave = true;
+                }
+            }
+            if ($changesToSave && $this->countSaved < $this->app['config']->importLimitToSaveOnEachRunImportedEvents) {
+                ++$this->countSaved;
 
-			}
+                if ($importedEvent->getId()) {
+                    if ($importedEvent->getIsDeleted()) {
+                        $importedEventRepo->delete($importedEvent);
+                    } else {
+                        $importedEventRepo->edit($importedEvent);
+                    }
+                } else {
+                    $importedEventRepo->create($importedEvent);
+                }
+            }
+
+            $this->importRun->markImportedEventSeen($importedEvent);
 		}
 	}
 	

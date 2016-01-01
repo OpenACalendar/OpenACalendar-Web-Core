@@ -34,8 +34,8 @@ class ExtensionMeetup extends \BaseExtension {
 	
 	public function getImportHandlers() {
 		return array(
-			new ImportExpandShortenerHandler(),
-			new ImportMeetupHandler(),
+			new ImportExpandShortenerHandler($this->app),
+			new ImportMeetupHandler($this->app),
 		);
 	}
 

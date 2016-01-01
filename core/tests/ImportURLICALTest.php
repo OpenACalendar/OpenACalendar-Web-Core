@@ -32,6 +32,8 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
 		$this->addCountriesToTestDB();
 		$countryRepo = new CountryRepository();
@@ -86,10 +88,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICAL.ical');		
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();
@@ -112,10 +118,13 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICALDeleted.ical');		
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 		
 		// Load!
 		$erb = new EventRepositoryBuilder();
@@ -133,6 +142,8 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 
 		$this->addCountriesToTestDB();
 		$countryRepo = new CountryRepository();
@@ -187,10 +198,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICAL.ical');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();
@@ -213,10 +228,13 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICALNoEvents.ical');
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();
@@ -234,6 +252,8 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
 
 		$user = new UserAccountModel();
@@ -275,10 +295,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart1.ical');		
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();
@@ -298,10 +322,13 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart2.ical');		
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 		
 		// Load!
 		$erb = new EventRepositoryBuilder();
@@ -324,6 +351,8 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
 		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
 
 		$user = new UserAccountModel();
@@ -365,10 +394,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALNotValid.ical');		
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();
@@ -380,9 +413,11 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 	
 	function testLimits() {
 		global $CONFIG;
-		
-		\TimeSource::mock(2012, 9, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000; 
+
+        \TimeSource::mock(2012, 9, 1, 1, 1, 1);
+        $CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 2;
 		
 
 		$user = new UserAccountModel();
@@ -424,11 +459,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		// Import
 		$importURLRun = new ImportRun($importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALManyEvents.ical');		
-		$i = new ImportICalHandler();
+		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
-		$i->setLimitToSaveOnEachRun(2);
 		$this->assertTrue($i->canHandle());
 		$r =  $i->handle();
+
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
 		$erb = new EventRepositoryBuilder();

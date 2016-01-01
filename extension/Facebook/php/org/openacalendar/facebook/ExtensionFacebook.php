@@ -37,7 +37,7 @@ class ExtensionFacebook extends \BaseExtension {
 	
 	public function getImportHandlers() {
 		return array(
-			new ImportFacebookHandler(),
+			new ImportFacebookHandler($this->app),
 		);
 	}
 

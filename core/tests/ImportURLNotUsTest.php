@@ -52,7 +52,7 @@ class ImportURLNotUsTest  extends \BaseAppTest  {
 		$site = new SiteModel();
 		$importRun = new ImportRun($import, $site);
 		
-		$handler = new ImportNotUsHandler();
+		$handler = new ImportNotUsHandler($this->app);
 		$handler->setImportRun($importRun);
 		$this->assertEquals($result, $handler->canHandle());
 	}

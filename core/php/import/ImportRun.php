@@ -2,6 +2,7 @@
 
 namespace import;
 use Guzzle\Http\Client;
+use models\ImportedEventModel;
 use models\ImportModel;
 use models\SiteModel;
 use models\GroupModel;
@@ -48,30 +49,32 @@ class ImportRun {
 
 	protected $temporaryFileStorage;
 	protected $temporaryFileStorageFromTesting;
-	
-	function __construct(ImportModel $import, SiteModel $site = null) {
-		global $CONFIG;
-		$this->import = $import;
-		$this->realurl = $import->getUrl();
-		if ($site) {
-			$this->site = $site;
-		} else {
-			$siteRepo = new SiteRepository();
-			$this->site = $siteRepo->loadById($import->getSiteId());
-		}
-		if ($import->getCountryId()) {
-			$countryRepo = new CountryRepository();
-			$this->country = $countryRepo->loadById($import->getCountryId());
-		}
-		if ($import->getAreaId()) {
-			$areaRepo = new AreaRepository();
-			$this->area = $areaRepo->loadById($import->getAreaId());
-		}
-		$groupRepository = new GroupRepository();
-		$this->group = $groupRepository->loadById($import->getGroupId());
-		$this->guzzle = new Client();
-		$this->guzzle->setUserAgent('OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
-	}
+
+    function __construct(ImportModel $import, SiteModel $site = null) {
+        global $CONFIG;
+        $this->import = $import;
+        $this->realurl = $import->getUrl();
+        if ($site) {
+            $this->site = $site;
+        } else {
+            $siteRepo = new SiteRepository();
+            $this->site = $siteRepo->loadById($import->getSiteId());
+        }
+        if ($import->getCountryId()) {
+            $countryRepo = new CountryRepository();
+            $this->country = $countryRepo->loadById($import->getCountryId());
+        }
+        if ($import->getAreaId()) {
+            $areaRepo = new AreaRepository();
+            $this->area = $areaRepo->loadById($import->getAreaId());
+        }
+        if ($import->getGroupId()) {
+            $groupRepository = new GroupRepository();
+            $this->group = $groupRepository->loadById($import->getGroupId());
+        }
+        $this->guzzle = new Client();
+        $this->guzzle->setUserAgent('OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
+    }
 
 	public function getImport() {
 		return $this->import;
@@ -146,6 +149,16 @@ class ImportRun {
 	function __destruct() {
 		$this->deleteLocallyStoredURL();
 	}
+
+    protected $importedEventsSeenIds = array();
+
+    function markImportedEventSeen(ImportedEventModel $importedEventModel) {
+        $this->importedEventsSeenIds[$importedEventModel->getId()] = true;
+    }
+
+    function wasImportedEventSeen(ImportedEventModel $importedEventModel) {
+        return isset($this->importedEventsSeenIds[$importedEventModel->getId()]) && $this->importedEventsSeenIds[$importedEventModel->getId()];
+    }
 	
 }
 

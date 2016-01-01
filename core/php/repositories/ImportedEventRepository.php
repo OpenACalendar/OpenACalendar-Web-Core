@@ -79,8 +79,11 @@ class ImportedEventRepository {
 	
 	public function edit(ImportedEventModel $importedEvent) {
 		global $DB;
+        if ($importedEvent->getIsDeleted()) {
+            throw new Exception("Can't edit a deleted imported event.\n");
+        }
 		$stat = $DB->prepare("UPDATE imported_event SET title=:title, description=:description, ".
-				"start_at=:start_at, end_at=:end_at, timezone=:timezone,  is_deleted='1', url = :url, ".
+				"start_at=:start_at, end_at=:end_at, timezone=:timezone,  is_deleted='0', url = :url, ".
 				"ticket_url = :ticket_url, reoccur=:reoccur WHERE id=:id");
 		$stat->execute(array(
 			'id'=>$importedEvent->getId(),

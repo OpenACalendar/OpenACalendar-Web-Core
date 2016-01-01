@@ -14,14 +14,16 @@ use models\ImportModel;
  */
 abstract class ImportHandlerBase {
 
-	
-	protected $limitToSaveOnEachRun = 20;
-	
-	public function setLimitToSaveOnEachRun($limit) { $this->limitToSaveOnEachRun = $limit; }
-	
-	
-	
-	/** @var ImportRun **/
+
+    /** @var Application */
+    protected $app;
+
+    function __construct($app)
+    {
+        $this->app = $app;
+    }
+
+    /** @var ImportRun **/
 	protected $importRun;
 	
 	public function setImportRun(ImportRun $importRun) {

@@ -3,7 +3,6 @@
 namespace org\openacalendar\meetup;
 
 use import\ImportHandlerBase;
-use import\ImportedEventsToEvents;
 use models\ImportedEventModel;
 use models\ImportResultModel;
 use repositories\ImportedEventRepository;
@@ -54,24 +53,16 @@ class ImportMeetupHandler extends ImportHandlerBase {
 	}
 
 	protected $countNew, $countExisting, $countSaved, $countInPast, $countToFarInFuture, $countNotValid;
-	
-	/** @var \import\ImportedEventsToEvents **/
-	protected $importedEventsToEvents;
 
 	
 	public function handle() {
-		global $app;
-
 		$this->countNew = 0;
 		$this->countExisting = 0;
 		$this->countSaved = 0;
 		$this->countInPast = 0;
 		$this->countToFarInFuture = 0;
 		$this->countNotValid = 0;
-		
-		$this->importedEventsToEvents = new ImportedEventsToEvents();
-		$this->importedEventsToEvents->setFromImportURlRun($this->importRun);
-		
+
 		$iurlr = new ImportResultModel();
 		$iurlr->setIsSuccess(true);
 		$iurlr->setMessage("Meetup data found");
@@ -91,9 +82,6 @@ class ImportMeetupHandler extends ImportHandlerBase {
 			$iurlr->setIsSuccess(false);
 			$iurlr->setMessage("Meetup API error: ". $err->getCode()." ".$err->getMessage());
 		}
-		
-		// Now run the thing to make imported events real events!
-		$this->importedEventsToEvents->run();
 
 		$iurlr->setNewCount($this->countNew);
 		$iurlr->setExistingCount($this->countExisting);
@@ -106,7 +94,7 @@ class ImportMeetupHandler extends ImportHandlerBase {
 	}	
 	
 	protected function getMeetupDataForEventID($id) {
-		global $app, $CONFIG;
+		global $app;
 		
 		$extension = $app['extensions']->getExtensionById('org.openacalendar.meetup');
 		$appKey = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_key'));
@@ -137,7 +125,7 @@ class ImportMeetupHandler extends ImportHandlerBase {
 	}
 	
 	protected function getMeetupDatasForGroupname($groupName) {
-		global $app, $CONFIG;
+		global $app;
 		
 		$extension = $app['extensions']->getExtensionById('org.openacalendar.meetup');
 		$appKey = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_key'));
@@ -173,74 +161,67 @@ class ImportMeetupHandler extends ImportHandlerBase {
 
 		return array();
 	}
-	
-	protected function processMeetupData($meetupData) {
-		global $CONFIG;
-		$start = new \DateTime('', new \DateTimeZone('UTC'));
-		$start->setTimestamp($meetupData['time'] / 1000);
-		if (isset($meetupData['duration']) && $meetupData['duration']) {
-			$end = new \DateTime('', new \DateTimeZone('UTC'));
-			$end->setTimestamp($meetupData['time'] / 1000);
-			$end->add(new \DateInterval("PT".($meetupData['duration'] / 1000)."S"));
-		} else {
-			$end = clone $start;
-			$end->add(new \DateInterval("PT3H"));
-		}
-		if ($start && $end && $start <= $end) { 
-			if ($end->getTimeStamp() < \TimeSource::time()) {
-				$this->countInPast++;
-			} else if ($start->getTimeStamp() > \TimeSource::time()+$CONFIG->importURLAllowEventsSecondsIntoFuture) {
-				$this->countToFarInFuture++;
-			} else {
-		
-				$importedEventRepo = new \repositories\ImportedEventRepository();
-				$id = "event_".$meetupData['id']."@meetup.com";
-				$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importRun->getImport()->getId() ,$id);
 
-				$changesToSave = false;
-				if (!$importedEvent) {
-					if ($meetupData['status'] != 'cancelled') {
-						++$this->countNew;
-						$importedEvent = new ImportedEventModel();						
-						$importedEvent->setImportId($id);
-						$importedEvent->setImportUrlId($this->importRun->getImport()->getId());
-						$this->setImportedEventFromMeetupData($importedEvent, $meetupData);
-						$changesToSave = true;
-					}
-				} else {
-					++$this->countExisting;
-					if ($meetupData['status'] == 'cancelled') {
-						if (!$importedEvent->getIsDeleted()) {
-							$importedEvent->setIsDeleted(true);
-							$changesToSave = true;
-						}
-					} else {
-						$changesToSave = $this->setImportedEventFromMeetupData($importedEvent, $meetupData);
-						// if was deleted, undelete
-						if ($importedEvent->getIsDeleted()) {
-							$importedEvent->setIsDeleted(false);
-							$changesToSave = true;
-						}
-					}
-				}
-				if ($changesToSave && $this->countSaved < $this->limitToSaveOnEachRun) {
-					++$this->countSaved;
-					$this->importedEventsToEvents->addImportedEvent($importedEvent);
+    protected function processMeetupData($meetupData) {
+        $start = new \DateTime('', new \DateTimeZone('UTC'));
+        $start->setTimestamp($meetupData['time'] / 1000);
+        if (isset($meetupData['duration']) && $meetupData['duration']) {
+            $end = new \DateTime('', new \DateTimeZone('UTC'));
+            $end->setTimestamp($meetupData['time'] / 1000);
+            $end->add(new \DateInterval("PT".($meetupData['duration'] / 1000)."S"));
+        } else {
+            $end = clone $start;
+            $end->add(new \DateInterval("PT3H"));
+        }
+        if ($start && $end && $start <= $end) {
 
-					if ($importedEvent->getId()) {
-						if ($importedEvent->getIsDeleted()) {
-							$importedEventRepo->delete($importedEvent);
-						} else {
-							$importedEventRepo->edit($importedEvent);
-						}
-					} else {
-						$importedEventRepo->create($importedEvent);
-					}
-				}		
+            $importedEventRepo = new \repositories\ImportedEventRepository();
+            $id = "event_".$meetupData['id']."@meetup.com";
+            $importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importRun->getImport()->getId() ,$id);
 
-			}
-		}
-	}
+            $changesToSave = false;
+            if (!$importedEvent) {
+                if ($meetupData['status'] != 'cancelled') {
+                    ++$this->countNew;
+                    $importedEvent = new ImportedEventModel();
+                    $importedEvent->setImportId($id);
+                    $importedEvent->setImportUrlId($this->importRun->getImport()->getId());
+                    $this->setImportedEventFromMeetupData($importedEvent, $meetupData);
+                    $changesToSave = true;
+                }
+            } else {
+                ++$this->countExisting;
+                if ($meetupData['status'] == 'cancelled') {
+                    if (!$importedEvent->getIsDeleted()) {
+                        $importedEvent->setIsDeleted(true);
+                        $changesToSave = true;
+                    }
+                } else {
+                    $changesToSave = $this->setImportedEventFromMeetupData($importedEvent, $meetupData);
+                    // if was deleted, undelete
+                    if ($importedEvent->getIsDeleted()) {
+                        $importedEvent->setIsDeleted(false);
+                        $changesToSave = true;
+                    }
+                }
+            }
+            if ($changesToSave && $this->countSaved < $this->app['config']->importLimitToSaveOnEachRunImportedEvents) {
+                ++$this->countSaved;
+
+                if ($importedEvent->getId()) {
+                    if ($importedEvent->getIsDeleted()) {
+                        $importedEventRepo->delete($importedEvent);
+                    } else {
+                        $importedEventRepo->edit($importedEvent);
+                    }
+                } else {
+                    $importedEventRepo->create($importedEvent);
+                }
+            }
+            $this->importRun->markImportedEventSeen($importedEvent);
+
+        }
+    }
 	
 	protected function setImportedEventFromMeetupData(ImportedEventModel $importedEvent, $meetupData) {
 		$changesToSave = false;
