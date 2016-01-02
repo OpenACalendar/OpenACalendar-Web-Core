@@ -89,13 +89,13 @@ class ImportICalHandler extends ImportHandlerBase {
 		$importedEventRepo = new ImportedEventRepository();
 
 		$importedEventChangesToSave = false;
-		$importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importRun->getImport()->getId() ,$icalevent->getUid());
+		$importedEvent = $importedEventRepo->loadByImportIDAndIdInImport($this->importRun->getImport()->getId() ,$icalevent->getUid());
 
 		if (!$importedEvent) {
 			if (!$icalevent->isDeleted()) {
 				$importedEvent = new ImportedEventModel();
-				$importedEvent->setImportId($icalevent->getUid());
-				$importedEvent->setImportUrlId($this->importRun->getImport()->getId());
+				$importedEvent->setIdInImport($icalevent->getUid());
+				$importedEvent->setImportId($this->importRun->getImport()->getId());
 				$this->setOurEventFromIcalEvent($importedEvent, $icalevent);
 				$importedEventChangesToSave = true;
 			}

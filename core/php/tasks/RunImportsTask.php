@@ -204,7 +204,7 @@ class RunImportsTask extends \BaseTask  {
         } else {
             $lastRunDate = $importURLRepo->getLastRunDateForImportURL($import);
             $nowDate = \TimeSource::getDateTime();
-            if (!$lastRunDate || ($lastRunDate->getTimestamp() < $nowDate->getTimestamp() - $CONFIG->importURLSecondsBetweenImports)) {
+            if (!$lastRunDate || ($lastRunDate->getTimestamp() < $nowDate->getTimestamp() - $CONFIG->importSecondsBetweenImports)) {
                 $this->logVerbose( " - importing");
                 $runner = new ImportRunner($this->app);
                 $runner->go($import);

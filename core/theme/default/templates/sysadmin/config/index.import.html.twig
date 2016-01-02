@@ -25,30 +25,30 @@
 			</td>
 		</tr>
 		<tr>
-			<th>importURLExpireSecondsAfterLastEdit</th>
-			<td>{{ config.importURLExpireSecondsAfterLastEdit }}
-				({{ (config.importURLExpireSecondsAfterLastEdit / 60) | round (0,'floor') }} mins)
-				({{ (config.importURLExpireSecondsAfterLastEdit / 60/60) | round (0,'floor') }} hours)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
+			<th>importExpireSecondsAfterLastEdit</th>
+			<td>{{ config.importExpireSecondsAfterLastEdit }}
+				({{ (config.importExpireSecondsAfterLastEdit / 60) | round (0,'floor') }} mins)
+				({{ (config.importExpireSecondsAfterLastEdit / 60/60) | round (0,'floor') }} hours)
+				({{ (config.importExpireSecondsAfterLastEdit / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importExpireSecondsAfterLastEdit'} %}
 			</td>
 		</tr>
 		<tr>
-			<th>importURLSecondsBetweenImports</th>
-			<td>{{ config.importURLSecondsBetweenImports }}
-				({{ (config.importURLSecondsBetweenImports / 60) | round (0,'floor') }} mins)
-				({{ (config.importURLSecondsBetweenImports / 60/60) | round (0,'floor') }} hours)
-				({{ (config.importURLSecondsBetweenImports / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLSecondsBetweenImports'} %}
+			<th>importSecondsBetweenImports</th>
+			<td>{{ config.importSecondsBetweenImports }}
+				({{ (config.importSecondsBetweenImports / 60) | round (0,'floor') }} mins)
+				({{ (config.importSecondsBetweenImports / 60/60) | round (0,'floor') }} hours)
+				({{ (config.importSecondsBetweenImports / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importSecondsBetweenImports'} %}
 			</td>
 		</tr>
 		<tr>
-			<th>importURLAllowEventsSecondsIntoFuture</th>
-			<td>{{ config.importURLAllowEventsSecondsIntoFuture }}
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60) | round (0,'floor') }} mins)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60 )| round (0,'floor') }} hours)
-				({{ (config.importURLAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
-				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importURLAllowEventsSecondsIntoFuture'} %}
+			<th>importAllowEventsSecondsIntoFuture</th>
+			<td>{{ config.importAllowEventsSecondsIntoFuture }}
+				({{ (config.importAllowEventsSecondsIntoFuture / 60) | round (0,'floor') }} mins)
+				({{ (config.importAllowEventsSecondsIntoFuture / 60/60 )| round (0,'floor') }} hours)
+				({{ (config.importAllowEventsSecondsIntoFuture / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'importAllowEventsSecondsIntoFuture'} %}
 			</td>
 		</tr>
 	</table>

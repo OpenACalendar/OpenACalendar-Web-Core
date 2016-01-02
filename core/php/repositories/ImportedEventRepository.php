@@ -30,11 +30,11 @@ class ImportedEventRepository {
 		}
 	}
 	
-	public function loadByImportURLIDAndImportId($import_url_id, $import_id) {
+	public function loadByImportIDAndIdInImport($import_id, $id_in_import) {
 		global $DB;
 		$stat = $DB->prepare("SELECT imported_event.* FROM imported_event ".
-				"WHERE imported_event.import_url_id =:import_url_id AND imported_event.import_id =:import_id");
-		$stat->execute(array( 'import_id'=>$import_id, 'import_url_id'=>$import_url_id ));
+				"WHERE imported_event.import_url_id =:import_id AND imported_event.import_id =:id_in_import");
+		$stat->execute(array( 'id_in_import'=>$id_in_import, 'import_id'=>$import_id ));
 		if ($stat->rowCount() > 0) {
 			$event = new ImportedEventModel();
 			$event->setFromDataBaseRow($stat->fetch());
@@ -42,11 +42,11 @@ class ImportedEventRepository {
 		}
 	}
 
-	public function loadByImportURLIDAndId($import_url_id, $id) {
+	public function loadByImportIDAndId($import_id, $id) {
 		global $DB;
 		$stat = $DB->prepare("SELECT imported_event.* FROM imported_event ".
-				"WHERE imported_event.import_url_id =:import_url_id AND imported_event.id =:id");
-		$stat->execute(array( 'id'=>$id, 'import_url_id'=>$import_url_id ));
+				"WHERE imported_event.import_url_id =:import_id AND imported_event.id =:id");
+		$stat->execute(array( 'id'=>$id, 'import_id'=>$import_id ));
 		if ($stat->rowCount() > 0) {
 			$event = new ImportedEventModel();
 			$event->setFromDataBaseRow($stat->fetch());
@@ -58,11 +58,11 @@ class ImportedEventRepository {
 		global $DB;
 		$stat = $DB->prepare("INSERT INTO imported_event ( import_url_id, import_id, title, ".
 				"description, start_at, end_at, timezone, is_deleted, url, ticket_url, created_at, reoccur ) ".
-				" VALUES (  :import_url_id, :import_id, :title, ".
+				" VALUES (  :import_id, :id_in_import, :title, ".
 				":description, :start_at, :end_at, :timezone,  '0', :url, :ticket_url, :created_at, :reoccur ) RETURNING id");
 		$stat->execute(array(
-				'import_url_id'=>$importedEvent->getImportUrlId(), 
 				'import_id'=>$importedEvent->getImportId(),
+				'id_in_import'=>$importedEvent->getIdInImport(),
 				'title'=>substr($importedEvent->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 				'description'=>$importedEvent->getDescription(),
 				'start_at'=>$importedEvent->getStartAtInUTC()->format("Y-m-d H:i:s"),

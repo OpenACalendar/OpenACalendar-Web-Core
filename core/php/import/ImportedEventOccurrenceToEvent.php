@@ -28,7 +28,7 @@ use repositories\ImportedEventIsEventRepository;
 class ImportedEventOccurrenceToEvent {
 
 	/** @var  ImportModel */
-	protected $importURL;
+	protected $import;
 
 	/** @var SiteModel **/
 	protected $site;
@@ -49,12 +49,12 @@ class ImportedEventOccurrenceToEvent {
 
     protected $eventsSeenIDs;
 
-	public function __construct(ImportRun $importURLRun) {
-		$this->site = $importURLRun->getSite();
-		$this->group = $importURLRun->getGroup();
-		$this->country = $importURLRun->getCountry();
-		$this->area = $importURLRun->getArea();
-		$this->importURL = $importURLRun->getImport();
+	public function __construct(ImportRun $importRun) {
+		$this->site = $importRun->getSite();
+		$this->group = $importRun->getGroup();
+		$this->country = $importRun->getCountry();
+		$this->area = $importRun->getArea();
+		$this->import = $importRun->getImport();
 		$this->eventsSeenIDs = array();
 	}
 
@@ -92,7 +92,7 @@ class ImportedEventOccurrenceToEvent {
 				}
 			}
 		} else {
-			if (!$this->importURL->getIsManualEventsCreation()) {
+			if (!$this->import->getIsManualEventsCreation()) {
 				// New Event From Import Event URL
 				$event = $this->newEventFromImportedEventModel($importedEventOccurrenceModel);
 				if ($this->eventRecurSet) {
@@ -117,7 +117,7 @@ class ImportedEventOccurrenceToEvent {
         $count = 0;
         $eventRepo = new EventRepository();
         $erb = new EventRepositoryBuilder();
-        $erb->setImport($this->importURL);
+        $erb->setImport($this->import);
         $erb->setIncludeDeleted(false);
         $erb->setAfterNow();
         foreach($erb->fetchAll() as $event) {
@@ -140,7 +140,7 @@ class ImportedEventOccurrenceToEvent {
 		}
 
 		// Try old way - flags on event table - and if found, set data for new way
-		$event = $eventRepo->loadByImportURLIDAndImportId($importedEvent->getImportUrlId(), $importedEvent->getImportId());
+		$event = $eventRepo->loadByImportURLIDAndImportId($importedEvent->getImportId(), $importedEvent->getIdInImport());
 		if ($event) {
 			// Save this data as the new way
 			$repo = new ImportedEventIsEventRepository();

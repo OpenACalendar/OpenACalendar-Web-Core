@@ -15,8 +15,14 @@ namespace models;
 class ImportedEventModel {
 	
 	protected $id;
-	protected $import_url_id;
+    /**
+     * In DB this is called import_url_id for historical reasons.
+     */
 	protected $import_id;
+    /**
+     * In DB this is called import_id for historical reasons.
+     */
+	protected $id_in_import;
 	protected $title;
 	protected $description;
 	/** @var \DateTime **/
@@ -33,8 +39,8 @@ class ImportedEventModel {
 
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
-		$this->import_url_id = $data['import_url_id'];
-		$this->import_id = $data['import_id'];
+		$this->import_id = $data['import_url_id'];
+		$this->id_in_import = $data['import_id'];
 		$this->title = $data['title'];
 		$this->description = $data['description'];
 		$utc = new \DateTimeZone("UTC");
@@ -71,20 +77,20 @@ class ImportedEventModel {
 		$this->id = $id;
 	}
 
-	public function getImportUrlId() {
-		return $this->import_url_id;
-	}
-
-	public function setImportUrlId($import_url_id) {
-		$this->import_url_id = $import_url_id;
-	}
-
 	public function getImportId() {
 		return $this->import_id;
 	}
 
 	public function setImportId($import_id) {
 		$this->import_id = $import_id;
+	}
+
+	public function getIdInImport() {
+		return $this->id_in_import;
+	}
+
+	public function setIdInImport($id_in_import) {
+		$this->id_in_import = $id_in_import;
 	}
 
 	public function getTitle() {

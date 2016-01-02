@@ -46,7 +46,7 @@ class ImportedEventToImportedEventOccurrences {
 			$unraveler->setIncludeOriginalEvent(true);
             $unraveler->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
             $toEnd = $app['timesource']->getDateTime();
-            $toEnd->setTimestamp($toEnd->getTimestamp() + $app['config']->importURLAllowEventsSecondsIntoFuture);
+            $toEnd->setTimestamp($toEnd->getTimestamp() + $app['config']->importAllowEventsSecondsIntoFuture);
             $unraveler->addResultFilter(new ResultFilterBeforeDateTime($toEnd));
             $unraveler->setResultsCountLimit(max( $app['config']->importLimitToSaveOnEachRunImportedEvents, $app['config']->importLimitToSaveOnEachRunEvents ));
 			$unraveler->process();

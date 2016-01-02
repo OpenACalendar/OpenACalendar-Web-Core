@@ -177,15 +177,15 @@ class ImportMeetupHandler extends ImportHandlerBase {
 
             $importedEventRepo = new \repositories\ImportedEventRepository();
             $id = "event_".$meetupData['id']."@meetup.com";
-            $importedEvent = $importedEventRepo->loadByImportURLIDAndImportId($this->importRun->getImport()->getId() ,$id);
+            $importedEvent = $importedEventRepo->loadByImportIDAndIdInImport($this->importRun->getImport()->getId() ,$id);
 
             $changesToSave = false;
             if (!$importedEvent) {
                 if ($meetupData['status'] != 'cancelled') {
                     ++$this->countNew;
                     $importedEvent = new ImportedEventModel();
-                    $importedEvent->setImportId($id);
-                    $importedEvent->setImportUrlId($this->importRun->getImport()->getId());
+                    $importedEvent->setIdInImport($id);
+                    $importedEvent->setImportId($this->importRun->getImport()->getId());
                     $this->setImportedEventFromMeetupData($importedEvent, $meetupData);
                     $changesToSave = true;
                 }

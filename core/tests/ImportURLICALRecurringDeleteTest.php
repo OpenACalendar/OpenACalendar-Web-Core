@@ -35,7 +35,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		global $CONFIG;
 
 		\TimeSource::mock(2015, 1, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
+		$CONFIG->importAllowEventsSecondsIntoFuture = 77760000;
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 10;
 

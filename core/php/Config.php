@@ -131,9 +131,9 @@ class Config {
 	public $newUserRegisterAntiSpam = false;
 	public $contactFormAntiSpam = false;
 	
-	public $importURLExpireSecondsAfterLastEdit = 7776000; // 90 days
-	public $importURLSecondsBetweenImports = 36000; // 10 hours
-	public $importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+	public $importExpireSecondsAfterLastEdit = 7776000; // 90 days
+	public $importSecondsBetweenImports = 36000; // 10 hours
+	public $importAllowEventsSecondsIntoFuture = 7776000; // 90 days
 
     public $importLimitToSaveOnEachRunImportedEvents = 1000;
     public $importLimitToSaveOnEachRunEvents = 100;

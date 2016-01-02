@@ -106,9 +106,9 @@ class EventController {
 			}			
 		}
 		
-		if ($this->parameters['event']->getImportUrlId()) {
+		if ($this->parameters['event']->getImportId()) {
 			$iur = new ImportRepository();
-			$this->parameters['import'] = $iur->loadById($this->parameters['event']->getImportUrlId());
+			$this->parameters['import'] = $iur->loadById($this->parameters['event']->getImportId());
 		}
 		
 		$groupRB = new GroupRepositoryBuilder();

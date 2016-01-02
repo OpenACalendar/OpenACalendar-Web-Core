@@ -23,7 +23,7 @@ class ImportResultRepository {
 		$stat = $DB->prepare("INSERT INTO import_url_result (import_url_id,new_count,existing_count,saved_count,in_past_count,to_far_in_future_count,not_valid_count,created_at,is_success,message) ".
 				"VALUES (:import_url_id,:new_count,:existing_count,:saved_count,:in_past_count,:to_far_in_future_count,:not_valid_count,:created_at,:is_success,:message)");
 		$stat->execute(array(
-				'import_url_id'=>$importURLResult->getImportUrlId(), 
+				'import_url_id'=>$importURLResult->getImportId(),
 				'new_count'=>$importURLResult->getNewCount(), 
 				'existing_count'=>$importURLResult->getExistingCount(), 
 				'saved_count'=>$importURLResult->getSavedCount(), 

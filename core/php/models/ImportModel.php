@@ -143,7 +143,7 @@ class ImportModel {
 		global $CONFIG;
 		$r = new ImportRepository();
 		$lastEdit = $r->getLastEditDateForImportURL($this);
-		return $lastEdit->getTimeStamp() < (\TimeSource::time() - $CONFIG->importURLExpireSecondsAfterLastEdit);
+		return $lastEdit->getTimeStamp() < (\TimeSource::time() - $CONFIG->importExpireSecondsAfterLastEdit);
 	}
 
 	public function getCountryId() {

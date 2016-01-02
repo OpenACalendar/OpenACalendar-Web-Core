@@ -64,7 +64,7 @@ class ImportRunner {
 			if ($handler->canHandle()) {
 				if ($handler->isStopAfterHandling()) {
 					$iurlr = $handler->handle();
-					$iurlr->setImportUrlId($importRun->getImport()->getId());
+					$iurlr->setImportId($importRun->getImport()->getId());
 					$iurlrRepo->create($iurlr);
 					return $iurlr->getIsSuccess();
 				} else {
@@ -75,7 +75,7 @@ class ImportRunner {
 
         // Log that couldn't handle feed
         $iurlr = new ImportResultModel();
-        $iurlr->setImportUrlId($importRun->getImport()->getId());
+        $iurlr->setImportId($importRun->getImport()->getId());
         $iurlr->setIsSuccess(false);
         $iurlr->setMessage("Did not recognise data");
         $iurlrRepo->create($iurlr);
@@ -114,7 +114,7 @@ class ImportRunner {
             foreach($importedEventToImportedEventOccurrences->getImportedEventOccurrences() as $importedEventOccurrence) {
                 if ($importedEventOccurrence->getEndAt()->getTimeStamp() < $this->app['timesource']->time()) {
                     // TODO log this somewhere?
-                } else if ($importedEventOccurrence->getStartAt()->getTimeStamp() > $this->app['timesource']->time()+$this->app['config']->importURLAllowEventsSecondsIntoFuture) {
+                } else if ($importedEventOccurrence->getStartAt()->getTimeStamp() > $this->app['timesource']->time()+$this->app['config']->importAllowEventsSecondsIntoFuture) {
                     // TODO log this somewhere?
                 } else if ($saved < $this->app['config']->importLimitToSaveOnEachRunEvents) {
                     if ($importedEventOccurrenceToEvent->run($importedEventOccurrence)) {

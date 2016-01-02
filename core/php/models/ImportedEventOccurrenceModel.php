@@ -16,8 +16,8 @@ class ImportedEventOccurrenceModel extends \models\ImportedEventModel {
 
 	public function setFromImportedEventModel(ImportedEventModel $importedEventModel) {
 		$this->id = $importedEventModel->id;
-		$this->import_url_id = $importedEventModel->import_url_id;
 		$this->import_id = $importedEventModel->import_id;
+		$this->id_in_import = $importedEventModel->id_in_import;
 		$this->title = $importedEventModel->title;
 		$this->description = $importedEventModel->description;
 		$this->start_at = $importedEventModel->start_at;

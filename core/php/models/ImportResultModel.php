@@ -14,7 +14,7 @@ namespace models;
  */
 class ImportResultModel {
 	
-	protected $import_url_id;
+	protected $import_id;
 	protected $new_count = 0;
 	protected $existing_count = 0;
 	protected $saved_count = 0;
@@ -27,7 +27,7 @@ class ImportResultModel {
 
 
 	public function setFromDataBaseRow($data) {
-		$this->import_url_id = $data['import_url_id'];
+		$this->import_id = $data['import_url_id'];
 		$this->new_count = $data['new_count'];
 		$this->existing_count = $data['existing_count'];
 		$this->saved_count = $data['saved_count'];
@@ -40,12 +40,12 @@ class ImportResultModel {
 	}
 	
 	
-	public function getImportUrlId() {
-		return $this->import_url_id;
+	public function getImportId() {
+		return $this->import_id;
 	}
 
-	public function setImportUrlId($import_url_id) {
-		$this->import_url_id = $import_url_id;
+	public function setImportId($import_id) {
+		$this->import_id = $import_id;
 		return $this;
 	}
 

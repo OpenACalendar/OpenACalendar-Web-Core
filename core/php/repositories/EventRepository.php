@@ -240,8 +240,8 @@ class EventRepository {
 			$repo = new \repositories\ImportedEventRepository();
 			$importedEvent = $repo->loadByEvent($event);
 			if ($importedEvent) {
+				$event->setIdInImport($importedEvent->getIdInImport());
 				$event->setImportId($importedEvent->getImportId());
-				$event->setImportUrlId($importedEvent->getImportUrlId());
 			}
 			// ... and return
 			return $event;
@@ -265,8 +265,8 @@ class EventRepository {
 			$repo = new \repositories\ImportedEventRepository();
 			$importedEvent = $repo->loadByEvent($event);
 			if ($importedEvent) {
+				$event->setIdInImport($importedEvent->getIdInImport());
 				$event->setImportId($importedEvent->getImportId());
-				$event->setImportUrlId($importedEvent->getImportUrlId());
 			}
 			// ... and return
 			return $event;
@@ -291,8 +291,8 @@ class EventRepository {
 			$repo = new \repositories\ImportedEventRepository();
 			$importedEvent = $repo->loadByEvent($event);
 			if ($importedEvent) {
+				$event->setIdInImport($importedEvent->getIdInImport());
 				$event->setImportId($importedEvent->getImportId());
-				$event->setImportUrlId($importedEvent->getImportUrlId());
 			}
 			// ... and return
 			return $event;
@@ -487,8 +487,15 @@ class EventRepository {
 			return $event;
 		}
 	}
-	
-	public function loadByImportURLIDAndImportId($importURLID, $importID) {
+
+    /**
+     * Linking events to imported events by means of field on event_information is now old - new way is via imported_event_is_event table.
+     *
+     * This is left as sometimes we want to load data by old way in order to convert data from old to new.
+     *
+     * @deprecated
+     */
+    public function loadByImportURLIDAndImportId($importURLID, $importID) {
 			global $DB;
 		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".

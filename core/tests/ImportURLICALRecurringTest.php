@@ -32,7 +32,7 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
      */
     function testRRule1() {
         $this->app['timesource']->mock(2014, 11, 17, 1, 1, 1);
-        $this->app['config']->importURLAllowEventsSecondsIntoFuture = 24*60*60*365;
+        $this->app['config']->importAllowEventsSecondsIntoFuture = 24*60*60*365;
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 8;
 
@@ -229,7 +229,7 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
      */
     function testRRuleBST1() {
         $this->app['timesource']->mock(2015, 3, 1, 1, 1, 1);
-        $this->app['config']->importURLAllowEventsSecondsIntoFuture = 24*60*60*60;
+        $this->app['config']->importAllowEventsSecondsIntoFuture = 24*60*60*60;
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 7;
 
@@ -338,7 +338,7 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
      */
     function testRRuleExDate1() {
         $this->app['timesource']->mock(2015, 1, 1, 1, 1, 1);
-        $this->app['config']->importURLAllowEventsSecondsIntoFuture = 24*60*60*365;
+        $this->app['config']->importAllowEventsSecondsIntoFuture = 24*60*60*365;
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 7;
 

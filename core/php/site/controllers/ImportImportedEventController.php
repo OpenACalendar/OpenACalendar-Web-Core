@@ -26,7 +26,7 @@ class ImportImportedEventController extends ImportController {
 		}
 
 		$repo = new ImportedEventRepository();
-		$this->parameters['importedEvent'] = $repo->loadByImportURLIDAndId($this->parameters['import']->getId(), $id);
+		$this->parameters['importedEvent'] = $repo->loadByImportIDAndId($this->parameters['import']->getId(), $id);
 		if (!$this->parameters['importedEvent']) {
 			return false;
 		}

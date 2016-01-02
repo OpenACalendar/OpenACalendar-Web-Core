@@ -31,7 +31,7 @@ class ImportURLMeetupDataTest extends \BaseAppWithDBTest {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
 		
 
 		$user = new UserAccountModel();

@@ -34,7 +34,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
@@ -148,7 +148,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		global $CONFIG;
 
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 
@@ -262,7 +262,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
@@ -365,7 +365,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importURLAllowEventsSecondsIntoFuture = 7776000; // 90 days
+		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
@@ -434,7 +434,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		global $CONFIG;
 
         \TimeSource::mock(2012, 9, 1, 1, 1, 1);
-        $CONFIG->importURLAllowEventsSecondsIntoFuture = 77760000;
+        $CONFIG->importAllowEventsSecondsIntoFuture = 77760000;
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 2;
 		
