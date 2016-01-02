@@ -3,6 +3,8 @@
 namespace import;
 
 use JMBTechnologyLimited\RRuleUnravel\ICalData;
+use JMBTechnologyLimited\RRuleUnravel\ResultFilterAfterDateTime;
+use JMBTechnologyLimited\RRuleUnravel\ResultFilterBeforeDateTime;
 use JMBTechnologyLimited\RRuleUnravel\Unraveler;
 use models\ImportedEventModel;
 use models\ImportedEventOccurrenceModel;
@@ -22,7 +24,7 @@ class ImportedEventToImportedEventOccurrences {
 
 	protected $toMultiples;
 
-	function __construct(ImportedEventModel $importedEvent)
+	function __construct($app, ImportedEventModel $importedEvent)
 	{
 
 		$reoccur = $importedEvent->getReoccur();
@@ -42,6 +44,11 @@ class ImportedEventToImportedEventOccurrences {
 
 			$unraveler = new Unraveler($icaldata);
 			$unraveler->setIncludeOriginalEvent(true);
+            $unraveler->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
+            $toEnd = $app['timesource']->getDateTime();
+            $toEnd->setTimestamp($toEnd->getTimestamp() + $app['config']->importURLAllowEventsSecondsIntoFuture);
+            $unraveler->addResultFilter(new ResultFilterBeforeDateTime($toEnd));
+            $unraveler->setResultsCountLimit(max( $app['config']->importLimitToSaveOnEachRunImportedEvents, $app['config']->importLimitToSaveOnEachRunEvents ));
 			$unraveler->process();
 			$results = $unraveler->getResults();
 

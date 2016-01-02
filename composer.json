@@ -13,7 +13,7 @@
 		"symfony/monolog-bridge": "~2.3",
 		"jmbtechnologylimited/parsedatetimerangestring":"1.0.*",
 		"facebook/php-sdk-v4" : "4.0.*",
-		"jmbtechnologylimited/rruleunravel" : "0.3.*",
+		"jmbtechnologylimited/rruleunravel" : "0.4.*",
 		"jmbtechnologylimited/icaldissect" : "1.1.*",
 		"guzzlehttp/guzzle":"5.3.*",
 		"pda/pheanstalk":"3.1.*"

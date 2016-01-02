@@ -102,7 +102,7 @@ class ImportRunner {
                 }
             }
 
-            $importedEventToImportedEventOccurrences = new ImportedEventToImportedEventOccurrences($importedEvent);
+            $importedEventToImportedEventOccurrences = new ImportedEventToImportedEventOccurrences($this->app, $importedEvent);
 
             if ($importedEventToImportedEventOccurrences->getToMultiples()) {
                 $eventRecurSet = $importedEvent != null ? $eventRecurSetRepo->getForImportedEvent($importedEvent) : null;

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "77e16437eb87a5555043bbed601c704b",
-    "content-hash": "07bfd6342ea098afb56ad241097fa090",
+    "hash": "a630519b850a3c73f992bb009df7b77d",
+    "content-hash": "771cd8d163a89c36753f7083a0cdfbd2",
     "packages": [
         {
             "name": "facebook/php-sdk-v4",
@@ -439,23 +439,20 @@
         },
         {
             "name": "jmbtechnologylimited/rruleunravel",
-            "version": "v0.3.1",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JMB-Technology-Limited/RRuleUnravel.git",
-                "reference": "00a206b5a9e7c5e4b5718717a6e397298e230257"
+                "reference": "e98c0937af946d2c7f3acf67c0a3d353250ca2f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/00a206b5a9e7c5e4b5718717a6e397298e230257",
-                "reference": "00a206b5a9e7c5e4b5718717a6e397298e230257",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/RRuleUnravel/zipball/e98c0937af946d2c7f3acf67c0a3d353250ca2f2",
+                "reference": "e98c0937af946d2c7f3acf67c0a3d353250ca2f2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -481,7 +478,7 @@
                 "ical",
                 "rrule"
             ],
-            "time": "2015-01-15 08:58:57"
+            "time": "2016-01-01 18:55:37"
         },
         {
             "name": "monolog/monolog",
