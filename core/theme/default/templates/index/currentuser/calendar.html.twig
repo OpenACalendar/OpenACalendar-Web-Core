@@ -97,7 +97,7 @@
 										{% include '/index/currentuser/calendar.currentUserOptions.html.twig' %}
 									{% endif %}		
 									<span class="start_at">
-										{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+										{{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ? 'g:ia' : 'H:i' ) }}
 									</span>
 									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug }}' }); return false;">
 										{{ event.getSummaryDisplay() }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}

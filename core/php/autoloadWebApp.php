@@ -65,14 +65,13 @@ unset($dirs);
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 	global $CONFIG;
-    $twig->addExtension(new twig\extensions\LocaleExtension($app));
-    $twig->addExtension(new twig\extensions\SameDayExtension($app));
-    $twig->addExtension(new twig\extensions\LinkifyExtension($app));
+    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\TimeZoneExtension());
+    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
+    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array('attr'=>array('target'=>'_blank'))));
     $twig->addExtension(new twig\extensions\TypeCheckExtension($app));
-    $twig->addExtension(new twig\extensions\WordWrapExtension($app));
-    $twig->addExtension(new twig\extensions\TruncateExtension($app));
-    $twig->addExtension(new twig\extensions\LinkInfoExtension($app));
-    $twig->addExtension(new twig\extensions\TimeSinceInWordsExtension($app));
+    $twig->addExtension(new Twig_Extensions_Extension_Text());
+    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkInfoExtension());
+    $twig->addExtension(new Twig_Extensions_Extension_Date());
     $twig->addExtension(new twig\extensions\EventsCountExtension($app));
 	$twig->addGlobal('config', $CONFIG);
 	$twig->addGlobal('extensions', $app['extensions']);

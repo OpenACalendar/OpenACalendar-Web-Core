@@ -6,24 +6,24 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="date">
-	<time datetime="{{ startAt|tolocaltimeformatted('c', timezone) }}" itemprop="startDate">
-		<span class="startDay">{{ startAt|tolocaltimeformatted('D jS', timezone) }}</span>
-		<span class="startMonthYear">{{ startAt|tolocaltimeformatted('M Y', timezone) }}</span>
+	<time datetime="{{ startAt|totimezone(timezone)|date('c') }}" itemprop="startDate">
+		<span class="startDay">{{ startAt|totimezone(timezone)|date('D jS') }}</span>
+		<span class="startMonthYear">{{ startAt|totimezone(timezone)|date('M Y') }}</span>
 		<span class="startTime">
-			{{ startAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
+			{{ startAt|totimezone(timezone)|date( currentUserClock12Hour ? 'g:ia' : 'H:i') }}
 		</span>
 	</time>
 	<span class="to">to</span>
 	{% if sameday(startAt,endAt) %}
-		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}" itemprop="endDate">
+		<time datetime="{{ endAt|totimezone(timezone)|date('c') }}" itemprop="endDate">
 			<span class="end">
-				{{ endAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, timezone) }}
+				{{ endAt|totimezone(timezone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i') }}
 			</span>
 		</time>
 	{% else %}
-		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}" itemprop="endDate">
+		<time datetime="{{ endAt|totimezone(timezone)|date('c') }}" itemprop="endDate">
 			<span class="end">
-				{{ endAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, timezone) }}
+				{{ endAt|totimezone(timezone)|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i') }}
 			</span>
 		</time>
 	{% endif %}

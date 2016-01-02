@@ -22,7 +22,6 @@ use repositories\builders\filterparams\EventFilterParams;
 use repositories\UserAccountVerifyEmailRepository;
 use repositories\UserNotificationRepository;
 use repositories\builders\UserNotificationRepositoryBuilder;
-use twig\extensions\TimeSinceInWordsExtension;
 
 /**
  *
@@ -244,16 +243,14 @@ class CurrentUserController {
 		$rb->setUser($app['currentUser']);
 		
 		$notifications = $rb->fetchAll();
-		
-		$timeSinceInWordsExtension = new TimeSinceInWordsExtension($app);
-		
+
 		$out = array();
 		foreach($notifications as $notification) {
 			$out[] = array(
 				'id'=>$notification->getId(),
 				'text'=>$notification->getNotificationText(),
 				'read'=>$notification->getIsRead(),
-				'timesince'=>$timeSinceInWordsExtension->timeSinceInWords($notification->getCreatedAt()),
+				'timesince'=>$app['twig']->render('timediff.html.twig', array('data'=>$notification->getCreatedAt())),
 				'site'=>array(
 					'slug'=>$notification->getSite()->getSlug(),
 					'title'=>$notification->getSite()->getTitle(),

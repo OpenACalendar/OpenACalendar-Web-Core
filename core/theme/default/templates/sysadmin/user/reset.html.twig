@@ -19,10 +19,10 @@
 		</tr>
 		{% for reset in resets %}
 			<tr {% if loop.index is even %}class="alternative"{% endif %} >
-				<td>{{ reset.getCreatedAt  |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}</td>
+				<td>{{ reset.getCreatedAt  |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
 				<td>
 					{% if reset.getResetAt %}
-						{{ reset.getResetAt  |tolocaltimeformatted('D H:i jS M Y', currentTimeZone )}}
+						{{ reset.getResetAt  |totimezone(currentTimeZone)|date('D H:i jS M Y' )}}
 					{% endif %}
 				</td>				
 				

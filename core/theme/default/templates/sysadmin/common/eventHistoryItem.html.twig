@@ -11,10 +11,10 @@
 			{% if historyItem.isdeleted %}
 				Deleted!
 			{% else %}
-				<time datetime="{{ historyItem.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
-					<span class="startDay">{{ historyItem.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
-					<span class="startDate">{{ historyItem.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
-					<span class="startMonthYear">{{ historyItem.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+				<time datetime="{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('c') }}">
+					<span class="startDay">{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('D') }}</span>
+					<span class="startDate">{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('jS') }}</span>
+					<span class="startMonthYear">{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('M \'y') }}</span>
 				</time>				
 			{% endif %}
 		</a>
@@ -47,13 +47,13 @@
 		{% if historyItem.getStartAtChanged %}
 			<div class="fieldChanged">
 				<div class="field">Start changed:</div>
-				<div class="value">{{ historyItem.startAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, historyItem.timezone) }} ({{ historyItem.timezone }})</div>
+				<div class="value">{{ historyItem.startAt |totimezone(historyItem.timezone)|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i' )(, currentUserClock12Hour, ) }} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getEndAtChanged %}
 			<div class="fieldChanged">
 				<div class="field">End changed:</div>
-				<div class="value">{{ historyItem.endAt |tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, historyItem.timezone)}} ({{ historyItem.timezone }})</div>
+				<div class="value">{{ historyItem.endAt |totimezone(historyItem.timezone)|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i')}} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getCountryIdChanged %}
@@ -107,9 +107,9 @@
 	{% endif %}
 	<div class="created">
 		Edited at 
-		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
-			{{ historyItem.getCreatedAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}				
-			({{ historyItem.getCreatedAt | timesinceinwords }})
+		<time datetime="{{ historyItem.getCreatedAt|totimezone(currentTimeZone)|date('c') }}">
+			{{ historyItem.getCreatedAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i') }}
+			({{ historyItem.getCreatedAt | time_diff }})
 		</time>	
 		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
 	</div>

@@ -29,12 +29,12 @@
 	{% if recurMonthlyOnWeekNumber %}
 		<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/monthly">monthly 
 				on the {{ recurMonthlyOnWeekNumber }}{{ recurMonthlyOnWeekNumberOrdinal }} 
-				{{ event.getStartAt|tolocaltimeformatted('l', currentTimeZone)  }} in the month</a>?</p>
+				{{ event.getStartAt|totimezone(currentTimeZone)|date('l')  }} in the month</a>?</p>
 	{% endif %}
 	
 	{% if recurMonthlyOnLastWeek %}
 		<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/monthlyLast">monthly 
-				on the last {{ event.getStartAt|tolocaltimeformatted('l', currentTimeZone)  }} in the month</a>?</p>
+				on the last {{ event.getStartAt|totimezone(currentTimeZone)|date('l')  }} in the month</a>?</p>
 	{% endif %}
 
 

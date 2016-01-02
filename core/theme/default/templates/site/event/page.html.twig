@@ -75,7 +75,7 @@
 			event:{{ event.slug }},
 			eventSlugURL:"{{ event.slugForURL|e('js') }}",
 			eventTitle:"{{ event.summaryDisplay|e('js') }}",
-			eventStartLocal:"{{  event.startAt|tolocaltimeformatted('D jS M Y g:ia', event.timezone) }}"
+			eventStartLocal:"{{  event.startAt|totimezone(event.timezone)|date('D jS M Y g:ia') }}"
 			{% if group is not null %}, group: {{ group.slug }}, groupTitle:"{{ group.title|e('js') }}"{% endif %}
 		}
 	</script>

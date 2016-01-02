@@ -20,7 +20,7 @@
 		{% for notification in notifications  %}
 			<li class="usernotification{% if notification.isRead %}read{% else %}unread{% endif %}">
 				<a href="/me/notification/{{ notification.id }}" class="title">{{ notification.notificationText }}</a>
-				<div class="timesince">{{ notification.createdAt | timesinceinwords }}</div>
+				<div class="timesince">{{ notification.createdAt | time_diff }}</div>
 				{% if not config.isSingleSiteMode %}
 					<div class="site"><a href="{{ config.getWebSiteDomainSecure(notification.site.slug) }}">{{ notification.site.title }}</a></div>
 				{% endif %}

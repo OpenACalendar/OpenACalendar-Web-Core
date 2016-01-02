@@ -12,7 +12,7 @@
 - {{ event.summaryDisplay }}
 {% endfor %}
 {% for event in d.events %}
-- {{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }} {{ event.summaryDisplay }}
+- {{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i' ) }} {{ event.summaryDisplay }}
 {% endfor %}
 
 {% endfor %}

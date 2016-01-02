@@ -32,14 +32,14 @@
 			{% for event in futureEvents %}
 				<li class="event">
 					<div class="dateTimeIcon">
-						<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
+						<time datetime="{{ event.getStartAt|totimezone(currentTimeZone)|date('c') }}">
 							<div class="dateIcon">
-								<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', currentTimeZone) }}</span>
-								<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', currentTimeZone) }}</span>
-								<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', currentTimeZone) }}</span>
+								<span class="startDay">{{ event.getStartAt|totimezone(currentTimeZone)|date('D') }}</span>
+								<span class="startDate">{{ event.getStartAt|totimezone(currentTimeZone)|date('jS') }}</span>
+								<span class="startMonthYear">{{ event.getStartAt|totimezone(currentTimeZone)|date('M \'y') }}</span>
 							</div>
 							<div class="timeIcon">
-								<span class="startTime">{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}</span>
+								<span class="startTime">{{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia': 'H:i') }}</span>
 							</div>
 						</time>				
 					</div>

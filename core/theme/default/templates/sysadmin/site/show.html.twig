@@ -67,7 +67,7 @@
 		{% endif %}
 		<tr>
 			<th>Created</th>
-			<td>{% if site.createdAt %}{{ site.createdAt |tolocaltimeformatted('D H:i jS M Y', currentTimeZone ) }}{% endif %}</td>
+			<td>{% if site.createdAt %}{{ site.createdAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}{% endif %}</td>
 		</tr>
 		<tr>
 			<th>More</th>

@@ -37,24 +37,24 @@
 							<input type="checkbox" name="new[]" value="{{ newEvent.getStartAt.getTimeStamp }}" checked>
 							<div class="summary">{{ newEvent.summary }}</div>
 							<div class="date">
-								<time datetime="{{ newEvent.getStartAt|tolocaltimeformatted('c', currentTimeZone) }}">
-									<span class="startDay">{{ newEvent.getStartAt|tolocaltimeformatted('D jS', currentTimeZone) }}</span>
-									<span class="startMonthYear">{{ newEvent.getStartAt|tolocaltimeformatted('M Y', currentTimeZone) }}</span>
+								<time datetime="{{ newEvent.getStartAt|totimezone(currentTimeZone)|date('c') }}">
+									<span class="startDay">{{ newEvent.getStartAt|totimezone(currentTimeZone)|date('D jS') }}</span>
+									<span class="startMonthYear">{{ newEvent.getStartAt|totimezone(currentTimeZone)|date('M Y') }}</span>
 									<span class="startTime">
-										{{ newEvent.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+										{{ newEvent.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' :'H:i') }}
 									</span>
 								</time>
 								<span class="to">to</span>
 								{% if sameday(newEvent.getStartAt,newEvent.getEndAt) %}
-									<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+									<time datetime="{{ newEvent.getEndAt|totimezone(currentTimeZone)|date('c') }}">
 										<span class="end">
-											{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+											{{ newEvent.getEndAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ? 'g:ia': 'H:i') }}
 										</span>
 									</time>
 								{% else %}
-									<time datetime="{{ newEvent.getEndAt|tolocaltimeformatted('c', currentTimeZone) }}">
+									<time datetime="{{ newEvent.getEndAt|totimezone(currentTimeZone)|date('c') }}">
 										<span class="end">
-											{{ newEvent.getEndAt|tolocaltimeformatted12or24hourclock('D jS M Y g:ia', 'D jS M Y H:i', currentUserClock12Hour, currentTimeZone) }}
+											{{ newEvent.getEndAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'D jS M Y g:ia': 'D jS M Y H:i') }}
 										</span>
 									</time>
 								{% endif %}

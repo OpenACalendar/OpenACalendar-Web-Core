@@ -219,7 +219,7 @@
 										</div>
 									{% endif %}									
 									<span class="start_at">
-										{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
+										{{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i') }}
 									</span>
 									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
 										{{ event.getSummaryDisplay() }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
