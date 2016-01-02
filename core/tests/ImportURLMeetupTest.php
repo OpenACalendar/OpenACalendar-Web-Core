@@ -24,6 +24,8 @@ class ImportURLMeetupTest extends \BaseAppTest {
 	}
 	
 	/**
+     *
+     * @group import
      * @dataProvider dataForTestIsValid
      */	
 	function testIsValid($url, $result, $newURL) {

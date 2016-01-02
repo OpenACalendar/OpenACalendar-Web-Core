@@ -23,8 +23,11 @@ use repositories\builders\EventRepositoryBuilder;
  */
 class ImportURLEventbriteDataTest extends \BaseAppWithDBTest {
 
-	
-	function testBasic() {
+    /**
+     *
+     * @group import
+     */
+    function testBasic() {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);

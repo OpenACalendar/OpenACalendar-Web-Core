@@ -18,8 +18,12 @@ use repositories\ImportRepository;
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 class ImportURLClashTest extends \BaseAppWithDBTest {
-	
-	function test1() {
+
+    /**
+     *
+     * @group import
+     */
+    function test1() {
 
 
 		$user = new UserAccountModel();

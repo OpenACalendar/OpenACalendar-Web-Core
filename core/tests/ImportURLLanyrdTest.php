@@ -23,6 +23,8 @@ class ImportURLLanyrdTest extends \BaseAppTest {
 	}
 	
 	/**
+     *
+     * @group import
      * @dataProvider dataForTestIsValid
      */	
 	function testIsValid($currentYear, $url, $result, $newURL) {

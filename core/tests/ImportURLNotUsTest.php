@@ -36,6 +36,8 @@ class ImportURLNotUsTest  extends \BaseAppTest  {
 	}
 	
 	/**
+     *
+     * @group import
      * @dataProvider dataForTestIsValid
      */	
 	function testIsValid($webIndexDomain, $webSiteDomain, $hasSSL, $webIndexDomainSSL, $webSiteDomainSSL, $url, $result) {

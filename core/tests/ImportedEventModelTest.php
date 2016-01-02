@@ -14,7 +14,10 @@ use models\ImportedEventModel;
 class ImportedEventModelTest  extends \BaseAppTest {
 
 
-	public function  testReoccurIfDifferentFromNull1() {
+    /**
+     * @group import
+     */
+    public function  testReoccurIfDifferentFromNull1() {
 		$iem = new ImportedEventModel();
 		$this->assertFalse($iem->hasReoccurence());
 		$this->assertTrue($iem->setReoccurIfDifferent(array("ical_rrule"=>array("FREQ"=>"WEEKLY"))));
@@ -32,6 +35,7 @@ class ImportedEventModelTest  extends \BaseAppTest {
 	}
 
 	/**
+     * @group import
 	 * @dataProvider dataForTestReoccurIfDifferentTrue
 	 */
 	public function  testReoccurIfDifferentTrue($first, $second) {
@@ -50,6 +54,7 @@ class ImportedEventModelTest  extends \BaseAppTest {
 
 	/**
 	 * @dataProvider dataForTestReoccurIfDifferentFalse
+     * @group import
 	 */
 	public function  testReoccurIfDifferentFalse($first, $second) {
 		$iem = new ImportedEventModel();

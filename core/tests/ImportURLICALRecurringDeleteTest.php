@@ -27,7 +27,11 @@ use repositories\builders\EventRepositoryBuilder;
 class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 
 
-	function testRRuleDeleteByExDate1() {
+    /**
+     *
+     * @group import
+     */
+    function testRRuleDeleteByExDate1() {
 		global $CONFIG;
 
 		\TimeSource::mock(2015, 1, 1, 1, 1, 1);

@@ -26,8 +26,11 @@ use repositories\builders\EventRepositoryBuilder;
  */
 class ImportURLICALTest extends \BaseAppWithDBTest {
 
-	
-	function testBasicThenDeletedByFlag() {
+    /**
+     *
+     * @group import
+     */
+    function testBasicThenDeletedByFlag() {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
@@ -137,7 +140,11 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 	}
 
-	function testBasicThenDeletedByVanishing() {
+    /**
+     *
+     * @group import
+     */
+    function testBasicThenDeletedByVanishing() {
 		global $CONFIG;
 
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
@@ -247,7 +254,11 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 	}
 
-	function testMoves() {
+    /**
+     *
+     * @group import
+     */
+    function testMoves() {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
@@ -345,8 +356,12 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$this->assertFalse($event->getIsDeleted());
 		
 	}
-	
-	function testNotValid() {
+
+    /**
+     *
+     * @group import
+     */
+    function testNotValid() {
 		global $CONFIG;
 		
 		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
@@ -410,8 +425,12 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$this->assertEquals(0, count($events));
 		
 	}
-	
-	function testLimits() {
+
+    /**
+     *
+     * @group import
+     */
+    function testLimits() {
 		global $CONFIG;
 
         \TimeSource::mock(2012, 9, 1, 1, 1, 1);
