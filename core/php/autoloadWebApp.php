@@ -67,7 +67,16 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 	global $CONFIG;
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\TimeZoneExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
-    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array('attr'=>array('target'=>'_blank'))));
+    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array(
+        'callback' => function($url, $caption, $isEmail) {
+                if ($isEmail) {
+                    return '<a href="mailto:'.$url.'">'.$url.'</a>';
+                } else {
+                    $bits = parse_url($url);
+                    return '<a href="'.$url.'" target="_blank">'.(isset($bits['host']) ? $bits['host'] : $url).'</a>';
+                }
+            }
+    )));
     $twig->addExtension(new twig\extensions\TypeCheckExtension($app));
     $twig->addExtension(new Twig_Extensions_Extension_Text());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkInfoExtension());
