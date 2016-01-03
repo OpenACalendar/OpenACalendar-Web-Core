@@ -31,7 +31,8 @@
 						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 						<input type="hidden" name="removeTag" value="{{ tag.slug }}">
 						<span class="tagTitleWrapper">{{ tag.title }}</a></span>
-						<input type="submit" value="Remove Tag">
+						<div class="bigSubmitActionWrapper"><input type="submit"  value="Remove Tag" class="bigSubmitAction"/></div>
+						<div class="afterBigSubmitActionWrapper"></div>
 					</form>
 					<p>{{ tag.description | nl2br | linkify }}</p>
 				</li>
@@ -43,7 +44,8 @@
 		</ul>
 
 		<form method="get" action="/event/{{ event.slugForURL }}">
-			<input type="submit" value="OK, Finished editing!">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="OK, Finished editing!" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 
 	</div>
@@ -60,7 +62,8 @@
 						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 						<input type="hidden" name="addTag" value="{{ tag.slug }}">
 						<span class="tagTitleWrapper">{{ tag.title }}</span>
-						<input type="submit" value="Add Tag">
+						<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Tag" class="bigSubmitAction"/></div>
+						<div class="afterBigSubmitActionWrapper"></div>
 					</form>
 					<p>{{ tag.description | nl2br | linkify }}</p>
 				</li>
