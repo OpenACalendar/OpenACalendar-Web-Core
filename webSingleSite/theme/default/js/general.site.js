@@ -109,7 +109,7 @@ function showExportSharePopup() {
 				html += '<label><input type="radio" name="ExportWhat" id="ExportEvent"> just this event</label>';
 			}
 		} else {
-			html  += '<p>Hint: if you browse round the site, you will be offered the option to export filtered feeds of only what interests you!</p>';
+			html  += '<p>Hint: if you browse round the calendar, you can export filtered feeds of only what interests you!</p>';
 		}
 		html += '</div>';
 		html += '<ul id="ExportSharePopupExportMenu">';
