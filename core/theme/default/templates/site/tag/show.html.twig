@@ -70,3 +70,11 @@
 
 {% endblock %}
 
+
+{% block scripts %}
+	{{ parent() }}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
+{% endblock %}
+
+
