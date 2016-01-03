@@ -207,6 +207,8 @@ class Config {
 
 	public $formWidgetTimeMinutesMultiples = 1;
 
+    public $slugMaxLength = 50;
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

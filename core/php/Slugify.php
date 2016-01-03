@@ -33,7 +33,7 @@ class Slugify  {
         // Do it twice to get ---'s turned to -'s to.
         $extraSlug = str_replace("--", "-", $extraSlug);
         $extraSlug = str_replace("--", "-", $extraSlug);
-        return $extraSlug;
+        return substr($extraSlug, 0, $this->app['config']->slugMaxLength);
     }
 
 }

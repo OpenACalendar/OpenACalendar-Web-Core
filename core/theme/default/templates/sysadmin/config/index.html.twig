@@ -276,6 +276,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th>slugMaxLength</th>
+			<td>{{ config.slugMaxLength }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'slugMaxLength'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>Import</th>
 			<td><a href="/sysadmin/config/import">More</a></td>
 		</tr>

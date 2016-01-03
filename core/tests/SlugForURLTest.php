@@ -17,6 +17,8 @@ use models\TagModel;
  */
 class SlugForUrlTest extends \BaseAppTest {
 
+    protected $testSetMaxLength = 30;
+
 	function dataForTestSet() {
 		return array(
 				array(1,'cat','1-cat'),
@@ -26,6 +28,7 @@ class SlugForUrlTest extends \BaseAppTest {
 				array(5,'café','5-cafe'),
 				array(6,'cafe meetup - bob\'s group','6-cafe-meetup-bobs-group'),
 				array(7,'  cafe meetup ','7-cafe-meetup'),
+				array(8,'abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz','8-abcdefghijklmnopqrstuvwxyz-abc'),
 			);
 	}
 	
@@ -33,6 +36,7 @@ class SlugForUrlTest extends \BaseAppTest {
      * @dataProvider dataForTestSet
      */
 	function testSet1($slug, $text, $result) {
+        $this->app['config']->slugMaxLength = $this->testSetMaxLength;
 		$area = new AreaModel();
 		$area->setSlug($slug);
 		$area->setTitle($text);
@@ -43,6 +47,7 @@ class SlugForUrlTest extends \BaseAppTest {
      * @dataProvider dataForTestSet
      */
 	function testSet2($slug, $text, $result) {
+        $this->app['config']->slugMaxLength = $this->testSetMaxLength;
 		$group = new GroupModel();
 		$group->setSlug($slug);
 		$group->setTitle($text);
@@ -53,6 +58,7 @@ class SlugForUrlTest extends \BaseAppTest {
      * @dataProvider dataForTestSet
      */
 	function testSet3($slug, $text, $result) {
+        $this->app['config']->slugMaxLength = $this->testSetMaxLength;
 		$venue = new VenueModel();
 		$venue->setSlug($slug);
 		$venue->setTitle($text);
@@ -63,6 +69,7 @@ class SlugForUrlTest extends \BaseAppTest {
      * @dataProvider dataForTestSet
      */
 	function testSet4($slug, $text, $result) {
+        $this->app['config']->slugMaxLength = $this->testSetMaxLength;
 		$event = new EventModel();
 		$event->setSlug($slug);
 		$event->setSummary($text);
@@ -73,6 +80,7 @@ class SlugForUrlTest extends \BaseAppTest {
      * @dataProvider dataForTestSet
      */
 	function testSet5($slug, $text, $result) {
+        $this->app['config']->slugMaxLength = $this->testSetMaxLength;
 		$curatedlist = new CuratedListModel();
 		$curatedlist->setSlug($slug);
 		$curatedlist->setTitle($text);
@@ -83,11 +91,14 @@ class SlugForUrlTest extends \BaseAppTest {
      * @dataProvider dataForTestSet
      */
 	function testSet6($slug, $text, $result) {
+        $this->app['config']->slugMaxLength = $this->testSetMaxLength;
 		$tag = new TagModel();
 		$tag->setSlug($slug);
 		$tag->setTitle($text);
 		$this->assertEquals($result, $tag->getSlugForUrl());
 	}
+
+    protected $testClassMaxLength = 30;
 
     function dataForTestClass() {
         return array(
@@ -98,6 +109,7 @@ class SlugForUrlTest extends \BaseAppTest {
             array('café','cafe'),
             array('cafe meetup - bob\'s group','cafe-meetup-bobs-group'),
             array('  cafe meetup ','cafe-meetup'),
+            array('abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz','abcdefghijklmnopqrstuvwxyz-abc'),
         );
     }
 
@@ -105,6 +117,7 @@ class SlugForUrlTest extends \BaseAppTest {
      * @dataProvider dataForTestClass
      */
     function testClass1($text, $result) {
+        $this->app['config']->slugMaxLength = $this->testClassMaxLength;
         $slugify = new Slugify($this->app);
         $this->assertEquals($result, $slugify->process($text));
     }
