@@ -249,16 +249,20 @@ class CurrentUserController {
 		
 		$out = array();
 		foreach($notifications as $notification) {
-			$out[] = array(
+			$data = array(
 				'id'=>$notification->getId(),
 				'text'=>$notification->getNotificationText(),
 				'read'=>$notification->getIsRead(),
 				'timesince'=>$timeSinceInWordsExtension->timeSinceInWords($notification->getCreatedAt()),
-				'site'=>array(
-					'slug'=>$notification->getSite()->getSlug(),
-					'title'=>$notification->getSite()->getTitle(),
-				),
+                'site'=>null,
 			);
+            if ($notification->getSite()) {
+                $data['site'] = array(
+                    'slug'=>$notification->getSite()->getSlug(),
+                    'title'=>$notification->getSite()->getTitle(),
+                );
+            }
+            $out[] = $data;
 		}
 		
 		return json_encode(array('notifications'=>$out));

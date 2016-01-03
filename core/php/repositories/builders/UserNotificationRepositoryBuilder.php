@@ -94,11 +94,14 @@ class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 			if ($extension) {
 				$type = $extension->getUserNotificationType($data['from_user_notification_type']);
 				if ($type) {
-					$site = new SiteModel();
-					$site->setId($data['site_id']);
-					$site->setSlug($data['site_slug']);
-					$site->setTitle($data['site_title']);
-					$notification = $type->getNotificationFromData($data, null, $site);
+                    $site = null;
+                    if ($data['site_id']) {
+                        $site = new SiteModel();
+                        $site->setId($data['site_id']);
+                        $site->setSlug($data['site_slug']);
+                        $site->setTitle($data['site_title']);
+                    }
+                    $notification = $type->getNotificationFromData($data, null, $site);
 					if ($notification->isValid()) {
 						$results[] = $notification;
 					}
