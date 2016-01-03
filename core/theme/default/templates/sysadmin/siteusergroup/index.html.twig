@@ -133,6 +133,17 @@
 		{% endfor %}
 	</table>
 
+	<table class="oneData">
+		<tr>
+			<th>More</th>
+			<td>
+				<ul>
+					<li><a href="{{  config.getWebSiteDomainSecure(site.slug) }}/admin/usergroup/{{ usergroup.id }}" target="_blank">View On Site</a></li>
+				</ul>
+			</td>
+		</tr>
+	</table>
+
 	<form action="#" method="post" class="action">
 		{{ form_errors(form) }}
 		{{ form_rest(form) }}

@@ -32,7 +32,15 @@
 		<tr>
 			<th>Description</th>
 			<td>{{ tag.description | nl2br }}</td>
-		</tr>	
+		</tr>
+		<tr>
+			<th>More</th>
+			<td>
+				<ul>
+					<li><a href="{{  config.getWebSiteDomainSecure(site.slug) }}/tag/{{ tag.slugForURL }}" target="_blank">View On Site</a></li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 
 	<form action="#" method="post" class="action">

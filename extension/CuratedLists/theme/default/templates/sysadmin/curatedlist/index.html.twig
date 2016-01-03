@@ -33,6 +33,14 @@
 			<th>Description</th>
 			<td>{{ curatedlist.description | nl2br }}</td>
 		</tr>
+		<tr>
+			<th>More</th>
+			<td>
+				<ul>
+					<li><a href="{{  config.getWebSiteDomainSecure(site.slug) }}/curatedlist/{{ curatedlist.slug }}" target="_blank">View On Site</a></li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 
 	<form action="#" method="post" class="action">
