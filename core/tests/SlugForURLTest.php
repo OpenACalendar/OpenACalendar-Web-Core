@@ -38,7 +38,7 @@ class SlugForUrlTest extends \BaseAppTest {
 		$area->setTitle($text);
 		$this->assertEquals($result, $area->getSlugForUrl());
 	}
-	
+
 	/**
      * @dataProvider dataForTestSet
      */
@@ -48,7 +48,7 @@ class SlugForUrlTest extends \BaseAppTest {
 		$group->setTitle($text);
 		$this->assertEquals($result, $group->getSlugForUrl());
 	}
-	
+
 	/**
      * @dataProvider dataForTestSet
      */
@@ -58,7 +58,7 @@ class SlugForUrlTest extends \BaseAppTest {
 		$venue->setTitle($text);
 		$this->assertEquals($result, $venue->getSlugForUrl());
 	}
-	
+
 	/**
      * @dataProvider dataForTestSet
      */
@@ -68,7 +68,7 @@ class SlugForUrlTest extends \BaseAppTest {
 		$event->setSummary($text);
 		$this->assertEquals($result, $event->getSlugForUrl());
 	}
-	
+
 	/**
      * @dataProvider dataForTestSet
      */
@@ -78,7 +78,7 @@ class SlugForUrlTest extends \BaseAppTest {
 		$curatedlist->setTitle($text);
 		$this->assertEquals($result, $curatedlist->getSlugForUrl());
 	}
-	
+
 	/**
      * @dataProvider dataForTestSet
      */
@@ -88,6 +88,26 @@ class SlugForUrlTest extends \BaseAppTest {
 		$tag->setTitle($text);
 		$this->assertEquals($result, $tag->getSlugForUrl());
 	}
-	
+
+    function dataForTestClass() {
+        return array(
+            array('cat','cat'),
+            array('@cat','cat'),
+            array('cat dog','cat-dog'),
+            array('',''),
+            array('café','cafe'),
+            array('cafe meetup - bob\'s group','cafe-meetup-bobs-group'),
+            array('  cafe meetup ','cafe-meetup'),
+        );
+    }
+
+    /**
+     * @dataProvider dataForTestClass
+     */
+    function testClass1($text, $result) {
+        $slugify = new Slugify($this->app);
+        $this->assertEquals($result, $slugify->process($text));
+    }
+
 }
 
