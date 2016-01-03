@@ -94,7 +94,7 @@ function loadNotifications() {
 				
 				html += '<div class="title"><a href="'+rootNotificationURL+notification.id+'">'+escapeHTML(notification.text)+'</a></div>';
 				html += '<div class="timesince">'+escapeHTML(notification.timesince)+'</div>'
-				if (!config.isSingleSiteMode) {
+				if (!config.isSingleSiteMode && notification.site) {
 					html += '<div class="site">'+escapeHTML(notification.site.title)+'</div>'
 				}
 				html += '</li>';
