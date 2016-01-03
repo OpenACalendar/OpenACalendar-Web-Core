@@ -38,7 +38,8 @@
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="submitted" value="remove">
 							<input type="hidden" name="username" value="{{ curator.username }}">
-							<input type="submit" value="Remove">
+							<div class="bigSubmitActionWrapper"><input type="submit"  value="Remove {{ curator.username |e ('html_attr') }}" class="bigSubmitAction"/></div>
+							<div class="afterBigSubmitActionWrapper"></div>
 						</form>
 					{% endif %}
 				</li>
@@ -58,8 +59,9 @@
 				<div class="widgetWrapperPlacementOnly smallInputs"><input type="text" name="userdetails" value=""></div>
 				<div class="after"></div>
 			</div>
-			
-			<input type="submit" value="Add">
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Add new Curator" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 	{% endif %}
 
