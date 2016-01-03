@@ -93,8 +93,17 @@
 								<div class="event starting {% if event.isDeleted %}deleted{% endif %}">
 									<div class="above"></div>
 									{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
-										{# The below is a seperate file, as it varies slightly on Site and SingleSite #}
-										{% include '/index/currentuser/calendar.currentUserOptions.html.twig' %}
+										<div class="currentUserAttendance" id="currentUserAttendanceForSite{{ event.siteSlug }}Event{{ event.slug }}">
+											<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showCurrentUserAttendanceForEvent({slug: {{ event.slug }}, site: '{{ event.siteSlug |e('js')}}' }); return false;" class="activationLinkWrapper">
+												{% if event.userIsPlanAttending %}
+													<div class="iconUserAttendingSmall" title="You are attending"></div>
+												{% elseif event.userIsPlanMaybeAttending %}
+													<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>
+												{% else %}
+													<div class="iconUserNotAttendingSmall" title="You are not attending"></div>
+												{% endif %}
+											</a>
+										</div>
 									{% endif %}		
 									<span class="start_at">
 										{{ event.getStartAt|tolocaltimeformatted12or24hourclock('g:ia', 'H:i', currentUserClock12Hour, currentTimeZone) }}
