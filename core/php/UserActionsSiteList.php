@@ -23,8 +23,8 @@ class UserActionsSiteList {
 			'tagNew'=>$permissionsList->hasPermission("org.openacalendar","TAGS_CHANGE") && $siteModel->getIsFeatureTag(),
 			'venueNew'=>$permissionsList->hasPermission("org.openacalendar","VENUES_CHANGE") && $siteModel->getIsFeaturePhysicalEvents(),
 			'areaNew'=>$permissionsList->hasPermission("org.openacalendar","AREAS_CHANGE") && $siteModel->getIsFeaturePhysicalEvents(),
-			'curatedListNew'=>$permissionsList->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $siteModel->getIsFeatureCuratedList(),
-			'curatedListGeneralEdit'=>$permissionsList->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $siteModel->getIsFeatureCuratedList(),
+			'curatedListNew'=>$permissionsList->hasPermission("org.openacalendar.curatedlists","CURATED_LISTS_CHANGE") && $siteModel->getIsFeatureCuratedList(),
+			'curatedListGeneralEdit'=>$permissionsList->hasPermission("org.openacalendar.curatedlists","CURATED_LISTS_CHANGE") && $siteModel->getIsFeatureCuratedList(),
 			'admin'=>$permissionsList->hasPermission("org.openacalendar","CALENDAR_ADMINISTRATE"),
 		));
 	}

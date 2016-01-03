@@ -1,6 +1,7 @@
 <?php
 
 namespace org\openacalendar\curatedlists;
+use org\openacalendar\curatedlists\userpermissions\CuratedListsChangeUserPermission;
 
 /**
  *
@@ -42,4 +43,16 @@ class ExtensionCuratedLists extends \BaseExtension {
 			new \org\openacalendar\curatedlists\sitefeatures\CuratedListFeature(),
 		);
 	}
+
+
+    public function getUserPermissions() {
+        return array('CURATED_LISTS_CHANGE');
+    }
+
+    public function getUserPermission($key) {
+        if ($key == 'CURATED_LISTS_CHANGE') {
+            return new CuratedListsChangeUserPermission();
+        }
+    }
+
 }
