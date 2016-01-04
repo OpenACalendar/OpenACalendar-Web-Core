@@ -40,7 +40,7 @@
 				{% for msg in getAndClearFlashMessages() %}
 					<div class="flash-notice">{{ msg }}</div>
 				{% endfor %}	
-				<ul class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</ul>
+				{% block breadcrumbs %}{% endblock %}
 				{% block content %}{% endblock %}
 			</div>
 			{% include 'index/pageFooter.html.twig' %}

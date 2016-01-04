@@ -13,9 +13,7 @@
 {%  endblock %}
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	<li><a href="/tag">tags</a></li>
-	<li class="current"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></li>
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/tag', 'label':'tags' }, { 'url':'/tag/'~tag.slugForURL, 'label':tag.title } ]  } %}
 {% endblock %}
 
 

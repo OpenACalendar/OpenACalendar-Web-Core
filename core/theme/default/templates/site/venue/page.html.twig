@@ -15,12 +15,15 @@
 {%  endblock %}
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	<li><a href="/venue">venues</a></li>
-	<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>
-	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slug }}">{{ parentArea.title }}</a></li>{% endfor %}
-	{% if area %}<li class="current"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>{% endif %}
-	<li class="current"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></li>
+	{%  set breadcrumbs = [  { 'url':'/venue', 'label':'venues' }, {'url':'/country/'~country.twoCharCode, 'label':country.title} ] %}
+	{% for parentArea in parentAreas %}
+		{%  set breadcrumbs = breadcrumbs|merge([{ 'url':'/area/'~parentArea.slugForUrl, 'label':parentArea.title }])  %}
+	{% endfor %}
+	{% if area %}
+		{%  set breadcrumbs = breadcrumbs|merge([{ 'url':'/area/'~area.slugForUrl, 'label':area.title }])  %}
+	{% endif %}
+	{%  set breadcrumbs = breadcrumbs|merge([{ 'url':'/venue/'~venue.slugForUrl, 'label':venue.title }])  %}
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': breadcrumbs  } %}
 {% endblock %}
 
 

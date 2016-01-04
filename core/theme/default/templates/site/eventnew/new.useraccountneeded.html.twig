@@ -9,8 +9,7 @@
 {% block pageTitle %}Add an Event - {% endblock %}
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	<li class="current"><a href="/event">events</a></li>
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/event', 'label':'events' } ]  } %}
 {% endblock %}
 
 {% block content %}

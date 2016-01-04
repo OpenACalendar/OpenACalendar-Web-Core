@@ -10,9 +10,7 @@
 {% block pageTitle %}Settings Admin - {% endblock %} 
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	<li><a href="/admin">admin</a></li>
-	<li class="current"><a href="/admin/settings">settings</a></li>
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/admin', 'label':'admin' },  { 'url':'/admin/settings', 'label':'settings' } ]  } %}
 {% endblock %}
 
 {% block content %}

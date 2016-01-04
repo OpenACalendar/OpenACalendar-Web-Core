@@ -13,9 +13,7 @@
 
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}
-	<li class="current"><a href="/country/{{ country.twoCharCode }}">{{ country.title }}</a></li>
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/country', 'label':'countries' }, {'url':'/country/'~country.twoCharCode, 'label':country.title} ]  } %}
 {% endblock %}
 
 

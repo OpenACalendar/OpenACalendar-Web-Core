@@ -15,8 +15,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	<li class="current"><a href="/import">import from web</a></li>
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/import', 'label':'import from web' } ]  } %}
 {% endblock %}
 
 {% block content %}

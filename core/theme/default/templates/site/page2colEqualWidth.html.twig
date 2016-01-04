@@ -38,7 +38,7 @@
 				{% for msg in getAndClearFlashMessages() %}
 					<div class="flash-notice">{{ msg }}</div>
 				{% endfor %}	
-				<ul class="breadcrumbs">{% block breadcrumbs %}{% endblock %}</ul>
+				{% block breadcrumbs %}{% endblock %}
 				<div id="bodyLeftEqualWidth">
 					{% block contentLeft %}{% endblock %}
 				</div>

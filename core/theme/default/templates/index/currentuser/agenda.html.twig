@@ -13,8 +13,7 @@
 
 
 {% block breadcrumbs %}
-	<li><a href="/me/">your account</a></li>
-	<li class="current"><a href="/me/agenda">personal agenda</a></li>
+	{%  include 'index/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/me', 'label':'your account' }, { 'url':'/me/agenda','label':'personal agenda' } ]  } %}
 {% endblock %}
 
 

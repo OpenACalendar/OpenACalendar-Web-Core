@@ -14,11 +14,16 @@
 {%  endblock %}
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	{% if currentSite.cachedIsMultipleCountries %}<li><a href="/country/">countries</a></li>{% endif %}
-	<li><a href="/country/{{ country.twoCharCode }}/">{{ country.title }}</a></li>
-	{% for parentArea in parentAreas %}<li><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></li>{% endfor %}
-	<li class="current"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></li>
+	{%  set breadcrumbs = [ ] %}
+	{%  if currentSite.cachedIsMultipleCountries  %}
+		{%  set breadcrumbs = breadcrumbs|merge([ {'url':'/country' , 'label':'countries' }])  %}
+	{%  endif %}
+	{%  set breadcrumbs = breadcrumbs|merge([ {'url':'/country/'~country.twoCharCode, 'label':country.title}])  %}
+	{% for parentArea in parentAreas %}
+		{%  set breadcrumbs = breadcrumbs|merge([{ 'url':'/area/'~parentArea.slugForUrl, 'label':parentArea.title }])  %}
+	{% endfor %}
+	{%  set breadcrumbs = breadcrumbs|merge([{ 'url':'/area/'~area.slugForUrl, 'label':area.title }])  %}
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': breadcrumbs  } %}
 {% endblock %}
 
 

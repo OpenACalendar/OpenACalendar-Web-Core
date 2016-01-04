@@ -10,8 +10,7 @@
 {% block pageTitle %}Preferences - {% endblock %} 
 
 {% block breadcrumbs %}
-	<li><a href="/me/">your account</a></li>
-	<li class="current"><a href="/me/prefs">preferences</a></li>
+	{%  include 'index/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/me', 'label':'your account' }, { 'url':'/me/prefs','label':'preferences' } ]  } %}
 {% endblock %}
 
 

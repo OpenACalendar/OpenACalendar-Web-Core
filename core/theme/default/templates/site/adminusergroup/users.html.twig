@@ -13,12 +13,6 @@
 
 {% block tabUsers %}currentTab{% endblock %}
 
-{% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	<li><a href="/admin">admin</a></li>
-	<li><a href="/admin/usergroup">user groups</a></li>
-	<li class="current"><a href="/admin/usergroup/{{  usergroup.id }}">{{  usergroup.title }}</a></li>
-{% endblock %}
 
 {% block innerContent %}
 

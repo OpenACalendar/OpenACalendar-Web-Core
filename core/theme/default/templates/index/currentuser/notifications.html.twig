@@ -10,8 +10,7 @@
 {% block pageTitle %}Notifications - {% endblock %} 
 
 {% block breadcrumbs %}
-	<li><a href="/me/">your account</a></li>
-	<li class="current"><a href="/me/notification">notifications</a></li>
+	{%  include 'index/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/me', 'label':'your account' }, { 'url':'/me/notification','label':'notifications' } ]  } %}
 {% endblock %}
 
 

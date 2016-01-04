@@ -12,10 +12,7 @@
 {% block pageTitle %}User Groups Admin - {% endblock %}
 
 {% block breadcrumbs %}
-	{% if not config.isSingleSiteMode %}<li><a href="/">{{ currentSite.title }}</a></li>{% endif %}
-	<li><a href="/admin">admin</a></li>
-	<li><a href="/admin/usergroup">user groups</a></li>
-	<li class="current"><a href="/admin/usergroup/new">new</a></li>
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/admin', 'label':'admin' },  { 'url':'/admin/usergroup', 'label':'user groups' } , {  'url':'/admin/usergroup/new', 'label':'new' } ]  } %}
 {% endblock %}
 
 {% block content %}
