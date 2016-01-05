@@ -1622,13 +1622,18 @@ class EventController {
 		
 		$newEventState = clone $this->parameters['event'];
 		$newEventState->setFromHistory($this->parameters['eventHistory']);
-		
-		$form = $app['form.factory']->create(new EventEditForm($app['currentSite'],$app['currentTimeZone'], $app), $newEventState);
+
+        $ourForm = new EventEditForm($app['currentSite'],$app['currentTimeZone'], $app);
+        $form = $app['form.factory']->create($ourForm, $newEventState);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
+
+                foreach($ourForm->getCustomFields() as $customField) {
+                    $newEventState->setCustomField(  $customField, $form->get('custom_'.$customField->getKey())->getData() );
+                }
 
 				// Because to undelete or uncancel something, you rollback to a valid state, when you rollback you must set these.
 				$newEventState->setIsCancelled(false);
