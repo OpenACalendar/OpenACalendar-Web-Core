@@ -150,6 +150,7 @@ class EventModel {
 		$this->end_at = clone $ehm->getEndAt();
 		$this->is_deleted = false;
 		$this->is_cancelled = false;
+        $this->custom_fields = $ehm->custom_fields;
 	}
 	
 	protected $validateErrors = array();
