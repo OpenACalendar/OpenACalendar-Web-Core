@@ -28,6 +28,12 @@
 				<div style="font-size: 10pt;">{{ historyItem.url }}</div>
 			</div>
 		{% endif %}
+		{% if historyItem.getTicketUrlChanged %}
+			<div>
+				<div>Ticket URL{%  if not historyItem.isNew %} changed{%  endif %}:</div>
+				<div style="font-size: 10pt;">{{ historyItem.ticketUrl }}</div>
+			</div>
+		{% endif %}
 		{% if historyItem.getStartAtChanged %}
 			<div>
 				<div>Start{%  if not historyItem.isNew %} changed{%  endif %}:</div>
