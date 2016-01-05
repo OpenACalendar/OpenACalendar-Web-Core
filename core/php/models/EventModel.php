@@ -148,6 +148,8 @@ class EventModel {
 		$this->description = $ehm->getDescription();
 		$this->start_at = clone $ehm->getStartAt();
 		$this->end_at = clone $ehm->getEndAt();
+        $this->url = $ehm->getUrl();
+        $this->ticket_url = $ehm->getTicketUrl();
 		$this->is_deleted = false;
 		$this->is_cancelled = false;
         $this->custom_fields = $ehm->custom_fields;
