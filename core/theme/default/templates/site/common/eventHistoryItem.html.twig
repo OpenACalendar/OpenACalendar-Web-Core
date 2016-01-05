@@ -53,6 +53,12 @@
 				<div class="value">{{ historyItem.url }}</div>
 			</div>
 		{% endif %}
+		{% if historyItem.getTicketUrlChanged %}
+			<div class="fieldChanged">
+				<div class="field">Ticket URL changed:</div>
+				<div class="value">{{ historyItem.ticketUrl }}</div>
+			</div>
+		{% endif %}
 		{% if historyItem.getStartAtChanged %}
 			<div class="fieldChanged">
 				<div class="field">Start changed:</div>
