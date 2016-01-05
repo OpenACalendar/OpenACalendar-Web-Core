@@ -208,6 +208,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 			$message->setTo($userAccountModel->getEmail());
 
 			$messageText = $this->app['twig']->render('email/userWatchesNotifyEmail.txt.twig', array(
+                'site'=>$siteModel,
 				'user'=>$userAccountModel,
 				'newEvents'=>$newEvents,
 				'histories'=>$histories,
@@ -219,6 +220,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 			$message->setBody($messageText);
 
 			$messageHTML = $this->app['twig']->render('email/userWatchesNotifyEmail.html.twig', array(
+                'site'=>$siteModel,
 				'user'=>$userAccountModel,
 				'newEvents'=>$newEvents,
 				'histories'=>$histories,

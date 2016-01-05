@@ -94,6 +94,16 @@
 				<div style="font-size: 10pt;">{% if historyItem.getIsCancelled %}Cancelled!{% else %}Restored!{% endif %}</div>
 			</div>
 		{%endif %}
+		{%  if site is defined and site %}
+			{%  for customField in site.getCachedEventCustomFieldDefinitionsAsModels %}
+				{% if historyItem.getCustomFieldChanged(customField) %}
+					<div class="fieldChanged">
+						<div class="field">{{  customField.label }} changed:</div>
+						<div class="value">{{ historyItem.getCustomField(customField) | nl2br  }}</div>
+					</div>
+				{%  endif %}
+			{%  endfor %}
+		{%  endif %}
 	{% endif %}
 	<div style="font-style: italic; font-size: 0.8em;">
 		Edited at
