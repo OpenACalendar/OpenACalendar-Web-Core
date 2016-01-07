@@ -16,11 +16,15 @@ use Silex\Application;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-
+if ($app['config']->hasSSL && $app['config']->forceSSL) {
+    $fr = new ForceRequestToSSL($app);
+    $fr->processForIndex();
+    unset($fr);
+}
 
 $app->before(function (Request $request) use ($app) {
 	global $CONFIG;
-	
+
 	
 	# ////////////// Timezone
 	$timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);

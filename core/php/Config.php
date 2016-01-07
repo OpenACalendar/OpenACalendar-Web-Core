@@ -35,6 +35,7 @@ class Config {
 	public $webAPI1Domain = "api1.example.com";
 
 	public $hasSSL = true;
+    public $forceSSL = false;
 	public $webIndexDomainSSL = "www.example.com";
 	public $webSiteDomainSSL = "example.com";
 

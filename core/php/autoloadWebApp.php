@@ -31,7 +31,7 @@ if (!$parseDomain->isCoveredByCookies()) {
 ///////////////////////// Sessions
 
 /** @var WebSession **/
-$WEBSESSION = new WebSession();
+$WEBSESSION = new WebSession($app);
 $app['websession'] = $WEBSESSION;
 /** @var FlashMessages **/
 $FLASHMESSAGES = new FlashMessages($WEBSESSION);

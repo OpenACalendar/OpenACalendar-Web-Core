@@ -10,16 +10,21 @@
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class WebSession {
-	
-	public function __construct() {
-		global $CONFIG;
-		ini_set("session.cookie_httponly", "1");
-		ini_set("session.cookie_domain", $CONFIG->webCommonSessionDomain);
-		ini_set("session.gc_maxlifetime", $CONFIG->sessionLastsInSeconds);
-		// We must set this. If we don't, PHP "helpfully" adds big sodding "nocache" headers everywhere -
-		//   and some pages we actually do want cached.
-		ini_set("session.cache_limiter", "");
-	}
+
+    function __construct($app)
+    {
+        ini_set("session.cookie_httponly", "1");
+        ini_set("session.cookie_domain", $app['config']->webCommonSessionDomain);
+        ini_set("session.gc_maxlifetime", $app['config']->sessionLastsInSeconds);
+        if ($app['config']->hasSSL && $app['config']->forceSSL) {
+            ini_set("session.cookie_secure",true);
+        } else {
+            ini_set("session.cookie_secure",false);
+        }
+        // We must set this. If we don't, PHP "helpfully" adds big sodding "nocache" headers everywhere -
+        //   and some pages we actually do want cached.
+        ini_set("session.cache_limiter", "");
+    }
 	
 	private function startSessionIfNeededForWriting() {
 		if (!session_id()) {

@@ -39,8 +39,8 @@ class UserAccountRememberMeModel {
 	
 	public function sendCookies() {
 		global $CONFIG;
-		setcookie("userID",$this->user_account_id,time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,false,true);
-		setcookie("userKey",$this->access_key,time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,false,true);
+		setcookie("userID",$this->user_account_id,time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,$CONFIG->forceSSL,true);
+		setcookie("userKey",$this->access_key,time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,$CONFIG->forceSSL,true);
 	}
 	
 }

@@ -29,6 +29,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th>forceSSL</th>
+			<td>{% if config.forceSSL %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'forceSSL'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>webIndexDomainSSL</th>
 			<td>{{ config.webIndexDomainSSL }}
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'webIndexDomainSSL'} %}</td>

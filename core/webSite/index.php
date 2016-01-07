@@ -30,8 +30,15 @@ $app->before(function (Request $request) use ($app) {
 
 	$app['twig']->addGlobal('currentSite', $site);	
 	$app['currentSite'] = $site;
-	
-	# ////////////// Site closed
+
+    # ////////////// Force SSL?
+    if ($app['config']->hasSSL && $app['config']->forceSSL) {
+        $fr = new ForceRequestToSSL($app);
+        $fr->processForSite($site);
+        unset($fr);
+    }
+
+    # ////////////// Site closed
 	if ($app['currentSite']->getIsClosedBySysAdmin()) {
 		$app['twig']->addGlobal('currentUserInSite', null);
 		$app['twig']->addGlobal('currentUserCanAdminSite', false);
