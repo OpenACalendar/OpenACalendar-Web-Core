@@ -3,6 +3,7 @@
 namespace reports\valuereports;
 
 use BaseValueReport;
+use Silex\Application;
 
 
 /**
@@ -15,8 +16,9 @@ use BaseValueReport;
  */
 class EventsCreatedReport extends BaseValueReport {
 
-	function __construct()
-	{
+    function __construct(Application $app)
+    {
+        parent::__construct($app);
 		$this->hasFilterTime = true;
 		$this->hasFilterSite = true;
 	}
@@ -36,7 +38,6 @@ class EventsCreatedReport extends BaseValueReport {
 	public function run()
 	{
 
-		global $DB;
 
 		$where = array();
 		$params = array();
@@ -61,7 +62,7 @@ class EventsCreatedReport extends BaseValueReport {
 			" FROM event_information ".
 			($where ? " WHERE " . implode(" AND ",$where) : "");
 
-		$stat = $DB->prepare($sql);
+		$stat = $this->app['db']->prepare($sql);
 		$stat->execute($params);
 		$data = $stat->fetch();
 		$this->data = $data['count'];

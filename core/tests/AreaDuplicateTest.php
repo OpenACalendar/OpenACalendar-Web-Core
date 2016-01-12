@@ -25,7 +25,7 @@ use repositories\VenueRepository;
 class AreaDuplicateTest extends BaseAppWithDBTest {
 	
 	function test1() {
-		\TimeSource::mock(2014,1,1,0,0,0);
+		$this->app['timesource']->mock(2014,1,1,0,0,0);
 
 		$this->addCountriesToTestDB();
 		$countryRepo = new CountryRepository();
@@ -104,7 +104,7 @@ class AreaDuplicateTest extends BaseAppWithDBTest {
 		$this->assertNull($area2->getIsDuplicateOfId());
 
 		// Mark
-		\TimeSource::mock(2014,1,1,2,0,0);
+		$this->app['timesource']->mock(2014,1,1,2,0,0);
 		$areaRepo->markDuplicate($area2, $area1, $user);
 
 

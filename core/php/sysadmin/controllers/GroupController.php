@@ -51,7 +51,6 @@ class GroupController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
-		global $CONFIG;
 
 		$this->build($siteid, $slug, $request, $app);
 		
@@ -92,7 +91,7 @@ class GroupController {
 					}
 
 
-				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeGroupPassword && $CONFIG->sysAdminExtraPurgeGroupPassword == $action->getParam(0)) {
+				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeGroupPassword && $app['config']->sysAdminExtraPurgeGroupPassword == $action->getParam(0)) {
 
 					$gr = new GroupRepository();
 					$gr->purge($this->parameters['group']);

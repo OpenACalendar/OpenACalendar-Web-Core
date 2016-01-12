@@ -72,7 +72,6 @@ class EventController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
-		global $CONFIG;
 
 		$this->build($siteid, $slug, $request, $app);
 
@@ -173,7 +172,7 @@ class EventController {
 					$redirect = true;
 
 
-				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeEventPassword && $CONFIG->sysAdminExtraPurgeEventPassword == $action->getParam(0)) {
+				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeEventPassword && $app['config']->sysAdminExtraPurgeEventPassword == $action->getParam(0)) {
 
 					$er = new EventRepository();
 					$er->purge($this->parameters['event']);

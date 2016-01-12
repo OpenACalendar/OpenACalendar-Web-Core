@@ -24,7 +24,7 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 
 	function test1() {
 
-		\TimeSource::mock(2015,5,1,7,0,0);
+		$this->app['timesource']->mock(2015,5,1,7,0,0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -85,7 +85,7 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 
 	function testAcrossBST1() {
 
-		\TimeSource::mock(2015,5,1,7,0,0);
+		$this->app['timesource']->mock(2015,5,1,7,0,0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");

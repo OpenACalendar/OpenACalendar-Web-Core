@@ -1,5 +1,5 @@
 <?php
-
+use Silex\Application;
 
 
 /**
@@ -12,6 +12,14 @@
  */
 abstract class BaseReport {
 
+
+    /** @var Application */
+    protected $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
 	public abstract function getReportTitle();
 

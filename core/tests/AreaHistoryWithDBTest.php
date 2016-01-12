@@ -25,7 +25,7 @@ class AreaHistoryWithDBTest extends \BaseAppWithDBTest {
 	function testIntegration1() {
 
 		$this->addCountriesToTestDB();
-		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 12, 0, 0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -46,7 +46,7 @@ class AreaHistoryWithDBTest extends \BaseAppWithDBTest {
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 		
 		## Create area
-		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 13, 0, 0);
 		$area = new AreaModel();
 		$area->setTitle("test");
 		$area->setDescription("test test");
@@ -56,7 +56,7 @@ class AreaHistoryWithDBTest extends \BaseAppWithDBTest {
 		$areaRepo->create($area, null, $site, $gb, $user);
 		
 		## Edit area
-		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 14, 0, 0);
 		
 		$area = $areaRepo->loadById($area->getId());
 		$area->setDescription("testy");

@@ -34,7 +34,7 @@ fclose( $f );
 
 
 ######### Create
-$createEvent = new CreateEvent();
+$createEvent = new CreateEvent($app);
 $json = json_decode(trim($stdin));
 if ($json) {
 	$createEvent->setFromJSON($json);

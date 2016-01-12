@@ -24,6 +24,9 @@ use repositories\builders\VenueRepositoryBuilder;
  */
 class EventEditForm extends \BaseFormWithEditComment {
 
+    /** @var Application */
+    protected $app;
+
 	protected $timeZoneName;
 
 	/** @var SiteModel **/
@@ -40,6 +43,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 		$this->timeZoneName = $timeZoneName;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
 		$this->extensionManager = $application['extensions'];
+        $this->app = $application;
 	}
 
 	protected $customFields;
@@ -202,7 +206,6 @@ class EventEditForm extends \BaseFormWithEditComment {
 
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
-			global $CONFIG;
 			$form = $event->getForm();
 			$myExtraFieldStart = $form->get('start_at')->getData();
 			$myExtraFieldEnd = $form->get('end_at')->getData();
@@ -216,27 +219,27 @@ class EventEditForm extends \BaseFormWithEditComment {
 			}
 			// validate not to far in future
 			$max = \TimeSource::getDateTime();
-			$max->add(new \DateInterval(("P".$CONFIG->eventsCantBeMoreThanYearsInFuture."Y")));
+			$max->add(new \DateInterval(("P".$this->app['config']->eventsCantBeMoreThanYearsInFuture."Y")));
 			if ($myExtraFieldStart > $max) {
 				$form['start_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
+						($this->app['config']->eventsCantBeMoreThanYearsInFuture > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
 						" in the future."));
 			}
 			if ($myExtraFieldEnd > $max) {
 				$form['end_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
+						($this->app['config']->eventsCantBeMoreThanYearsInFuture > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
 						" in the future."));			}
 			// validate not to far in past
 			$min = \TimeSource::getDateTime();
-			$min->sub(new \DateInterval(("P".$CONFIG->eventsCantBeMoreThanYearsInPast."Y")));
+			$min->sub(new \DateInterval(("P".$this->app['config']->eventsCantBeMoreThanYearsInPast."Y")));
 			if ($myExtraFieldStart < $min) {
 				$form['start_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
+						($this->app['config']->eventsCantBeMoreThanYearsInPast > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
 						" in the past."));
 			}
 			if ($myExtraFieldEnd < $min) {
 				$form['end_at']->addError(new FormError("The event can not be more than ".
-						($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
+						($this->app['config']->eventsCantBeMoreThanYearsInPast > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
 						" in the past."));
 			}
 			// URL validation. We really can't do much except verify ppl haven't put a space in, which they might do if they just type in Google search terms (seen it done)

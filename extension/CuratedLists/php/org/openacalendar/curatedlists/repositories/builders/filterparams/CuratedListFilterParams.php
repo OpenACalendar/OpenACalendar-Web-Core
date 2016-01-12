@@ -3,6 +3,7 @@
 namespace org\openacalendar\curatedlists\repositories\builders\filterparams;
 
 use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBuilder;
+use Silex\Application;
 
 
 /**
@@ -15,7 +16,7 @@ use org\openacalendar\curatedlists\repositories\builders\CuratedListRepositoryBu
  */
 class CuratedListFilterParams {
 
-    function __construct() {
+    function __construct(Application $app) {
         $this->curatedListRepositoryBuilder = new CuratedListRepositoryBuilder();
         $this->curatedListRepositoryBuilder->setLimit(100);
     }

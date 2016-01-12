@@ -4,6 +4,7 @@
 
 namespace index\forms;
 
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -19,11 +20,18 @@ use Symfony\Component\Form\FormError;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class SignUpUserForm  extends AbstractType {
-	
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) {
-		global $CONFIG;
-		
+
+
+    /** @var Application */
+    protected $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options) {
+
 		$builder->add('email', 'email', array(
 			'label'=>'Email',
 			'required'=>true, 
@@ -52,7 +60,7 @@ class SignUpUserForm  extends AbstractType {
 					)
 			    );
 		
-		if ($CONFIG->newUserRegisterAntiSpam) {
+		if ($this->app['config']->newUserRegisterAntiSpam) {
 			$builder->add('antispam','text',array('label'=>'What is 2 + 2?','required'=>true));
 			
 			$myExtraFieldValidatorSpam = function(FormEvent $event){

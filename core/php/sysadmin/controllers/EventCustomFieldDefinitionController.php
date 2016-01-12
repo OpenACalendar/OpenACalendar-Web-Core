@@ -56,7 +56,6 @@ class EventCustomFieldDefinitionController
 
 	function index($siteid, $fieldid, Request $request, Application $app)
 	{
-		global $CONFIG;
 
 		$this->build($siteid, $fieldid, $request, $app);
 

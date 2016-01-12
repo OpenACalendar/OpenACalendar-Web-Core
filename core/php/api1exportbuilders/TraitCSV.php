@@ -14,12 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 trait TraitCSV   {
 
 	public function getResponse() {
-		global $CONFIG;
 		$response = new Response($this->getContents());
 		$response->headers->set('Content-Type', 'text/csv');
 		$response->headers->set('Content-disposition', 'attachment;filename=events.csv');
 		$response->setPublic();
-		$response->setMaxAge($CONFIG->cacheFeedsInSeconds);
+		$response->setMaxAge($this->app['config']->cacheFeedsInSeconds);
 		return $response;
 	}
 

@@ -54,7 +54,7 @@ class TagController {
 		}
 		
 			
-		$this->parameters['eventListFilterParams'] = new EventFilterParams();
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setTag($this->parameters['tag']);

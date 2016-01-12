@@ -24,7 +24,7 @@ class EventHistoryWithDBTest extends \BaseAppWithDBTest {
 
 
 	function testIntegration1() {
-		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 12, 0, 0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -42,7 +42,7 @@ class EventHistoryWithDBTest extends \BaseAppWithDBTest {
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		## Create Event
-		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 13, 0, 0);
 		$event = new EventModel();
 		$event->setSummary("test");
 		$event->setDescription("test test");
@@ -53,14 +53,14 @@ class EventHistoryWithDBTest extends \BaseAppWithDBTest {
 		$eventRepo->create($event, $site, $user);
 
 		## Edit event
-		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 14, 0, 0);
 
 		$event = $eventRepo->loadBySlug($site, $event->getSlug());
 		$event->setDescription("testy 123");
 		$eventRepo->edit($event, $user);
 
 		# delete event
-		\TimeSource::mock(2014, 1, 1, 15, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 15, 0, 0);
 		$eventRepo->delete($event, $user);
 
 		## Now save changed flags on these .....

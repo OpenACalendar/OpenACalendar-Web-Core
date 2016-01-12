@@ -7,6 +7,7 @@ use models\EventModel;
 use models\VenueModel;
 use models\AreaModel;
 use models\CountryModel;
+use Silex\Application;
 
 
 /**
@@ -30,8 +31,8 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 		$this->daysBefore = $daysBefore && $daysBefore > 0 && $daysBefore < 700 ? $daysBefore : 3;
 	}
 
-	public function __construct(SiteModel $site = null, $timeZone = null, $title = null) {
-		parent::__construct($site, $timeZone, $title);
+	public function __construct(Application $app, SiteModel $site = null, $timeZone = null, $title = null) {
+		parent::__construct($app, $site, $timeZone, $title);
 		// order by start at time
 		$this->eventRepositoryBuilder->setOrderByStartAt(true);
 	}
@@ -46,21 +47,20 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 
 	
 	public function getContents() {
-		global $CONFIG;
 		$txt = '<?xml version="1.0" encoding="utf-8"?>';
 		$txt .= '<feed xmlns="http://www.w3.org/2005/Atom">'."\n";
-		if ($this->site && !$CONFIG->isSingleSiteMode) {
+		if ($this->site && !$this->app['config']->isSingleSiteMode) {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
 					($this->daysBefore > 1 ? $this->daysBefore.' Days Before Start - ' : ' 1 Day before start - ').
 					 htmlentities($this->site->getTitle()).' '.
-					 htmlentities($CONFIG->siteTitle).
+					 htmlentities($this->app['config']->siteTitle).
 					'</title>'."\n";
 		} else {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
 					($this->daysBefore > 1 ? $this->daysBefore.' Days Before Start - ' : ' 1 Day before start - ').
-					 htmlentities($CONFIG->siteTitle).
+					 htmlentities($this->app['config']->siteTitle).
 					'</title>'."\n";
 		}
 		$txt .= '<id>'.$this->feedURL.'</id>'."\n";
@@ -80,8 +80,7 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
 							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
-		global $CONFIG;
-		
+
 		if ($event->getIsDeleted()) return false;
 		
 		
@@ -89,9 +88,9 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 		
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();
 		
-		$ourUrl = $CONFIG->isSingleSiteMode ? 
-				'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlug() : 
-				'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlug() ; 
+		$ourUrl = $this->app['config']->isSingleSiteMode ?
+				'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlug() :
+				'http://'.$siteSlug.".".$this->app['config']->webSiteDomain.'/event/'.$event->getSlug() ;
 		
 		$dh = new \DateTime('', $this->localTimeZone);
 		$dh->setTimestamp($event->getStartAt()->getTimestamp());
@@ -121,7 +120,7 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 		// TODO $event->getUrl()
 		$content .= '<a href="'.htmlentities($ourUrl).'">More details at '.htmlentities($ourUrl).'</a><br>';
 		$content .= '<p style="font-style:italic;font-size:80%">'.
-					'Powered by <a href="'.$ourUrl.'">'.$CONFIG->siteTitle.'</a>';
+					'Powered by <a href="'.$ourUrl.'">'.$this->app['config']->siteTitle.'</a>';
 		foreach($this->extraFooters as $extraFooter) {
 			$content .= "<br>".$extraFooter->getHtml();
 		}
@@ -131,7 +130,7 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 				
 		$txt .= $this->getUpdatedString($event);
 		
-		$txt .= '<author><name>'.$CONFIG->siteTitle.'</name></author></entry>'." \r\n";
+		$txt .= '<author><name>'.$this->app['config']->siteTitle.'</name></author></entry>'." \r\n";
 		
 		$this->events[] = $txt;
 	}

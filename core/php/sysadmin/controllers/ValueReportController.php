@@ -38,7 +38,7 @@ class ValueReportController {
 
 
 
-		$form = $app['form.factory']->create(new RunValueReportForm($this->report));
+		$form = $app['form.factory']->create(new RunValueReportForm($app, $this->report));
 
 		return $app['twig']->render('sysadmin/valuereport/index.html.twig', array(
 			'report'=>$this->report,
@@ -51,7 +51,7 @@ class ValueReportController {
 			die("NO");
 		}
 
-		$form = $app['form.factory']->create(new RunValueReportForm($this->report));
+		$form = $app['form.factory']->create(new RunValueReportForm($app, $this->report));
 		$form->bind($request);
 
 		$filterStartAt = $form->get('start_at')->getData();

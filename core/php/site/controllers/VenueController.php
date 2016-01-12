@@ -37,7 +37,6 @@ class VenueController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		global $CONFIG;
 		$this->parameters = array(
 			'country'=>null,
 			'area'=>null,
@@ -106,7 +105,7 @@ class VenueController {
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
 			&& $app['currentSite']->getIsFeaturePhysicalEvents()
 			&& !$this->parameters['venue']->getIsDeleted()
-			&& $CONFIG->isFileStore());
+			&& $app['config']->isFileStore());
 
 		$app['currentUserActions']->set("org.openacalendar","venueEditPushToChildAreas",
 			$this->parameters['childAreas'] &&
@@ -124,7 +123,7 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams();
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);

@@ -18,7 +18,7 @@ class EventListController {
 	function index(Application $app) {
 		
 		
-		$params = new EventFilterParams();
+		$params = new EventFilterParams($app);
 		$params->set($_GET);
 		$params->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);

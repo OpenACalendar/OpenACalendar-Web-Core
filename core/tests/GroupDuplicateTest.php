@@ -22,7 +22,7 @@ use repositories\builders\GroupRepositoryBuilder;
 class GroupDuplicateTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		\TimeSource::mock(2014,1,1,0,0,0);
+		$this->app['timesource']->mock(2014,1,1,0,0,0);
 
 		$user1 = new UserAccountModel();
 		$user1->setEmail("test@jarofgreen.co.uk");
@@ -57,7 +57,7 @@ class GroupDuplicateTest extends \BaseAppWithDBTest {
 
 		$groupRepo = new GroupRepository();
 
-		\TimeSource::mock(2014,1,1,1,0,0);
+		$this->app['timesource']->mock(2014,1,1,1,0,0);
 		$groupRepo->create($group1, $site, $user1);
 		$groupRepo->create($group2, $site, $user2);
 
@@ -86,7 +86,7 @@ class GroupDuplicateTest extends \BaseAppWithDBTest {
 
 
 		// Mark
-		\TimeSource::mock(2014,1,1,2,0,0);
+		$this->app['timesource']->mock(2014,1,1,2,0,0);
 		$groupRepo->markDuplicate($group2, $group1, $user1);
 
 

@@ -22,7 +22,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 
 	
 	function testIntegration1() {
-		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 12, 0, 0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -40,7 +40,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		## Create tag
-		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 13, 0, 0);
 		$tag = new TagModel();
 		$tag->setTitle("test");
 		$tag->setDescription("test test");
@@ -49,7 +49,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$tagRepo->create($tag, $site, $user);
 		
 		## Edit tag
-		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 14, 0, 0);
 		
 		$tag = $tagRepo->loadById($tag->getId());
 		$tag->setDescription("testy");
@@ -91,7 +91,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 	}
 
 	function testIntegration2() {
-		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 12, 0, 0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -109,7 +109,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		## Create tag
-		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 13, 0, 0);
 		$tag = new TagModel();
 		$tag->setTitle("test");
 		$tag->setDescription("test test");
@@ -118,7 +118,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$tagRepo->create($tag, $site, $user);
 
 		## Delete tag
-		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 14, 0, 0);
 
 		$tag = $tagRepo->loadById($tag->getId());
 		$tagRepo->delete($tag, $user);

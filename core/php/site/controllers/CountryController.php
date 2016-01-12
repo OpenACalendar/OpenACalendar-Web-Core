@@ -60,7 +60,7 @@ class CountryController {
 			$app->abort(404, "Country does not exist.");
 		}
 		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams();
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);

@@ -49,7 +49,6 @@ class GroupController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		global $CONFIG;
 		$this->parameters = array(
 			'currentUserWatchesGroup'=>false,
 			'groupIsDuplicateOf'=>null);
@@ -80,7 +79,7 @@ class GroupController {
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupEditMedia",
-			$CONFIG->isFileStore()
+            $app['config']->isFileStore()
 			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& !$this->parameters['group']->getIsDeleted());
@@ -103,7 +102,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams();
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);

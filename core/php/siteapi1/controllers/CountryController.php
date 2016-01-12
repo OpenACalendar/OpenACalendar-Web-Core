@@ -57,7 +57,7 @@ class CountryController {
 			$app->abort(404, "Country does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'], $this->parameters['country']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['country']->getTitle());
 		$ical->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$ical->build();
 		return $ical->getResponse();
@@ -74,7 +74,7 @@ class CountryController {
 		}
 
 		
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
@@ -91,7 +91,7 @@ class CountryController {
 		}
 
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -108,7 +108,7 @@ class CountryController {
 		}
 
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();
@@ -123,7 +123,7 @@ class CountryController {
 		}
 
 		$days = isset($_GET['days']) ? $_GET['days'] : null;
-		$atom = new EventListATOMBeforeBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMBeforeBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setDaysBefore($days);
 		$atom->setTitle($this->parameters['country']->getTitle());
 		$atom->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
@@ -139,7 +139,7 @@ class CountryController {
 		}
 
 		
-		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMCreateBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle($this->parameters['country']->getTitle());
 		$atom->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$atom->build();

@@ -91,7 +91,7 @@ class EventController {
 
 				
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'], $this->parameters['event']->getSummaryDisplay());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['event']->getSummaryDisplay());
 		$ical->addEvent($this->parameters['event']);
 		return $ical->getResponse();
 				
@@ -115,7 +115,7 @@ class EventController {
 			$eventMedias = $mrb->fetchAll();
 		}
 
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->addEvent($this->parameters['event'], $this->parameters['groups'], 
 				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country'], $eventMedias);
 		return $json->getResponse();
@@ -140,7 +140,7 @@ class EventController {
 		}
 
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->addEvent($this->parameters['event'], $this->parameters['groups'], 
 				$this->parameters['venue'], $this->parameters['area'], $this->parameters['country'], $eventMedias);
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);

@@ -22,7 +22,7 @@ class GroupRepositoryTest extends \BaseAppWithDBTest {
 	
 	function testIsGroupRunningOutOfFutureEvents() {
 
-		\TimeSource::mock(2014,1,1,1,1,1);
+		$this->app['timesource']->mock(2014,1,1,1,1,1);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -58,55 +58,55 @@ class GroupRepositoryTest extends \BaseAppWithDBTest {
 		$eventRepository->create($event, $site, $user, $group);
 		
 		### TEST
-		\TimeSource::mock(2014,2,1,1,1,1);
+		$this->app['timesource']->mock(2014,2,1,1,1,1);
 		$this->assertEquals(0, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,2,15,1,1,1);
+		$this->app['timesource']->mock(2014,2,15,1,1,1);
 		$this->assertEquals(0, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,1,1,1,1);
+		$this->app['timesource']->mock(2014,3,1,1,1,1);
 		$this->assertEquals(0, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,2,1,1,1);
+		$this->app['timesource']->mock(2014,3,2,1,1,1);
 		$this->assertEquals(0, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,3,1,1,1);
+		$this->app['timesource']->mock(2014,3,3,1,1,1);
 		$this->assertEquals(0, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,4,1,1,1);
+		$this->app['timesource']->mock(2014,3,4,1,1,1);
 		$this->assertEquals(0, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,5,1,1,1);
+		$this->app['timesource']->mock(2014,3,5,1,1,1);
 		$this->assertEquals(1, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,6,1,1,1);
+		$this->app['timesource']->mock(2014,3,6,1,1,1);
 		$this->assertEquals(1, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,7,1,1,1);
+		$this->app['timesource']->mock(2014,3,7,1,1,1);
 		$this->assertEquals(1, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,3,20,1,1,1);
+		$this->app['timesource']->mock(2014,3,20,1,1,1);
 		$this->assertEquals(1, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,4,1,1,1,1);
+		$this->app['timesource']->mock(2014,4,1,1,1,1);
 		$this->assertEquals(1, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,4,15,1,1,1);
+		$this->app['timesource']->mock(2014,4,15,1,1,1);
 		$this->assertEquals(2, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		### TEST
-		\TimeSource::mock(2014,5,1,1,1,1);
+		$this->app['timesource']->mock(2014,5,1,1,1,1);
 		$this->assertEquals(2, $groupRepo->isGroupRunningOutOfFutureEvents($group, $site));
 		
 		

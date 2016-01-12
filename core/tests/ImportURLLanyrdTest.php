@@ -29,13 +29,13 @@ class ImportURLLanyrdTest extends \BaseAppTest {
      */	
 	function testIsValid($currentYear, $url, $result, $newURL) {
 		
-		\TimeSource::mock($currentYear);
+		$this->app['timesource']->mock($currentYear);
 		
 
 		$import = new ImportModel();
 		$import->setUrl($url);
 		$site = new SiteModel();
-		$importRun = new ImportRun($import, $site);
+		$importRun = new ImportRun($this->app, $import, $site);
 		
 		
 		$handler = new ImportLanyrdHandler($this->app);

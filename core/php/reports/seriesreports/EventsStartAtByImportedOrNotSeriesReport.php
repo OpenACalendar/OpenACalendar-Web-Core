@@ -5,6 +5,7 @@ namespace reports\seriesreports;
 
 use BaseSeriesReport;
 use ReportDataItem;
+use Silex\Application;
 
 
 /**
@@ -18,8 +19,9 @@ use ReportDataItem;
 
 class EventsStartAtByImportedOrNotSeriesReport   extends BaseSeriesReport {
 
-	function __construct()
-	{
+    function __construct(Application $app)
+    {
+        parent::__construct($app);
 		$this->hasFilterTime = true;
 		$this->hasFilterSite = true;
 	}
@@ -32,7 +34,6 @@ class EventsStartAtByImportedOrNotSeriesReport   extends BaseSeriesReport {
 
 
 	public function run() {
-		global $DB;
 
 		$where = array();
 		$params = array();
@@ -61,7 +62,7 @@ class EventsStartAtByImportedOrNotSeriesReport   extends BaseSeriesReport {
 			" LEFT JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id ".
 			"WHERE event_information.import_url_id IS NULL  AND imported_event_is_event.event_id IS NULL ".
 			($where ? " AND " . implode(" AND ",$where) : "");
-		$stat = $DB->prepare($sql);
+		$stat = $this->app['db']->prepare($sql);
 		$stat->execute($params);
 		$data = $stat->fetch();
 		$this->data["NOTIMPORTED"] = new ReportDataItem($data['count'], "NOTIMPORTED", "Not Imported", null);
@@ -74,7 +75,7 @@ class EventsStartAtByImportedOrNotSeriesReport   extends BaseSeriesReport {
 			" LEFT JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id ".
 			"WHERE (event_information.import_url_id IS NOT NULL  OR imported_event_is_event.event_id IS NOT NULL) ".
 			($where ? " AND " . implode(" AND ",$where) : "");
-		$stat = $DB->prepare($sql);
+		$stat = $this->app['db']->prepare($sql);
 		$stat->execute($params);
 		$data = $stat->fetch();
 		$this->data["IMPORTED"] = new ReportDataItem($data['count'], "IMPORTED", "Imported", null);

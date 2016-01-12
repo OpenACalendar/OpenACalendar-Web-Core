@@ -24,9 +24,8 @@ class ParseDomainTest extends \BaseAppTest {
 	* @dataProvider isCoveredByCookiesDataProvider
 	*/ 
 	function testIsCoveredByCookies($domain, $cookieDomain, $result) {
-		global $CONFIG;
-		$CONFIG->webCommonSessionDomain = $cookieDomain;
-		$p = new \ParseDomain($domain);
+		$this->app['config']->webCommonSessionDomain = $cookieDomain;
+		$p = new \ParseDomain($this->app, $domain);
 		$this->assertEquals($result, $p->isCoveredByCookies());
 	}
 }

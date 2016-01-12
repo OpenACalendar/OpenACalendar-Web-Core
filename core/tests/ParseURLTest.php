@@ -25,7 +25,6 @@ class ParseURLTest extends \BaseAppTest {
 	* @dataProvider CanonicalDataProvider
 	*/ 
 	function testCanonical($in, $out) {
-		global $CONFIG;
 		$p = new \ParseURL($in);
 		$this->assertEquals($out, $p->getCanonical());
 	}

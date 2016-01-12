@@ -41,18 +41,17 @@ class ImportURLNotUsTest  extends \BaseAppTest  {
      * @dataProvider dataForTestIsValid
      */	
 	function testIsValid($webIndexDomain, $webSiteDomain, $hasSSL, $webIndexDomainSSL, $webSiteDomainSSL, $url, $result) {
-		global $CONFIG;
-		
-		$CONFIG->webIndexDomain = $webIndexDomain;
-		$CONFIG->webSiteDomain = $webSiteDomain;
-		$CONFIG->hasSSL = $hasSSL;
-		$CONFIG->webIndexDomainSSL = $webIndexDomainSSL;
-		$CONFIG->webSiteDomainSSL = $webSiteDomainSSL;
+
+		$this->app['config']->webIndexDomain = $webIndexDomain;
+		$this->app['config']->webSiteDomain = $webSiteDomain;
+		$this->app['config']->hasSSL = $hasSSL;
+		$this->app['config']->webIndexDomainSSL = $webIndexDomainSSL;
+		$this->app['config']->webSiteDomainSSL = $webSiteDomainSSL;
 				
 		$import = new ImportModel();
 		$import->setUrl($url);
 		$site = new SiteModel();
-		$importRun = new ImportRun($import, $site);
+		$importRun = new ImportRun($this->app, $import, $site);
 		
 		$handler = new ImportNotUsHandler($this->app);
 		$handler->setImportRun($importRun);

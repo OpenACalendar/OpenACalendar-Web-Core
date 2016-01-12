@@ -6,6 +6,7 @@ use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
 use repositories\builders\VenueRepositoryBuilder;
+use Silex\Application;
 
 
 /**
@@ -18,7 +19,7 @@ use repositories\builders\VenueRepositoryBuilder;
  */
 class VenueFilterParams {
 
-	function __construct() {
+	function __construct(Application $app) {
 		$this->venueRepositoryBuilder = new VenueRepositoryBuilder();
 		$this->venueRepositoryBuilder->setLimit(100);
 	}

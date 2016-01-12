@@ -7,6 +7,7 @@ use models\EventModel;
 use models\VenueModel;
 use models\AreaModel;
 use models\CountryModel;
+use Silex\Application;
 
 
 /**
@@ -24,8 +25,8 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 	
 	
 	
-	public function __construct(SiteModel $site = null, $timeZone  = null) {
-		parent::__construct($site, $timeZone);
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null) {
+		parent::__construct($app, $site, $timeZone);
 		// We want all events
 		// (... is default)
 		// order by created at time
@@ -34,19 +35,18 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 	
 	
 	public function getContents() {
-		global $CONFIG;
 		$txt = '<?xml version="1.0" encoding="utf-8"?>';
 		$txt .= '<feed xmlns="http://www.w3.org/2005/Atom">'."\n";
-		if ($this->site && !$CONFIG->isSingleSiteMode) {
+		if ($this->site && !$this->app['config']->isSingleSiteMode) {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
 					 htmlentities($this->site->getTitle()).' '.
-					 htmlentities($CONFIG->siteTitle).
+					 htmlentities($this->app['config']->siteTitle).
 					'</title>'."\n";
 		} else {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
-					 htmlentities($CONFIG->siteTitle).
+					 htmlentities($this->app['config']->siteTitle).
 					'</title>'."\n";
 		}
 		$txt .= '<id>'.$this->feedURL.'</id>'."\n";
@@ -67,8 +67,7 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
 							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
-		global $CONFIG;
-		
+
 		if ($event->getIsDeleted()) return false;
 		
 		
@@ -76,9 +75,9 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 		
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();
 		
-		$ourUrl = $CONFIG->isSingleSiteMode ? 
-				'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlug() : 
-				'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlug() ; 
+		$ourUrl = $this->app['config']->isSingleSiteMode ?
+				'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlug() :
+				'http://'.$siteSlug.".".$this->app['config']->webSiteDomain.'/event/'.$event->getSlug() ;
 		
 		$dh = new \DateTime('', $this->localTimeZone);
 		$dh->setTimestamp($event->getStartAt()->getTimestamp());
@@ -108,7 +107,7 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 		// TODO $event->getUrl()
 		$content .= '<a href="'.htmlentities($ourUrl).'">More details at '.htmlentities($ourUrl).'</a><br>';
 		$content .= '<p style="font-style:italic;font-size:80%">'.
-					'Powered by <a href="'.$ourUrl.'">'.$CONFIG->siteTitle.'</a>';
+					'Powered by <a href="'.$ourUrl.'">'.$this->app['config']->siteTitle.'</a>';
 		foreach($this->extraFooters as $extraFooter) {
 			$content .= "<br>".$extraFooter->getHtml();
 		}
@@ -118,7 +117,7 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 				
 		$txt .= $this->getUpdatedString($event);
 		
-		$txt .= '<author><name>'.$CONFIG->siteTitle.'</name></author></entry>'." \r\n";
+		$txt .= '<author><name>'.$this->app['config']->siteTitle.'</name></author></entry>'." \r\n";
 		
 		$this->events[] = $txt;
 	}

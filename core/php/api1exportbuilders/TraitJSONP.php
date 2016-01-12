@@ -27,11 +27,10 @@ trait TraitJSONP {
 	}
 
 	public function getResponse() {
-		global $CONFIG;	
 		$response = new Response($this->getContents());
 		$response->headers->set('Content-Type', 'text/javascript');
 		$response->setPublic();
-		$response->setMaxAge($CONFIG->cacheFeedsInSeconds);
+		$response->setMaxAge($this->app['config']->cacheFeedsInSeconds);
 		return $response;		
 	}
 	

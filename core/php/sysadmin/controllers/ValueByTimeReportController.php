@@ -41,7 +41,7 @@ class ValueByTimeReportController {
 
 
 
-		$form = $app['form.factory']->create(new RunValueByTimeReportForm($this->report));
+		$form = $app['form.factory']->create(new RunValueByTimeReportForm($app, $this->report));
 
 		return $app['twig']->render('sysadmin/valuebytimereport/index.html.twig', array(
 			'report'=>$this->report,
@@ -54,7 +54,7 @@ class ValueByTimeReportController {
 			die("NO");
 		}
 
-		$form = $app['form.factory']->create(new RunValueByTimeReportForm($this->report));
+		$form = $app['form.factory']->create(new RunValueByTimeReportForm($app, $this->report));
 		$form->bind($request);
 
 		$startAt = $form->get('start_at')->getData();

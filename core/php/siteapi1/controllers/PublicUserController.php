@@ -4,7 +4,6 @@ namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
 use Silex\Application;
-use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use repositories\UserAccountRepository;
@@ -52,7 +51,7 @@ class PublicUserController {
 		}
 				
 		// TODO should we be passing a better timeZone here?
-		$ical = new EventListICalBuilder($app['currentSite'], "UTC", $this->parameters['user']->getUserName());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], "UTC", $this->parameters['user']->getUserName());
 		$ical->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$ical->build();
 		return $ical->getResponse();
@@ -68,7 +67,7 @@ class PublicUserController {
 			$app->abort(404, "User does not exist.");
 		}
 		
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
@@ -85,7 +84,7 @@ class PublicUserController {
 			$app->abort(404, "User does not exist.");
 		}
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -103,7 +102,7 @@ class PublicUserController {
 			$app->abort(404, "User does not exist.");
 		}
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();

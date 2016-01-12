@@ -62,7 +62,7 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'], $this->parameters['venue']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['venue']->getTitle());
 		$ical->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$ical->build();
 		return $ical->getResponse();
@@ -79,7 +79,7 @@ class VenueController {
 		}
 
 		
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$json->addOtherDataVenue($this->parameters['venue']);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
@@ -98,7 +98,7 @@ class VenueController {
 		}
 
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$jsonp->addOtherDataVenue($this->parameters['venue']);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
@@ -118,7 +118,7 @@ class VenueController {
 		}
 
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();
@@ -133,7 +133,7 @@ class VenueController {
 		}
 
 		$days = isset($_GET['days']) ? $_GET['days'] : null;
-		$atom = new EventListATOMBeforeBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMBeforeBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setDaysBefore($days);
 		$atom->setTitle($this->parameters['venue']->getTitle());
 		$atom->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
@@ -149,7 +149,7 @@ class VenueController {
 		}
 
 		
-		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMCreateBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle($this->parameters['venue']->getTitle());
 		$atom->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$atom->build();

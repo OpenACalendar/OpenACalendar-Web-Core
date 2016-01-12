@@ -51,7 +51,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'], $this->parameters['curatedlist']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['curatedlist']->getTitle());
 		$ical->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$ical->build();
 		return $ical->getResponse();
@@ -67,7 +67,7 @@ class CuratedListController {
 		}
 
 		
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
@@ -84,7 +84,7 @@ class CuratedListController {
 		}
 
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -102,7 +102,7 @@ class CuratedListController {
 		}
 
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();
@@ -117,7 +117,7 @@ class CuratedListController {
 		}
 
 		$days = isset($_GET['days']) ? $_GET['days'] : null;
-		$atom = new EventListATOMBeforeBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMBeforeBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setDaysBefore($days);
 		$atom->setTitle($this->parameters['curatedlist']->getTitle());
 		$atom->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
@@ -133,7 +133,7 @@ class CuratedListController {
 		}
 
 		
-		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMCreateBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle($this->parameters['curatedlist']->getTitle());
 		$atom->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$atom->build();

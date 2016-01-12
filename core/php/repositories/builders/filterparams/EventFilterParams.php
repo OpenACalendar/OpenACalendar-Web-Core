@@ -7,6 +7,7 @@ use models\EventModel;
 use models\GroupModel;
 use models\UserAccountModel;
 use repositories\builders\EventRepositoryBuilder;
+use Silex\Application;
 
 
 /**
@@ -19,7 +20,7 @@ use repositories\builders\EventRepositoryBuilder;
  */
 class EventFilterParams {
 
-	function __construct(EventRepositoryBuilder $erb = null) {
+	function __construct(Application $app, EventRepositoryBuilder $erb = null) {
 		if ($erb) {
 			$this->eventRepositoryBuilder = $erb;
 		} else {

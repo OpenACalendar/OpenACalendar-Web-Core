@@ -8,6 +8,7 @@ use models\VenueModel;
 use models\AreaModel;
 use models\CountryModel;
 use repositories\builders\MediaRepositoryBuilder;
+use Silex\Application;
 
 /**
  *
@@ -44,11 +45,10 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 
 
 
-	public function __construct(SiteModel $site = null, $timeZone = null, $title = null) {
-		parent::__construct($site, $timeZone, $title);
-		global $CONFIG;
+	public function __construct(Application $app, SiteModel $site = null, $timeZone = null, $title = null) {
+		parent::__construct($app, $site, $timeZone, $title);
 		$this->eventRepositoryBuilder = new EventRepositoryBuilder();
-		$this->eventRepositoryBuilder->setLimit($CONFIG->api1EventListLimit);
+		$this->eventRepositoryBuilder->setLimit($this->app['config']->api1EventListLimit);
 		$this->eventRepositoryBuilder->setIncludeCountryInformation(true);
 		$this->eventRepositoryBuilder->setIncludeAreaInformation(true);
 		$this->eventRepositoryBuilder->setIncludeVenueInformation(true);

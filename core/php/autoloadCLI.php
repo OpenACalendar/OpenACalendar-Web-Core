@@ -34,13 +34,12 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 unset($dirs);
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-	global $CONFIG;
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\TimeZoneExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array('attr'=>array('target'=>'_blank'))));
     $twig->addExtension(new twig\extensions\TypeCheckExtension($app));
     $twig->addExtension(new Twig_Extensions_Extension_Text());
-	$twig->addGlobal('config', $CONFIG);
+	$twig->addGlobal('config', $app['config']);
 	$twig->addGlobal('currentUserClock12Hour', true);
 	$twig->addGlobal('COPYRIGHT_YEARS', COPYRIGHT_YEARS);
 	return $twig;
@@ -88,12 +87,11 @@ function configureAppForUser(UserAccountModel $user = null) {
 ///////////////////////// SWIFT MAILER
 // We do NOT use $app->register(new Silex\Provider\SwiftmailerServiceProvider()); here because that 
 // sets up some options that make sense for web but not for CLI like Spooling.
-$app['mailer'] =  function ($c) {
-	global $CONFIG;
-	$transport = Swift_SmtpTransport::newInstance($CONFIG->SMTPHost, $CONFIG->SMTPPort);
-	$transport->setUsername($CONFIG->SMTPUsername);
-	$transport->setPassword($CONFIG->SMTPPassword);
-	$transport->setEncryption($CONFIG->SMTPEncyption);
+$app['mailer'] =  function ($app) {
+	$transport = Swift_SmtpTransport::newInstance($app['config']->SMTPHost, $app['config']->SMTPPort);
+	$transport->setUsername($app['config']->SMTPUsername);
+	$transport->setPassword($app['config']->SMTPPassword);
+	$transport->setEncryption($app['config']->SMTPEncyption);
 	return Swift_Mailer::newInstance($transport);
 };
 

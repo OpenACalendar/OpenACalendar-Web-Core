@@ -64,7 +64,7 @@ class IndexController {
 
 		$siteRepository = new SiteRepository();
 				
-		$form = $app['form.factory']->create(new CreateForm());
+		$form = $app['form.factory']->create(new CreateForm($app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

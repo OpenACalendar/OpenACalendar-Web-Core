@@ -28,7 +28,7 @@ class VenueVirtualController {
 	
 	function show(Request $request, Application $app) {
 		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams();
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);

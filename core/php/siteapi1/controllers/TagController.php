@@ -62,7 +62,7 @@ class TagController {
 			$app->abort(404, "Tag does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'],$this->parameters['tag']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'],$this->parameters['tag']->getTitle());
 		$ical->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$ical->build();
 		return $ical->getResponse();
@@ -78,7 +78,7 @@ class TagController {
 		}
 
 		
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
@@ -95,7 +95,7 @@ class TagController {
 		}
 
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -113,7 +113,7 @@ class TagController {
 		}
 
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();
@@ -129,7 +129,7 @@ class TagController {
 		}
 
 		$days = isset($_GET['days']) ? $_GET['days'] : null;
-		$atom = new EventListATOMBeforeBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMBeforeBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setDaysBefore($days);
 		$atom->setTitle($this->parameters['tag']->getTitle());
 		$atom->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
@@ -145,7 +145,7 @@ class TagController {
 		}
 
 		
-		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMCreateBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle($this->parameters['tag']->getTitle());
 		$atom->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$atom->build();

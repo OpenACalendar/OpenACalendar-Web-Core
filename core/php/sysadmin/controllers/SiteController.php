@@ -197,14 +197,13 @@ class SiteController {
 	}
 
 	function listUsersNotEditors($siteid, Request $request, Application $app) {
-		global $CONFIG;
 		$this->build($siteid, $request, $app);
 
 		$userAccountRepoBuilder = new UserAccountRepositoryBuilder();
 		$userAccountRepoBuilder->setUserHasNoEditorPermissionsInSite($this->parameters['site']);
 		$this->parameters['users'] = $userAccountRepoBuilder->fetchAll();
 
-		$this->parameters['featureActive'] = $CONFIG->isSingleSiteMode ? false : true;
+		$this->parameters['featureActive'] = $app['config']->isSingleSiteMode ? false : true;
 
 		return $app['twig']->render('sysadmin/site/usersnoteditors.html.twig', $this->parameters);
 

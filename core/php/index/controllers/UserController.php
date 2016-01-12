@@ -50,7 +50,6 @@ class UserController {
 	protected $parameters = array();
 
 	protected function processThingsToDoAfterGetUser(Request $request, Application $app) {
-		global $CONFIG;
 
 		$siteRepo = new SiteRepository();
 		$eventRepo = new EventRepository();
@@ -75,7 +74,7 @@ class UserController {
 
 		// Any events to add?
 		if ($request->query->has("event")) {
-			if ($CONFIG->isSingleSiteMode) {
+			if ($app['config']->isSingleSiteMode) {
 				$event = $eventRepo->loadBySiteIDAndEventSlug($CONFIG->singleSiteID, $request->query->get("event"));
 			} else {
 				$site = $siteRepo->loadBySlug($request->query->get("eventSite"));
@@ -97,7 +96,7 @@ class UserController {
 
 		// Any areas to add?
 		if ($request->query->has("area")) {
-			if ($CONFIG->isSingleSiteMode) {
+			if ($app['config']->isSingleSiteMode) {
 				$area = $areaRepo->loadBySiteIDAndAreaSlug($CONFIG->singleSiteID, $request->query->get("area"));
 			} else {
 				$site = $siteRepo->loadBySlug($request->query->get("areaSite"));
@@ -244,7 +243,6 @@ class UserController {
 
 
 	function register(Request $request, Application $app) {
-		global $CONFIG;
 		if (!$app['config']->allowNewUsersToRegister) {
 			return $app['twig']->render('index/user/register.notallowed.html.twig', array(
 			));
@@ -254,13 +252,13 @@ class UserController {
 
 		$userRepository = new UserAccountRepository();
 				
-		$form = $app['form.factory']->create(new SignUpUserForm());
+		$form = $app['form.factory']->create(new SignUpUserForm($app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 			$data = $form->getData();
 
-			if (is_array($CONFIG->userNameReserved) && in_array($data['username'], $CONFIG->userNameReserved)) {
+			if (is_array($app['config']->userNameReserved) && in_array($data['username'], $app['config']->userNameReserved)) {
 				$form->addError(new FormError('That user name is already taken'));
 			}
 

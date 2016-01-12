@@ -75,7 +75,6 @@ class ImportNewForm extends AbstractType{
 
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
-			global $CONFIG;
 			$form = $event->getForm();
 			// URL validation. We really can't do much except verify ppl haven't put a space in, which they might do if they just type in Google search terms (seen it done)
 			// or no value

@@ -3,7 +3,6 @@
 namespace site\controllers;
 
 use Silex\Application;
-use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use models\CountryModel;

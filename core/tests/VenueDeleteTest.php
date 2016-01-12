@@ -20,7 +20,7 @@ use repositories\builders\VenueRepositoryBuilder;
 class VenueDeleteTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		\TimeSource::mock(2014,1,1,0,0,0);
+		$this->app['timesource']->mock(2014,1,1,0,0,0);
 
 		$this->addCountriesToTestDB();
 
@@ -47,11 +47,11 @@ class VenueDeleteTest extends \BaseAppWithDBTest {
 		$venue->setDescription("test test");
 		$venue->setCountryId($gb->getId());
 
-		\TimeSource::mock(2014,1,1,1,0,0);
+		$this->app['timesource']->mock(2014,1,1,1,0,0);
 		$venueRepo = new VenueRepository();
 		$venueRepo->create($venue, $site, $user);
 
-		\TimeSource::mock(2014,1,1,2,0,0);
+		$this->app['timesource']->mock(2014,1,1,2,0,0);
 		$venueRepo->delete($venue, $user);
 
 

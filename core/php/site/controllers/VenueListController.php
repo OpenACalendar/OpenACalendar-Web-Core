@@ -24,7 +24,7 @@ class VenueListController {
 	function index(Application $app) {
 		
 			
-		$params = new VenueFilterParams();
+		$params = new VenueFilterParams($app);
 		$params->set($_GET);
 		$params->getVenueRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getVenueRepositoryBuilder()->setIncludeDeleted(false);

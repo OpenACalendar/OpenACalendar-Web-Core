@@ -7,6 +7,7 @@ namespace reports\seriesreports;
 
 use BaseSeriesReport;
 use ReportDataItem;
+use Silex\Application;
 
 
 /**
@@ -21,8 +22,9 @@ use ReportDataItem;
 class UsersWithEventsEditedSeriesReport extends BaseSeriesReport {
 
 
-	function __construct()
-	{
+    function __construct(Application $app)
+    {
+        parent::__construct($app);
 		$this->hasFilterTime = true;
 	}
 
@@ -34,7 +36,6 @@ class UsersWithEventsEditedSeriesReport extends BaseSeriesReport {
 	public function getReportTitle() { return 'Users With Events Edited'; }
 
 	public function run() {
-		global $DB;
 
 		$where = array();
 		$params = array();
@@ -61,7 +62,7 @@ class UsersWithEventsEditedSeriesReport extends BaseSeriesReport {
 			"GROUP BY eh.user_account_id ".
 			"ORDER BY count DESC ";
 
-		$stat = $DB->prepare($sql);
+		$stat = $this->app['db']->prepare($sql);
 		$stat->execute($params);
 		$this->data = array();
 		while($data = $stat->fetch()) {

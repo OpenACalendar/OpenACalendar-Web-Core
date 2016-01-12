@@ -24,7 +24,7 @@ class GroupListController {
 	function index(Application $app) {
 		
 		
-		$params = new GroupFilterParams();
+		$params = new GroupFilterParams($app);
 		$params->set($_GET);
 		$params->getGroupRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getGroupRepositoryBuilder()->setIncludeDeleted(false);

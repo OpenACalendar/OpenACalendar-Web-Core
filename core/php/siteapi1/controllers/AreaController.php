@@ -50,7 +50,7 @@ class AreaController {
 			$app->abort(404, "Area does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'],$this->parameters['area']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'],$this->parameters['area']->getTitle());
 		$ical->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$ical->build();
 		return $ical->getResponse();
@@ -66,7 +66,7 @@ class AreaController {
 		}
 
 		
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
@@ -83,7 +83,7 @@ class AreaController {
 		}
 
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -101,7 +101,7 @@ class AreaController {
 		}
 
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();
@@ -117,7 +117,7 @@ class AreaController {
 		}
 
 		$days = isset($_GET['days']) ? $_GET['days'] : null;
-		$atom = new EventListATOMBeforeBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMBeforeBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setDaysBefore($days);
 		$atom->setTitle($this->parameters['area']->getTitle());
 		$atom->getEventRepositoryBuilder()->setArea($this->parameters['area']);
@@ -133,7 +133,7 @@ class AreaController {
 		}
 
 		
-		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMCreateBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle($this->parameters['area']->getTitle());
 		$atom->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$atom->build();

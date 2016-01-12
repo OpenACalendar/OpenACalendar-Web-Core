@@ -42,7 +42,7 @@ class VenueVirtualController {
 	function ical(Request $request, Application $app) {
 		
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'], "Virtual Events");
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], "Virtual Events");
 		$ical->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$ical->build();
 		return $ical->getResponse();
@@ -54,7 +54,7 @@ class VenueVirtualController {
 
 		$ourRequest = new \Request($request);
 
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->build();
@@ -66,7 +66,7 @@ class VenueVirtualController {
 
 		$ourRequest = new \Request($request);
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -79,7 +79,7 @@ class VenueVirtualController {
 
 		$ourRequest = new \Request($request);
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$csv->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$csv->build();
@@ -90,7 +90,7 @@ class VenueVirtualController {
 	function atomBefore(Request $request, Application $app) {
 		
 		$days = isset($_GET['days']) ? $_GET['days'] : null;
-		$atom = new EventListATOMBeforeBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMBeforeBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setDaysBefore($days);
 		$atom->setTitle('Virtual');
 		$atom->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
@@ -101,7 +101,7 @@ class VenueVirtualController {
 
 	function atomCreate(Request $request, Application $app) {
 		
-		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMCreateBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle('Virtual');
 		$atom->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$atom->build();

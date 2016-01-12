@@ -1,4 +1,5 @@
 <?php
+use Silex\Application;
 
 /**
  *
@@ -10,16 +11,18 @@
  */
 class ParseDomain {
 
+    /** @var Application */
+    protected $app;
+
 	protected $currentDomain;
-	
-	public function __construct($currentDomain) {
-		$this->currentDomain = $currentDomain;
-	}
+
+    public function __construct(Application $application, $currentDomain) {
+        $this->currentDomain = $currentDomain;
+        $this->app = $application;
+    }
 	
 	public function isCoveredByCookies() {
-		global $CONFIG;
-		
-		$matchAgainst = $this->stripPort($CONFIG->webCommonSessionDomain);
+		$matchAgainst = $this->stripPort($this->app['config']->webCommonSessionDomain);
 		$bit = substr($this->stripPort($this->currentDomain), -strlen($matchAgainst));
 		if (strtolower($bit) == strtolower($matchAgainst)) {
 			return true;

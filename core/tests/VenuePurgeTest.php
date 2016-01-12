@@ -25,7 +25,7 @@ class VenuePurgeTest extends \BaseAppWithDBTest {
 	function test1() {
 		$this->addCountriesToTestDB();
 
-		\TimeSource::mock(2014,10,1,1,1,0);
+		$this->app['timesource']->mock(2014,10,1,1,1,0);
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
@@ -65,7 +65,7 @@ class VenuePurgeTest extends \BaseAppWithDBTest {
 		$venueDuplicate->setTitle("test Duplicate");
 
 		$venueRepo->create($venueDuplicate, $site, $user);
-		\TimeSource::mock(2014,10,1,1,2,0);
+		$this->app['timesource']->mock(2014,10,1,1,2,0);
 		$venueRepo->markDuplicate($venueDuplicate, $venue, $user);
 
 		$event = new EventModel();

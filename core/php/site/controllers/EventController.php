@@ -55,8 +55,6 @@ class EventController {
 	protected $parameters = array();
 	
 	protected function build($slug, Request $request, Application $app) {
-		global $CONFIG;
-
 		$this->parameters = array(
 			'group'=>null,
 			'venue'=>null,
@@ -152,7 +150,7 @@ class EventController {
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& $CONFIG->isFileStore());
+			&& $app['config']->isFileStore());
 		$app['currentUserActions']->set("org.openacalendar","eventRecur",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsImported()
@@ -1780,7 +1778,7 @@ class EventController {
 		
 		}
 		
-		$this->parameters['groupListFilterParams'] = new GroupFilterParams();
+		$this->parameters['groupListFilterParams'] = new GroupFilterParams($app);
 		$this->parameters['groupListFilterParams']->set($_GET);
 		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['groupListFilterParams']->getGroupRepositoryBuilder()->setIncludeDeleted(false);
@@ -1882,7 +1880,6 @@ class EventController {
 	}
 
 	function exportExistingGoogleCalendar($slug, Request $request, Application $app) {
-		global $CONFIG;
 
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Event does not exist.");
@@ -1893,7 +1890,7 @@ class EventController {
 		// 300 to address, 300 to title
 		// rest for misc.
 
-		$eventURL = $CONFIG->getWebSiteDomainSecure($app['currentSite']->getSlug()).'/event/'.$this->parameters['event']->getSlugForURL();
+		$eventURL = $app['config']->getWebSiteDomainSecure($app['currentSite']->getSlug()).'/event/'.$this->parameters['event']->getSlugForURL();
 
 		$locationStringBits = array();
 		if ($this->parameters['venue']) {

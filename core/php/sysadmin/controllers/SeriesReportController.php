@@ -40,7 +40,7 @@ class SeriesReportController {
 
 
 
-		$form = $app['form.factory']->create(new RunSeriesReportForm($this->report));
+		$form = $app['form.factory']->create(new RunSeriesReportForm($app, $this->report));
 
 		return $app['twig']->render('sysadmin/seriesreport/index.html.twig', array(
 			'report'=>$this->report,
@@ -53,7 +53,7 @@ class SeriesReportController {
 			die("NO");
 		}
 
-		$form = $app['form.factory']->create(new RunSeriesReportForm($this->report));
+		$form = $app['form.factory']->create(new RunSeriesReportForm($app, $this->report));
 		$form->bind($request);
 
 		$filterStartAt = $filterEndAt = $filterSiteID = null;

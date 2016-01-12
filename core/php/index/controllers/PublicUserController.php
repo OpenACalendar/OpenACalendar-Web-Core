@@ -3,7 +3,6 @@
 namespace index\controllers;
 
 use Silex\Application;
-use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use repositories\UserAccountRepository;
@@ -70,7 +69,7 @@ class PublicUserController {
 		}
 				
 		// TODO should we be passing a better timeZone here?
-		$ical = new EventListICalBuilder(null, "UTC", $this->parameters['user']->getUserName());
+		$ical = new EventListICalBuilder($app, null, "UTC", $this->parameters['user']->getUserName());
 		$ical->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$ical->build();
 		return $ical->getResponse();
@@ -83,7 +82,7 @@ class PublicUserController {
 			$app->abort(404, "User does not exist.");
 		}
 		
-		$json = new EventListJSONBuilder(null, $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, null, $app['currentTimeZone']);
 		$json->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$json->build();
 		return $json->getResponse();
@@ -96,7 +95,7 @@ class PublicUserController {
 			$app->abort(404, "User does not exist.");
 		}
 		
-		$jsonp = new EventListJSONPBuilder(null, $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, null, $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$jsonp->build();
 		if (isset($_GET['callback'])) $jsonp->setCallBackFunction($_GET['callback']);

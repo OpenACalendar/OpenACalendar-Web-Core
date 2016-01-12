@@ -1,6 +1,7 @@
 <?php
 
 namespace tasks;
+use Silex\Application;
 
 
 /**
@@ -14,10 +15,8 @@ namespace tasks;
 class LoadStaticData {
 
 	
-	public static function load($verbose = false) {
-		global $DB;
-		
-		
+	public static function load(Application $app, $verbose = false) {
+
 		if ($verbose) print "Starting ".date("c")."\n";
 
 
@@ -78,10 +77,10 @@ class LoadStaticData {
 
 
 		# Step - Save to DB
-		$statCheck = $DB->prepare("SELECT * FROM country WHERE two_char_code=:code");
-		$statInsert = $DB->prepare("INSERT INTO country (two_char_code,title,timezones,max_lat,max_lng,min_lat,min_lng,address_code_label) ".
+		$statCheck = $app['db']->prepare("SELECT * FROM country WHERE two_char_code=:code");
+		$statInsert = $app['db']->prepare("INSERT INTO country (two_char_code,title,timezones,max_lat,max_lng,min_lat,min_lng,address_code_label) ".
 				"VALUES (:two_char_code,:title,:timezones,:max_lat,:max_lng,:min_lat,:min_lng,:address_code_label)");
-		$statUpdate = $DB->prepare("UPDATE country SET title=:title, timezones=:timezones,  ".
+		$statUpdate = $app['db']->prepare("UPDATE country SET title=:title, timezones=:timezones,  ".
 				" max_lat=:max_lat, max_lng=:max_lng, min_lat=:min_lat, min_lng=:min_lng, address_code_label=:address_code_label  ".
 				" WHERE two_char_code=:two_char_code");
 		foreach($data as $code=>$countryData) {

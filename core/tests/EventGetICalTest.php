@@ -41,7 +41,7 @@ class EventGetICalTest extends \BaseAppTest {
      */	
 	function testGetIcalLine($key, $value, $out) {
 		$site = new SiteModel();
-		$ical = new EventListICalBuilder($site,'Europe/London');
+		$ical = new EventListICalBuilder($this->app, $site,'Europe/London');
 		$this->assertEquals($out, $ical->getIcalLine($key, $value));		
 	}
 

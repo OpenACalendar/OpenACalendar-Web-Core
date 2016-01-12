@@ -62,7 +62,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app['currentSite'], $app['currentTimeZone'],$this->parameters['group']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'],$this->parameters['group']->getTitle());
 		$ical->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$ical->build();
 		return $ical->getResponse();
@@ -78,7 +78,7 @@ class GroupController {
 		}
 
 		
-		$json = new EventListJSONBuilder($app['currentSite'], $app['currentTimeZone']);
+		$json = new EventListJSONBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$json->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$json->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$json->build();
@@ -95,7 +95,7 @@ class GroupController {
 		}
 
 		
-		$jsonp = new EventListJSONPBuilder($app['currentSite'], $app['currentTimeZone']);
+		$jsonp = new EventListJSONPBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$jsonp->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$jsonp->setIncludeEventMedias($ourRequest->getGetOrPostBoolean("includeMedias",false));
 		$jsonp->build();
@@ -111,7 +111,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 
-		$csv = new EventListCSVBuilder($app['currentSite'], $app['currentTimeZone']);
+		$csv = new EventListCSVBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$csv->setTitle($this->parameters['group']->getTitle());
 		$csv->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$csv->build();
@@ -125,7 +125,7 @@ class GroupController {
 		}
 
 		$days = isset($_GET['days']) ? $_GET['days'] : null;
-		$atom = new EventListATOMBeforeBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMBeforeBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setDaysBefore($days);
 		$atom->setTitle($this->parameters['group']->getTitle());
 		$atom->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
@@ -141,7 +141,7 @@ class GroupController {
 		}
 
 		
-		$atom = new EventListATOMCreateBuilder($app['currentSite'], $app['currentTimeZone']);
+		$atom = new EventListATOMCreateBuilder($app, $app['currentSite'], $app['currentTimeZone']);
 		$atom->setTitle($this->parameters['group']->getTitle());
 		$atom->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$atom->build();

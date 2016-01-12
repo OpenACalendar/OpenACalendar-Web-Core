@@ -31,10 +31,9 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
      * @group import
      */
     function testBasicThenDeletedByFlag() {
-		global $CONFIG;
-		
-		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
+
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 1);
+		$this->app['config']->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
@@ -89,7 +88,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 		
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICAL.ical');		
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -118,8 +117,8 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$this->assertEquals("Europe/London",$event->getTimezone());
 		
 		// Import again
-		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
-		$importURLRun = new ImportRun($importURL, $site);
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 2);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICALDeleted.ical');		
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -145,10 +144,9 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
      * @group import
      */
     function testBasicThenDeletedByVanishing() {
-		global $CONFIG;
 
-		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 1);
+		$this->app['config']->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 
@@ -203,7 +201,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICAL.ical');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -232,8 +230,8 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$this->assertEquals("Europe/London",$event->getTimezone());
 
 		// Import again
-		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
-		$importURLRun = new ImportRun($importURL, $site);
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 2);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/BasicICALNoEvents.ical');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -259,10 +257,9 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
      * @group import
      */
     function testMoves() {
-		global $CONFIG;
-		
-		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
+
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 1);
+		$this->app['config']->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
@@ -304,7 +301,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 		
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart1.ical');		
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -330,8 +327,8 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$this->assertFalse($event->getIsDeleted());
 		
 		// Import again
-		\TimeSource::mock(2013, 10, 1, 1, 1, 2);
-		$importURLRun = new ImportRun($importURL, $site);
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 2);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/MovedICALPart2.ical');		
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -362,10 +359,9 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
      * @group import
      */
     function testNotValid() {
-		global $CONFIG;
-		
-		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
+
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 1);
+		$this->app['config']->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
@@ -407,7 +403,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 		
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALNotValid.ical');		
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -431,10 +427,9 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
      * @group import
      */
     function testLimits() {
-		global $CONFIG;
 
-        \TimeSource::mock(2012, 9, 1, 1, 1, 1);
-        $CONFIG->importAllowEventsSecondsIntoFuture = 77760000;
+        $this->app['timesource']->mock(2012, 9, 1, 1, 1, 1);
+        $this->app['config']->importAllowEventsSecondsIntoFuture = 77760000;
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 2;
 		
@@ -476,7 +471,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 
 		
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ICALManyEvents.ical');		
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);

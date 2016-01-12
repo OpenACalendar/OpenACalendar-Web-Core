@@ -4,6 +4,7 @@ namespace api1exportbuilders;
 use repositories\builders\EventRepositoryBuilder;
 use models\SiteModel;
 use models\EventModel;
+use Silex\Application;
 
 /**
  *
@@ -15,6 +16,9 @@ use models\EventModel;
  */
 abstract class BaseBuilder {
 
+    /** @var Application */
+    protected $app;
+
 	protected $title;
 	
 	/** @var SiteModel **/
@@ -24,16 +28,16 @@ abstract class BaseBuilder {
 	
 	protected $localTimeZone;
 	
-	public function __construct(SiteModel $site = null, $timeZone = null, $title = null) {		
-		global $CONFIG;
+	public function __construct(Application $app, SiteModel $site = null, $timeZone = null, $title = null) {
+        $this->app = $app;
 		$this->site = $site;
 		$this->localTimeZone = new \DateTimeZone($timeZone ? $timeZone : "UTC");
 		$this->title = $title;
-		if ($CONFIG->apiExtraHeader1Html || $CONFIG->apiExtraHeader1Text) {
-			$this->addExtraHeader($CONFIG->apiExtraHeader1Html, $CONFIG->apiExtraHeader1Text);
+		if ($this->app['config']->apiExtraHeader1Html || $this->app['config']->apiExtraHeader1Text) {
+			$this->addExtraHeader($this->app['config']->apiExtraHeader1Html, $this->app['config']->apiExtraHeader1Text);
 		}
-		if ($CONFIG->apiExtraFooter1Html || $CONFIG->apiExtraFooter1Text) {
-			$this->addExtraFooter($CONFIG->apiExtraFooter1Html, $CONFIG->apiExtraFooter1Text);
+		if ($this->app['config']->apiExtraFooter1Html || $this->app['config']->apiExtraFooter1Text) {
+			$this->addExtraFooter($this->app['config']->apiExtraFooter1Html, $this->app['config']->apiExtraFooter1Text);
 		}
 	}
 

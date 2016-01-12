@@ -24,7 +24,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 	function testIntegration1() {
 
 		$this->addCountriesToTestDB();
-		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 12, 0, 0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -45,7 +45,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 		
 		## Create venue
-		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 13, 0, 0);
 		$venue = new VenueModel();
 		$venue->setTitle("test");
 		$venue->setDescription("test test");
@@ -55,7 +55,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$venueRepo->create($venue, $site, $user);
 		
 		## Edit venue
-		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 14, 0, 0);
 		
 		$venue = $venueRepo->loadById($venue->getId());
 		$venue->setDescription("testy");
@@ -103,7 +103,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 
 	function testIntegration2() {
 		$this->addCountriesToTestDB();
-		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 12, 0, 0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -124,7 +124,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 
 		## Create venue
-		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 13, 0, 0);
 		$venue = new VenueModel();
 		$venue->setTitle("test");
 		$venue->setDescription("test test");
@@ -134,7 +134,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$venueRepo->create($venue, $site, $user);
 
 		## Edit venue
-		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 14, 0, 0);
 
 		$venue = $venueRepo->loadById($venue->getId());
 		$venue->setDescription("testy");
@@ -143,7 +143,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$venueRepo->edit($venue, $user);
 
 		## Delete venue
-		\TimeSource::mock(2014, 1, 1, 15, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 15, 0, 0);
 
 		$venueRepo->delete($venue, $user);
 

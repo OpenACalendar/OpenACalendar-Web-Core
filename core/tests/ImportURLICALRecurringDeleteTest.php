@@ -32,10 +32,9 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
      * @group import
      */
     function testRRuleDeleteByExDate1() {
-		global $CONFIG;
 
-		\TimeSource::mock(2015, 1, 1, 1, 1, 1);
-		$CONFIG->importAllowEventsSecondsIntoFuture = 77760000;
+		$this->app['timesource']->mock(2015, 1, 1, 1, 1, 1);
+		$this->app['config']->importAllowEventsSecondsIntoFuture = 77760000;
         $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
         $this->app['config']->importLimitToSaveOnEachRunEvents = 10;
 
@@ -75,7 +74,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$importRepository->create($importURL, $site, $user);
 
 		// ============================================= Import CREATE
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleDeleteByExDate1Part1.ics');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -122,10 +121,10 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$this->assertFalse($event->getIsDeleted());
 
 
-		\TimeSource::mock(2015, 1,2, 1, 1, 1);
+		$this->app['timesource']->mock(2015, 1,2, 1, 1, 1);
 
 		// ============================================= Import With no changes
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleDeleteByExDate1Part1.ics');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -172,10 +171,10 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$this->assertFalse($event->getIsDeleted());
 
 
-		\TimeSource::mock(2015, 1,3, 1, 1, 1);
+		$this->app['timesource']->mock(2015, 1,3, 1, 1, 1);
 
 		// ============================================= Import WITH ONE DELETED!
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleDeleteByExDate1Part2.ics');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);

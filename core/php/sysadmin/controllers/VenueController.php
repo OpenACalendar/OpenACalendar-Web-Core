@@ -45,7 +45,6 @@ class VenueController {
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
-		global $CONFIG;
 
 		$this->build($siteid, $slug, $request, $app);
 		
@@ -87,7 +86,7 @@ class VenueController {
 					}
 
 
-				} else if ($action->getCommand() == 'purge' && $CONFIG->sysAdminExtraPurgeVenuePassword && $CONFIG->sysAdminExtraPurgeVenuePassword == $action->getParam(0)) {
+				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeVenuePassword && $app['config']->sysAdminExtraPurgeVenuePassword == $action->getParam(0)) {
 
 					$vr = new VenueRepository();
 					$vr->purge($this->parameters['venue']);

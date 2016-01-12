@@ -161,7 +161,7 @@ class CurrentUserController {
 	
 	function agenda(Request $request, Application $app) {
 		
-		$params = new EventFilterParams();
+		$params = new EventFilterParams($app);
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
@@ -180,7 +180,7 @@ class CurrentUserController {
 	
 	function calendarNow(Application $app) {
 		$cal = new \RenderCalendar();
-		$params = new EventFilterParams($cal->getEventRepositoryBuilder());
+		$params = new EventFilterParams($app, $cal->getEventRepositoryBuilder());
 		$params->setHasDateControls(false);
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
 		$params->set($_GET);
@@ -202,7 +202,7 @@ class CurrentUserController {
 	function calendar($year, $month, Application $app) {
 		
 		$cal = new \RenderCalendar();
-		$params = new EventFilterParams($cal->getEventRepositoryBuilder());
+		$params = new EventFilterParams($app, $cal->getEventRepositoryBuilder());
 		$params->setHasDateControls(false);
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
 		$params->set($_GET);

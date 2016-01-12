@@ -20,7 +20,6 @@ use Silex\Application;
  */
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG, $WEBSESSION;
 	# ////////////// Site
 	$siteRepository = new SiteRepository();
 	$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
@@ -88,20 +87,20 @@ $app->before(function (Request $request) use ($app) {
 	if (substr($_SERVER['REQUEST_URI'],0,4) != '/api') {
 		// we do this in cookies not session because it's not security sensitive and it saves us making a session for every bot that visits
 		if (!isset($_COOKIE['sitesSeen'])) {
-			setcookie("sitesSeen",$site->getId(),time()+60*60*24*$CONFIG->siteSeenCookieStoreForDays,'/',$CONFIG->webCommonSessionDomain,false,false);
+			setcookie("sitesSeen",$site->getId(),time()+60*60*24*$app['config']->siteSeenCookieStoreForDays,'/',$app['config']->webCommonSessionDomain,false,false);
 		} else {
 			$vals = explode(",",  $_COOKIE['sitesSeen']);
 			if (!in_array($site->getId(), $vals)) {
 				$vals[] = $site->getId();
 			}
-			setcookie("sitesSeen",  implode(",", $vals),time()+60*60*24*$CONFIG->siteSeenCookieStoreForDays,'/',$CONFIG->webCommonSessionDomain,false,false);
+			setcookie("sitesSeen",  implode(",", $vals),time()+60*60*24*$app['config']->siteSeenCookieStoreForDays,'/',$app['config']->webCommonSessionDomain,false,false);
 		}
 	}
 	
 	# ////////////// Timezone
 	$timezone = "";
 	if (isset($_GET['mytimezone']) && in_array($_GET['mytimezone'], $app['currentSite']->getCachedTimezonesAsList())) {
-		setcookie("site".$app['currentSite']->getId()."timezone",$_GET['mytimezone'],time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,false,false);
+		setcookie("site".$app['currentSite']->getId()."timezone",$_GET['mytimezone'],time()+60*60*24*365,'/',$app['config']->webCommonSessionDomain,false,false);
 		$timezone = $_GET['mytimezone'];
 	} else if (isset($_COOKIE["site".$app['currentSite']->getId()."timezone"]) && in_array($_COOKIE["site".$app['currentSite']->getId()."timezone"],$site->getCachedTimezonesAsList())) {
 		$timezone = $_COOKIE["site".$app['currentSite']->getId()."timezone"];
@@ -126,49 +125,45 @@ $app->before(function (Request $request) use ($app) {
 
 
 $permissionCalendarChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
 };
 
 $permissionCalendarChangeRequiredOrForAnyVerifiedUser = function(Request $request, Application $app) {
-	global $CONFIG;
 	if ($app['currentUser']) {
 		if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
 			return $app->abort(403); // TODO
 		}
 	} else {
 		if (!$app['anyVerifiedUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 	}
 };
 
 $permissionCalendarAdministratorRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_ADMINISTRATE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 	}
 };
 
 
 $permissionEventsChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
@@ -176,129 +171,117 @@ $permissionEventsChangeRequired = function(Request $request, Application $app) {
 
 
 $permissionEventsChangeRequiredOrForAnyVerifiedUser = function(Request $request, Application $app) {
-	global $CONFIG;
 	if ($app['currentUser']) {
 		if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")) {
 			return $app->abort(403); // TODO
 		}
 	} else {
 		if (!$app['anyVerifiedUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")) {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 	}
 };
 
 $permissionGroupsChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
 };
 
 $permissionGroupsChangeRequiredOrForAnyVerifiedUser = function(Request $request, Application $app) {
-	global $CONFIG;
 	if ($app['currentUser']) {
 		if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")) {
 			return $app->abort(403); // TODO
 		}
 	} else {
 		if (!$app['anyVerifiedUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")) {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 	}
 };
 
 $permissionVenuesChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
 };
 
 $permissionAreasChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
 };
 
 $permissionTagsChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","TAGS_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
 };
 
 $permissionImportURLsChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","IMPORTURL_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
 };
 
 $permissionMediasChangeRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","MEDIAS_CHANGE")) {
 		if ($app['currentUser']) {
 			return $app->abort(403); // TODO
 		} else {
-			return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+			return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 		}
 
 	}
 };
 
 $appUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;
 	if (!$app['currentUser']) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 	}
 };
 
 $appVerifiedUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;	
 	if (!$app['currentUser']) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 	}
 	if (!$app['currentUser']->getIsEmailVerified()) {
-		return new RedirectResponse('http://'.$CONFIG->webIndexDomain.'/me/verifyneeded');
+		return new RedirectResponse('http://'.$app['config']->webIndexDomain.'/me/verifyneeded');
 	}
 };
 
 $featureCuratedListRequired = function(Request $request)  use ($app) {
-	global $CONFIG;
 	if (!$app['currentSite']->getIsFeatureCuratedList()) {
 		return new RedirectResponse('/curatedlist');
 	}
 };
 
 $featureGroupRequired = function(Request $request)  use ($app) {
-	global $CONFIG;
 	if (!$app['currentSite']->getIsFeatureGroup()) {
 		return new RedirectResponse('/group');
 	}
@@ -306,7 +289,6 @@ $featureGroupRequired = function(Request $request)  use ($app) {
 
 
 $featureTagRequired = function(Request $request)  use ($app) {
-	global $CONFIG;
 	if (!$app['currentSite']->getIsFeatureTag()) {
 		return new RedirectResponse('/tag');
 	}
@@ -314,29 +296,25 @@ $featureTagRequired = function(Request $request)  use ($app) {
 
 
 $featureImporterRequired = function(Request $request)  use ($app) {
-	global $CONFIG;
 	if (!$app['currentSite']->getIsFeatureImporter()) {
 		return new RedirectResponse('/importurl');
 	}
 };
 
 $featurePhysicalEventsRequired = function(Request $request)  use ($app) {
-	global $CONFIG;
 	if (!$app['currentSite']->getIsFeaturePhysicalEvents()) {
 		return new RedirectResponse('/venue');
 	}
 };
 
 $appFileStoreRequired = function(Request $request)  use ($app) {
-	global $CONFIG;
-	if (!$CONFIG->isFileStore()) {
+	if (!$app['config']->isFileStore()) {
 		return new RedirectResponse('/');
 	}
 };
 
 $canChangeSite = function(Request $request) use ($app) {
-	global  $CONFIG;
-	if ($CONFIG->siteReadOnly) {
+	if ($app['config']->siteReadOnly) {
 		return new Response($app['twig']->render('site/readonly.html.twig', array()));
 	}		
 };

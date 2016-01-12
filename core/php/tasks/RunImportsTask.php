@@ -58,7 +58,6 @@ class RunImportsTask extends \BaseTask  {
     }
 
     public function runImport(ImportModel $import) {
-        global $CONFIG;
 
         $siteRepo = new SiteRepository();
         $siteFeatureRepository = new SiteFeatureRepository($this->app);
@@ -120,7 +119,7 @@ class RunImportsTask extends \BaseTask  {
 
                         $message = \Swift_Message::newInstance();
                         $message->setSubject("Please confirm this is still valid: ".$import->getTitle());
-                        $message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+                        $message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
                         $message->setTo($user->getEmail());
 
                         $messageText = $this->app['twig']->render('email/importExpired.watchesSite.txt.twig', array(
@@ -129,7 +128,7 @@ class RunImportsTask extends \BaseTask  {
                             'stopCode'=>$userWatchesSiteStop->getAccessKey(),
                             'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
                         ));
-                        if ($CONFIG->isDebug) file_put_contents('/tmp/importExpired.watchesSite.txt', $messageText);
+                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesSite.txt', $messageText);
                         $message->setBody($messageText);
 
                         $messageHTML = $this->app['twig']->render('email/importExpired.watchesSite.html.twig', array(
@@ -138,10 +137,10 @@ class RunImportsTask extends \BaseTask  {
                             'stopCode'=>$userWatchesSiteStop->getAccessKey(),
                             'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
                         ));
-                        if ($CONFIG->isDebug) file_put_contents('/tmp/importExpired.watchesSite.html', $messageHTML);
+                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesSite.html', $messageHTML);
                         $message->addPart($messageHTML,'text/html');
 
-                        if (!$CONFIG->isDebug) {
+                        if (!$this->app['config']->isDebug) {
                             $this->app['mailer']->send($message);
                         }
                         $userNotificationRepo->markEmailed($userNotification);
@@ -170,7 +169,7 @@ class RunImportsTask extends \BaseTask  {
 
                         $message = \Swift_Message::newInstance();
                         $message->setSubject("Please confirm this is still valid: ".$import->getTitle());
-                        $message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+                        $message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
                         $message->setTo($user->getEmail());
 
                         $messageText = $this->app['twig']->render('email/importExpired.watchesGroup.txt.twig', array(
@@ -180,7 +179,7 @@ class RunImportsTask extends \BaseTask  {
                             'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
                             'group'=>$group,
                         ));
-                        if ($CONFIG->isDebug) file_put_contents('/tmp/importExpired.watchesGroup.txt', $messageText);
+                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesGroup.txt', $messageText);
                         $message->setBody($messageText);
 
                         $messageHTML = $this->app['twig']->render('email/importExpired.watchesGroup.html.twig', array(
@@ -190,10 +189,10 @@ class RunImportsTask extends \BaseTask  {
                             'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
                             'group'=>$group,
                         ));
-                        if ($CONFIG->isDebug) file_put_contents('/tmp/importExpired.watchesGroup.html', $messageHTML);
+                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesGroup.html', $messageHTML);
                         $message->addPart($messageHTML,'text/html');
 
-                        if (!$CONFIG->isDebug) {
+                        if (!$this->app['config']->isDebug) {
                             $this->app['mailer']->send($message);
                         }
                         $userNotificationRepo->markEmailed($userNotification);
@@ -204,7 +203,7 @@ class RunImportsTask extends \BaseTask  {
         } else {
             $lastRunDate = $importURLRepo->getLastRunDateForImportURL($import);
             $nowDate = \TimeSource::getDateTime();
-            if (!$lastRunDate || ($lastRunDate->getTimestamp() < $nowDate->getTimestamp() - $CONFIG->importSecondsBetweenImports)) {
+            if (!$lastRunDate || ($lastRunDate->getTimestamp() < $nowDate->getTimestamp() - $this->app['config']->importSecondsBetweenImports)) {
                 $this->logVerbose( " - importing");
                 $runner = new ImportRunner($this->app);
                 $runner->go($import);

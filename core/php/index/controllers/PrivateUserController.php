@@ -3,7 +3,6 @@
 namespace index\controllers;
 
 use Silex\Application;
-use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use repositories\UserAccountRepository;
@@ -56,7 +55,7 @@ class PrivateUserController {
 		}
 				
 		// TODO should we be passing a better timeZone here?
-		$ical = new EventListICalBuilder(null, "UTC", $this->parameters['user']->getUserName());
+		$ical = new EventListICalBuilder($app, null, "UTC", $this->parameters['user']->getUserName());
 		$ical->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'],false,true,true,true);
 		$ical->build();
 		return $ical->getResponse();
@@ -70,7 +69,7 @@ class PrivateUserController {
 		}
 				
 		// TODO should we be passing a better timeZone here?
-		$ical = new EventListICalBuilder(null, "UTC", $this->parameters['user']->getUserName());
+		$ical = new EventListICalBuilder($app, null, "UTC", $this->parameters['user']->getUserName());
 		$ical->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'],false,true,true,false);
 		$ical->build();
 		return $ical->getResponse();

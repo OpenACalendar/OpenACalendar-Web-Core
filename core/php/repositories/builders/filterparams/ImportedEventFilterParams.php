@@ -3,6 +3,7 @@
 namespace repositories\builders\filterparams;
 
 use repositories\builders\ImportedEventRepositoryBuilder;
+use Silex\Application;
 
 
 /**
@@ -15,7 +16,7 @@ use repositories\builders\ImportedEventRepositoryBuilder;
  */
 class ImportedEventFilterParams {
 
-	function __construct(ImportedEventRepositoryBuilder $erb = null) {
+	function __construct(Application $app, ImportedEventRepositoryBuilder $erb = null) {
 		if ($erb) {
 			$this->importedEventRepositoryBuilder = $erb;
 		} else {

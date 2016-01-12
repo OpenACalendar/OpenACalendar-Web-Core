@@ -31,11 +31,11 @@ class SiteEditTest extends \BaseAppWithDBTest {
 		$site->setSlug("test");
 		
 		$siteRepo = new SiteRepository();
-		\TimeSource::mock(2012, 1,1,1,0,0);
+		$this->app['timesource']->mock(2012, 1,1,1,0,0);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$site->setTitle("TEST ME");
-		\TimeSource::mock(2012, 1,1,1,0,1);
+		$this->app['timesource']->mock(2012, 1,1,1,0,1);
 		$siteRepo->edit($site, $user);
 		
 		

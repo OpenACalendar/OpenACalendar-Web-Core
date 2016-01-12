@@ -54,7 +54,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams();
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist'], true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);

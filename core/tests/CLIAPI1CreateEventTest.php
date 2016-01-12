@@ -29,7 +29,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	 */
 	function testBasic1() {
 		
-		\TimeSource::mock(2014,06,01,00,00,00);
+		$this->app['timesource']->mock(2014,06,01,00,00,00);
 		
 		$this->addCountriesToTestDB();
 
@@ -83,7 +83,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	}
 }');
 
-		$createEvent = new CreateEvent();
+		$createEvent = new CreateEvent($this->app);
 		$createEvent->setFromJSON($json);
 		
 		$this->assertEquals(true, $createEvent->canGo());
@@ -110,7 +110,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 
 	function testSetCountryAndTimeZone() {
 
-		\TimeSource::mock(2014,06,01,00,00,00);
+		$this->app['timesource']->mock(2014,06,01,00,00,00);
 
 		$this->addCountriesToTestDB();
 
@@ -168,7 +168,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	}
 }');
 
-		$createEvent = new CreateEvent();
+		$createEvent = new CreateEvent($this->app);
 		$createEvent->setFromJSON($json);
 
 		$this->assertEquals(true, $createEvent->canGo());
@@ -195,7 +195,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 
 	function testValidateBadCountry() {
 		
-		\TimeSource::mock(2014,06,01,00,00,00);
+		$this->app['timesource']->mock(2014,06,01,00,00,00);
 		
 		$json = json_decode('{
 	"event":{
@@ -221,7 +221,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	}
 }');
 
-		$createEvent = new CreateEvent();
+		$createEvent = new CreateEvent($this->app);
 		$createEvent->setFromJSON($json);
 		
 		$this->assertEquals(false, $createEvent->canGo());
@@ -231,7 +231,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 
 	function testValidateBadTimeZone() {
 
-		\TimeSource::mock(2014,06,01,00,00,00);
+		$this->app['timesource']->mock(2014,06,01,00,00,00);
 
 		$this->addCountriesToTestDB();
 
@@ -259,7 +259,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	}
 }');
 
-		$createEvent = new CreateEvent();
+		$createEvent = new CreateEvent($this->app);
 		$createEvent->setFromJSON($json);
 
 		$this->assertEquals(false, $createEvent->canGo());
@@ -269,7 +269,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 
 	function testValidateNoStart() {
 
-		\TimeSource::mock(2014,06,01,00,00,00);
+		$this->app['timesource']->mock(2014,06,01,00,00,00);
 
 		$this->addCountriesToTestDB();
 
@@ -290,7 +290,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	}
 }');
 
-		$createEvent = new CreateEvent();
+		$createEvent = new CreateEvent($this->app);
 		$createEvent->setFromJSON($json);
 
 		$this->assertEquals(false, $createEvent->canGo());
@@ -300,7 +300,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	
 	function testValidateNoEnd() {
 		
-		\TimeSource::mock(2014,06,01,00,00,00);
+		$this->app['timesource']->mock(2014,06,01,00,00,00);
 
 		$this->addCountriesToTestDB();
 
@@ -321,7 +321,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	}
 }');
 
-		$createEvent = new CreateEvent();
+		$createEvent = new CreateEvent($this->app);
 		$createEvent->setFromJSON($json);
 		
 		$this->assertEquals(false, $createEvent->canGo());
@@ -331,7 +331,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	
 	function testValidateStartAfterEnd() {
 		
-		\TimeSource::mock(2014,06,01,00,00,00);
+		$this->app['timesource']->mock(2014,06,01,00,00,00);
 
 		$this->addCountriesToTestDB();
 
@@ -355,7 +355,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 	}
 }');
 
-		$createEvent = new CreateEvent();
+		$createEvent = new CreateEvent($this->app);
 		$createEvent->setFromJSON($json);
 		
 		$this->assertEquals(false, $createEvent->canGo());

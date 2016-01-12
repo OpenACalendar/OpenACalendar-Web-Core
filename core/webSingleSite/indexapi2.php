@@ -24,11 +24,10 @@ if(!$CONFIG->isSingleSiteMode) {
 }
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG, $WEBSESSION;
 
 	# ////////////// Site
 	$siteRepository = new SiteRepository();
-	$site = $siteRepository->loadById($CONFIG->singleSiteID);
+	$site = $siteRepository->loadById($app['config']->singleSiteID);
 	if (!$site) {
 		die ("404 Not Found"); // TODO
 	}
@@ -45,7 +44,7 @@ $app->before(function (Request $request) use ($app) {
 	# ////////////// Timezone
 	$timezone = "";
 	if (isset($_GET['mytimezone']) && in_array($_GET['mytimezone'], $app['currentSite']->getCachedTimezonesAsList())) {
-		setcookie("site".$app['currentSite']->getId()."timezone",$_GET['mytimezone'],time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,false,false);
+		setcookie("site".$app['currentSite']->getId()."timezone",$_GET['mytimezone'],time()+60*60*24*365,'/',$app['config']->webCommonSessionDomain,false,false);
 		$timezone = $_GET['mytimezone'];
 	} else if (isset($_COOKIE["site".$app['currentSite']->getId()."timezone"]) && in_array($_COOKIE["site".$app['currentSite']->getId()."timezone"],$site->getCachedTimezonesAsList())) {
 		$timezone = $_COOKIE["site".$app['currentSite']->getId()."timezone"];

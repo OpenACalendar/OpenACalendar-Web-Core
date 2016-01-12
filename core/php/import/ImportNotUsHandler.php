@@ -19,16 +19,15 @@ class ImportNotUsHandler extends ImportHandlerBase {
 	}
 	
 	public function canHandle() {
-		global $CONFIG;
-		
+
 		$data = parse_url($this->importRun->getRealUrl());
 		$host = isset($data['host']) ? $data['host'] : '';
 		
 		
-		$checks = array($this->getDomainMinusPort($CONFIG->webIndexDomain),$this->getDomainMinusPort($CONFIG->webSiteDomain));
-		if ($CONFIG->hasSSL) {
-			$checks[] = $this->getDomainMinusPort($CONFIG->webSiteDomain);
-			$checks[] = $this->getDomainMinusPort($CONFIG->webSiteDomainSSL);
+		$checks = array($this->getDomainMinusPort($this->app['config']->webIndexDomain),$this->getDomainMinusPort($this->app['config']->webSiteDomain));
+		if ($this->app['config']->hasSSL) {
+			$checks[] = $this->getDomainMinusPort($this->app['config']->webSiteDomain);
+			$checks[] = $this->getDomainMinusPort($this->app['config']->webSiteDomainSSL);
 		}
 		foreach($checks as $check) {
 			if (strpos(strtolower($host), strtolower($check)) !== false) {

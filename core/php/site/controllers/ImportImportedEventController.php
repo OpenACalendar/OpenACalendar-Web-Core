@@ -44,7 +44,7 @@ class ImportImportedEventController extends ImportController {
 
 			$this->parameters['importedEventReoccurs'] = true;
 
-			$this->parameters['eventListFilterParams'] = new EventFilterParams();
+			$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
 			// set some defaults that are different from normal
 			$this->parameters['eventListFilterParams']->setIncludeDeleted(true);
 			$this->parameters['eventListFilterParams']->setFromNow(false);

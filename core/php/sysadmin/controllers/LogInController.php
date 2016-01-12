@@ -3,7 +3,6 @@
 namespace sysadmin\controllers;
 
 use Silex\Application;
-use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use repositories\SiteRepository;

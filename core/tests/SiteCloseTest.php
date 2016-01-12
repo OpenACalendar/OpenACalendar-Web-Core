@@ -21,7 +21,7 @@ class SiteCloseTest extends \BaseAppWithDBTest {
 	function testEventsVanish() {
 
 		## User, Site, Event
-		\TimeSource::mock(2014,1,1,1,2,3);
+		$this->app['timesource']->mock(2014,1,1,1,2,3);
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
@@ -61,7 +61,7 @@ class SiteCloseTest extends \BaseAppWithDBTest {
 		$this->assertEquals(1, count($erb->fetchAll()));
 		
 		## Close Site
-		\TimeSource::mock(2014,2,1,1,2,3);
+		$this->app['timesource']->mock(2014,2,1,1,2,3);
 		$site->setIsClosedBySysAdmin(true);
 		$site->setClosedBySysAdminreason('Testing');
 		$siteRepo->edit($site, $user);

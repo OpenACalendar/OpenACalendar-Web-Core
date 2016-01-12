@@ -1,6 +1,7 @@
 <?php
 namespace api1exportbuilders;
 
+use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use models\EventModel;
 use models\SiteModel;
@@ -22,8 +23,8 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 	
 	
 	
-	public function __construct(SiteModel $site = null, $timeZone  = null, $title = null) {
-		parent::__construct($site, $timeZone, $title);
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null, $title = null) {
+		parent::__construct($app, $site, $timeZone, $title);
 		// We go back a month, just so calendars have a bit of the past available.
 		$time = \TimeSource::getDateTime();
 		$time->sub(new \DateInterval("P30D"));
@@ -33,14 +34,13 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 
 	
 	public function getContents() {
-		global $CONFIG;
 		$txt = $this->getIcalLine('BEGIN','VCALENDAR');
 		$txt .= $this->getIcalLine('VERSION','2.0');
 		$txt .= $this->getIcalLine('PRODID','-//JarOfGreen//NONSGML JarOfGreenWikiCalendarBundle//EN');
-		if ($this->site && !$CONFIG->isSingleSiteMode) {
-			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->site->getTitle().' '.$CONFIG->siteTitle);
+		if ($this->site && !$this->app['config']->isSingleSiteMode) {
+			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->site->getTitle().' '.$this->app['config']->siteTitle);
 		} else {
-			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$CONFIG->siteTitle);
+			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->app['config']->siteTitle);
 		}
 		$txt .= implode("", $this->events);
 		$txt .= $this->getIcalLine('END','VCALENDAR');
@@ -48,26 +48,24 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 	}
 	
 	public function getResponse() {
-		global $CONFIG;		
 		$response = new Response($this->getContents());
 		$response->headers->set('Content-Type', 'text/calendar');
 		$response->setPublic();
-		$response->setMaxAge($CONFIG->cacheFeedsInSeconds);
+		$response->setMaxAge($this->app['config']->cacheFeedsInSeconds);
 		return $response;				
 	}
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
 							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
-		global $CONFIG;
-		
+
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();
 		
 		$txt = $this->getIcalLine('BEGIN','VEVENT');
-		$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$CONFIG->webSiteDomain);
+		$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$this->app['config']->webSiteDomain);
 
-		$url = $CONFIG->isSingleSiteMode ?
-			'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() :
-			'http://'.$siteSlug.".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() ;
+		$url = $this->app['config']->isSingleSiteMode ?
+			'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl() :
+			'http://'.$siteSlug.".".$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl() ;
 		$txt .= $this->getIcalLine('URL',$url);
 
 		if ($event->getIsDeleted()) {
@@ -90,7 +88,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			$description .= $event->getDescription()."\n".
 					//($event->getUrl() ? $event->getUrl()."\n" : '').
 					$url."\n".
-					"Powered by ".$CONFIG->siteTitle;
+					"Powered by ".$this->app['config']->siteTitle;
 			foreach($this->extraFooters as $extraFooter) {
 				$description .= "\n".$extraFooter->getText();
 			}
@@ -103,7 +101,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			$descriptionHTML .=	"<p>".str_replace("\r","",str_replace("\n","<br>",htmlentities($event->getDescription())))."</p>";
 			//if ($event->getUrl()) $descriptionHTML .= '<p>More info: <a href="'.$event->getUrl().'">'.$event->getUrl().'</a></p>';
 			$descriptionHTML .= '<p>More info: <a href="'.$url.'">'.$url.'</a></p>';
-			$descriptionHTML .= '<p style="font-style:italic;font-size:80%">Powered by <a href="'.$url.'">'.$CONFIG->siteTitle.'</a>';
+			$descriptionHTML .= '<p style="font-style:italic;font-size:80%">Powered by <a href="'.$url.'">'.$this->app['config']->siteTitle.'</a>';
 			foreach($this->extraFooters as $extraFooter) {
 				$descriptionHTML .= "<br>".$extraFooter->getHtml();
 			}

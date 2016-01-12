@@ -8,6 +8,7 @@ use repositories\builders\ImportedEventRepositoryBuilder;
 use repositories\EventRecurSetRepository;
 use repositories\ImportedEventRepository;
 use repositories\ImportResultRepository;
+use Silex\Application;
 
 /**
  *
@@ -22,14 +23,14 @@ class ImportRunner {
     /** @var Application */
     protected $app;
 
-    function __construct($app)
+    function __construct(Application $app)
     {
         $this->app = $app;
     }
 
     public function go(ImportModel $importModel)
     {
-        $importRun = new ImportRun($importModel);
+        $importRun = new ImportRun($this->app, $importModel);
         if ($this->runHandlersSaveResult($importRun)) {
             $this->runImportedEventsToEvents($importRun);
         }

@@ -73,7 +73,7 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 
 
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRule1.ics');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -150,7 +150,7 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
         $this->app['timesource']->mock(2014, 12, 25, 1, 1, 1);
 
 		// reimport
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRule1.ics');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -269,7 +269,7 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 		$importRepository->create($importURL, $site, $user);
 
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRule1.ics');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);
@@ -378,7 +378,7 @@ class ImportURLICALRecurringTest extends \BaseAppWithDBTest {
 		$importRepository->create($importURL, $site, $user);
 
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/ImportRRuleExDate1.ics');
 		$i = new ImportICalHandler($this->app);
 		$i->setImportRun($importURLRun);

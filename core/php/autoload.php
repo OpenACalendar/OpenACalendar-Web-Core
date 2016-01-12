@@ -35,7 +35,7 @@ spl_autoload_register('autoload');
 $CONFIG = new Config();
 require APP_ROOT_DIR."/config.php";
 
-$EXTENSIONHOOKRUNNER = new ExtensionHookRunner();
+
 
 /** @var PDO **/
 $DB = new PDO($CONFIG->databaseType.':host='.$CONFIG->databaseHost.';dbname='.$CONFIG->databaseName, $CONFIG->databaseUser, $CONFIG->databasePassword);
@@ -67,7 +67,8 @@ $app['config'] = $CONFIG;
 $app['db'] = $DB;
 $app['timesource'] = new TimeSource();
 $app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
-	
+$EXTENSIONHOOKRUNNER = new ExtensionHookRunner($app);
+
 ///////////////////////// LOGGING
 if ($CONFIG->logFile) {
 	$app->register(new Silex\Provider\MonologServiceProvider(), array(

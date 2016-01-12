@@ -16,42 +16,44 @@ use models\UserAccountModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ExtensionHookRunner {
-	
-	
-	public function beforeVenueSave(VenueModel $venue, UserAccountModel $user = null) {
-		global $app, $CONFIG;
-		foreach($CONFIG->extensions as $extensionDir) {
-			$app['extensions']->getExtensionByDir($extensionDir)->beforeVenueSave($venue, $user);
-		}
-	}
 
-	public function beforeGroupSave(GroupModel $group, UserAccountModel $user = null) {
-		global $app, $CONFIG;
-		foreach($CONFIG->extensions as $extensionDir) {
-			$app['extensions']->getExtensionByDir($extensionDir)->beforeGroupSave($group, $user);
-		}
-	}
+    /** @var Application */
+    protected $app;
 
-	public function beforeAreaSave(AreaModel $area, UserAccountModel $user = null) {
-		global $app, $CONFIG;
-		foreach($CONFIG->extensions as $extensionDir) {
-			$app['extensions']->getExtensionByDir($extensionDir)->beforeAreaSave($area, $user);
-		}
-	}
+    function __construct($app)
+    {
+        $this->app = $app;
+    }
 
-	public function afterSiteCreate(SiteModel $site, UserAccountModel $owner) {
-		global $app, $CONFIG;
-		foreach($CONFIG->extensions as $extensionDir) {
-			$app['extensions']->getExtensionByDir($extensionDir)->afterSiteCreate($site, $owner);
-		}
-	}
+    public function beforeVenueSave(VenueModel $venue, UserAccountModel $user = null) {
+        foreach($this->app['config']->extensions as $extensionDir) {
+            $this->app['extensions']->getExtensionByDir($extensionDir)->beforeVenueSave($venue, $user);
+        }
+    }
 
-	public function afterUserAccountCreate(UserAccountModel $user) {
-		global $app, $CONFIG;
-		foreach($CONFIG->extensions as $extensionDir) {
-			$app['extensions']->getExtensionByDir($extensionDir)->afterUserAccountCreate($user);
-		}
-	}
+    public function beforeGroupSave(GroupModel $group, UserAccountModel $user = null) {
+        foreach($this->app['config']->extensions as $extensionDir) {
+            $this->app['extensions']->getExtensionByDir($extensionDir)->beforeGroupSave($group, $user);
+        }
+    }
+
+    public function beforeAreaSave(AreaModel $area, UserAccountModel $user = null) {
+        foreach($this->app['config']->extensions as $extensionDir) {
+            $this->app['extensions']->getExtensionByDir($extensionDir)->beforeAreaSave($area, $user);
+        }
+    }
+
+    public function afterSiteCreate(SiteModel $site, UserAccountModel $owner) {
+        foreach($this->app['config']->extensions as $extensionDir) {
+            $this->app['extensions']->getExtensionByDir($extensionDir)->afterSiteCreate($site, $owner);
+        }
+    }
+
+    public function afterUserAccountCreate(UserAccountModel $user) {
+        foreach($this->app['config']->extensions as $extensionDir) {
+            $this->app['extensions']->getExtensionByDir($extensionDir)->afterUserAccountCreate($user);
+        }
+    }
 
 }
 

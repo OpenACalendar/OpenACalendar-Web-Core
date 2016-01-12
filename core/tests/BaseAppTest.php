@@ -33,7 +33,6 @@ class BaseAppTest extends \PHPUnit_Framework_TestCase {
 		require APP_ROOT_DIR."config.test.php";
 		$CONFIG->isDebug = true;
 
-		$EXTENSIONHOOKRUNNER = new ExtensionHookRunner();
 
 		$this->app = new Silex\Application();
 		$app = $this->app;
@@ -45,7 +44,9 @@ class BaseAppTest extends \PHPUnit_Framework_TestCase {
 		$this->app['appconfig'] = new appconfiguration\AppConfigurationManager($DB, $CONFIG);
 		$this->app['config'] = $CONFIG;
         $this->app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
+        $this->app['timesource'] = new TimeSource();
 
+        $EXTENSIONHOOKRUNNER = new ExtensionHookRunner($this->app);
 	}
 
 

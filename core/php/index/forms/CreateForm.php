@@ -3,6 +3,7 @@
 namespace index\forms;
 
 use models\SiteModel;
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -18,6 +19,14 @@ use Symfony\Component\Form\FormError;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class CreateForm extends AbstractType{
+
+    /** @var Application */
+    protected $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
@@ -35,16 +44,15 @@ class CreateForm extends AbstractType{
 		));
 		
 		$myExtraFieldValidator = function(FormEvent $event){
-			global $CONFIG;
 			$form = $event->getForm();
 			$myExtraField = $form->get('slug')->getData();
 			if (!ctype_alnum($myExtraField) || strlen($myExtraField) < 2) {
 				$form['slug']->addError(new FormError("Numbers and letters only, at least 2."));
-			} else if (in_array($myExtraField, $CONFIG->siteSlugReserved)) {
+			} else if (in_array($myExtraField, $this->app['config']->siteSlugReserved)) {
 				$form['slug']->addError(new FormError("That is already taken."));
 			// The above checks provide a nice error message.
 			// Now let's do a final belt and braces check.
-			} else if (!SiteModel::isSlugValid($myExtraField, $CONFIG)) {
+			} else if (!SiteModel::isSlugValid($myExtraField, $this->app['config'])) {
 				$form['slug']->addError(new FormError("That is not allowed."));
 			}
 		};

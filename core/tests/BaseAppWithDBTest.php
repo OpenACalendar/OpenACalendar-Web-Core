@@ -40,8 +40,6 @@ class BaseAppWithDBTest extends \PHPUnit_Framework_TestCase {
 		$CONFIG->isDebug = true;
 		$this->setConfig($CONFIG);
 
-		$EXTENSIONHOOKRUNNER = new ExtensionHookRunner();
-
 		/** @var PDO * */
 		if (!$DB)
 		{
@@ -64,7 +62,7 @@ class BaseAppWithDBTest extends \PHPUnit_Framework_TestCase {
 		$this->app['timesource'] = new TimeSource();
         $this->app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
 
-
+        $EXTENSIONHOOKRUNNER = new ExtensionHookRunner($this->app);
 
 		foreach($CONFIG->extensions as $extensionName) {
 			$file = APP_ROOT_DIR . DIRECTORY_SEPARATOR . 'extension' . DIRECTORY_SEPARATOR . $extensionName . DIRECTORY_SEPARATOR.'sql'.DIRECTORY_SEPARATOR.'destroy.sql';

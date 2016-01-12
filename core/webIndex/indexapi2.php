@@ -20,9 +20,6 @@ use repositories\UserInSiteRepository;
  */
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG, $WEBSESSION;
-
-
 
 	# ////////////// Timezone
 	$timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);

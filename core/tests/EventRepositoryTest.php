@@ -25,7 +25,7 @@ class EventRepositoryTest  extends \BaseAppWithDBTest {
 
 	function testLoadEventJustBeforeEdit() {
 		
-		\TimeSource::mock(2014,1,1,1,1,1);
+		$this->app['timesource']->mock(2014,1,1,1,1,1);
 
 
 		$this->addCountriesToTestDB();
@@ -52,7 +52,7 @@ class EventRepositoryTest  extends \BaseAppWithDBTest {
 		
 		#### Create Event
 	
-		\TimeSource::mock(2014,1,1,1,2,1);
+		$this->app['timesource']->mock(2014,1,1,1,2,1);
 		
 		$event = new EventModel();
 		$event->setSummary("Cats");
@@ -64,7 +64,7 @@ class EventRepositoryTest  extends \BaseAppWithDBTest {
 		
 		#### Edit Event
 		
-		\TimeSource::mock(2014,1,1,1,3,1);
+		$this->app['timesource']->mock(2014,1,1,1,3,1);
 		
 		$event = $eventRepo->loadBySlug($site, $event->getSlug());
 		$event->setSummary("Lizards");
@@ -72,7 +72,7 @@ class EventRepositoryTest  extends \BaseAppWithDBTest {
 		$eventRepo->edit($event, $user);
 		#### Edit Event
 		
-		\TimeSource::mock(2014,1,1,1,4,1);
+		$this->app['timesource']->mock(2014,1,1,1,4,1);
 		
 		$event = $eventRepo->loadBySlug($site, $event->getSlug());
 		$event->setSummary("Dogs");
@@ -81,7 +81,7 @@ class EventRepositoryTest  extends \BaseAppWithDBTest {
 
 		#### test: Load Current State
 		
-		\TimeSource::mock(2014,1,1,1,5,1);
+		$this->app['timesource']->mock(2014,1,1,1,5,1);
 		
 		$event = $eventRepo->loadBySlug($site, $event->getSlug());
 		$this->assertEquals("Dogs", $event->getSummary());
@@ -89,7 +89,7 @@ class EventRepositoryTest  extends \BaseAppWithDBTest {
 
 		#### test: load state before last edit
 		
-		\TimeSource::mock(2014,1,1,1,6,1);
+		$this->app['timesource']->mock(2014,1,1,1,6,1);
 		
 		$history = $eventHistoryRepo->loadByEventAndlastEditByUser($event, $user);
 		$event = $eventRepo->loadEventJustBeforeEdit($event, $history);

@@ -47,7 +47,6 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 	}
 
 	protected function run() {
-		global $CONFIG;
 
 		$userRepo = new UserAccountRepository();
 		$siteRepo = new SiteRepository();
@@ -107,19 +106,19 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 						configureAppForUser($user);
 
 						$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
-						$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+						$unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
 						$lastEventsBuilder = new EventRepositoryBuilder();
 						$lastEventsBuilder->setSite($site);
 						$lastEventsBuilder->setOrderByStartAt(true);
 						$lastEventsBuilder->setIncludeDeleted(false);
 						$lastEventsBuilder->setIncludeImported(false);
-						$lastEventsBuilder->setLimit($CONFIG->userWatchesGroupPromptEmailShowEvents);
+						$lastEventsBuilder->setLimit($this->app['config']->userWatchesGroupPromptEmailShowEvents);
 						$lastEvents = $lastEventsBuilder->fetchAll();
 
 						$message = \Swift_Message::newInstance();
 						$message->setSubject("Any news about ".$site->getTitle()."?");
-						$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+						$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 						$message->setTo($user->getEmail());
 
 						$messageText = $this->app['twig']->render('email/userWatchesSitePromptEmail.txt.twig', array(
@@ -129,7 +128,7 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 							'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
 							'unsubscribeURL'=>$unsubscribeURL,
 						));
-						if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSitePromptEmail.txt', $messageText);
+						if ($this->app['config']->isDebug) file_put_contents('/tmp/userWatchesSitePromptEmail.txt', $messageText);
 						$message->setBody($messageText);
 
 						$messageHTML = $this->app['twig']->render('email/userWatchesSitePromptEmail.html.twig', array(
@@ -139,7 +138,7 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 							'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
 							'unsubscribeURL'=>$unsubscribeURL,
 						));
-						if ($CONFIG->isDebug) file_put_contents('/tmp/userWatchesSitePromptEmail.html', $messageHTML);
+						if ($this->app['config']->isDebug) file_put_contents('/tmp/userWatchesSitePromptEmail.html', $messageHTML);
 						$message->addPart($messageHTML,'text/html');
 
 						$headers = $message->getHeaders();
@@ -147,7 +146,7 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 
 
 						$this->logVerbose( " ... sending");
-						if (!$CONFIG->isDebug) {
+						if (!$this->app['config']->isDebug) {
 							$this->app['mailer']->send($message);
 						}
 						$userNotificationRepo->markEmailed($userNotification);

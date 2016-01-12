@@ -26,29 +26,24 @@ use Silex\Application;
 class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 	use TraitATOM;
 
-	/** @var Application */
-	protected $app;
-	
-	public function __construct(Application $application, SiteModel $site = null, $timeZone  = null) {
-		parent::__construct($site, $timeZone);
-		$this->app = $application;
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null) {
+		parent::__construct($app, $site, $timeZone);
 	}
 
 	
 	public function getContents() {
-		global $CONFIG;
 		$txt = '<?xml version="1.0" encoding="utf-8"?>';
 		$txt .= '<feed xmlns="http://www.w3.org/2005/Atom">'."\n";
-		if ($this->site && !$CONFIG->isSingleSiteMode) {
+		if ($this->site && !$this->app['config']->isSingleSiteMode) {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
 					 htmlentities($this->site->getTitle()).' '.
-					 htmlentities($CONFIG->siteTitle).
+					 htmlentities($this->app['config']->siteTitle).
 					'</title>'."\n";
 		} else {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
-					 htmlentities($CONFIG->siteTitle).
+					 htmlentities($this->app['config']->siteTitle).
 					'</title>'."\n";
 		}
 		$txt .= '<id>'.$this->feedURL.'</id>'."\n";
@@ -62,7 +57,6 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 
 
 	public function addHistory(InterfaceHistoryModel $history) {
-		global $CONFIG;
 		foreach($this->app['extensions']->getExtensionsIncludingCore() as $ext) {
 			/** @var $r InterfaceNewsFeedModel */
 			$r = $ext->getNewsFeedModel($history, $this->site);
@@ -73,7 +67,7 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 				$txt .= '<title>'.  $this->getData($r->getTitle()).'</title>';
 				$txt .= '<summary>'.$this->getBigData($r->getSummary()).'</summary>';
 				$txt .= '<updated>'.$r->getCreatedAt()->format("Y-m-d")."T".$r->getCreatedAt()->format("H:i:s")."Z</updated>";
-				$txt .= '<author><name>'.$CONFIG->siteTitle.'</name></author></entry>'." \r\n";
+				$txt .= '<author><name>'.$this->app['config']->siteTitle.'</name></author></entry>'." \r\n";
 				$this->histories[] = $txt;
 				return;
 			}

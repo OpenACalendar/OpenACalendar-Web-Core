@@ -39,7 +39,6 @@ class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 	}
 
 	protected function run() {
-		global $CONFIG;
 
 		$userRepoBuilder = new UserAccountRepositoryBuilder();
 		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
@@ -74,11 +73,11 @@ class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 					configureAppForUser($user);
 
 					$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
-					$unsubscribeURL = $CONFIG->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+					$unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
 					$message = \Swift_Message::newInstance();
 					$message->setSubject("Events coming up");
-					$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
+					$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 					$message->setTo($user->getEmail());
 
 					$messageText = $this->app['twig']->render('email/upcomingEventsForUser.txt.twig', array(
@@ -90,7 +89,7 @@ class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 						'currentTimeZone'=>'Europe/London',
 						'unsubscribeURL'=>$unsubscribeURL,
 					));
-					if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.txt', $messageText);
+					if ($this->app['config']->isDebug) file_put_contents('/tmp/upcomingEventsForUser.txt', $messageText);
 					$message->setBody($messageText);
 
 					$messageHTML = $this->app['twig']->render('email/upcomingEventsForUser.html.twig', array(
@@ -102,14 +101,14 @@ class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 						'currentTimeZone'=>'Europe/London',
 						'unsubscribeURL'=>$unsubscribeURL,
 					));
-					if ($CONFIG->isDebug) file_put_contents('/tmp/upcomingEventsForUser.html', $messageHTML);
+					if ($this->app['config']->isDebug) file_put_contents('/tmp/upcomingEventsForUser.html', $messageHTML);
 					$message->addPart($messageHTML,'text/html');
 
 					$headers = $message->getHeaders();
 					$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
 
 					$this->logVerbose( " ... sending" );
-					if (!$CONFIG->isDebug) {
+					if (!$this->app['config']->isDebug) {
 						$this->app['mailer']->send($message);
 					}
 					$userNotificationRepo->markEmailed($userNotification);

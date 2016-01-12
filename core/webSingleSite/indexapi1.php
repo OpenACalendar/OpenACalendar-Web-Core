@@ -23,10 +23,9 @@ if(!$CONFIG->isSingleSiteMode) {
 }
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG, $WEBSESSION;
 	# ////////////// Site
 	$siteRepository = new SiteRepository();
-	$site = $siteRepository->loadById($CONFIG->singleSiteID);
+	$site = $siteRepository->loadById($app['config']->singleSiteID);
 	if (!$site) {
 		die ("404 Not Found"); // TODO
 	}

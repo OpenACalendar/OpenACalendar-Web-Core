@@ -29,9 +29,8 @@ class UsersWithNotificationsSeriesReport extends BaseSeriesReport {
 	public function getReportTitle() { return 'Users With Notifications'; }
 
 	public function run() {
-		global $DB;
 
-		$stat = $DB->prepare("SELECT user_notification.user_id, COUNT('user_notification.user_id') AS count , MAX(user_account_information.username) AS username".
+		$stat = $this->app['db']->prepare("SELECT user_notification.user_id, COUNT('user_notification.user_id') AS count , MAX(user_account_information.username) AS username".
 			" FROM user_notification ".
 			" JOIN user_account_information ON user_account_information.id = user_notification.user_id ".
 			" GROUP BY user_notification.user_id ".

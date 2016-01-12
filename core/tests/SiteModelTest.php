@@ -59,9 +59,8 @@ class SiteModelTest extends \BaseAppTest {
 	* @dataProvider providerSlugIsValid
 	*/
 	function testSlugIsValid($in) {
-		global $CONFIG;
-		$CONFIG->siteSlugReserved = array('www');
-		$this->assertTrue(SiteModel::isSlugValid($in, $CONFIG));
+		$this->app['config']->siteSlugReserved = array('www');
+		$this->assertTrue(SiteModel::isSlugValid($in, $this->app['config']));
 	}
 
 	function providerSlugIsNotValid() {
@@ -80,9 +79,8 @@ class SiteModelTest extends \BaseAppTest {
 	* @dataProvider providerSlugIsNotValid
 	*/
 	function testSlugIsNotValid($in) {
-		global $CONFIG;
-		$CONFIG->siteSlugReserved = array('www');
-		$this->assertFalse(SiteModel::isSlugValid($in, $CONFIG));
+		$this->app['config']->siteSlugReserved = array('www');
+		$this->assertFalse(SiteModel::isSlugValid($in, $this->app['config']));
 	}
 
 	

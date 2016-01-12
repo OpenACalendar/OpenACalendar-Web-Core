@@ -46,7 +46,6 @@ class GroupEditForm extends \BaseFormWithEditComment {
 
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
-			global $CONFIG;
 			$form = $event->getForm();
 			// Title
 			if (!trim($form->get('title')->getData())) {

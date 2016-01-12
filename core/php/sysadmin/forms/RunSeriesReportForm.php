@@ -4,6 +4,7 @@ namespace sysadmin\forms;
 
 
 use BaseSeriesReport;
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -26,14 +27,17 @@ class RunSeriesReportForm extends AbstractType{
 
 	protected $timeZoneName = "Europe/London";
 
-	function __construct($report)
+    /** @var Application */
+    protected $app;
+
+    function __construct(Application $app, $report)
 	{
+        $this->app = $app;
 		$this->report = $report;
 	}
 
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		global $CONFIG;
 
 		$builder
 			->add('output', 'choice', array(
@@ -66,7 +70,7 @@ class RunSeriesReportForm extends AbstractType{
 			$builder->add('site_id', 'integer' ,array(
 				'label'=>'Site ID',
 				'required'=>false,
-				'data'=> ($CONFIG->isSingleSiteMode ? $CONFIG->singleSiteID : null),
+				'data'=> ($this->app['config']->isSingleSiteMode ? $this->app['config']->singleSiteID : null),
 			));
 		}
 	}

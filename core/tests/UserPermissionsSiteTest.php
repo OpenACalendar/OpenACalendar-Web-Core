@@ -16,8 +16,7 @@ class UserPermissionsSiteTest extends \BaseAppWithDBTest {
 
 
 	function testSiteOwnerAllEdit() {
-		global $CONFIG;
-		$CONFIG->newUsersAreEditors = true;
+		$this->app['config']->newUsersAreEditors = true;
 		$this->addCountriesToTestDB();
 
 		$userOwner = new UserAccountModel();
@@ -93,8 +92,7 @@ class UserPermissionsSiteTest extends \BaseAppWithDBTest {
 	}
 
 	function testSiteOwnerSpecificEdit() {
-		global $CONFIG;
-		$CONFIG->newUsersAreEditors = true;
+		$this->app['config']->newUsersAreEditors = true;
 		$this->addCountriesToTestDB();
 
 		$userOwner = new UserAccountModel();

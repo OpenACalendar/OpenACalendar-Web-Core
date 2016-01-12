@@ -14,6 +14,7 @@ use repositories\EventRepository;
 use repositories\SiteRepository;
 use repositories\UserAccountRepository;
 use repositories\GroupRepository;
+use Silex\Application;
 
 /**
  *
@@ -25,6 +26,9 @@ use repositories\GroupRepository;
  */
 class CreateEvent {
 
+
+    /** @var Application */
+    protected $app;
 
 	/** @var SiteModel **/
 	protected $site;
@@ -54,13 +58,14 @@ class CreateEvent {
 	protected $start_at;
 	/** @var DateTime **/
 	protected $end_at;
-	
-	
-	public function __construct() {
-		global $CONFIG;
-		if ($CONFIG->isSingleSiteMode) {
+
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+		if ($this->app['config']->isSingleSiteMode) {
 			$siteRepo = new SiteRepository();
-			$this->site = $siteRepo->loadById($CONFIG->singleSiteID);
+			$this->site = $siteRepo->loadById($this->app['config']->singleSiteID);
 		}
 		$countryRepo = new CountryRepository();
 		// TODO if we have $this->site, should set $this->country_id & $this->timezone from countries which are enabled

@@ -23,14 +23,13 @@ if ($app['config']->hasSSL && $app['config']->forceSSL) {
 }
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG;
 
 	
 	# ////////////// Timezone
 	$timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 	$timezone = "";
 	if (isset($_GET['mytimezone']) && in_array($_GET['mytimezone'], $timezones)) {
-		setcookie("siteIndextimezone",$_GET['mytimezone'],time()+60*60*24*365,'/',$CONFIG->webCommonSessionDomain,false,false);
+		setcookie("siteIndextimezone",$_GET['mytimezone'],time()+60*60*24*365,'/',$app['config']->webCommonSessionDomain,false,false);
 		$timezone = $_GET['mytimezone'];
 	} else if (isset($_COOKIE["siteIndextimezone"]) && in_array($_COOKIE["siteIndextimezone"],$timezones)) {
 		$timezone = $_COOKIE["siteIndextimezone"];
@@ -52,23 +51,20 @@ $app->before(function (Request $request) use ($app) {
 
 
 $permissionCreateSiteRequired = function(Request $request, Application $app) {
-	global $CONFIG;
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CREATE_SITE")) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 	}
 };
 
 $appUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;
 	if (!$app['currentUser']) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 	}
 };
 
 $appUnverifiedUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;
 	if (!$app['currentUser']) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 	}
 	if ($app['currentUser']->getIsEmailVerified()) {
 		return new RedirectResponse('/');
@@ -76,9 +72,8 @@ $appUnverifiedUserRequired = function(Request $request) use ($app) {
 };
 
 $appVerifiedUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;
 	if (!$app['currentUser']) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 	}
 	if (!$app['currentUser']->getIsEmailVerified()) {
 		return new RedirectResponse('/me/verifyneeded');
@@ -86,9 +81,8 @@ $appVerifiedUserRequired = function(Request $request) use ($app) {
 };
 
 $appVerifiedEditorUserRequired = function(Request $request) use ($app) {
-	global $CONFIG;
 	if (!$app['currentUser']) {
-		return new RedirectResponse($CONFIG->getWebIndexDomainSecure().'/you/login');
+		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
 	}
 	if (!$app['currentUser']->getIsEmailVerified()) {
 		return new RedirectResponse('/me/verifyneeded');
@@ -99,8 +93,7 @@ $appVerifiedEditorUserRequired = function(Request $request) use ($app) {
 };
 
 $canChangeSite = function(Request $request) use ($app) {
-	global  $CONFIG;
-	if ($CONFIG->siteReadOnly) {
+	if ($app['config']->siteReadOnly) {
 		return new Response($app['twig']->render('index/readonly.html.twig', array()));
 	}		
 };

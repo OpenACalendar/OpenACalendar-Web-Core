@@ -15,7 +15,7 @@ use repositories\UserAccountRememberMeRepository;
 
 ///////////////////////// Redirect to Correct Domain
 
-$parseDomain = new ParseDomain($_SERVER['SERVER_NAME']);
+$parseDomain = new ParseDomain($app, $_SERVER['SERVER_NAME']);
 if (!$parseDomain->isCoveredByCookies()) {
 	if ($app['config']->isSingleSiteMode) {
 		header("Location: ".$app['config']->getWebIndexDomainSecure() . $_SERVER['REQUEST_URI'] );
@@ -64,7 +64,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 unset($dirs);
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-	global $CONFIG;
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\TimeZoneExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array(
@@ -82,7 +81,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkInfoExtension());
     $twig->addExtension(new Twig_Extensions_Extension_Date());
     $twig->addExtension(new twig\extensions\EventsCountExtension($app));
-	$twig->addGlobal('config', $CONFIG);
+	$twig->addGlobal('config', $app['config']);
 	$twig->addGlobal('extensions', $app['extensions']);
 	$twig->addGlobal('COPYRIGHT_YEARS', COPYRIGHT_YEARS);
     return $twig;

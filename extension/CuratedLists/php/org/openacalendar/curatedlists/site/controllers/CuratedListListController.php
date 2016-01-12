@@ -21,7 +21,7 @@ class CuratedListListController {
     function index(Application $app) {
 
 
-        $params = new CuratedListFilterParams();
+        $params = new CuratedListFilterParams($app);
         $params->set($_GET);
         $params->getCuratedListRepositoryBuilder()->setSite($app['currentSite']);
         $params->getCuratedListRepositoryBuilder()->setIncludeDeleted(false);

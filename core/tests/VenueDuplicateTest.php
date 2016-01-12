@@ -21,7 +21,7 @@ use repositories\EventRepository;
 class VenueDuplicateTest extends \BaseAppWithDBTest {
 	
 	function test1() {
-		\TimeSource::mock(2014,1,1,0,0,0);
+		$this->app['timesource']->mock(2014,1,1,0,0,0);
 		$this->addCountriesToTestDB();
 
 		$user = new UserAccountModel();
@@ -74,7 +74,7 @@ class VenueDuplicateTest extends \BaseAppWithDBTest {
 		$this->assertNull($venue2->getIsDuplicateOfId());
 
 		// Mark
-		\TimeSource::mock(2014,1,1,2,0,0);
+		$this->app['timesource']->mock(2014,1,1,2,0,0);
 		$venueRepo->markDuplicate($venue2, $venue1, $user);
 
 		// Test Duplicate

@@ -6,6 +6,7 @@ use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
 use repositories\builders\GroupRepositoryBuilder;
+use Silex\Application;
 
 
 /**
@@ -18,7 +19,7 @@ use repositories\builders\GroupRepositoryBuilder;
  */
 class GroupFilterParams {
 
-	function __construct() {
+	function __construct(Application $app) {
 		$this->groupRepositoryBuilder = new GroupRepositoryBuilder();
 		$this->groupRepositoryBuilder->setLimit(100);
 	}

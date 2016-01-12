@@ -8,6 +8,7 @@ use models\GroupModel;
 use models\VenueModel;
 use models\AreaModel;
 use models\CountryModel;
+use Silex\Application;
 
 /**
  *
@@ -22,8 +23,8 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 
 	protected $delimiter = ",";
 
-	public function __construct(SiteModel $site = null, $timeZone  = null) {
-		parent::__construct($site, $timeZone);
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null) {
+		parent::__construct($app, $site, $timeZone);
 		$this->eventRepositoryBuilder->setAfterNow();
 	}
 
@@ -67,9 +68,8 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
 							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
-		global $CONFIG;
 
-		$siteurlbase = $CONFIG->getWebSiteDomainSecure($this->site?$this->site->getSlug():$event->getSiteSlug());
+		$siteurlbase = $this->app['config']->getWebSiteDomainSecure($this->site?$this->site->getSlug():$event->getSiteSlug());
 		$siteurl = $siteurlbase.'/event/'.$event->getSlugForUrl();
 		$url = $event->getUrl() && filter_var($event->getUrl(), FILTER_VALIDATE_URL) ? $event->getUrl() : $siteurl;
 		$ticket_url = $event->getTicketUrl() && filter_var($event->getTicketUrl(), FILTER_VALIDATE_URL) ? $event->getTicketUrl() : null;

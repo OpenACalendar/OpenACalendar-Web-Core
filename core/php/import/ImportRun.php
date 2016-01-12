@@ -11,6 +11,7 @@ use repositories\SiteRepository;
 use repositories\GroupRepository;
 use repositories\CountryRepository;
 use repositories\AreaRepository;
+use Silex\Application;
 
 /**
  *
@@ -21,6 +22,9 @@ use repositories\AreaRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportRun {
+
+    /** @var Application */
+    protected $app;
 
 	/** @var Client */
 	protected $guzzle;
@@ -50,8 +54,8 @@ class ImportRun {
 	protected $temporaryFileStorage;
 	protected $temporaryFileStorageFromTesting;
 
-    function __construct(ImportModel $import, SiteModel $site = null) {
-        global $CONFIG;
+    function __construct(Application $app, ImportModel $import, SiteModel $site = null) {
+        $this->app = $app;
         $this->import = $import;
         $this->realurl = $import->getUrl();
         if ($site) {
@@ -73,7 +77,7 @@ class ImportRun {
             $this->group = $groupRepository->loadById($import->getGroupId());
         }
         $this->guzzle = new Client();
-        $this->guzzle->setUserAgent('OpenACalendar from ican.openacalendar.org, install '.$CONFIG->webIndexDomain);
+        $this->guzzle->setUserAgent('OpenACalendar from ican.openacalendar.org, install '.$this->app['config']->webIndexDomain);
     }
 
 	public function getImport() {

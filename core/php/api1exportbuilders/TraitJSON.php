@@ -16,11 +16,10 @@ trait TraitJSON {
 	
 	
 	public function getResponse() {
-		global $CONFIG;	
 		$response = new Response($this->getContents());
 		$response->headers->set('Content-Type', 'application/json');
 		$response->setPublic();
-		$response->setMaxAge($CONFIG->cacheFeedsInSeconds);
+		$response->setMaxAge($this->app['config']->cacheFeedsInSeconds);
 		return $response;		
 	}
 	

@@ -28,10 +28,9 @@ class ImportURLEventbriteDataTest extends \BaseAppWithDBTest {
      * @group import
      */
     function testBasic() {
-		global $CONFIG;
-		
-		\TimeSource::mock(2013, 10, 1, 1, 1, 1);
-		$CONFIG->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
+
+		$this->app['timesource']->mock(2013, 10, 1, 1, 1, 1);
+		$this->app['config']->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -70,7 +69,7 @@ class ImportURLEventbriteDataTest extends \BaseAppWithDBTest {
 
 		
 		// Import
-		$importURLRun = new ImportRun($importURL, $site);
+		$importURLRun = new ImportRun($this->app, $importURL, $site);
 		$importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/Eventbrite1.ical');	
 		$importURLRun->setFlag(ImportRun::$FLAG_ADD_UIDS);
 		$importURLRun->setFlag(ImportRun::$FLAG_SET_TICKET_URL_AS_URL);

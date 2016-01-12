@@ -5,7 +5,7 @@ namespace reports\seriesreports;
 
 use BaseSeriesReport;
 use ReportDataItem;
-
+use Silex\Application;
 
 
 /**
@@ -19,8 +19,9 @@ use ReportDataItem;
 
 class AreasWithUsersDirectlyWatching  extends BaseSeriesReport {
 
-	function __construct()
-	{
+    function __construct(Application $app)
+    {
+        parent::__construct($app);
 		$this->hasFilterTime = false;
 		$this->hasFilterSite = true;
 	}
@@ -32,7 +33,6 @@ class AreasWithUsersDirectlyWatching  extends BaseSeriesReport {
 	public function getReportTitle() { return 'Areas With Users Directly Watching'; }
 
 	public function run() {
-		global $DB;
 
 		$where = array();
 		$params = array();
@@ -48,7 +48,7 @@ class AreasWithUsersDirectlyWatching  extends BaseSeriesReport {
 			($where ? " AND " . implode(" AND ",$where) : "").
 			"GROUP BY area_information.id ".
 			"ORDER BY count DESC ";
-		$stat = $DB->prepare($sql);
+		$stat = $this->app['db']->prepare($sql);
 		$stat->execute($params);
 		$this->data = array();
 		while($data = $stat->fetch()) {

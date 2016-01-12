@@ -15,15 +15,13 @@ class AppConfigurationTest extends \BaseAppWithDBTest {
 	
 	
 	function testGetDefault() {
-		global $CONFIG, $DB;
-		$appConfigManager = new AppConfigurationManager($DB, $CONFIG);
+		$appConfigManager = new AppConfigurationManager($this->app['db'], $this->app['config']);
 		$def = new \appconfiguration\AppConfigurationDefinition('core','key','text',true);
 		$this->assertEquals('yaks',$appConfigManager->getValue($def,'yaks'));
 	}
 	
 	function testSetGet() {
-		global $CONFIG, $DB;
-		$appConfigManager = new AppConfigurationManager($DB, $CONFIG);
+		$appConfigManager = new AppConfigurationManager($this->app['db'], $this->app['config']);
 		$def = new \appconfiguration\AppConfigurationDefinition('core','key','text',true);
 		
 		$appConfigManager->setValue($def, 'moreyaks');
@@ -31,8 +29,7 @@ class AppConfigurationTest extends \BaseAppWithDBTest {
 	}
 	
 	function testSetUpdateGet() {
-		global $CONFIG, $DB;
-		$appConfigManager = new AppConfigurationManager($DB, $CONFIG);
+		$appConfigManager = new AppConfigurationManager($this->app['db'], $this->app['config']);
 		$def = new \appconfiguration\AppConfigurationDefinition('core','key','text',true);
 		
 		$appConfigManager->setValue($def, 'moreyaks');

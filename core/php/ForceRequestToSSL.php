@@ -9,6 +9,7 @@
 
 
 use models\SiteModel;
+use Silex\Application;
 
 /**
  *
@@ -22,7 +23,7 @@ class ForceRequestToSSL {
     /** @var Application */
     protected $app;
 
-    function __construct($app)
+    function __construct(Application $app)
     {
         $this->app = $app;
     }

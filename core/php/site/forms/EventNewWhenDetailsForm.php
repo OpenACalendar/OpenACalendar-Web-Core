@@ -23,6 +23,9 @@ use repositories\builders\VenueRepositoryBuilder;
  */
 class EventNewWhenDetailsForm extends AbstractType {
 
+    /** @var Application */
+    protected $app;
+
 	protected $timeZoneName;
 
 	/** @var SiteModel **/
@@ -45,6 +48,7 @@ class EventNewWhenDetailsForm extends AbstractType {
 		$this->timeZoneName = $timeZoneName;
 		$this->extensionManager = $application['extensions'];
 		$this->eventDraft = $newEventDraftModel;
+        $this->app = $application;
 	}
 
 	protected $customFields;
@@ -159,7 +163,6 @@ class EventNewWhenDetailsForm extends AbstractType {
 
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
-			global $CONFIG;
 			$form = $event->getForm();
 			$myExtraFieldStart = $form->get('start_at')->getData();
 			$myExtraFieldEnd = $form->get('end_at')->getData();
@@ -169,27 +172,27 @@ class EventNewWhenDetailsForm extends AbstractType {
 			}
 			// validate not to far in future
 			$max = \TimeSource::getDateTime();
-			$max->add(new \DateInterval(("P".$CONFIG->eventsCantBeMoreThanYearsInFuture."Y")));
+			$max->add(new \DateInterval(("P".$this->app['config']->eventsCantBeMoreThanYearsInFuture."Y")));
 			if ($myExtraFieldStart > $max) {
 				$form['start_at']->addError(new FormError("The event can not be more than ".
-					($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
+					($this->app['config']->eventsCantBeMoreThanYearsInFuture > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
 					" in the future."));
 			}
 			if ($myExtraFieldEnd > $max) {
 				$form['end_at']->addError(new FormError("The event can not be more than ".
-					($CONFIG->eventsCantBeMoreThanYearsInFuture > 1 ? $CONFIG->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
+					($this->app['config']->eventsCantBeMoreThanYearsInFuture > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInFuture." years"  : "a year" ).
 					" in the future."));			}
 			// validate not to far in past
 			$min = \TimeSource::getDateTime();
-			$min->sub(new \DateInterval(("P".$CONFIG->eventsCantBeMoreThanYearsInPast."Y")));
+			$min->sub(new \DateInterval(("P".$this->app['config']->eventsCantBeMoreThanYearsInPast."Y")));
 			if ($myExtraFieldStart < $min) {
 				$form['start_at']->addError(new FormError("The event can not be more than ".
-					($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
+					($this->app['config']->eventsCantBeMoreThanYearsInPast > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
 					" in the past."));
 			}
 			if ($myExtraFieldEnd < $min) {
 				$form['end_at']->addError(new FormError("The event can not be more than ".
-					($CONFIG->eventsCantBeMoreThanYearsInPast > 1 ? $CONFIG->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
+					($this->app['config']->eventsCantBeMoreThanYearsInPast > 1 ? $this->app['config']->eventsCantBeMoreThanYearsInPast." years"  : "a year" ).
 					" in the past."));
 			}
 		};

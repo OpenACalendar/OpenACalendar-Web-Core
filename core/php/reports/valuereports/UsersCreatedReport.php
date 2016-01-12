@@ -3,6 +3,7 @@
 namespace reports\valuereports;
 
 use BaseValueReport;
+use Silex\Application;
 
 
 /**
@@ -15,8 +16,9 @@ use BaseValueReport;
  */
 class UsersCreatedReport extends BaseValueReport {
 
-	function __construct()
-	{
+    function __construct(Application $app)
+    {
+        parent::__construct($app);
 		$this->hasFilterTime = true;
 	}
 
@@ -35,7 +37,6 @@ class UsersCreatedReport extends BaseValueReport {
 	public function run()
 	{
 
-		global $DB;
 
 		$where = array();
 		$params = array();
@@ -55,7 +56,7 @@ class UsersCreatedReport extends BaseValueReport {
 			" FROM user_account_information ".
 			($where ? " WHERE " . implode(" AND ",$where) : "");
 
-		$stat = $DB->prepare($sql);
+		$stat = $this->app['db']->prepare($sql);
 		$stat->execute($params);
 		$data = $stat->fetch();
 		$this->data = $data['count'];

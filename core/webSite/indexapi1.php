@@ -20,7 +20,6 @@ use repositories\UserWatchesSiteRepository;
  */
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG, $WEBSESSION;
 	# ////////////// Site
 	$siteRepository = new SiteRepository();
 	$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);

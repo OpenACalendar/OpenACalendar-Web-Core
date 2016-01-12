@@ -19,9 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG;
-	
-	
 	# ////////////// Timezone
 	$timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 	$timezone = "";

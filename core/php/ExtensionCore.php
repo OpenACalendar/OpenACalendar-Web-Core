@@ -119,7 +119,6 @@ class ExtensionCore extends BaseExtension {
 	}
 
 	public function clearCache() {
-		global $CONFIG;
 		$cacheDir = APP_ROOT_DIR."/cache/";
 		foreach(glob($cacheDir."/templates.cli/*/*/*.php") as $file) {
 			unlink($file);
@@ -205,24 +204,24 @@ class ExtensionCore extends BaseExtension {
 
 	public function getSeriesReports() {
 		return array(
-			new reports\seriesreports\UsersWithNotificationsSeriesReport(),
-			new reports\seriesreports\UsersWithEventEditsSeriesReport(),
-			new reports\seriesreports\UsersWithEventsEditedSeriesReport(),
-			new reports\seriesreports\GroupsWithUsersWatching(),
-			new reports\seriesreports\AreasWithUsersDirectlyWatching(),
-			new reports\seriesreports\EventsStartAtByImportedOrNotSeriesReport(),
+			new reports\seriesreports\UsersWithNotificationsSeriesReport($this->app),
+			new reports\seriesreports\UsersWithEventEditsSeriesReport($this->app),
+			new reports\seriesreports\UsersWithEventsEditedSeriesReport($this->app),
+			new reports\seriesreports\GroupsWithUsersWatching($this->app),
+			new reports\seriesreports\AreasWithUsersDirectlyWatching($this->app),
+			new reports\seriesreports\EventsStartAtByImportedOrNotSeriesReport($this->app),
 		);
 	}
 
 	public function getValueReports() {
 		return array(
-			new reports\valuereports\EventsCreatedReport(),
-			new reports\valuereports\GroupsCreatedReport(),
-			new reports\valuereports\VenuesCreatedReport(),
-			new reports\valuereports\UsersCreatedReport(),
-			new reports\valuereports\EventsEditedReport(),
-			new reports\valuereports\GroupsEditedReport(),
-			new reports\valuereports\VenuesEditedReport(),
+			new reports\valuereports\EventsCreatedReport($this->app),
+			new reports\valuereports\GroupsCreatedReport($this->app),
+			new reports\valuereports\VenuesCreatedReport($this->app),
+			new reports\valuereports\UsersCreatedReport($this->app),
+			new reports\valuereports\EventsEditedReport($this->app),
+			new reports\valuereports\GroupsEditedReport($this->app),
+			new reports\valuereports\VenuesEditedReport($this->app),
 		);
 	}
 

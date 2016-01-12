@@ -8,6 +8,7 @@ use models\GroupModel;
 use models\VenueModel;
 use models\AreaModel;
 use models\CountryModel;
+use Silex\Application;
 
 /**
  *
@@ -23,15 +24,14 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 	public $otherData = array();
 	
 	
-	public function __construct(SiteModel $site = null, $timeZone  = null) {
-		parent::__construct($site, $timeZone);
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null) {
+		parent::__construct($app, $site, $timeZone);
 		$this->eventRepositoryBuilder->setAfterNow();
 	}
 
 	
 	public function getContents() {
-		global $CONFIG;
-		$out = array_merge($this->otherData, array( 
+		$out = array_merge($this->otherData, array(
 			'data'=>$this->events , 
 			'localtimezone'=>$this->localTimeZone->getName(),
 		));
@@ -40,8 +40,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
 							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
-		global $CONFIG;
-		
+
 		$out = array(
 			'slug'=>$event->getSlug(),
 			'slugforurl'=>$event->getSlugForUrl(),
@@ -55,9 +54,9 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 			'custom_fields'=> array(),
 		);
 		
-		$out['siteurl'] = $CONFIG->isSingleSiteMode ?
-				'http://'.$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl() :
-				'http://'.($this->site?$this->site->getSlug():$event->getSiteSlug()).".".$CONFIG->webSiteDomain.'/event/'.$event->getSlugForUrl();
+		$out['siteurl'] = $this->app['config']->isSingleSiteMode ?
+				'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl() :
+				'http://'.($this->site?$this->site->getSlug():$event->getSiteSlug()).".".$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl();
 		$out['url'] = $event->getUrl() && filter_var($event->getUrl(), FILTER_VALIDATE_URL) ? $event->getUrl() : $out['siteurl'];
 		$out['ticket_url'] = $event->getTicketUrl() && filter_var($event->getTicketUrl(), FILTER_VALIDATE_URL) ? $event->getTicketUrl() : null;
 		$out['timezone'] = $event->getTimezone();
@@ -148,7 +147,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 
 		if (is_array($eventMedias)) {
 			$out['medias'] = array();
-			$siteurl = $CONFIG->getWebSiteDomainSecure($this->site->getSlug());
+			$siteurl = $this->app['config']->getWebSiteDomainSecure($this->site->getSlug());
 			foreach($eventMedias as $eventMedia) {
 				$out['medias'][] = array(
 					'slug'=>$eventMedia->getSlug(),

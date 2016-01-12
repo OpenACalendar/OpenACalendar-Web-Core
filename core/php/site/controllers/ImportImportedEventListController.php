@@ -22,7 +22,7 @@ class ImportImportedEventListController extends ImportController {
 		}
 
 
-		$this->parameters['importedEventListFilterParams'] = new ImportedEventFilterParams();
+		$this->parameters['importedEventListFilterParams'] = new ImportedEventFilterParams($app);
 		$this->parameters['importedEventListFilterParams']->set($_GET);
 		$this->parameters['importedEventListFilterParams']->getImportedEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['importedEventListFilterParams']->getImportedEventRepositoryBuilder()->setImport($this->parameters['import']);

@@ -34,7 +34,6 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 
 
 	public function testGetSubjectOneData() {
-		global $app;
 
 		$site = new \models\SiteModel();
 		$site->setTitle("Test");
@@ -46,13 +45,12 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 		$content1 = new UserWatchesAreaNotifyContent();
 		$content1->setWatchedThingTitle("Edinburgh");
 
-		$task = new TestSendUserWatchesNotifyTask($app);
+		$task = new TestSendUserWatchesNotifyTask($this->app);
 		$this->assertEquals("Changes in Edinburgh", $task->testGetEmailSubject($site, $user, array( $content1 )));
 
 	}
 
 	public function testGetSubjectTwoData() {
-		global $app;
 
 		$site = new \models\SiteModel();
 		$site->setTitle("Test");
@@ -67,13 +65,12 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 		$content2 = new UserWatchesAreaNotifyContent();
 		$content2->setWatchedThingTitle("Glasgow");
 
-		$task = new TestSendUserWatchesNotifyTask($app);
+		$task = new TestSendUserWatchesNotifyTask($this->app);
 		$this->assertEquals("Changes in Edinburgh and Glasgow", $task->testGetEmailSubject($site, $user, array( $content1, $content2 )));
 
 	}
 
 	public function testGetSubjectThreeData() {
-		global $app;
 
 		$site = new \models\SiteModel();
 		$site->setTitle("Test");
@@ -91,13 +88,12 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 		$content3 = new UserWatchesAreaNotifyContent();
 		$content3->setWatchedThingTitle("Aberdeen");
 
-		$task = new TestSendUserWatchesNotifyTask($app);
+		$task = new TestSendUserWatchesNotifyTask($this->app);
 		$this->assertEquals("Changes in Test", $task->testGetEmailSubject($site, $user, array( $content1, $content2 , $content3 )));
 
 	}
 
 	public function testGetNewAndHistoriesForContentsToSendSimple() {
-		global $app;
 
 		$eventHistoryModel = new \models\EventHistoryModel();
 		$eventHistoryModel->setFromDataBaseRow(array(
@@ -140,7 +136,7 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 		$content1->setHistories(array($eventHistoryModel));
 
 
-		$task = new TestSendUserWatchesNotifyTask($app);
+		$task = new TestSendUserWatchesNotifyTask($this->app);
 		list($newThings, $histories) = $task->testGetNewAndHistoriesForContentsToSend(array($content1));
 
 
@@ -151,7 +147,6 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 	}
 
 	public function testGetNewAndHistoriesForContentsToSendSort() {
-		global $app;
 
 		$eventHistoryModel1 = new \models\EventHistoryModel();
 		$eventHistoryModel1->setFromDataBaseRow(array(
@@ -235,7 +230,7 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 		$content2->setHistories(array($eventHistoryModel2));
 
 
-		$task = new TestSendUserWatchesNotifyTask($app);
+		$task = new TestSendUserWatchesNotifyTask($this->app);
 		list($newThings, $histories) = $task->testGetNewAndHistoriesForContentsToSend(array($content1, $content2));
 
 
@@ -246,7 +241,6 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 	}
 
 	public function testGetNewAndHistoriesForContentsToSendSame() {
-		global $app;
 
 		// Create 2 seperate objects in memory because that is how it might happen in the app ...
 		// but they represent the same piece of data!
@@ -302,7 +296,7 @@ class SendUserWatchesNotifyTaskTest  extends \BaseAppTest {
 		$content2->setHistories(array($eventHistoryModel2));
 
 
-		$task = new TestSendUserWatchesNotifyTask($app);
+		$task = new TestSendUserWatchesNotifyTask($this->app);
 		list($newThings, $histories) = $task->testGetNewAndHistoriesForContentsToSend(array($content1, $content2));
 
 

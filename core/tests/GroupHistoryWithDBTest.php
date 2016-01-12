@@ -22,7 +22,7 @@ class GroupHistoryWithDBTest extends \BaseAppWithDBTest {
 
 	
 	function testIntegration1() {
-		\TimeSource::mock(2014, 1, 1, 12, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 12, 0, 0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -40,7 +40,7 @@ class GroupHistoryWithDBTest extends \BaseAppWithDBTest {
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		## Create group
-		\TimeSource::mock(2014, 1, 1, 13, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 13, 0, 0);
 		$group = new GroupModel();
 		$group->setTitle("test");
 		$group->setDescription("test test");
@@ -50,7 +50,7 @@ class GroupHistoryWithDBTest extends \BaseAppWithDBTest {
 		$groupRepo->create($group, $site, $user);
 		
 		## Edit group
-		\TimeSource::mock(2014, 1, 1, 14, 0, 0);
+		$this->app['timesource']->mock(2014, 1, 1, 14, 0, 0);
 		
 		$group = $groupRepo->loadById($group->getId());
 		$group->setTwitterUsername("testy");

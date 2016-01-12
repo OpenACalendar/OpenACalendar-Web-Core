@@ -27,7 +27,7 @@ class AreaPurgeTest extends BaseAppWithDBTest {
 		$countryRepo = new CountryRepository();
 		$areaRepo = new AreaRepository();
 
-		\TimeSource::mock(2014,10,1,1,0,0);
+		$this->app['timesource']->mock(2014,10,1,1,0,0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -54,7 +54,7 @@ class AreaPurgeTest extends BaseAppWithDBTest {
 		$areaDuplicate->setTitle("test Duplicate");
 
 		$areaRepo->create($areaDuplicate, null, $site, $countryRepo->loadByTwoCharCode('GB') , $user);
-		\TimeSource::mock(2014,10,1,2,0,0);
+		$this->app['timesource']->mock(2014,10,1,2,0,0);
 		$areaRepo->markDuplicate($areaDuplicate, $area, $user);
 
 		$areaChild = new AreaModel();
