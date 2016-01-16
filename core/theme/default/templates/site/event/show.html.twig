@@ -279,7 +279,7 @@
 				<p class="groupTitle">About <a href="/group/{{ displayGroup.slugForUrl }}">{{ displayGroup.title }}</a></p>
 			</div>
 			<div class="innerPageLeft">
-				{% if group.description  %}
+				{% if displayGroup.description  %}
 					<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
 				{% else %}
 					<p class="groupDescription">We don't know any more about {{ displayGroup.title }}.</p>
