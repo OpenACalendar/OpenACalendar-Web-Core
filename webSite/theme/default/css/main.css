@@ -1667,6 +1667,17 @@ ul.mediaGrid li img {
   clear: left;
 }
 ul.mainListMedias li.media {
+  margin: 5px 5px;
+  border-bottom: 2px solid #E9E9E9;
+}
+@media screen and (min-width: 750px) {
+  ul.mainListMedias li.media,
+  ul.mainListMedias li.nodata {
+    margin: 5px 50px;
+  }
+}
+ul.mainListMedias li.media {
+  border-bottom: 2px solid #E9E9E9;
   padding: 5px 0;
 }
 ul.mainListMedias li.media .thumbnail {

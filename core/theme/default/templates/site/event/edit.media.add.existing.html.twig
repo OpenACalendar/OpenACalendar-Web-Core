@@ -39,7 +39,8 @@
 						<form action="" method="post">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="addMedia" value="{{ media.slug }}">
-							<input type="submit" value="Add this picture">
+							<div class="bigSubmitActionWrapper"><input type="submit"  value="Add this picture" class="bigSubmitAction"/></div>
+							<div class="afterBigSubmitActionWrapper"></div>
 						</form>
 					{% endif %}
 					<div class="afterMediaListing"></div>

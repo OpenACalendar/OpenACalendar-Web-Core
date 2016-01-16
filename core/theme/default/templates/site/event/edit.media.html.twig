@@ -39,7 +39,8 @@
 						<form action="/event/{{ event.slugForUrl }}/edit/media/{{ media.slug }}/remove" method="post" onsubmit="return confirm('Are you sure you want to remove this?');">
 							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 							<input type="hidden" name="remove" value="yes">
-							<input type="submit" value="Remove this from this event">
+							<div class="bigSubmitActionWrapper"><input type="submit"  value="Remove this from this event" class="bigSubmitAction"/></div>
+							<div class="afterBigSubmitActionWrapper"></div>
 						</form>
 					{% endif %}
 					<div class="afterMediaListing"></div>
@@ -63,8 +64,8 @@
 
 			{{ form_rest(uploadNewMediaForm) }}
 
-			<input type="submit"  value="Upload" />	
-
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Upload" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 		
 		<h3>Add existing picture</h3>
@@ -72,11 +73,18 @@
 				
 		<form action="/event/{{ event.slugForUrl }}/edit/media/add/existing" method="get" class="styled">
 
-			<input type="submit"  value="Search existing pictures" />	
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Search existing pictures" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 
 		</form>
 		
 	{% endif %}
+
+	<form method="get" action="/event/{{ event.slugForURL }}">
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="OK, Finished editing!" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
+	</form>
+
 {% endblock %}
 
 
