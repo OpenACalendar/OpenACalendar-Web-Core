@@ -831,23 +831,36 @@ ul.mediaGrid {
 
 ul.mainListMedias {
 	li.media {
-		padding: 5px 0;
-		.thumbnail {
-			width: 70px;
-			height: 70px;
-			float: left;
-			margin: 2px;
-			img {
-				max-width: 70px;
-				max-height: 70px;
-			}
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		border-bottom: 2px solid #E9E9E9;
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListMedias {
+		li.media, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
 		}
-		.title {
-			font-weight: bold;
+	}
+}
+
+ul.mainListMedias li.media {
+	border-bottom: 2px solid #E9E9E9;
+	padding: 5px 0;
+	.thumbnail {
+		width: 70px;
+		height: 70px;
+		float: left;
+		margin: 2px;
+		img {
+			max-width: 70px;
+			max-height: 70px;
 		}
-		div.afterMediaListing {
-			clear: both;
-		}
+	}
+	.title {
+		font-weight: bold;
+	}
+	div.afterMediaListing {
+		clear: both;
 	}
 }
 
