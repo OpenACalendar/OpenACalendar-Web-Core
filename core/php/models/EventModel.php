@@ -153,6 +153,8 @@ class EventModel {
 		$this->is_deleted = false;
 		$this->is_cancelled = false;
         $this->custom_fields = $ehm->custom_fields;
+        $this->is_physical = $ehm->getIsPhysical();
+        $this->is_virtual = $ehm->getIsVirtual();
 	}
 	
 	protected $validateErrors = array();
