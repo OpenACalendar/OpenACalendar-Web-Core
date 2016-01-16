@@ -60,7 +60,7 @@ class ValueByTimeReportController {
 		$startAt = $form->get('start_at')->getData();
 		$endAt = $form->get('end_at')->getData();
 		$period = $form->get('timeperiod')->getData();
-		$filterSiteID = $form->get('site_id')->getData();
+        $filterSiteID = $this->report->getHasFilterSite() ? $form->get('site_id')->getData() : null;
 
 		$this->report->setFilterSiteId($filterSiteID);
 

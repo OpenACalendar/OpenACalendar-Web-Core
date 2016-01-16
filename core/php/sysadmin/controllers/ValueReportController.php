@@ -2,6 +2,7 @@
 
 namespace sysadmin\controllers;
 
+use BaseValueReport;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ use sysadmin\forms\RunValueReportForm;
  */
 class ValueReportController {
 
+    /** @var  BaseValueReport */
 	protected $report;
 
 	function build($extid, $reportId, Application $app) {
@@ -54,9 +56,9 @@ class ValueReportController {
 		$form = $app['form.factory']->create(new RunValueReportForm($app, $this->report));
 		$form->bind($request);
 
-		$filterStartAt = $form->get('start_at')->getData();
-		$filterEndAt = $form->get('end_at')->getData();
-		$filterSiteID = $form->get('site_id')->getData();
+		$filterStartAt = $this->report->getHasFilterTime() ? $form->get('start_at')->getData() : null;
+		$filterEndAt = $this->report->getHasFilterTime() ? $form->get('end_at')->getData() : null;
+		$filterSiteID = $this->report->getHasFilterSite() ? $form->get('site_id')->getData() : null;
 
 		$this->report->setFilterTime($filterStartAt,$filterEndAt);
 		$this->report->setFilterSiteId($filterSiteID);
