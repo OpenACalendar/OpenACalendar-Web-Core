@@ -58,13 +58,11 @@ class SiteNewController {
 						$site->setIsListedInIndex(false);
 						$site->setIsWebRobotsAllowed(false);
 					}
-					if ($data['write'] == 'public') {
-						$site->setIsAllUsersEditors(true);
-						$site->setIsRequestAccessAllowed(false);
-					} else {
-						$site->setIsAllUsersEditors(false);
-						$site->setIsRequestAccessAllowed(true);
-					}
+                    if ($data['write'] == 'public') {
+                        $isAllUsersEditors = true;
+                    } else {
+                        $isAllUsersEditors = false;
+                    }
 					$site->setPromptEmailsDaysInAdvance($app['config']->newSitePromptEmailsDaysInAdvance);
 
 					$countryRepository = new CountryRepository();
@@ -74,7 +72,8 @@ class SiteNewController {
 						$site,
 						$user,
 						array( $countryRepository->loadByTwoCharCode("GB") ),
-						$siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode)
+						$siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode),
+                        $isAllUsersEditors
 					);
 					return $app->redirect("/sysadmin/site/".$site->getId());
 				} else {
