@@ -34,7 +34,9 @@
 					<form method="post">
 						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 						<input type="hidden" name="removeGroup" value="{{ group.slug }}">
-						<input type="submit" value="Remove Event From Group">
+
+						<div class="bigSubmitActionWrapper"><input type="submit"  value="Remove Event From Group" class="bigSubmitAction"/></div>
+						<div class="afterBigSubmitActionWrapper"></div>
 					</form>
 				</li>
 			{% else %}
@@ -45,7 +47,8 @@
 		</ul>
 
 		<form method="get" action="/event/{{ event.slugForURL }}">
-			<input type="submit" value="OK, Finished editing!">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="OK, Finished editing!" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 
 	</div>
@@ -64,7 +67,8 @@
 					<form method="post">
 						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 						<input type="hidden" name="addGroup" value="{{ group.slug }}">
-						<input type="submit" value="Add Event To Group">
+						<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Event To Group" class="bigSubmitAction"/></div>
+						<div class="afterBigSubmitActionWrapper"></div>
 					</form>
 				</li>
 			{% else %}
