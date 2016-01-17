@@ -65,7 +65,7 @@
 		</tr>	
 		<tr>
 			<th>Created</th>
-			<td>{% if user.createdAt %}{{ user.createdAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}{% endif %}</td>
+			<td>{% if user.createdAt %}{{ user.createdAt |date('D H:i jS M Y', currentTimeZone ) }}{% endif %}</td>
 		</tr>
 		<tr>
 			<th>Created From IP</th>

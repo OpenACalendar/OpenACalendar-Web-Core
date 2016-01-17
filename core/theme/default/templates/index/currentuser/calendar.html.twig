@@ -108,7 +108,7 @@
 										</div>
 									{% endif %}		
 									<span class="start_at">
-										{{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ? 'g:ia' : 'H:i' ) }}
+										{{ event.getStartAt|date( currentUserClock12Hour ? 'g:ia' : 'H:i', currentTimeZone ) }}
 									</span>
 									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug }}' }); return false;">
 										{{ event.getSummaryDisplay() }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}

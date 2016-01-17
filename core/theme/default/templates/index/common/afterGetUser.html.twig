@@ -25,7 +25,7 @@
 			<ul class="loginOrRegisterInterestedIn">
 				{%  for event in afterGetUserAddEvents %}
 					<li class="afterGetUserEvent"  id="afterGetUserEvent{{  event.id }}">
-						{{  event.summaryDisplay }}, {{ event.getStartAt|totimezone(currentTimeZone)|date('D jS M Y, g:ia') }}
+						{{  event.summaryDisplay }}, {{ event.getStartAt|date('D jS M Y, g:ia', currentTimeZone) }}
 						(<a href="#" onclick="loginOrRegisterRemoveEvent({{  event.id }}); return false;">not interested</a>)
 					</li>
 				{%  endfor %}

@@ -24,14 +24,14 @@
 
 		{% if true %}
 			<div class="dateTimeIcon">
-				<time datetime="{{ importedEvent.getStartAt|totimezone(currentTimeZone)|date('c') }}">
+				<time datetime="{{ importedEvent.getStartAt|date('c', currentTimeZone) }}">
 					<div class="dateIcon">
-						<span class="startDay">{{ importedEvent.getStartAt|totimezone(currentTimeZone)|date('D') }}</span>
-						<span class="startDate">{{ importedEvent.getStartAt|totimezone(currentTimeZone)|date('jS') }}</span>
-						<span class="startMonthYear">{{ importedEvent.getStartAt|totimezone(currentTimeZone)|date('M \'y') }}</span>
+						<span class="startDay">{{ importedEvent.getStartAt|date('D', currentTimeZone) }}</span>
+						<span class="startDate">{{ importedEvent.getStartAt|date('jS', currentTimeZone) }}</span>
+						<span class="startMonthYear">{{ importedEvent.getStartAt|date('M \'y', currentTimeZone) }}</span>
 					</div>
 					<div class="timeIcon">
-						<span class="startTime">{{ importedEvent.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i') }}</span>
+						<span class="startTime">{{ importedEvent.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}</span>
 					</div>
 				</time>
 			</div>

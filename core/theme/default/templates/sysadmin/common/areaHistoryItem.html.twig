@@ -52,7 +52,7 @@
 	<div class="created">
 		Edited at 
 		<time datetime="{{ historyItem.getCreatedAt|tolocaltimeformatted('c', currentTimeZone) }}">
-			{{ historyItem.getCreatedAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i' )) }}
+			{{ historyItem.getCreatedAt|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i', currentTimeZone )) }}
 			({{ historyItem.getCreatedAt | time_diff }})
 		</time>	
 		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}

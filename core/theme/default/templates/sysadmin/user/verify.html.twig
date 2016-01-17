@@ -20,10 +20,10 @@
 		</tr>
 		{% for verify in verifies %}
 			<tr {% if loop.index is even %}class="alternative"{% endif %} >
-				<td>{{ verify.getCreatedAt  |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
+				<td>{{ verify.getCreatedAt  |date('D H:i jS M Y' , currentTimeZone) }}</td>
 				<td>
 					{% if verify.getVerifiedAt %}
-						{{ verify.getVerifiedAt  |totimezone(currentTimeZone)|date('D H:i jS M Y' )}}
+						{{ verify.getVerifiedAt  |date('D H:i jS M Y', currentTimeZone )}}
 					{% endif %}
 				</td>
 				<td>

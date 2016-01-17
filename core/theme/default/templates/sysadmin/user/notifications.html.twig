@@ -16,7 +16,7 @@
 			<li class="usernotification{% if notification.isRead %}read{% else %}unread{% endif %}">
 				<div class="title">{{ notification.notificationText }}</div>
 				<div class="id">ID={{ notification.id }}</div>
-				<div class="timesince">{{ notification.createdAt |totimezone(currentTimeZone)|date('D H:i jS M Y'  ) }} -  {{ notification.createdAt | time_diff }}</div>
+				<div class="timesince">{{ notification.createdAt |date('D H:i jS M Y' , currentTimeZone ) }} -  {{ notification.createdAt | time_diff }}</div>
 				{% if not config.isSingleSiteMode %}
 					<div class="site"> {{ notification.site.title }} - {{ config.getWebSiteDomainSecure(notification.site.slug) }}</div>
 				{% endif %}

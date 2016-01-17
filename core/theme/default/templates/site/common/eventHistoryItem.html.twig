@@ -14,15 +14,15 @@
 		</div>
 	{% else %}
 		<div class="dateTimeIcon">
-			<time datetime="{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('c') }}">
+			<time datetime="{{ historyItem.getStartAt|date('c', currentTimeZone) }}">
 				<a href="/event/{{ historyItem.eventSlug }}">
 					<div class="dateIcon">
-						<span class="startDay">{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('D') }}</span>
-						<span class="startDate">{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('jS') }}</span>
-						<span class="startMonthYear">{{ historyItem.getStartAt|totimezone(currentTimeZone)|date('M \'y') }}</span>
+						<span class="startDay">{{ historyItem.getStartAt|date('D', currentTimeZone) }}</span>
+						<span class="startDate">{{ historyItem.getStartAt|date('jS', currentTimeZone) }}</span>
+						<span class="startMonthYear">{{ historyItem.getStartAt|date('M \'y', currentTimeZone) }}</span>
 					</div>
 					<div class="timeIcon">
-						<span class="startTime">{{ historyItem.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ? 'g:ia' : 'H:i') }}</span>
+						<span class="startTime">{{ historyItem.getStartAt|date( currentUserClock12Hour ? 'g:ia' : 'H:i', currentTimeZone) }}</span>
 					</div>
 				</a>
 			</time>				
@@ -62,13 +62,13 @@
 		{% if historyItem.getStartAtChanged %}
 			<div class="fieldChanged">
 				<div class="field">Start changed:</div>
-				<div class="value">{{ historyItem.startAt |totimezone(historyItem.timezone)|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i') }} ({{ historyItem.timezone }})</div>
+				<div class="value">{{ historyItem.startAt|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i', historyItem.timezone) }} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getEndAtChanged %}
 			<div class="fieldChanged">
 				<div class="field">End changed:</div>
-				<div class="value">{{ historyItem.endAt |totimezone(historyItem.timezone)|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i')}} ({{ historyItem.timezone }})</div>
+				<div class="value">{{ historyItem.endAt |date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i', historyItem.timezone)}} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getCountryIdChanged %}
@@ -130,8 +130,8 @@
 	{% endif %}
 	<div class="created">
 		Edited at
-		<time datetime="{{ historyItem.getCreatedAt|totimezone(currentTimeZone)|date('c') }}">
-			{{ historyItem.getCreatedAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i') }}
+		<time datetime="{{ historyItem.getCreatedAt|date('c', currentTimeZone) }}">
+			{{ historyItem.getCreatedAt|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i', currentTimeZone) }}
 			({{ historyItem.getCreatedAt | time_diff }})
 		</time>	
 		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}

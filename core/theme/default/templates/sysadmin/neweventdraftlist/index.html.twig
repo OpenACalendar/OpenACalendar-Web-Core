@@ -28,8 +28,8 @@
 			<tr {% if loop.index is even %}class="alternative"{% endif %} >
 				<td>{{ neweventdraft.slug }}</td>
 				<td>{%  if neweventdraft.eventID %}Yes{%  elseif neweventdraft.wasExistingEventID %}Dupe, original found{%  endif %}</td>
-				<td>{{ neweventdraft.createdAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
-				<td>{{ neweventdraft.updatedAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
+				<td>{{ neweventdraft.createdAt |date('D H:i jS M Y', currentTimeZone ) }}</td>
+				<td>{{ neweventdraft.updatedAt |date('D H:i jS M Y', currentTimeZone ) }}</td>
 				<td>
 					<a href="/sysadmin/site/{{ site.id }}/neweventdraft/{{ neweventdraft.slug }}" class="button">Show</a>
 				</td>

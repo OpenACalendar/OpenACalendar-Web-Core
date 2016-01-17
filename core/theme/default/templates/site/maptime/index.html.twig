@@ -19,7 +19,7 @@
 {% block content %}
 	<div id="Map" class="fullScreen"></div>
 	<form id="MapTimeControls" onsubmit="loadNewData(); return false;">
-		<input type="text" name="day" value="{{ start|totimezone(currentTimeZone)|date('j')  }}">
+		<input type="text" name="day" value="{{ start|date('j', currentTimeZone)  }}">
 		<select name="month">
 			<option value="1" {%  if start.format('n') == 1 %}selected="selected"{% endif %}>Jan</option>
 			<option value="2" {%  if start.format('n') == 2 %}selected="selected"{% endif %}>Feb</option>
@@ -34,11 +34,11 @@
 			<option value="11" {%  if start.format('n') == 11 %}selected="selected"{% endif %}>Nov</option>
 			<option value="12" {%  if start.format('n') == 12 %}selected="selected"{% endif %}>Dec</option>
 		</select>
-		<input type="text" name="year" value="{{ start|totimezone(currentTimeZone)|date('Y')  }}">
+		<input type="text" name="year" value="{{ start|date('Y', currentTimeZone)  }}">
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		
-		<input type="text" name="hour" value="{{ start|totimezone(currentTimeZone)|date('H')  }}">:
-		<input type="text" name="min" value="{{ start|totimezone(currentTimeZone)|date('i')  }}">
+		<input type="text" name="hour" value="{{ start|date('H', currentTimeZone)  }}">:
+		<input type="text" name="min" value="{{ start|date('i', currentTimeZone)  }}">
 		
 		<select name="speed">
 			<option value="60">x60 (1 min/second)</option>

@@ -42,7 +42,7 @@
 			{% endfor %}
 			{% for event in d.events %}
 				<div style="padding: 5px 10px;">
-					<i>{{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i') }}</i>
+					<i>{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}</i>
 					<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/{{event.slug}}?mytimezone={{ currentTimeZone }}">{{ event.summaryDisplay }}{% if event.isCancelled %} [CANCELLED]{% endif %}</a>
 					{% if event.area %}
 						({{ event.area.title }})

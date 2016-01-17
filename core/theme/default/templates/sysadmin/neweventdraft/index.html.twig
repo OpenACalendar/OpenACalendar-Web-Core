@@ -59,11 +59,11 @@
 	{%  endif %}
 	<tr>
 		<th>Created</th>
-		<td>{{ draft.createdAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
+		<td>{{ draft.createdAt |date('D H:i jS M Y', currentTimeZone ) }}</td>
 	</tr>
 	<tr>
 		<th>Updated</th>
-		<td>{{ draft.updatedAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
+		<td>{{ draft.updatedAt |date('D H:i jS M Y' , currentTimeZone) }}</td>
 	</tr>
 </table>
 

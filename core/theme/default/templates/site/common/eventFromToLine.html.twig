@@ -6,24 +6,24 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="date">
-	<time datetime="{{ startAt|totimezone(timezone)|date('c') }}" itemprop="startDate">
-		<span class="startDay">{{ startAt|totimezone(timezone)|date('D jS') }}</span>
-		<span class="startMonthYear">{{ startAt|totimezone(timezone)|date('M Y') }}</span>
+	<time datetime="{{ startAt|date('c', timezone) }}" itemprop="startDate">
+		<span class="startDay">{{ startAt|date('D jS', timezone) }}</span>
+		<span class="startMonthYear">{{ startAt|date('M Y', timezone) }}</span>
 		<span class="startTime">
-			{{ startAt|totimezone(timezone)|date( currentUserClock12Hour ? 'g:ia' : 'H:i') }}
+			{{ startAt|date( currentUserClock12Hour ? 'g:ia' : 'H:i', timezone) }}
 		</span>
 	</time>
 	<span class="to">to</span>
 	{% if sameday(startAt,endAt) %}
-		<time datetime="{{ endAt|totimezone(timezone)|date('c') }}" itemprop="endDate">
+		<time datetime="{{ endAt|date('c', timezone) }}" itemprop="endDate">
 			<span class="end">
-				{{ endAt|totimezone(timezone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i') }}
+				{{ endAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', timezone) }}
 			</span>
 		</time>
 	{% else %}
-		<time datetime="{{ endAt|totimezone(timezone)|date('c') }}" itemprop="endDate">
+		<time datetime="{{ endAt|date('c', timezone) }}" itemprop="endDate">
 			<span class="end">
-				{{ endAt|totimezone(timezone)|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i') }}
+				{{ endAt|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i', timezone) }}
 			</span>
 		</time>
 	{% endif %}

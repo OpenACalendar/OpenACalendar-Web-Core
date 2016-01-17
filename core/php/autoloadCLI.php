@@ -34,7 +34,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 unset($dirs);
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\TimeZoneExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array('attr'=>array('target'=>'_blank'))));
     $twig->addExtension(new twig\extensions\TypeCheckExtension($app));

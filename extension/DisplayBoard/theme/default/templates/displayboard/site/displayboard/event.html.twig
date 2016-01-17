@@ -8,15 +8,15 @@
 <li {% if minorImportance %}class="minorImportance"{% else %}class="majorImportance"{% endif %}>
 	<div class="dateIcon">
 		<a href="/event/{{ event.slugForUrl }}">
-			<time datetime="{{ event.getStartAt|totimezone(currentTimeZone)|date('c') }}">
+			<time datetime="{{ event.getStartAt|date('c', currentTimeZone) }}">
 				{% if showStart == 'date' %}
-					<span class="startDay">{{ event.getStartAt|totimezone(currentTimeZone)|date('D') }}</span>
-					<span class="startDate">{{ event.getStartAt|totimezone(currentTimeZone)|date('jS') }}</span>
-					<span class="startMonthYear">{{ event.getStartAt|totimezone(currentTimeZone)|date('M \'y') }}</span>
+					<span class="startDay">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
+					<span class="startDate">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
+					<span class="startMonthYear">{{ event.getStartAt|date('M \'y', currentTimeZone) }}</span>
 				{% else %}
 					{# TODO We don't follow 12/24 hour pref here. We could do but must pay attention to styling. #}
-					<span class="startTime1">{{ event.getStartAt|totimezone(currentTimeZone)|date('g:i') }}</span>
-					<span class="startTime2">{{ event.getStartAt|totimezone(currentTimeZone)|date('a') }}</span>
+					<span class="startTime1">{{ event.getStartAt|date('g:i', currentTimeZone) }}</span>
+					<span class="startTime2">{{ event.getStartAt|date('a', currentTimeZone) }}</span>
 				{% endif %}
 			</time>
 		</a>

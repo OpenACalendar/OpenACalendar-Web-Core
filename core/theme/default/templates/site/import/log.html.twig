@@ -34,7 +34,7 @@
 		{% for result in results %}
 			<tr {% if loop.index is even %}class="alternative"{% endif %}>
 				<td>
-					{{ result.getCreatedAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'D jS M Y g:ia': 'D jS M Y H:i') }}
+					{{ result.getCreatedAt|date( currentUserClock12Hour ?  'D jS M Y g:ia': 'D jS M Y H:i', currentTimeZone) }}
 				</td>
 				<td>{% if result.isSuccess %}Yes{% else %}No{% endif %}</td>
 				<td>{{ result.message }}</td>

@@ -23,13 +23,13 @@
 				<div style="background: #231F20; ; float: left; height: 60px; margin: 2px; text-align: center; width: 60px;">
 					{# If event less than 6 days in future show day of week. If further in future show date and month. #}
 					{% if event.getStartAt.Timestamp < "now"|date("U") + 6*24*60*60  %}
-						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|totimezone(currentTimeZone)|date('D') }}</span>
-						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|totimezone(currentTimeZone)|date('jS') }}</span>
-						<span style="color: white; font-size: 10pt;">{{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i' ) }}</span>
+						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
+						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
+						<span style="color: white; font-size: 10pt;">{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone ) }}</span>
 					{% else %}
-						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|totimezone(currentTimeZone)|date('jS') }}</span>
-						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|totimezone(currentTimeZone)|date('M') }}</span>
-						<span style="color: white; font-size: 10pt;">{{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i') }}</span>
+						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
+						<span style="color: white; font-size: 12pt;font-weight: bold;display: block;">{{ event.getStartAt|date('M', currentTimeZone) }}</span>
+						<span style="color: white; font-size: 10pt;">{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}</span>
 					{% endif %}
 				</div>
 			{%  endif %}

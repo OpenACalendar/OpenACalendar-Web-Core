@@ -39,11 +39,11 @@
 		{% for tasklog in tasklogs %}
 			<tr {% if loop.index is even %}class="alternative"{% endif %} >
 				<td>
-					{{ tasklog.startedat   |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}
+					{{ tasklog.startedat   |date('D H:i jS M Y' , currentTimeZone) }}
 				</td>
 				<td>
 					{% if tasklog.endedat %}
-						{{ tasklog.endedat   |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}
+						{{ tasklog.endedat   |date('D H:i jS M Y' , currentTimeZone) }}
 					{% endif %}
 				</td>
 				<td>

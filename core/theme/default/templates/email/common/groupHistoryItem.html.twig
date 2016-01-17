@@ -43,8 +43,8 @@
 	{% endif %}
 	<div style="font-style: italic; font-size: 0.8em;">
 		Edited at 
-		<time datetime="{{ historyItem.getCreatedAt|totimezone(currentTimeZone)|date('c') }}">
-			{{ historyItem.getCreatedAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'D jS M Y g:ia'  : 'D jS M Y H:i') }}
+		<time datetime="{{ historyItem.getCreatedAt|date('c', currentTimeZone) }}">
+			{{ historyItem.getCreatedAt|date( currentUserClock12Hour ?  'D jS M Y g:ia'  : 'D jS M Y H:i', currentTimeZone) }}
 		</time>	
 		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
 	</div>

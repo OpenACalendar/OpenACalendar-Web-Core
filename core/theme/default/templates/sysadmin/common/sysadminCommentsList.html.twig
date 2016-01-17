@@ -12,8 +12,8 @@
 				<div class="comment">{{  comment.comment | nl2br }}</div>
 				<div class="created">
 					Created at
-					<time datetime="{{ comment.getCreatedAt|totimezone(currentTimeZone)|date('c') }}">
-						{{ comment.getCreatedAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'D jS M Y g:ia' :  'D jS M Y H:i' ) }}
+					<time datetime="{{ comment.getCreatedAt|date('c', currentTimeZone) }}">
+						{{ comment.getCreatedAt|date( currentUserClock12Hour ?  'D jS M Y g:ia' :  'D jS M Y H:i', currentTimeZone ) }}
 						({{ comment.getCreatedAt | time_diff }})
 					</time>
 					{% if comment.userAccountUsername %}by {{  comment.userAccountUsername }}{% endif %}

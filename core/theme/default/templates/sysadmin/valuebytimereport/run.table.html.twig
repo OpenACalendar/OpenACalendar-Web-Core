@@ -15,11 +15,11 @@
 	 <table class="data">
 		 <tr>
 			 <td>Start</td>
-			 <td>{%  if startAt %}{{  startAt | totimezone('Europe/London')|date('Y-m-d H:i:s')  }}{%  endif %}</td>
+			 <td>{%  if startAt %}{{  startAt | date('Y-m-d H:i:s', 'Europe/London')  }}{%  endif %}</td>
 		 </tr>
 		 <tr>
 			 <td>End</td>
-			 <td>{%  if endAt %}{{  endAt | totimezone('Europe/London')|date('Y-m-d H:i:s')  }}{%  endif %}</td>
+			 <td>{%  if endAt %}{{  endAt | date('Y-m-d H:i:s', 'Europe/London')  }}{%  endif %}</td>
 		 </tr>
 		 <tr>
 			 <td>Site ID</td>

@@ -42,11 +42,11 @@
 		</tr>
 		<tr>
 			<th>Start</th>
-			<td>{{ event.startAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
+			<td>{{ event.startAt|date('D H:i jS M Y', currentTimeZone ) }}</td>
 		</tr>
 		<tr>
 			<th>End</th>
-			<td>{{ event.endAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</td>
+			<td>{{ event.endAt |date('D H:i jS M Y', currentTimeZone ) }}</td>
 		</tr>
 		<tr>
 			<th>Main Group ID</th>

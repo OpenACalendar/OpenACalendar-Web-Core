@@ -22,7 +22,7 @@
 			<tr {% if loop.index is even %}class="alternative"{% endif %} >
 				<td>{{ event.slug }}</td>
 				<td>{{ event.summary }}</td>
-				<td>{{ event.startAt |totimezone(currentTimeZone)|date('D H:i jS M Y' ) }}</a></td>
+				<td>{{ event.startAt |date('D H:i jS M Y', currentTimeZone ) }}</a></td>
 				<td>
 					<a href="/sysadmin/site/{{ event.siteId }}/event/{{ event.slug }}" class="button">Show</a>
 				</td>

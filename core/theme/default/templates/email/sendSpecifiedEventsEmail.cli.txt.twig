@@ -18,7 +18,7 @@
 
 {% endfor %}
 {% for event in d.events %}
-- {{ event.getStartAt|totimezone(currentTimeZone)|date( currentUserClock12Hour ?  'g:ia' : 'H:i') }} {{ event.summaryDisplay|raw }}{% if event.isCancelled %} [CANCELLED]{% endif %}
+- {{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }} {{ event.summaryDisplay|raw }}{% if event.isCancelled %} [CANCELLED]{% endif %}
 {# This comment AND the blank line below are needed to stop 2 events running together - https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/442 #}
 
 {% endfor %}
