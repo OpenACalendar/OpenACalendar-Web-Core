@@ -288,11 +288,14 @@ class EventRecurSetModel {
 			$thisEnd->sub($interval);
 			if ($thisStart->format("N") == $dayOfWeek) ++$weekInMonth;
 		}
-				
+        // We have to sub 1 day here - if the first day of the month is a monday, and we are trying to get the Xth monday in the month it will count wrong otherwise.
+        $thisStart->sub($interval);
+        $thisEnd->sub($interval);
+
 		// vars		
 		$out = array();
-		$currentMonthLong = $thisStart->format('F');
-		$currentMonthShort = $thisStart->format('M');		
+		$currentMonthLong = $event->getStartAtInTimezone()->format('F');
+		$currentMonthShort = $event->getStartAtInTimezone()->format('M');
 		$currentMonth = $thisStart->format('m');
 		$currentWeekInMonth = 1;
 		$loopStop = \TimeSource::time() + $daysInAdvance*24*60*60;
@@ -314,6 +317,11 @@ class EventRecurSetModel {
 					$end->setTimeZone($timeZoneUTC);
 
 					$include = true;
+
+                    if ($start->format("c") == $event->getStartAtInUTC()->format("c")) {
+                        // This event is the original event we were passed; don't return it.
+                        $include = false;
+                    }
 
 					if ($include) {
 						$newEvent = new EventModel();
