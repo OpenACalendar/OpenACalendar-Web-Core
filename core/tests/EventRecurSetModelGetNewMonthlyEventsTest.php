@@ -336,9 +336,36 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 		$this->assertEquals($this->mktime(2014,7,29,21,0,0)->format('r'), $newEvents[2]->getEndAt()->format('r'));
 
 	}
-	
-	
-	
-	
+
+
+    /**
+     * See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/412
+     */
+    function testFourthMondayInMonth() {
+
+
+        TimeSource::mock(2015,4,20,14,27,0);
+
+        $event = new EventModel();
+        $event->setStartAt($this->mktime(2015,6,22,18,0,0));
+        $event->setEndAt($this->mktime(2015,6,22,20,0,0));
+
+        $eventSet = new EventRecurSetModel();
+        $eventSet->setTimeZoneName('Europe/London');
+
+        $newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6*31);
+
+        $this->assertTrue(count($newEvents) >= 2);
+
+        $this->assertEquals($this->mktime(2015,7,27,18,0,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2015,7,27,20,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2015,8,24,18,0,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2015,8,24,20,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+
+    }
+
+
+
 }
 
