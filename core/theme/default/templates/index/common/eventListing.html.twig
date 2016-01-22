@@ -24,7 +24,7 @@
 				<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slugForUrl }}">
 					<div class="dateIcon">
 						<span class="startDay">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
-						<span class="startDate">{{ event.getStartAtdate('jS', currentTimeZone) }}</span>
+						<span class="startDate">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
 						<span class="startMonthYear">{{ event.getStartAt|date('M \'y', currentTimeZone) }}</span>
 					</div>
 					<div class="timeIcon">
