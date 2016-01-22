@@ -41,12 +41,40 @@
 			<td>{{ event.description | nl2br }}</td>
 		</tr>
 		<tr>
+			<th>Country ID</th>
+			<td>{{ event.countryId }}</td>
+		</tr>
+		{% if country is not null %}
+			<tr class="sub">
+				<th>Country Title</th>
+				<td>{{ country.title }}</td>
+			</tr>
+		{% endif %}
+		<tr>
+			<th>Timezone</th>
+			<td>{{ event.timezone }}</td>
+		</tr>
+		<tr>
 			<th>Start</th>
-			<td>{{ event.startAt|date('D H:i jS M Y', currentTimeZone ) }}</td>
+			<td>
+				{% if event.timezone != currentTimeZone %}
+					{{ event.startAt |date('D H:i jS M Y', event.timezone ) }} ( {{  event.timezone }})<br/>
+					{{ event.startAt |date('D H:i jS M Y', currentTimeZone ) }} ( {{  currentTimeZone }})
+				{% else %}
+					{{ event.startAt |date('D H:i jS M Y', currentTimeZone ) }} ( {{  currentTimeZone }})
+				{%  endif %}
+			</td>
 		</tr>
 		<tr>
 			<th>End</th>
-			<td>{{ event.endAt |date('D H:i jS M Y', currentTimeZone ) }}</td>
+			<td>
+				{% if event.timezone != currentTimeZone %}
+					{{ event.endAt |date('D H:i jS M Y', event.timezone ) }} ( {{  event.timezone }})<br/>
+					{{ event.endAt |date('D H:i jS M Y', currentTimeZone ) }} ( {{  currentTimeZone }})
+				{% else %}
+					{{ event.endAt |date('D H:i jS M Y', currentTimeZone ) }} ( {{  currentTimeZone }})
+				{%  endif %}
+			</td>
 		</tr>
 		<tr>
 			<th>Main Group ID</th>
@@ -67,6 +95,24 @@
 			</tr>
 		{% endif %}
 		<tr>
+			<th>Area ID</th>
+			<td>{{ event.areaId }}</td>
+		</tr>
+		{% if area is not null %}
+			<tr class="sub">
+				<th>Area Slug</th>
+				<td>{{ area.slug }}</td>
+			</tr>
+			<tr class="sub">
+				<th>Area Title</th>
+				<td>{{ area.title }}</td>
+			</tr>
+			<tr class="sub">
+				<th>More</th>
+				<td><a href="/sysadmin/site/{{ site.id }}/area/{{ area.slug }}">Area</a></td>
+			</tr>
+		{% endif %}
+		<tr>
 			<th>Venue ID</th>
 			<td>{{ event.venueId }}</td>
 		</tr>
@@ -79,15 +125,9 @@
 				<th>Venue Title</th>
 				<td>{{ venue.title }}</td>
 			</tr>
-		{% endif %}
-		<tr>
-			<th>Country ID</th>
-			<td>{{ event.countryId }}</td>
-		</tr>
-		{% if country is not null %}
 			<tr class="sub">
-				<th>Country Title</th>
-				<td>{{ country.title }}</td>
+				<th>More</th>
+				<td><a href="/sysadmin/site/{{ site.id }}/venue/{{ venue.slug }}">Venue</a></td>
 			</tr>
 		{% endif %}
 	</table>

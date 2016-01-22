@@ -3,6 +3,7 @@
 namespace sysadmin\controllers;
 
 use models\EventEditMetaDataModel;
+use repositories\AreaRepository;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +37,7 @@ class EventController {
 	protected $parameters = array();
 	
 	protected function build($siteid, $slug, Request $request, Application $app) {
-		$this->parameters = array('group'=>null,'venue'=>null,'country'=>null);
+		$this->parameters = array('group'=>null,'venue'=>null,'country'=>null,'area'=>null);
 
 		$sr = new SiteRepository();
 		$this->parameters['site'] = $sr->loadById($siteid);
@@ -68,7 +69,13 @@ class EventController {
 			$cr = new VenueRepository();
 			$this->parameters['venue'] = $cr->loadById($this->parameters['event']->getVenueID());
 		}
-		
+
+
+		if ($this->parameters['event']->getAreaID()) {
+			$ar = new AreaRepository();
+			$this->parameters['area'] = $ar->loadById($this->parameters['event']->getAreaID());
+		}
+
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
