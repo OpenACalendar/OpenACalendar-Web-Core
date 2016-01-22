@@ -11,9 +11,14 @@
 {% endif %}
 
 {%  if breadcrumbs %}
-	<ul class="breadcrumbs">
+	<ul class="breadcrumbs" vocab="http://schema.org/" typeof="BreadcrumbList">
 		{%  for breadcrumb in breadcrumbs %}
-			<li{%  if loop.last %} class="current"{%  endif %}><a href="{{  breadcrumb.url }}"><span class="fa fa-angle-right"></span> <span property="name">{{ breadcrumb.label }}</span></a></li>
+			<li{%  if loop.last %} class="current"{%  endif %} property="itemListElement" typeof="ListItem">
+				<a href="{{  breadcrumb.url }}" property="item" typeof="WebPage">
+					<span class="fa fa-angle-right"></span> <span property="name">{{ breadcrumb.label }}</span>
+				</a>
+				<meta property="position" content="{{ loop.index }}">
+			</li>
 		{%  endfor %}
 	</ul>
 {%  endif %}
