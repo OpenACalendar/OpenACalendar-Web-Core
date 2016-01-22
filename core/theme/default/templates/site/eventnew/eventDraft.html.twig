@@ -9,7 +9,7 @@
 {% block pageTitle %}Add an Event - {% endblock %}
 
 {% block breadcrumbs %}
-	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/event', 'label':'events' } ]  } %}
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/event', 'label':'events' },  { 'url':'/event/new/' ~ draft.slug ~ '/' ~ currentStep.stepId, 'label':'new' } ]  } %}
 {% endblock %}
 
 {% block htmlHeader %}
