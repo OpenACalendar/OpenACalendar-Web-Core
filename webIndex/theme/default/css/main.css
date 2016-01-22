@@ -1132,7 +1132,6 @@ ul.breadcrumbs li {
   display: inline;
   font-size: 0.8em;
   padding: 5px 10px 5px 15px;
-  background: url('/theme/default/img/angleright16.png') left center no-repeat;
 }
 @media screen and (max-width: 500px) {
   ul.breadcrumbs li {

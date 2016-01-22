@@ -136,26 +136,26 @@
 			{% endif %}
 			
 			{% if group is defined and group %}
-				<h3 class="group"><a href="/group/{{ group.slugForUrl }}">{{ group.title }}</a></h3>
+				<h3 class="group"><a href="/group/{{ group.slugForUrl }}"><span class="fa fa-angle-right"></span> {{ group.title }}</a></h3>
 			{% elseif curatedlist is defined and curatedlist %}
-				<h3 class="curatedlist"><a href="/curatedlist/{{ curatedlist.slugForUrl }}">{{ curatedlist.title }}</a></h3>
+				<h3 class="curatedlist"><a href="/curatedlist/{{ curatedlist.slugForUrl }}"><span class="fa fa-angle-right"></span> {{ curatedlist.title }}</a></h3>
 			{% elseif venue is defined and venue %}
-				<h3 class="country"><a href="/venue/{{ venue.slugForUrl }}">{{ venue.title }}</a></h3>
+				<h3 class="country"><a href="/venue/{{ venue.slugForUrl }}"><span class="fa fa-angle-right"></span> {{ venue.title }}</a></h3>
 				{% if area is defined and area %}
-					<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
+					<h3 class="country"><a href="/area/{{ area.slugForUrl }}"><span class="fa fa-angle-right"></span> {{ area.title }}</a></h3>
 				{% endif %}
 				{% if country is defined and country %}
-					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+					<h3 class="country"><a href="/country/{{ country.twoCharCode }}"><span class="fa fa-angle-right"></span> {{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 				{% endif %}
 			{% elseif area is defined and area %}
-				<h3 class="country"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></h3>
+				<h3 class="country"><a href="/area/{{ area.slugForUrl }}"><span class="fa fa-angle-right"></span> {{ area.title }}</a></h3>
 				{% if country is defined and country %}
-					<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+					<h3 class="country"><a href="/country/{{ country.twoCharCode }}"><span class="fa fa-angle-right"></span> {{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 				{% endif %}
 			{% elseif country is defined and country %}
-				<h3 class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
+				<h3 class="country"><a href="/country/{{ country.twoCharCode }}"><span class="fa fa-angle-right"></span> {{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></h3>
 			{% elseif venueVirtual is defined and venueVirtual %}
-				<h3 class="venue"><a href="/venue/virtual">Virtual Events</a></h3>
+				<h3 class="venue"><a href="/venue/virtual"><span class="fa fa-angle-right"></span> Virtual Events</a></h3>
 			{% endif %}
 			<div id="afterHeader"></div>
 		</div>

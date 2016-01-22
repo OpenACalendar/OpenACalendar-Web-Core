@@ -8,7 +8,8 @@
 {%  if breadcrumbs %}
 	<ul class="breadcrumbs">
 		{%  for breadcrumb in breadcrumbs %}
-			<li{%  if loop.last %} class="current"{%  endif %}><a href="{{  breadcrumb.url }}">{{ breadcrumb.label }}</a></li>
+			<li{%  if loop.last %} class="current"{%  endif %}><a href="{{  breadcrumb.url }}"><span class="fa fa-angle-right"></span>  {{ breadcrumb.label }}</a></li>
 		{%  endfor %}
 	</ul>
 {%  endif %}
+
