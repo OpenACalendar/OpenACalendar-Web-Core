@@ -2282,10 +2282,7 @@ ul.breadcrumbs li a:focus {
   text-decoration: underline;
   color: black;
 }
-ul.breadcrumbs li.current a,
-ul.breadcrumbs li.current a:hover,
-ul.breadcrumbs li.current a:focus {
-  text-decoration: none;
+ul.breadcrumbs li.current {
   color: #555;
 }
 ul.actionList li.header {
