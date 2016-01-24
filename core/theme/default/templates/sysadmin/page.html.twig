@@ -61,8 +61,8 @@
 		</div>
 		<div id="footer">
 			Powered by <a href="http://ican.openacalendar.org">OpenACalendar</a>
-		</div>	
-		<script src="/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+		</div>
+		<script src="{%  if config.useLibraryCDNs %}https://code.jquery.com/jquery-1.10.2.min.js{%  else %}/js/jquery-1.10.2.min.js{%  endif %}" type="text/javascript"></script>
 		{% block scripts %}{% endblock %}		
 	</body>
 </html>

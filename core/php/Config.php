@@ -191,6 +191,9 @@ class Config {
 
 	public $formWidgetTimeMinutesMultiples = 1;
 
+    /** @var bool This setting is false by default in v1.5.x but will be true by default in v1.6.0 onwards */
+    public $useLibraryCDNs = false;
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 
