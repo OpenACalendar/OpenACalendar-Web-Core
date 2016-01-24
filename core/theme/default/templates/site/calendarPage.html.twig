@@ -40,7 +40,6 @@
 		<title>{{ pageTitle }} - {% if not config.isSingleSiteMode %}{{ currentSite.title }} {% endif %}{{ config.siteTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
 		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css{%  else %}/font-awesome-4.5.0/css/font-awesome.min.css{%  endif %}">
-		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.css{%  else %}/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css{%  endif %}">
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 		{% if calendar.modeByMonth %}
 			{% if group is defined %}
