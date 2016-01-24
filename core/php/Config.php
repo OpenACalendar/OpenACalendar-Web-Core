@@ -210,6 +210,8 @@ class Config {
 
     public $slugMaxLength = 50;
 
+    public $useLibraryCDNs = true;
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

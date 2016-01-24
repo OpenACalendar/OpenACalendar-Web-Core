@@ -384,6 +384,11 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'CLIAPI1Enabled'} %}</td>
 		</tr>
 		<tr>
+			<th>useLibraryCDNs</th>
+			<td>{% if config.useLibraryCDNs %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'useLibraryCDNs'} %}</td>
+		</tr>
+		<tr>
 			<th>Tasks</th>
 			<td><a href="/sysadmin/config/tasks">More</a></td>
 		</tr>
