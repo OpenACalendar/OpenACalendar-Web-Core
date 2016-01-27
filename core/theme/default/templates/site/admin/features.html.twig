@@ -19,7 +19,7 @@
 
 	{% for feature in currentSiteFeatures.asList %}
 
-		<h3>{{ feature.title }}</h3>
+		<h3>{{ feature.title }} {% if feature.on %}<span class="fa fa-check"></span>{% else %}<span class="fa fa-times"></span>{%  endif %}</h3>
 		<p>{{  feature.description }}</p>
 		<form action="#" method="post"  class="styled">
 			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
