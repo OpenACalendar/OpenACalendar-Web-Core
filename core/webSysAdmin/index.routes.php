@@ -26,6 +26,8 @@ $app->match('/sysadmin/site/{id}/', "sysadmin\controllers\SiteController::show")
 		->assert('id', '\d+');
 $app->match('/sysadmin/site/{id}/watchers', "sysadmin\controllers\SiteController::watchers")
 		->assert('id', '\d+');
+$app->match('/sysadmin/site/{id}/features', "sysadmin\controllers\SiteController::features")
+		->assert('id', '\d+');
 
 
 $app->match('/sysadmin/sitequota', "sysadmin\controllers\SiteQuotaListController::index");

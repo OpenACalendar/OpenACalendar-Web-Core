@@ -2,6 +2,7 @@
 
 namespace sysadmin\controllers;
 
+use repositories\SiteFeatureRepository;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -148,7 +149,39 @@ class SiteController {
 
 		return $app['twig']->render('sysadmin/site/watchers.html.twig', $this->parameters);		
 	}
-	
+
+    function features($id, Request $request, Application $app) {
+        $this->build($id, $request, $app);
+
+        $siteFeatureRepository = new SiteFeatureRepository($app);
+
+        if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('action') == 'on') {
+            $ext = $app['extensions']->getExtensionById($request->request->get('extension'));
+            if ($ext) {
+                foreach($ext->getSiteFeatures($this->parameters['site']) as $feature) {
+                    if ($feature->getFeatureId() == $request->request->get('feature')) {
+                        $siteFeatureRepository->setFeature($this->parameters['site'], $feature, true, $app['currentUser']);
+                        return $app->redirect("/sysadmin/site/".$this->parameters['site']->getid().'/features');
+                    }
+                }
+            }
+        } else if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('action') == 'off') {
+            $ext = $app['extensions']->getExtensionById($request->request->get('extension'));
+            if ($ext) {
+                foreach($ext->getSiteFeatures($this->parameters['site']) as $feature) {
+                    if ($feature->getFeatureId() == $request->request->get('feature')) {
+                        $siteFeatureRepository->setFeature($this->parameters['site'], $feature, false, $app['currentUser']);
+                        return $app->redirect("/sysadmin/site/".$this->parameters['site']->getid().'/features');
+                    }
+                }
+            }
+        }
+
+        $this->parameters['siteFeatures'] = $siteFeatureRepository->getForSiteAsList($this->parameters['site']);
+
+        return $app['twig']->render('sysadmin/site/features.html.twig', $this->parameters);
+    }
+
 	function listCountries($siteid, Request $request, Application $app) {
 		$this->build($siteid, $request, $app);
 		
