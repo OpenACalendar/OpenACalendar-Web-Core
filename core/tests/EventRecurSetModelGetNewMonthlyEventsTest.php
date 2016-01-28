@@ -365,7 +365,56 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 
     }
 
+    function testDaysInAdvance1()
+    {
+
+        TimeSource::mock(2015, 3, 20, 14, 27, 0);
+
+        $event = new EventModel();
+        $event->setStartAt($this->mktime(2015, 6, 22, 18, 0, 0));
+        $event->setEndAt($this->mktime(2015, 6, 22, 20, 0, 0));
+
+        $eventSet = new EventRecurSetModel();
+        $eventSet->setTimeZoneName('Europe/London');
+
+        $newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6 * 31);
+
+        // This is the real test here.
+        // The days in advance is from current time NOT event start time, and therefore we should only have events up to 2015, 3, 20, 14, 27, 0 + 6*31 days
+        $this->assertEquals(2, count($newEvents));
+
+        $this->assertEquals($this->mktime(2015, 7, 27, 18, 0, 0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2015, 7, 27, 20, 0, 0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2015, 8, 24, 18, 0, 0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2015, 8, 24, 20, 0, 0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+    }
+
+    function testDaysInAdvance2() {
 
 
+        TimeSource::mock(2014,1,20,14,27,0);
+
+        $event = new EventModel();
+        $event->setStartAt($this->mktime(2014,4,29,18,30,0));
+        $event->setEndAt($this->mktime(2014,4,29,21,0,0));
+
+        $eventSet = new EventRecurSetModel();
+        $eventSet->setTimeZoneName('Europe/London');
+
+        $newEvents = $eventSet->getNewMonthlyEventsOnLastDayInWeek($event, 6*31);
+
+        // This is the real test here.
+        // The days in advance is from current time NOT event start time, and therefore we should only have events up to 2014,1,20,14,27,0 + 6*31 days
+        $this->assertEquals(2, count($newEvents));
+
+        $this->assertEquals($this->mktime(2014,5,27,18,30,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2014,5,27,21,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2014,6,24,18,30,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2014,6,24,21,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+
+
+    }
 }
 

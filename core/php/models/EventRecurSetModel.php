@@ -4,6 +4,8 @@
 namespace models;
 
 
+use JMBTechnologyLimited\RRuleUnravel\ICalData;
+use JMBTechnologyLimited\RRuleUnravel\Unraveler;
 use repositories\builders\EventRepositoryBuilder;
 
 /**
@@ -101,52 +103,34 @@ class EventRecurSetModel {
 			
 	
 	public function getNewWeeklyEvents(EventModel $event,  $daysInAdvance = 93) {
-		// constants
-		$interval = new \DateInterval('P1D');
-		$timeZone = new \DateTimeZone($this->timeZoneName);
-		$timeZoneUTC = new \DateTimeZone("UTC");
-		// vars
-		$dayOfWeek = $event->getStartAt()->format("N");
-		$thisStart = new \DateTime($event->getStartAt()->format('Y-m-d H:i:s'),$timeZoneUTC);
-		$thisEnd = new \DateTime($event->getEndAt()->format('Y-m-d H:i:s'),$timeZoneUTC);
-		$thisStart->setTimeZone($timeZone);
-		$thisEnd->setTimeZone($timeZone);
-		$out = array();
-		$loopStop = (\TimeSource::time() + $daysInAdvance*24*60*60);
-		while ( $thisStart->getTimestamp() < $loopStop) {
-			$thisStart->add($interval);
-			$thisEnd->add($interval);
-			if ($thisStart->format("N") == $dayOfWeek && $thisStart->getTimestamp() > \TimeSource::time()) {
-				
-				$start = clone $thisStart;
-				$end = clone $thisEnd;
-				$start->setTimeZone($timeZoneUTC);
-				$end->setTimeZone($timeZoneUTC);
-				
-				$include = true;
-				
-				
-				if ($include) {
-					$newEvent = new EventModel();
-					$newEvent->setGroupId($event->getGroupId());
-					$newEvent->setVenueId($event->getVenueId());
-					$newEvent->setCountryId($event->getCountryId());
-					$newEvent->setEventRecurSetId($this->id);
-					$newEvent->setSummary($event->getSummary());
-					$newEvent->setDescription($event->getDescription());
-					$newEvent->setStartAt($start);
-					$newEvent->setEndAt($end);
-					foreach($this->customFields as $customField) {
-						if ($event->hasCustomField($customField)) {
-							$newEvent->setCustomField($customField, $event->getCustomField($customField));
-						}
-					}
-					
-					$out[] = $newEvent;
-				}
-			}
-		}
-		return $out;
+        $untilDateTime = new \DateTime();
+        $untilDateTime->setTimestamp(\TimeSource::time() + $daysInAdvance*24*60*60);
+
+        $rruleunraveller = new Unraveler(new ICalData($event->getStartAtInUTC(), $event->getEndAtInUTC(), array("FREQ"=>"WEEKLY","UNTIL"=>$untilDateTime->format("Ymd")), $event->getTimezone()));
+        // as well as the until clause above, we set a limit here for safety and robustness.
+        $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 7) + 1);
+        $rruleunraveller->setIncludeOriginalEvent(false);
+        $rruleunraveller->process();
+        $out = array();
+        foreach($rruleunraveller->getResults() as $result) {
+            $newEvent = new EventModel();
+            $newEvent->setGroupId($event->getGroupId());
+            $newEvent->setVenueId($event->getVenueId());
+            $newEvent->setCountryId($event->getCountryId());
+            $newEvent->setEventRecurSetId($this->id);
+            $newEvent->setSummary($event->getSummary());
+            $newEvent->setDescription($event->getDescription());
+            $newEvent->setStartAt($result->getStartInUTC());
+            $newEvent->setEndAt($result->getEndInUTC());
+            foreach($this->customFields as $customField) {
+                if ($event->hasCustomField($customField)) {
+                    $newEvent->setCustomField($customField, $event->getCustomField($customField));
+                }
+            }
+
+            $out[] = $newEvent;
+        };
+        return $out;
 	}
 	
 	
@@ -190,74 +174,42 @@ class EventRecurSetModel {
 
 	
 	public function getNewMonthlyEventsOnLastDayInWeek(EventModel $event,  $daysInAdvance = 186) {
-		// constants
-		$interval = new \DateInterval('P1D');
-		$timeZone = new \DateTimeZone($this->timeZoneName);
-		$timeZoneUTC = new \DateTimeZone("UTC");
-		
-		// calculate which day of month it should be
-		$dayOfWeek = $event->getStartAt()->format("N");
-		$thisStart = new \DateTime($event->getStartAt()->format('Y-m-d H:i:s'),$timeZoneUTC);
-		$thisEnd = new \DateTime($event->getEndAt()->format('Y-m-d H:i:s'),$timeZoneUTC);
-		$thisStart->setTimeZone($timeZone);
-		$thisEnd->setTimeZone($timeZone);
-		while($thisStart->format('d') != 1) {
-			$thisStart->add($interval);
-			$thisEnd->add($interval);
-		}
-				
-		// vars		
-		$out = array();
-		$currentMonthLong = $thisStart->format('F');
-		$currentMonthShort = $thisStart->format('M');		
-		$currentMonth = $thisStart->format('m');
-		$loopStop = \TimeSource::time() + $daysInAdvance*24*60*60;
-		$startInMonth = null;
-		$endInMonth = null;
-		while ( $thisStart->getTimestamp() < $loopStop) {
-			$thisStart->add($interval);
-			$thisEnd->add($interval);
-			//print $thisStart->format("r")."  current month: ".$currentMonth." current week: ".$currentWeekInMonth."\n";
-			if ($currentMonth != $thisStart->format('m')) {
-				$currentMonth = $thisStart->format('m');
-				
-				$startInMonth->setTimeZone($timeZoneUTC);
-				$endInMonth->setTimeZone($timeZoneUTC);
+        $dayOfWeek = substr(strtoupper($event->getStartAt()->format("l")),0,2);
 
-				$include = true;
+        $untilDateTime = new \DateTime();
+        $untilDateTime->setTimestamp(\TimeSource::time() + $daysInAdvance*24*60*60);
 
-				if ($include) {
-					$newEvent = new EventModel();
-					$newEvent->setGroupId($event->getGroupId());
-					$newEvent->setVenueId($event->getVenueId());
-					$newEvent->setCountryId($event->getCountryId());
-					$newEvent->setEventRecurSetId($this->id);
-					$newEvent->setSummary($event->getSummary());
-					$newEvent->setDescription($event->getDescription());
-					$newEvent->setStartAt($startInMonth);
-					$newEvent->setEndAt($endInMonth);
-					foreach($this->customFields as $customField) {
-						if ($event->hasCustomField($customField)) {
-							$newEvent->setCustomField($customField, $event->getCustomField($customField));
-						}
-					}
-
-					if (stripos($newEvent->getSummary(),$currentMonthLong) !== false) {
-						$newEvent->setSummary(str_ireplace($currentMonthLong, $newEvent->getStartAt()->format('F'), $newEvent->getSummary()));
-					} else if (stripos($newEvent->getSummary(),$currentMonthShort) !== false) {
-						$newEvent->setSummary(str_ireplace($currentMonthShort, $newEvent->getStartAt()->format('M'), $newEvent->getSummary()));
-					}
-
-					$out[] = $newEvent;
-				}
-				
-			}
-			if ($thisStart->format("N") == $dayOfWeek) {
-				$startInMonth = clone $thisStart;
-				$endInMonth = clone $thisEnd;
-			}			
-		}
-		return $out;
+        $rruleunraveller = new Unraveler(new ICalData($event->getStartAtInUTC(), $event->getEndAtInUTC(), array("FREQ"=>"MONTHLY","BYDAY"=>"-1".$dayOfWeek,"UNTIL"=>$untilDateTime->format("Ymd")), $event->getTimezone()));
+        // as well as the until clause above, we set a limit here for safety and robustness.
+        $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 30) + 1);
+        $rruleunraveller->setIncludeOriginalEvent(false);
+        $rruleunraveller->process();
+        $out = array();
+        $currentMonthLong = $event->getStartAtInTimezone()->format('F');
+        $currentMonthShort = $event->getStartAtInTimezone()->format('M');
+        foreach($rruleunraveller->getResults() as $result) {
+            $newEvent = new EventModel();
+            $newEvent->setGroupId($event->getGroupId());
+            $newEvent->setVenueId($event->getVenueId());
+            $newEvent->setCountryId($event->getCountryId());
+            $newEvent->setEventRecurSetId($this->id);
+            $newEvent->setSummary($event->getSummary());
+            $newEvent->setDescription($event->getDescription());
+            $newEvent->setStartAt($result->getStartInUTC());
+            $newEvent->setEndAt($result->getEndInUTC());
+            foreach($this->customFields as $customField) {
+                if ($event->hasCustomField($customField)) {
+                    $newEvent->setCustomField($customField, $event->getCustomField($customField));
+                }
+            }
+            if (stripos($newEvent->getSummary(),$currentMonthLong) !== false) {
+                $newEvent->setSummary(str_ireplace($currentMonthLong, $newEvent->getStartAt()->format('F'), $newEvent->getSummary()));
+            } else if (stripos($newEvent->getSummary(),$currentMonthShort) !== false) {
+                $newEvent->setSummary(str_ireplace($currentMonthShort, $newEvent->getStartAt()->format('M'), $newEvent->getSummary()));
+            }
+            $out[] = $newEvent;
+        };
+        return $out;
 	}
 
 	/**
@@ -271,89 +223,43 @@ class EventRecurSetModel {
 	 * @return \models\EventModel
 	 */
 	public function getNewMonthlyEventsOnSetDayInWeek(EventModel $event,  $daysInAdvance = 186) {
-		// constants
-		$interval = new \DateInterval('P1D');
-		$timeZone = new \DateTimeZone($this->timeZoneName);
-		$timeZoneUTC = new \DateTimeZone("UTC");
-		
-		// calculate which day of month it should be
-		$dayOfWeek = $event->getStartAt()->format("N");
-		$thisStart = new \DateTime($event->getStartAt()->format('Y-m-d H:i:s'),$timeZoneUTC);
-		$thisEnd = new \DateTime($event->getEndAt()->format('Y-m-d H:i:s'),$timeZoneUTC);
-		$thisStart->setTimeZone($timeZone);
-		$thisEnd->setTimeZone($timeZone);
-		$weekInMonth = 1;
-		while($thisStart->format('d') > 1) {
-			$thisStart->sub($interval);
-			$thisEnd->sub($interval);
-			if ($thisStart->format("N") == $dayOfWeek) ++$weekInMonth;
-		}
-        // We have to sub 1 day here - if the first day of the month is a monday, and we are trying to get the Xth monday in the month it will count wrong otherwise.
-        $thisStart->sub($interval);
-        $thisEnd->sub($interval);
+        $patternData = $this->getEventPatternData($event);
+        $dayOfWeek = substr(strtoupper($event->getStartAt()->format("l")),0,2);
 
-		// vars		
-		$out = array();
-		$currentMonthLong = $event->getStartAtInTimezone()->format('F');
-		$currentMonthShort = $event->getStartAtInTimezone()->format('M');
-		$currentMonth = $thisStart->format('m');
-		$currentWeekInMonth = 1;
-		$loopStop = \TimeSource::time() + $daysInAdvance*24*60*60;
-		while ( $thisStart->getTimestamp() < $loopStop) {
-			$thisStart->add($interval);
-			$thisEnd->add($interval);
-			//print $thisStart->format("r")."  current month: ".$currentMonth." current week: ".$currentWeekInMonth."\n";
-			if ($currentMonth != $thisStart->format('m')) {
-				$currentMonth = $thisStart->format('m');
-				$currentWeekInMonth = 1;
-			}
-			if ($thisStart->format("N") == $dayOfWeek) {
+        $untilDateTime = new \DateTime();
+        $untilDateTime->setTimestamp(\TimeSource::time() + $daysInAdvance*24*60*60);
 
-				if ($currentWeekInMonth == $weekInMonth && $thisStart->getTimestamp() > \TimeSource::time()) {
-				
-					$start = clone $thisStart;
-					$end = clone $thisEnd;
-					$start->setTimeZone($timeZoneUTC);
-					$end->setTimeZone($timeZoneUTC);
-
-					$include = true;
-
-                    if ($start->format("c") == $event->getStartAtInUTC()->format("c")) {
-                        // This event is the original event we were passed; don't return it.
-                        $include = false;
-                    }
-
-					if ($include) {
-						$newEvent = new EventModel();
-						$newEvent->setGroupId($event->getGroupId());
-						$newEvent->setVenueId($event->getVenueId());
-						$newEvent->setCountryId($event->getCountryId());
-						$newEvent->setEventRecurSetId($this->id);
-						$newEvent->setSummary($event->getSummary());
-						$newEvent->setDescription($event->getDescription());
-						$newEvent->setStartAt($start);
-						$newEvent->setEndAt($end);
-						foreach($this->customFields as $customField) {
-							if ($event->hasCustomField($customField)) {
-								$newEvent->setCustomField($customField, $event->getCustomField($customField));
-							}
-						}
-						
-						if (stripos($newEvent->getSummary(),$currentMonthLong) !== false) {
-							$newEvent->setSummary(str_ireplace($currentMonthLong, $newEvent->getStartAt()->format('F'), $newEvent->getSummary()));
-						} else if (stripos($newEvent->getSummary(),$currentMonthShort) !== false) {
-							$newEvent->setSummary(str_ireplace($currentMonthShort, $newEvent->getStartAt()->format('M'), $newEvent->getSummary()));
-						}
-						
-						$out[] = $newEvent;
-					}
-				
-				}
-				
-				++$currentWeekInMonth;
-			}
-		}
-		return $out;
+        $rruleunraveller = new Unraveler(new ICalData($event->getStartAtInUTC(), $event->getEndAtInUTC(), array("FREQ"=>"MONTHLY","BYDAY"=>$patternData['weekInMonth'].$dayOfWeek,'UNTIL'=>$untilDateTime->format("Ymd")), $event->getTimezone()));
+        // as well as the until clause above, we set a limit here for safety and robustness.
+        $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 30) + 1);
+        $rruleunraveller->setIncludeOriginalEvent(false);
+        $rruleunraveller->process();
+        $out = array();
+        $currentMonthLong = $event->getStartAtInTimezone()->format('F');
+        $currentMonthShort = $event->getStartAtInTimezone()->format('M');
+        foreach($rruleunraveller->getResults() as $result) {
+            $newEvent = new EventModel();
+            $newEvent->setGroupId($event->getGroupId());
+            $newEvent->setVenueId($event->getVenueId());
+            $newEvent->setCountryId($event->getCountryId());
+            $newEvent->setEventRecurSetId($this->id);
+            $newEvent->setSummary($event->getSummary());
+            $newEvent->setDescription($event->getDescription());
+            $newEvent->setStartAt($result->getStartInUTC());
+            $newEvent->setEndAt($result->getEndInUTC());
+            foreach($this->customFields as $customField) {
+                if ($event->hasCustomField($customField)) {
+                    $newEvent->setCustomField($customField, $event->getCustomField($customField));
+                }
+            }
+            if (stripos($newEvent->getSummary(),$currentMonthLong) !== false) {
+                $newEvent->setSummary(str_ireplace($currentMonthLong, $newEvent->getStartAt()->format('F'), $newEvent->getSummary()));
+            } else if (stripos($newEvent->getSummary(),$currentMonthShort) !== false) {
+                $newEvent->setSummary(str_ireplace($currentMonthShort, $newEvent->getStartAt()->format('M'), $newEvent->getSummary()));
+            }
+            $out[] = $newEvent;
+        };
+        return $out;
 	}
 
 	public function isDateToSoonForArbitraryDate(\DateTime $newDate, \TimeSource $timeSource) {

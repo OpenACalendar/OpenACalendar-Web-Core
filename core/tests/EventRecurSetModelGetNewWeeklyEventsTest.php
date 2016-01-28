@@ -125,7 +125,37 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 		
 		
 	}
-	
-	
-	
+
+    function testDaysInAdvance1() {
+
+        TimeSource::mock(2016,6,1,9,0,0);
+
+
+        $event = new EventModel();
+        $event->setStartAt($this->mktime(2016,7,5,19,0,0));
+        $event->setEndAt($this->mktime(2016,7,5,21,0,0));
+
+        $eventSet = new EventRecurSetModel();
+        $eventSet->setTimeZoneName('Europe/London');
+
+        $newEvents = $eventSet->getNewWeeklyEvents($event, 60);
+
+        // This is the real test here.
+        // The days in advance is from current time NOT event start time, and therefore we should only have events up to 2016,6,1,9,0,0 + 60 days
+        $this->assertEquals(3, count($newEvents));
+
+        $this->assertEquals($this->mktime(2016,7,12,19,0,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2016,7,12,21,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2016,7,19,19,0,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2016,7,19,21,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2016,7,26,19,0,0)->format('r'), $newEvents[2]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2016,7,26,21,0,0)->format('r'), $newEvents[2]->getEndAt()->format('r'));
+
+    }
+
+
+
+
 }
