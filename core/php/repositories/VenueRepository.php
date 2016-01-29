@@ -11,6 +11,7 @@ use models\VenueModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use repositories\builders\EventRepositoryBuilder;
+use Slugify;
 
 /**
  *
@@ -44,7 +45,8 @@ class VenueRepository {
 	}
 
 	public function createWithMetaData(VenueModel $venue, SiteModel $site, VenueEditMetaDataModel $venueEditMetaDataModel) {
-		global $DB, $EXTENSIONHOOKRUNNER;
+		global $DB, $EXTENSIONHOOKRUNNER, $app;
+        $slugify = new Slugify($app);
 		
 		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$venueEditMetaDataModel->getUserAccount());
 		
@@ -56,13 +58,14 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, title,".
+			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, slug_human,  title,".
 					"description,lat,lng,country_id,area_id,created_at,approved_at,address,address_code, is_deleted) ".
-					"VALUES (:site_id, :slug, :title, ".
+					"VALUES (:site_id, :slug, :slug_human,  :title, ".
 					":description, :lat, :lng,:country_id, :area_id,:created_at,:approved_at,:address,:address_code, '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$venue->getSlug(),
+                    'slug_human'=>$slugify->process($venue->getTitle()),
 					'title'=>substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'lat'=>$venue->getLat(),
 					'lng'=>$venue->getLng(),
@@ -107,24 +110,44 @@ class VenueRepository {
 		if (strpos($slug, "-")) {
 			$slug = array_shift(explode("-", $slug, 2));
 		}
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT venue_information.* FROM venue_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$venue = new VenueModel();
 			$venue->setFromDataBaseRow($stat->fetch());
+			//  data migration .... if no human_slug, let's add one
+            if ($venue->getTitle() && !$venue->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $venue->setSlugHuman($slugify->process($venue->getTitle()));
+                $stat = $DB->prepare("UPDATE venue_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$venue->getId(),
+                    'slug_human'=>$venue->getSlugHuman(),
+                ));
+            }
 			return $venue;
 		}
 	}
 	
 	
 	public function loadById($id) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT venue_information.* FROM venue_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id, ));
 		if ($stat->rowCount() > 0) {
 			$venue = new VenueModel();
 			$venue->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($venue->getTitle() && !$venue->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $venue->setSlugHuman($slugify->process($venue->getTitle()));
+                $stat = $DB->prepare("UPDATE venue_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$venue->getId(),
+                    'slug_human'=>$venue->getSlugHuman(),
+                ));
+            }
 			return $venue;
 		}
 	}

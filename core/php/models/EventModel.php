@@ -20,6 +20,7 @@ class EventModel {
 	protected $site_id;
 	protected $site_slug;
 	protected $slug;
+	protected $slug_human;
 	protected $summary;
 	protected $description;
 	protected $group_id;
@@ -91,6 +92,7 @@ class EventModel {
 		$this->site_id = $data['site_id'];
 		$this->site_slug = isset($data['site_slug']) ? $data['site_slug'] : null;
 		$this->slug = $data['slug'];
+		$this->slug_human = $data['slug_human'];
 		$this->summary = $data['summary'];
 		$this->description = $data['description'];
 		$utc = new \DateTimeZone("UTC");
@@ -249,14 +251,36 @@ class EventModel {
 
     public function getSlugForUrl() {
         global $app;
-        $slugify = new Slugify($app);
-        $extraSlug = $slugify->process($this->summary);
-        return $this->slug.($extraSlug?"-".$extraSlug:'');
+        if ($this->slug_human) {
+            return $this->slug."-".$this->slug_human;
+        } else {
+            $slugify = new Slugify($app);
+            $extraSlug = $slugify->process($this->summary);
+            return $this->slug.($extraSlug?"-".$extraSlug:'');
+        }
     }
 
     public function setSlug($slug) {
 		$this->slug = $slug;
 	}
+
+    /**
+     * @param mixed $slug_human
+     */
+    public function setSlugHuman($slug_human)
+    {
+        $this->slug_human = $slug_human;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlugHuman()
+    {
+        return $this->slug_human;
+    }
+
+
 
 	public function getSummary() {
 		return $this->summary;

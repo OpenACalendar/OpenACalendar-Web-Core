@@ -12,6 +12,7 @@ use models\UserAccountModel;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
 use repositories\UserWatchesGroupRepository;
+use Slugify;
 
 /**
  *
@@ -34,8 +35,9 @@ class GroupRepository {
 
 	
 	public function create(GroupModel $group, SiteModel $site, UserAccountModel $creator) {
-		global $DB, $EXTENSIONHOOKRUNNER;
+		global $DB, $EXTENSIONHOOKRUNNER, $app;
 
+        $slugify = new Slugify($app);
 		$EXTENSIONHOOKRUNNER->beforeGroupSave($group,$creator);
 
 		try {
@@ -46,11 +48,12 @@ class GroupRepository {
 			$data = $stat->fetch();
 			$group->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO group_information (site_id, slug, title,url,description,created_at,twitter_username,approved_at) ".
-					"VALUES (:site_id, :slug, :title, :url, :description, :created_at, :twitter_username,:approved_at) RETURNING id");
+			$stat = $DB->prepare("INSERT INTO group_information (site_id, slug, slug_human,  title,url,description,created_at,twitter_username,approved_at) ".
+					"VALUES (:site_id, :slug, :slug_human,  :title, :url, :description, :created_at, :twitter_username,:approved_at) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$group->getSlug(),
+                    'slug_human'=>$slugify->process($group->getTitle()),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -86,24 +89,44 @@ class GroupRepository {
 	
 	
 	public function loadBySlug(SiteModel $site, $slug) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT group_information.* FROM group_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$group = new GroupModel();
 			$group->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($group->getTitle() && !$group->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $group->setSlugHuman($slugify->process($group->getTitle()));
+                $stat = $DB->prepare("UPDATE group_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$group->getId(),
+                    'slug_human'=>$group->getSlugHuman(),
+                ));
+            }
 			return $group;
 		}
 	}
 	
 	
 	public function loadById($id) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT group_information.* FROM group_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id, ));
 		if ($stat->rowCount() > 0) {
 			$group = new GroupModel();
 			$group->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($group->getTitle() && !$group->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $group->setSlugHuman($slugify->process($group->getTitle()));
+                $stat = $DB->prepare("UPDATE group_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$group->getId(),
+                    'slug_human'=>$group->getSlugHuman(),
+                ));
+            }
 			return $group;
 		}
 	}

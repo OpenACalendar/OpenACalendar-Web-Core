@@ -19,6 +19,7 @@ class AreaModel {
 	protected $id;
 	protected $site_id;
 	protected $slug;
+    protected $slug_human;
 	protected $title;
 	protected $description;
 	protected $country_id;
@@ -40,6 +41,7 @@ class AreaModel {
 		$this->id = $data['id'];
 		$this->site_id = $data['site_id'];
 		$this->slug = $data['slug'];
+        $this->slug_human = $data['slug_human'];
 		$this->title = $data['title'];
 		$this->description = $data['description'];
 		$this->country_id = $data['country_id'];
@@ -78,14 +80,36 @@ class AreaModel {
 
     public function getSlugForUrl() {
         global $app;
-        $slugify = new Slugify($app);
-        $extraSlug = $slugify->process($this->title);
-        return $this->slug.($extraSlug?"-".$extraSlug:'');
+        if ($this->slug_human) {
+            return $this->slug."-".$this->slug_human;
+        } else {
+            $slugify = new Slugify($app);
+            $extraSlug = $slugify->process($this->title);
+            return $this->slug.($extraSlug?"-".$extraSlug:'');
+        }
     }
 	
 	public function setSlug($slug) {
 		$this->slug = $slug;
 	}
+
+    /**
+     * @param mixed $slug_human
+     */
+    public function setSlugHuman($slug_human)
+    {
+        $this->slug_human = $slug_human;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlugHuman()
+    {
+        return $this->slug_human;
+    }
+
+
 
 	public function getTitle() {
 		return $this->title;

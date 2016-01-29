@@ -317,6 +317,7 @@ class SearchForDuplicateEventsTest  extends \BaseAppTest {
 			'id'=>1,
 			'site_id'=>1,
 			'slug'=>1,
+            'slug_human'=>'cat',
 			'summary'=>'Cat',
 			'description'=>'Cat',
 			'start_at'=>'2014:01:01 01:01:01',

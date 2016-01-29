@@ -22,6 +22,10 @@
 			<td>{{ tag.slug }}</td>
 		</tr>
 		<tr>
+			<th>Human Slug</th>
+			<td>{{ tag.slugHuman }}</td>
+		</tr>
+		<tr>
 			<th>Deleted</th>
 			<td>{% if tag.isDeleted %}Deleted{% else %}-{% endif %}</td>
 		</tr>

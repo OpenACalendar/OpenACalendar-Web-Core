@@ -9,6 +9,7 @@ use models\SiteModel;
 use models\EventModel;
 use models\UserAccountModel;
 use dbaccess\TagDBAccess;
+use Slugify;
 
 /**
  *
@@ -31,7 +32,8 @@ class TagRepository {
 
 	
 	public function create(TagModel $tag, SiteModel $site, UserAccountModel $creator) {
-		global $DB;
+		global $DB, $app;
+        $slugify = new Slugify($app);
 		try {
 			$DB->beginTransaction();
 
@@ -40,11 +42,12 @@ class TagRepository {
 			$data = $stat->fetch();
 			$tag->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO tag_information (site_id, slug, title,description,created_at,approved_at, is_deleted) ".
-					"VALUES (:site_id, :slug, :title, :description, :created_at,:approved_at, '0') RETURNING id");
+			$stat = $DB->prepare("INSERT INTO tag_information (site_id, slug, slug_human,  title,description,created_at,approved_at, is_deleted) ".
+					"VALUES (:site_id, :slug, :slug_human,  :title, :description, :created_at,:approved_at, '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$tag->getSlug(),
+                    'slug_human'=>$slugify->process($tag->getTitle()),
 					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$tag->getDescription(),
 					'created_at'=>\TimeSource::getFormattedForDataBase(),
@@ -72,12 +75,22 @@ class TagRepository {
 	
 	
 	public function loadBySlug(SiteModel $site, $slug) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT tag_information.* FROM tag_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$tag = new TagModel();
 			$tag->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($tag->getTitle() && !$tag->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $tag->setSlugHuman($slugify->process($tag->getTitle()));
+                $stat = $DB->prepare("UPDATE tag_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$tag->getId(),
+                    'slug_human'=>$tag->getSlugHuman(),
+                ));
+            }
 			return $tag;
 		}
 	}
@@ -85,12 +98,22 @@ class TagRepository {
 	
 	
 	public function loadById($id) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT tag_information.* FROM tag_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id ));
 		if ($stat->rowCount() > 0) {
 			$tag = new TagModel();
 			$tag->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($tag->getTitle() && !$tag->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $tag->setSlugHuman($slugify->process($tag->getTitle()));
+                $stat = $DB->prepare("UPDATE tag_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$tag->getId(),
+                    'slug_human'=>$tag->getSlugHuman(),
+                ));
+            }
 			return $tag;
 		}
 	}

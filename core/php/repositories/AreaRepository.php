@@ -16,6 +16,7 @@ use models\VenueEditMetaDataModel;
 use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
+use Slugify;
 
 /**
  *
@@ -37,7 +38,8 @@ class AreaRepository {
 	}
 	
 	public function create(AreaModel $area, AreaModel $parentArea = null, SiteModel $site, CountryModel $country, UserAccountModel $creator = null) {
-		global $DB, $EXTENSIONHOOKRUNNER;
+		global $DB, $EXTENSIONHOOKRUNNER, $app;
+        $slugify = new Slugify($app);
 
 		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$creator);
 
@@ -51,11 +53,12 @@ class AreaRepository {
 			
 			if ($parentArea) $area->setParentAreaId($parentArea->getId());
 			
-			$stat = $DB->prepare("INSERT INTO area_information (site_id, slug, title,description,country_id,parent_area_id,created_at,approved_at,cache_area_has_parent_generated, is_deleted) ".
-					"VALUES (:site_id, :slug, :title,:description,:country_id,:parent_area_id,:created_at,:approved_at,:cache_area_has_parent_generated, '0') RETURNING id");
+			$stat = $DB->prepare("INSERT INTO area_information (site_id, slug,  slug_human, title,description,country_id,parent_area_id,created_at,approved_at,cache_area_has_parent_generated, is_deleted) ".
+					"VALUES (:site_id, :slug, :slug_human,  :title,:description,:country_id,:parent_area_id,:created_at,:approved_at,:cache_area_has_parent_generated, '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$area->getSlug(),
+                    'slug_human'=>$slugify->process($area->getTitle()),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$area->getDescription(),
 					'country_id'=>$country->getId(),
@@ -95,36 +98,66 @@ class AreaRepository {
 	}
 
 	public function loadBySiteIDAndAreaSlug($siteID, $slug) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$siteID, 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$area = new AreaModel();
 			$area->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($area->getTitle() && !$area->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $area->setSlugHuman($slugify->process($area->getTitle()));
+                $stat = $DB->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$area->getId(),
+                    'slug_human'=>$area->getSlugHuman(),
+                ));
+            }
 			return $area;
 		}
 	}
 	
 	
 	public function loadBySlugAndCountry(SiteModel $site, $slug, CountryModel $country) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid AND country_id=:cid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug, 'cid'=>$country->getId() ));
 		if ($stat->rowCount() > 0) {
 			$area = new AreaModel();
 			$area->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($area->getTitle() && !$area->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $area->setSlugHuman($slugify->process($area->getTitle()));
+                $stat = $DB->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$area->getId(),
+                    'slug_human'=>$area->getSlugHuman(),
+                ));
+            }
 			return $area;
 		}
 	}
 	
 	
 	public function loadById($id) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT area_information.* FROM area_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id, ));
 		if ($stat->rowCount() > 0) {
 			$area = new AreaModel();
 			$area->setFromDataBaseRow($stat->fetch());
+            //  data migration .... if no human_slug, let's add one
+            if ($area->getTitle() && !$area->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $area->setSlugHuman($slugify->process($area->getTitle()));
+                $stat = $DB->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$area->getId(),
+                    'slug_human'=>$area->getSlugHuman(),
+                ));
+            }
 			return $area;
 		}
 	}

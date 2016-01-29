@@ -14,6 +14,7 @@ use \models\ImportedEventModel;
 use repositories\builders\UserAtEventRepositoryBuilder;
 use repositories\UserWatchesGroupRepository;
 use dbaccess\EventDBAccess;
+use Slugify;
 
 /**
  *
@@ -51,7 +52,8 @@ class EventRepository {
 
 	public function createWithMetaData(EventModel $event, SiteModel $site, EventEditMetaDataModel $eventEditMetaDataModel,
 			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null, $tags=array(), $medias=array()) {
-		global $DB;
+		global $DB, $app;
+        $slugify = new Slugify($app);
 		try {
 			$DB->beginTransaction();
 
@@ -60,15 +62,16 @@ class EventRepository {
 			$data = $stat->fetch();
 			$event->setSlug($data['c'] + 1);
 
-			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, summary,description,start_at,end_at,".
+			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, slug_human, summary,description,start_at,end_at,".
 				" created_at, event_recur_set_id,venue_id,country_id,timezone, ".
 				" url, ticket_url, is_physical, is_virtual, area_id, approved_at, is_deleted, is_cancelled, custom_fields) ".
-					" VALUES (:site_id, :slug, :summary, :description, :start_at, :end_at, ".
+					" VALUES (:site_id, :slug, :slug_human, :summary, :description, :start_at, :end_at, ".
 						" :created_at, :event_recur_set_id,:venue_id,:country_id,:timezone, ".
 						" :url, :ticket_url, :is_physical, :is_virtual, :area_id, :approved_at, '0', '0', :custom_fields) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
 					'slug'=>$event->getSlug(),
+                    'slug_human'=>$slugify->process($event->getSummary()),
 					'summary'=>substr($event->getSummary(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$event->getDescription(),
 					'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
@@ -224,7 +227,7 @@ class EventRepository {
 
 
 	public function loadByID($id) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 			" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 			" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
@@ -243,13 +246,23 @@ class EventRepository {
 				$event->setIdInImport($importedEvent->getIdInImport());
 				$event->setImportId($importedEvent->getImportId());
 			}
+            // another data migration .... if no human_slug, let's add one
+            if ($event->getSummary() && !$event->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $event->setSlugHuman($slugify->process($event->getSummary()));
+                $stat = $DB->prepare("UPDATE event_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$event->getId(),
+                    'slug_human'=>$event->getSlugHuman(),
+                ));
+            }
 			// ... and return
 			return $event;
 		}
 	}
 
 	public function loadBySlug(SiteModel $site, $slug) {
-		global $DB;
+		global $DB, $app;
 		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
@@ -268,6 +281,16 @@ class EventRepository {
 				$event->setIdInImport($importedEvent->getIdInImport());
 				$event->setImportId($importedEvent->getImportId());
 			}
+            // another data migration .... if no human_slug, let's add one
+            if ($event->getSummary() && !$event->getSlugHuman()) {
+                $slugify = new Slugify($app);
+                $event->setSlugHuman($slugify->process($event->getSummary()));
+                $stat = $DB->prepare("UPDATE event_information SET slug_human=:slug_human WHERE id=:id");
+                $stat->execute(array(
+                    'id'=>$event->getId(),
+                    'slug_human'=>$event->getSlugHuman(),
+                ));
+            }
 			// ... and return
 			return $event;
 		}
