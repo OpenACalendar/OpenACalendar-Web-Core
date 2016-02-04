@@ -40,7 +40,8 @@ class UserEmailsForm  extends AbstractType {
 	
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
+		global $app;
+
 		$choices = array(
 				'a'=>'You are attending',
 				'm'=>'You are or might be attending',
@@ -57,7 +58,7 @@ class UserEmailsForm  extends AbstractType {
 					)
 			    );
 		
-		$repo = new \repositories\UserNotificationPreferenceRepository();
+		$repo = new \repositories\UserNotificationPreferenceRepository($app);
 		
 		foreach($this->preferences as $key=>$preference) {
 			
@@ -88,7 +89,8 @@ class UserEmailsForm  extends AbstractType {
 	}
 	
 	public function savePreferences($form) {
-		$repo = new \repositories\UserNotificationPreferenceRepository();
+        global $app;
+		$repo = new \repositories\UserNotificationPreferenceRepository($app);
 		foreach($this->preferences as $key=>$preference) {
 			$repo->editEmailPreference($this->user, $preference->getUserNotificationPreferenceExtensionID(), 
 					$preference->getUserNotificationPreferenceType(), $form->get($key)->getData());

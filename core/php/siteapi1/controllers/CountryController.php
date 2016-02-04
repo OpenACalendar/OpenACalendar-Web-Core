@@ -37,7 +37,7 @@ class CountryController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array();
 		
-		$gr = new CountryRepository();
+		$gr = new CountryRepository($app);
 		$this->parameters['country'] = $gr->loadByTwoCharCode($slug);
 		if (!$this->parameters['country']) {
 			return false;

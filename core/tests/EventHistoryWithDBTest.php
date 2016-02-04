@@ -31,14 +31,14 @@ class EventHistoryWithDBTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		## Create Event
@@ -49,7 +49,7 @@ class EventHistoryWithDBTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2014,9,1,1,1,1));
 		$event->setEndAt(getUTCDateTime(2014,9,1,1,1,1));
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user);
 
 		## Edit event
@@ -64,7 +64,7 @@ class EventHistoryWithDBTest extends \BaseAppWithDBTest {
 		$eventRepo->delete($event, $user);
 
 		## Now save changed flags on these .....
-		$eventHistoryRepo = new EventHistoryRepository();
+		$eventHistoryRepo = new EventHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM event_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -74,7 +74,7 @@ class EventHistoryWithDBTest extends \BaseAppWithDBTest {
 		}
 
 		## Now load and check
-		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo = new HistoryRepositoryBuilder($this->app);
 		$historyRepo->setSite($site);
 		$historyRepo->setIncludeEventHistory(true);
 		$histories = $historyRepo->fetchAll();

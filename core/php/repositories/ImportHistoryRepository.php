@@ -5,6 +5,7 @@ namespace repositories;
 use models\ImportModel;
 use models\ImportHistoryModel;
 use models\UserAccountModel;
+use Silex\Application;
 
 /**
  *
@@ -16,14 +17,22 @@ use models\UserAccountModel;
  */
 class ImportHistoryRepository {
 
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
 	public function ensureChangedFlagsAreSet(ImportHistoryModel $importurlhistory) {
-		global $DB;
+
 		
 		// do we already have them?
 		if (!$importurlhistory->isAnyChangeFlagsUnknown()) return;
 		
 		// load last.
-		$stat = $DB->prepare("SELECT * FROM import_url_history WHERE import_url_id = :id AND created_at < :at ".
+		$stat = $this->app['db']->prepare("SELECT * FROM import_url_history WHERE import_url_id = :id AND created_at < :at ".
 				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$importurlhistory->getId(),'at'=>$importurlhistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
@@ -75,7 +84,7 @@ class ImportHistoryRepository {
 			$sqlParams['is_manual_events_creation_changed'] = $importurlhistory->getIsManualEventsCreationChanged() ? 1 : -1;
 		}
 
-		$statUpdate = $DB->prepare("UPDATE import_url_history SET ".
+		$statUpdate = $this->app['db']->prepare("UPDATE import_url_history SET ".
 			" is_new = :is_new, ".
 			implode(" , ",$sqlFields).
 			" WHERE import_url_id = :id AND created_at = :created_at");

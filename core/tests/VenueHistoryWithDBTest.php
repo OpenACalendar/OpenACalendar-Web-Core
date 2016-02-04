@@ -31,17 +31,17 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 		
 		## Create venue
@@ -51,7 +51,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$venue->setDescription("test test");
 		$venue->setCountryId($gb->getId());
 		
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue, $site, $user);
 		
 		## Edit venue
@@ -64,7 +64,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$venueRepo->edit($venue, $user);
 		
 		## Now save changed flags on these .....
-		$venueHistoryRepo = new VenueHistoryRepository();
+		$venueHistoryRepo = new VenueHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM venue_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -74,7 +74,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		}
 		
 		## Now load and check
-		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo = new HistoryRepositoryBuilder($this->app);
 		$historyRepo->setVenue($venue);
 		$historyRepo->setIncludeEventHistory(false);
 		$historyRepo->setIncludeGroupHistory(false);
@@ -110,17 +110,17 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 
 		## Create venue
@@ -130,7 +130,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$venue->setDescription("test test");
 		$venue->setCountryId($gb->getId());
 
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue, $site, $user);
 
 		## Edit venue
@@ -148,7 +148,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		$venueRepo->delete($venue, $user);
 
 		## Now save changed flags on these .....
-		$venueHistoryRepo = new VenueHistoryRepository();
+		$venueHistoryRepo = new VenueHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM venue_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -158,7 +158,7 @@ class VenueHistoryWithDBTest extends \BaseAppWithDBTest {
 		}
 
 		## Now load and check
-		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo = new HistoryRepositoryBuilder($this->app);
 		$historyRepo->setVenue($venue);
 		$historyRepo->setIncludeEventHistory(false);
 		$historyRepo->setIncludeGroupHistory(false);

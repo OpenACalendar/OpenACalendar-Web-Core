@@ -5,6 +5,7 @@ namespace newsfeedmodels;
 use api1exportbuilders\TraitATOM;
 use models\AreaHistoryModel;
 use models\SiteModel;
+use Silex\Application;
 
 /**
  *

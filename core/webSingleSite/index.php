@@ -26,7 +26,7 @@ if(!$CONFIG->isSingleSiteMode) {
 
 $app->before(function (Request $request) use ($app) {
 	# ////////////// Site
-	$siteRepository = new SiteRepository();
+	$siteRepository = new SiteRepository($app);
 	$site = $siteRepository->loadById($app['config']->singleSiteID);
 	if (!$site) {
 		die ("404 Not Found"); // TODO
@@ -57,7 +57,7 @@ $app->before(function (Request $request) use ($app) {
 	$app['currentSiteFeatures']->setFeaturesOnSite($app['currentSite']);
 
 	# ////////////// Permissions and Watch
-	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app);
 	// We do not check UserHasNoEditorPermissionsInSiteRepository(); because that is site mode only.
 	// In Single Site mode sysadmins can remove this right.
 	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite($app['currentUser'], $app['currentSite'], false, true);
@@ -67,7 +67,7 @@ $app->before(function (Request $request) use ($app) {
 	$app['currentUserActions'] = new UserActionsSiteList($app['currentSite'], $app['currentUserPermissions']);
 	$app['currentUserWatchesSite'] = false;
 	if ($app['currentUser']) {
-		$uwsr = new UserWatchesSiteRepository();
+		$uwsr = new UserWatchesSiteRepository($app);
 		$uws = $uwsr->loadByUserAndSite($app['currentUser'], $app['currentSite']);
 		$app['currentUserWatchesSite'] = $uws && $uws->getIsWatching();
 	}
@@ -100,7 +100,7 @@ $app->before(function (Request $request) use ($app) {
 	
 	# ////////////// Country
 	if (!$app['currentSite']->getCachedIsMultipleCountries()) {
-		$cr = new CountryRepository();
+		$cr = new CountryRepository($app);
 		$app['currentSiteHasOneCountry'] = $cr->loadBySite($app['currentSite']);
 		$app['twig']->addGlobal('currentSiteHasOneCountry', $app['currentSiteHasOneCountry']);	
 	}

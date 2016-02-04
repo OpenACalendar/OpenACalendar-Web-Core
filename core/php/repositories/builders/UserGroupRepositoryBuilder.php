@@ -44,7 +44,7 @@ class UserGroupRepositoryBuilder  extends BaseRepositoryBuilder {
 
 
 	protected function build() {
-		global $DB;
+
 
 		if ($this->site) {
 			$this->joins[] = " JOIN user_group_in_site ON user_group_in_site.user_group_id = user_group_information.id ".
@@ -63,7 +63,7 @@ class UserGroupRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 
 	protected function buildStat() {
-		global $DB;
+
 
 		$sql = "SELECT user_group_information.* FROM user_group_information ".
 			implode(" ", $this->joins).
@@ -71,7 +71,7 @@ class UserGroupRepositoryBuilder  extends BaseRepositoryBuilder {
 			" ORDER BY user_group_information.title ASC ".
 			( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 

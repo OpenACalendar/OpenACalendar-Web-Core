@@ -28,14 +28,14 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		// reload user object so all flags set correctly
 		$user = $userRepo->loadByUserName("test");
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		## Noone can create sites
 
@@ -51,7 +51,7 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$userGroupModel->setTitle("TITLE");
 		$userGroupModel->setIsIncludesUsers(true);
 
-		$userGroupRepo = new \repositories\UserGroupRepository();
+		$userGroupRepo = new \repositories\UserGroupRepository($this->app);
 		$userGroupRepo->createForIndex($userGroupModel);
 
 		$userGroupRepo->addPermissionToGroup(new \userpermissions\CreateSiteUserPermission(), $userGroupModel, null);
@@ -84,7 +84,7 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$userUnverified->setUsername("unverified");
 		$userUnverified->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($userVerified);
 		$userRepo->verifyEmail($userVerified);
 		$userRepo->create($userUnverified);
@@ -98,7 +98,7 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$user = $userRepo->loadByUserName("test");
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		## Noone can create sites
 
@@ -117,7 +117,7 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$userGroupModel->setTitle("TITLE");
 		$userGroupModel->setIsIncludesVerifiedUsers(true);
 
-		$userGroupRepo = new \repositories\UserGroupRepository();
+		$userGroupRepo = new \repositories\UserGroupRepository($this->app);
 		$userGroupRepo->createForIndex($userGroupModel);
 
 		$userGroupRepo->addPermissionToGroup(new \userpermissions\CreateSiteUserPermission(), $userGroupModel, null);
@@ -158,7 +158,7 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$userOther->setUsername("other");
 		$userOther->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->verifyEmail($user);
 		$userRepo->create($userOther);
@@ -169,7 +169,7 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$user = $userRepo->loadByUserName("test");
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		## Noone can create sites
 
@@ -187,7 +187,7 @@ class UserPermissionsIndexConfigFalseTest extends \BaseAppWithDBTest {
 		$userGroupModel = new \models\UserGroupModel();
 		$userGroupModel->setTitle("TITLE");
 
-		$userGroupRepo = new \repositories\UserGroupRepository();
+		$userGroupRepo = new \repositories\UserGroupRepository($this->app);
 		$userGroupRepo->createForIndex($userGroupModel);
 		$userGroupRepo->addUserToGroup($user, $userGroupModel);
 

@@ -33,21 +33,21 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 	function testInArea() {
 		$this->addCountriesToTestDB();
 		
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$area1 = new AreaModel();
@@ -56,8 +56,8 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 		$area2 = new AreaModel();
 		$area2->setTitle("england");
 		
-		$areaRepo = new AreaRepository();
-		$countryRepo = new CountryRepository();
+		$areaRepo = new AreaRepository($this->app);
+		$countryRepo = new CountryRepository($this->app);
 		$areaRepo->create($area1, null, $site, $countryRepo->loadByTwoCharCode('GB'), $user);
 		$areaRepo->buildCacheAreaHasParent($area1);
 		$areaRepo->create($area2, null, $site, $countryRepo->loadByTwoCharCode('GB'), $user);
@@ -70,12 +70,12 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
 		$event->setAreaId($area1->getId());
 				
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		#test - find in erb
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$erb->setArea($area1);
 		$events = $erb->fetchAll();
@@ -85,7 +85,7 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 		
 		#test - don't find in erb
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$erb->setArea($area2);
 		$events = $erb->fetchAll();
@@ -99,21 +99,21 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 	function testInChildArea() {
 		$this->addCountriesToTestDB();
 		
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$area1 = new AreaModel();
@@ -125,8 +125,8 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 		$area2 = new AreaModel();
 		$area2->setTitle("england");
 		
-		$areaRepo = new AreaRepository();
-		$countryRepo = new CountryRepository();
+		$areaRepo = new AreaRepository($this->app);
+		$countryRepo = new CountryRepository($this->app);
 		$areaRepo->create($area1, null, $site, $countryRepo->loadByTwoCharCode('GB'), $user);
 		$areaRepo->buildCacheAreaHasParent($area1);
 		$areaRepo->create($area1child, $area1, $site, $countryRepo->loadByTwoCharCode('GB'), $user);
@@ -141,12 +141,12 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
 		$event->setAreaId($area1child->getId());
 				
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		#test - find in erb
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$erb->setArea($area1);
 		$events = $erb->fetchAll();
@@ -157,7 +157,7 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 		
 		#test - find in erb
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$erb->setArea($area1child);
 		$events = $erb->fetchAll();
@@ -167,7 +167,7 @@ class EventInAreaTest extends \BaseAppWithDBTest {
 		
 		#test - don't find in erb
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$erb->setArea($area2);
 		$events = $erb->fetchAll();

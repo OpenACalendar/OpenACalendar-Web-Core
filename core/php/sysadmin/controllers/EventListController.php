@@ -25,14 +25,14 @@ class EventListController {
 	function index($siteid, Request $request, Application $app) {
 		
 		
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 		
 		if (!$site) {
 			die("404");
 		}
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
 		$erb->setSite($site);
 		$erb->setOrderByStartAt(true);
 		$events = $erb->fetchAll();

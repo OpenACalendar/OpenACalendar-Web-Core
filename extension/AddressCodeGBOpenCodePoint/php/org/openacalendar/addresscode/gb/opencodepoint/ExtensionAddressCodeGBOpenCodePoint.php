@@ -33,7 +33,7 @@ class ExtensionAddressCodeGBOpenCodePoint extends \BaseExtension {
 	public function addDetailsToVenue(VenueModel $venue) {
 
 		if ($venue->getAddressCode() && (!$venue->getLat() || !$venue->getLng())) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($this->app);
 			$gb = $cr->loadByTwoCharCode("GB");
 			if ($venue->getCountryId() == $gb->getId()) {
 				list($lat,$lng) = AddressCodeGBOpenCodePointGet::get($venue->getAddressCode());

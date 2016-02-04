@@ -140,8 +140,8 @@ class ImportModel {
 	}
 	
 	public function isShouldExpireNow() {
-		global $CONFIG;
-		$r = new ImportRepository();
+		global $CONFIG, $app;
+		$r = new ImportRepository($app);
 		$lastEdit = $r->getLastEditDateForImportURL($this);
 		return $lastEdit->getTimeStamp() < (\TimeSource::time() - $CONFIG->importExpireSecondsAfterLastEdit);
 	}

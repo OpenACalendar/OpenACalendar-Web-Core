@@ -34,9 +34,9 @@ class UpdateVenueFutureEventsCacheTask extends \BaseTask {
 
 	protected function run()
 	{
-		$venueRepository = new VenueRepository();
+		$venueRepository = new VenueRepository($this->app);
 
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($this->app);
 		$count = 0;
 		foreach($vrb->fetchAll() as $venue) {
 

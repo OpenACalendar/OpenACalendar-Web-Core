@@ -36,14 +36,14 @@ class EventRecurSetModelFilterEventsForExistingTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -51,14 +51,14 @@ class EventRecurSetModelFilterEventsForExistingTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		$event1 = new EventModel();
 		$event1->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event1->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event1, $site, $user, $group);
 		
 		$event2 = new EventModel();
@@ -86,14 +86,14 @@ class EventRecurSetModelFilterEventsForExistingTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -101,14 +101,14 @@ class EventRecurSetModelFilterEventsForExistingTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		$event1 = new EventModel();
 		$event1->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event1->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event1, $site, $user, $group);
 		
 		// this event is not in the same group as event1 so it won't count as a duplicate
@@ -137,14 +137,14 @@ class EventRecurSetModelFilterEventsForExistingTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -152,7 +152,7 @@ class EventRecurSetModelFilterEventsForExistingTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		$event1 = new EventModel();
@@ -160,7 +160,7 @@ class EventRecurSetModelFilterEventsForExistingTest extends \BaseAppWithDBTest {
 		$event1->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event1->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event1, $site, $user);
 		
 		

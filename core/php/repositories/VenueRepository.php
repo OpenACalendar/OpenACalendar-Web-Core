@@ -11,6 +11,7 @@ use models\VenueModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use repositories\builders\EventRepositoryBuilder;
+use Silex\Application;
 use Slugify;
 
 /**
@@ -23,14 +24,17 @@ use Slugify;
  */
 class VenueRepository {
 
+    /** @var Application */
+    private  $app;
+
 	/** @var  \dbaccess\VenueDBAccess */
 	protected $venueDBAccess;
 
 
-	function __construct()
+	function __construct(Application $app)
 	{
-		global $DB;
-		$this->venueDBAccess = new VenueDBAccess($DB, new \TimeSource());
+        $this->app = $app;
+		$this->venueDBAccess = new VenueDBAccess($app);
 	}
 
 
@@ -45,20 +49,19 @@ class VenueRepository {
 	}
 
 	public function createWithMetaData(VenueModel $venue, SiteModel $site, VenueEditMetaDataModel $venueEditMetaDataModel) {
-		global $DB, $EXTENSIONHOOKRUNNER, $app;
-        $slugify = new Slugify($app);
+        $slugify = new Slugify($this->app);
 		
-		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$venueEditMetaDataModel->getUserAccount());
+		$this->app['extensionhookrunner']->beforeVenueSave($venue,$venueEditMetaDataModel->getUserAccount());
 		
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
-			$stat = $DB->prepare("SELECT max(slug) AS c FROM venue_information WHERE site_id=:site_id");
+			$stat = $this->app['db']->prepare("SELECT max(slug) AS c FROM venue_information WHERE site_id=:site_id");
 			$stat->execute(array('site_id'=>$site->getId()));
 			$data = $stat->fetch();
 			$venue->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO venue_information (site_id, slug, slug_human,  title,".
+			$stat = $this->app['db']->prepare("INSERT INTO venue_information (site_id, slug, slug_human,  title,".
 					"description,lat,lng,country_id,area_id,created_at,approved_at,address,address_code, is_deleted) ".
 					"VALUES (:site_id, :slug, :slug_human,  :title, ".
 					":description, :lat, :lng,:country_id, :area_id,:created_at,:approved_at,:address,:address_code, '0') RETURNING id");
@@ -74,13 +77,13 @@ class VenueRepository {
 					'address_code'=>$venue->getAddressCode(),
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				));
 			$data = $stat->fetch();
 			$venue->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new, is_deleted, edit_comment) VALUES ".
+			$stat = $this->app['db']->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new, is_deleted, edit_comment) VALUES ".
 					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1', '0', :edit_comment)");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
@@ -93,15 +96,15 @@ class VenueRepository {
 					'user_account_id'=>($venueEditMetaDataModel->getUserAccount() ? $venueEditMetaDataModel->getUserAccount()->getId() : null),
 					'country_id'=>$venue->getCountryId(),
 					'area_id'=>$venue->getAreaId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'edit_comment'=>$venueEditMetaDataModel->getEditComment(),
 				));
 			$data = $stat->fetch();
 			
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 	
@@ -110,17 +113,16 @@ class VenueRepository {
 		if (strpos($slug, "-")) {
 			$slug = array_shift(explode("-", $slug, 2));
 		}
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT venue_information.* FROM venue_information WHERE slug =:slug AND site_id =:sid");
+		$stat = $this->app['db']->prepare("SELECT venue_information.* FROM venue_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$venue = new VenueModel();
 			$venue->setFromDataBaseRow($stat->fetch());
 			//  data migration .... if no human_slug, let's add one
             if ($venue->getTitle() && !$venue->getSlugHuman()) {
-                $slugify = new Slugify($app);
+                $slugify = new Slugify($this->app);
                 $venue->setSlugHuman($slugify->process($venue->getTitle()));
-                $stat = $DB->prepare("UPDATE venue_information SET slug_human=:slug_human WHERE id=:id");
+                $stat = $this->app['db']->prepare("UPDATE venue_information SET slug_human=:slug_human WHERE id=:id");
                 $stat->execute(array(
                     'id'=>$venue->getId(),
                     'slug_human'=>$venue->getSlugHuman(),
@@ -132,17 +134,16 @@ class VenueRepository {
 	
 	
 	public function loadById($id) {
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT venue_information.* FROM venue_information WHERE id = :id");
+		$stat = $this->app['db']->prepare("SELECT venue_information.* FROM venue_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id, ));
 		if ($stat->rowCount() > 0) {
 			$venue = new VenueModel();
 			$venue->setFromDataBaseRow($stat->fetch());
             //  data migration .... if no human_slug, let's add one
             if ($venue->getTitle() && !$venue->getSlugHuman()) {
-                $slugify = new Slugify($app);
+                $slugify = new Slugify($this->app);
                 $venue->setSlugHuman($slugify->process($venue->getTitle()));
-                $stat = $DB->prepare("UPDATE venue_information SET slug_human=:slug_human WHERE id=:id");
+                $stat = $this->app['db']->prepare("UPDATE venue_information SET slug_human=:slug_human WHERE id=:id");
                 $stat->execute(array(
                     'id'=>$venue->getId(),
                     'slug_human'=>$venue->getSlugHuman(),
@@ -162,13 +163,12 @@ class VenueRepository {
 	}
 
 	public function editWithMetaData(VenueModel $venue, VenueEditMetaDataModel $venueEditMetaDataModel) {
-		global $DB, $EXTENSIONHOOKRUNNER;
-		
+
 		if ($venue->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted venue!");
 		}
 		
-		$EXTENSIONHOOKRUNNER->beforeVenueSave($venue,$venueEditMetaDataModel->getUserAccount());
+		$this->app['extensionhookrunner']->beforeVenueSave($venue,$venueEditMetaDataModel->getUserAccount());
 
 
 		$fields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_deleted');
@@ -215,12 +215,12 @@ class VenueRepository {
 	}
 
 	public function markDuplicateWithMetaData(VenueModel $duplicateVenue, VenueModel $originalVenue, VenueEditMetaDataModel $venueEditMetaDataModel) {
-		global $DB;
+
 
 		if ($duplicateVenue->getId() == $originalVenue->getId()) return;
 
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
 			$duplicateVenue->setIsDeleted(true);
 			$duplicateVenue->setIsDuplicateOfId($originalVenue->getId());
@@ -230,17 +230,17 @@ class VenueRepository {
 			$eventEditMetaData = new EventEditMetaDataModel();
 			$eventEditMetaData->setForSecondaryEditFromPrimaryEditMeta($venueEditMetaDataModel);
 
-			$eventRepoBuilder = new EventRepositoryBuilder();
+			$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 			$eventRepoBuilder->setVenue($duplicateVenue);
-			$eventDBAccess = new EventDBAccess($DB, new \TimeSource());
+			$eventDBAccess = new EventDBAccess($this->app);
 			foreach($eventRepoBuilder->fetchAll() as $event) {
 				$event->setVenueId($originalVenue->getId());
 				$eventDBAccess->update($event, array('venue_id'), $eventEditMetaData);
 			}
 
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 
@@ -256,40 +256,40 @@ class VenueRepository {
 	 * @throws Exception
 	 */
 	public function purge(VenueModel $venue) {
-		global $DB;
+
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
-			$stat = $DB->prepare("UPDATE event_history SET venue_id = NULL, venue_id_changed=0 WHERE venue_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE event_history SET venue_id = NULL, venue_id_changed=0 WHERE venue_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
-			$stat = $DB->prepare("UPDATE event_information SET venue_id = NULL WHERE venue_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE event_information SET venue_id = NULL WHERE venue_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
-			$stat = $DB->prepare("UPDATE venue_history SET is_duplicate_of_id = NULL, is_duplicate_of_id_changed = 0 WHERE is_duplicate_of_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE venue_history SET is_duplicate_of_id = NULL, is_duplicate_of_id_changed = 0 WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
-			$stat = $DB->prepare("UPDATE venue_information SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE venue_information SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
-			$stat = $DB->prepare("DELETE FROM venue_history WHERE venue_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM venue_history WHERE venue_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
-			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
-			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_venue WHERE sysadmin_comment_id=:id");
-			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_venue WHERE venue_id=:id");
+			$statDeleteComment = $this->app['db']->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
+			$statDeleteLink = $this->app['db']->prepare("DELETE FROM sysadmin_comment_about_venue WHERE sysadmin_comment_id=:id");
+			$stat = $this->app['db']->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_venue WHERE venue_id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 			while($data = $stat->fetch()) {
 				$statDeleteLink->execute(array($data['sysadmin_comment_id']));
 				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
 			}
 
-			$stat = $DB->prepare("DELETE FROM venue_information WHERE id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM venue_information WHERE id=:id");
 			$stat->execute(array('id'=>$venue->getId()));
 
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 			throw $e;
 		}
 
@@ -297,10 +297,10 @@ class VenueRepository {
 
 
 	public function updateFutureEventsCache(VenueModel $venue) {
-		global $DB;
-		$statUpdate = $DB->prepare("UPDATE venue_information SET cached_future_events=:count WHERE id=:id");
 
-		$erb = new EventRepositoryBuilder();
+		$statUpdate = $this->app['db']->prepare("UPDATE venue_information SET cached_future_events=:count WHERE id=:id");
+
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setVenue($venue);
 		$erb->setIncludeDeleted(false);
 		$erb->setIncludeCancelled(false);

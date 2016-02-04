@@ -19,7 +19,7 @@ class GroupListController  {
 	
 	public function listJson (Request $request, Application $app) {
 		
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($app);
 		$grb->setSite($app['currentSite']);
 		
 		$ourRequest = new \Request($request);

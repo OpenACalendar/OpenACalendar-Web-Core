@@ -75,7 +75,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 			'required'=>false
 		));
 
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {

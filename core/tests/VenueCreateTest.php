@@ -27,17 +27,17 @@ class VenueCreateTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 
 		$venue = new VenueModel();
@@ -45,17 +45,17 @@ class VenueCreateTest extends \BaseAppWithDBTest {
 		$venue->setDescription("test test");
 		$venue->setCountryId($gb->getId());
 
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue, $site, $user);
 		
 		$this->checkVenueInTest1($venueRepo->loadById($venue->getId()));
 		$this->checkVenueInTest1($venueRepo->loadBySlug($site, $venue->getSlug()));
 		
-		$grb = new VenueRepositoryBuilder();
+		$grb = new VenueRepositoryBuilder($this->app);
 		$grb->setFreeTextsearch('test');
 		$this->assertEquals(1, count($grb->fetchAll()));	
 		
-		$grb = new VenueRepositoryBuilder();
+		$grb = new VenueRepositoryBuilder($this->app);
 		$grb->setFreeTextsearch('cats');
 		$this->assertEquals(0, count($grb->fetchAll()));	
 

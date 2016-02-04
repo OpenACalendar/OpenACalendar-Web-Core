@@ -34,9 +34,9 @@ class UpdateGroupFutureEventsCacheTask extends \BaseTask {
 
     protected function run()
     {
-        $groupRepository = new GroupRepository();
+        $groupRepository = new GroupRepository($this->app);
 
-        $grb = new GroupRepositoryBuilder();
+        $grb = new GroupRepositoryBuilder($this->app);
         $count = 0;
         foreach($grb->fetchAll() as $venue) {
 

@@ -30,7 +30,7 @@ class CountryController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array();
 		
-		$gr = new CountryRepository();
+		$gr = new CountryRepository($app);
 		// we must accept both ID and Slug. Slug is proper one to use, but some JS needs to load by ID.
 		$this->parameters['country'] = intval($slug) ? $gr->loadById($slug) :  $gr->loadByTwoCharCode($slug);
 		if (!$this->parameters['country']) {
@@ -38,12 +38,12 @@ class CountryController {
 		}
 		
 		// check this country is or was valid for this site
-		$countryInSiteRepo = new CountryInSiteRepository();
+		$countryInSiteRepo = new CountryInSiteRepository($app);
 		if (!$countryInSiteRepo->isCountryInSite($this->parameters['country'], $app['currentSite'])) {
 			return false;
 		}
 		
-		$areaRepoBuilder = new AreaRepositoryBuilder();
+		$areaRepoBuilder = new AreaRepositoryBuilder($app);
 		$areaRepoBuilder->setSite($app['currentSite']);
 		$areaRepoBuilder->setCountry($this->parameters['country']);
 		$areaRepoBuilder->setNoParentArea(true);
@@ -85,7 +85,7 @@ class CountryController {
 			$app->abort(404, "Country does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -107,7 +107,7 @@ class CountryController {
 		}
 
 		
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -146,7 +146,7 @@ class CountryController {
 
 			if ($form->isValid()) {
 				
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($app);
 				$areaRepository->create($area, null, $app['currentSite'], $this->parameters['country'], $app['currentUser']);
 				// don't need to call $areaRepository->buildCacheAreaHasParent($area); - there are no parents!
 				return $app->redirect("/area/".$area->getSlug());
@@ -192,7 +192,7 @@ class CountryController {
 		}
 
 		if (isset($_GET['includeVenues']) && $_GET['includeVenues']) {
-			$vrb = new VenueRepositoryBuilder();
+			$vrb = new VenueRepositoryBuilder($app);
 			$vrb->setIncludeDeleted(false);
 			$vrb->setSite($app['currentSite']);
 			$vrb->setCountry($this->parameters['country']);

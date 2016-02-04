@@ -21,14 +21,14 @@ class AreaListController {
 	function index($siteid, Request $request, Application $app) {
 		
 		
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 		
 		if (!$site) {
 			die("404");
 		}
 		
-		$arb = new AreaRepositoryBuilder();
+		$arb = new AreaRepositoryBuilder($app);
 		$arb->setSite($site);
 		$areas = $arb->fetchAll();
 		

@@ -140,7 +140,7 @@ class SysadminCommentRepositoryBuilder extends BaseRepositoryBuilder {
 
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		
 		$sql = "SELECT " . implode(", ",$this->select) . " FROM sysadmin_comment_information ".
@@ -148,7 +148,7 @@ class SysadminCommentRepositoryBuilder extends BaseRepositoryBuilder {
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 				" ORDER BY sysadmin_comment_information.created_at ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 		
 	}

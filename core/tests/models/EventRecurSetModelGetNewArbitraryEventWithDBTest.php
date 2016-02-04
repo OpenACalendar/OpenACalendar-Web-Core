@@ -31,14 +31,14 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -56,13 +56,13 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 		$event->setUrl("http://www.info.com");
 		$event->setTicketUrl("http://www.tickets.com");
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());
 
 
-		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSetRepository = new EventRecurSetRepository($this->app);
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($event);
 		$eventRecurSet->setTimeZoneName($event->getTimezone());
 
@@ -92,14 +92,14 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -117,13 +117,13 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 		$event->setUrl("http://www.info.com");
 		$event->setTicketUrl("http://www.tickets.com");
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());
 
 
-		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSetRepository = new EventRecurSetRepository($this->app);
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($event);
 		$eventRecurSet->setTimeZoneName($event->getTimezone());
 

@@ -7,6 +7,7 @@ use models\EventEditMetaDataModel;
 use models\UserAccountModel;
 use models\EventModel;
 use models\EventHistoryModel;
+use Silex\Application;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -27,11 +28,11 @@ class EventDBAccess {
 	protected $timesource;
 
 
-	function __construct($db, $timesource)
-	{
-		$this->db = $db;
-		$this->timesource = $timesource;
-	}
+    function __construct(Application $application)
+    {
+        $this->db = $application['db'];
+        $this->timesource = $application['timesource'];
+    }
 
 
 	protected $possibleFields = array('summary','description','start_at','end_at','venue_id','area_id','country_id','timezone',

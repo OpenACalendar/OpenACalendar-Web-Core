@@ -31,7 +31,7 @@ class ContactSupportController {
 		}
 		
 		if ($this->parameters['contactsupport']->getUserAccountId()) {
-			$ur = new UserAccountRepository;
+			$ur = new UserAccountRepository($app);
 			$this->parameters['user'] = $ur->loadByID($this->parameters['contactsupport']->getUserAccountId());
 		}
 		

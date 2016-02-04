@@ -36,22 +36,22 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		
 		// User will watch site automatically in site->create()
 		
 		# Test
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		$data = $userWatchesSite->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInSiteId($site->getId()));
 		$this->assertFalse($data['moreEventsNeeded']);
@@ -71,14 +71,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -91,14 +91,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user);
 		
 		// User will watch site automatically in site->create()
 				
 		# Test
 		$this->app['timesource']->mock(2013, 9, 1, 0, 0, 0);
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		$data = $userWatchesSite->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInSiteId($site->getId()));
 		$this->assertTrue($data['moreEventsNeeded']);
@@ -119,14 +119,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -139,14 +139,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user);
 		
 		// User will watch site automatically in site->create()
 				
 		# Test
 		$this->app['timesource']->mock(2013, 6, 1, 0, 0, 0);
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		$data = $userWatchesSite->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInSiteId($site->getId()));
 		$this->assertFalse($data['moreEventsNeeded']);
@@ -168,14 +168,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -188,14 +188,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user);
 		
 		// User will watch site automatically in site->create()
 				
 		# Test
 		$this->app['timesource']->mock(2013, 6, 1, 0, 0, 0);
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		$data = $userWatchesSite->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInSiteId($site->getId()));
 		$this->assertTrue($data['moreEventsNeeded']);
@@ -219,14 +219,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -239,11 +239,11 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user);
 		
 		// User will watch site automatically in site->create()
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		
 		$this->app['timesource']->mock(2013, 5, 2, 0, 0, 0);
@@ -251,7 +251,7 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		
 		# Test
 		$this->app['timesource']->mock(2013, 6, 1, 0, 0, 0);
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		$data = $userWatchesSite->getPromptEmailData($site, $eventRepo->loadLastNonDeletedNonImportedByStartTimeInSiteId($site->getId()));
 		$this->assertFalse($data['moreEventsNeeded']);
@@ -272,14 +272,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -292,12 +292,12 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user);
 		
 		// User will watch site automatically in site->create()
 		
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		
 		$this->app['timesource']->mock(2013, 6, 1, 0, 0, 0);
@@ -325,14 +325,14 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -345,12 +345,12 @@ class UserWatchesSitePromptTest extends \BaseAppWithDBTest {
 		$end->setTime(12,0,0);
 		$event->setEndAt($end);
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user);
 		
 		// User will watch site automatically in site->create()
 		
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		
 		#Before email sent!

@@ -77,10 +77,10 @@ foreach(array('SiteID','Subject','FromEmail','FromName','TimeZone','IntroTXTFile
 }
 
 // ######################################################### Load site, build query
-$siteRepository = new SiteRepository();
+$siteRepository = new SiteRepository($app);
 $site = $siteRepository->loadById($thisconfig->get('SiteID'));
 if (!$site) die("NO SITE?\n");
-$calendar = new \RenderCalendar();
+$calendar = new \RenderCalendar($app);
 $calendar->getEventRepositoryBuilder()->setSite($site);
 $calendar->getEventRepositoryBuilder()->setIncludeDeleted(false);
 $calendar->getEventRepositoryBuilder()->setIncludeCancelled(true);
@@ -110,7 +110,7 @@ $calendar->setStartAndEnd($start, $end);
 // ######################################################### Filters?
 $area = null;
 if ($thisconfig->hasValue('AreaID')) {
-	$repo = new repositories\AreaRepository();
+	$repo = new repositories\AreaRepository($app);
 	$area = $repo->loadById($thisconfig->get('AreaID'));
 	if ($area) {
 		$calendar->getEventRepositoryBuilder()->setArea($area);
@@ -127,7 +127,7 @@ $calData = $calendar->getData();
 
 $childAreas = array();
 if ($thisconfig->getBoolean('ListChildAreas', false)) {
-	$areaRepoBuilder = new \repositories\builders\AreaRepositoryBuilder();
+	$areaRepoBuilder = new \repositories\builders\AreaRepositoryBuilder($app);
 	$areaRepoBuilder->setSite($site);
 	$areaRepoBuilder->setIncludeDeleted(false);
 
@@ -137,7 +137,7 @@ if ($thisconfig->getBoolean('ListChildAreas', false)) {
 		$areaRepoBuilder->setNoParentArea(true);
 	}
 	$childAreas = array();
-	$areaRepository = new AreaRepository();
+	$areaRepository = new AreaRepository($app);
 	foreach($areaRepoBuilder->fetchAll() as $area) {
 		$areaRepository->updateFutureEventsCache($area);
 		if ($thisconfig->getBoolean('ListChildAreasWithNoEvents', false) || $area->getCachedFutureEvents() > 0) {

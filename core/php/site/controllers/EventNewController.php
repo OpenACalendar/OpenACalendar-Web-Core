@@ -75,7 +75,7 @@ class EventNewController {
 
 		// check for incoming area
 		if (isset($_GET['area']) && trim($_GET['area'])) {
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$area = $ar->loadBySlug($app['currentSite'], $request->query->get('area'));
 			if ($area) {
 				$incomingData['area.id'] = $area->getId();
@@ -85,7 +85,7 @@ class EventNewController {
 
 		// check for incoming group
 		if (isset($_GET['group']) && trim($_GET['group'])) {
-			$gr = new GroupRepository();
+			$gr = new GroupRepository($app);
 			$group = $gr->loadBySlug($app['currentSite'], $request->query->get('group'));
 			if ($group) {
 				$newEventDraft->setDetailsValue('group.id',$group->getId());
@@ -110,7 +110,7 @@ class EventNewController {
 			$newEventDraft->setDetailsValue('incoming.' . $k, $v);
 		}
 
-		$repo = new NewEventDraftRepository();
+		$repo = new NewEventDraftRepository($app);
 		$repo->create($newEventDraft);
 
 		$steps = $this->getSteps($request, $app, $newEventDraft);
@@ -134,7 +134,7 @@ class EventNewController {
 
 		$this->parameters = array('draft' => null);
 
-		$repo = new NewEventDraftRepository();
+		$repo = new NewEventDraftRepository($app);
 		$this->parameters['draft'] = $repo->loadBySlugForSiteAndUser($draftslug, $app['currentSite'], $app['currentUser']);
 		if (!$this->parameters['draft']) {
 			return false;
@@ -232,7 +232,7 @@ class EventNewController {
 				}
 				$eventEditMetaData->setFromRequest($request);
 
-				$repo = new EventRepository();
+				$repo = new EventRepository($app);
 				$repo->createWithMetaData($event, $app['currentSite'], $eventEditMetaData);
 
 
@@ -291,7 +291,7 @@ class EventNewController {
 			$this->parameters = array_merge($this->parameters, $this->parameters['currentStep']->onThisStepSetUpPage());
 
 			if ($this->parameters['currentStep']->onThisStepProcessPage() && 'POST' == $request->getMethod()) {
-				$repo = new NewEventDraftRepository();
+				$repo = new NewEventDraftRepository($app);
 				$repo->saveProgress($this->parameters['draft']);
 				if ($this->parameters['currentStep']->getIsAllInformationGathered()) {
 					return $app->redirect('/event/new/' . $this->parameters['draft']->getSlug() . "/" . $this->parameters['nextStepID']);
@@ -340,7 +340,7 @@ class EventNewController {
 
 		if ($request->query->get('notDuplicateSlugs')) {
 			if ($this->parameters['draft']->addNotDuplicateEvents(explode(",", $request->query->get('notDuplicateSlugs')))) {
-				$repo = new NewEventDraftRepository();
+				$repo = new NewEventDraftRepository($app);
 				$repo->saveNotDuplicateEvents($this->parameters['draft']);
 			}
 		}
@@ -391,13 +391,13 @@ class EventNewController {
 			return $app->abort(404);
 		}
 
-		$er = new EventRepository();
+		$er = new EventRepository($app);
 		$event = $er->loadBySlug($app['currentSite'], $eventslug);
 		if (!$event) {
 			return $app->abort(404);
 		}
 
-		$ner = new NewEventDraftRepository();
+		$ner = new NewEventDraftRepository($app);
 		$ner->markIsDuplicateOf($this->parameters['draft'], $event);
 
 		return $app->redirect('/event/' . $event->getSlugForUrl());

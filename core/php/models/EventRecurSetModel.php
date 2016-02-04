@@ -320,7 +320,8 @@ class EventRecurSetModel {
 	 * @return Array New proposed events where duplicates don't exist.
 	 */
 	public function filterEventsForExisting(EventModel $sourceEvent, $events) {
-		
+		global $app;
+
 		$group = new GroupModel();
 		$group->setId($sourceEvent->getGroupId());
 		
@@ -328,7 +329,7 @@ class EventRecurSetModel {
 		
 		foreach ($events as $event) {
 
-			$erb = new EventRepositoryBuilder();
+			$erb = new EventRepositoryBuilder($app);
 			$erb->setGroup($group);
 			$erb->setStart($event->getStartAt());
 			$erb->setEnd($event->getEndAt());

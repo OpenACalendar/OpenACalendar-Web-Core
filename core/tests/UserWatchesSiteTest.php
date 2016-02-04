@@ -31,7 +31,7 @@ class UserWatchesSiteTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->create($userOwner);
 		
@@ -39,16 +39,16 @@ class UserWatchesSiteTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		
 		# Part 1: User does not watch site
 		$t = $userWatchesSiteRepo->loadByUserAndSite($user, $site);
 		$this->assertNull($t);
 		
-		$b = new UserWatchesSiteRepositoryBuilder();
+		$b = new UserWatchesSiteRepositoryBuilder($this->app);
 		$t = $b->fetchAll();
 		$this->assertEquals(1, count($t));
 		
@@ -60,7 +60,7 @@ class UserWatchesSiteTest extends \BaseAppWithDBTest {
 		$this->assertEquals(true, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesSiteRepositoryBuilder();
+		$b = new UserWatchesSiteRepositoryBuilder($this->app);
 		$t = $b->fetchAll();
 		$this->assertEquals(2, count($t));	
 		
@@ -72,7 +72,7 @@ class UserWatchesSiteTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesSiteRepositoryBuilder();
+		$b = new UserWatchesSiteRepositoryBuilder($this->app);
 		$t = $b->fetchAll();
 		$this->assertEquals(1, count($t));
 		

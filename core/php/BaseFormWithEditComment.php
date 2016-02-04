@@ -22,9 +22,11 @@ abstract class  BaseFormWithEditComment  extends AbstractType
 
 	protected $formEditComments = false;
 
+    protected  $app;
 
 	function __construct(Application $application)
 	{
+        $this->app = $application;
 		$this->formEditComments = $application['currentSiteFeatures']->has('org.openacalendar', 'EditComments');
 	}
 

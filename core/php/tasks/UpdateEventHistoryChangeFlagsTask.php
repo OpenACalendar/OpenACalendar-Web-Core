@@ -34,7 +34,7 @@ class UpdateEventHistoryChangeFlagsTask extends \BaseTask {
 	protected function run() {
 
 
-		$eventHistoryRepo = new EventHistoryRepository();
+		$eventHistoryRepo = new EventHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM event_history");
 		$stat->execute();
 		$count = 0;

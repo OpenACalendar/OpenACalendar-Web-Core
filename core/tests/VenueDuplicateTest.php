@@ -29,17 +29,17 @@ class VenueDuplicateTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 
 		$venue1 = new VenueModel();
@@ -52,7 +52,7 @@ class VenueDuplicateTest extends \BaseAppWithDBTest {
 		$venue2->setDescription("test test");
 		$venue2->setCountryId($gb->getId());
 
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue1, $site, $user);
 		$venueRepo->create($venue2, $site, $user);
 
@@ -62,7 +62,7 @@ class VenueDuplicateTest extends \BaseAppWithDBTest {
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 		$event->setVenueId($venue2->getId());
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		// Test before

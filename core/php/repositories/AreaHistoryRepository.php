@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\AreaModel;
 use models\AreaHistoryModel;
+use Silex\Application;
 
 /**
  *
@@ -15,15 +16,22 @@ use models\AreaHistoryModel;
  */
 class AreaHistoryRepository {
 
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 	
 	public function ensureChangedFlagsAreSet(AreaHistoryModel $areaHistory) {
-		global $DB;
-		
+
 		// do we already have them?
 		if (!$areaHistory->isAnyChangeFlagsUnknown()) return;
 		
 		// load last.
-		$stat = $DB->prepare("SELECT * FROM area_history WHERE area_id = :id AND created_at < :at ".
+		$stat = $this->app['db']->prepare("SELECT * FROM area_history WHERE area_id = :id AND created_at < :at ".
 				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$areaHistory->getId(),'at'=>$areaHistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
@@ -71,7 +79,7 @@ class AreaHistoryRepository {
 			$sqlParams['is_deleted_changed'] = $areaHistory->getIsDeletedChanged() ? 1 : -1;
 		}
 
-		$statUpdate = $DB->prepare("UPDATE area_history SET ".
+		$statUpdate = $this->app['db']->prepare("UPDATE area_history SET ".
 			" is_new = :is_new, ".
 			implode(" , ",$sqlFields).
 			" WHERE area_id = :id AND created_at = :created_at");

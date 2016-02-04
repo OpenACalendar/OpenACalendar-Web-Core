@@ -138,7 +138,7 @@ class ImportFacebookHandler extends ImportHandlerBase {
 		}
 		if ($start && $end && $start <= $end) { 
 
-            $importedEventRepo = new \repositories\ImportedEventRepository();
+            $importedEventRepo = new \repositories\ImportedEventRepository($this->app);
             $importedEvent = $importedEventRepo->loadByImportIDAndIdInImport($this->importRun->getImport()->getId() ,$id);
 
             $changesToSave = false;

@@ -16,6 +16,7 @@ use models\VenueEditMetaDataModel;
 use repositories\builders\AreaRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
+use Silex\Application;
 use Slugify;
 
 /**
@@ -28,32 +29,34 @@ use Slugify;
  */
 class AreaRepository {
 
+    /** @var Application */
+    private  $app;
+
 	/** @var  \dbaccess\AreaDBAccess */
 	protected $areaDBAccess;
 
-	function __construct()
+	function __construct(Application $app)
 	{
-		global $DB, $USERAGENT;
-		$this->areaDBAccess = new AreaDBAccess($DB, new \TimeSource(), $USERAGENT);
+        $this->app = $app;
+		$this->areaDBAccess = new AreaDBAccess($app);
 	}
 	
 	public function create(AreaModel $area, AreaModel $parentArea = null, SiteModel $site, CountryModel $country, UserAccountModel $creator = null) {
-		global $DB, $EXTENSIONHOOKRUNNER, $app;
-        $slugify = new Slugify($app);
+        $slugify = new Slugify($this->app);
 
-		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$creator);
+		$this->app['extensionhookrunner']->beforeAreaSave($area,$creator);
 
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
-			$stat = $DB->prepare("SELECT max(slug) AS c FROM area_information WHERE site_id=:site_id");
+			$stat = $this->app['db']->prepare("SELECT max(slug) AS c FROM area_information WHERE site_id=:site_id");
 			$stat->execute(array('site_id'=>$site->getId()));
 			$data = $stat->fetch();
 			$area->setSlug($data['c'] + 1);
 			
 			if ($parentArea) $area->setParentAreaId($parentArea->getId());
 			
-			$stat = $DB->prepare("INSERT INTO area_information (site_id, slug,  slug_human, title,description,country_id,parent_area_id,created_at,approved_at,cache_area_has_parent_generated, is_deleted) ".
+			$stat = $this->app['db']->prepare("INSERT INTO area_information (site_id, slug,  slug_human, title,description,country_id,parent_area_id,created_at,approved_at,cache_area_has_parent_generated, is_deleted) ".
 					"VALUES (:site_id, :slug, :slug_human,  :title,:description,:country_id,:parent_area_id,:created_at,:approved_at,:cache_area_has_parent_generated, '0') RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
@@ -63,14 +66,14 @@ class AreaRepository {
 					'description'=>$area->getDescription(),
 					'country_id'=>$country->getId(),
 					'parent_area_id'=>($parentArea ? $parentArea->getId() : null),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'cache_area_has_parent_generated'=>  ( $parentArea ? '0' : '1' ),
 				));
 			$data = $stat->fetch();
 			$area->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_new, is_deleted) VALUES ".
+			$stat = $this->app['db']->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_new, is_deleted) VALUES ".
 					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at,'1','0')");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
@@ -79,13 +82,13 @@ class AreaRepository {
 					'country_id'=>$country->getId(),
 					'parent_area_id'=>($parentArea ? $parentArea->getId() : null),
 					'user_account_id'=>($creator ? $creator->getId() : null),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				));
-			
-			$DB->commit();
+
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 			
 	}
@@ -98,17 +101,16 @@ class AreaRepository {
 	}
 
 	public function loadBySiteIDAndAreaSlug($siteID, $slug) {
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid");
+		$stat = $this->app['db']->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$siteID, 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$area = new AreaModel();
 			$area->setFromDataBaseRow($stat->fetch());
             //  data migration .... if no human_slug, let's add one
             if ($area->getTitle() && !$area->getSlugHuman()) {
-                $slugify = new Slugify($app);
+                $slugify = new Slugify($this->app);
                 $area->setSlugHuman($slugify->process($area->getTitle()));
-                $stat = $DB->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
+                $stat = $this->app['db']->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
                 $stat->execute(array(
                     'id'=>$area->getId(),
                     'slug_human'=>$area->getSlugHuman(),
@@ -120,17 +122,16 @@ class AreaRepository {
 	
 	
 	public function loadBySlugAndCountry(SiteModel $site, $slug, CountryModel $country) {
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid AND country_id=:cid");
+		$stat = $this->app['db']->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid AND country_id=:cid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug, 'cid'=>$country->getId() ));
 		if ($stat->rowCount() > 0) {
 			$area = new AreaModel();
 			$area->setFromDataBaseRow($stat->fetch());
             //  data migration .... if no human_slug, let's add one
             if ($area->getTitle() && !$area->getSlugHuman()) {
-                $slugify = new Slugify($app);
+                $slugify = new Slugify($this->app);
                 $area->setSlugHuman($slugify->process($area->getTitle()));
-                $stat = $DB->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
+                $stat = $this->app['db']->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
                 $stat->execute(array(
                     'id'=>$area->getId(),
                     'slug_human'=>$area->getSlugHuman(),
@@ -142,17 +143,16 @@ class AreaRepository {
 	
 	
 	public function loadById($id) {
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT area_information.* FROM area_information WHERE id = :id");
+		$stat = $this->app['db']->prepare("SELECT area_information.* FROM area_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id, ));
 		if ($stat->rowCount() > 0) {
 			$area = new AreaModel();
 			$area->setFromDataBaseRow($stat->fetch());
             //  data migration .... if no human_slug, let's add one
             if ($area->getTitle() && !$area->getSlugHuman()) {
-                $slugify = new Slugify($app);
+                $slugify = new Slugify($this->app);
                 $area->setSlugHuman($slugify->process($area->getTitle()));
-                $stat = $DB->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
+                $stat = $this->app['db']->prepare("UPDATE area_information SET slug_human=:slug_human WHERE id=:id");
                 $stat->execute(array(
                     'id'=>$area->getId(),
                     'slug_human'=>$area->getSlugHuman(),
@@ -166,16 +166,14 @@ class AreaRepository {
 	 * 
 	 * 
 	 * 
-	 * @global type $DB
 	 * @param \models\AreaModel $area
 	 */
 	public function buildCacheAreaHasParent(AreaModel $area) {
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
-			$statInsertCache = $DB->prepare("INSERT INTO cached_area_has_parent(area_id,has_parent_area_id) VALUES (:area_id,:has_parent_area_id)");
-			$statFirstArea = $DB->prepare("SELECT area_information.parent_area_id, area_information.cache_area_has_parent_generated FROM area_information WHERE area_information.id=:id");
+			$statInsertCache = $this->app['db']->prepare("INSERT INTO cached_area_has_parent(area_id,has_parent_area_id) VALUES (:area_id,:has_parent_area_id)");
+			$statFirstArea = $this->app['db']->prepare("SELECT area_information.parent_area_id, area_information.cache_area_has_parent_generated FROM area_information WHERE area_information.id=:id");
 
 			// get first parent
 			$areaParentID = null;
@@ -184,13 +182,13 @@ class AreaRepository {
 				$d = $statFirstArea->fetch();
 				// Wait, have we already done this one?
 				if ($d['cache_area_has_parent_generated']) {
-					$DB->commit();
+                    $this->app['db']->commit();
 					return;
 				}
 				$areaParentID = $d['parent_area_id'];
 			}
 			
-			$statNextArea = $DB->prepare("SELECT area_information.parent_area_id FROM area_information WHERE area_information.id=:id");
+			$statNextArea = $this->app['db']->prepare("SELECT area_information.parent_area_id FROM area_information WHERE area_information.id=:id");
 			while($areaParentID) {
 				// insert this parent into the cache
 				$statInsertCache->execute(array('area_id'=>$area->getId(), 'has_parent_area_id'=>$areaParentID));
@@ -206,12 +204,12 @@ class AreaRepository {
 			}
 			
 			// finally mark this area as cached.
-			$DB->prepare("UPDATE area_information SET cache_area_has_parent_generated='1' WHERE id=:id")
+            $this->app['db']->prepare("UPDATE area_information SET cache_area_has_parent_generated='1' WHERE id=:id")
 					->execute(array('id'=>$area->getId()));
-			
-			$DB->commit();
+
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -229,10 +227,9 @@ class AreaRepository {
 	 * This will undelete the area to.
 	 */
 	public function editWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB, $EXTENSIONHOOKRUNNER;
-		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
+		$this->app['extensionhookrunner']->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$area->setIsDeleted(false);
 
@@ -240,9 +237,9 @@ class AreaRepository {
 
 			$this->areaDBAccess->update($area, $fields, $areaEditMetaDataModel);
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -256,22 +253,21 @@ class AreaRepository {
 	}
 
 	public function editParentAreaWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB, $EXTENSIONHOOKRUNNER;
-		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
+		$this->app['extensionhookrunner']->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't edit deleted area!");
 		}
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$this->areaDBAccess->update($area, array('parent_area_id'), $areaEditMetaDataModel);
 
 			// new must clear caches
 			$this->deleteParentCacheForArea($area);
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -285,20 +281,19 @@ class AreaRepository {
 	}
 
 	public function deleteWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB, $EXTENSIONHOOKRUNNER;
-		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
+		$this->app['extensionhookrunner']->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		if ($area->getIsDeleted()) {
 			throw new \Exception("Can't delete deleted area!");
 		}
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$area->setIsDeleted(true);
 			$this->areaDBAccess->update($area, array('is_deleted'), $areaEditMetaDataModel);
-			
-			$DB->commit();
+
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -312,25 +307,23 @@ class AreaRepository {
 	}
 
 	public function undeleteWithMetaData(AreaModel $area, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB, $EXTENSIONHOOKRUNNER;
-		$EXTENSIONHOOKRUNNER->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
+		$this->app['extensionhookrunner']->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$area->setIsDeleted(false);
 			$this->areaDBAccess->update($area, array('is_deleted'), $areaEditMetaDataModel);
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
 	public function updateFutureEventsCache(AreaModel $area) {
-		global $DB;
-		$statUpdate = $DB->prepare("UPDATE area_information SET cached_future_events=:count WHERE id=:id");
+		$statUpdate = $this->app['db']->prepare("UPDATE area_information SET cached_future_events=:count WHERE id=:id");
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setArea($area);
 		$erb->setIncludeDeleted(false);
 		$erb->setIncludeCancelled(false);
@@ -343,12 +336,11 @@ class AreaRepository {
 	}
 
 	public function updateBoundsCache(AreaModel $area) {
-		global $DB;
-		$statUpdate = $DB->prepare("UPDATE area_information SET cached_max_lat=:cached_max_lat, ".
+		$statUpdate = $this->app['db']->prepare("UPDATE area_information SET cached_max_lat=:cached_max_lat, ".
 				"cached_max_lng=:cached_max_lng, cached_min_lat=:cached_min_lat, cached_min_lng=:cached_min_lng ".
 				" WHERE id=:id");
 
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($this->app);
 		$vrb->setArea($area);
 		$vrb->setIncludeDeleted(false);
 		$cachedMinLat = null;
@@ -380,8 +372,7 @@ class AreaRepository {
 	}
 
 	public function doesCountryHaveAnyNotDeletedAreas(SiteModel $site, CountryModel $country) {
-		global $DB;
-		$stat = $DB->prepare("SELECT id FROM area_information WHERE site_id=:site_id AND country_id=:country_id AND is_deleted='0'");
+		$stat = $this->app['db']->prepare("SELECT id FROM area_information WHERE site_id=:site_id AND country_id=:country_id AND is_deleted='0'");
 		$stat->execute(array(
 			'site_id'=>$site->getId(),
 			'country_id'=>$country->getId(),
@@ -400,12 +391,11 @@ class AreaRepository {
 	}
 
 	public function markDuplicateWithMetaData(AreaModel $duplicateArea, AreaModel $originalArea, AreaEditMetaDataModel $areaEditMetaDataModel) {
-		global $DB;
 
 		if ($duplicateArea->getId() == $originalArea->getId()) return;
 
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 
 			$duplicateArea->setIsDuplicateOfId($originalArea->getId());
@@ -414,8 +404,8 @@ class AreaRepository {
 
 
 			// Move Venues
-			$venueDBAccess = new VenueDBAccess($DB, new \TimeSource());
-			$vrb = new VenueRepositoryBuilder();
+			$venueDBAccess = new VenueDBAccess($this->app);
+			$vrb = new VenueRepositoryBuilder($this->app);
 			$vrb->setArea($duplicateArea);
 			$venueEditMetaData = new VenueEditMetaDataModel();
 			$venueEditMetaData->setForSecondaryEditFromPrimaryEditMeta($areaEditMetaDataModel);
@@ -425,9 +415,9 @@ class AreaRepository {
 			}
 
 			// Move Events
-			$eventRepoBuilder = new EventRepositoryBuilder();
+			$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 			$eventRepoBuilder->setArea($duplicateArea);
-			$eventDBAccess = new EventDBAccess($DB, new \TimeSource());
+			$eventDBAccess = new EventDBAccess($this->app);
 			$eventEditMetaData = new EventEditMetaDataModel();
 			$eventEditMetaData->setForSecondaryEditFromPrimaryEditMeta($areaEditMetaDataModel);
 			foreach($eventRepoBuilder->fetchAll() as $event) {
@@ -440,7 +430,7 @@ class AreaRepository {
 			}
 
 			// Move Child Areas
-			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder = new AreaRepositoryBuilder($this->app);
 			$areaRepoBuilder->setParentArea($duplicateArea);
 			$areaRepoBuilder->setIncludeParentLevels(0);
 			$flag = false;
@@ -458,9 +448,9 @@ class AreaRepository {
 				$this->deleteParentCacheForArea($duplicateArea);
 			}
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -475,10 +465,9 @@ class AreaRepository {
 	 * @param AreaModel $area
 	 */
 	protected function deleteParentCacheForArea(AreaModel $area) {
-		global $DB;
 		// TODO clear for this area only - for now clear all.
-		$DB->prepare("DELETE FROM cached_area_has_parent")->execute();
-		$DB->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
+        $this->app['db']->prepare("DELETE FROM cached_area_has_parent")->execute();
+        $this->app['db']->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
 	}
 
 	/**
@@ -493,48 +482,47 @@ class AreaRepository {
 	 * @throws Exception
 	 */
 	public function purge(AreaModel $area) {
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$this->deleteParentCacheForArea($area);
 
-			$stat = $DB->prepare("UPDATE event_history SET area_id = NULL, area_id_changed = 0 WHERE area_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE event_history SET area_id = NULL, area_id_changed = 0 WHERE area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("UPDATE event_information SET area_id = NULL WHERE area_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE event_information SET area_id = NULL WHERE area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("UPDATE area_history SET parent_area_id = NULL, parent_area_id_changed=0 WHERE parent_area_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE area_history SET parent_area_id = NULL, parent_area_id_changed=0 WHERE parent_area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("UPDATE area_information SET parent_area_id = NULL WHERE parent_area_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE area_information SET parent_area_id = NULL WHERE parent_area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("UPDATE area_history SET is_duplicate_of_id = NULL, is_duplicate_of_id_changed = 0 WHERE is_duplicate_of_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE area_history SET is_duplicate_of_id = NULL, is_duplicate_of_id_changed = 0 WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("UPDATE area_information SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE area_information SET is_duplicate_of_id = NULL WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$stat = $DB->prepare("DELETE FROM area_history WHERE area_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM area_history WHERE area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
-			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_area WHERE sysadmin_comment_id=:id");
-			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_area WHERE area_id=:id");
+			$statDeleteComment = $this->app['db']->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
+			$statDeleteLink = $this->app['db']->prepare("DELETE FROM sysadmin_comment_about_area WHERE sysadmin_comment_id=:id");
+			$stat = $this->app['db']->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_area WHERE area_id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 			while($data = $stat->fetch()) {
 				$statDeleteLink->execute(array($data['sysadmin_comment_id']));
 				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
 			}
 
-			$stat = $DB->prepare("DELETE FROM area_information WHERE id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM area_information WHERE id=:id");
 			$stat->execute(array('id'=>$area->getId()));
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 			throw $e;
 		}
 

@@ -5,6 +5,7 @@ namespace dbaccess;
 
 use models\UserAccountModel;
 use models\SiteModel;
+use Silex\Application;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -24,15 +25,11 @@ class SiteDBAccess {
 	/** @var  \TimeSource */
 	protected $timesource;
 
-	/** @var \UserAgent */
-	protected $useragent;
-
-	function __construct($db, $timesource, $useragent)
-	{
-		$this->db = $db;
-		$this->timesource = $timesource;
-		$this->useragent = $useragent;
-	}
+    function __construct(Application $application)
+    {
+        $this->db = $application['db'];
+        $this->timesource = $application['timesource'];
+    }
 
 	protected $possibleFields = array('title','slug','description_text','footer_text','is_web_robots_allowed',
 		'is_closed_by_sys_admin','closed_by_sys_admin_reason','is_listed_in_index','prompt_emails_days_in_advance');

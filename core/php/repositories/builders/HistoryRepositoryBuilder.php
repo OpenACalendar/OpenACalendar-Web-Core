@@ -18,6 +18,7 @@ use models\TagHistoryModel;
 use models\ImportHistoryModel;
 use models\API2ApplicationModel;
 use repositories\builders\config\HistoryRepositoryBuilderConfig;
+use Silex\Application;
 
 /**
  *
@@ -29,11 +30,14 @@ use repositories\builders\config\HistoryRepositoryBuilderConfig;
  */
 class HistoryRepositoryBuilder {
 
+    protected $app;
+
 	/** @var \repositories\builders\config\HistoryRepositoryBuilderConfig  */
 	protected $historyRepositoryBuilderConfig;
 
-	function __construct(HistoryRepositoryBuilderConfig $historyRepositoryBuilderConfig = null)
+	function __construct(Application $application, HistoryRepositoryBuilderConfig $historyRepositoryBuilderConfig = null)
 	{
+        $this->app = $application;
 		$this->historyRepositoryBuilderConfig = $historyRepositoryBuilderConfig ? $historyRepositoryBuilderConfig : new HistoryRepositoryBuilderConfig();
 	}
 
@@ -134,8 +138,7 @@ class HistoryRepositoryBuilder {
 	}
 	
 	public function fetchAll() {
-		global $DB, $app;
-		
+
 		$results = array();
 		
 	
@@ -188,7 +191,7 @@ class HistoryRepositoryBuilder {
 
 				$areaids = array( $this->historyRepositoryBuilderConfig->getArea()->getId() );
 
-				$this->statAreas = $DB->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
+				$this->statAreas = $this->app['db']->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
 				$this->statAreas->execute(array('id'=>$this->historyRepositoryBuilderConfig->getArea()->getId()));
 				while($d = $this->statAreas->fetch()) {
 					$areaids[] = $d['area_id'];
@@ -217,7 +220,7 @@ class HistoryRepositoryBuilder {
 
 			//var_dump($sql); var_dump($params);
 			
-			$stat = $DB->prepare($sql);
+			$stat = $this->app['db']->prepare($sql);
 			$stat->execute($params);
 
 			while($data = $stat->fetch()) {
@@ -269,7 +272,7 @@ class HistoryRepositoryBuilder {
 
 			//var_dump($sql); var_dump($params);
 			
-			$stat = $DB->prepare($sql);
+			$stat = $this->app['db']->prepare($sql);
 			$stat->execute($params);
 			
 			while($data = $stat->fetch()) {
@@ -322,7 +325,7 @@ class HistoryRepositoryBuilder {
 
 			//var_dump($sql); var_dump($params);
 			
-			$stat = $DB->prepare($sql);
+			$stat = $this->app['db']->prepare($sql);
 			$stat->execute($params);
 			
 			while($data = $stat->fetch()) {
@@ -378,7 +381,7 @@ class HistoryRepositoryBuilder {
 
 			//var_dump($sql); var_dump($params);
 			
-			$stat = $DB->prepare($sql);
+			$stat = $this->app['db']->prepare($sql);
 			$stat->execute($params);
 			
 			while($data = $stat->fetch()) {
@@ -424,7 +427,7 @@ class HistoryRepositoryBuilder {
 
 			//var_dump($sql); var_dump($params);
 			
-			$stat = $DB->prepare($sql);
+			$stat = $this->app['db']->prepare($sql);
 			$stat->execute($params);
 			
 			while($data = $stat->fetch()) {
@@ -483,7 +486,7 @@ class HistoryRepositoryBuilder {
 
 			//var_dump($sql); var_dump($params);
 			
-			$stat = $DB->prepare($sql);
+			$stat = $this->app['db']->prepare($sql);
 			$stat->execute($params);
 			
 			while($data = $stat->fetch()) {
@@ -497,7 +500,7 @@ class HistoryRepositoryBuilder {
 		
 
 		////////////////////// Others!
-		foreach($app['extensions']->getExtensions() as $ext) {
+		foreach($this->app['extensions']->getExtensions() as $ext) {
 			$results = array_merge($results, $ext->getHistoryRepositoryBuilderData($this->historyRepositoryBuilderConfig));
 		}
 

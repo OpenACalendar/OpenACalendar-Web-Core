@@ -38,7 +38,7 @@ class RenderCalendarTest extends \BaseAppTest {
 	function testByDate($inYear, $inMonth, $inDay, $days, $expand, $startYear, $startMonth, $startDate, $endYear, $endMonth, $endDate, $outYear, $outMonth) {
 		$this->app['timesource']->mock($inYear, $inMonth, $inDay, 1, 2, 3);
 		
-		$cal = new RenderCalendar();
+		$cal = new RenderCalendar($this->app);
 		
 		$inDate = new \DateTime();
 		$inDate->setDate($inYear, $inMonth, $inDay);

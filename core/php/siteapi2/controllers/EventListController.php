@@ -19,7 +19,7 @@ class EventListController  {
 	
 	public function listJson (Request $request, Application $app) {
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
 		$erb->setSite($app['currentSite']);
 			
 		$ourRequest = new \Request($request);

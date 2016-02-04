@@ -86,7 +86,7 @@ class ImportICalHandler extends ImportHandlerBase {
 
 	protected function processICalEvent(ICalEvent $icalevent) {
 
-		$importedEventRepo = new ImportedEventRepository();
+		$importedEventRepo = new ImportedEventRepository($this->app);
 
 		$importedEventChangesToSave = false;
 		$importedEvent = $importedEventRepo->loadByImportIDAndIdInImport($this->importRun->getImport()->getId() ,$icalevent->getUid());

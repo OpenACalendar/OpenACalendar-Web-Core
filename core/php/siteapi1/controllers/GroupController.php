@@ -46,7 +46,7 @@ class GroupController {
 			$slug = $slugBits[0];
 		}
 
-		$gr = new GroupRepository();
+		$gr = new GroupRepository($app);
 		$this->parameters['group'] = $gr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['group']) {
 			return false;

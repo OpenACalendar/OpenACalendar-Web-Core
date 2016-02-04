@@ -33,7 +33,7 @@ class UpdateGroupHistoryChangeFlagsTask extends \BaseTask {
 
 	protected function run() {
 
-		$groupHistoryRepo = new GroupHistoryRepository();
+		$groupHistoryRepo = new GroupHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM group_history");
 		$stat->execute();
 		$count = 0;

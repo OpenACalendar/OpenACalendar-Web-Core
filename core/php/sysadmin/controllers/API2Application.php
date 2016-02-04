@@ -23,7 +23,7 @@ class API2Application {
 	protected $parameters = array('api2Application'=>null);
 	
 	protected function build($id, Request $request, Application $app) {
-		$repo = new API2ApplicationRepository();
+		$repo = new API2ApplicationRepository($app);
 		$this->parameters['api2Application'] = $repo->loadById($id);
 		if (!$this->parameters['api2Application']) {
 			$app->abort(404);
@@ -40,7 +40,7 @@ class API2Application {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
-				$api2appRepo = new \repositories\API2ApplicationRepository();
+				$api2appRepo = new \repositories\API2ApplicationRepository($app);
 			
 				if ($action->getCommand() == 'close') {
 					$this->parameters['api2Application']->setIsClosedBySysAdmin(true);
@@ -105,7 +105,7 @@ class API2Application {
 	function history($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 		
-		$hrb = new HistoryRepositoryBuilder();
+		$hrb = new HistoryRepositoryBuilder($app);
 		$hrb->setAPI2Application($this->parameters['api2Application']);
 		$this->parameters['historyItems']= $hrb->fetchAll();
 

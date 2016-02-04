@@ -140,7 +140,7 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		
 		$sql = "SELECT " . implode(", ",$this->select) . " FROM area_information ".
@@ -148,7 +148,7 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 				" ORDER BY area_information.title ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 		
 	}

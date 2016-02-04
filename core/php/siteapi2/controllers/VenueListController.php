@@ -20,7 +20,7 @@ class VenueListController
 	
 	public function listJson (Request $request, Application $app) {
 		
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($app);
 		$vrb->setSite($app['currentSite']);
 				
 		$ourRequest = new \Request($request);

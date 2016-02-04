@@ -38,14 +38,14 @@ class ImportResultRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 
 	protected function buildStat() {
-				global $DB;
+
 		
 		
 		$sql = "SELECT import_url_result.* FROM import_url_result ".
 				" WHERE ".implode(" AND ", $this->where).
 				" ORDER BY import_url_result.created_at DESC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

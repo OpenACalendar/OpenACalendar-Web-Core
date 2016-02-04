@@ -20,7 +20,7 @@ use Silex\Application;
 class VenueFilterParams {
 
 	function __construct(Application $app) {
-		$this->venueRepositoryBuilder = new VenueRepositoryBuilder();
+		$this->venueRepositoryBuilder = new VenueRepositoryBuilder($app);
 		$this->venueRepositoryBuilder->setLimit(100);
 	}
 

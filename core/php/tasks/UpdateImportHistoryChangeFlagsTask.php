@@ -33,7 +33,7 @@ class UpdateImportHistoryChangeFlagsTask extends \BaseTask {
 
 	protected function run() {
 
-		$importURLHistoryRepo = new ImportHistoryRepository();
+		$importURLHistoryRepo = new ImportHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM import_url_history");
 		$stat->execute();
 		$count = 0;

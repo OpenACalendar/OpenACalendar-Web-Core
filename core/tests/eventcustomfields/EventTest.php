@@ -32,14 +32,14 @@ class EventTest extends BaseAppWithDBTest
 
 	public function testAddCustomFieldThenCreateEventThenEditToAddContent() {
 
-		TimeSource::mock(2014,5,1,7,0,0);
+		$this->app['timesource']->mock(2014,5,1,7,0,0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
@@ -48,7 +48,7 @@ class EventTest extends BaseAppWithDBTest
 
 
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$customFieldDefinition1 = new EventCustomFieldDefinitionModel();
@@ -65,7 +65,7 @@ class EventTest extends BaseAppWithDBTest
 		$customFieldDefinition2->setKey('dogs');
 		$customFieldDefinition2->setLabel('dogs');
 
-		$ecfRepo = new EventCustomFieldDefinitionRepository();
+		$ecfRepo = new EventCustomFieldDefinitionRepository($this->app);
 		$ecfRepo->create($customFieldDefinition1, $user);
 		$ecfRepo->create($customFieldDefinition2, $user);
 
@@ -79,9 +79,9 @@ class EventTest extends BaseAppWithDBTest
 
 		// CREATE
 
-		TimeSource::mock(2014,5,1,7,1,0);
+		$this->app['timesource']->mock(2014,5,1,7,1,0);
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadByID($event->getId());
@@ -93,7 +93,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// EDIT FIELD 1
 
-		TimeSource::mock(2014,5,1,7,2,0);
+		$this->app['timesource']->mock(2014,5,1,7,2,0);
 
 
 		$event = $eventRepository->loadByID($event->getId());
@@ -114,7 +114,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// EDIT FIELD 2
 
-		TimeSource::mock(2014,5,1,7,3,0);
+		$this->app['timesource']->mock(2014,5,1,7,3,0);
 
 
 		$event = $eventRepository->loadByID($event->getId());
@@ -135,7 +135,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// DELETE
 		// this is an edit that should mark custom fields change unknown.
-		TimeSource::mock(2014,5,1,7,4,0);
+		$this->app['timesource']->mock(2014,5,1,7,4,0);
 
 		$event = $eventRepository->loadByID($event->getId());
 
@@ -150,7 +150,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// LET's CHECK HISTORY
 
-		$eventHistoryRepo = new EventHistoryRepository();
+		$eventHistoryRepo = new EventHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM event_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -159,7 +159,7 @@ class EventTest extends BaseAppWithDBTest
 			$eventHistoryRepo->ensureChangedFlagsAreSet($eventHistory);
 		}
 
-		$eventHistoryRepoBuilder = new EventHistoryRepositoryBuilder();
+		$eventHistoryRepoBuilder = new EventHistoryRepositoryBuilder($this->app);
 		$eventHistoryRepoBuilder->setEvent($event);
 		$histories = $eventHistoryRepoBuilder->fetchAll();
 
@@ -196,14 +196,14 @@ class EventTest extends BaseAppWithDBTest
 
 	public function testCreateEventThenAddCustomFieldThenAddContent() {
 
-		TimeSource::mock(2014,5,1,7,0,0);
+		$this->app['timesource']->mock(2014,5,1,7,0,0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
@@ -212,10 +212,10 @@ class EventTest extends BaseAppWithDBTest
 
 
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
-		$ecfRepo = new EventCustomFieldDefinitionRepository();
+		$ecfRepo = new EventCustomFieldDefinitionRepository($this->app);
 
 		$event = new EventModel();
 		$event->setSummary("test");
@@ -227,9 +227,9 @@ class EventTest extends BaseAppWithDBTest
 
 		// CREATE
 
-		TimeSource::mock(2014,5,1,7,1,0);
+		$this->app['timesource']->mock(2014,5,1,7,1,0);
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadByID($event->getId());
@@ -250,7 +250,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// EDIT FIELD 1
 
-		TimeSource::mock(2014,5,1,7,2,0);
+		$this->app['timesource']->mock(2014,5,1,7,2,0);
 
 
 		$event = $eventRepository->loadByID($event->getId());
@@ -281,7 +281,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// EDIT FIELD 2
 
-		TimeSource::mock(2014,5,1,7,3,0);
+		$this->app['timesource']->mock(2014,5,1,7,3,0);
 
 
 		$event = $eventRepository->loadByID($event->getId());
@@ -302,7 +302,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// DELETE
 		// this is an edit that should mark custom fields change unknown.
-		TimeSource::mock(2014,5,1,7,4,0);
+		$this->app['timesource']->mock(2014,5,1,7,4,0);
 
 		$event = $eventRepository->loadByID($event->getId());
 
@@ -317,7 +317,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// LET's CHECK HISTORY
 
-		$eventHistoryRepo = new EventHistoryRepository();
+		$eventHistoryRepo = new EventHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM event_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -326,7 +326,7 @@ class EventTest extends BaseAppWithDBTest
 			$eventHistoryRepo->ensureChangedFlagsAreSet($eventHistory);
 		}
 
-		$eventHistoryRepoBuilder = new EventHistoryRepositoryBuilder();
+		$eventHistoryRepoBuilder = new EventHistoryRepositoryBuilder($this->app);
 		$eventHistoryRepoBuilder->setEvent($event);
 		$histories = $eventHistoryRepoBuilder->fetchAll();
 
@@ -370,14 +370,14 @@ class EventTest extends BaseAppWithDBTest
 
 	public function testAddCustomFieldThenCreateEventWithContent() {
 
-		TimeSource::mock(2014,5,1,7,0,0);
+		$this->app['timesource']->mock(2014,5,1,7,0,0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
@@ -386,7 +386,7 @@ class EventTest extends BaseAppWithDBTest
 
 
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$customFieldDefinition1 = new EventCustomFieldDefinitionModel();
@@ -403,7 +403,7 @@ class EventTest extends BaseAppWithDBTest
 		$customFieldDefinition2->setKey('dogs');
 		$customFieldDefinition2->setLabel('dogs');
 
-		$ecfRepo = new EventCustomFieldDefinitionRepository();
+		$ecfRepo = new EventCustomFieldDefinitionRepository($this->app);
 		$ecfRepo->create($customFieldDefinition1, $user);
 		$ecfRepo->create($customFieldDefinition2, $user);
 
@@ -418,9 +418,9 @@ class EventTest extends BaseAppWithDBTest
 
 		// CREATE WITH
 
-		TimeSource::mock(2014,5,1,7,1,0);
+		$this->app['timesource']->mock(2014,5,1,7,1,0);
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadByID($event->getId());
@@ -433,7 +433,7 @@ class EventTest extends BaseAppWithDBTest
 
 		// LET's CHECK HISTORY
 
-		$eventHistoryRepo = new EventHistoryRepository();
+		$eventHistoryRepo = new EventHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM event_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -442,7 +442,7 @@ class EventTest extends BaseAppWithDBTest
 			$eventHistoryRepo->ensureChangedFlagsAreSet($eventHistory);
 		}
 
-		$eventHistoryRepoBuilder = new EventHistoryRepositoryBuilder();
+		$eventHistoryRepoBuilder = new EventHistoryRepositoryBuilder($this->app);
 		$eventHistoryRepoBuilder->setEvent($event);
 		$histories = $eventHistoryRepoBuilder->fetchAll();
 

@@ -30,11 +30,11 @@ class EventRepositoryTest  extends \BaseAppWithDBTest {
 
 		$this->addCountriesToTestDB();
 		
-		$countryRepo = new CountryRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$eventRepo = new EventRepository();
-		$eventHistoryRepo = new EventHistoryRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$eventRepo = new EventRepository($this->app);
+		$eventHistoryRepo = new EventHistoryRepository($this->app);
 		
 		#### Setup
 		$user = new UserAccountModel();

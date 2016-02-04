@@ -27,7 +27,8 @@ abstract class BaseUserNotificationType {
 	public abstract function getUserNotificationPreferenceType();
 
 	public function getEmailPreference(UserAccountModel $user) {
-		$repo = new UserNotificationPreferenceRepository();
+        global $app;
+		$repo = new UserNotificationPreferenceRepository($app);
 		$pref = $repo->load($user, $this->getUserNotificationPreferenceExtensionID(), $this->getUserNotificationPreferenceType());
 		return $pref->getIsEmail();
 	}

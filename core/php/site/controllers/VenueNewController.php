@@ -28,8 +28,8 @@ class VenueNewController {
 	protected $parameters = array();
 	
 	function newVenue(Request $request, Application $app) {
-		$areaRepository = new AreaRepository();
-		$countryRepository = new CountryRepository();
+		$areaRepository = new AreaRepository($app);
+		$countryRepository = new CountryRepository($app);
 					
 		$venue = new VenueModel();
 		
@@ -38,21 +38,20 @@ class VenueNewController {
 		
 		
 		if (isset($_GET['area_id'])) {
-			$ar = new AreaRepository();
-			$this->parameters['area'] = $ar->loadBySlug($app['currentSite'], $_GET['area_id']);
+			$this->parameters['area'] = $areaRepository->loadBySlug($app['currentSite'], $_GET['area_id']);
 			if ($this->parameters['area']) {
 
-				$checkArea = $this->parameters['area']->getParentAreaId() ? $ar->loadById($this->parameters['area']->getParentAreaId())  : null;
+				$checkArea = $this->parameters['area']->getParentAreaId() ? $areaRepository->loadById($this->parameters['area']->getParentAreaId())  : null;
 				while($checkArea) {
 					array_unshift($this->parameters['parentAreas'],$checkArea);
 					$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
 				}
 
-				$cr = new CountryRepository();
+				$cr = new CountryRepository($app);
 				$this->parameters['country'] = $cr->loadById($this->parameters['area']->getCountryID());
 				$venue->setCountryId($this->parameters['country']->getId());
 
-				$areaRepoBuilder = new AreaRepositoryBuilder();
+				$areaRepoBuilder = new AreaRepositoryBuilder($app);
 				$areaRepoBuilder->setSite($app['currentSite']);
 				$areaRepoBuilder->setCountry($this->parameters['country']);
 				$areaRepoBuilder->setParentArea($this->parameters['area']);
@@ -106,7 +105,7 @@ class VenueNewController {
 				}
 				$venueEditMetaData->setFromRequest($request);
 
-				$venueRepository = new VenueRepository();
+				$venueRepository = new VenueRepository($app);
 				$venueRepository->createWithMetaData($venue, $app['currentSite'], $venueEditMetaData);
 				
 				return $app->redirect("/venue/".$venue->getSlug());
@@ -134,7 +133,7 @@ class VenueNewController {
 					$venue->setCountryId(intval($request->request->get('country')));
 				}
 				
-				$venueRepository = new VenueRepository();
+				$venueRepository = new VenueRepository($app);
 				$venueRepository->create($venue, $app['currentSite'], $app['currentUser']);
 
 				$data['venue'] = array(

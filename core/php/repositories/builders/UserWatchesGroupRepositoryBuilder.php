@@ -57,7 +57,7 @@ class UserWatchesGroupRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-			global $DB;
+
 		
 	
 		$sql = "SELECT user_watches_group_information.* FROM user_watches_group_information ".
@@ -65,7 +65,7 @@ class UserWatchesGroupRepositoryBuilder  extends BaseRepositoryBuilder {
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
 				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

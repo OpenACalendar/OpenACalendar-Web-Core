@@ -30,7 +30,7 @@ class AdminUserGroupController {
 
 
 
-		$ugr = new UserGroupRepository();
+		$ugr = new UserGroupRepository($app);
 		$this->parameters['usergroup'] = $ugr->loadByIdInSite($id, $app['currentSite']);
 		if (!$this->parameters['usergroup']) {
 			return false;
@@ -46,11 +46,11 @@ class AdminUserGroupController {
 			$app->abort(404, "User Group does not exist.");
 		}
 
-		$urb = new UserAccountRepositoryBuilder();
+		$urb = new UserAccountRepositoryBuilder($app);
 		$urb->setInUserGroup($this->parameters['usergroup']);
 		$this->parameters['users'] = $urb->fetchAll();
 
-		$r = new UserPermissionsRepository($app['extensions']);
+		$r = new UserPermissionsRepository($app);
 		$this->parameters['userpermissions'] = $r->getPermissionsForUserGroup($this->parameters['usergroup'], false);
 
 
@@ -68,7 +68,7 @@ class AdminUserGroupController {
 			if ($extension) {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
-					$ugr = new UserGroupRepository();
+					$ugr = new UserGroupRepository($app);
 					$ugr->addPermissionToGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/permissions');
 				}
@@ -78,14 +78,14 @@ class AdminUserGroupController {
 			if ($extension) {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
-					$ugr = new UserGroupRepository();
+					$ugr = new UserGroupRepository($app);
 					$ugr->removePermissionFromGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/permissions');
 				}
 			}
 		}
 
-		$r = new UserPermissionsRepository($app['extensions']);
+		$r = new UserPermissionsRepository($app);
 		$this->parameters['userpermissions'] = $r->getPermissionsForUserGroup($this->parameters['usergroup'], false);
 
 		$this->parameters['userpermissionstoadd'] = array();
@@ -111,18 +111,18 @@ class AdminUserGroupController {
 
 
 		if ($request->request->get('action') == "removeuser" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$ur = new UserAccountRepository();
+			$ur = new UserAccountRepository($app);
 			$user = $ur->loadById($request->request->get('id'));
 			if ($user) {
-				$ugr = new UserGroupRepository();
+				$ugr = new UserGroupRepository($app);
 				$ugr->removeUserFromGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 				return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 			}
 		} else if ($request->request->get('action') == "adduser" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$ur = new UserAccountRepository();
+			$ur = new UserAccountRepository($app);
 			$user = $ur->loadByUserName($request->request->get('username'));
 			if ($user) {
-				$ugr = new UserGroupRepository();
+				$ugr = new UserGroupRepository($app);
 				$ugr->addUserToGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 				return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 			} else {
@@ -130,45 +130,45 @@ class AdminUserGroupController {
 			}
 		} else if ($request->request->get('action') == "removeanonymous" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesAnonymous(false);
-			$ugr = new UserGroupRepository();
+			$ugr = new UserGroupRepository($app);
 			$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 		} else if ($request->request->get('action') == "addanonymous" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesAnonymous(true);
-			$ugr = new UserGroupRepository();
+			$ugr = new UserGroupRepository($app);
 			$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 
 		} else if ($request->request->get('action') == "removeusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesUsers(false);
-			$ugr = new UserGroupRepository();
+			$ugr = new UserGroupRepository($app);
 			$ugr->editIsIncludesUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 		} else if ($request->request->get('action') == "addusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesUsers(true);
-			$ugr = new UserGroupRepository();
+			$ugr = new UserGroupRepository($app);
 			$ugr->editIsIncludesUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 
 		} else if ($request->request->get('action') == "removeverifiedusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesVerifiedUsers(false);
-			$ugr = new UserGroupRepository();
+			$ugr = new UserGroupRepository($app);
 			$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 		} else if ($request->request->get('action') == "addverifiedusers" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$this->parameters['usergroup']->setIsIncludesVerifiedUsers(true);
-			$ugr = new UserGroupRepository();
+			$ugr = new UserGroupRepository($app);
 			$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], $app['currentUser']);
 			return $app->redirect('/admin/usergroup/'.$this->parameters['usergroup']->getId().'/users');
 
 		}
 
 
-		$urb = new UserAccountRepositoryBuilder();
+		$urb = new UserAccountRepositoryBuilder($app);
 		$urb->setInUserGroup($this->parameters['usergroup']);
 		$this->parameters['users'] = $urb->fetchAll();
 
-		$r = new UserPermissionsRepository($app['extensions']);
+		$r = new UserPermissionsRepository($app);
 		$this->parameters['userpermissions'] = $r->getPermissionsForUserGroup($this->parameters['usergroup'], false);
 
 
@@ -190,7 +190,7 @@ class AdminUserGroupController {
 
             if ($form->isValid()) {
 
-                $ugr = new UserGroupRepository();
+                $ugr = new UserGroupRepository($app);
                 $meta = new UserGroupEditMetaDataModel();
                 $meta->setUserAccount($app['currentUser']);
 				$meta->setFromRequest($request);

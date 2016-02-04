@@ -25,7 +25,7 @@ class ImportImportedEventController extends ImportController {
 			return false;
 		}
 
-		$repo = new ImportedEventRepository();
+		$repo = new ImportedEventRepository($app);
 		$this->parameters['importedEvent'] = $repo->loadByImportIDAndId($this->parameters['import']->getId(), $id);
 		if (!$this->parameters['importedEvent']) {
 			return false;
@@ -69,7 +69,7 @@ class ImportImportedEventController extends ImportController {
 			$this->parameters['eventListFilterParams'] = null;
 			$this->parameters['events'] = null;
 
-			$eventRepo = new EventRepository();
+			$eventRepo = new EventRepository($app);
 			$this->parameters['event'] = $eventRepo->loadByImportedEvent($this->parameters['importedEvent']);
 
 		}

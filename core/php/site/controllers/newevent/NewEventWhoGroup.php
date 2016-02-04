@@ -55,7 +55,7 @@ class NewEventWhoGroup extends BaseNewEvent
 
 		if ($this->request->request->get('action') == 'selectgroup') {
 
-			$gr = new GroupRepository();
+			$gr = new GroupRepository($this->application);
 			$group = $gr->loadBySlug($this->site, $this->request->request->get('group'));
 			if ($group) {
 				$this->draftEvent->setDetailsValue('group.new',false);
@@ -84,7 +84,7 @@ class NewEventWhoGroup extends BaseNewEvent
 		$out = array('groupSearchText'=>$this->request->request->get('groupsearch'));
 
 		if ($this->request->request->get('action') == 'groupsearch') {
-			$grb = new GroupRepositoryBuilder();
+			$grb = new GroupRepositoryBuilder($this->application);
 			$grb->setSite($this->site);
 			$grb->setIncludeDeleted(false);
 			$grb->setFreeTextsearch($this->request->request->get('groupsearch'));
@@ -114,7 +114,7 @@ class NewEventWhoGroup extends BaseNewEvent
 			$group = new GroupModel();
 			$group->setTitle($this->draftEvent->getDetailsValue('group.title'));
 
-			$groupRepo = new GroupRepository();
+			$groupRepo = new GroupRepository($this->application);
 			$groupRepo->create($group, $this->site, $this->application['currentUser']);
 
 			$eventModel->setGroupId($group->getId());

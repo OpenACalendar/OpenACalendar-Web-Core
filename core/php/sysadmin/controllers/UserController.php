@@ -45,7 +45,7 @@ class UserController {
 	protected function build($id, Request $request, Application $app) {
 		$this->parameters = array('group'=>null);
 
-		$uar = new UserAccountRepository();
+		$uar = new UserAccountRepository($app);
 		$this->parameters['user'] = $uar->loadById($id);
 		
 		if (!$this->parameters['user']) {
@@ -69,12 +69,12 @@ class UserController {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
-				$uar = new UserAccountRepository();
+				$uar = new UserAccountRepository($app);
 
 				$redirect = false;
 
 				if ($data['comment']) {
-					$scr = new SysAdminCommentRepository();
+					$scr = new SysAdminCommentRepository($app);
 					$scr->createAboutUser($this->parameters['user'], $data['comment'], $app['currentUser']);
 					$redirect = true;
 				}
@@ -99,7 +99,7 @@ class UserController {
 					$uar->verifyEmail($this->parameters['user']);
 					$redirect = true;
 				} else if ($action->getCommand() == 'resendverificationemail' && !$this->parameters['user']->getIsEmailVerified()) {
-					$repo = new UserAccountVerifyEmailRepository();
+					$repo = new UserAccountVerifyEmailRepository($app);
 					$verify = $repo->create($this->parameters['user']);
 					$verify->sendEmail($app, $this->parameters['user']);
 					$app['flashmessages']->addMessage('Sent');
@@ -126,7 +126,7 @@ class UserController {
 		
 		$this->parameters['form'] = $form->createView();
 
-		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setUser($this->parameters['user']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
 
@@ -138,7 +138,7 @@ class UserController {
 		$this->build($id, $request, $app);
 		
 		
-		$rb = new UserAccountVerifyEmailRepositoryBuilder();
+		$rb = new UserAccountVerifyEmailRepositoryBuilder($app);
 		$rb->setUser($this->parameters['user']);
 		$this->parameters['verifies'] = $rb->fetchAll();
 		
@@ -149,7 +149,7 @@ class UserController {
 		$this->build($id, $request, $app);
 		
 		
-		$rb = new UserAccountResetRepositoryBuilder();
+		$rb = new UserAccountResetRepositoryBuilder($app);
 		$rb->setUser($this->parameters['user']);
 		$this->parameters['resets'] = $rb->fetchAll();
 		
@@ -161,7 +161,7 @@ class UserController {
 	function listNotifications($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 	
-		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb = new UserNotificationRepositoryBuilder($app);
 		$rb->setLimit(40);
 		$rb->setUser($this->parameters['user']);
 		$this->parameters['notifications'] = $rb->fetchAll();
@@ -172,7 +172,7 @@ class UserController {
 	function eventEdited($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
 		$erb->setEditedByUser($this->parameters['user']);
 		$erb->setOrderByStartAt(true);
 		$this->parameters['events'] = $erb->fetchAll();
@@ -185,7 +185,7 @@ class UserController {
 	function areaEdited($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 
-		$arb = new AreaRepositoryBuilder();
+		$arb = new AreaRepositoryBuilder($app);
 		$arb->setEditedByUser($this->parameters['user']);
 		$this->parameters['areas'] = $arb->fetchAll();
 
@@ -197,7 +197,7 @@ class UserController {
 	function venueEdited($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($app);
 		$vrb->setEditedByUser($this->parameters['user']);
 		$this->parameters['venues'] = $vrb->fetchAll();
 
@@ -209,7 +209,7 @@ class UserController {
 	function groupEdited($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($app);
 		$grb->setEditedByUser($this->parameters['user']);
 		$this->parameters['groups'] = $grb->fetchAll();
 

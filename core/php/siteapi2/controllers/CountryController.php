@@ -23,7 +23,7 @@ class CountryController {
 	protected function build($slug, Request $request, Application $app) {
 
 		
-		$repo = new CountryRepository();
+		$repo = new CountryRepository($app);
 		$this->country = $repo->loadByTwoCharCode($slug);
 		if (!$this->country) {
 			return false;

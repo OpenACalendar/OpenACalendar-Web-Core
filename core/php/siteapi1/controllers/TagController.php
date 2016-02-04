@@ -46,7 +46,7 @@ class TagController {
 			$slug = $slugBits[0];
 		}
 
-		$tr = new TagRepository();
+		$tr = new TagRepository($app);
 		$this->parameters['tag'] = $tr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['tag']) {
 			return false;

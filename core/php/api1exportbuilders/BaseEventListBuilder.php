@@ -47,7 +47,7 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 
 	public function __construct(Application $app, SiteModel $site = null, $timeZone = null, $title = null) {
 		parent::__construct($app, $site, $timeZone, $title);
-		$this->eventRepositoryBuilder = new EventRepositoryBuilder();
+		$this->eventRepositoryBuilder = new EventRepositoryBuilder($app);
 		$this->eventRepositoryBuilder->setLimit($this->app['config']->api1EventListLimit);
 		$this->eventRepositoryBuilder->setIncludeCountryInformation(true);
 		$this->eventRepositoryBuilder->setIncludeAreaInformation(true);
@@ -63,7 +63,7 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 		foreach($this->eventRepositoryBuilder->fetchAll() as $event) {
 			$eventMedias = null;
 			if ($this->includeEventMedias) {
-				$mrb = new MediaRepositoryBuilder();
+				$mrb = new MediaRepositoryBuilder($this->app);
 				$mrb->setEvent($event);
 				$mrb->setIncludeDeleted(false);
 				$eventMedias = $mrb->fetchAll();

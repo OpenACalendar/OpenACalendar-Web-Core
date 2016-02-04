@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -24,14 +25,16 @@ class ImportNewForm extends AbstractType{
 	protected $timeZoneName;
 	/** @var SiteModel **/
 	protected $site;
-	
-	function __construct(SiteModel $site, $timeZoneName) {
+
+    protected $app;
+
+    function __construct(Application $application, SiteModel $site, $timeZoneName) {
+        $this->app = $application;
 		$this->site = $site;
 		$this->timeZoneName = $timeZoneName;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
 		$builder->add('title', 'text', array(
 			'label'=>'Title',
 			'required'=>false, 
@@ -54,7 +57,7 @@ class ImportNewForm extends AbstractType{
 		);
 		 * **/
 			
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
 		$countries = array();
 		$defaultCountry = null;

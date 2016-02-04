@@ -13,6 +13,6 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-db\migrations\MigrationManager::upgrade(true);
+db\migrations\MigrationManager::upgrade($app, true);
 
 

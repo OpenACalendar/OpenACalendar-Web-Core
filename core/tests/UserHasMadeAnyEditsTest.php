@@ -27,7 +27,7 @@ class UserHasMadeAnyEditsTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$this->assertFalse($userRepo->hasMadeAnyEdits($user));
@@ -44,16 +44,16 @@ class UserHasMadeAnyEditsTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		
@@ -77,16 +77,16 @@ class UserHasMadeAnyEditsTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		
@@ -96,7 +96,7 @@ class UserHasMadeAnyEditsTest extends \BaseAppWithDBTest {
 		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		
@@ -111,16 +111,16 @@ class UserHasMadeAnyEditsTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		
@@ -129,7 +129,7 @@ class UserHasMadeAnyEditsTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		
@@ -146,23 +146,23 @@ class UserHasMadeAnyEditsTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		
 		$venue = new VenueModel();
 		$venue->setTitle("test");
 		
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue, $site, $user);
 		
 		$this->assertTrue($userRepo->hasMadeAnyEdits($user));

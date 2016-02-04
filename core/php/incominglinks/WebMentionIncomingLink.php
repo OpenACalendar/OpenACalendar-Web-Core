@@ -30,7 +30,7 @@ class WebMentionIncomingLink extends \BaseIncomingLink {
 			$pbil->setReporterIp($_SERVER['REMOTE_ADDR']);
 			$pbil->setReporterUseragent($_SERVER['HTTP_USER_AGENT']);
 
-			$repo = new \repositories\IncomingLinkRepository();
+			$repo = new \repositories\IncomingLinkRepository($app);
 			$repo->create($pbil, $siteModel);
 
 			header("HTTP/1.0 202 ");

@@ -77,7 +77,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 				
-		$userAccountRepository = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
+		$userAccountRepository = new \org\openacalendar\curatedlists\repositories\UserAccountRepository($app);
 		$this->parameters['curatedlistOwner'] = $userAccountRepository->loadByOwnerOfCuratedList($this->parameters['curatedlist']);
 
 		if ($this->parameters['actionCuratedListEditCurators'] && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
@@ -102,7 +102,7 @@ class CuratedListController {
 		}
 
 
-		$userRepoBuilder = new UserAccountRepositoryBuilder();
+		$userRepoBuilder = new UserAccountRepositoryBuilder($app);
 		$userRepoBuilder->canEditNotOwnCuratedList($this->parameters['curatedlist']);
 		$this->parameters['curatedlistEditors'] = $userRepoBuilder->fetchAll();
 		
@@ -147,7 +147,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -169,7 +169,7 @@ class CuratedListController {
 		}
 
 		
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);

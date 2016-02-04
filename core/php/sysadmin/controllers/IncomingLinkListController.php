@@ -25,14 +25,14 @@ class IncomingLinkListController {
 	function listForSite($siteid, Request $request, Application $app) {
 
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 
 		if (!$site) {
 			die("404");
 		}
 
-		$ilrb = new IncomingLinkRepositoryBuilder();
+		$ilrb = new IncomingLinkRepositoryBuilder($app);
 		$ilrb->setSite($site);
 		$incominglinks = $ilrb->fetchAll();
 

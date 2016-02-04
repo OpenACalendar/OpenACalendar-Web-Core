@@ -29,14 +29,14 @@ class GroupHistoryWithDBTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		## Create group
@@ -46,7 +46,7 @@ class GroupHistoryWithDBTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		## Edit group
@@ -57,7 +57,7 @@ class GroupHistoryWithDBTest extends \BaseAppWithDBTest {
 		$groupRepo->edit($group, $user);
 		
 		## Now save changed flags on these .....
-		$groupHistoryRepo = new GroupHistoryRepository();
+		$groupHistoryRepo = new GroupHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM group_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -67,7 +67,7 @@ class GroupHistoryWithDBTest extends \BaseAppWithDBTest {
 		}
 		
 		## Now load and check
-		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo = new HistoryRepositoryBuilder($this->app);
 		$historyRepo->setGroup($group);
 		$historyRepo->setIncludeEventHistory(false);
 		$historyRepo->setIncludeVenueHistory(false);

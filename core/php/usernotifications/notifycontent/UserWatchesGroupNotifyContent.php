@@ -60,7 +60,8 @@ class UserWatchesGroupNotifyContent extends BaseUserWatchesNotifyContent {
 
 	public function markNotificationSent(\DateTime $checkTime)
 	{
-		$userWatchesGroupRepository = new UserWatchesGroupRepository();
+        global $app;
+		$userWatchesGroupRepository = new UserWatchesGroupRepository($app);
 		$userWatchesGroup = $userWatchesGroupRepository->loadByUserAndGroup($this->userAccount, $this->group);
 		$userWatchesGroupRepository->markNotifyEmailSent($userWatchesGroup, $checkTime);
 	}

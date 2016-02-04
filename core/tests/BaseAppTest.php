@@ -45,6 +45,12 @@ class BaseAppTest extends \PHPUnit_Framework_TestCase {
 		$this->app['config'] = $CONFIG;
         $this->app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
         $this->app['timesource'] = new TimeSource();
+        $this->app['userAgent'] = new UserAgent();
+        $this->app['extensionhookrunner'] = new ExtensionHookRunner($this->app);
+
+        // These tests don't have a DB. But we put an entry in Pimple for it as some code relies on looking it up.
+        // We put null in, so if anf code tries to use it it errors and we can change test to one with DB.
+        $this->app['db'] = null;
 
         $EXTENSIONHOOKRUNNER = new ExtensionHookRunner($this->app);
 	}

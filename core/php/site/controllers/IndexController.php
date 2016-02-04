@@ -26,7 +26,7 @@ use repositories\UserNotificationRepository;
 class IndexController {
 	
 	function index(Application $app) {
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
 		$erb->setSite($app['currentSite']);
 		$erb->setAfterNow();
 		$erb->setIncludeDeleted(false);
@@ -54,7 +54,7 @@ class IndexController {
 	
 	function watch(Request $request, Application $app) {		
 		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$repo = new UserWatchesSiteRepository();
+			$repo = new UserWatchesSiteRepository($app);
 			if ($request->request->get('action') == 'watch') {
 				$repo->startUserWatchingSite($app['currentUser'], $app['currentSite']);
 			} else if ($request->request->get('action') == 'unwatch') {
@@ -65,7 +65,7 @@ class IndexController {
 			return $app->redirect('/watch');
 		}
 
-		$repo = new \repositories\UserNotificationPreferenceRepository();
+		$repo = new \repositories\UserNotificationPreferenceRepository($app);
 		$preferences = array();
 
 		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
@@ -84,21 +84,21 @@ class IndexController {
 	}
 	
 	function stopWatchingFromEmail($userid, $code, Request $request, Application $app) {		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($app);
 		$user = $userRepo->loadByID($userid);
 		if (!$user) {
 			$app['monolog']->addError("Failed stop watching site from email - user not known");
 			die("NO"); // TODO
 		}
 		
-		$userWatchesSiteStopRepo = new UserWatchesSiteStopRepository();
+		$userWatchesSiteStopRepo = new UserWatchesSiteStopRepository($app);
 		$userWatchesSiteStop = $userWatchesSiteStopRepo->loadByUserAccountIDAndSiteIDAndAccessKey($user->getId(), $app['currentSite']->getId(), $code);
 		if (!$userWatchesSiteStop) {
 			$app['monolog']->addError("Failed stop watching site from email - user ".$user->getId()." - code wrong");
 			die("NO"); // TODO
 		}
 		
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($app);
 		$userWatchesSite = $userWatchesSiteRepo->loadByUserAndSite($user, $app['currentSite']);
 		if (!$userWatchesSite || !$userWatchesSite->getIsWatching()) {
 			$app['monolog']->addError("Failed stop watching site from email - user ".$user->getId()." - not watching");

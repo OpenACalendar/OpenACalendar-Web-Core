@@ -24,7 +24,7 @@ class GroupController {
 
 		
 		
-		$repo = new GroupRepository();
+		$repo = new GroupRepository($app);
 		$this->group = $repo->loadBySlug($app['currentSite'], $slug);
 		if (!$this->group) {
 			return false;
@@ -74,7 +74,7 @@ class GroupController {
 		}
 
 		if ($edits) {
-			$repo = new GroupRepository();
+			$repo = new GroupRepository($app);
 			$repo->edit($this->group, $app['apiUser']);
 			$out = array(
 				'edited'=>true,

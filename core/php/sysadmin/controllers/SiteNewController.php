@@ -34,7 +34,7 @@ class SiteNewController {
 			$form->bind($request);
 
 			$data = $form->getData();
-			$siteRepository = new SiteRepository();
+			$siteRepository = new SiteRepository($app);
 
 			$site = $siteRepository->loadBySlug($data['slug']);
 			if ($site) {
@@ -43,7 +43,7 @@ class SiteNewController {
 
 			if ($form->isValid()) {
 				
-				$userRepo = new UserAccountRepository();
+				$userRepo = new UserAccountRepository($app);
 				$user = $userRepo->loadByEmail($data['email']);
 				if ($user) {
 
@@ -65,8 +65,8 @@ class SiteNewController {
                     }
 					$site->setPromptEmailsDaysInAdvance($app['config']->newSitePromptEmailsDaysInAdvance);
 
-					$countryRepository = new CountryRepository();
-					$siteQuotaRepository = new SiteQuotaRepository();
+					$countryRepository = new CountryRepository($app);
+					$siteQuotaRepository = new SiteQuotaRepository($app);
 
 					$siteRepository->create(
 						$site,

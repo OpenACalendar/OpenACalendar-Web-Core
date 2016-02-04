@@ -4,6 +4,7 @@
 namespace repositories;
 
 use models\SiteQuotaModel;
+use Silex\Application;
 
 
 /**
@@ -16,10 +17,19 @@ use models\SiteQuotaModel;
  */
 class SiteQuotaRepository {
 
-	
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+
 	public function loadByCode($code) {
-		global $DB;
-		$stat = $DB->prepare("SELECT site_quota_information.* FROM site_quota_information ".
+
+		$stat = $this->app['db']->prepare("SELECT site_quota_information.* FROM site_quota_information ".
 				" WHERE site_quota_information.code =:code ");
 		$stat->execute(array( 'code'=> strtoupper($code)));
 		if ($stat->rowCount() > 0) {
@@ -30,8 +40,8 @@ class SiteQuotaRepository {
 	}
 	
 	public function loadById($id) {
-		global $DB;
-		$stat = $DB->prepare("SELECT site_quota_information.* FROM site_quota_information ".
+
+		$stat = $this->app['db']->prepare("SELECT site_quota_information.* FROM site_quota_information ".
 				" WHERE site_quota_information.id =:id ");
 		$stat->execute(array( 'id'=>$id));
 		if ($stat->rowCount() > 0) {

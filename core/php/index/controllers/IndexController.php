@@ -24,7 +24,7 @@ class IndexController {
 	
 	function index(Application $app) {		
 		$sites = array();
-		$repo  = new SiteRepository();
+		$repo  = new SiteRepository($app);
 		if (isset($_COOKIE['sitesSeen'])) {
 			foreach(explode(",",$_COOKIE['sitesSeen']) as $siteID) {
 				if (intval($siteID) > 0) {
@@ -37,7 +37,7 @@ class IndexController {
 		}
 		
 		if ($app['currentUser']) {
-			$srb = new SiteRepositoryBuilder();
+			$srb = new SiteRepositoryBuilder($app);
 			$srb->setIsOpenBySysAdminsOnly(true);
 			$srb->setUserInterestedIn($app['currentUser']);
 			foreach($srb->fetchAll() as $site) {
@@ -62,7 +62,7 @@ class IndexController {
 	
 	function create(Request $request, Application $app) {
 
-		$siteRepository = new SiteRepository();
+		$siteRepository = new SiteRepository($app);
 				
 		$form = $app['form.factory']->create(new CreateForm($app));
 		
@@ -94,8 +94,8 @@ class IndexController {
 				}
 				$site->setPromptEmailsDaysInAdvance($app['config']->newSitePromptEmailsDaysInAdvance);
 
-				$countryRepository = new CountryRepository();
-				$siteQuotaRepository = new SiteQuotaRepository();
+				$countryRepository = new CountryRepository($app);
+				$siteQuotaRepository = new SiteQuotaRepository($app);
 				
 				$siteRepository->create(
 							$site,
@@ -114,7 +114,7 @@ class IndexController {
 		}
 
 		$sites = array();
-		$repo  = new SiteRepository();
+		$repo  = new SiteRepository($app);
 		if (isset($_COOKIE['sitesSeen'])) {
 			foreach(explode(",",$_COOKIE['sitesSeen']) as $siteID) {
 				if (intval($siteID) > 0) {
@@ -126,7 +126,7 @@ class IndexController {
 			}
 		}
 
-		$srb = new SiteRepositoryBuilder();
+		$srb = new SiteRepositoryBuilder($app);
 		$srb->setIsOpenBySysAdminsOnly(true);
 		$srb->setUserInterestedIn($app['currentUser']);
 		foreach($srb->fetchAll() as $site) {
@@ -171,7 +171,7 @@ class IndexController {
 	
 	function discover(Application $app) {
 
-		$srb = new SiteRepositoryBuilder();
+		$srb = new SiteRepositoryBuilder($app);
 		$srb->setIsListedInIndexOnly(true);
 		$srb->setIsOpenBySysAdminsOnly(true);
 		$sites = $srb->fetchAll();

@@ -16,7 +16,7 @@ use repositories\SiteRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$siteRepository = new SiteRepository();
+$siteRepository = new SiteRepository($ap);
 $site = $siteRepository->loadById($CONFIG->singleSiteID);
 
 

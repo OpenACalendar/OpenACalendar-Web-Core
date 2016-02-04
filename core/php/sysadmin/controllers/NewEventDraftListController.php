@@ -23,14 +23,14 @@ class NewEventDraftListController
 	function listForSite($siteid, Request $request, Application $app) {
 
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 
 		if (!$site) {
 			die("404");
 		}
 
-		$nedrb = new NewEventDraftRepositoryBuilder();
+		$nedrb = new NewEventDraftRepositoryBuilder($app);
 		$nedrb->setSite($site);
 		$drafts = $nedrb->fetchAll();
 

@@ -22,7 +22,7 @@ class CountryListController {
 	
 	function index(Application $app) {
 		
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($app);
 		$crb->setSiteIn($app['currentSite']);
 		$countries = $crb->fetchAll();
 		

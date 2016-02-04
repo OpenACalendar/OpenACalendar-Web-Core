@@ -48,15 +48,15 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 
 	protected function run()
 	{
-		$siteRepoBuilder = new SiteRepositoryBuilder();
+		$siteRepoBuilder = new SiteRepositoryBuilder($this->app);
 		$siteRepoBuilder->setIsOpenBySysAdminsOnly(true);
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$countCheck = 0;
 		$countSend = 0;
 		foreach($siteRepoBuilder->fetchAll() as $site) {
 			$siteRepo->loadLegacyFeaturesOnSite($site);
 			$this->logVerbose("Site ".$site->getSlug());
-			$userRepoBuilder = new UserAccountRepositoryBuilder();
+			$userRepoBuilder = new UserAccountRepositoryBuilder($this->app);
 			$userRepoBuilder->setIsOpenBySysAdminsOnly(true);
 			foreach($userRepoBuilder->fetchAll() as $userAccount) {
 				$this->logVerbose("User ".$userAccount->getId());
@@ -86,11 +86,11 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 	}
 
 	protected function makeSureHistoriesAreCorrect($contentsToSend) {
-		$eventHistoryRepository =  new EventHistoryRepository;
-		$groupHistoryRepository = new GroupHistoryRepository;
-		$areaHistoryRepository = new AreaHistoryRepository;
-		$venueHistoryRepository = new VenueHistoryRepository;
-		$importHistoryRepository = new ImportHistoryRepository;
+		$eventHistoryRepository =  new EventHistoryRepository($this->app);
+		$groupHistoryRepository = new GroupHistoryRepository($this->app);
+		$areaHistoryRepository = new AreaHistoryRepository($this->app);
+		$venueHistoryRepository = new VenueHistoryRepository($this->app);
+		$importHistoryRepository = new ImportHistoryRepository($this->app);
 		foreach($contentsToSend as $contentToSend) {
 			foreach($contentToSend->getHistories() as $history) {
 				$found = false;
@@ -142,7 +142,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
         usort($histories, $usortHistories);
         // Extract New events
         $newEvents = array();
-        $eventRepo = new EventRepository();
+        $eventRepo = new EventRepository($this->app);
         foreach($histories as $history)  {
             if ($history instanceof EventHistoryModel && $history->getIsNew()) {
                 $event =  $eventRepo->loadByID($history->getId());
@@ -178,7 +178,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 	protected function sendFor(SiteModel $siteModel, UserAccountModel $userAccountModel, $contentsToSend) {
 
 		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesNotify');
-		$userNotificationRepo = new UserNotificationRepository();
+		$userNotificationRepo = new UserNotificationRepository($this->app);
 
 		///// Notification Class
 		$userNotification = $userNotificationType->getNewNotification($userAccountModel, $siteModel);
@@ -195,7 +195,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 
 			list($newEvents, $histories) = $this->getNewAndHistoriesForContentsToSend($contentsToSend);
 
-			$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
+			$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($this->app);
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($userAccountModel);
 			$unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.$userAccountModel->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 

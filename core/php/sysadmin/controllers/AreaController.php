@@ -33,14 +33,14 @@ class AreaController {
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('area'=>null,'parentarea'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 		
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 		
-		$ar = new AreaRepository();
+		$ar = new AreaRepository($app);
 		$this->parameters['area'] = $ar->loadBySlug($this->parameters['site'], $slug);
 
 		if (!$this->parameters['area']) {
@@ -54,7 +54,7 @@ class AreaController {
 		}
 		
 		
-		$cr = new CountryRepository();
+		$cr = new CountryRepository($app);
 		$this->parameters['country'] = $this->parameters['area']->getCountryId() 
 				? $cr->loadById($this->parameters['area']->getCountryId()) : null; 
 		
@@ -79,23 +79,23 @@ class AreaController {
 				$redirect = false;
 
 				if ($data['comment']) {
-					$scr = new SysAdminCommentRepository();
+					$scr = new SysAdminCommentRepository($app);
 					$scr->createAboutArea($this->parameters['area'], $data['comment'], $app['currentUser']);
 					$redirect = true;
 				}
 
 
 				if ($action->getCommand() == 'delete' && !$this->parameters['area']->getIsDeleted()) {
-					$ar = new AreaRepository();
+					$ar = new AreaRepository($app);
 					$ar->delete($this->parameters['area'],  $app['currentUser']);
 					$redirect = true;
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['area']->getIsDeleted()) {
 					$this->parameters['area']->setIsDeleted(false);
-					$ar = new AreaRepository();
+					$ar = new AreaRepository($app);
 					$ar->undelete($this->parameters['area'],  $app['currentUser']);
 					$redirect = true;
 				} else if ($action->getCommand() == 'parentarea') {
-					$ar = new AreaRepository();
+					$ar = new AreaRepository($app);
 					$newparentarea = $ar->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($newparentarea) {
 						// TODO make sure they aren't doing something dumb like moving under themselves or making a loop
@@ -106,7 +106,7 @@ class AreaController {
 
 				} else if ($action->getCommand() == 'isduplicateof') {
 
-					$ar = new AreaRepository();
+					$ar = new AreaRepository($app);
 					$originalArea = $ar->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalArea && $originalArea->getId() != $this->parameters['area']->getId()) {
 						$ar->markDuplicate($this->parameters['area'], $originalArea, $app['currentUser']);
@@ -116,7 +116,7 @@ class AreaController {
 
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeAreaPassword && $app['config']->sysAdminExtraPurgeAreaPassword == $action->getParam(0)) {
 
-					$ar = new AreaRepository();
+					$ar = new AreaRepository($app);
 					$ar->purge($this->parameters['area']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/area/');
 
@@ -133,7 +133,7 @@ class AreaController {
 		$this->parameters['form'] = $form->createView();
 
 
-		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setArea($this->parameters['area']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
 		
@@ -149,7 +149,7 @@ class AreaController {
 		$this->build($siteid, $slug, $request, $app);
 
 
-		$uarb = new UserAccountRepositoryBuilder();
+		$uarb = new UserAccountRepositoryBuilder($app);
 		$uarb->setWatchesArea($this->parameters['area']);
 		$this->parameters['watchers'] = $uarb->fetchAll();
 

@@ -26,7 +26,7 @@ class UserPermissionsIndexConfigTrueTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->verifyEmail($user);
 
@@ -34,7 +34,7 @@ class UserPermissionsIndexConfigTrueTest extends \BaseAppWithDBTest {
 		$user = $userRepo->loadByUserName("test");
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		## user can create sites, anon can't!
 

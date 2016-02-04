@@ -22,7 +22,7 @@ class MediaListController {
 	function index(Application $app) {
 		
 
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$medias = $mrb->fetchAll();

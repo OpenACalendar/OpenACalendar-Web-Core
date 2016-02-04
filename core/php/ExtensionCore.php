@@ -158,7 +158,7 @@ class ExtensionCore extends BaseExtension {
 	public function getUserNotifyContents(SiteModel $site, UserAccountModel $userAccountModel) {
 		$out = array();
 
-		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository($this->app);
 		$data = $userWatchesSiteRepo->getUserNotifyContentForSiteAndUser($site, $userAccountModel);
 		if ($data) {
 			// no point carrying on; someone watching a site overrides any data contained within
@@ -167,7 +167,7 @@ class ExtensionCore extends BaseExtension {
 
 		$siteFeatureRepo = new \repositories\SiteFeatureRepository($this->app);
 		if ($siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($site,'org.openacalendar','Group')) {
-			$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
+			$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository($this->app);
 			$data = $userWatchesGroupRepo->getUserNotifyContentForSiteAndUser($site, $userAccountModel);
 			if ($data) {
 				$out = array_merge($out, $data);
@@ -175,7 +175,7 @@ class ExtensionCore extends BaseExtension {
 		}
 
 
-		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository();
+		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository($this->app);
 		$data = $userWatchesAreaRepo->getUserNotifyContentForSiteAndUser($site, $userAccountModel);
 		if ($data) {
 			$out = array_merge($out, $data);

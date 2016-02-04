@@ -32,7 +32,7 @@ class UpdateAreaHistoryChangeFlagsTask extends \BaseTask {
 
 	protected function run() {
 
-		$areaHistoryRepo = new AreaHistoryRepository();
+		$areaHistoryRepo = new AreaHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM area_history");
 		$stat->execute();
 		$count = 0;

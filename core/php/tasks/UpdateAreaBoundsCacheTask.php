@@ -34,9 +34,9 @@ class UpdateAreaBoundsCacheTask extends \BaseTask {
 
 	protected  function run() {
 
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($this->app);
 
-		$arb = new AreaRepositoryBuilder();
+		$arb = new AreaRepositoryBuilder($this->app);
 		$count = 0;
 		foreach($arb->fetchAll() as $area) {
 			$areaRepository->updateBoundsCache($area);

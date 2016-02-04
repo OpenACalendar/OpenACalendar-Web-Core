@@ -38,25 +38,25 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 		
 		$this->addCountriesToTestDB();
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), $this->getSiteQuotaUsedForTesting());
 		
 		
-		$areaRepo = new AreaRepository();
+		$areaRepo = new AreaRepository($this->app);
 		
 		$area = new AreaModel();
 		$area->setTitle("test");
@@ -69,10 +69,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
-		$importRepository = new ImportRepository();
+		$importRepository = new ImportRepository($this->app);
 		
 		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
@@ -100,7 +100,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -129,7 +129,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 		
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -151,25 +151,25 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
 
 		$this->addCountriesToTestDB();
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), $this->getSiteQuotaUsedForTesting());
 
 
-		$areaRepo = new AreaRepository();
+		$areaRepo = new AreaRepository($this->app);
 
 		$area = new AreaModel();
 		$area->setTitle("test");
@@ -182,10 +182,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
-		$importRepository = new ImportRepository();
+		$importRepository = new ImportRepository($this->app);
 
 		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
@@ -213,7 +213,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -242,7 +242,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -269,14 +269,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -284,10 +284,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
-		$importRepository = new ImportRepository();
+		$importRepository = new ImportRepository($this->app);
 		
 		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
@@ -313,7 +313,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -339,7 +339,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 		
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -371,14 +371,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -386,10 +386,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
-		$importRepository = new ImportRepository();
+		$importRepository = new ImportRepository($this->app);
 		
 		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
@@ -415,7 +415,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -439,14 +439,14 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -454,10 +454,10 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
-		$importRepository = new ImportRepository();
+		$importRepository = new ImportRepository($this->app);
 		
 		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
@@ -483,7 +483,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(2, count($events));

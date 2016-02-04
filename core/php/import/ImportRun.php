@@ -61,19 +61,19 @@ class ImportRun {
         if ($site) {
             $this->site = $site;
         } else {
-            $siteRepo = new SiteRepository();
+            $siteRepo = new SiteRepository($app);
             $this->site = $siteRepo->loadById($import->getSiteId());
         }
         if ($import->getCountryId()) {
-            $countryRepo = new CountryRepository();
+            $countryRepo = new CountryRepository($app);
             $this->country = $countryRepo->loadById($import->getCountryId());
         }
         if ($import->getAreaId()) {
-            $areaRepo = new AreaRepository();
+            $areaRepo = new AreaRepository($app);
             $this->area = $areaRepo->loadById($import->getAreaId());
         }
         if ($import->getGroupId()) {
-            $groupRepository = new GroupRepository();
+            $groupRepository = new GroupRepository($this->app);
             $this->group = $groupRepository->loadById($import->getGroupId());
         }
         $this->guzzle = new Client();

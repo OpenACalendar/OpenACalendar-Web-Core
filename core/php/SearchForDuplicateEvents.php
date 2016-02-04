@@ -45,6 +45,7 @@ class SearchForDuplicateEvents {
 	}
 	
 	function getPossibleDuplicates() {
+        global $app;
 
 		/**
 		 * If no Start or End time on event then we aren't even going to try to look for dupes.
@@ -55,7 +56,7 @@ class SearchForDuplicateEvents {
 		}
 		
 		## Get events
-		$eventRepositoryBuilder = new EventRepositoryBuilder();
+		$eventRepositoryBuilder = new EventRepositoryBuilder($app);
 		$eventRepositoryBuilder->setSite($this->site);
 		$eventRepositoryBuilder->setIncludeAreaInformation(true);
 

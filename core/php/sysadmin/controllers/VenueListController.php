@@ -21,14 +21,14 @@ class VenueListController {
 	function index($siteid, Request $request, Application $app) {
 		
 		
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 		
 		if (!$site) {
 			die("404");
 		}
 		
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($app);
 		$vrb->setSite($site);
 		$venues = $vrb->fetchAll();
 		

@@ -25,7 +25,7 @@ class SiteController {
 	protected function build($siteSlug, Request $request, Application $app) {
 		$this->parameters = array('user'=>null);
 
-		$repository = new SiteRepository();
+		$repository = new SiteRepository($app);
 		$this->parameters['site'] =  $repository->loadBySlug($siteSlug);
 		if (!$this->parameters['site']) {
 			return false;
@@ -45,14 +45,14 @@ class SiteController {
 			$app->abort(404, "Site does not exist.");
 		}
 		
-		$repo = new \repositories\EventRepository();
+		$repo = new \repositories\EventRepository($app);
 		$this->parameters['event'] = $repo->loadBySlug($this->parameters['site'], $eventSlug);
 		
 		if (!$this->parameters['event']) {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		$uaer = new UserAtEventRepository();
+		$uaer = new UserAtEventRepository($app);
 		$userAtEvent = $uaer->loadByUserAndEventOrInstanciate($app['currentUser'], $this->parameters['event']);
 
 		$data = array();

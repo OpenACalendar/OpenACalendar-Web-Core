@@ -191,6 +191,7 @@ class UserAccountModel {
 		 * @return type array(array(), array(), array(), boolean) - upcoming events, other events, user at event data, flag if any to send
 		 */
 		public function getDataForUpcomingEventsEmail() {
+            global $app;
 			
 			$flag = false;
 
@@ -208,8 +209,8 @@ class UserAccountModel {
 			$allEvents = array();
 			$userAtEvent = array();
 			
-			$userAtEventRepo = new UserAtEventRepository();
-			$erb = new EventRepositoryBuilder();
+			$userAtEventRepo = new UserAtEventRepository($app);
+			$erb = new EventRepositoryBuilder($app);
 			$erb->setAfterNow();
 			$erb->setIncludeDeleted(false);
 			$erb->setIncludeCancelled(true);

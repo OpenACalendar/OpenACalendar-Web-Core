@@ -25,7 +25,7 @@ class TaskLogListController {
 	function index(Request $request, Application $app) {
 
 
-		$tllrb = new TaskLogRepositoryBuilder();
+		$tllrb = new TaskLogRepositoryBuilder($app);
 		$tllrb->setLimit(500);
 
 

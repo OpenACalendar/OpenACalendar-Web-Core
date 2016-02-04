@@ -27,14 +27,14 @@ class SiteCloseTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
@@ -45,17 +45,17 @@ class SiteCloseTest extends \BaseAppWithDBTest {
 		$event->setUrl("http://www.info.com");
 		$event->setTicketUrl("http://www.tickets.com");
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 	
 		## Event can be found
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setIncludeEventsFromClosedSites(true);
 		$erb->fetchAll();
 		$this->assertEquals(1, count($erb->fetchAll()));
 		
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setIncludeEventsFromClosedSites(false);
 		$erb->fetchAll();
 		$this->assertEquals(1, count($erb->fetchAll()));
@@ -67,13 +67,13 @@ class SiteCloseTest extends \BaseAppWithDBTest {
 		$siteRepo->edit($site, $user);
 		
 		## Event can not be found
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setIncludeEventsFromClosedSites(true);
 		$erb->fetchAll();
 		$this->assertEquals(1, count($erb->fetchAll()));
 		
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setIncludeEventsFromClosedSites(false);
 		$erb->fetchAll();
 		$this->assertEquals(0, count($erb->fetchAll()));

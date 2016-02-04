@@ -29,14 +29,14 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		## Create tag
@@ -45,7 +45,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$tag->setTitle("test");
 		$tag->setDescription("test test");
 		
-		$tagRepo = new TagRepository();
+		$tagRepo = new TagRepository($this->app);
 		$tagRepo->create($tag, $site, $user);
 		
 		## Edit tag
@@ -56,7 +56,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$tagRepo->edit($tag, $user);
 		
 		## Now save changed flags on these .....
-		$tagHistoryRepo = new TagHistoryRepository();
+		$tagHistoryRepo = new TagHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM tag_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -66,7 +66,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		}
 		
 		## Now load and check
-		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo = new HistoryRepositoryBuilder($this->app);
 		$historyRepo->setTag($tag);
 		$historyRepo->setIncludeEventHistory(false);
 		$historyRepo->setIncludeVenueHistory(false);
@@ -98,14 +98,14 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		## Create tag
@@ -114,7 +114,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$tag->setTitle("test");
 		$tag->setDescription("test test");
 
-		$tagRepo = new TagRepository();
+		$tagRepo = new TagRepository($this->app);
 		$tagRepo->create($tag, $site, $user);
 
 		## Delete tag
@@ -124,7 +124,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		$tagRepo->delete($tag, $user);
 
 		## Now save changed flags on these .....
-		$tagHistoryRepo = new TagHistoryRepository();
+		$tagHistoryRepo = new TagHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM tag_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -134,7 +134,7 @@ class TagHistoryWithDBTest extends \BaseAppWithDBTest {
 		}
 
 		## Now load and check
-		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo = new HistoryRepositoryBuilder($this->app);
 		$historyRepo->setTag($tag);
 		$historyRepo->setIncludeEventHistory(false);
 		$historyRepo->setIncludeVenueHistory(false);

@@ -36,7 +36,7 @@ class EventCustomFieldDefinitionRepositoryBuilder extends BaseRepositoryBuilder 
 	}
 
 	protected function buildStat() {
-		global $DB;
+
 
 
 		$sql = "SELECT " . implode(", ",$this->select) . " FROM event_custom_field_definition_information ".
@@ -44,7 +44,7 @@ class EventCustomFieldDefinitionRepositoryBuilder extends BaseRepositoryBuilder 
 			($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 			" ORDER BY event_custom_field_definition_information.key ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 
 	}

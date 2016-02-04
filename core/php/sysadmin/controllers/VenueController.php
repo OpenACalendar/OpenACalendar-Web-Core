@@ -27,14 +27,14 @@ class VenueController {
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('group'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 		
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 		
-		$vr = new VenueRepository();
+		$vr = new VenueRepository($app);
 		$this->parameters['venue'] = $vr->loadBySlug($this->parameters['site'], $slug);
 		if (!$this->parameters['venue']) {
 			$app->abort(404);
@@ -60,25 +60,25 @@ class VenueController {
 				$redirect = false;
 
 				if ($data['comment']) {
-					$scr = new SysAdminCommentRepository();
+					$scr = new SysAdminCommentRepository($app);
 					$scr->createAboutVenue($this->parameters['venue'], $data['comment'], $app['currentUser']);
 					$redirect = true;
 				}
 
 
 				if ($action->getCommand() == 'delete' && !$this->parameters['venue']->getIsDeleted()) {
-					$vr = new VenueRepository();
+					$vr = new VenueRepository($app);
 					$vr->delete($this->parameters['venue'],  $app['currentUser']);
 					$redirect = true;
 
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['venue']->getIsDeleted()) {
 					$this->parameters['venue']->setIsDeleted(false);
-					$vr = new VenueRepository();
+					$vr = new VenueRepository($app);
 					$vr->undelete($this->parameters['venue'],  $app['currentUser']);
 					$redirect = true;
 
 				} else if ($action->getCommand() == 'isduplicateof') {
-					$vr = new VenueRepository();
+					$vr = new VenueRepository($app);
 					$originalVenue = $vr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalVenue && $originalVenue->getId() != $this->parameters['venue']->getId()) {
 						$vr->markDuplicate($this->parameters['venue'], $originalVenue, $app['currentUser']);
@@ -88,7 +88,7 @@ class VenueController {
 
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeVenuePassword && $app['config']->sysAdminExtraPurgeVenuePassword == $action->getParam(0)) {
 
-					$vr = new VenueRepository();
+					$vr = new VenueRepository($app);
 					$vr->purge($this->parameters['venue']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/venue/');
 
@@ -104,7 +104,7 @@ class VenueController {
 		$this->parameters['form'] = $form->createView();
 
 
-		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setVenue($this->parameters['venue']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
 			

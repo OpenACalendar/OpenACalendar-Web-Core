@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -22,19 +23,23 @@ use repositories\builders\VenueRepositoryBuilder;
  */
 class EventImportedEditForm extends AbstractType{
 
+
+    protected $app;
+
 	protected $timeZoneName;
 	/** @var SiteModel **/
 	protected $site;
 	
-	function __construct(SiteModel $site, $timeZoneName) {
+	function __construct(Application $application, SiteModel $site, $timeZoneName) {
+        $this->app = $application;
 		$this->site = $site;
 		$this->timeZoneName = $timeZoneName;
 	}
 
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
-		$crb = new CountryRepositoryBuilder();
+
+		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {

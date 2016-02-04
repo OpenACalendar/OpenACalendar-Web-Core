@@ -158,7 +158,7 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		$sql = "SELECT ".implode(",",$this->select)." FROM user_account_information ".
 				implode(" ", $this->joins).
@@ -166,7 +166,7 @@ class UserAccountRepositoryBuilder  extends BaseRepositoryBuilder {
 				($this->groupNeeded ? " GROUP BY user_account_information.id ":"").
 				" ORDER BY user_account_information.id ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 		
 	}

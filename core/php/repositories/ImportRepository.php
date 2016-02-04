@@ -8,6 +8,7 @@ use models\ImportEditMetaDataModel;
 use models\ImportModel;
 use models\SiteModel;
 use models\UserAccountModel;
+use Silex\Application;
 
 
 /**
@@ -20,29 +21,30 @@ use models\UserAccountModel;
  */
 class ImportRepository {
 
-    protected $app;
+
+    /** @var Application */
+    private  $app;
 
 	/** @var  \dbaccess\ImportDBAccess */
 	protected $importDBAccess;
 
-	function __construct()
+	function __construct(Application $app)
 	{
-		global $DB, $USERAGENT, $app;
         $this->app = $app;
-		$this->importDBAccess = new ImportDBAccess($DB, new \TimeSource(), $USERAGENT);
+		$this->importDBAccess = new ImportDBAccess($app);
 	}
 
 	public function create(ImportModel $importURL, SiteModel $site, UserAccountModel $creator) {
-		global $DB;
-		try {
-			$DB->beginTransaction();
 
-			$stat = $DB->prepare("SELECT max(slug) AS c FROM import_url_information WHERE site_id=:site_id");
+		try {
+			$this->app['db']->beginTransaction();
+
+			$stat = $this->app['db']->prepare("SELECT max(slug) AS c FROM import_url_information WHERE site_id=:site_id");
 			$stat->execute(array('site_id'=>$site->getId()));
 			$data = $stat->fetch();
 			$importURL->setSlug($data['c'] + 1);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id,area_id, approved_at, is_manual_events_creation) ".
+			$stat = $this->app['db']->prepare("INSERT INTO import_url_information (site_id, slug, title,url,url_canonical,created_at,group_id,is_enabled,country_id,area_id, approved_at, is_manual_events_creation) ".
 					"VALUES (:site_id, :slug, :title,:url,:url_canonical, :created_at, :group_id,:is_enabled,:country_id,:area_id,:approved_at,:is_manual_events_creation) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$site->getId(), 
@@ -53,15 +55,15 @@ class ImportRepository {
 					'group_id'=>$importURL->getGroupId(),
 					'country_id'=>$importURL->getCountryId(),
 					'area_id'=>$importURL->getAreaId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),		
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
 					'is_manual_events_creation'=>$importURL->getIsManualEventsCreation()?1:0,
 				));
 			$data = $stat->fetch();
 			$importURL->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, approved_at, is_new, is_manual_events_creation) VALUES ".
+			$stat = $this->app['db']->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, approved_at, is_new, is_manual_events_creation) VALUES ".
 					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id, :approved_at, '1', :is_manual_events_creation )");
 			$stat->execute(array(
 					'curated_list_id'=>$importURL->getId(),
@@ -70,24 +72,24 @@ class ImportRepository {
 					'country_id'=>$importURL->getCountryId(),
 					'area_id'=>$importURL->getAreaId(),
 					'user_account_id'=>$creator->getId(),				
-					'created_at'=>\TimeSource::getFormattedForDataBase(),		
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
 					'is_manual_events_creation'=>$importURL->getIsManualEventsCreation()?1:0,
 				));
 			
 			
-			$DB->commit();
+			$this->app['db']->commit();
 
             $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 	
 	public function loadBySlug(SiteModel $site, $slug) {
-		global $DB;
-		$stat = $DB->prepare("SELECT import_url_information.* FROM import_url_information WHERE slug =:slug AND site_id =:sid");
+
+		$stat = $this->app['db']->prepare("SELECT import_url_information.* FROM import_url_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$iurl = new ImportModel();
@@ -97,8 +99,8 @@ class ImportRepository {
 	}
 	
 	public function loadById($id) {
-		global $DB;
-		$stat = $DB->prepare("SELECT import_url_information.* FROM import_url_information WHERE id =:id");
+
+		$stat = $this->app['db']->prepare("SELECT import_url_information.* FROM import_url_information WHERE id =:id");
 		$stat->execute(array('id'=>$id ));
 		if ($stat->rowCount() > 0) {
 			$iurl = new ImportModel();
@@ -117,18 +119,18 @@ class ImportRepository {
 	}
 
 	public function editWithMetaData(ImportModel $importURL, ImportEditMetaDataModel $importEditMetaDataModel) {
-		global $DB;
+
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
 			$fields = array('title','country_id','area_id','is_manual_events_creation');
 			$this->importDBAccess->update($importURL, $fields, $importEditMetaDataModel);
 			
-			$DB->commit();
+			$this->app['db']->commit();
 
             $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 
@@ -143,9 +145,9 @@ class ImportRepository {
 	}
 
 	public function enableWithMetaData(ImportModel $importURL, ImportEditMetaDataModel $importEditMetaDataModel) {
-		global $DB;
+
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
 			$importURL->setIsEnabled(true);
 			$importURL->setExpiredAt(null);
@@ -153,11 +155,11 @@ class ImportRepository {
 			$this->importDBAccess->update($importURL, array('is_enabled','expired_at'), $importEditMetaDataModel);
 
 
-			$DB->commit();
+			$this->app['db']->commit();
 
             $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 
@@ -171,9 +173,9 @@ class ImportRepository {
 	}
 
 	public function disableWithMetaData(ImportModel $importURL, ImportEditMetaDataModel $importEditMetaDataModel) {
-		global $DB;
+
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
 
 			$importURL->setIsEnabled(false);
@@ -181,17 +183,17 @@ class ImportRepository {
 
 			$this->importDBAccess->update($importURL, array('is_enabled','expired_at'), $importEditMetaDataModel);
 			
-			$DB->commit();
+			$this->app['db']->commit();
 
             $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 	
 	public function getLastEditDateForImportURL(ImportModel $importURL) {
-		global $DB;
-		$stat = $DB->prepare("SELECT max(created_at) AS c FROM import_url_history WHERE import_url_id = :import_url_id");
+
+		$stat = $this->app['db']->prepare("SELECT max(created_at) AS c FROM import_url_history WHERE import_url_id = :import_url_id");
 		$stat->execute(array('import_url_id'=>$importURL->getId()));
 		$data = $stat->fetch();
 		return new \DateTime($data['c'], new \DateTimeZone('UTC'));
@@ -199,19 +201,19 @@ class ImportRepository {
 	
 	
 	public function getLastRunDateForImportURL(ImportModel $importURL) {
-		global $DB;
-		$stat = $DB->prepare("SELECT max(created_at) AS c FROM import_url_result WHERE import_url_id = :import_url_id");
+
+		$stat = $this->app['db']->prepare("SELECT max(created_at) AS c FROM import_url_result WHERE import_url_id = :import_url_id");
 		$stat->execute(array('import_url_id'=>$importURL->getId()));
 		$data = $stat->fetch();
 		return $data['c'] ? new \DateTime($data['c'], new \DateTimeZone('UTC')) : null;
 	}
 	
 	public function expire(ImportModel $importURL) {
-		global $DB;
-		try {
-			$DB->beginTransaction();
 
-			$importURL->setExpiredAt(\TimeSource::getDateTime());
+		try {
+			$this->app['db']->beginTransaction();
+
+			$importURL->setExpiredAt($this->app['timesource']->getDateTime());
 
 
 			$importURLEditMetaData = new ImportEditMetaDataModel();
@@ -219,16 +221,16 @@ class ImportRepository {
 
 			$this->importDBAccess->update($importURL, array('expired_at'), $importURLEditMetaData);
 
-			$DB->commit();
+			$this->app['db']->commit();
 
             $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 	
 	public function loadClashForImportUrl(ImportModel $importURL) {
-		global $DB;
+
 		
 		$sql = "SELECT import_url_information.* FROM import_url_information WHERE ".
 				"is_enabled='1' AND expired_at IS NULL AND site_id=:site_id AND url_canonical=:url_canonical ";
@@ -241,7 +243,7 @@ class ImportRepository {
 			$params['id'] = $importURL->getId();
 		}
 				
-		$stat = $DB->prepare($sql);
+		$stat = $this->app['db']->prepare($sql);
 		$stat->execute($params);
 		if ($stat->rowCount() > 0) {
 			$iurl = new ImportModel();

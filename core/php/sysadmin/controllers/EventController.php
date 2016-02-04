@@ -39,14 +39,14 @@ class EventController {
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('group'=>null,'venue'=>null,'country'=>null,'area'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 		
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 
-		$er = new EventRepository();
+		$er = new EventRepository($app);
 		$this->parameters['event'] = $er->loadBySlug($this->parameters['site'], $slug);
 
 		$this->parameters['eventisduplicateof'] = $this->parameters['event']->getIsDuplicateOfId() ? $er->loadById($this->parameters['event']->getIsDuplicateOfId()) : null;
@@ -56,23 +56,23 @@ class EventController {
 		}
 	
 		if ($this->parameters['event']->getGroupId()) {
-			$gr = new GroupRepository();
+			$gr = new GroupRepository($app);
 			$this->parameters['group'] = $gr->loadById($this->parameters['event']->getGroupId());
 		}
 		
 		if ($this->parameters['event']->getCountryID()) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($app);
 			$this->parameters['country'] = $cr->loadById($this->parameters['event']->getCountryID());
 		}
 		
 		if ($this->parameters['event']->getVenueID()) {
-			$cr = new VenueRepository();
+			$cr = new VenueRepository($app);
 			$this->parameters['venue'] = $cr->loadById($this->parameters['event']->getVenueID());
 		}
 
 
 		if ($this->parameters['event']->getAreaID()) {
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$this->parameters['area'] = $ar->loadById($this->parameters['event']->getAreaID());
 		}
 
@@ -97,51 +97,51 @@ class EventController {
 				$redirect = false;
 
 				if ($data['comment']) {
-					$scr = new SysAdminCommentRepository();
+					$scr = new SysAdminCommentRepository($app);
 					$scr->createAboutEvent($this->parameters['event'], $data['comment'], $app['currentUser']);
 					$redirect = true;
 				}
 
 
 				if ($action->getCommand() == 'addgroup') {
-					$gr = new GroupRepository();
+					$gr = new GroupRepository($app);
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
 						$gr->addEventToGroup($this->parameters['event'], $group, $app['currentUser']);
 						$redirect = true;
 					}
 				} else if ($action->getCommand() == 'removegroup') {
-					$gr = new GroupRepository();
+					$gr = new GroupRepository($app);
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
 						$gr->removeEventFromGroup($this->parameters['event'], $group, $app['currentUser']);
 						$redirect = true;
 					}
 				} else if ($action->getCommand() == 'maingroup') {
-					$gr = new GroupRepository();
+					$gr = new GroupRepository($app);
 					$group = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($group) {
 						$gr->setMainGroupForEvent($group, $this->parameters['event'], $app['currentUser']);
 						$redirect = true;
 					}
 				} else if ($action->getCommand() == 'delete' && !$this->parameters['event']->getIsDeleted()) {
-					$er = new EventRepository();
+					$er = new EventRepository($app);
 					$er->delete($this->parameters['event'],  $app['currentUser']);
 					$redirect = true;
 					
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['event']->getIsDeleted()) {
 					$this->parameters['event']->setIsDeleted(false);
-					$er = new EventRepository();
+					$er = new EventRepository($app);
 					$er->undelete($this->parameters['event'],  $app['currentUser']);
 					$redirect = true;
 
 				} else if ($action->getCommand() == 'cancel' && !$this->parameters['event']->getIsDeleted()) {
-					$er = new EventRepository();
+					$er = new EventRepository($app);
 					$er->cancel($this->parameters['event'],  $app['currentUser']);
 					$redirect = true;
 
 				} else if ($action->getCommand() == 'uncancel' && $this->parameters['event']->getIsCancelled()) {
-					$er = new EventRepository();
+					$er = new EventRepository($app);
 					$er->uncancel($this->parameters['event'],  $app['currentUser']);
 					$redirect = true;
 
@@ -163,7 +163,7 @@ class EventController {
 
 				} else if ($action->getCommand() == 'isduplicateof') {
 
-					$er = new EventRepository();
+					$er = new EventRepository($app);
 					$originalEvent = $er->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalEvent && $originalEvent->getId() != $this->parameters['event']->getId()) {
 						$er->markDuplicate($this->parameters['event'], $originalEvent, $app['currentUser']);
@@ -171,7 +171,7 @@ class EventController {
 					}
 				} else if ($action->getCommand() == 'isnotduplicate') {
 
-					$er = new EventRepository();
+					$er = new EventRepository($app);
 					$eventEditMetaData = new EventEditMetaDataModel();
 					$eventEditMetaData->setUserAccount($app['currentUser']);
 					$eventEditMetaData->setFromRequest($request);
@@ -181,7 +181,7 @@ class EventController {
 
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeEventPassword && $app['config']->sysAdminExtraPurgeEventPassword == $action->getParam(0)) {
 
-					$er = new EventRepository();
+					$er = new EventRepository($app);
 					$er->purge($this->parameters['event']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/event/');
 
@@ -196,13 +196,13 @@ class EventController {
 			
 		}
 		
-		$groupRB = new GroupRepositoryBuilder();
+		$groupRB = new GroupRepositoryBuilder($app);
 		$groupRB->setEvent($this->parameters['event']);
 		$this->parameters['groups'] = $groupRB->fetchAll();
 		
 		$this->parameters['form'] = $form->createView();
 
-		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setEvent($this->parameters['event']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
 		

@@ -57,14 +57,14 @@ class GroupController {
 			$slug = array_shift(explode("-", $slug, 2));
 		}
 		
-		$gr = new GroupRepository();
+		$gr = new GroupRepository($app);
 		$this->parameters['group'] = $gr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['group']) {
 			return false;
 		}
 		
 		if ($app['currentUser']) {
-			$uwgr = new UserWatchesGroupRepository();
+			$uwgr = new UserWatchesGroupRepository($app);
 			$uwg = $uwgr->loadByUserAndGroup($app['currentUser'], $this->parameters['group']);
 			$this->parameters['currentUserWatchesGroup'] = $uwg && $uwg->getIsWatching();
 		}
@@ -115,18 +115,18 @@ class GroupController {
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
 		
 				
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setGroup($this->parameters['group']);
 		$this->parameters['medias'] = $mrb->fetchAll();
 		
 		// we only want to link to these if there are any
-		$importurlRepoBuilder = new ImportRepositoryBuilder();
+		$importurlRepoBuilder = new ImportRepositoryBuilder($app);
 		$importurlRepoBuilder->setGroup($this->parameters['group']);
 		$this->parameters['importurls'] = $importurlRepoBuilder->fetchAll();
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($app);
 		if (!$this->parameters['group']->getIsDeleted() && $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
 			&& $app['currentSite']->getIsFeatureGroup() ) {
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
@@ -134,7 +134,7 @@ class GroupController {
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = 0;
 		}
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($app);
 		$curatedListRepoBuilder->setContainsGroup($this->parameters['group']);
 		$curatedListRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['curatedLists'] = $curatedListRepoBuilder->fetchAll();
@@ -151,7 +151,7 @@ class GroupController {
 		
 		
 		
-		$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+		$historyRepositoryBuilder = new HistoryRepositoryBuilder($app);
 		$historyRepositoryBuilder->setGroup($this->parameters['group']);
 		$this->parameters['historyItems'] = $historyRepositoryBuilder->fetchAll();
 		
@@ -168,7 +168,7 @@ class GroupController {
 		
 		
 		
-		$importurlRepoBuilder = new ImportRepositoryBuilder();
+		$importurlRepoBuilder = new ImportRepositoryBuilder($app);
 		$importurlRepoBuilder->setGroup($this->parameters['group']);
 		$this->parameters['importurls'] = $importurlRepoBuilder->fetchAll();
 		
@@ -202,13 +202,13 @@ class GroupController {
 
 				if ($form->isValid() && $form['media']->getData()) {
 
-					$mediaRepository = new MediaRepository();
+					$mediaRepository = new MediaRepository($app);
 					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
 							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
 
-						$mediaInGroupRepo = new MediaInGroupRepository();
+						$mediaInGroupRepo = new MediaInGroupRepository($app);
 						$mediaInGroupRepo->add($media, $this->parameters['group'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
@@ -223,7 +223,7 @@ class GroupController {
 		}
 		
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setGroup($this->parameters['group']);
@@ -238,10 +238,10 @@ class GroupController {
 		}
 		
 		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$mediaRepository = new MediaRepository();
+			$mediaRepository = new MediaRepository($app);
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
-				$mediaInGroupRepo = new MediaInGroupRepository();
+				$mediaInGroupRepo = new MediaInGroupRepository($app);
 				$mediaInGroupRepo->remove($media, $this->parameters['group'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Removed!');
 			}
@@ -256,17 +256,17 @@ class GroupController {
 		}
 			
 		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$mediaRepository = new MediaRepository();
+			$mediaRepository = new MediaRepository($app);
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
-				$mediaInGroupRepo = new MediaInGroupRepository();
+				$mediaInGroupRepo = new MediaInGroupRepository($app);
 				$mediaInGroupRepo->add($media, $this->parameters['group'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Added!');
 				return $app->redirect("/group/".$this->parameters['group']->getSlugForURL().'/');
 			}
 		}
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setNotInGroup($this->parameters['group']);
@@ -301,7 +301,7 @@ class GroupController {
 				}
 				$groupEditMetaDataModel->setFromRequest($request);
 
-				$groupRepository = new GroupRepository();
+				$groupRepository = new GroupRepository($app);
 				$groupRepository->editWithMetaData($this->parameters['group'], $groupEditMetaDataModel);
 				
 				return $app->redirect("/group/".$this->parameters['group']->getSlugForUrl());
@@ -320,7 +320,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 				
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -342,7 +342,7 @@ class GroupController {
 		}
 
 		
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -365,7 +365,7 @@ class GroupController {
 		}
 		
 		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$repo = new UserWatchesGroupRepository();
+			$repo = new UserWatchesGroupRepository($app);
 			if ($request->request->get('action') == 'watch') {
 				$repo->startUserWatchingGroup($app['currentUser'], $this->parameters['group']);
 				$app['flashmessages']->addMessage("Watching!");
@@ -378,7 +378,7 @@ class GroupController {
 			return $app->redirect('/group/'.$this->parameters['group']->getSlugForURL());
 		}
 
-		$repo = new \repositories\UserNotificationPreferenceRepository();
+		$repo = new \repositories\UserNotificationPreferenceRepository($app);
 		$this->parameters['preferences'] = array();
 		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
 			if (!isset($this->parameters['preferences'][$extension->getId()])) {
@@ -398,21 +398,21 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($app);
 		$user = $userRepo->loadByID($userid);
 		if (!$user) {
 			$app['monolog']->addError("Failed stop watching group from email - no user ");
 			die("NO"); // TODO
 		}
 		
-		$userWatchesGroupStopRepo = new UserWatchesGroupStopRepository();
+		$userWatchesGroupStopRepo = new UserWatchesGroupStopRepository($app);
 		$userWatchesGroupStop = $userWatchesGroupStopRepo->loadByUserAccountIDAndGroupIDAndAccessKey($user->getId(), $this->parameters['group']->getId(), $code);
 		if (!$userWatchesGroupStop) {
 			$app['monolog']->addError("Failed stop watching group from email - user ".$user->getId()." - code wrong");
 			die("NO"); // TODO
 		}
 		
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($app);
 		$userWatchesGroup = $userWatchesGroupRepo->loadByUserAndGroup($user, $this->parameters['group']);
 		if (!$userWatchesGroup || !$userWatchesGroup->getIsWatching()) {
 			$app['monolog']->addError("Failed stop watching group from email - user ".$user->getId()." - not watching");
@@ -444,14 +444,14 @@ class GroupController {
 		$importurl->setSiteId($app['currentSite']->getId());
 		$importurl->setGroupId($this->parameters['group']->getId());
 		
-		$form = $app['form.factory']->create(new ImportNewForm($app['currentSite'], $app['currentTimeZone']), $importurl);
+		$form = $app['form.factory']->create(new ImportNewForm($app, $app['currentSite'], $app['currentTimeZone']), $importurl);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
 			if ($form->isValid()) {
 				
-				$importRepository = new ImportRepository();
+				$importRepository = new ImportRepository($app);
 				
 				$clash = $importRepository->loadClashForImportUrl($importurl);
 				if ($clash) {
@@ -462,7 +462,7 @@ class GroupController {
 				}
 				
 				$area = null;
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($app);
 				$areasPost = $request->request->get('areas');
 				if (is_array($areasPost)) {
 					foreach ($areasPost as $areaCode) {

@@ -39,8 +39,9 @@ class EventsCountExtension  extends \Twig_Extension {
 
 	public function futureEventsCount($data)
 	{
+        global $app;
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
         $erb->setSite($this->app['currentSite']);
 		$erb->setAfterNow();
 		$erb->setIncludeCancelled(true);
@@ -60,8 +61,9 @@ class EventsCountExtension  extends \Twig_Extension {
 
 	public function pastEventsCount($data)
 	{
+        global $app;
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
         $erb->setSite($this->app['currentSite']);
 		$erb->setBeforeNow();
 		$erb->setIncludeCancelled(true);

@@ -37,7 +37,7 @@ class NewEventDraftRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		
 		
@@ -46,7 +46,7 @@ class NewEventDraftRepositoryBuilder  extends BaseRepositoryBuilder {
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
 				" ORDER BY new_event_draft_information.slug ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

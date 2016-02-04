@@ -24,7 +24,7 @@ class SiteListController {
 	function index(Request $request, Application $app) {
 		
 		
-		$erb = new SiteRepositoryBuilder();
+		$erb = new SiteRepositoryBuilder($app);
 		$sites = $erb->fetchAll();
 		
 		return $app['twig']->render('sysadmin/sitelist/index.html.twig', array(

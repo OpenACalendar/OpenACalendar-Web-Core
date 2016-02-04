@@ -35,9 +35,9 @@ class UpdateAreaFutureEventsCacheTask extends \BaseTask {
 
 	protected function run()
 	{
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($this->app);
 
-		$arb = new AreaRepositoryBuilder();
+		$arb = new AreaRepositoryBuilder($this->app);
 		$arb->setLimit(0);  // all of them
 		$count = 0;
 		foreach($arb->fetchAll() as $area) {

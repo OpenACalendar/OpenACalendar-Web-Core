@@ -38,8 +38,9 @@ class ImportURLExpiredUserNotificationModel extends \BaseUserNotificationModel {
 	var $import;
 	
 	private function loadImportURLIfNeeded() {
+        global $app;
 		if (!$this->import && property_exists($this->data, 'import') && $this->data->import) {
-			$repo = new ImportRepository;
+			$repo = new ImportRepository($app);
 			$this->import = $repo->loadById($this->data->import);
 		}
 	}

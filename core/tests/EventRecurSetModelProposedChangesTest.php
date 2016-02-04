@@ -18,7 +18,7 @@ class EventRecurSetModelProposedChangesTest extends \BaseAppTest {
 	 */
 	function testChangeDescription1() {
 		
-		TimeSource::mock(2014,1,1,9,0,0);
+		$this->app['timesource']->mock(2014,1,1,9,0,0);
 		
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
@@ -181,7 +181,7 @@ class EventRecurSetModelProposedChangesTest extends \BaseAppTest {
      */	
 	function testChangeSummary1($janMonthName, $febMonthName, $marMonthName, $aprMonthName) {
 		
-		TimeSource::mock(2014,1,1,9,0,0);
+		$this->app['timesource']->mock(2014,1,1,9,0,0);
 		
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
@@ -350,7 +350,7 @@ class EventRecurSetModelProposedChangesTest extends \BaseAppTest {
 	
 	function testChangeStartEnd1() {
 		
-		TimeSource::mock(2014,1,1,9,0,0);
+		$this->app['timesource']->mock(2014,1,1,9,0,0);
 		
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');

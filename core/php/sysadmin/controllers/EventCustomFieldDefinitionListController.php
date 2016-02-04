@@ -40,7 +40,7 @@ class EventCustomFieldDefinitionListController
 	{
 		$this->parameters = array();
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 
 		if (!$this->parameters['site']) {
@@ -73,7 +73,7 @@ class EventCustomFieldDefinitionListController
 						$ecfdm->setType('TextSingleLine');
 						$ecfdm->setKey($action->getParam(0));
 						$ecfdm->setLabel($action->getParam(0));
-						$repo = new EventCustomFieldDefinitionRepository();
+						$repo = new EventCustomFieldDefinitionRepository($app);
 						$repo->create($ecfdm, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/' . $this->parameters['site']->getId() . '/eventcustomfielddefinition/' . $ecfdm->getId());
 					} else {
@@ -87,7 +87,7 @@ class EventCustomFieldDefinitionListController
 						$ecfdm->setType('TextMultiLine');
 						$ecfdm->setKey($action->getParam(0));
 						$ecfdm->setLabel($action->getParam(0));
-						$repo = new EventCustomFieldDefinitionRepository();
+						$repo = new EventCustomFieldDefinitionRepository($app);
 						$repo->create($ecfdm, $app['currentUser']);
 						return $app->redirect('/sysadmin/site/' . $this->parameters['site']->getId() . '/eventcustomfielddefinition/' . $ecfdm->getId());
 					} else {
@@ -103,7 +103,7 @@ class EventCustomFieldDefinitionListController
 
 
 
-		$rb = new EventCustomFieldDefinitionRepositoryBuilder();
+		$rb = new EventCustomFieldDefinitionRepositoryBuilder($app);
 		$rb->setSite($this->parameters['site']);
 		$this->parameters['fields'] = $rb->fetchAll();
 

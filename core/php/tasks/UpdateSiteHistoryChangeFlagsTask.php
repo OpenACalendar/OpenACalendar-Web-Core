@@ -33,7 +33,7 @@ class UpdateSiteHistoryChangeFlagsTask extends \BaseTask {
 
 	protected function run() {
 
-		$siteHistoryRepo = new SiteHistoryRepository();
+		$siteHistoryRepo = new SiteHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM site_history");
 		$stat->execute();
 		$count = 0;

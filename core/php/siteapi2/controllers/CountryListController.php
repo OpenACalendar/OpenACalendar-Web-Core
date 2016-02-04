@@ -19,7 +19,7 @@ class CountryListController   {
 	
 	public function listJson (Request $request, Application $app) {
 		
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($app);
 		$crb->setSiteIn($app['currentSite']);
 		
 		

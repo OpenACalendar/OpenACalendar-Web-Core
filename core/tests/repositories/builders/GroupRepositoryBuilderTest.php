@@ -28,21 +28,21 @@ class GroupRepositoryBuilderTest extends \BaseAppWithDBTest
 
 	function testEventAndNotEvent1() {
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$event = new EventModel();
@@ -51,7 +51,7 @@ class GroupRepositoryBuilderTest extends \BaseAppWithDBTest
 		$event->setStartAt(getUTCDateTime(2013,8,1,19,0,0));
 		$event->setEndAt(getUTCDateTime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$group = new GroupModel();
@@ -60,37 +60,37 @@ class GroupRepositoryBuilderTest extends \BaseAppWithDBTest
 		$group->setUrl("http://www.group.com");
 
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		## Test event not in group
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setEvent($event);
 		$this->assertEquals(0, count($grb->fetchAll()));
 
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setNotEvent($event);
 		$this->assertEquals(1, count($grb->fetchAll()));
 
 		## Add event to group, test
 		$groupRepo->addEventToGroup($event, $group, $user);
 
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setEvent($event);
 		$this->assertEquals(1, count($grb->fetchAll()));
 
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setNotEvent($event);
 		$this->assertEquals(0, count($grb->fetchAll()));
 
 		## remove event from group
 		$groupRepo->removeEventFromGroup($event, $group, $user);
 
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setEvent($event);
 		$this->assertEquals(0, count($grb->fetchAll()));
 
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setNotEvent($event);
 		$this->assertEquals(1, count($grb->fetchAll()));
 	}

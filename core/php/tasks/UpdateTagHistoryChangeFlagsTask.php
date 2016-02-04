@@ -34,7 +34,7 @@ class UpdateTagHistoryChangeFlagsTask extends \BaseTask {
 	protected function run() {
 
 
-		$tagHistoryRepo = new TagHistoryRepository();
+		$tagHistoryRepo = new TagHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM tag_history");
 		$stat->execute();
 		$count = 0;

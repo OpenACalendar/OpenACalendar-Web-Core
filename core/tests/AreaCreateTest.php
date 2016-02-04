@@ -22,22 +22,22 @@ class AreaCreateTest extends \BaseAppWithDBTest {
 	
 	function test1() {
 		$this->addCountriesToTestDB();
-		$countryRepo = new CountryRepository();
-		$areaRepo = new AreaRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$areaRepo = new AreaRepository($this->app);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		### No areas

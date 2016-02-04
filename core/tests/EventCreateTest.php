@@ -30,21 +30,21 @@ class EventCreateTest extends BaseAppWithDBTest {
 	
 	function testSummerTime() {
 
-		TimeSource::mock(2014,5,1,7,0,0);
+		$this->app['timesource']->mock(2014,5,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
@@ -55,7 +55,7 @@ class EventCreateTest extends BaseAppWithDBTest {
 		$event->setUrl("http://www.info.com");
 		$event->setTicketUrl("http://www.tickets.com");
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());
@@ -70,11 +70,11 @@ class EventCreateTest extends BaseAppWithDBTest {
 		$startAtIs->setTimezone(new \DateTimeZone('UTC'));
 		$this->assertEquals($startAtShouldBe->format("c"), $startAtIs->format("c"));
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setFreeTextsearch('cat');
 		$this->assertEquals(0, count($erb->fetchAll()));	
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setFreeTextsearch('test');
 		$this->assertEquals(1, count($erb->fetchAll()));	
 		
@@ -82,21 +82,21 @@ class EventCreateTest extends BaseAppWithDBTest {
 	
 	function testWinterTime() {
 
-		TimeSource::mock(2014,5,1,7,0,0);
+		$this->app['timesource']->mock(2014,5,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
@@ -105,7 +105,7 @@ class EventCreateTest extends BaseAppWithDBTest {
 		$event->setStartAt($this->mktime(2014,11,10,19,0,0,'Europe/London'));
 		$event->setEndAt($this->mktime(2014,11,10,21,0,0,'Europe/London'));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());

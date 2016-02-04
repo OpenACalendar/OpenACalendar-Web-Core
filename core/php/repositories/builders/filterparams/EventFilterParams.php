@@ -24,7 +24,7 @@ class EventFilterParams {
 		if ($erb) {
 			$this->eventRepositoryBuilder = $erb;
 		} else {
-			$this->eventRepositoryBuilder = new EventRepositoryBuilder();
+			$this->eventRepositoryBuilder = new EventRepositoryBuilder($app);
 			$this->eventRepositoryBuilder->setLimit(100);
 		}
 	}

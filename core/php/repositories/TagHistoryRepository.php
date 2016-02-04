@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\TagModel;
 use models\TagHistoryModel;
+use Silex\Application;
 
 /**
  *
@@ -15,15 +16,23 @@ use models\TagHistoryModel;
  */
 class TagHistoryRepository {
 
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
 
 	public function ensureChangedFlagsAreSet(TagHistoryModel $tagHistory) {
-		global $DB;
+
 
 		// do we already have them?
 		if (!$tagHistory->isAnyChangeFlagsUnknown()) return;
 
 		// load last.
-		$stat = $DB->prepare("SELECT * FROM tag_history WHERE tag_id = :id AND created_at < :at ".
+		$stat = $this->app['db']->prepare("SELECT * FROM tag_history WHERE tag_id = :id AND created_at < :at ".
 			"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$tagHistory->getId(),'at'=>$tagHistory->getCreatedAt()->format("Y-m-d H:i:s")));
 
@@ -59,7 +68,7 @@ class TagHistoryRepository {
 			$sqlFields[] = " is_deleted_changed = :is_deleted_changed ";
 			$sqlParams['is_deleted_changed'] = $tagHistory->getIsDeletedChanged() ? 1 : -1;
 		}
-		$statUpdate = $DB->prepare("UPDATE tag_history SET ".
+		$statUpdate = $this->app['db']->prepare("UPDATE tag_history SET ".
 			" is_new = :is_new, ".implode(" , ",$sqlFields).
 			" WHERE tag_id = :id AND created_at = :created_at");
 		$statUpdate->execute($sqlParams);

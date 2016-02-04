@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\SiteModel;
 use models\SiteHistoryModel;
+use Silex\Application;
 
 /**
  *
@@ -15,15 +16,23 @@ use models\SiteHistoryModel;
  */
 class SiteHistoryRepository {
 
-	
-	public function ensureChangedFlagsAreSet(SiteHistoryModel $sitehistory) {
-		global $DB;
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    public function ensureChangedFlagsAreSet(SiteHistoryModel $sitehistory) {
+
 		
 		// do we already have them?
 		if (!$sitehistory->isAnyChangeFlagsUnknown()) return;
 		
 		// load last.
-		$stat = $DB->prepare("SELECT * FROM site_history WHERE site_id = :id AND created_at < :at ".
+		$stat = $this->app['db']->prepare("SELECT * FROM site_history WHERE site_id = :id AND created_at < :at ".
 				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$sitehistory->getId(),'at'=>$sitehistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
@@ -87,7 +96,7 @@ class SiteHistoryRepository {
 			$sqlParams['prompt_emails_days_in_advance_changed'] = $sitehistory->getPromptEmailsDaysInAdvanceChanged() ? 1 : -1;
 		}
 
-		$statUpdate = $DB->prepare("UPDATE site_history SET ".
+		$statUpdate = $this->app['db']->prepare("UPDATE site_history SET ".
 			" is_new = :is_new, ".
 			implode(" , ",$sqlFields).
 			" WHERE site_id = :id AND created_at = :created_at");

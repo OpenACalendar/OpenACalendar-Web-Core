@@ -31,21 +31,21 @@ class EventInGroupCreateTest extends \BaseAppWithDBTest {
 	
 	function testMultiple() {
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group1 = new GroupModel();
@@ -59,7 +59,7 @@ class EventInGroupCreateTest extends \BaseAppWithDBTest {
 		$group2->setUrl("http://www.cat.com");
 		
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group1, $site, $user);
 		$groupRepo->create($group2, $site, $user);
 		
@@ -69,11 +69,11 @@ class EventInGroupCreateTest extends \BaseAppWithDBTest {
 		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group1, array($group1, $group2));
 
 		// Check groups
-		$groupRB = new GroupRepositoryBuilder();
+		$groupRB = new GroupRepositoryBuilder($this->app);
 		$groupRB->setEvent($event);
 		$groups = $groupRB->fetchAll();
 		$this->assertEquals(2, count($groups));

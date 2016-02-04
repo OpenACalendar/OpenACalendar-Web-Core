@@ -28,7 +28,7 @@ class UserGetDataForUpcomingEventsEmailTest  extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		
@@ -66,14 +66,14 @@ class UserGetDataForUpcomingEventsEmailTest  extends \BaseAppWithDBTest {
      */	
 	function test1($emailOption, $goingOption, $result) {	
 	
-		TimeSource::mock(2013,8,1,7,0,0);
+		$this->app['timesource']->mock(2013,8,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		
@@ -81,7 +81,7 @@ class UserGetDataForUpcomingEventsEmailTest  extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
@@ -90,7 +90,7 @@ class UserGetDataForUpcomingEventsEmailTest  extends \BaseAppWithDBTest {
 		$event->setStartAt($this->mktime(2013,8,2,19,0,0));
 		$event->setEndAt($this->mktime(2013,8,2,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		$user->setEmailUpcomingEventsDaysNotice(1);
@@ -102,14 +102,14 @@ class UserGetDataForUpcomingEventsEmailTest  extends \BaseAppWithDBTest {
 			$userAtEvent->setUserAccountId($user->getId());
 			$userAtEvent->setEventId($event->getId());
 			$userAtEvent->setIsPlanAttending(true);
-			$uaeRepo = new UserAtEventRepository();
+			$uaeRepo = new UserAtEventRepository($this->app);
 			$uaeRepo->save($userAtEvent);
 		} else if ($goingOption == 'm') {
 			$userAtEvent = new UserAtEventModel();
 			$userAtEvent->setUserAccountId($user->getId());
 			$userAtEvent->setEventId($event->getId());
 			$userAtEvent->setIsPlanMaybeAttending(true);
-			$uaeRepo = new UserAtEventRepository();
+			$uaeRepo = new UserAtEventRepository($this->app);
 			$uaeRepo->save($userAtEvent);
 		}
 		

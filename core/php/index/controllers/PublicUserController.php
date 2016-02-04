@@ -29,7 +29,7 @@ class PublicUserController {
 	protected function build($username, Request $request, Application $app) {
 		$this->parameters = array('user'=>null);
 
-		$repository = new UserAccountRepository();
+		$repository = new UserAccountRepository($app);
 		$this->parameters['user'] =  $repository->loadByUserName($username);
 		if (!$this->parameters['user']) {
 			return false;
@@ -51,7 +51,7 @@ class PublicUserController {
 		}
 		
 		
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
 		$erb->setAfterNow();
 		$erb->setUserAccount($this->parameters['user'], false, false, true, false);
 		$this->parameters['events'] = $erb->fetchAll();

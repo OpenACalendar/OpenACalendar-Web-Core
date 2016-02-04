@@ -24,21 +24,21 @@ class GroupPurgeTest extends \BaseAppWithDBTest {
 	
 	function testMultiple() {
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -49,13 +49,13 @@ class GroupPurgeTest extends \BaseAppWithDBTest {
 		$groupDupe = new GroupModel();
 		$groupDupe->setTitle("test DUPE");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		$groupRepo->create($groupDupe, $site, $user);
-		TimeSource::mock(2013,7,1,7,1,0);
+		$this->app['timesource']->mock(2013,7,1,7,1,0);
 		$groupRepo->markDuplicate($groupDupe, $group);
 
-		$ufgr = new UserWatchesGroupRepository();
+		$ufgr = new UserWatchesGroupRepository($this->app);
 		$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($user, $group->getId());
 		
 		$event = new EventModel();
@@ -64,16 +64,16 @@ class GroupPurgeTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2013,8,1,19,0,0));
 		$event->setEndAt(getUTCDateTime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group);
 
-		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
+		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository($this->app);
 		$sysadminCommentRepo->createAboutGroup($group, "TEST", null);
 
 		## TEST
 		$this->assertNotNull($groupRepo->loadById($group->getId()));
 		
-		$groupRB = new GroupRepositoryBuilder();
+		$groupRB = new GroupRepositoryBuilder($this->app);
 		$groupRB->setEvent($event);
 		$groups = $groupRB->fetchAll();
 		$this->assertEquals(1, count($groups));
@@ -84,7 +84,7 @@ class GroupPurgeTest extends \BaseAppWithDBTest {
 		## TEST
 		$this->assertNull($groupRepo->loadById($group->getId()));
 		
-		$groupRB = new GroupRepositoryBuilder();
+		$groupRB = new GroupRepositoryBuilder($this->app);
 		$groupRB->setEvent($event);
 		$groups = $groupRB->fetchAll();
 		$this->assertEquals(0, count($groups));

@@ -24,21 +24,21 @@ class EventHasTagTest extends \BaseAppWithDBTest {
 
 	function testAddRemove() {
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
@@ -47,27 +47,27 @@ class EventHasTagTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2013,8,1,19,0,0));
 		$event->setEndAt(getUTCDateTime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		$tag = new TagModel();
 		$tag->setTitle("test");
 		
-		$tagRepo = new TagRepository();
+		$tagRepo = new TagRepository($this->app);
 		$tagRepo->create($tag, $site, $user);
 		
 		## No tags
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsForEvent($event);
 		$this->assertEquals(0, count($tagRepoBuilder->fetchAll()));		
 		
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsNotForEvent($event);
 		$this->assertEquals(1, count($tagRepoBuilder->fetchAll()));		
 		
-		$eventRepoBuilder = new EventRepositoryBuilder();
+		$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 		$eventRepoBuilder->setSite($site);
 		$eventRepoBuilder->setTag($tag);
 		$this->assertEquals(0, count($eventRepoBuilder->fetchAll()));
@@ -75,17 +75,17 @@ class EventHasTagTest extends \BaseAppWithDBTest {
 		## Add event to tag, test
 		$tagRepo->addTagToEvent($tag, $event, $user);
 		
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsForEvent($event);
 		$this->assertEquals(1, count($tagRepoBuilder->fetchAll()));		
 		
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsNotForEvent($event);
 		$this->assertEquals(0, count($tagRepoBuilder->fetchAll()));		
 		
-		$eventRepoBuilder = new EventRepositoryBuilder();
+		$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 		$eventRepoBuilder->setSite($site);
 		$eventRepoBuilder->setTag($tag);
 		$this->assertEquals(1, count($eventRepoBuilder->fetchAll()));
@@ -93,17 +93,17 @@ class EventHasTagTest extends \BaseAppWithDBTest {
 		## remove tag
 		$tagRepo->removeTagFromEvent($tag, $event, $user);
 		
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsForEvent($event);
 		$this->assertEquals(0, count($tagRepoBuilder->fetchAll()));		
 		
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsNotForEvent($event);
 		$this->assertEquals(1, count($tagRepoBuilder->fetchAll()));		
 		
-		$eventRepoBuilder = new EventRepositoryBuilder();
+		$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 		$eventRepoBuilder->setSite($site);
 		$eventRepoBuilder->setTag($tag);
 		$this->assertEquals(0, count($eventRepoBuilder->fetchAll()));
@@ -114,27 +114,27 @@ class EventHasTagTest extends \BaseAppWithDBTest {
 	
 	function testAddOnCreate() {
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$tag = new TagModel();
 		$tag->setTitle("test");
 		
-		$tagRepo = new TagRepository();
+		$tagRepo = new TagRepository($this->app);
 		$tagRepo->create($tag, $site, $user);
 		
 		$event = new EventModel();
@@ -143,21 +143,21 @@ class EventHasTagTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2013,8,1,19,0,0));
 		$event->setEndAt(getUTCDateTime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, null, null, null, array ($tag));
 		
 		## test		
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsForEvent($event);
 		$this->assertEquals(1, count($tagRepoBuilder->fetchAll()));		
 		
-		$tagRepoBuilder = new TagRepositoryBuilder();
+		$tagRepoBuilder = new TagRepositoryBuilder($this->app);
 		$tagRepoBuilder->setSite($site);
 		$tagRepoBuilder->setTagsNotForEvent($event);
 		$this->assertEquals(0, count($tagRepoBuilder->fetchAll()));		
 		
-		$eventRepoBuilder = new EventRepositoryBuilder();
+		$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 		$eventRepoBuilder->setSite($site);
 		$eventRepoBuilder->setTag($tag);
 		$this->assertEquals(1, count($eventRepoBuilder->fetchAll()));

@@ -5,6 +5,7 @@ namespace repositories;
 use models\EventModel;
 use models\EventHistoryModel;
 use models\UserAccountModel;
+use Silex\Application;
 
 /**
  *
@@ -16,10 +17,17 @@ use models\UserAccountModel;
  */
 class EventHistoryRepository {
 
-	
-	public function loadByEventAndtimeStamp(EventModel $event, $timestamp) {
-		global $DB;
-		$stat = $DB->prepare("SELECT event_history.* FROM event_history ".
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    public function loadByEventAndtimeStamp(EventModel $event, $timestamp) {
+		$stat = $this->app['db']->prepare("SELECT event_history.* FROM event_history ".
 				"WHERE event_history.event_id =:id AND event_history.created_at <= :cat ORDER BY event_history.created_at DESC");
 		$stat->execute(array( 'id'=>$event->getId(), 'cat'=>date("Y-m-d H:i:s",$timestamp) ));
 		if ($stat->rowCount() > 0) {
@@ -33,13 +41,12 @@ class EventHistoryRepository {
 	}
 	
 	public function ensureChangedFlagsAreSet(EventHistoryModel $eventhistory) {
-		global $DB;
-		
+
 		// do we already have them?
 		if (!$eventhistory->isAnyChangeFlagsUnknown()) return;
 		
 		// load last.
-		$stat = $DB->prepare("SELECT * FROM event_history WHERE event_id = :id AND created_at < :at ".
+		$stat = $this->app['db']->prepare("SELECT * FROM event_history WHERE event_id = :id AND created_at < :at ".
 				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$eventhistory->getId(),'at'=>$eventhistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
@@ -130,7 +137,7 @@ class EventHistoryRepository {
 		$sqlParams['custom_fields_changed'] = $eventhistory->getCustomFieldsChangedForDataBase();
 
 
-		$statUpdate = $DB->prepare("UPDATE event_history SET ".
+		$statUpdate = $this->app['db']->prepare("UPDATE event_history SET ".
 			" is_new = :is_new, ".
 			implode(" , ",$sqlFields).
 			" WHERE event_id = :id AND created_at = :created_at");
@@ -142,8 +149,7 @@ class EventHistoryRepository {
 	
 	
 	public function loadByEventAndlastEditByUser(EventModel $event, UserAccountModel $user) {
-		global $DB;
-		$stat = $DB->prepare("SELECT event_history.* FROM event_history ".
+		$stat = $this->app['db']->prepare("SELECT event_history.* FROM event_history ".
 				" WHERE event_history.event_id = :id AND event_history.user_account_id = :user ".
 				" ORDER BY event_history.created_at DESc");
 		$stat->execute(array( 

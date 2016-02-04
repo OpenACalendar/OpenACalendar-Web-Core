@@ -45,34 +45,34 @@ class EventController {
 			$slug = $slugBits[0];
 		}
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($app);
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['event']) {
 			return false;
 		}
 
 		if ($this->parameters['event']->getGroupId()) {
-			$grb = new GroupRepositoryBuilder();
+			$grb = new GroupRepositoryBuilder($app);
 			$grb->setEvent($this->parameters['event']);
 			$this->parameters['groups'] = $grb->fetchAll();
 		}
 		
 		if ($this->parameters['event']->getVenueID()) {
-			$vr = new VenueRepository();
+			$vr = new VenueRepository($app);
 			$this->parameters['venue'] = $vr->loadById($this->parameters['event']->getVenueID());
 		}
 		
 		if ($this->parameters['event']->getAreaID()) {
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$this->parameters['area'] = $ar->loadById($this->parameters['event']->getAreaID());
 		} elseif ($this->parameters['venue'] && $this->parameters['venue']->getAreaId()) {
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$this->parameters['area'] = $ar->loadById($this->parameters['venue']->getAreaID());
 		}
 		
 		
 		if ($this->parameters['event']->getCountryID()) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($app);
 			$this->parameters['country'] = $cr->loadById($this->parameters['event']->getCountryID());
 		}
 		
@@ -109,7 +109,7 @@ class EventController {
 		$ourRequest = new \Request($request);
 
 		if ($ourRequest->getGetOrPostBoolean("includeMedias",false)) {
-			$mrb = new MediaRepositoryBuilder();
+			$mrb = new MediaRepositoryBuilder($app);
 			$mrb->setEvent($this->parameters['event']);
 			$mrb->setIncludeDeleted(false);
 			$eventMedias = $mrb->fetchAll();
@@ -133,7 +133,7 @@ class EventController {
 		$ourRequest = new \Request($request);
 
 		if ($ourRequest->getGetOrPostBoolean("includeMedias",false)) {
-			$mrb = new MediaRepositoryBuilder();
+			$mrb = new MediaRepositoryBuilder($app);
 			$mrb->setEvent($this->parameters['event']);
 			$mrb->setIncludeDeleted(false);
 			$eventMedias = $mrb->fetchAll();

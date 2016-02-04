@@ -5,6 +5,7 @@ namespace repositories;
 
 use models\SiteModel;
 use models\UserAccountModel;
+use Silex\Application;
 
 /**
  *
@@ -17,24 +18,33 @@ use models\UserAccountModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class SiteProfileMediaRepository {
-	
-	
-	public function createOrEdit(SiteModel $site, UserAccountModel $user) {
-		global $DB;
-		$createdat = \TimeSource::getFormattedForDataBase();
+
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+
+    public function createOrEdit(SiteModel $site, UserAccountModel $user) {
+
+		$createdat = $this->app['timesource']->getFormattedForDataBase();
 		
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
-			$stat = $DB->prepare("SELECT * FROM site_profile_media_information WHERE site_id=:site_id");
+			$stat = $this->app['db']->prepare("SELECT * FROM site_profile_media_information WHERE site_id=:site_id");
 			$stat->execute(array(
 				'site_id'=>$site->getId(),
 			));
 			if ($stat->rowCount() == 1) {
-				$stat = $DB->prepare("UPDATE site_profile_media_information SET logo_media_id=:logo_media_id ".
+				$stat = $this->app['db']->prepare("UPDATE site_profile_media_information SET logo_media_id=:logo_media_id ".
 						" WHERE site_id=:site_id");
 			} else {
-				$stat = $DB->prepare("INSERT INTO site_profile_media_information (site_id, logo_media_id) ".
+				$stat = $this->app['db']->prepare("INSERT INTO site_profile_media_information (site_id, logo_media_id) ".
 					" VALUES (:site_id, :logo_media_id)");
 			}
 			$stat->execute(array(
@@ -42,7 +52,7 @@ class SiteProfileMediaRepository {
 					'site_id'=>$site->getId(),
 				));
 			
-			$stat = $DB->prepare("INSERT INTO site_profile_media_history (site_id, logo_media_id, user_account_id, created_at) ".
+			$stat = $this->app['db']->prepare("INSERT INTO site_profile_media_history (site_id, logo_media_id, user_account_id, created_at) ".
 					" VALUES (:site_id, :logo_media_id, :user_account_id, :created_at)");
 			$stat->execute(array(
 					'site_id'=>$site->getId(),
@@ -53,9 +63,9 @@ class SiteProfileMediaRepository {
 			$data = $stat->fetch();
 			
 			
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 	

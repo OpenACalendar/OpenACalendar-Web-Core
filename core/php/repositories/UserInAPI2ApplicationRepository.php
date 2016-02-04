@@ -8,6 +8,7 @@ use models\UserAccountModel;
 use models\API2ApplicationUserAuthorisationTokenModel;
 use models\API2ApplicationUserPermissionsModel;
 use models\UserInAPI2ApplicationModel;
+use Silex\Application;
 
 /**
  *
@@ -18,18 +19,28 @@ use models\UserInAPI2ApplicationModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserInAPI2ApplicationRepository {
-	
-	
+
+
+    /** @var Application */
+    private  $app;
+
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+
 	public function setPermissionsForUserInApp(API2ApplicationUserPermissionsModel $permissions, UserAccountModel $user, API2ApplicationModel $app) {
-		global $DB;
+
 		
-		$stat = $DB->prepare("SELECT user_in_api2_application_information.* FROM user_in_api2_application_information WHERE ".
+		$stat = $this->app['db']->prepare("SELECT user_in_api2_application_information.* FROM user_in_api2_application_information WHERE ".
 				"api2_application_id =:api2_application_id AND user_id =:user_id");
 		$stat->execute(array( 'api2_application_id'=>$app->getId(), 'user_id'=>$user->getId() ));
 		
 		################## If not there, just add
 		if ($stat->rowCount() == 0) {
-			$stat = $DB->prepare("INSERT INTO user_in_api2_application_information ".
+			$stat = $this->app['db']->prepare("INSERT INTO user_in_api2_application_information ".
 					"(api2_application_id, user_id, is_editor, created_at) ".
 					"VALUES (:api2_application_id, :user_id, :is_editor, :created_at)");
 			
@@ -37,7 +48,7 @@ class UserInAPI2ApplicationRepository {
 				'api2_application_id'=>$app->getId(),
 				'user_id'=> $user->getId() ,
 				'is_editor'=>  $permissions->getIsEditorGranted() ? 1 : 0,
-				'created_at'=>  \TimeSource::getFormattedForDataBase(),
+				'created_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 			));
 			
 			return;
@@ -48,7 +59,7 @@ class UserInAPI2ApplicationRepository {
 
 		if (($permissions->getIsEditorGranted() && $userInAppData['is_editor'] == 0)) {
 			
-			$stat = $DB->prepare("UPDATE user_in_api2_application_information ".
+			$stat = $this->app['db']->prepare("UPDATE user_in_api2_application_information ".
 					" SET is_editor='1' ".
 					" WHERE api2_application_id =:api2_application_id AND user_id =:user_id ");
 			$stat->execute(array( 
@@ -60,7 +71,7 @@ class UserInAPI2ApplicationRepository {
 
 		if (($permissions->getIsEditorRefused() && $userInAppData['is_editor'] == 1)) {
 
-			$stat = $DB->prepare("UPDATE user_in_api2_application_information ".
+			$stat = $this->app['db']->prepare("UPDATE user_in_api2_application_information ".
 					" SET is_editor='0' ".
 					" WHERE api2_application_id =:api2_application_id AND user_id =:user_id ");
 			$stat->execute(array(
@@ -78,8 +89,8 @@ class UserInAPI2ApplicationRepository {
 	 * @return \models\UserInAPI2ApplicationModel
 	 */
 	public function loadByUserAndApplication(UserAccountModel $user, API2ApplicationModel $app) {
-		global $DB;
-		$stat = $DB->prepare("SELECT user_in_api2_application_information.* FROM user_in_api2_application_information ".
+
+		$stat = $this->app['db']->prepare("SELECT user_in_api2_application_information.* FROM user_in_api2_application_information ".
 				"WHERE api2_application_id =:api2_application_id AND user_id =:user_id");
 		$stat->execute(array( 
 				'api2_application_id'=>$app->getId(), 

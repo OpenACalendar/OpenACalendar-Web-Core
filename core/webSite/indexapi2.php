@@ -23,7 +23,7 @@ use repositories\UserInSiteRepository;
 $app->before(function (Request $request) use ($app) {
 
 	# ////////////// Site
-	$siteRepository = new SiteRepository();
+	$siteRepository = new SiteRepository($app);
 	$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
 	if (!$site) {
 		die ("404 Not Found"); // TODO
@@ -61,7 +61,7 @@ $app->before(function (Request $request) use ($app) {
 	$app['apiAppLoadedBySecret'] = false;
 	$app['apiUser'] = null;
 	$app['apiUserToken'] = null;
-	$appRepo = new API2ApplicationRepository();
+	$appRepo = new API2ApplicationRepository($app);
 	if ($data['app_secret']) {
 		$apiapp = $appRepo->loadByAppTokenAndAppSecret($data['app_token'], $data['app_secret']);
 		$app['apiAppLoadedBySecret'] = true;
@@ -74,13 +74,13 @@ $app->before(function (Request $request) use ($app) {
 		$app['userAgent']->setApi2ApplicationId($apiapp->getId());
 
 		// User Token
-		$userTokenRepo = new API2ApplicationUserTokenRepository();
+		$userTokenRepo = new API2ApplicationUserTokenRepository($app);
 		if ($data['user_token']) {
 			$app['apiUserToken'] = $userTokenRepo->loadByAppAndUserTokenAndUserSecret($apiapp, $data['user_token'], $data['user_secret']);
 			if ($app['apiUserToken']) {
 
 				// User
-				$userRepo = new UserAccountRepository();
+				$userRepo = new UserAccountRepository($app);
 				$app['apiUser'] = $userRepo->loadByID($app['apiUserToken']->getUserId());
 
 			}
@@ -90,7 +90,7 @@ $app->before(function (Request $request) use ($app) {
 
 
 	// user permissons
-	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app);
 	// if app is not editor or token is not editor, remove edit permissions
 	$removeEditPermissions =
 		($app['apiApp'] && !$app['apiApp']->getIsEditor()) ||

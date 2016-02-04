@@ -152,8 +152,9 @@ class UserWatchesSiteModel {
 
 	
 	public function getSinceDateForGroupPromptChecking(GroupModel $group) {
+        global $app;
 		$dates = array( $this->created_at );
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($app);
 		$r = $userWatchesSiteRepo->getLastGroupPromptEmailSent($this, $group);
 		if ($r) $dates[] = $r;
 		if ($this->last_watch_started) $dates[] = $this->last_watch_started;

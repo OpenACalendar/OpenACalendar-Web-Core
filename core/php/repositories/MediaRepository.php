@@ -6,6 +6,7 @@ namespace repositories;
 use models\SiteModel;
 use models\MediaModel;
 use models\UserAccountModel;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
@@ -18,11 +19,17 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class MediaRepository {
-	
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 	
 	public function createFromFile(UploadedFile $newMedia, SiteModel $site, UserAccountModel $user, $title = null, $sourceText = null, $sourceURL = null) {
-		global $CONFIG;
-		
+
 		if ($newMedia && in_array(strtolower($newMedia->guessExtension()), MediaModel::getAllowedImageExtensions())) {
 
 			$media = new MediaModel();
@@ -35,7 +42,7 @@ class MediaRepository {
 
 			$this->create($media, $user);
 
-			$storeDirectory = $CONFIG->fileStoreLocation.DIRECTORY_SEPARATOR."media";
+			$storeDirectory = $this->app['config']->fileStoreLocation.DIRECTORY_SEPARATOR."media";
 			$extension = strtolower($newMedia->guessExtension());
 
 			$newMedia->move($storeDirectory,$media->getId().".".  $extension );
@@ -46,18 +53,18 @@ class MediaRepository {
 	}
 	
 	public function create(MediaModel $media, UserAccountModel $owner) {
-		global $DB;
-		$createdat = \TimeSource::getFormattedForDataBase();
+
+		$createdat = $this->app['timesource']->getFormattedForDataBase();
 		
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 		
-			$stat = $DB->prepare("SELECT max(slug) AS c FROM media_information WHERE site_id=:site_id");
+			$stat = $this->app['db']->prepare("SELECT max(slug) AS c FROM media_information WHERE site_id=:site_id");
 			$stat->execute(array('site_id'=>$media->getSiteId()));
 			$data = $stat->fetch();
 			$media->setSlug($data['c'] + 1);
 
-			$stat = $DB->prepare("INSERT INTO media_information (site_id, slug, storage_size, created_by_user_account_id, created_at,title,source_text,source_url,md5) ".
+			$stat = $this->app['db']->prepare("INSERT INTO media_information (site_id, slug, storage_size, created_by_user_account_id, created_at,title,source_text,source_url,md5) ".
 					"VALUES (:site_id, :slug, :storage_size, :created_by_user_account_id, :created_at,:title,:source_text,:source_url,:md5) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>$media->getSiteId(), 
@@ -73,7 +80,7 @@ class MediaRepository {
 			$data = $stat->fetch();
 			$media->setId($data['id']);
 
-			$stat = $DB->prepare("INSERT INTO media_history (media_id,title,title_changed,source_text,source_text_changed,source_url,source_url_changed,user_account_id,created_at) ".
+			$stat = $this->app['db']->prepare("INSERT INTO media_history (media_id,title,title_changed,source_text,source_text_changed,source_url,source_url_changed,user_account_id,created_at) ".
 				"VALUES (:media_id,:title,:title_changed,:source_text,:source_text_changed,:source_url,:source_url_changed,:user_account_id,:created_at)");
 			$stat->execute(array(
 				'media_id'=>$media->getId(),
@@ -87,16 +94,16 @@ class MediaRepository {
 				'created_at'=>$createdat,
 			));
 
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 	
 	
 	public function loadBySlug(SiteModel $site, $slug) {
-		global $DB;
-		$stat = $DB->prepare("SELECT media_information.* FROM media_information WHERE slug =:slug AND site_id =:sid");
+
+		$stat = $this->app['db']->prepare("SELECT media_information.* FROM media_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
 			$media = new MediaModel();
@@ -106,8 +113,8 @@ class MediaRepository {
 	}
 		
 	public function loadByID($id) {
-		global $DB;
-		$stat = $DB->prepare("SELECT media_information.*  FROM media_information ".
+
+		$stat = $this->app['db']->prepare("SELECT media_information.*  FROM media_information ".
 				"WHERE media_information.id =:id");
 		$stat->execute(array( 'id'=>$id ));
 		if ($stat->rowCount() > 0) {
@@ -118,52 +125,52 @@ class MediaRepository {
 	}	
 	
 	public function delete(MediaModel $media, UserAccountModel $user) {
-		global $DB;
+
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 			
-			$stat = $DB->prepare("UPDATE media_in_group SET removed_by_user_account_id=:removed_by_user_account_id,".
+			$stat = $this->app['db']->prepare("UPDATE media_in_group SET removed_by_user_account_id=:removed_by_user_account_id,".
 					" removed_at=:removed_at , removal_approved_at= :removal_approved_at WHERE ".
 					" media_id=:media_id AND removed_at IS NULL ");
 			$stat->execute(array(
 					'media_id'=>$media->getId(),
-					'removed_at'=>  \TimeSource::getFormattedForDataBase(),
-					'removal_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+					'removed_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+					'removal_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 					'removed_by_user_account_id'=>$user->getId(),
 				));		
 			
-			$stat = $DB->prepare("UPDATE media_in_venue SET removed_by_user_account_id=:removed_by_user_account_id,".
+			$stat = $this->app['db']->prepare("UPDATE media_in_venue SET removed_by_user_account_id=:removed_by_user_account_id,".
 				" removed_at=:removed_at , removal_approved_at= :removal_approved_at WHERE ".
 				" media_id=:media_id AND removed_at IS NULL ");
 			$stat->execute(array(
 				'media_id'=>$media->getId(),
-				'removed_at'=>  \TimeSource::getFormattedForDataBase(),
-				'removal_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+				'removed_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+				'removal_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 				'removed_by_user_account_id'=>$user->getId(),
 			));
 
-			$stat = $DB->prepare("UPDATE media_in_event SET removed_by_user_account_id=:removed_by_user_account_id,".
+			$stat = $this->app['db']->prepare("UPDATE media_in_event SET removed_by_user_account_id=:removed_by_user_account_id,".
 				" removed_at=:removed_at , removal_approved_at= :removal_approved_at WHERE ".
 				" media_id=:media_id AND removed_at IS NULL ");
 			$stat->execute(array(
 				'media_id'=>$media->getId(),
-				'removed_at'=>  \TimeSource::getFormattedForDataBase(),
-				'removal_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+				'removed_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+				'removal_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 				'removed_by_user_account_id'=>$user->getId(),
 			));
 
-			$stat = $DB->prepare("UPDATE media_information SET deleted_by_user_account_id=:deleted_by_user_account_id,".
+			$stat = $this->app['db']->prepare("UPDATE media_information SET deleted_by_user_account_id=:deleted_by_user_account_id,".
 				" deleted_at=:deleted_at WHERE ".
 				" id=:id AND deleted_at IS NULL ");
 			$stat->execute(array(
 				'id'=>$media->getId(),
-				'deleted_at'=>  \TimeSource::getFormattedForDataBase(),
+				'deleted_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 				'deleted_by_user_account_id'=>$user->getId(),
 			));
 			
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 		
 		$media->deleteFiles();

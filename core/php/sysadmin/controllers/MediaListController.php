@@ -21,14 +21,14 @@ class MediaListController {
 	function index($siteid, Request $request, Application $app) {
 		
 		
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 		
 		if (!$site) {
 			die("404");
 		}
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(true);
 		$mrb->setSite($site);
 		$medias = $mrb->fetchAll();

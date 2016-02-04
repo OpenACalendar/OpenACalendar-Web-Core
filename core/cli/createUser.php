@@ -39,7 +39,7 @@ sleep(10);
 
 print "Starting ...\n";
 
-$userRepository = new UserAccountRepository();
+$userRepository = new UserAccountRepository($app);
 
 if (is_array($CONFIG->userNameReserved) && in_array($username, $CONFIG->userNameReserved)) {
 	die("That user name is reserved\n");

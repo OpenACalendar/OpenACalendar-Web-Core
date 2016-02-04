@@ -30,26 +30,26 @@ class ImportController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array('country'=>null,'area'=>null,'parentAreas'=>array());
 
-		$iurlRepository = new ImportRepository();
+		$iurlRepository = new ImportRepository($app);
 		$this->parameters['import'] =  $iurlRepository->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['import']) {
 			return false;
 		}
 		
 		if ($this->parameters['import']->getCountryID()) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($app);
 			$this->parameters['country'] = $cr->loadById($this->parameters['import']->getCountryID());
 		}
 		
 		
 		if ($this->parameters['import']->getGroupId()) {
-			$gr = new GroupRepository();
+			$gr = new GroupRepository($app);
 			$this->parameters['group'] = $gr->loadById($this->parameters['import']->getGroupId());
 		}
 		
 		
 		if ($this->parameters['import']->getAreaId()) {	
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$this->parameters['area'] = $ar->loadById($this->parameters['import']->getAreaId());
 			if (!$this->parameters['area']) {
 				return false;
@@ -87,7 +87,7 @@ class ImportController {
 			$app->abort(404, "Import does not exist.");
 		}
 
-		$irr = new ImportResultRepositoryBuilder();
+		$irr = new ImportResultRepositoryBuilder($app);
 		$irr->setImport($this->parameters['import']);
 		$this->parameters['hasLogEntries'] = (boolean)(count($irr->fetchAll()) > 0);
 
@@ -100,7 +100,7 @@ class ImportController {
 			$app->abort(404, "Import does not exist.");
 		}
 		
-		$irr = new ImportResultRepositoryBuilder();
+		$irr = new ImportResultRepositoryBuilder($app);
 		$irr->setImport($this->parameters['import']);
 		$this->parameters['results'] = $irr->fetchAll();
 			
@@ -114,7 +114,7 @@ class ImportController {
 			$app->abort(404, "Import does not exist.");
 		}
 		
-		$form = $app['form.factory']->create(new ImportEditForm($app['currentSite']), $this->parameters['import']);
+		$form = $app['form.factory']->create(new ImportEditForm($app, $app['currentSite']), $this->parameters['import']);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -122,7 +122,7 @@ class ImportController {
 			if ($form->isValid()) {
 								
 				$area = null;
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($app);
 				$postAreas = $request->request->get('areas');
 				if (is_array($postAreas)) {
 					foreach ($postAreas as $areaCode) {
@@ -133,7 +133,7 @@ class ImportController {
 				}
 				$this->parameters['import']->setAreaId($area ? $area->getId() : null);
 				
-				$iRepository = new ImportRepository();
+				$iRepository = new ImportRepository($app);
 				$iRepository->edit($this->parameters['import'], $app['currentUser']);
 				
 				return $app->redirect("/import/".$this->parameters['import']->getSlug());
@@ -144,7 +144,7 @@ class ImportController {
 		
 		
 		if ($this->parameters['country']) {
-			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder = new AreaRepositoryBuilder($app);
 			$areaRepoBuilder->setSite($app['currentSite']);
 			$areaRepoBuilder->setCountry($this->parameters['country']);
 			$areaRepoBuilder->setIncludeDeleted(false);
@@ -172,7 +172,7 @@ class ImportController {
 			die ('NO'); // TODO
 		}
 		
-		$iRepository = new ImportRepository();
+		$iRepository = new ImportRepository($app);
 		$this->parameters['clashimport'] = $iRepository->loadClashForImportUrl($this->parameters['import']);
 		if ($this->parameters['clashimport']) {
 			return $app['twig']->render('site/import/enable.clash.html.twig',$this->parameters);
@@ -196,14 +196,14 @@ class ImportController {
 		}
 		
 		if ($request->request->get('disable') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-				$iRepository = new ImportRepository();
+				$iRepository = new ImportRepository($app);
 				$iRepository->disable($this->parameters['import'], $app['currentUser']);
 				
-				$erb = new EventRepositoryBuilder();
+				$erb = new EventRepositoryBuilder($app);
 				$erb->setAfterNow();
 				$erb->setIncludeDeleted(false);
 				$erb->setImport($this->parameters['import']);
-				$eventRepository = new EventRepository();
+				$eventRepository = new EventRepository($app);
 				foreach($erb->fetchAll() as $event) {
 					$eventRepository->delete($event, $app['currentUser']);
 				}

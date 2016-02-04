@@ -14,6 +14,7 @@ use \models\ImportedEventModel;
 use repositories\builders\UserAtEventRepositoryBuilder;
 use repositories\UserWatchesGroupRepository;
 use dbaccess\EventDBAccess;
+use Silex\Application;
 use Slugify;
 
 /**
@@ -26,15 +27,18 @@ use Slugify;
  */
 class EventRepository {
 
+    /** @var Application */
+    private  $app;
+
 
 	/** @var  \dbaccess\EventDBAccess */
 	protected $eventDBAccess;
 
 
-	function __construct()
+	function __construct(Application $app)
 	{
-		global $DB;
-		$this->eventDBAccess = new EventDBAccess($DB, new \TimeSource());
+        $this->app = $app;
+		$this->eventDBAccess = new EventDBAccess($app);
 	}
 
 
@@ -52,17 +56,16 @@ class EventRepository {
 
 	public function createWithMetaData(EventModel $event, SiteModel $site, EventEditMetaDataModel $eventEditMetaDataModel,
 			GroupModel $group = null, $additionalGroups = null, ImportedEventModel $importedEvent = null, $tags=array(), $medias=array()) {
-		global $DB, $app;
-        $slugify = new Slugify($app);
+        $slugify = new Slugify($this->app);
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
-			$stat = $DB->prepare("SELECT max(slug) AS c FROM event_information WHERE site_id=:site_id");
+			$stat = $this->app['db']->prepare("SELECT max(slug) AS c FROM event_information WHERE site_id=:site_id");
 			$stat->execute(array('site_id'=>$site->getId()));
 			$data = $stat->fetch();
 			$event->setSlug($data['c'] + 1);
 
-			$stat = $DB->prepare("INSERT INTO event_information (site_id, slug, slug_human, summary,description,start_at,end_at,".
+			$stat = $this->app['db']->prepare("INSERT INTO event_information (site_id, slug, slug_human, summary,description,start_at,end_at,".
 				" created_at, event_recur_set_id,venue_id,country_id,timezone, ".
 				" url, ticket_url, is_physical, is_virtual, area_id, approved_at, is_deleted, is_cancelled, custom_fields) ".
 					" VALUES (:site_id, :slug, :slug_human, :summary, :description, :start_at, :end_at, ".
@@ -76,8 +79,8 @@ class EventRepository {
 					'description'=>$event->getDescription(),
 					'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
 					'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'event_recur_set_id'=>$event->getEventRecurSetId(),
 					'country_id'=>$event->getCountryId(),
 					'venue_id'=>$event->getVenueId(),
@@ -92,7 +95,7 @@ class EventRepository {
 			$data = $stat->fetch();
 			$event->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
+			$stat = $this->app['db']->prepare("INSERT INTO event_history (event_id, summary, description,start_at, end_at, ".
 				" user_account_id  , created_at,venue_id,country_id,timezone,".
 				" url, ticket_url, is_physical, is_virtual, area_id, is_new, approved_at, is_deleted, is_cancelled, edit_comment, custom_fields) VALUES ".
 					" (:event_id, :summary, :description, :start_at, :end_at, ".
@@ -105,8 +108,8 @@ class EventRepository {
 					'start_at'=>$event->getStartAtInUTC()->format("Y-m-d H:i:s"),
 					'end_at'=>$event->getEndAtInUTC()->format("Y-m-d H:i:s"),
 					'user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId(): null),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
-					'approved_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
+					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'country_id'=>$event->getCountryId(),
 					'venue_id'=>$event->getVenueId(),
 					'area_id'=>($event->getVenueId() ? null : $event->getAreaId()),
@@ -126,15 +129,15 @@ class EventRepository {
 			}
 
 			if ($group || $additionalGroups) {
-				$stat = $DB->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,is_main_group,addition_approved_at) ".
+				$stat = $this->app['db']->prepare("INSERT INTO event_in_group (group_id,event_id,added_by_user_account_id,added_at,is_main_group,addition_approved_at) ".
 						"VALUES (:group_id,:event_id,:added_by_user_account_id,:added_at,:is_main_group,:addition_approved_at)");
 				if ($group) {
 					$stat->execute(array(
 							'group_id'=>$group->getId(),
 							'event_id'=>$event->getId(),
 							'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId(): null),
-							'added_at'=>\TimeSource::getFormattedForDataBase(),
-							'addition_approved_at'=>\TimeSource::getFormattedForDataBase(),
+							'added_at'=>$this->app['timesource']->getFormattedForDataBase(),
+							'addition_approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 							'is_main_group'=>1,
 						));
 				}
@@ -145,8 +148,8 @@ class EventRepository {
 									'group_id'=>$additionalGroup->getId(),
 									'event_id'=>$event->getId(),
 									'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount() ? $eventEditMetaDataModel->getUserAccount()->getId(): null),
-									'added_at'=>\TimeSource::getFormattedForDataBase(),
-									'addition_approved_at'=>\TimeSource::getFormattedForDataBase(),
+									'added_at'=>$this->app['timesource']->getFormattedForDataBase(),
+									'addition_approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 									'is_main_group'=>0,
 								));
 						}
@@ -157,7 +160,7 @@ class EventRepository {
 			
 			if ($eventEditMetaDataModel->getUserAccount()) {
 				if ($event->getGroupId()) {
-					$ufgr = new UserWatchesGroupRepository();
+					$ufgr = new UserWatchesGroupRepository($this->app);
 					$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($eventEditMetaDataModel->getUserAccount(), $event->getGroupId());
 				} else {
 					// TODO watch site?
@@ -165,70 +168,69 @@ class EventRepository {
 			}
 			
 			if ($importedEvent) {
-				$stat = $DB->prepare("INSERT INTO imported_event_is_event (imported_event_id, event_id, created_at) ".
+				$stat = $this->app['db']->prepare("INSERT INTO imported_event_is_event (imported_event_id, event_id, created_at) ".
 						"VALUES (:imported_event_id, :event_id, :created_at)");
 				$stat->execute(array(
 					'imported_event_id'=>$importedEvent->getId(),
 					'event_id'=>$event->getId(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				));
 			}
 			
 			if ($tags) {	
-				$stat = $DB->prepare("INSERT INTO event_has_tag (tag_id,event_id,added_by_user_account_id,added_at,addition_approved_at) ".
+				$stat = $this->app['db']->prepare("INSERT INTO event_has_tag (tag_id,event_id,added_by_user_account_id,added_at,addition_approved_at) ".
 					"VALUES (:tag_id,:event_id,:added_by_user_account_id,:added_at,:addition_approved_at)");
 				foreach($tags as $tag) {
 						$stat->execute(array(
 							'tag_id'=>$tag->getId(),
 							'event_id'=>$event->getId(),
 							'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount()?$eventEditMetaDataModel->getUserAccount()->getId():null),
-							'added_at'=>  \TimeSource::getFormattedForDataBase(),
-							'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+							'added_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+							'addition_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 						));
 				}
 			}
 
 			if ($medias) {
-				$stat = $DB->prepare("INSERT INTO media_in_event (event_id,media_id,added_by_user_account_id,added_at,addition_approved_at) ".
+				$stat = $this->app['db']->prepare("INSERT INTO media_in_event (event_id,media_id,added_by_user_account_id,added_at,addition_approved_at) ".
 					"VALUES (:event_id,:media_id,:added_by_user_account_id,:added_at,:addition_approved_at)");
 				foreach($medias as $media) {
 					$stat->execute(array(
 						'event_id'=>$event->getId(),
 						'media_id'=>$media->getId(),
 						'added_by_user_account_id'=>($eventEditMetaDataModel->getUserAccount()?$eventEditMetaDataModel->getUserAccount()->getId():null),
-						'added_at'=>  \TimeSource::getFormattedForDataBase(),
-						'addition_approved_at'=>  \TimeSource::getFormattedForDataBase(),
+						'added_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+						'addition_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 					));
 				}
 			}
 
 			if ($eventEditMetaDataModel->getCreatedFromNewEventDraftID()) {
-				$stat = $DB->prepare("UPDATE new_event_draft_information SET event_id=:event_id WHERE id=:id");
+				$stat = $this->app['db']->prepare("UPDATE new_event_draft_information SET event_id=:event_id WHERE id=:id");
 				$stat->execute(array(
 					'event_id'=>$event->getId(),
 					'id'=>$eventEditMetaDataModel->getCreatedFromNewEventDraftID(),
 				));
 
-				$stat = $DB->prepare("INSERT INTO new_event_draft_history (new_event_draft_id, event_id, user_account_id,created_at,details_changed,was_existing_event_id_changed,not_duplicate_events_changed) ".
+				$stat = $this->app['db']->prepare("INSERT INTO new_event_draft_history (new_event_draft_id, event_id, user_account_id,created_at,details_changed,was_existing_event_id_changed,not_duplicate_events_changed) ".
 					"VALUES (:new_event_draft_id, :event_id, :user_account_id,:created_at,-2,-2,-2 )");
 				$stat->execute(array(
 					'new_event_draft_id'=>$eventEditMetaDataModel->getCreatedFromNewEventDraftID(),
 					'event_id'=>$event->getId(),
 					'user_account_id'=>($eventEditMetaDataModel->getUserAccount()?$eventEditMetaDataModel->getUserAccount()->getId():null),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				));
 			}
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
 
 	public function loadByID($id) {
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 			" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 			" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 			" WHERE event_information.id =:id");
@@ -240,7 +242,7 @@ class EventRepository {
 			// old way - flags on event
 			// new way - seperate models
 			// The below code checks the new way of linking and adds it if it finds anything
-			$repo = new \repositories\ImportedEventRepository();
+			$repo = new \repositories\ImportedEventRepository($this->app);
 			$importedEvent = $repo->loadByEvent($event);
 			if ($importedEvent) {
 				$event->setIdInImport($importedEvent->getIdInImport());
@@ -248,9 +250,9 @@ class EventRepository {
 			}
             // another data migration .... if no human_slug, let's add one
             if ($event->getSummary() && !$event->getSlugHuman()) {
-                $slugify = new Slugify($app);
+                $slugify = new Slugify($this->app);
                 $event->setSlugHuman($slugify->process($event->getSummary()));
-                $stat = $DB->prepare("UPDATE event_information SET slug_human=:slug_human WHERE id=:id");
+                $stat = $this->app['db']->prepare("UPDATE event_information SET slug_human=:slug_human WHERE id=:id");
                 $stat->execute(array(
                     'id'=>$event->getId(),
                     'slug_human'=>$event->getSlugHuman(),
@@ -262,8 +264,7 @@ class EventRepository {
 	}
 
 	public function loadBySlug(SiteModel $site, $slug) {
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 				" WHERE event_information.slug =:slug AND event_information.site_id =:sid");
@@ -275,7 +276,7 @@ class EventRepository {
 			// old way - flags on event
 			// new way - seperate models
 			// The below code checks the new way of linking and adds it if it finds anything
-			$repo = new \repositories\ImportedEventRepository();
+			$repo = new \repositories\ImportedEventRepository($this->app);
 			$importedEvent = $repo->loadByEvent($event);
 			if ($importedEvent) {
 				$event->setIdInImport($importedEvent->getIdInImport());
@@ -283,9 +284,9 @@ class EventRepository {
 			}
             // another data migration .... if no human_slug, let's add one
             if ($event->getSummary() && !$event->getSlugHuman()) {
-                $slugify = new Slugify($app);
+                $slugify = new Slugify($this->app);
                 $event->setSlugHuman($slugify->process($event->getSummary()));
-                $stat = $DB->prepare("UPDATE event_information SET slug_human=:slug_human WHERE id=:id");
+                $stat = $this->app['db']->prepare("UPDATE event_information SET slug_human=:slug_human WHERE id=:id");
                 $stat->execute(array(
                     'id'=>$event->getId(),
                     'slug_human'=>$event->getSlugHuman(),
@@ -298,8 +299,7 @@ class EventRepository {
 
 
 	public function loadBySiteIDAndEventSlug($siteid, $slug) {
-		global $DB;
-		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 				" WHERE event_information.slug =:slug AND event_information.site_id =:sid");
@@ -311,7 +311,7 @@ class EventRepository {
 			// old way - flags on event
 			// new way - seperate models
 			// The below code checks the new way of linking and adds it if it finds anything
-			$repo = new \repositories\ImportedEventRepository();
+			$repo = new \repositories\ImportedEventRepository($this->app);
 			$importedEvent = $repo->loadByEvent($event);
 			if ($importedEvent) {
 				$event->setIdInImport($importedEvent->getIdInImport());
@@ -325,7 +325,6 @@ class EventRepository {
 	
 	/**
 	 * Note you can only edit undeleted events.
-	 * @global type $DB
 	 * @param EventModel $event
 	 * @param UserAccountModel $creator
 	 * @param EventHistoryModel $fromHistory
@@ -346,9 +345,8 @@ class EventRepository {
 			throw new \Exception("Can't edit deleted events!");
 		}
 		
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$fields = array('summary','description','start_at','end_at','venue_id','area_id','country_id','timezone',
 				'url','ticket_url','is_physical','is_virtual','is_deleted','is_cancelled','custom');
@@ -358,16 +356,16 @@ class EventRepository {
 			
 			if ($eventEditMetaDataModel->getUserAccount()) {
 				if ($event->getGroupId()) {
-					$ufgr = new UserWatchesGroupRepository();
+					$ufgr = new UserWatchesGroupRepository($this->app);
 					$ufgr->startUserWatchingGroupIdIfNotWatchedBefore($eventEditMetaDataModel->getUserAccount(), $event->getGroupId());
 				} else {
 					// TODO watch site?
 				}
 			}
-			
-			$DB->commit();
+
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -381,9 +379,8 @@ class EventRepository {
 	}
 
 	public function deleteWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$event->setIsDeleted(true);
 			$this->eventDBAccess->update($event, array('is_deleted'), $eventEditMetaDataModel);
@@ -391,10 +388,10 @@ class EventRepository {
 
 			// TODO if in group, watch
 
-			
-			$DB->commit();
+
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -408,9 +405,8 @@ class EventRepository {
 	}
 
 	public function undeleteWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$event->setIsDeleted(false);
 			$this->eventDBAccess->update($event, array('is_deleted'), $eventEditMetaDataModel);
@@ -419,9 +415,9 @@ class EventRepository {
 			// TODO if in group, watch
 
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -436,9 +432,8 @@ class EventRepository {
 	}
 
 	public function cancelWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$event->setIsCancelled(true);
 			$this->eventDBAccess->update($event, array('is_cancelled'), $eventEditMetaDataModel);
@@ -447,9 +442,9 @@ class EventRepository {
 			// TODO if in group, watch
 
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 
@@ -463,9 +458,8 @@ class EventRepository {
 	}
 
 	public function uncancelWithMetaData(EventModel $event,  EventEditMetaDataModel $eventEditMetaDataModel) {
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$event->setIsCancelled(false);
 			$this->eventDBAccess->update($event, array('is_cancelled'), $eventEditMetaDataModel);
@@ -474,15 +468,14 @@ class EventRepository {
 			// TODO if in group, watch
 
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 	}
 	
 	public function loadLastNonDeletedNonImportedByStartTimeInSiteId($siteID) {
-		global $DB;
-		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 				"WHERE event_information.site_id =:sid AND event_information.import_url_id is null AND event_information.is_deleted = '0' ORDER BY event_information.start_at DESC LIMIT 1");
@@ -495,11 +488,10 @@ class EventRepository {
 	}
 	
 	public function loadLastNonDeletedNonImportedByStartTimeInGroupId($groupID) {
-		global $DB;
 		// We haven't got a " AND event_in_group.is_main_group = '1' " search term so the group_title & group_id returned may not be from the main group
 		// but given where this is used, that's ok for now.
 		// We need to make sure the search by group clause works.
-		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 				"WHERE group_information.id =:gid AND event_information.import_url_id is null AND event_information.is_deleted = '0' ORDER BY event_information.start_at DESC LIMIT 1");
@@ -519,8 +511,7 @@ class EventRepository {
      * @deprecated
      */
     public function loadByImportURLIDAndImportId($importURLID, $importID) {
-			global $DB;
-		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
 				"WHERE event_information.import_url_id =:import_url_id AND event_information.import_id =:import_id");
@@ -538,13 +529,11 @@ class EventRepository {
 	 * This is a bit broken - in theory this could return multiple events (in the case of a imported event with recurrence) 
 	 * But for now that can't happen so just return one event.
 	 * 
-	 * @global \repositories\type $DB
 	 * @param \models\ImportedEventModel $importedEvent
 	 * @return \models\EventModel
 	 */
 	public function loadByImportedEvent(\models\ImportedEventModel $importedEvent) {
-			global $DB;
-		$stat = $DB->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
 				" JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
@@ -568,10 +557,9 @@ class EventRepository {
 	}
 
 	public function moveAllFutureEventsAtVenueToNoSetVenueWithMetaData(VenueModel $venue, EventEditMetaDataModel $eventEditMetaDataModel) {
-			global $DB;
-			
-			$statFetch = $DB->prepare("SELECT event_information.* FROM event_information WHERE venue_id = :venue_id AND start_at > :start_at AND is_deleted='0'");
-			$statFetch->execute(array('venue_id'=>$venue->getId(), 'start_at'=>\TimeSource::getFormattedForDataBase()));
+
+			$statFetch = $this->app['db']->prepare("SELECT event_information.* FROM event_information WHERE venue_id = :venue_id AND start_at > :start_at AND is_deleted='0'");
+			$statFetch->execute(array('venue_id'=>$venue->getId(), 'start_at'=>$this->app['timesource']->getFormattedForDataBase()));
 			while($data = $statFetch->fetch()) {
 				$event = new EventModel();
 				$event->setFromDataBaseRow($data);
@@ -584,7 +572,6 @@ class EventRepository {
 	}
 	
 	public function loadEventJustBeforeEdit(EventModel $event, EventHistoryModel $eventHistory) {
-		global $DB;
 		$eventOut = clone $event;
 		
 		/**
@@ -594,7 +581,7 @@ class EventRepository {
 		 * 
 		 * When we do that, we'll have to iterate back over multiple event_histories until we have all fields.
 		 */
-		$stat = $DB->prepare("SELECT event_history.* FROM event_history ".
+		$stat = $this->app['db']->prepare("SELECT event_history.* FROM event_history ".
 				"WHERE event_history.event_id = :id AND event_history.created_at < :cat ".
 				"ORDER BY event_history.created_at DESC LIMIT 1");
 		$stat->execute(array( 
@@ -620,20 +607,19 @@ class EventRepository {
 	}
 
 	public function markDuplicateWithMetaData(EventModel $duplicateEvent, EventModel $originalEvent, EventEditMetaDataModel $eventEditMetaDataModel) {
-		global $DB;
 
 		if ($duplicateEvent->getId() == $originalEvent->getId()) return;
 
 
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 
 			$duplicateEvent->setIsDeleted(true);
 			$duplicateEvent->setIsDuplicateOfId($originalEvent->getId());
 			$this->eventDBAccess->update($duplicateEvent, array('is_deleted','is_duplicate_of_id'), $eventEditMetaDataModel);
 
-			$uaeRepo = new UserAtEventRepository();
-			$uaerb = new UserAtEventRepositoryBuilder();
+			$uaeRepo = new UserAtEventRepository($this->app);
+			$uaerb = new UserAtEventRepositoryBuilder($this->app);
 			$uaerb->setEventOnly($duplicateEvent);
 			foreach($uaerb->fetchAll() as $uaeDuplicate) {
 				if ($uaeDuplicate->getIsPlanAttending() || $uaeDuplicate->getIsPlanMaybeAttending()) {
@@ -648,76 +634,73 @@ class EventRepository {
 				}
 			}
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 		}
 
 
 	}
 
 	public function markNotDuplicateWithMetaData(EventModel $notDuplicateEvent, EventEditMetaDataModel $eventEditMetaDataModel) {
-		global $DB;
-
 		$notDuplicateEvent->setIsDuplicateOfId(null);
 		$this->eventDBAccess->update($notDuplicateEvent, array('is_duplicate_of_id'), $eventEditMetaDataModel);
 
 	}
 
 	public function purge(EventModel $event) {
-		global $DB;
 		try {
-			$DB->beginTransaction();
+            $this->app['db']->beginTransaction();
 			
 			
-			$stat = $DB->prepare("UPDATE event_history SET is_duplicate_of_id=NULL, is_duplicate_of_id_changed=0 WHERE is_duplicate_of_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE event_history SET is_duplicate_of_id=NULL, is_duplicate_of_id_changed=0 WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
-			$stat = $DB->prepare("UPDATE event_information SET is_duplicate_of_id=NULL WHERE is_duplicate_of_id=:id");
+			$stat = $this->app['db']->prepare("UPDATE event_information SET is_duplicate_of_id=NULL WHERE is_duplicate_of_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 			
-			$stat = $DB->prepare("DELETE FROM event_in_group WHERE event_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM event_in_group WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
-			$stat = $DB->prepare("DELETE FROM user_at_event_information WHERE event_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM user_at_event_information WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
-			$stat = $DB->prepare("DELETE FROM event_in_curated_list WHERE event_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM event_in_curated_list WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 			
-			$stat = $DB->prepare("DELETE FROM event_has_tag WHERE event_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM event_has_tag WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
-			$stat = $DB->prepare("DELETE FROM event_history WHERE event_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM event_history WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
-			$stat = $DB->prepare("DELETE FROM media_in_event WHERE event_id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM media_in_event WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
-			$statDeleteComment = $DB->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
-			$statDeleteLink = $DB->prepare("DELETE FROM sysadmin_comment_about_event WHERE sysadmin_comment_id=:id");
-			$stat = $DB->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_event WHERE event_id=:id");
+			$statDeleteComment = $this->app['db']->prepare("DELETE FROM sysadmin_comment_information WHERE id=:id");
+			$statDeleteLink = $this->app['db']->prepare("DELETE FROM sysadmin_comment_about_event WHERE sysadmin_comment_id=:id");
+			$stat = $this->app['db']->prepare("SELECT sysadmin_comment_id FROM sysadmin_comment_about_event WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 			while($data = $stat->fetch()) {
 				$statDeleteLink->execute(array($data['sysadmin_comment_id']));
 				$statDeleteComment->execute(array($data['sysadmin_comment_id']));
 			}
 
-			$statDeleteInfo = $DB->prepare("DELETE FROM new_event_draft_information WHERE id=:id");
-			$statDeleteHistory = $DB->prepare("DELETE FROM new_event_draft_history WHERE new_event_draft_id=:id");
-			$stat = $DB->prepare("SELECT id FROM new_event_draft_information WHERE event_id=:id");
+			$statDeleteInfo = $this->app['db']->prepare("DELETE FROM new_event_draft_information WHERE id=:id");
+			$statDeleteHistory = $this->app['db']->prepare("DELETE FROM new_event_draft_history WHERE new_event_draft_id=:id");
+			$stat = $this->app['db']->prepare("SELECT id FROM new_event_draft_information WHERE event_id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 			while($data = $stat->fetch()) {
 				$statDeleteHistory->execute(array($data['id']));
 				$statDeleteInfo->execute(array($data['id']));
 			}
 
-			$stat = $DB->prepare("DELETE FROM event_information WHERE id=:id");
+			$stat = $this->app['db']->prepare("DELETE FROM event_information WHERE id=:id");
 			$stat->execute(array('id'=>$event->getId()));
 
-			$DB->commit();
+            $this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+            $this->app['db']->rollBack();
 			throw $e;
 		}
 	}

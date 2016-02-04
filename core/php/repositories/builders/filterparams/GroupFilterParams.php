@@ -20,7 +20,7 @@ use Silex\Application;
 class GroupFilterParams {
 
 	function __construct(Application $app) {
-		$this->groupRepositoryBuilder = new GroupRepositoryBuilder();
+		$this->groupRepositoryBuilder = new GroupRepositoryBuilder($app);
 		$this->groupRepositoryBuilder->setLimit(100);
 	}
 

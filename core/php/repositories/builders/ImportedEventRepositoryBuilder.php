@@ -51,7 +51,7 @@ class ImportedEventRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 	
 	public function setAfterNow() {
-		$this->after = \TimeSource::getDateTime();
+		$this->after = $this->app['timesource']->getDateTime();
 		return $this;
 	}
 
@@ -65,7 +65,7 @@ class ImportedEventRepositoryBuilder extends BaseRepositoryBuilder {
     }
 
 	protected function build() {
-		global $DB;
+
 
 		$this->select[] = 'imported_event.*';
 
@@ -89,7 +89,7 @@ class ImportedEventRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 	
 				
@@ -98,7 +98,7 @@ class ImportedEventRepositoryBuilder extends BaseRepositoryBuilder {
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
 				" ORDER BY  ".$this->orderBy." ".$this->orderDirection .( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 		
 	}

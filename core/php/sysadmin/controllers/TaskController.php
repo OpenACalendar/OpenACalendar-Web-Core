@@ -50,7 +50,7 @@ class TaskController {
 			return $app->abort(404);
 		}
 
-		$tllrb = new TaskLogRepositoryBuilder();
+		$tllrb = new TaskLogRepositoryBuilder($app);
 		$tllrb->setLimit(100);
 		$tllrb->setTask($this->parameters['task']);
 		$this->parameters['tasklogs'] = $tllrb->fetchAll();

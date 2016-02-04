@@ -70,20 +70,20 @@ class EventController {
 			$slug = array_shift(explode("-", $slug, 2));
 		}
 		
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($app);
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['event']) {
 			return false;
 		}
 		
 		if ($this->parameters['event']->getCountryID()) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($app);
 			$this->parameters['country'] = $cr->loadById($this->parameters['event']->getCountryID());
 		}
 		
 		$areaID = null;
 		if ($this->parameters['event']->getVenueID()) {
-			$cr = new VenueRepository();
+			$cr = new VenueRepository($app);
 			$this->parameters['venue'] = $cr->loadById($this->parameters['event']->getVenueID());
 			$areaID = $this->parameters['venue']->getAreaId();
 		} else if ($this->parameters['event']->getAreaId()) {
@@ -91,7 +91,7 @@ class EventController {
 		}
 		
 		if ($areaID) {	
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$this->parameters['area'] = $ar->loadById($areaID);
 			if (!$this->parameters['area']) {
 				return false;
@@ -105,11 +105,11 @@ class EventController {
 		}
 		
 		if ($this->parameters['event']->getImportId()) {
-			$iur = new ImportRepository();
+			$iur = new ImportRepository($app);
 			$this->parameters['import'] = $iur->loadById($this->parameters['event']->getImportId());
 		}
 		
-		$groupRB = new GroupRepositoryBuilder();
+		$groupRB = new GroupRepositoryBuilder($app);
 		$groupRB->setEvent($this->parameters['event']);
 		$this->parameters['groups'] = $groupRB->fetchAll();
 		if ($this->parameters['event']->getGroupId()) {
@@ -181,7 +181,7 @@ class EventController {
 	protected function addTagsToParameters(Application $app) {
 		if (!isset($this->parameters['tags'])) {
 			if ($app['currentSite']->getIsFeatureTag()) {
-				$trb = new TagRepositoryBuilder();
+				$trb = new TagRepositoryBuilder($app);
 				$trb->setSite($app['currentSite']);
 				$trb->setIncludeDeleted(false);
 				$trb->setTagsForEvent($this->parameters['event']);
@@ -200,7 +200,7 @@ class EventController {
 		}
 				
 		if ($app['currentUser'] && !$this->parameters['event']->isInPast()) {
-			$uaer = new UserAtEventRepository();
+			$uaer = new UserAtEventRepository($app);
 			$this->parameters['userAtEvent'] = $uaer->loadByUserAndEventOrInstanciate($app['currentUser'], $this->parameters['event']);
 		}
 
@@ -210,7 +210,7 @@ class EventController {
 		$this->parameters['medias'] = array();
 		if ($app['config']->isFileStore()) {
 			foreach($this->parameters['groups'] as $group) {
-				$mrb = new MediaRepositoryBuilder();
+				$mrb = new MediaRepositoryBuilder($app);
 				$mrb->setIncludeDeleted(false);
 				$mrb->setSite($app['currentSite']);
 				$mrb->setGroup($group);
@@ -219,7 +219,7 @@ class EventController {
 			}
 
 			if ($this->parameters['venue']) {
-				$mrb = new MediaRepositoryBuilder();
+				$mrb = new MediaRepositoryBuilder($app);
 				$mrb->setIncludeDeleted(false);
 				$mrb->setSite($app['currentSite']);
 				$mrb->setVenue($this->parameters['venue']);
@@ -227,7 +227,7 @@ class EventController {
 				$this->parameters['medias'] = array_merge($this->parameters['medias'],$this->parameters['mediasForVenue']);
 			}
 
-			$mrb = new MediaRepositoryBuilder();
+			$mrb = new MediaRepositoryBuilder($app);
 			$mrb->setIncludeDeleted(false);
 			$mrb->setSite($app['currentSite']);
 			$mrb->setEvent($this->parameters['event']);
@@ -235,32 +235,32 @@ class EventController {
 			$this->parameters['medias'] = array_merge($this->parameters['medias'],$this->parameters['mediasForEvent']);
 		}
 
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingYesOnly(true);
 		$uaerb->setPlanPublicOnly(true);
 		$this->parameters['userAtEventYesPublic'] = $uaerb->fetchAll();
 		
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingYesOnly(true);
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventYesPrivate'] = $uaerb->fetchAll();
 		
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingMaybeOnly(true);
 		$uaerb->setPlanPublicOnly(true);
 		$this->parameters['userAtEventMaybePublic'] = $uaerb->fetchAll();
 		
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingMaybeOnly(true);
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
 
 		if ($app['currentUser']) {
-			$uaer = new UserAtEventRepository();
+			$uaer = new UserAtEventRepository($app);
 			$uae = $uaer->loadByUserAndEvent($app['currentUser'], $this->parameters['event']);
 			$this->parameters['userAtEventIsCurrentUser'] = $uae && ($uae->getIsPlanAttending() || $uae->getIsPlanMaybeAttending());
 		} else {
@@ -270,7 +270,7 @@ class EventController {
 		$this->addTagsToParameters($app);
 		
 		if ($this->parameters['country']) {
-			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder = new AreaRepositoryBuilder($app);
 			$areaRepoBuilder->setSite($app['currentSite']);
 			$areaRepoBuilder->setCountry($this->parameters['country']);
 			$areaRepoBuilder->setIncludeDeleted(false);
@@ -294,7 +294,7 @@ class EventController {
 			!$this->parameters['group']->getIsDeleted()
 			&& $app['currentSite']->getIsFeatureGroup()
 			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
-			$groupRepo = new GroupRepository();
+			$groupRepo = new GroupRepository($app);
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
 		}
 
@@ -321,32 +321,32 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingYesOnly(true);
 		$uaerb->setPlanPublicOnly(true);
 		$this->parameters['userAtEventYesPublic'] = $uaerb->fetchAll();
 		
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingYesOnly(true);
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventYesPrivate'] = $uaerb->fetchAll();
 		
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingMaybeOnly(true);
 		$uaerb->setPlanPublicOnly(true);
 		$this->parameters['userAtEventMaybePublic'] = $uaerb->fetchAll();
 		
-		$uaerb = new UserAtEventRepositoryBuilder();
+		$uaerb = new UserAtEventRepositoryBuilder($app);
 		$uaerb->setEventOnly($this->parameters['event']);
 		$uaerb->setPlanAttendingMaybeOnly(true);
 		$uaerb->setPlanPrivateOnly(true);
 		$this->parameters['userAtEventMaybePrivate'] = $uaerb->fetchAll();
 
 		if ($app['currentUser']) {
-			$uaer = new UserAtEventRepository();
+			$uaer = new UserAtEventRepository($app);
 			$uae = $uaer->loadByUserAndEvent($app['currentUser'], $this->parameters['event']);
 			$this->parameters['userAtEventIsCurrentUser'] = $uae && ($uae->getIsPlanAttending() || $uae->getIsPlanMaybeAttending());
 		} else {
@@ -362,7 +362,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 
-		$uaer = new UserAtEventRepository();
+		$uaer = new UserAtEventRepository($app);
 		$userAtEvent = $uaer->loadByUserAndEventOrInstanciate($app['currentUser'], $this->parameters['event']);
 
 		$data = array();
@@ -412,7 +412,7 @@ class EventController {
 		}
 
 				
-		$ehrb = new EventHistoryRepositoryBuilder();
+		$ehrb = new EventHistoryRepositoryBuilder($app);
 		$ehrb->setEvent($this->parameters['event']);
 		$this->parameters['eventHistories'] = $ehrb->fetchAll();
 				
@@ -439,7 +439,7 @@ class EventController {
 		
 		$timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
 		if ($this->parameters['event']->getIsImported()) {
-			$ourForm = new EventImportedEditForm($app['currentSite'], $timeZone);
+			$ourForm = new EventImportedEditForm($app, $app['currentSite'], $timeZone);
 		} else {
 			$ourForm = new EventEditForm($app['currentSite'], $timeZone, $app);
 		}
@@ -461,10 +461,10 @@ class EventController {
 					$eventEditMetaData->setEditComment($form->get('edit_comment')->getData());
 				}
 
-				$eventRepository = new EventRepository();
+				$eventRepository = new EventRepository($app);
 				$eventRepository->editWithMetaData($this->parameters['event'], $eventEditMetaData);
 
-				$repo = new EventRecurSetRepository();
+				$repo = new EventRecurSetRepository($app);
 				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
 				} else {
@@ -570,7 +570,7 @@ class EventController {
 			die("No"); // TODO
 		}
 
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($app);
 
 		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 		$this->parameters['searchAddressCode'] = $request->query->get('searchAddressCode');
@@ -584,7 +584,7 @@ class EventController {
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 
 
-			$venueRepository = new VenueRepository();
+			$venueRepository = new VenueRepository($app);
 
 
 			if ($request->request->get('venue_slug') && intval($request->request->get('venue_slug'))) {
@@ -593,14 +593,14 @@ class EventController {
 				if ($venue) {
 					$this->parameters['event']->setVenueId($venue->getId());
 					$this->parameters['event']->setAreaId(null);
-					$eventRepository = new EventRepository();
+					$eventRepository = new EventRepository($app);
 					$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 					$gotResult = true;
 				}
 			}
 
 			if ($gotResult) {
-				$repo = new EventRecurSetRepository();
+				$repo = new EventRecurSetRepository($app);
 				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
 				} else {
@@ -625,7 +625,7 @@ class EventController {
 			die("No"); // TODO
 		}
 
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($app);
 
 		$this->parameters['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 		$this->parameters['searchAddressCode'] = $request->query->get('searchAddressCode');
@@ -682,7 +682,7 @@ class EventController {
 		if ($this->parameters['doesCountryHaveAnyNotDeletedAreas']) {
 			// Area search
 			if ($this->parameters['searchArea']) {
-				$arb = new AreaRepositoryBuilder();
+				$arb = new AreaRepositoryBuilder($app);
 				$arb->setIncludeDeleted(false);
 				$arb->setIncludeParentLevels(1);
 				$arb->setSite($app['currentSite']);
@@ -715,7 +715,7 @@ class EventController {
 
 		// venue search
 		if ($this->parameters['searchAddressCode'] || $this->parameters['searchAddress'] || $this->parameters['searchTitle'] || $this->parameters['searchAreaObject']) {
-			$vrb = new VenueRepositoryBuilder();
+			$vrb = new VenueRepositoryBuilder($app);
 			$vrb->setSite($app['currentSite']);
 			$vrb->setCountry($this->parameters['country']);
 			$vrb->setIncludeDeleted(false);
@@ -747,7 +747,7 @@ class EventController {
 		}
 
 		// ======================== Firstly, are there any areas in this country?
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($app);
 		if (!$areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country'])) {
 
 			// But we may have come here with a venue. The user is saying there is no known venue. Remove venue?
@@ -771,10 +771,10 @@ class EventController {
 						}
 						$eventEditMetaData->setFromRequest($request);
 
-						$eventRepository = new EventRepository();
+						$eventRepository = new EventRepository($app);
 						$eventRepository->editWithMetaData($this->parameters['event'], $eventEditMetaData);
 
-						$repo = new EventRecurSetRepository();
+						$repo = new EventRecurSetRepository($app);
 						if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 							return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
 						} else {
@@ -812,14 +812,14 @@ class EventController {
 				if ($area) {
 					$this->parameters['event']->setVenueId(null);
 					$this->parameters['event']->setAreaId($area->getId());
-					$eventRepository = new EventRepository();
+					$eventRepository = new EventRepository($app);
 					$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 					$gotResult = true;
 				}
 			}
 
 			if ($gotResult) {
-				$repo = new EventRecurSetRepository();
+				$repo = new EventRecurSetRepository($app);
 				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
 				} else {
@@ -870,7 +870,7 @@ class EventController {
 		$this->parameters['areas'] = array();
 		$this->parameters['areaSearchDone'] = false;
 
-		$arb = new AreaRepositoryBuilder();
+		$arb = new AreaRepositoryBuilder($app);
 		$arb->setSite($app['currentSite']);
 		$arb->setCountry($this->parameters['country']);
 		$arb->setIncludeDeleted(false);
@@ -892,7 +892,7 @@ class EventController {
 			die("No"); // TODO
 		}
 
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($app);
 
 		$this->parameters['shouldWeAskForArea'] = $app['currentSite']->getIsFeaturePhysicalEvents() &&
 			$areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
@@ -951,7 +951,7 @@ class EventController {
 
 			// Free text search string passed that only has 1 result?
 			if (!$this->parameters['fieldAreaObject'] && $this->parameters['fieldAreaSearchText']) {
-				$arb = new AreaRepositoryBuilder();
+				$arb = new AreaRepositoryBuilder($app);
 				$arb->setSite($app['currentSite']);
 				$arb->setCountry($this->parameters['country']);
 				$arb->setFreeTextSearch($this->parameters['fieldAreaSearchText']);
@@ -1001,7 +1001,7 @@ class EventController {
 			// Child areas?
 			// -1 indicates "none of the above", so don't prompt the user again.
 			if (!$this->parameters['noneOfAboveSelected']) {
-				$areaRepoBuilder = new AreaRepositoryBuilder();
+				$areaRepoBuilder = new AreaRepositoryBuilder($app);
 				$areaRepoBuilder->setSite($app['currentSite']);
 				$areaRepoBuilder->setCountry($this->parameters['country']);
 				$areaRepoBuilder->setIncludeDeleted(false);
@@ -1023,15 +1023,15 @@ class EventController {
 
 		//===================================== No prompt? We can  save!
 
-		$venueRepository = new VenueRepository();
+		$venueRepository = new VenueRepository($app);
 		$venueRepository->create($this->parameters['venue'], $app['currentSite'], $app['currentUser']);
 
 		$this->parameters['event']->setVenueId($this->parameters['venue']->getId());
 		$this->parameters['event']->setAreaId(null);
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($app);
 		$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 
-		$repo = new EventRecurSetRepository();
+		$repo = new EventRecurSetRepository($app);
 		if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 			return $app->redirect("/event/".$this->parameters['event']->getSlugforURL().'/edit/future');
 		} else {
@@ -1047,7 +1047,7 @@ class EventController {
 		}
 
 		// Event Recur Set
-		$eventRecurSetRepo = new EventRecurSetRepository();
+		$eventRecurSetRepo = new EventRecurSetRepository($app);
 		$this->parameters['eventRecurSet'] = $eventRecurSetRepo->loadForEvent($this->parameters['event']);
 		if (!$this->parameters['eventRecurSet']) {
 			return false; // TODO
@@ -1055,7 +1055,7 @@ class EventController {
 		$this->parameters['eventRecurSet']->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
 
 		// Load history we are working with
-		$eventHistoryRepo = new EventHistoryRepository();
+		$eventHistoryRepo = new EventHistoryRepository($app);
 		$this->parameters['eventHistory'] = $eventHistoryRepo->loadByEventAndlastEditByUser($this->parameters['event'], $app['currentUser']);
 		if (!$this->parameters['eventHistory']) {
 			return false; // TODO
@@ -1064,12 +1064,12 @@ class EventController {
 		$this->parameters['eventRecurSet']->setInitalEventLastChange($this->parameters['eventHistory']);
 
 		// load event before this edit
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($app);
 		$this->parameters['eventRecurSet']->setInitialEventJustBeforeLastChange($eventRepo->loadEventJustBeforeEdit($this->parameters['event'], $this->parameters['eventHistory']));
 		
 		// Event & Future Events
 		$this->parameters['eventRecurSet']->setInitalEvent($this->parameters['event']);
-		$eventRB = new EventRepositoryBuilder();
+		$eventRB = new EventRepositoryBuilder($app);
 		$eventRB->setStartAfter($this->parameters['event']->getStartAtInUTC());
 		$eventRB->setInSameRecurEventSet($this->parameters['event']);
 		$eventRB->setIncludeDeleted(false);
@@ -1089,7 +1089,7 @@ class EventController {
 			
 			if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				
-				$eventRepo = new EventRepository();
+				$eventRepo = new EventRepository($app);
 				
 				$countEvents = 0;
 				foreach($this->parameters['eventRecurSet']->getFutureEvents() as $futureEvent) {
@@ -1183,11 +1183,11 @@ class EventController {
 			// Existing Group
 			// TODO csfr
 			if ($request->request->get('intoGroupSlug')) {
-				$groupRepo = new GroupRepository();
+				$groupRepo = new GroupRepository($app);
 				$group = $groupRepo->loadBySlug($app['currentSite'], $request->request->get('intoGroupSlug'));
 				if ($group) {
 					$groupRepo->addEventToGroup($this->parameters['event'], $group);
-					$repo = new UserWatchesGroupRepository();
+					$repo = new UserWatchesGroupRepository($app);
 					$repo->startUserWatchingGroupIfNotWatchedBefore($app['currentUser'], $group);
 					return $app->redirect("/event/".$this->parameters['event']->getSlugForURL()."/recur/");
 				}
@@ -1197,7 +1197,7 @@ class EventController {
 			if ($request->request->get('NewGroupTitle') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 				$group = new GroupModel();
 				$group->setTitle($request->request->get('NewGroupTitle'));
-				$groupRepo = new GroupRepository();
+				$groupRepo = new GroupRepository($app);
 				$groupRepo->create($group, $app['currentSite'], $app['currentUser']);
 				$groupRepo->addEventToGroup($this->parameters['event'], $group);
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL()."/recur/");
@@ -1243,7 +1243,7 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSetRepository = new EventRecurSetRepository($app);
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
@@ -1256,13 +1256,13 @@ class EventController {
 			
 			$this->addTagsToParameters($app);
 
-			$mrb = new MediaRepositoryBuilder();
+			$mrb = new MediaRepositoryBuilder($app);
 			$mrb->setIncludeDeleted(false);
 			$mrb->setSite($app['currentSite']);
 			$mrb->setEvent($this->parameters['event']);
 			$medias = $mrb->fetchAll();
 
-			$eventRepository = new EventRepository();
+			$eventRepository = new EventRepository($app);
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
@@ -1299,7 +1299,7 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSetRepository = new EventRecurSetRepository($app);
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
@@ -1312,13 +1312,13 @@ class EventController {
 			
 			$this->addTagsToParameters($app);
 
-			$mrb = new MediaRepositoryBuilder();
+			$mrb = new MediaRepositoryBuilder($app);
 			$mrb->setIncludeDeleted(false);
 			$mrb->setSite($app['currentSite']);
 			$mrb->setEvent($this->parameters['event']);
 			$medias = $mrb->fetchAll();
 			
-			$eventRepository = new EventRepository();
+			$eventRepository = new EventRepository($app);
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
@@ -1357,7 +1357,7 @@ class EventController {
 			die("No"); // TODO
 		}
 
-		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSetRepository = new EventRecurSetRepository($app);
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
@@ -1370,13 +1370,13 @@ class EventController {
 
 			$this->addTagsToParameters($app);
 
-			$mrb = new MediaRepositoryBuilder();
+			$mrb = new MediaRepositoryBuilder($app);
 			$mrb->setIncludeDeleted(false);
 			$mrb->setSite($app['currentSite']);
 			$mrb->setEvent($this->parameters['event']);
 			$medias = $mrb->fetchAll();
 
-			$eventRepository = new EventRepository();
+			$eventRepository = new EventRepository($app);
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
@@ -1413,7 +1413,7 @@ class EventController {
 			die("No"); // TODO
 		}
 
-		$eventRecurSetRepository = new EventRecurSetRepository();
+		$eventRecurSetRepository = new EventRecurSetRepository($app);
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($this->parameters['event']);
 		$eventRecurSet->setTimeZoneName($app['currentTimeZone']);
 		$eventRecurSet->setCustomFields($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels());
@@ -1441,7 +1441,7 @@ class EventController {
 
 					$this->addTagsToParameters($app);
 
-					$mrb = new MediaRepositoryBuilder();
+					$mrb = new MediaRepositoryBuilder($app);
 					$mrb->setIncludeDeleted(false);
 					$mrb->setSite($app['currentSite']);
 					$mrb->setEvent($this->parameters['event']);
@@ -1451,7 +1451,7 @@ class EventController {
 					$eventMeta->setUserAccount($app['currentUser']);
 					$eventMeta->setFromRequest($request);
 
-					$eventRepository = new EventRepository();
+					$eventRepository = new EventRepository($app);
 
 					$eventRepository->createWithMetaData($newEvent, $app['currentSite'], $eventMeta, $this->parameters['group'], $this->parameters['groups'],
 						null, $this->parameters['tags'], $medias);
@@ -1495,7 +1495,7 @@ class EventController {
 				}
 				$eventEditMetaData->setFromRequest($request);
 
-				$eventRepository = new EventRepository();
+				$eventRepository = new EventRepository($app);
 				$eventRepository->deleteWithMetaData($this->parameters['event'], $eventEditMetaData);
 
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
@@ -1518,7 +1518,7 @@ class EventController {
 
 		//TODO It's inefective to get them all when really we just want the latest one!
 		
-		$ehrb = new EventHistoryRepositoryBuilder();
+		$ehrb = new EventHistoryRepositoryBuilder($app);
 		$ehrb->setEvent($this->parameters['event']);
 		$ehrb->setOrderByCreatedAt(true);
 		$eventHistories = $ehrb->fetchAll();
@@ -1561,10 +1561,10 @@ class EventController {
 				}
 				$eventEditMetaData->setFromRequest($request);
 
-				$eventRepository = new EventRepository();
+				$eventRepository = new EventRepository($app);
 				$eventRepository->cancelWithMetaData($this->parameters['event'], $eventEditMetaData);
 
-				$repo = new EventRecurSetRepository();
+				$repo = new EventRecurSetRepository($app);
 				if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 					return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl().'/edit/future');
 				} else {
@@ -1589,7 +1589,7 @@ class EventController {
 
 		//TODO It's inefective to get them all when really we just want the latest one!
 
-		$ehrb = new EventHistoryRepositoryBuilder();
+		$ehrb = new EventHistoryRepositoryBuilder($app);
 		$ehrb->setEvent($this->parameters['event']);
 		$ehrb->setOrderByCreatedAt(true);
 		$eventHistories = $ehrb->fetchAll();
@@ -1612,7 +1612,7 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		$ehr = new EventHistoryRepository();
+		$ehr = new EventHistoryRepository($app);
 		$this->parameters['eventHistory'] = $ehr->loadByEventAndtimeStamp($this->parameters['event'], $timestamp);
 		if (!$this->parameters['eventHistory']) {
 			$app->abort(404, "Event History does not exist.");
@@ -1645,7 +1645,7 @@ class EventController {
 				$eventEditMetaData->setRevertedFromHistoryCreatedAt($this->parameters['eventHistory']->getCreatedAt());
 				$eventEditMetaData->setFromRequest($request);
 
-				$eventRepository = new EventRepository();
+				$eventRepository = new EventRepository($app);
 				$eventRepository->editWithMetaData($newEventState,  $eventEditMetaData);
 				
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL());
@@ -1674,17 +1674,17 @@ class EventController {
 			
 			if (intval($request->request->get('area'))) {
 				
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($app);
 				$area = $areaRepository->loadBySlug($app['currentSite'], $request->request->get('area'));
 				if ($area && (!$this->parameters['area'] || $area->getId() != $this->parameters['area']->getId())) {
 					if ($this->parameters['venue']) {
 						$this->parameters['venue']->setAreaId($area->getId());
-						$venueRepository = new VenueRepository();
+						$venueRepository = new VenueRepository($app);
 						$venueRepository->edit($this->parameters['venue'], $app['currentUser']);
 						$gotResultEditedVenue = true;
 					} else {
 						$this->parameters['event']->setAreaId($area->getId());
-						$eventRepository = new EventRepository();
+						$eventRepository = new EventRepository($app);
 						$eventRepository->edit($this->parameters['event'], $app['currentUser']);
 						$gotResultEditedEvent = true;
 					}
@@ -1697,7 +1697,7 @@ class EventController {
 		}
 		
 		if ($gotResultEditedEvent) {
-			$repo = new EventRecurSetRepository();
+			$repo = new EventRecurSetRepository($app);
 			if ($repo->isEventInSetWithNotDeletedFutureEvents($this->parameters['event'])) {
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForUrl().'/edit/future');
 			} else {
@@ -1715,7 +1715,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		$tagRepo = new TagRepository();
+		$tagRepo = new TagRepository($app);
 			
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
@@ -1735,13 +1735,13 @@ class EventController {
 		
 		}
 		
-		$trb = new TagRepositoryBuilder();
+		$trb = new TagRepositoryBuilder($app);
 		$trb->setSite($app['currentSite']);
 		$trb->setIncludeDeleted(false);
 		$trb->setTagsForEvent($this->parameters['event']);
 		$this->parameters['tags'] = $trb->fetchAll();
 		
-		$trb = new TagRepositoryBuilder();
+		$trb = new TagRepositoryBuilder($app);
 		$trb->setSite($app['currentSite']);
 		$trb->setIncludeDeleted(false);
 		$trb->setTagsNotForEvent($this->parameters['event']);
@@ -1755,7 +1755,7 @@ class EventController {
 			$app->abort(404, "Event does not exist.");
 		}
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($app);
 			
 		if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			
@@ -1806,13 +1806,13 @@ class EventController {
 
 				if ($form->isValid() && $form['media']->getData()) {
 
-					$mediaRepository = new MediaRepository();
+					$mediaRepository = new MediaRepository($app);
 					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
 							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
 
-						$mediaInEventRepo = new MediaInEventRepository();
+						$mediaInEventRepo = new MediaInEventRepository($app);
 						$mediaInEventRepo->add($media, $this->parameters['event'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
@@ -1827,7 +1827,7 @@ class EventController {
 		}
 		
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setEvent($this->parameters['event']);
@@ -1842,10 +1842,10 @@ class EventController {
 		}
 		
 		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$mediaRepository = new MediaRepository();
+			$mediaRepository = new MediaRepository($app);
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
-				$mediaInEventRepo = new MediaInEventRepository();
+				$mediaInEventRepo = new MediaInEventRepository($app);
 				$mediaInEventRepo->remove($media, $this->parameters['event'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Removed!');
 			}
@@ -1860,17 +1860,17 @@ class EventController {
 		}
 			
 		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$mediaRepository = new MediaRepository();
+			$mediaRepository = new MediaRepository($app);
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
-				$mediaInEventRepo = new MediaInEventRepository();
+				$mediaInEventRepo = new MediaInEventRepository($app);
 				$mediaInEventRepo->add($media, $this->parameters['event'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Added!');
 				return $app->redirect("/event/".$this->parameters['event']->getSlugForURL().'/');
 			}
 		}
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setNotInEvent($this->parameters['event']);

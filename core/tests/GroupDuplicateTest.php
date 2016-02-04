@@ -34,7 +34,7 @@ class GroupDuplicateTest extends \BaseAppWithDBTest {
 		$user2->setUsername("test2");
 		$user2->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user1);
 		$userRepo->create($user2);
 
@@ -42,7 +42,7 @@ class GroupDuplicateTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user1, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group1 = new GroupModel();
@@ -55,7 +55,7 @@ class GroupDuplicateTest extends \BaseAppWithDBTest {
 		$group2->setDescription("test test");
 		$group2->setUrl("http://www.group.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 
 		$this->app['timesource']->mock(2014,1,1,1,0,0);
 		$groupRepo->create($group1, $site, $user1);
@@ -66,15 +66,15 @@ class GroupDuplicateTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user1, $group2);
 
-		$uwgr = new UserWatchesGroupRepository();
+		$uwgr = new UserWatchesGroupRepository($this->app);
 
 
 		// Test before
 
-		$erb = new \repositories\builders\EventRepositoryBuilder();
+		$erb = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$erb->setGroup($group1);
 		$this->assertEquals(0, count($erb->fetchAll()));
 
@@ -92,7 +92,7 @@ class GroupDuplicateTest extends \BaseAppWithDBTest {
 
 		// Test Duplicate
 
-		$erb = new \repositories\builders\EventRepositoryBuilder();
+		$erb = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$erb->setGroup($group1);
 		$this->assertEquals(1, count($erb->fetchAll()));
 

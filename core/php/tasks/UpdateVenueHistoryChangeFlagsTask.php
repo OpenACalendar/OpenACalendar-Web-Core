@@ -33,7 +33,7 @@ class UpdateVenueHistoryChangeFlagsTask extends \BaseTask {
 
 	protected function run() {
 
-		$venueHistoryRepo = new VenueHistoryRepository();
+		$venueHistoryRepo = new VenueHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM venue_history");
 		$stat->execute();
 		$count = 0;

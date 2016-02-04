@@ -60,7 +60,8 @@ class UserWatchesAreaNotifyContent extends BaseUserWatchesNotifyContent {
 
 	public function markNotificationSent(\DateTime $checkTime)
 	{
-		$userWatchesAreaRepository = new UserWatchesAreaRepository();
+        global $app;
+		$userWatchesAreaRepository = new UserWatchesAreaRepository($app);
 		$userWatchesArea = $userWatchesAreaRepository->loadByUserAndArea($this->userAccount, $this->area);
 		$userWatchesAreaRepository->markNotifyEmailSent($userWatchesArea, $checkTime);
 	}

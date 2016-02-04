@@ -40,7 +40,7 @@ class EventListController {
 	
 	
 	function calendarNow(Application $app) {
-		$cal = new \RenderCalendar();
+		$cal = new \RenderCalendar($app);
 		$cal->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$cal->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if ($app['currentUser']) {
@@ -63,7 +63,7 @@ class EventListController {
 	
 	function calendar($year, $month, Application $app) {
 		
-		$cal = new \RenderCalendar();
+		$cal = new \RenderCalendar($app);
 		$cal->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$cal->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if ($app['currentUser']) {

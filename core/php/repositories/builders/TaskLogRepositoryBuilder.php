@@ -39,7 +39,7 @@ class TaskLogRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 
 	protected function buildStat() {
-				global $DB;
+
 
 
 
@@ -48,7 +48,7 @@ class TaskLogRepositoryBuilder  extends BaseRepositoryBuilder {
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
 				" ORDER BY task_log.started_at DESC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 

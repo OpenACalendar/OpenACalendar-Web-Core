@@ -35,7 +35,7 @@ class CuratedListEventController {
 			return false;
 		}
 		
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($app);
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $eslug);
 		if (!$this->parameters['event']) {
 			return false;

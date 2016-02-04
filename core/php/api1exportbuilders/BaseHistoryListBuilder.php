@@ -10,6 +10,7 @@ use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
 use models\ImportHistoryModel;
+use Silex\Application;
 
 /**
  *
@@ -28,9 +29,9 @@ abstract class BaseHistoryListBuilder extends BaseBuilder {
 	protected $histories = array();
 
 
-	public function __construct(SiteModel $site = null, $timeZone  = null, $title = null) {
-		parent::__construct($site, $timeZone, $title);
-		$this->historyRepositoryBuilder = new HistoryRepositoryBuilder();
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null, $title = null) {
+		parent::__construct($app, $site, $timeZone, $title);
+		$this->historyRepositoryBuilder = new HistoryRepositoryBuilder($this->app);
 		$this->historyRepositoryBuilder->getHistoryRepositoryBuilderConfig()->setLimit(100);
 		if ($site) $this->historyRepositoryBuilder->setSite($site);
 	}

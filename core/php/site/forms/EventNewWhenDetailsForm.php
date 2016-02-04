@@ -55,7 +55,7 @@ class EventNewWhenDetailsForm extends AbstractType {
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
 		$this->defaultCountry = null;
 		$defaultCountryID = null;

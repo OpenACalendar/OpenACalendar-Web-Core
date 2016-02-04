@@ -20,7 +20,7 @@ class ImportedEventFilterParams {
 		if ($erb) {
 			$this->importedEventRepositoryBuilder = $erb;
 		} else {
-			$this->importedEventRepositoryBuilder = new ImportedEventRepositoryBuilder();
+			$this->importedEventRepositoryBuilder = new ImportedEventRepositoryBuilder($app);
 			$this->importedEventRepositoryBuilder->setLimit(100);
 		}
 	}

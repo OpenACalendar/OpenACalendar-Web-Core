@@ -21,7 +21,7 @@ use Silex\Application;
 
 $app->before(function (Request $request) use ($app) {
 	# ////////////// Site
-	$siteRepository = new SiteRepository();
+	$siteRepository = new SiteRepository($app);
 	$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
 	if (!$site) {
 		die ("404 Not Found"); // TODO
@@ -54,9 +54,9 @@ $app->before(function (Request $request) use ($app) {
 	$app['currentSiteFeatures']->setFeaturesOnSite($app['currentSite']);
 
 	# ////////////// Permissions and Watch
-	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app);
 	$removeEditorPermissions = false;
-	$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+	$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository($app);
 	if ($app['currentUser'] && $userHasNoEditorPermissionsInSiteRepo->isUserInSite($app['currentUser'], $app['currentSite'])) {
 		$removeEditorPermissions = true;
 	}
@@ -67,7 +67,7 @@ $app->before(function (Request $request) use ($app) {
 	$app['currentUserActions'] = new UserActionsSiteList($app['currentSite'], $app['currentUserPermissions']);
 	$app['currentUserWatchesSite'] = false;
 	if ($app['currentUser']) {
-		$uwsr = new UserWatchesSiteRepository();
+		$uwsr = new UserWatchesSiteRepository($app);
 		$uws = $uwsr->loadByUserAndSite($app['currentUser'], $app['currentSite']);
 		$app['currentUserWatchesSite'] = $uws && $uws->getIsWatching();
 	}
@@ -114,7 +114,7 @@ $app->before(function (Request $request) use ($app) {
 	
 	# ////////////// Country
 	if (!$app['currentSite']->getCachedIsMultipleCountries()) {
-		$cr = new CountryRepository();
+		$cr = new CountryRepository($app);
 		$app['currentSiteHasOneCountry'] = $cr->loadBySite($app['currentSite']);
 		$app['twig']->addGlobal('currentSiteHasOneCountry', $app['currentSiteHasOneCountry']);	
 	}

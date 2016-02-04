@@ -48,20 +48,20 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 
 	protected function run() {
 
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$eventRepo = new EventRepository();
-		$userWatchesSiteRepository = new UserWatchesSiteRepository();
-		$userWatchesSiteStopRepository = new UserWatchesSiteStopRepository();
-		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
-		$userNotificationRepo = new UserNotificationRepository();
-		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
-		$userPermissionsRepo = new UserPermissionsRepository($this->app['extensions']);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$eventRepo = new EventRepository($this->app);
+		$userWatchesSiteRepository = new UserWatchesSiteRepository($this->app);
+		$userWatchesSiteStopRepository = new UserWatchesSiteStopRepository($this->app);
+		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($this->app);
+		$userNotificationRepo = new UserNotificationRepository($this->app);
+		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository($this->app);
+		$userPermissionsRepo = new UserPermissionsRepository($this->app);
 
 		/** @var usernotifications/UserWatchesSiteGroupPromptNotificationType **/
 		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSitePrompt');
 
-		$b = new UserWatchesSiteRepositoryBuilder();
+		$b = new UserWatchesSiteRepositoryBuilder($this->app);
 		foreach($b->fetchAll() as $userWatchesSite) {
 
 			$user = $userRepo->loadByID($userWatchesSite->getUserAccountId());
@@ -108,7 +108,7 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
 						$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
 						$unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
-						$lastEventsBuilder = new EventRepositoryBuilder();
+						$lastEventsBuilder = new EventRepositoryBuilder($this->app);
 						$lastEventsBuilder->setSite($site);
 						$lastEventsBuilder->setOrderByStartAt(true);
 						$lastEventsBuilder->setIncludeDeleted(false);

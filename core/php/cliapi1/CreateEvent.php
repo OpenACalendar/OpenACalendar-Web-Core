@@ -64,10 +64,10 @@ class CreateEvent {
     {
         $this->app = $app;
 		if ($this->app['config']->isSingleSiteMode) {
-			$siteRepo = new SiteRepository();
+			$siteRepo = new SiteRepository($app);
 			$this->site = $siteRepo->loadById($this->app['config']->singleSiteID);
 		}
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($app);
 		// TODO if we have $this->site, should set $this->country_id & $this->timezone from countries which are enabled
 		$this->country = $countryRepo->loadByTwoCharCode("GB");
 		$this->timezone = 'Europe/London';
@@ -92,7 +92,7 @@ class CreateEvent {
 				$this->end_at = new \DateTime($json->event->end->str, $timezone);
 			}
 			if (isset($json->event->country) && isset($json->event->country->code) && $json->event->country->code) {
-				$countryRepo = new CountryRepository();
+				$countryRepo = new CountryRepository($this->app);
 				// Delibrately setting NULL on failure so user gets an error message.
 				$this->country = $countryRepo->loadByTwoCharCode($json->event->country->code);
 				// TODO check allowed in this site
@@ -103,7 +103,7 @@ class CreateEvent {
 			}
 		}
 		if (isset($json->site)) {
-			$siteRepo = new SiteRepository();
+			$siteRepo = new SiteRepository($this->app);
 			if (isset($json->site->id)) {
 				$this->site = $siteRepo->loadById($json->site->id);
 			}
@@ -112,7 +112,7 @@ class CreateEvent {
 			}
 		}
 		if (isset($json->user)) {
-			$userRepo = new UserAccountRepository();
+			$userRepo = new UserAccountRepository($this->app);
 			if (isset($json->user->email)) {
 				$this->user = $userRepo->loadByEmail($json->user->email);
 			} else if (isset($json->user->username)) {
@@ -120,7 +120,7 @@ class CreateEvent {
 			}
 		} 
 		if (isset($json->group)) {
-			$groupRepo = new GroupRepository();
+			$groupRepo = new GroupRepository($this->app);
 			if (isset($json->group->slug) && $this->site) {
 				$this->group = $groupRepo->loadBySlug($this->site, $json->group->slug);
 			} else if (isset($json->group->id)) {
@@ -180,7 +180,7 @@ class CreateEvent {
 		$event->setEndAt($this->end_at);
 		$event->setCountryId($this->country->getId());
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $this->site, $this->user, $this->group);
 		
 	}

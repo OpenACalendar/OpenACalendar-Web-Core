@@ -29,13 +29,11 @@ if (!$app['currentUser']->getIsSystemAdmin()) {
 ///////////////////////////////////////////// APP
 
 $app->before(function (Request $request) use ($app) {
-	global $CONFIG;
-	
 	# ////////////// Timezone
-	$timezone = $CONFIG->sysAdminTimeZone;
+	$timezone = $app['config']->sysAdminTimeZone;
 	$app['twig']->addGlobal('currentTimeZone', $timezone);	
 	$app['currentTimeZone'] = $timezone;
-	
+
 });
 
 

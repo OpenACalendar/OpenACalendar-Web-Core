@@ -50,7 +50,7 @@ class AreaController {
 			$slug = array_shift(explode("-", $slug, 2));
 		}
 		
-		$ar = new AreaRepository();
+		$ar = new AreaRepository($app);
 		$this->parameters['area'] = $ar->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['area']) {
 			return false;
@@ -64,16 +64,16 @@ class AreaController {
 		
 		
 		if ($app['currentUser']) {
-			$uwgr = new UserWatchesAreaRepository();
+			$uwgr = new UserWatchesAreaRepository($app);
 			$uwg = $uwgr->loadByUserAndArea($app['currentUser'], $this->parameters['area']);
 			$this->parameters['currentUserWatchesArea'] = $uwg && $uwg->getIsWatching();
 		}
 
 		
-		$cr = new CountryRepository();
+		$cr = new CountryRepository($app);
 		$this->parameters['country'] = $cr->loadById($this->parameters['area']->getCountryID());
 						
-		$areaRepoBuilder = new AreaRepositoryBuilder();
+		$areaRepoBuilder = new AreaRepositoryBuilder($app);
 		$areaRepoBuilder->setSite($app['currentSite']);
 		$areaRepoBuilder->setCountry($this->parameters['country']);
 		$areaRepoBuilder->setParentArea($this->parameters['area']);
@@ -144,7 +144,7 @@ class AreaController {
 
 			if ($form->isValid()) {
 				
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($app);
 				$areaRepository->create($area, $this->parameters['area'], $app['currentSite'], $this->parameters['country'], $app['currentUser']);
 				$areaRepository->buildCacheAreaHasParent($area);
 				return $app->redirect("/area/".$area->getSlug());
@@ -183,7 +183,7 @@ class AreaController {
 				}
 				$areaEditMetaDataModel->setFromRequest($request);
 
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($app);
 				$areaRepository->editWithMetaData($this->parameters['area'], $areaEditMetaDataModel);
 				
 				return $app->redirect("/area/".$this->parameters['area']->getSlugForURL());
@@ -205,7 +205,7 @@ class AreaController {
 			$app->abort(404, "Area does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -227,7 +227,7 @@ class AreaController {
 		}
 
 		
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -274,7 +274,7 @@ class AreaController {
 		}
 		
 		if (isset($_GET['includeVenues']) && $_GET['includeVenues']) {
-			$vrb = new VenueRepositoryBuilder();
+			$vrb = new VenueRepositoryBuilder($app);
 			$vrb->setIncludeDeleted(false);
 			$vrb->setSite($app['currentSite']);
 			$vrb->setArea($this->parameters['area']);
@@ -304,7 +304,7 @@ class AreaController {
 		
 		
 		
-		$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+		$historyRepositoryBuilder = new HistoryRepositoryBuilder($app);
 		$historyRepositoryBuilder->getHistoryRepositoryBuilderConfig()->setArea($this->parameters['area']);
 		$this->parameters['historyItems'] = $historyRepositoryBuilder->fetchAll();
 		
@@ -318,7 +318,7 @@ class AreaController {
 		}
 
 		if ($request->request->get('action')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$repo = new UserWatchesAreaRepository();
+			$repo = new UserWatchesAreaRepository($app);
 			if ($request->request->get('action') == 'watch') {
 				$repo->startUserWatchingArea($app['currentUser'], $this->parameters['area']);
 				$app['flashmessages']->addMessage("Watching!");
@@ -331,7 +331,7 @@ class AreaController {
 			return $app->redirect('/area/'.$this->parameters['area']->getSlugForURL());
 		}
 
-		$repo = new \repositories\UserNotificationPreferenceRepository();
+		$repo = new \repositories\UserNotificationPreferenceRepository($app);
 		$this->parameters['preferences'] = array();
 		foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
 			if (!isset($this->parameters['preferences'][$extension->getId()])) {
@@ -351,21 +351,21 @@ class AreaController {
 			$app->abort(404, "Area does not exist.");
 		}
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($app);
 		$user = $userRepo->loadByID($userid);
 		if (!$user) {
 			$app['monolog']->addError("Failed stop watching area from email - no user ");
 			die("NO"); // TODO
 		}
 
-		$userWatchesAreaStopRepo = new UserWatchesAreaStopRepository();
+		$userWatchesAreaStopRepo = new UserWatchesAreaStopRepository($app);
 		$userWatchesAreaStop = $userWatchesAreaStopRepo->loadByUserAccountIDAndAreaIDAndAccessKey($user->getId(), $this->parameters['area']->getId(), $code);
 		if (!$userWatchesAreaStop) {
 			$app['monolog']->addError("Failed stop watching area from email - user ".$user->getId()." - code wrong");
 			die("NO"); // TODO
 		}
 
-		$userWatchesAreaRepo = new UserWatchesAreaRepository();
+		$userWatchesAreaRepo = new UserWatchesAreaRepository($app);
 		$userWatchesArea = $userWatchesAreaRepo->loadByUserAndArea($user, $this->parameters['area']);
 		if (!$userWatchesArea || !$userWatchesArea->getIsWatching()) {
 			$app['monolog']->addError("Failed stop watching area from email - user ".$user->getId()." - not watching");

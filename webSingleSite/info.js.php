@@ -17,7 +17,7 @@ use repositories\UserHasNoEditorPermissionsInSiteRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$siteRepository = new SiteRepository();
+$siteRepository = new SiteRepository($app);
 $site = $siteRepository->loadById($CONFIG->singleSiteID);
 
 // ================ cache for a bit
@@ -54,12 +54,12 @@ if ($user) {
 
 
 $removeEditorPermissions = false;
-$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository($app);
 if ($app['currentUser'] && $userHasNoEditorPermissionsInSiteRepo->isUserInSite($app['currentUser'], $site)) {
 	$removeEditorPermissions = true;
 }
 
-$userPermissionsRepo = new \repositories\UserPermissionsRepository($app['extensions']);
+$userPermissionsRepo = new \repositories\UserPermissionsRepository($app);
 $currentUserPermissions = $userPermissionsRepo->getPermissionsForUserInSite($user, $site, $removeEditorPermissions, true);
 $data['currentUserPermissions'] = $currentUserPermissions->getAsArrayForJSON();
 

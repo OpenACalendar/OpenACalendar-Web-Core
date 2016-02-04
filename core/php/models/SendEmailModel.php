@@ -51,16 +51,16 @@ class SendEmailModel {
 	}	
 	
 	public function buildEvents(Application $app) {
-		global $CONFIG;
+		global $CONFIG, $app;
 		
-		$repo = new SiteRepository();
+		$repo = new SiteRepository($app);
 		$site = $repo->loadById($this->site_id);
 		
 		$start = \TimeSource::getDateTime();
 		$end =  \TimeSource::getDateTime();
 		$end->add(new \DateInterval("P".($this->days_into_future+1)."D"));
 
-		$calendar = new \RenderCalendar();
+		$calendar = new \RenderCalendar($app);
 		$calendar->setStartAndEnd($start, $end);
 		$calendar->getEventRepositoryBuilder()->setSite($site);
 		$calendar->getEventRepositoryBuilder()->setIncludeDeleted(true);

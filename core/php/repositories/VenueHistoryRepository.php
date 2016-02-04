@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\VenueModel;
 use models\VenueHistoryModel;
+use Silex\Application;
 
 /**
  *
@@ -15,15 +16,23 @@ use models\VenueHistoryModel;
  */
 class VenueHistoryRepository {
 
-	
-	public function ensureChangedFlagsAreSet(VenueHistoryModel $venuehistory) {
-		global $DB;
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    public function ensureChangedFlagsAreSet(VenueHistoryModel $venuehistory) {
+
 		
 		// do we already have them?
 		if (!$venuehistory->isAnyChangeFlagsUnknown()) return;
 		
 		// load last.
-		$stat = $DB->prepare("SELECT * FROM venue_history WHERE venue_id = :id AND created_at < :at ".
+		$stat = $this->app['db']->prepare("SELECT * FROM venue_history WHERE venue_id = :id AND created_at < :at ".
 				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$venuehistory->getId(),'at'=>$venuehistory->getCreatedAt()->format("Y-m-d H:i:s")));
 
@@ -87,7 +96,7 @@ class VenueHistoryRepository {
 			$sqlParams['is_deleted_changed'] = $venuehistory->getIsDeletedChanged() ? 1 : -1;
 		}
 
-		$statUpdate = $DB->prepare("UPDATE venue_history SET ".
+		$statUpdate = $this->app['db']->prepare("UPDATE venue_history SET ".
 				" is_new = :is_new, ".
 				implode(" , ",$sqlFields).
 				" WHERE venue_id = :id AND created_at = :created_at");

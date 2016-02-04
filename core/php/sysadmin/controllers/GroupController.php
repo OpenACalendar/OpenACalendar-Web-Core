@@ -32,14 +32,14 @@ class GroupController {
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('group'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 		
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 		
-		$gr = new GroupRepository();
+		$gr = new GroupRepository($app);
 		$this->parameters['group'] = $gr->loadBySlug($this->parameters['site'], $slug);
 		
 		if (!$this->parameters['group']) {
@@ -67,23 +67,23 @@ class GroupController {
 				$redirect = false;
 
 				if ($data['comment']) {
-					$scr = new SysAdminCommentRepository();
+					$scr = new SysAdminCommentRepository($app);
 					$scr->createAboutGroup($this->parameters['group'], $data['comment'], $app['currentUser']);
 					$redirect = true;
 				}
 
 
 				if ($action->getCommand() == 'delete' && !$this->parameters['group']->getIsDeleted()) {
-					$gr = new GroupRepository();
+					$gr = new GroupRepository($app);
 					$gr->delete($this->parameters['group'],  $app['currentUser']);
 					$redirect = true;
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['group']->getIsDeleted()) {
 					$this->parameters['group']->setIsDeleted(false);
-					$gr = new GroupRepository();
+					$gr = new GroupRepository($app);
 					$gr->undelete($this->parameters['group'],  $app['currentUser']);
 					$redirect = true;
 				} else if ($action->getCommand() == 'isduplicateof') {
-					$gr = new GroupRepository();
+					$gr = new GroupRepository($app);
 					$originalGroup = $gr->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($originalGroup && $originalGroup->getId() != $this->parameters['group']->getId()) {
 						$gr->markDuplicate($this->parameters['group'], $originalGroup, $app['currentUser']);
@@ -93,7 +93,7 @@ class GroupController {
 
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeGroupPassword && $app['config']->sysAdminExtraPurgeGroupPassword == $action->getParam(0)) {
 
-					$gr = new GroupRepository();
+					$gr = new GroupRepository($app);
 					$gr->purge($this->parameters['group']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/');
 
@@ -109,7 +109,7 @@ class GroupController {
 		$this->parameters['form'] = $form->createView();
 
 
-		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setGroup($this->parameters['group']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
 		
@@ -123,7 +123,7 @@ class GroupController {
 		$this->build($siteid, $slug, $request, $app);
 		
 				
-		$uarb = new UserAccountRepositoryBuilder();
+		$uarb = new UserAccountRepositoryBuilder($app);
 		$uarb->setWatchesGroup($this->parameters['group']);
 		$this->parameters['watchers'] = $uarb->fetchAll();
 

@@ -36,7 +36,7 @@ class CuratedListPurgeTest extends \BaseAppWithDBTest {
 
         // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
         // It extends the core one so has all methods.
-		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->create($userOther);
 		
@@ -44,7 +44,7 @@ class CuratedListPurgeTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
@@ -52,7 +52,7 @@ class CuratedListPurgeTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -63,7 +63,7 @@ class CuratedListPurgeTest extends \BaseAppWithDBTest {
 		$event->setUrl("http://www.info.com");
 		$event->setTicketUrl("http://www.tickets.com");
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		$curatedList = new CuratedListModel();

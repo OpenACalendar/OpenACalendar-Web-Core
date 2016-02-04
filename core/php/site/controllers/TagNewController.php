@@ -36,7 +36,7 @@ class TagNewController {
 
 			if ($form->isValid()) {
 				
-				$tagRepository = new TagRepository();
+				$tagRepository = new TagRepository($app);
 				$tagRepository->create($tag, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/tag/".$tag->getSlugForUrl());

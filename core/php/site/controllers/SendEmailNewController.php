@@ -49,7 +49,7 @@ class SendEmailNewController {
 				
 				$sendemail->buildEvents($app);
 		
-				$repository = new SendEmailRepository();
+				$repository = new SendEmailRepository($app);
 				$repository->create($sendemail, $app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/admin/sendemail/".$sendemail->getSlug());
@@ -59,7 +59,7 @@ class SendEmailNewController {
 		
 		$emails = array(  $app['currentUser']->getEmail()  );
 		
-		$rb = new SendEmailRepositoryBuilder();
+		$rb = new SendEmailRepositoryBuilder($app);
 		$rb->setSite($app['currentSite']);
 		$rb->setUserCreatedBy($app['currentUser']);
 		foreach($rb->fetchAll() as $sendemail) {

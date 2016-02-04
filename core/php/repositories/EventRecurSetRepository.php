@@ -9,6 +9,7 @@ use models\EventHistoryModel;
 use models\EventRecurSetModel;
 use models\ImportedEventModel;
 use models\UserAccountModel;
+use Silex\Application;
 
 
 /**
@@ -21,13 +22,21 @@ use models\UserAccountModel;
  */
 class EventRecurSetRepository {
 
-	
-	public function isEventInSetWithNotDeletedFutureEvents(EventModel $event) {
-		global $DB;
-		
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+
+    public function isEventInSetWithNotDeletedFutureEvents(EventModel $event) {
+
 		if (!$event->getEventRecurSetId()) return false;
 		
-		$stat = $DB->prepare("SELECT event_information.id FROM event_information ".
+		$stat = $this->app['db']->prepare("SELECT event_information.id FROM event_information ".
 				"WHERE event_recur_set_id =:id AND start_at > :start_at AND is_deleted = '0'");
 		$stat->execute(array( 
 			'id'=>$event->getEventRecurSetId(), 
@@ -43,26 +52,25 @@ class EventRecurSetRepository {
 	
 	/** @return \models\EventRecurSetModel **/
 	public function getForEvent(EventModel $event) {
-		global $DB;
-		
+
 		$eventRecurSet = $this->loadForEvent($event);
 		if (!$eventRecurSet) {
 			
 			try {
-				$DB->beginTransaction();
+                $this->app['db']->beginTransaction();
 				
-				$stat = $DB->prepare("INSERT INTO event_recur_set (created_at) VALUES (:created_at) RETURNING id");
-				$stat->execute(array( 'created_at'=>  \TimeSource::getFormattedForDataBase() ));
+				$stat = $this->app['db']->prepare("INSERT INTO event_recur_set (created_at) VALUES (:created_at) RETURNING id");
+				$stat->execute(array( 'created_at'=>  $this->app['timesource']->getFormattedForDataBase() ));
 				$data = $stat->fetch();
 				$eventRecurSet = new EventRecurSetModel();
 				$eventRecurSet->setId($data['id']);
 
-				$stat = $DB->prepare("UPDATE event_information SET event_recur_set_id = :ersi WHERE id = :id");
+				$stat = $this->app['db']->prepare("UPDATE event_information SET event_recur_set_id = :ersi WHERE id = :id");
 				$stat->execute(array('ersi'=>$eventRecurSet->getId(), 'id'=>$event->getId()));
-				
-				$DB->commit();
+
+                $this->app['db']->commit();
 			} catch (Exception $e) {
-				$DB->rollBack();
+                $this->app['db']->rollBack();
 			}
 		}
 		
@@ -72,9 +80,8 @@ class EventRecurSetRepository {
 	
 	
 	public function loadForEvent(EventModel $event) {
-		global $DB;
 		if ($event->getEventRecurSetId()) {
-			$stat = $DB->prepare("SELECT event_recur_set.* FROM event_recur_set WHERE id =:id");
+			$stat = $this->app['db']->prepare("SELECT event_recur_set.* FROM event_recur_set WHERE id =:id");
 			$stat->execute(array( 'id'=>$event->getEventRecurSetId() ));
 			if ($stat->rowCount() > 0) {
 				$eventRecurSet = new EventRecurSetModel();
@@ -85,9 +92,8 @@ class EventRecurSetRepository {
 	}
 
 	public function getForImportedEvent(ImportedEventModel $importedEventModel) {
-		global $DB;
 
-		$stat = $DB->prepare("SELECT event_recur_set.* FROM event_recur_set ".
+		$stat = $this->app['db']->prepare("SELECT event_recur_set.* FROM event_recur_set ".
 			" JOIN event_information ON event_information.event_recur_set_id = event_recur_set.id ".
 			" JOIN imported_event_is_event ON imported_event_is_event.event_id = event_information.id ".
 			" WHERE imported_event_is_event.imported_event_id = :id");

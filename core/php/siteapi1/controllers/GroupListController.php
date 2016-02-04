@@ -20,7 +20,7 @@ class GroupListController {
 	
 	function json(Request $request, Application $app) {
 		
-		$groupRepoBuilder = new GroupRepositoryBuilder();
+		$groupRepoBuilder = new GroupRepositoryBuilder($app);
 		$groupRepoBuilder->setSite($app['currentSite']);
 		
 		if (isset($_GET['search']) && trim($_GET['search'])) {

@@ -49,18 +49,18 @@ class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 	protected function run() {
 
 		
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$eventRepo = new EventRepository();
-		$userWatchesSiteRepository = new UserWatchesSiteRepository();
-		$userWatchesSiteStopRepository = new UserWatchesSiteStopRepository();
-		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
-		$userNotificationRepo = new UserNotificationRepository();
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$eventRepo = new EventRepository($this->app);
+		$userWatchesSiteRepository = new UserWatchesSiteRepository($this->app);
+		$userWatchesSiteStopRepository = new UserWatchesSiteStopRepository($this->app);
+		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($this->app);
+		$userNotificationRepo = new UserNotificationRepository($this->app);
 
 		/** @var usernotifications/UserWatchesSiteGroupPromptNotificationType **/
 		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesSiteGroupPrompt');
 
-		$b = new UserWatchesSiteRepositoryBuilder();
+		$b = new UserWatchesSiteRepositoryBuilder($this->app);
 		foreach($b->fetchAll() as $userWatchesSite) {
 
 			$user = $userRepo->loadByID($userWatchesSite->getUserAccountId());
@@ -76,7 +76,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 			// Technically UserWatchesSiteRepositoryBuilder() should only return getIsWatching() == true but lets double check
 			} else if ($userWatchesSite->getIsWatching()) {
 
-				$groupRepoBuilder = new GroupRepositoryBuilder();
+				$groupRepoBuilder = new GroupRepositoryBuilder($this->app);
 				$groupRepoBuilder->setSite($site);
 				$groupRepoBuilder->setIncludeDeleted(false);
 				foreach($groupRepoBuilder->fetchAll() as $group) {
@@ -109,7 +109,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 								$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
 								$unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
-								$lastEventsBuilder = new EventRepositoryBuilder();
+								$lastEventsBuilder = new EventRepositoryBuilder($this->app);
 								$lastEventsBuilder->setSite($site);
 								$lastEventsBuilder->setGroup($group);
 								$lastEventsBuilder->setOrderByStartAt(true);

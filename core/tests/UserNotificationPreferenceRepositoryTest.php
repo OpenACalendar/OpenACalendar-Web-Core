@@ -20,11 +20,11 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		
-		$prefRepo = new UserNotificationPreferenceRepository();
+		$prefRepo = new UserNotificationPreferenceRepository($this->app);
 		
 		### Test
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
@@ -42,11 +42,11 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		
-		$prefRepo = new UserNotificationPreferenceRepository();
+		$prefRepo = new UserNotificationPreferenceRepository($this->app);
 		
 		### Set
 		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '0' NOT NULL");
@@ -70,11 +70,11 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		
-		$prefRepo = new UserNotificationPreferenceRepository();
+		$prefRepo = new UserNotificationPreferenceRepository($this->app);
 		
 		### Set
 		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '1' NOT NULL");
@@ -98,11 +98,11 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		
-		$prefRepo = new UserNotificationPreferenceRepository();
+		$prefRepo = new UserNotificationPreferenceRepository($this->app);
 		
 		### Set
 		$prefRepo->editEmailPreference($user, 'org.openacalendar', 'WatchPrompt', true);

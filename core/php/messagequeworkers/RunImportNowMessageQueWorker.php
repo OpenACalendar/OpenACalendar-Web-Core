@@ -19,7 +19,7 @@ class RunImportNowMessageQueWorker extends BaseMessageQueWorker {
     {
         if ($extension == 'org.openacalendar' && $type == 'ImportSaved') {
 
-            $importrepo = new ImportRepository();
+            $importrepo = new ImportRepository($this->app);
             $import = $importrepo->loadById($data['id']);
 
             if ($import) {

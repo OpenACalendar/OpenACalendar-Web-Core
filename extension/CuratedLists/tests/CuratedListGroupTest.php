@@ -33,14 +33,14 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
         // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
         // It extends the core one so has all methods.
-		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$curatedList = new CuratedListModel();
@@ -55,7 +55,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -63,16 +63,16 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group);
 
 
 		// Test Before
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -80,7 +80,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->getIsGroupInlist());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -88,13 +88,13 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -108,7 +108,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		// Test After
 
 		// .... we don't ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -120,7 +120,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// .... we Do ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList, true);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -132,7 +132,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -140,7 +140,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(true, $curatedListWithInfo->getIsGroupInlist());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -149,13 +149,13 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals($group->getId(), $curatedListWithInfo->getEventInListViaGroupId());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsGroup));
@@ -166,11 +166,11 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// Test After
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -178,7 +178,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->getIsGroupInlist());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -186,13 +186,13 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -209,14 +209,14 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
         // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
         // It extends the core one so has all methods.
-		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$curatedList = new CuratedListModel();
@@ -237,7 +237,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$group2->setDescription("works first time");
 		$group2->setUrl("http://www.soveryperfect.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group1, $site, $user);
 		$groupRepo->create($group2, $site, $user);
 
@@ -246,16 +246,16 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group1, array($group2));
 
 
 		// Test Before
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -263,7 +263,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->getIsGroupInlist());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -271,18 +271,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -295,7 +295,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		// Test After
 
 		// .... we don't ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -307,7 +307,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// .... we Do ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList, true);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -319,7 +319,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -328,7 +328,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -337,18 +337,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals($group1->getId(), $curatedListWithInfo->getEventInListViaGroupId());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -359,11 +359,11 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// Test After
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -372,7 +372,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -381,18 +381,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -409,14 +409,14 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
         // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
         // It extends the core one so has all methods.
-		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$curatedList = new CuratedListModel();
@@ -437,7 +437,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$group2->setDescription("works first time");
 		$group2->setUrl("http://www.soveryperfect.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group1, $site, $user);
 		$groupRepo->create($group2, $site, $user);
 
@@ -446,16 +446,16 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group1, array($group2));
 
 
 		// Test Before
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -463,7 +463,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->getIsGroupInlist());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -472,18 +472,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -498,7 +498,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		// Test After
 
 		// .... we don't ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -510,7 +510,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// .... we Do ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList, true);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -522,7 +522,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -531,7 +531,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -541,18 +541,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsGroup));
@@ -564,11 +564,11 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// Test After
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -576,7 +576,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->getIsGroupInlist());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -585,18 +585,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -615,14 +615,14 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
         // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
         // It extends the core one so has all methods.
-		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$curatedList = new CuratedListModel();
@@ -643,7 +643,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$group2->setDescription("works first time");
 		$group2->setUrl("http://www.soveryperfect.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group1, $site, $user);
 		$groupRepo->create($group2, $site, $user);
 
@@ -652,16 +652,16 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2014,5,10,19,0,0));
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group1, array($group2));
 
 
 		// Test Before
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -669,25 +669,25 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->getIsGroupInlist());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
 		$curatedListWithInfo = $curatedListsWithInfo[0];
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -701,7 +701,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		// Test After
 
 		// .... we don't ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -713,7 +713,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// .... we Do ask for extra info
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList, true);
 		$events = $eventRepositoryBuilder->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -725,7 +725,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -734,7 +734,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -743,18 +743,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals($group1->getId(), $curatedListWithInfo->getEventInListViaGroupId());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
@@ -766,11 +766,11 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 		// Test After
-		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder();
+		$eventRepositoryBuilder = new \repositories\builders\EventRepositoryBuilder($this->app);
 		$eventRepositoryBuilder->setCuratedList($curatedList);
 		$this->assertEquals(0, count($eventRepositoryBuilder->fetchAll()));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setGroupInformation($group1);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -779,7 +779,7 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setEventInformation($event);
 		$curatedListsWithInfo = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsWithInfo));
@@ -787,18 +787,18 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $curatedListWithInfo->isEventInListViaGroup());
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($event);
 		$curatedListsContainsEvent = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsEvent));
 
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group1);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsGroup($group2);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));

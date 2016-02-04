@@ -23,7 +23,7 @@ class UserGroupListController {
 
 
 
-		$ugrb = new UserGroupRepositoryBuilder();
+		$ugrb = new UserGroupRepositoryBuilder($app);
 		$ugrb->setIndexOnly(true);
 		$userGroups = $ugrb->fetchAll();
 

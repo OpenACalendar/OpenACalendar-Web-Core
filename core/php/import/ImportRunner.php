@@ -38,7 +38,7 @@ class ImportRunner {
 
     protected function runHandlersSaveResult(ImportRun $importRun) {
 
-		$iurlrRepo = new ImportResultRepository();
+		$iurlrRepo = new ImportResultRepository($this->app);
 		$handlers = array();
 		
 		// Get
@@ -84,13 +84,13 @@ class ImportRunner {
     }
 
     protected function runImportedEventsToEvents(ImportRun $importRun) {
-        $eventRecurSetRepo = new EventRecurSetRepository();
-        $importedEventRepo = new ImportedEventRepository();
+        $eventRecurSetRepo = new EventRecurSetRepository($this->app);
+        $importedEventRepo = new ImportedEventRepository($this->app);
 
-        $importedEventOccurrenceToEvent = new ImportedEventOccurrenceToEvent($importRun);
+        $importedEventOccurrenceToEvent = new ImportedEventOccurrenceToEvent($this->app, $importRun);
         $saved = 0;
 
-        $importedEventsRepo = new ImportedEventRepositoryBuilder();
+        $importedEventsRepo = new ImportedEventRepositoryBuilder($this->app);
         $importedEventsRepo->setImport($importRun->getImport());
         $importedEventsRepo->setIncludeDeleted(true);
         foreach($importedEventsRepo->fetchAll() as $importedEvent) {

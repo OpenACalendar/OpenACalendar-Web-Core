@@ -38,14 +38,14 @@ class ImportURLLanyrdDataTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -53,10 +53,10 @@ class ImportURLLanyrdDataTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
-		$importRepository = new ImportRepository();
+		$importRepository = new ImportRepository($this->app);
 		
 		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
@@ -82,7 +82,7 @@ class ImportURLLanyrdDataTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Load!
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -97,7 +97,7 @@ class ImportURLLanyrdDataTest extends \BaseAppWithDBTest {
 
 
 		// Look for event
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setSite($site);
 		$erb->setImport($importURL);
 		$this->assertEquals(1, count($erb->fetchAll()));

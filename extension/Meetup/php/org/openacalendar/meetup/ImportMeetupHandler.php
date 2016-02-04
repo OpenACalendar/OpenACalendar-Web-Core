@@ -175,7 +175,7 @@ class ImportMeetupHandler extends ImportHandlerBase {
         }
         if ($start && $end && $start <= $end) {
 
-            $importedEventRepo = new \repositories\ImportedEventRepository();
+            $importedEventRepo = new \repositories\ImportedEventRepository($this->app);
             $id = "event_".$meetupData['id']."@meetup.com";
             $importedEvent = $importedEventRepo->loadByImportIDAndIdInImport($this->importRun->getImport()->getId() ,$id);
 

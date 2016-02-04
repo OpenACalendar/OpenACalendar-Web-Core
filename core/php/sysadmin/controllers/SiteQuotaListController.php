@@ -21,7 +21,7 @@ class SiteQuotaListController {
 	function index(Request $request, Application $app) {
 		
 		
-		$sqrb = new SiteQuotaRepositoryBuilder();
+		$sqrb = new SiteQuotaRepositoryBuilder($app);
 		$sitequotas = $sqrb->fetchAll();
 		
 		return $app['twig']->render('sysadmin/sitequotalist/index.html.twig', array(

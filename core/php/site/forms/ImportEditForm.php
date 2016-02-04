@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -21,16 +22,18 @@ use models\SiteModel;
  */
 class ImportEditForm extends AbstractType{
 
-	/** @var SiteModel **/
+    protected $app;
+
+    /** @var SiteModel **/
 	protected $site;
 	
-	function __construct(SiteModel $site) {
+	function __construct(Application $application, SiteModel $site) {
+        $this->app = $application;
 		$this->site = $site;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
-		
+
 		$builder->add('title', 'text', array(
 			'label'=>'Title',
 			'required'=>false, 
@@ -47,7 +50,7 @@ class ImportEditForm extends AbstractType{
 		);
 		 * **/
 
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {

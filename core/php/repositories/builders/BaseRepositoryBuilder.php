@@ -1,6 +1,7 @@
 <?php
 
 namespace repositories\builders;
+use Silex\Application;
 
 /**
  *
@@ -11,9 +12,18 @@ namespace repositories\builders;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 abstract class BaseRepositoryBuilder {
-	
 
-	protected $limit = 0;
+
+    /** @var Application */
+    protected   $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+
+    protected $limit = 0;
 	
 	public function setLimit($limit) {
 		$this->limit = $limit;

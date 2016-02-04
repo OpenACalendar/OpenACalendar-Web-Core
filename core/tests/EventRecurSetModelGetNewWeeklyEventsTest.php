@@ -27,7 +27,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 	 */
 	function test1() {
 		
-		TimeSource::mock(2012,12,1,9,0,0);
+		$this->app['timesource']->mock(2012,12,1,9,0,0);
 		
 		
 		$event = new EventModel();
@@ -55,7 +55,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 	 */
 	function test2() {
 		
-		TimeSource::mock(2012,6,1,9,0,0);
+		$this->app['timesource']->mock(2012,6,1,9,0,0);
 		
 		
 		$event = new EventModel();
@@ -85,7 +85,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 	 */
 	function test3() {
 		
-		TimeSource::mock(2013,3,1,9,0,0);
+		$this->app['timesource']->mock(2013,3,1,9,0,0);
 		
 		$event = new EventModel();
 		$event->setStartAt($this->mktime(2013,3,1,19,0,0));
@@ -128,7 +128,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 
     function testDaysInAdvance1() {
 
-        TimeSource::mock(2016,6,1,9,0,0);
+        $this->app['timesource']->mock(2016,6,1,9,0,0);
 
 
         $event = new EventModel();

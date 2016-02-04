@@ -41,7 +41,7 @@ class NewEventPreview extends BaseNewEvent
 		$out = array();
 
 		if ($this->draftEvent->getDetailsValue('event.country_id')) {
-			$countryRepository = new CountryRepository();
+			$countryRepository = new CountryRepository($this->application);
 			$out['country'] = $countryRepository->loadById($this->draftEvent->getDetailsValue('event.country_id'));
 		}
 

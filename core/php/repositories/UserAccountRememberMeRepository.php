@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\UserAccountModel;
 use models\UserAccountRememberMeModel;
+use Silex\Application;
 
 /**
  *
@@ -14,9 +15,17 @@ use models\UserAccountRememberMeModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserAccountRememberMeRepository {
-	
-	public function create(UserAccountModel $user) {
-		global $DB;
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    public function create(UserAccountModel $user) {
+
 		
 		$uarm = new UserAccountRememberMeModel();
 		$uarm->setUserAccountId($user->getId());
@@ -24,12 +33,12 @@ class UserAccountRememberMeRepository {
 		
 		// TODO check not already used
 		
-		$stat = $DB->prepare("INSERT INTO user_account_remember_me (user_account_id, access_key, created_at) ".
+		$stat = $this->app['db']->prepare("INSERT INTO user_account_remember_me (user_account_id, access_key, created_at) ".
 				"VALUES (:user_account_id, :access_key, :created_at)");
 		$stat->execute(array(
 				'user_account_id'=>$uarm->getUserAccountId(),
 				'access_key'=>$uarm->getAccessKey(),
-				'created_at'=>\TimeSource::getFormattedForDataBase()
+				'created_at'=>$this->app['timesource']->getFormattedForDataBase()
 			));
 		$data = $stat->fetch();
 		
@@ -39,8 +48,8 @@ class UserAccountRememberMeRepository {
 	
 	/** @return UserAccountRememberMeModel **/
 	public function loadByUserAccountIDAndAccessKey($id, $access) {
-		global $DB;
-		$stat = $DB->prepare("SELECT user_account_remember_me.* FROM user_account_remember_me WHERE user_account_id =:user_account_id AND access_key=:access_key");
+
+		$stat = $this->app['db']->prepare("SELECT user_account_remember_me.* FROM user_account_remember_me WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));
 		if ($stat->rowCount() > 0) {
 			$uarm = new UserAccountRememberMeModel();
@@ -50,8 +59,8 @@ class UserAccountRememberMeRepository {
 	}
 	
 	public function deleteByUserAccountIDAndAccessKey($id, $access) {
-		global $DB;
-		$stat = $DB->prepare("DELETE FROM user_account_remember_me WHERE user_account_id =:user_account_id AND access_key=:access_key");
+
+		$stat = $this->app['db']->prepare("DELETE FROM user_account_remember_me WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));
 	}
 }

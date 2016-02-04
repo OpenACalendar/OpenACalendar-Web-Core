@@ -17,7 +17,7 @@ use Silex\Application;
 class CuratedListFilterParams {
 
     function __construct(Application $app) {
-        $this->curatedListRepositoryBuilder = new CuratedListRepositoryBuilder();
+        $this->curatedListRepositoryBuilder = new CuratedListRepositoryBuilder($app);
         $this->curatedListRepositoryBuilder->setLimit(100);
     }
 

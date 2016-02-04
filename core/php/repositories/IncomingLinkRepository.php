@@ -3,6 +3,7 @@
 
 namespace repositories;
 use models\SiteModel;
+use Silex\Application;
 
 
 /**
@@ -15,17 +16,21 @@ use models\SiteModel;
  */
 class IncomingLinkRepository {
 
-	function __construct()
-	{
-	}
 
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
 	public function create(\BaseIncomingLink $incomingLink, SiteModel $site=null) {
-		global $DB;
-		try {
-			$DB->beginTransaction();
 
-			$stat = $DB->prepare("INSERT INTO incoming_link (site_id, extension_id, type, source_url, target_url, reporter_useragent, reporter_ip, created_at) ".
+		try {
+			$this->app['db']->beginTransaction();
+
+			$stat = $this->app['db']->prepare("INSERT INTO incoming_link (site_id, extension_id, type, source_url, target_url, reporter_useragent, reporter_ip, created_at) ".
 					"VALUES (:site_id, :extension_id, :type, :source_url, :target_url, :reporter_useragent, :reporter_ip, :created_at) RETURNING id");
 			$stat->execute(array(
 					'site_id'=>($site ? $site->getId() : null),
@@ -35,14 +40,14 @@ class IncomingLinkRepository {
 					'target_url'=>$incomingLink->getTargetURL(),
 					'reporter_useragent'=>$incomingLink->getReporterUseragent(),
 					'reporter_ip'=>$incomingLink->getReporterIp(),
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				));
 			$data = $stat->fetch();
 			$incomingLink->setId($data['id']);
 
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 

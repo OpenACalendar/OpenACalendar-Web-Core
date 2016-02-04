@@ -6,6 +6,7 @@ namespace dbaccess;
 use models\UserAccountModel;
 use models\VenueEditMetaDataModel;
 use models\VenueModel;
+use Silex\Application;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -26,12 +27,11 @@ class VenueDBAccess {
 	protected $timesource;
 
 
-	function __construct($db, $timesource)
-	{
-		$this->db = $db;
-		$this->timesource = $timesource;
-	}
-
+    function __construct(Application $application)
+    {
+        $this->db = $application['db'];
+        $this->timesource = $application['timesource'];
+    }
 
 	protected $possibleFields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_duplicate_of_id','is_deleted');
 

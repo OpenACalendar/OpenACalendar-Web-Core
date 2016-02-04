@@ -28,10 +28,10 @@ class API2ApplicationList {
 			if ($form->isValid()) {
 				$data = $form->getData();
 		
-				$userRepo = new UserAccountRepository();
+				$userRepo = new UserAccountRepository($app);
 				$user = $userRepo->loadByEmail($data['email']);
 				if ($user) {
-					$appRepo = new API2ApplicationRepository;
+					$appRepo = new API2ApplicationRepository($app);
 					$apiapp = $appRepo->create($user, $data['title']);
 					return $app->redirect("/sysadmin/api2app/".$apiapp->getId());
 				} else {
@@ -43,7 +43,7 @@ class API2ApplicationList {
 		
 		
 		
-		$rb = new API2ApplicationRepositoryBuilder();
+		$rb = new API2ApplicationRepositoryBuilder($app);
 		$apps = $rb->fetchAll();
 		
 		return $app['twig']->render('sysadmin/api2applist/index.html.twig', array(

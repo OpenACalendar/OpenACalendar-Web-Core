@@ -24,7 +24,7 @@ class SendEmailController {
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array();
 		
-		$sec = new SendEmailRepository();
+		$sec = new SendEmailRepository($app);
 		$this->parameters['sendemail'] = $sec->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['sendemail']) {
 			return false;
@@ -41,7 +41,7 @@ class SendEmailController {
 		
 		if ($request->request->get('actionSend')  && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {	
 			$this->parameters['sendemail']->send($app, $app['currentUser']);
-			$sec = new SendEmailRepository();
+			$sec = new SendEmailRepository($app);
 			$sec->markSent($this->parameters['sendemail'], $app['currentUser']);
 			
 			return $app->redirect("/admin/sendemail/".$this->parameters['sendemail']->getSlug());

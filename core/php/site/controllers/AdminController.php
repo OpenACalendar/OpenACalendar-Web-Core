@@ -46,7 +46,7 @@ class AdminController {
 
 	function listUserGroups(Application $app) {
 
-		$ugrb = new UserGroupRepositoryBuilder();
+		$ugrb = new UserGroupRepositoryBuilder($app);
 		$ugrb->setSite($app['currentSite']);
 
 		return $app['twig']->render('site/admin/listUserGroups.html.twig', array(
@@ -58,7 +58,7 @@ class AdminController {
 	function listUsers(Application $app) {
 
 
-		$upr = new UserPermissionsRepository($app['extensions']);
+		$upr = new UserPermissionsRepository($app);
 
 
 
@@ -74,18 +74,18 @@ class AdminController {
 
 
 
-		$repo = new UserHasNoEditorPermissionsInSiteRepository();
+		$repo = new UserHasNoEditorPermissionsInSiteRepository($app);
 
 
 		if ($request->request->get('action') == "add" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$ur = new UserAccountRepository();
+			$ur = new UserAccountRepository($app);
 			$user = $ur->loadByUserName($request->request->get('username'));
 			if ($user) {
 				$repo->addUserToSite($user, $app['currentSite'], $app['currentUser']);
 				return $app->redirect('/admin/usernoteditor/');
 			}
 		} else if ($request->request->get('action') == "remove" && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$ur = new UserAccountRepository();
+			$ur = new UserAccountRepository($app);
 			$user = $ur->loadByID($request->request->get('id'));
 			if ($user) {
 				$repo->removeUserFromSite($user, $app['currentSite'], $app['currentUser']);
@@ -94,7 +94,7 @@ class AdminController {
 		}
 
 
-		$userAccountRepoBuilder = new UserAccountRepositoryBuilder();
+		$userAccountRepoBuilder = new UserAccountRepositoryBuilder($app);
 		$userAccountRepoBuilder->setUserHasNoEditorPermissionsInSite($app['currentSite']);
 
 		return $app['twig']->render('site/admin/listUsersNotEditors.html.twig', array(
@@ -114,7 +114,7 @@ class AdminController {
 
 			if ($form->isValid()) {
 
-				$ugRepository = new UserGroupRepository();
+				$ugRepository = new UserGroupRepository($app);
 				$ugRepository->createForSite($app['currentSite'], $userGroup, $app['currentUser']);
 				return $app->redirect("/admin/usergroup/".$userGroup->getId());
 
@@ -137,17 +137,17 @@ class AdminController {
 			
 			if ($form->isValid()) {
 				
-				$siteRepository = new SiteRepository();
+				$siteRepository = new SiteRepository($app);
 				$siteRepository->edit($app['currentSite'], $app['currentUser']);
 
 				if ($app['config']->isFileStore()) {
 					$newLogo = $form['logo']->getData();
 					if ($newLogo) {
-						$mediaRepository = new MediaRepository();
+						$mediaRepository = new MediaRepository($app);
 						$media = $mediaRepository->createFromFile($newLogo, $app['currentSite'], $app['currentUser']);
 						if ($media) {
 							$app['currentSite']->setLogoMediaId($media->getId());
-							$siteProfileMediaRepository = new SiteProfileMediaRepository();
+							$siteProfileMediaRepository = new SiteProfileMediaRepository($app);
 							$siteProfileMediaRepository->createOrEdit($app['currentSite'], $app['currentUser']);
 						}
 					}
@@ -203,7 +203,7 @@ class AdminController {
 				
 			$app['currentSite']->setPromptEmailsDaysInAdvance($request->request->get('PromptEmailsDaysInAdvance'));
 
-			$siteRepository = new SiteRepository();
+			$siteRepository = new SiteRepository($app);
 			$siteRepository->edit($app['currentSite'], $app['currentUser']);
 
 			$app['flashmessages']->addMessage("Details saved.");
@@ -224,7 +224,7 @@ class AdminController {
 				
 			if ($form->isValid()) {
 				
-				$siteRepository = new SiteRepository();
+				$siteRepository = new SiteRepository($app);
 				$siteRepository->edit($app['currentSite'], $app['currentUser']);
 				
 				return $app->redirect("/admin/");
@@ -241,13 +241,13 @@ class AdminController {
 	
 	function countries(Request $request, Application $app) {		
 		
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($app);
 		$crb->setSiteInformation($app['currentSite']);
 		$countries = $crb->fetchAll();
 		
 		if ($request->request->get('submitted') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$in = is_array($request->request->get('country')) ? $request->request->get('country') : null;
-			$cisr = new CountryInSiteRepository;
+			$cisr = new CountryInSiteRepository($app);
 			$countriesCount = 0;
 			$timezones = array();
 			foreach($countries as $country) {
@@ -265,7 +265,7 @@ class AdminController {
 			$app['currentSite']->setCachedTimezonesAsList($timezones);
 			$app['currentSite']->setCachedIsMultipleCountries($countriesCount > 1);
 			
-			$siteRepository = new SiteRepository();
+			$siteRepository = new SiteRepository($app);
 			$siteRepository->editCached($app['currentSite']);
 
 			return $app->redirect('/admin/');
@@ -279,7 +279,7 @@ class AdminController {
 	
 	function media(Request $request, Application $app) {
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$size = 0;
@@ -296,7 +296,7 @@ class AdminController {
 	}
 	
 	function areas(Application $app) {
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($app);
 		$crb->setSiteIn($app['currentSite']);
 		$countries = $crb->fetchAll();
 		

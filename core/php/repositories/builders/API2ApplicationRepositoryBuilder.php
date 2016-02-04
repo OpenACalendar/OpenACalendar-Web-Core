@@ -21,14 +21,14 @@ class API2ApplicationRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		
 		$sql = "SELECT api2_application_information.* FROM api2_application_information ".
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 				" ORDER BY api2_application_information.id ASC ";
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 		
 	}

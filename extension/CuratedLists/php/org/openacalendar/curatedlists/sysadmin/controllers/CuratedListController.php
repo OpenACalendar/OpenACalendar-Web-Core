@@ -28,7 +28,7 @@ class CuratedListController {
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('group'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 		
 		if (!$this->parameters['site']) {
@@ -69,7 +69,7 @@ class CuratedListController {
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/curatedlist/'.$this->parameters['curatedlist']->getSlug());
 
 				} else if ($action->getCommand() == 'addeditor') {
-					$userRepo = new UserAccountRepository;
+					$userRepo = new UserAccountRepository($app);
 					$user = $userRepo->loadByID($action->getParam(0));
 					if ($user) {
 						$clr = new CuratedListRepository();
@@ -78,7 +78,7 @@ class CuratedListController {
 					}					
 					
 				} else if ($action->getCommand() == 'removeeditor') {
-					$userRepo = new UserAccountRepository;
+					$userRepo = new UserAccountRepository($app);
 					$user = $userRepo->loadByID($action->getParam(0));
 					if ($user) {
 						$clr = new CuratedListRepository();
@@ -87,7 +87,7 @@ class CuratedListController {
 					}	
 					
 				} else if ($action->getCommand() == 'addevent') {
-					$eventRepository = new EventRepository();
+					$eventRepository = new EventRepository($app);
 					$event = $eventRepository->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($event) {
 						$clr = new CuratedListRepository();
@@ -96,7 +96,7 @@ class CuratedListController {
 					}
 					
 				} else if ($action->getCommand() == 'removeevent') {
-					$eventRepository = new EventRepository();
+					$eventRepository = new EventRepository($app);
 					$event = $eventRepository->loadBySlug($this->parameters['site'], $action->getParam(0));
 					if ($event) {
 						$clr = new CuratedListRepository();

@@ -25,14 +25,14 @@ class GroupListController {
 	function index($siteid, Request $request, Application $app) {
 		
 		
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 		
 		if (!$site) {
 			die("404");
 		}
 		
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($app);
 		$grb->setSite($site);
 		$groups = $grb->fetchAll();
 		

@@ -122,7 +122,7 @@ class MediaRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-				global $DB;
+
 		
 		
 		$sql = "SELECT media_information.* FROM media_information ".
@@ -130,7 +130,7 @@ class MediaRepositoryBuilder  extends BaseRepositoryBuilder {
 				($this->where?" WHERE ".implode(" AND ", $this->where):"").
 				" ORDER BY media_information.id ASC ".( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

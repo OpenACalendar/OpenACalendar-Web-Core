@@ -37,7 +37,7 @@ class SiteController {
 	protected function build($id, Request $request, Application $app) {
 		$this->parameters = array('group'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($id);
 		
 		if (!$this->parameters['site']) {
@@ -51,8 +51,8 @@ class SiteController {
 		$this->build($id, $request, $app);
 		
 				
-		$siteQuotaRepository = new SiteQuotaRepository();
-		$userRepository = new UserAccountRepository();
+		$siteQuotaRepository = new SiteQuotaRepository($app);
+		$userRepository = new UserAccountRepository($app);
 		
 		$form = $app['form.factory']->create(new ActionWithCommentForm());
 		
@@ -64,13 +64,13 @@ class SiteController {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);
 
-				$sr = new SiteRepository();
+				$sr = new SiteRepository($app);
 
 
 				$redirect = false;
 
 				if ($data['comment']) {
-					$scr = new SysAdminCommentRepository();
+					$scr = new SysAdminCommentRepository($app);
 					$scr->createAboutSite($this->parameters['site'], $data['comment'], $app['currentUser']);
 					$redirect = true;
 				}
@@ -132,7 +132,7 @@ class SiteController {
 				$siteQuotaRepository->loadById($this->parameters['site']->getSiteQuotaId()) : 
 				null;
 
-		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setSite($this->parameters['site']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
 
@@ -143,7 +143,7 @@ class SiteController {
 	function watchers($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 			
-		$uarb = new UserAccountRepositoryBuilder();
+		$uarb = new UserAccountRepositoryBuilder($app);
 		$uarb->setWatchesSite($this->parameters['site']);
 		$this->parameters['watchers'] = $uarb->fetchAll();
 
@@ -185,7 +185,7 @@ class SiteController {
 	function listCountries($siteid, Request $request, Application $app) {
 		$this->build($siteid, $request, $app);
 		
-		$crb = new CountryRepositoryBuilder();
+		$crb = new CountryRepositoryBuilder($app);
 		$crb->setSiteIn($this->parameters['site']);
 		$this->parameters['countries'] = $crb->fetchAll();
 		
@@ -193,13 +193,13 @@ class SiteController {
 
 	}
 	
-	protected function buildTree(SiteModel $site, AreaModel $parentArea = null) {
+	protected function buildTree(Application $app, SiteModel $site, AreaModel $parentArea = null) {
 		$data = array(
 				'area'=>$parentArea,
 				'children'=>array()
 			);
 		
-		$areaRepoBuilder = new AreaRepositoryBuilder();
+		$areaRepoBuilder = new AreaRepositoryBuilder($app);
 		$areaRepoBuilder->setSite($site);
 		$areaRepoBuilder->setCountry($this->parameters['country']);
 		if ($parentArea) {
@@ -209,7 +209,7 @@ class SiteController {
 		}
 		
 		foreach($areaRepoBuilder->fetchAll() as $area) {
-			$data['children'][] = $this->buildTree($site, $area);
+			$data['children'][] = $this->buildTree($app, $site, $area);
 		}
 		
 		return $data;
@@ -218,13 +218,13 @@ class SiteController {
 	function showCountry($siteid, $countrycode, Request $request, Application $app) {
 		$this->build($siteid, $request, $app);
 		
-		$cr = new CountryRepository();
+		$cr = new CountryRepository($app);
 		$this->parameters['country'] = $cr->loadByTwoCharCode($countrycode);
 		if (!$this->parameters['country']) {
 			die("No Country");
 		}
 		
-		$this->parameters['areaTree'] = $this->buildTree($this->parameters['site']);
+		$this->parameters['areaTree'] = $this->buildTree($app, $this->parameters['site']);
 		
 		return $app['twig']->render('sysadmin/site/country.html.twig', $this->parameters);	
 	}
@@ -232,7 +232,7 @@ class SiteController {
 	function listUsersNotEditors($siteid, Request $request, Application $app) {
 		$this->build($siteid, $request, $app);
 
-		$userAccountRepoBuilder = new UserAccountRepositoryBuilder();
+		$userAccountRepoBuilder = new UserAccountRepositoryBuilder($app);
 		$userAccountRepoBuilder->setUserHasNoEditorPermissionsInSite($this->parameters['site']);
 		$this->parameters['users'] = $userAccountRepoBuilder->fetchAll();
 

@@ -48,7 +48,7 @@ class RunImportsTask extends \BaseTask  {
 
 	protected function run() {
 
-		$iurlBuilder = new ImportRepositoryBuilder();
+		$iurlBuilder = new ImportRepositoryBuilder($this->app);
 
 		foreach($iurlBuilder->fetchAll() as $import) {
             $this->runImport($import);
@@ -59,15 +59,15 @@ class RunImportsTask extends \BaseTask  {
 
     public function runImport(ImportModel $import) {
 
-        $siteRepo = new SiteRepository();
+        $siteRepo = new SiteRepository($this->app);
         $siteFeatureRepository = new SiteFeatureRepository($this->app);
-        $groupRepo = new GroupRepository();
-        $importURLRepo = new ImportRepository();
-        $userRepo = new UserAccountRepository();
-        $userWatchesSiteStopRepository = new UserWatchesSiteStopRepository();
-        $userWatchesGroupStopRepository = new UserWatchesGroupStopRepository();
-        $userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
-        $userNotificationRepo = new UserNotificationRepository();
+        $groupRepo = new GroupRepository($this->app);
+        $importURLRepo = new ImportRepository($this->app);
+        $userRepo = new UserAccountRepository($this->app);
+        $userWatchesSiteStopRepository = new UserWatchesSiteStopRepository($this->app);
+        $userWatchesGroupStopRepository = new UserWatchesGroupStopRepository($this->app);
+        $userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($this->app);
+        $userNotificationRepo = new UserNotificationRepository($this->app);
 
         /** @var usernotifications/UpcomingEventsUserNotificationType **/
         $userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('ImportURLExpired');
@@ -96,7 +96,7 @@ class RunImportsTask extends \BaseTask  {
 
             configureAppForSite($site);
 
-            $uwsb = new UserWatchesSiteRepositoryBuilder();
+            $uwsb = new UserWatchesSiteRepositoryBuilder($this->app);
             $uwsb->setSite($site);
             foreach ($uwsb->fetchAll() as $userWatchesSite) {
                 $user = $userRepo->loadByID($userWatchesSite->getUserAccountId());
@@ -149,7 +149,7 @@ class RunImportsTask extends \BaseTask  {
                 }
             }
 
-            $uwgb = new UserWatchesGroupRepositoryBuilder();
+            $uwgb = new UserWatchesGroupRepositoryBuilder($this->app);
             $uwgb->setGroup($group);
             foreach ($uwgb->fetchAll() as $userWatchesGroup) {
                 $user = $userRepo->loadByID($userWatchesGroup->getUserAccountId());

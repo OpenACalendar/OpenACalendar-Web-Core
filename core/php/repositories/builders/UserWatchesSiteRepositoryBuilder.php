@@ -38,7 +38,7 @@ class UserWatchesSiteRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		
 	
@@ -48,7 +48,7 @@ class UserWatchesSiteRepositoryBuilder  extends BaseRepositoryBuilder {
 				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
 		
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

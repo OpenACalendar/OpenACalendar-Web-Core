@@ -53,21 +53,21 @@ class SendUserWatchesGroupPromptEmailsTask  extends \BaseTask  {
 
 	protected function run() {
 		
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$groupRepo = new GroupRepository();
-		$eventRepo = new EventRepository();
-		$userWatchesGroupRepository = new UserWatchesGroupRepository();
-		$userWatchesGroupStopRepository = new UserWatchesGroupStopRepository();
-		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
-		$userNotificationRepo = new UserNotificationRepository();
-		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
-		$userPermissionsRepo = new UserPermissionsRepository($this->app['extensions']);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$groupRepo = new GroupRepository($this->app);
+		$eventRepo = new EventRepository($this->app);
+		$userWatchesGroupRepository = new UserWatchesGroupRepository($this->app);
+		$userWatchesGroupStopRepository = new UserWatchesGroupStopRepository($this->app);
+		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($this->app);
+		$userNotificationRepo = new UserNotificationRepository($this->app);
+		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository($this->app);
+		$userPermissionsRepo = new UserPermissionsRepository($this->app);
 
 		/** @var usernotifications/UserWatchesGroupPromptNotificationType **/
 		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UserWatchesGroupPrompt');
 
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		foreach($b->fetchAll() as $userWatchesGroup) {
 
 			$user = $userRepo->loadByID($userWatchesGroup->getUserAccountId());
@@ -120,7 +120,7 @@ class SendUserWatchesGroupPromptEmailsTask  extends \BaseTask  {
 						$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
 						$unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
-						$lastEventsBuilder = new EventRepositoryBuilder();
+						$lastEventsBuilder = new EventRepositoryBuilder($this->app);
 						$lastEventsBuilder->setSite($site);
 						$lastEventsBuilder->setGroup($group);
 						$lastEventsBuilder->setOrderByStartAt(true);

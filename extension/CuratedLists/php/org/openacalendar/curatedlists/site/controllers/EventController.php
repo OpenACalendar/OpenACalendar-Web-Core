@@ -30,7 +30,7 @@ class EventController extends \site\controllers\EventController {
 			die("No"); // TODO
 		}
 		
-		$clrb = new CuratedListRepositoryBuilder();
+		$clrb = new CuratedListRepositoryBuilder($app);
 		$clrb->setSite($app['currentSite']);
 		$clrb->setUserCanEdit($app['currentUser']);
 		$clrb->setEventInformation($this->parameters['event']);

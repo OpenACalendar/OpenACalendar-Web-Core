@@ -21,7 +21,7 @@ class UserCreateTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$this->checkUserInTest1($userRepo->loadByID($user->getId()) );

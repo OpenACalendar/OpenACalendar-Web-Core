@@ -119,13 +119,13 @@ function userLogIn(UserAccountModel $user) {
 }
 
 function userLogOut() {
-	global $USER_CURRENT, $USER_CURRENT_LOADED, $CONFIG, $WEBSESSION;
+	global $USER_CURRENT, $USER_CURRENT_LOADED, $CONFIG, $WEBSESSION, $app;
 	$WEBSESSION->set('userID',null);
 	$WEBSESSION->set('sysAdminLastActive',null);
 	if (isset($_COOKIE['userID']) && isset($_COOKIE['userKey'])) {
 		setcookie("userID","",null,'/',$CONFIG->webCommonSessionDomain,false,true);
 		setcookie("userKey","",null,'/',$CONFIG->webCommonSessionDomain,false,true);
-		$repo = new UserAccountRememberMeRepository();
+		$repo = new UserAccountRememberMeRepository($app);
 		$repo->deleteByUserAccountIDAndAccessKey($_COOKIE['userID'], $_COOKIE['userKey']);			
 	}
 	$USER_CURRENT_LOADED = true;
@@ -143,17 +143,17 @@ $USER_CURRENT_LOADED = false;
  * @return UserAccountModel|null
  */
 function userGetCurrent() {
-	global $USER_CURRENT, $USER_CURRENT_LOADED, $WEBSESSION;
+	global $USER_CURRENT, $USER_CURRENT_LOADED, $WEBSESSION, $app;
 	if (!$USER_CURRENT_LOADED) {
 		if ($WEBSESSION->has('userID') && $WEBSESSION->get('userID') > 0) {
-			$uar = new UserAccountRepository();
+			$uar = new UserAccountRepository($app);
 			$USER_CURRENT = $uar->loadByID($WEBSESSION->get('userID'));
 			if ($USER_CURRENT && $USER_CURRENT->getIsClosedBySysAdmin()) $USER_CURRENT = null;
 		} else if (isset($_COOKIE['userID']) && isset($_COOKIE['userKey'])) {
-			$uarmr = new UserAccountRememberMeRepository();
+			$uarmr = new UserAccountRememberMeRepository($app);
 			$uarm = $uarmr->loadByUserAccountIDAndAccessKey($_COOKIE['userID'], $_COOKIE['userKey']);
 			if ($uarm) {
-				$uar = new UserAccountRepository();
+				$uar = new UserAccountRepository($app);
 				$USER_CURRENT = $uar->loadByID($uarm->getUserAccountId());
 				if ($USER_CURRENT && $USER_CURRENT->getIsClosedBySysAdmin()) $USER_CURRENT = null;
 				if ($USER_CURRENT) {
@@ -171,8 +171,8 @@ $app['currentUser'] = userGetCurrent();
 
 $app->before(function () use ($app) {
 	$app['twig']->addGlobal('currentUser', $app['currentUser']);
-	$app['twig']->addFunction(new Twig_SimpleFunction('getCurrentUserPrivateFeedKey', function () {
-		$r = new \repositories\UserAccountPrivateFeedKeyRepository();
+	$app['twig']->addFunction(new Twig_SimpleFunction('getCurrentUserPrivateFeedKey', function () use ($app) {
+		$r = new \repositories\UserAccountPrivateFeedKeyRepository($app);
 		return $r->getForUser( userGetCurrent());
 	}));
 	$app['twig']->addFunction(new Twig_SimpleFunction('getCSFRToken', function () {

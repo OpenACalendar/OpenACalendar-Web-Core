@@ -22,7 +22,7 @@ class AreaController {
 
 	protected function build($slug, Request $request, Application $app) {
 
-		$repo = new AreaRepository();
+		$repo = new AreaRepository($app);
 		$this->area = $repo->loadBySlug($app['currentSite'], $slug);
 		if (!$this->area) {
 			return false;
@@ -62,7 +62,7 @@ class AreaController {
 		}
 		
 		if ($edits) {
-			$repo = new AreaRepository();
+			$repo = new AreaRepository($app);
 			$repo->edit($this->area, $app['apiUser']);
 			$out = array(
 				'edited'=>true,

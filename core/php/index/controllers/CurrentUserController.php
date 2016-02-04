@@ -52,7 +52,7 @@ class CurrentUserController {
 	
 	
 	function resendVerifyEmail(Request $request, Application $app) {		
-		$repo = new UserAccountVerifyEmailRepository();
+		$repo = new UserAccountVerifyEmailRepository($app);
 		
 		$date = $repo->getLastSentForUserAccount($app['currentUser']);
 		if ($date && $date->getTimestamp() > (\TimeSource::time() - $app['config']->userAccountVerificationSecondsBetweenAllowedSends)) {
@@ -84,7 +84,7 @@ class CurrentUserController {
 					$form->addError(new FormError('old password wrong'));
 				} else {
 					$app['currentUser']->setPassword($data['password1']);
-					$userAccountRepository = new UserAccountRepository();
+					$userAccountRepository = new UserAccountRepository($app);
 					$userAccountRepository->editPassword($app['currentUser']);
 					$app['flashmessages']->addMessage("Password Changed.");
 					return $app['twig']->render('index/currentuser/changePasswordDone.html.twig', array());
@@ -107,7 +107,7 @@ class CurrentUserController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				$userRepo = new UserAccountRepository;
+				$userRepo = new UserAccountRepository($app);
 				$userRepo->editEmailsOptions($app['currentUser']);
 				$ourForm->savePreferences($form);
 				$app['flashmessages']->addMessage("Options Changed.");
@@ -128,7 +128,7 @@ class CurrentUserController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				$userRepo = new UserAccountRepository;
+				$userRepo = new UserAccountRepository($app);
 				$userRepo->editPreferences($app['currentUser']);
 				$app['flashmessages']->addMessage("Options Changed.");
 				return $app->redirect("/me/");
@@ -149,7 +149,7 @@ class CurrentUserController {
 	
 	function sites(Request $request, Application $app) {
 		
-		$srb = new SiteRepositoryBuilder();
+		$srb = new SiteRepositoryBuilder($app);
 		$srb->setUserInterestedIn($app['currentUser']);
 		$srb->setIsOpenBySysAdminsOnly(true);
 		
@@ -179,7 +179,7 @@ class CurrentUserController {
 	
 	
 	function calendarNow(Application $app) {
-		$cal = new \RenderCalendar();
+		$cal = new \RenderCalendar($app);
 		$params = new EventFilterParams($app, $cal->getEventRepositoryBuilder());
 		$params->setHasDateControls(false);
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
@@ -201,7 +201,7 @@ class CurrentUserController {
 	
 	function calendar($year, $month, Application $app) {
 		
-		$cal = new \RenderCalendar();
+		$cal = new \RenderCalendar($app);
 		$params = new EventFilterParams($app, $cal->getEventRepositoryBuilder());
 		$params->setHasDateControls(false);
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
@@ -223,7 +223,7 @@ class CurrentUserController {
 	
 	function listNotifications(Application $app) {
 	
-		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb = new UserNotificationRepositoryBuilder($app);
 		$rb->setLimit(20);
 		$rb->setUser($app['currentUser']);
 		
@@ -237,7 +237,7 @@ class CurrentUserController {
 	
 	function listNotificationsJson(Application $app) {
 	
-		$rb = new UserNotificationRepositoryBuilder($app['extensions']);
+		$rb = new UserNotificationRepositoryBuilder($app);
 		$rb->setIsOpenBySysAdminsOnly(true);
 		$rb->setLimit(20);
 		$rb->setUser($app['currentUser']);
@@ -269,7 +269,7 @@ class CurrentUserController {
 	function showNotification($id, Application $app) {
 
 		// get
-		$repo = new UserNotificationRepository();
+		$repo = new UserNotificationRepository($app);
 		$notification = $repo->loadByIdForUser($id, $app['currentUser']);
 
 		// Mark read

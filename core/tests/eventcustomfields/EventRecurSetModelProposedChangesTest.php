@@ -22,7 +22,7 @@ class EventRecurSetModelProposedChangesTest extends \BaseAppTest {
 	 */
 	function testChangCustomField1() {
 		
-		TimeSource::mock(2014,1,1,9,0,0);
+		$this->app['timesource']->mock(2014,1,1,9,0,0);
 
 		$customFieldDefinition1 = new EventCustomFieldDefinitionModel();
 		$customFieldDefinition1->setId(1);

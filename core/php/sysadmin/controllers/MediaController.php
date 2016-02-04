@@ -27,14 +27,14 @@ class MediaController {
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('group'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 		
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 		
-		$mr = new MediaRepository();
+		$mr = new MediaRepository($app);
 		$this->parameters['media'] = $mr->loadBySlug($this->parameters['site'], $slug);
 		if (!$this->parameters['media']) {
 			$app->abort(404);
@@ -58,14 +58,14 @@ class MediaController {
 				$redirect = false;
 
 				if ($data['comment']) {
-					$scr = new SysAdminCommentRepository();
+					$scr = new SysAdminCommentRepository($app);
 					$scr->createAboutMedia($this->parameters['media'], $data['comment'], $app['currentUser']);
 					$redirect = true;
 				}
 
 
 				if ($action->getCommand() == 'delete' && !$this->parameters['media']->getIsDeleted()) {
-					$mr = new MediaRepository();
+					$mr = new MediaRepository($app);
 					$mr->delete($this->parameters['media'],  $app['currentUser']);
 					$redirect = true;
 				}
@@ -80,7 +80,7 @@ class MediaController {
 		$this->parameters['form'] = $form->createView();
 
 
-		$sacrb = new SysadminCommentRepositoryBuilder();
+		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setMedia($this->parameters['media']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
 			

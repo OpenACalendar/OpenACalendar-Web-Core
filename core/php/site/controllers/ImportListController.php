@@ -21,7 +21,7 @@ class ImportListController {
 	function index(Application $app) {
 		
 
-		$grb = new ImportRepositoryBuilder();
+		$grb = new ImportRepositoryBuilder($app);
 		$grb->setSite($app['currentSite']);
 		
 		$imports = $grb->fetchAll();

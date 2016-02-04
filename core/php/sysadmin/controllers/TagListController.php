@@ -25,14 +25,14 @@ class TagListController {
 	function index($siteid, Request $request, Application $app) {
 		
 		
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 		
 		if (!$site) {
 			die("404");
 		}
 		
-		$trb = new TagRepositoryBuilder();
+		$trb = new TagRepositoryBuilder($app);
 		$trb->setSite($site);
 		$tags = $trb->fetchAll();
 		

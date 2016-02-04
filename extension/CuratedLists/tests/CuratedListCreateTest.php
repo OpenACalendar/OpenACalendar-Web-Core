@@ -33,7 +33,7 @@ class CuratedListCreateTest extends \BaseAppWithDBTest {
 
         // We are deliberately using the UserAccountRepository from this extension so we have tests to cover instantiating and using this class
         // It extends the core one so has all methods.
-		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository();
+		$userRepo = new \org\openacalendar\curatedlists\repositories\UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->create($userStranger);
 		
@@ -41,7 +41,7 @@ class CuratedListCreateTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$curatedList = new CuratedListModel();
@@ -60,11 +60,11 @@ class CuratedListCreateTest extends \BaseAppWithDBTest {
 		$this->assertTrue($curatedList->canUserEdit($user));
 		$this->assertFalse($curatedList->canUserEdit($userStranger));
 		
-		$clb = new CuratedListRepositoryBuilder();
+		$clb = new CuratedListRepositoryBuilder($this->app);
 		$clb->setUserCanEdit($user);
 		$this->assertEquals(1, count($clb->fetchAll()));
 		
-		$clb = new CuratedListRepositoryBuilder();
+		$clb = new CuratedListRepositoryBuilder($this->app);
 		$clb->setUserCanEdit($userStranger);
 		$this->assertEquals(0, count($clb->fetchAll()));
 	}

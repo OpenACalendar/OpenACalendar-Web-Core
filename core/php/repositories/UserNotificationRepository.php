@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\UserAccountModel;
 use models\SiteModel;
+use Silex\Application;
 
 /**
  *
@@ -14,11 +15,19 @@ use models\SiteModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserNotificationRepository {
-	
+
+    /** @var Application */
+    private  $app;
+
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 	
 	public function create(\BaseUserNotificationModel $userNotification) {
-		global $DB;
-		$stat = $DB->prepare("INSERT INTO user_notification ".
+
+		$stat = $this->app['db']->prepare("INSERT INTO user_notification ".
 				"(user_id,site_id,from_extension_id,from_user_notification_type,is_email,data_json,created_at) ".
 				"VALUES (:user_id,:site_id,:from_extension_id,:from_user_notification_type,:is_email,:data_json,:created_at) RETURNING id");
 		$stat->execute(array(
@@ -28,7 +37,7 @@ class UserNotificationRepository {
 				'from_user_notification_type'=>$userNotification->getFromUserNotificationType(),
 				'is_email'=>$userNotification->getIsEmail()?1:0,
 				'data_json'=>json_encode($userNotification->getData()),
-				'created_at'=>\TimeSource::getFormattedForDataBase(),
+				'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 			));
 		
 		$data = $stat->fetch();
@@ -36,20 +45,20 @@ class UserNotificationRepository {
 	}
 	
 	public function markEmailed(\BaseUserNotificationModel $userNotification) {
-			global $DB;
-			$stat = $DB->prepare("UPDATE user_notification SET emailed_at=:at WHERE id=:id");
+
+			$stat = $this->app['db']->prepare("UPDATE user_notification SET emailed_at=:at WHERE id=:id");
 			$stat->execute(array(
-				'at'=>\TimeSource::getFormattedForDataBase(),
+				'at'=>$this->app['timesource']->getFormattedForDataBase(),
 				'id'=>$userNotification->getId(),
 			));
 	}
 	
 	
 	public function markRead(\BaseUserNotificationModel $userNotification) {
-			global $DB;
-			$stat = $DB->prepare("UPDATE user_notification SET read_at=:at WHERE id=:id");
+
+			$stat = $this->app['db']->prepare("UPDATE user_notification SET read_at=:at WHERE id=:id");
 			$stat->execute(array(
-				'at'=>\TimeSource::getFormattedForDataBase(),
+				'at'=>$this->app['timesource']->getFormattedForDataBase(),
 				'id'=>$userNotification->getId(),
 			));
 	}
@@ -57,8 +66,7 @@ class UserNotificationRepository {
 	
 	
 	public function loadByIdForUser($id, UserAccountModel $user) {
-		global $DB, $app;
-		$stat = $DB->prepare("SELECT user_notification.*, ".
+		$stat = $this->app['db']->prepare("SELECT user_notification.*, ".
 				" site_information.id AS site_id,  site_information.slug AS site_slug,  site_information.title AS site_title ".
 				" FROM user_notification ".
 				" LEFT JOIN site_information ON site_information.id = user_notification.site_id ".
@@ -66,7 +74,7 @@ class UserNotificationRepository {
 		$stat->execute(array( 'uid'=>$user->getId(), 'id'=>$id ));
 		if ($stat->rowCount() > 0) {
 			$data = $stat->fetch();
-			$extension = $app['extensions']->getExtensionById($data['from_extension_id']);
+			$extension = $this->app['extensions']->getExtensionById($data['from_extension_id']);
 			if ($extension) {
 				$type = $extension->getUserNotificationType($data['from_user_notification_type']);
 				if ($type) {

@@ -29,21 +29,21 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 	}
 	
 	function testCreateInGroup() {
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -51,7 +51,7 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		$event = new EventModel();
@@ -60,7 +60,7 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group);
 		
 		$event = $eventRepository->loadBySlug($site, $event->getSlug());
@@ -73,21 +73,21 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 	
 	function testAddRemove() {
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
@@ -96,7 +96,7 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		$group1 = new GroupModel();
@@ -108,7 +108,7 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 		$group2->setTitle("test2");
 		$group2->setDescription("test 2");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group1, $site, $user);
 		$groupRepo->create($group2, $site, $user);
 		
@@ -138,21 +138,21 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 	
 	function testAddSet() {
 
-		TimeSource::mock(2013,7,1,7,0,0);
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event = new EventModel();
@@ -161,7 +161,7 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 		$event->setStartAt($this->mktime(2013,8,1,19,0,0));
 		$event->setEndAt($this->mktime(2013,8,1,21,0,0));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 		
 		$group1 = new GroupModel();
@@ -173,7 +173,7 @@ class EventInGroupTest extends \BaseAppWithDBTest {
 		$group2->setTitle("test2");
 		$group2->setDescription("test 2");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group1, $site, $user);
 		$groupRepo->create($group2, $site, $user);
 		

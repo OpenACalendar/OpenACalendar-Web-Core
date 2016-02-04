@@ -31,24 +31,24 @@ class VenuePurgeTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 
 		$area = new AreaModel();
 		$area->setTitle("test");
 		$area->setDescription("test test");
 
-		$areaRepo = new \repositories\AreaRepository();
+		$areaRepo = new \repositories\AreaRepository($this->app);
 		$areaRepo->create($area, null, $site, $gb , $user);
 
 
@@ -58,7 +58,7 @@ class VenuePurgeTest extends \BaseAppWithDBTest {
 		$venue->setCountryId($gb->getId());
 		$venue->setAreaId($area->getId());
 
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue, $site, $user);
 
 		$venueDuplicate = new VenueModel();
@@ -74,10 +74,10 @@ class VenuePurgeTest extends \BaseAppWithDBTest {
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0,'Europe/London'));
 		$event->setVenueId($venue->getId());
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
-		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
+		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository($this->app);
 		$sysadminCommentRepo->createAboutVenue($venue, "TEST", null);
 
 		## Test

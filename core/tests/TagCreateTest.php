@@ -25,21 +25,21 @@ class TagCreateTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$tag = new TagModel();
 		$tag->setTitle("test");
 		$tag->setDescription("test test");
 		
-		$tagRepo = new TagRepository();
+		$tagRepo = new TagRepository($this->app);
 		$tagRepo->create($tag, $site, $user);
 		
 		$this->checkTagInTest1($tagRepo->loadById($tag->getId()));

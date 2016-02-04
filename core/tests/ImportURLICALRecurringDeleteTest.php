@@ -44,14 +44,14 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
@@ -59,10 +59,10 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
-		$importRepository = new ImportRepository();
+		$importRepository = new ImportRepository($this->app);
 
 		$importURL = new ImportModel();
 		$importURL->setIsEnabled(true);
@@ -85,7 +85,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
         // Is it loaded on Imported Events?
-		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
+		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder($this->app);
 		$importedEvents = $ierb->fetchAll();
 		$this->assertEquals(1, count($importedEvents));
 		$importedEvent = $importedEvents[0];
@@ -98,7 +98,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$this->assertEquals("TH", $reoccur['ical_rrule']["BYDAY"]);
 
 		// now test real events
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setImportedEvent($importedEvent);
 		$erb->setAfterNow();
 		$events = $erb->fetchAll();
@@ -135,7 +135,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Is it loaded on Imported Events?
-		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
+		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder($this->app);
 		$importedEvents = $ierb->fetchAll();
 		$this->assertEquals(1, count($importedEvents));
 		$importedEvent = $importedEvents[0];
@@ -148,7 +148,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$this->assertEquals("TH", $reoccur['ical_rrule']["BYDAY"]);
 
 		// now test real events
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setImportedEvent($importedEvent);
 		$erb->setAfterNow();
 		$events = $erb->fetchAll();
@@ -185,7 +185,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
         $importRunner->testRunImportedEventsToEvents($importURLRun);
 
 		// Is it loaded on Imported Events?
-		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder();
+		$ierb = new \repositories\builders\ImportedEventRepositoryBuilder($this->app);
 		$importedEvents = $ierb->fetchAll();
 		$this->assertEquals(1, count($importedEvents));
 		$importedEvent = $importedEvents[0];
@@ -198,7 +198,7 @@ class ImportURLICALRecurringDeleteTest extends \BaseAppWithDBTest {
 		$this->assertEquals("TH", $reoccur['ical_rrule']["BYDAY"]);
 
 		// now test real events
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setImportedEvent($importedEvent);
 		$erb->setAfterNow();
 		$erb->setIncludeDeleted(true);

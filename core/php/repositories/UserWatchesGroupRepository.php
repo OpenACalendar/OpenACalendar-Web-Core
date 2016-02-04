@@ -7,6 +7,7 @@ use models\GroupModel;
 use models\UserWatchesGroupModel;
 use repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\HistoryRepositoryBuilder;
+use Silex\Application;
 use usernotifications\notifycontent\UserWatchesGroupNotifyContent;
 
 /**
@@ -19,13 +20,22 @@ use usernotifications\notifycontent\UserWatchesGroupNotifyContent;
  */
 class UserWatchesGroupRepository {
 
+    /** @var Application */
+    private  $app;
+
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
 	public function loadByUserAndGroup(UserAccountModel $user, GroupModel $group) {
 		return $this->loadByUserAndGroupId($user, $group->getId());
 	}
 	
 	public function loadByUserAndGroupId(UserAccountModel $user, $groupID) {
-		global $DB;
-		$stat = $DB->prepare("SELECT user_watches_group_information.* FROM user_watches_group_information WHERE user_account_id =:user_account_id AND group_id=:group_id");
+
+		$stat = $this->app['db']->prepare("SELECT user_watches_group_information.* FROM user_watches_group_information WHERE user_account_id =:user_account_id AND group_id=:group_id");
 		$stat->execute(array( 'user_account_id'=>$user->getId(), 'group_id'=>$groupID ));
 		if ($stat->rowCount() > 0) {
 			$uws = new UserWatchesGroupModel();
@@ -38,46 +48,46 @@ class UserWatchesGroupRepository {
 	 * Note this does not check if user is watching site first! TODO?
 	 */
 	public function startUserWatchingGroup(UserAccountModel $user, GroupModel $group) {
-		global $DB;
+
 	
 		$uws = $this->loadByUserAndGroup($user, $group);
 		if ($uws && $uws->getIsWatching()) {
 			// all done!
 		} else if ($uws && !$uws->getIsWatching()) {
-			$stat = $DB->prepare("UPDATE user_watches_group_information SET is_watching='1',last_watch_started=:last_watch_started WHERE user_account_id =:user_account_id AND group_id=:group_id");
-			$stat->execute(array( 'user_account_id'=>$user->getId(), 'group_id'=>$group->getId(), 'last_watch_started'=> \TimeSource::getFormattedForDataBase()));
+			$stat = $this->app['db']->prepare("UPDATE user_watches_group_information SET is_watching='1',last_watch_started=:last_watch_started WHERE user_account_id =:user_account_id AND group_id=:group_id");
+			$stat->execute(array( 'user_account_id'=>$user->getId(), 'group_id'=>$group->getId(), 'last_watch_started'=> $this->app['timesource']->getFormattedForDataBase()));
 		} else {
-			$stat = $DB->prepare("INSERT INTO user_watches_group_information (user_account_id,group_id,is_watching,is_was_once_watching,last_watch_started,created_at) ".
+			$stat = $this->app['db']->prepare("INSERT INTO user_watches_group_information (user_account_id,group_id,is_watching,is_was_once_watching,last_watch_started,created_at) ".
 					"VALUES (:user_account_id,:group_id,:is_watching,:is_was_once_watching,:last_watch_started,:created_at)");
 			$stat->execute(array(
 					'user_account_id'=>$user->getId(),
 					'group_id'=>$group->getId(),
 					'is_watching'=>'1',
 					'is_was_once_watching'=>'1',
-					'created_at'=>  \TimeSource::getFormattedForDataBase(),
-					'last_watch_started'=>  \TimeSource::getFormattedForDataBase(),
+					'created_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+					'last_watch_started'=>  $this->app['timesource']->getFormattedForDataBase(),
 				));			
 		}
 		
 	}
 	
 	public function stopUserWatchingGroup(UserAccountModel $user, GroupModel $group) {
-		global $DB;
-		$stat = $DB->prepare("UPDATE user_watches_group_information SET is_watching='0' WHERE user_account_id =:user_account_id AND group_id=:group_id");
+
+		$stat = $this->app['db']->prepare("UPDATE user_watches_group_information SET is_watching='0' WHERE user_account_id =:user_account_id AND group_id=:group_id");
 		$stat->execute(array( 'user_account_id'=>$user->getId(), 'group_id'=>$group->getId() ));
 	}
 
 		
 	
 	public function markNotifyEmailSent(UserWatchesGroupModel $userWatchesGroup, $emailTime) {
-		global $DB;
-		$stat = $DB->prepare("UPDATE user_watches_group_information SET last_notify_email_sent=:sent WHERE user_account_id =:user_account_id AND group_id=:group_id");
+
+		$stat = $this->app['db']->prepare("UPDATE user_watches_group_information SET last_notify_email_sent=:sent WHERE user_account_id =:user_account_id AND group_id=:group_id");
 		$stat->execute(array( 'user_account_id'=>$userWatchesGroup->getUserAccountId(), 'group_id'=>$userWatchesGroup->getGroupId(), 'sent'=>$emailTime->format("Y-m-d H:i:s") ));		
 	}
 	
 	public function markPromptEmailSent(UserWatchesGroupModel $userWatchesGroup, $emailTime) {
-		global $DB;
-		$stat = $DB->prepare("UPDATE user_watches_group_information SET last_prompt_email_sent=:sent WHERE user_account_id =:user_account_id AND group_id=:group_id");
+
+		$stat = $this->app['db']->prepare("UPDATE user_watches_group_information SET last_prompt_email_sent=:sent WHERE user_account_id =:user_account_id AND group_id=:group_id");
 		$stat->execute(array( 'user_account_id'=>$userWatchesGroup->getUserAccountId(), 'group_id'=>$userWatchesGroup->getGroupId(), 'sent'=>$emailTime->format("Y-m-d H:i:s") ));		
 	}
 		
@@ -92,20 +102,20 @@ class UserWatchesGroupRepository {
 	 * Note this does not check if user is watching site first! TODO?
 	 */	
 	public function startUserWatchingGroupIdIfNotWatchedBefore(UserAccountModel $user, $groupID) {
-		global $DB;
+
 		$uws = $this->loadByUserAndGroupId($user, $groupID);
 		if ($uws) {
 			// all done! They are already watching or they once were watching.
 		} else {
-			$stat = $DB->prepare("INSERT INTO user_watches_group_information (user_account_id,group_id,is_watching,is_was_once_watching,last_watch_started,created_at) ".
+			$stat = $this->app['db']->prepare("INSERT INTO user_watches_group_information (user_account_id,group_id,is_watching,is_was_once_watching,last_watch_started,created_at) ".
 					"VALUES (:user_account_id,:group_id,:is_watching,:is_was_once_watching,:last_watch_started,:created_at)");
 			$stat->execute(array(
 					'user_account_id'=>$user->getId(),
 					'group_id'=>$groupID,
 					'is_watching'=>'1',
 					'is_was_once_watching'=>'1',
-					'created_at'=>  \TimeSource::getFormattedForDataBase(),
-					'last_watch_started'=>  \TimeSource::getFormattedForDataBase(),
+					'created_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+					'last_watch_started'=>  $this->app['timesource']->getFormattedForDataBase(),
 				));			
 		}
 		
@@ -116,7 +126,6 @@ class UserWatchesGroupRepository {
 	 * @return array
 	 */
 	public function getUserNotifyContentForSiteAndUser(\models\SiteModel $siteModel, UserAccountModel $userAccountModel) {
-		global $CONFIG;
 
 		if (!$siteModel->getIsFeatureGroup()) {
 			return array();
@@ -124,7 +133,7 @@ class UserWatchesGroupRepository {
 
 		$out = array();
 
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setSite($siteModel);
 		$grb->setLimit(0); // all! No limit
 
@@ -138,7 +147,7 @@ class UserWatchesGroupRepository {
 
 				$dateSince = $uwg->getSinceDateForNotifyChecking();
 
-				$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+				$historyRepositoryBuilder = new HistoryRepositoryBuilder($this->app);
 				$historyRepositoryBuilder->setGroup($group);
 				$historyRepositoryBuilder->setSince($dateSince);
 				$historyRepositoryBuilder->setNotUser($userAccountModel);
@@ -152,9 +161,9 @@ class UserWatchesGroupRepository {
 					$content = new UserWatchesGroupNotifyContent();
 					$content->setHistories($histories);
 
-					$userWatchesGroupStopRepository = new UserWatchesGroupStopRepository();
+					$userWatchesGroupStopRepository = new UserWatchesGroupStopRepository($this->app);
 					$userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($userAccountModel, $group);
-					$content->setUnwatchURL($CONFIG->getWebSiteDomainSecure($siteModel->getSlug()).
+					$content->setUnwatchURL($this->app['config']->getWebSiteDomainSecure($siteModel->getSlug()).
 						'/group/'. $group->getSlugForURL().
 						'/stopWatchingFromEmail/'. $userAccountModel->getId().'/'.$userWatchesGroupStop->getAccessKey());
 
@@ -162,7 +171,7 @@ class UserWatchesGroupRepository {
 					$content->setSite($siteModel);
 					$content->setGroup($group);
 					$content->setWatchedThingTitle($group->getTitle());
-					$content->setWatchedThingURL($CONFIG->getWebSiteDomainSecure($siteModel->getSlug()).'/group/'. $group->getSlugForURL().'/history');
+					$content->setWatchedThingURL($this->app['config']->getWebSiteDomainSecure($siteModel->getSlug()).'/group/'. $group->getSlugForURL().'/history');
 
 					$out[] = $content;
 

@@ -30,7 +30,7 @@ class UserHasNoEditorPermissionsInSiteTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 
@@ -38,17 +38,17 @@ class UserHasNoEditorPermissionsInSiteTest extends \BaseAppWithDBTest {
 		$siteModel->setTitle("Test");
 		$siteModel->setSlug("test");
 
-		$siteRepository = new \repositories\SiteRepository();
-		$countryRepository = new \repositories\CountryRepository();
+		$siteRepository = new \repositories\SiteRepository($this->app);
+		$countryRepository = new \repositories\CountryRepository($this->app);
 		$siteRepository->create($siteModel, $user, array($countryRepository->loadByTwoCharCode("GB")), $this->getSiteQuotaUsedForTesting(), true);
 
 		// ########################################## Not there
 
-		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository();
+		$userHasNoEditorPermissionsInSiteRepo = new UserHasNoEditorPermissionsInSiteRepository($this->app);
 
 		$this->assertFalse($userHasNoEditorPermissionsInSiteRepo->isUserInSite($user, $siteModel));
 
-		$userAccountRepoBuilder = new \repositories\builders\UserAccountRepositoryBuilder();
+		$userAccountRepoBuilder = new \repositories\builders\UserAccountRepositoryBuilder($this->app);
 		$userAccountRepoBuilder->setUserHasNoEditorPermissionsInSite($siteModel);
 		$this->assertEquals(0, count($userAccountRepoBuilder->fetchAll()));
 
@@ -62,7 +62,7 @@ class UserHasNoEditorPermissionsInSiteTest extends \BaseAppWithDBTest {
 		$this->assertTrue($userHasNoEditorPermissionsInSiteRepo->isUserInSite($user, $siteModel));
 
 
-		$userAccountRepoBuilder = new \repositories\builders\UserAccountRepositoryBuilder();
+		$userAccountRepoBuilder = new \repositories\builders\UserAccountRepositoryBuilder($this->app);
 		$userAccountRepoBuilder->setUserHasNoEditorPermissionsInSite($siteModel);
 		$this->assertEquals(1, count($userAccountRepoBuilder->fetchAll()));
 
@@ -74,7 +74,7 @@ class UserHasNoEditorPermissionsInSiteTest extends \BaseAppWithDBTest {
 
 		$this->assertFalse($userHasNoEditorPermissionsInSiteRepo->isUserInSite($user, $siteModel));
 
-		$userAccountRepoBuilder = new \repositories\builders\UserAccountRepositoryBuilder();
+		$userAccountRepoBuilder = new \repositories\builders\UserAccountRepositoryBuilder($this->app);
 		$userAccountRepoBuilder->setUserHasNoEditorPermissionsInSite($siteModel);
 		$this->assertEquals(0, count($userAccountRepoBuilder->fetchAll()));
 		

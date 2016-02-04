@@ -82,7 +82,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 	 */
 	function testNoTitleChange() {
 		
-		TimeSource::mock(2012,7,1,7,0,0);
+		$this->app['timesource']->mock(2012,7,1,7,0,0);
 		
 		
 		$event = new EventModel();
@@ -131,7 +131,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 	 */
 	function testLongTitleChange() {
 		
-		TimeSource::mock(2012,7,1,7,0,0);
+		$this->app['timesource']->mock(2012,7,1,7,0,0);
 		
 		
 		$event = new EventModel();
@@ -181,7 +181,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 	 */
 	function testShortTitleChange() {
 		
-		TimeSource::mock(2012,7,1,7,0,0);
+		$this->app['timesource']->mock(2012,7,1,7,0,0);
 		
 		
 		$event = new EventModel();
@@ -228,7 +228,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 	/** test event on 1st sat in month which also happens to be the 1st of the month. **/
 	function testFirstWeekInMonthAlsoFirstDayInMonth() {
 		
-		TimeSource::mock(2012,9,20,14,27,0);
+		$this->app['timesource']->mock(2012,9,20,14,27,0);
 		
 		$event = new EventModel();
 		$event->setStartAt($this->mktime(2012,9,1,18,30,0));
@@ -257,7 +257,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 	/** test event on 1st sun in month. This is not the 1st of the month. **/
 	function testFirstWeekInMonthButNotFirstDayInMonth() {
 
-		TimeSource::mock(2012,9,20,14,27,0);
+		$this->app['timesource']->mock(2012,9,20,14,27,0);
 		
 		$event = new EventModel();
 		$event->setStartAt($this->mktime(2012,9,2,18,30,0));
@@ -285,7 +285,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 	function testFiveWeekInMonth() {
 		
 		
-		TimeSource::mock(2012,9,20,14,27,0);
+		$this->app['timesource']->mock(2012,9,20,14,27,0);
 		
 		$event = new EventModel();
 		$event->setStartAt($this->mktime(2012,9,29,18,30,0));
@@ -313,7 +313,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 	function testFiveWeekInMonth2() {
 		
 		
-		TimeSource::mock(2014,4,20,14,27,0);
+		$this->app['timesource']->mock(2014,4,20,14,27,0);
 		
 		$event = new EventModel();
 		$event->setStartAt($this->mktime(2014,4,29,18,30,0));
@@ -344,7 +344,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
     function testFourthMondayInMonth() {
 
 
-        TimeSource::mock(2015,4,20,14,27,0);
+        $this->app['timesource']->mock(2015,4,20,14,27,0);
 
         $event = new EventModel();
         $event->setStartAt($this->mktime(2015,6,22,18,0,0));
@@ -368,7 +368,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
     function testDaysInAdvance1()
     {
 
-        TimeSource::mock(2015, 3, 20, 14, 27, 0);
+        $this->app['timesource']->mock(2015, 3, 20, 14, 27, 0);
 
         $event = new EventModel();
         $event->setStartAt($this->mktime(2015, 6, 22, 18, 0, 0));
@@ -393,7 +393,7 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
     function testDaysInAdvance2() {
 
 
-        TimeSource::mock(2014,1,20,14,27,0);
+        $this->app['timesource']->mock(2014,1,20,14,27,0);
 
         $event = new EventModel();
         $event->setStartAt($this->mktime(2014,4,29,18,30,0));

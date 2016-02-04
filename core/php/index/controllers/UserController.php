@@ -51,15 +51,15 @@ class UserController {
 
 	protected function processThingsToDoAfterGetUser(Request $request, Application $app) {
 
-		$siteRepo = new SiteRepository();
-		$eventRepo = new EventRepository();
-		$areaRepo = new AreaRepository();
+		$siteRepo = new SiteRepository($app);
+		$eventRepo = new EventRepository($app);
+		$areaRepo = new AreaRepository($app);
 		$event = null;
 		$area = null;
 		$siteToAdd = null;
 
 		// Any sites of general interest?
-		if ($request->query->has("site") && !$CONFIG->isSingleSiteMode) {
+		if ($request->query->has("site") && !$app['config']->isSingleSiteMode) {
 			$siteToAdd = $siteRepo->loadBySlug($request->query->get("site"));
 			if ($siteToAdd && $siteToAdd->getIsAllowedForAfterGetUser()) {
 				if (!$app['websession']->hasArray("afterGetUserAddSites")) {
@@ -75,7 +75,7 @@ class UserController {
 		// Any events to add?
 		if ($request->query->has("event")) {
 			if ($app['config']->isSingleSiteMode) {
-				$event = $eventRepo->loadBySiteIDAndEventSlug($CONFIG->singleSiteID, $request->query->get("event"));
+				$event = $eventRepo->loadBySiteIDAndEventSlug($app['config']->singleSiteID, $request->query->get("event"));
 			} else {
 				$site = $siteRepo->loadBySlug($request->query->get("eventSite"));
 				if ($site) {
@@ -97,7 +97,7 @@ class UserController {
 		// Any areas to add?
 		if ($request->query->has("area")) {
 			if ($app['config']->isSingleSiteMode) {
-				$area = $areaRepo->loadBySiteIDAndAreaSlug($CONFIG->singleSiteID, $request->query->get("area"));
+				$area = $areaRepo->loadBySiteIDAndAreaSlug($app['config']->singleSiteID, $request->query->get("area"));
 			} else {
 				$site = $siteRepo->loadBySlug($request->query->get("areaSite"));
 				if ($site) {
@@ -189,7 +189,7 @@ class UserController {
 	protected function actionThingsToDoAfterGetUser(Application $app, UserAccountModel $user) {
 
 		// events
-		$uaerepo = new UserAtEventRepository();
+		$uaerepo = new UserAtEventRepository($app);
 
 		$eventsAdded = false;
 		foreach($this->parameters['afterGetUserAddEvents'] as $event) {
@@ -207,7 +207,7 @@ class UserController {
 		}
 
 		// areas
-		$uwarepo = new UserWatchesAreaRepository();
+		$uwarepo = new UserWatchesAreaRepository($app);
 		foreach($this->parameters['afterGetUserAddAreas'] as $area) {
 			if ($area->getIsAllowedForAfterGetUser()) {
 				$uwarepo->startUserWatchingArea($user, $area);
@@ -215,7 +215,7 @@ class UserController {
 		}
 
 		// sites
-		$uiisr = new UserInterestedInSiteRepository();
+		$uiisr = new UserInterestedInSiteRepository($app);
 		foreach($this->parameters['afterGetUserAddSites'] as $site) {
 			if ($site->getIsAllowedForAfterGetUser()) {
 				$uiisr->markUserInterestedInSite($user, $site);
@@ -250,7 +250,7 @@ class UserController {
 
 		$this->processThingsToDoAfterGetUser($request, $app);
 
-		$userRepository = new UserAccountRepository();
+		$userRepository = new UserAccountRepository($app);
 				
 		$form = $app['form.factory']->create(new SignUpUserForm($app));
 		
@@ -284,7 +284,7 @@ class UserController {
 
 				$userRepository->create($user, $userAccountMeta);
 				
-				$repo = new UserAccountVerifyEmailRepository();
+				$repo = new UserAccountVerifyEmailRepository($app);
 				$userVerify = $repo->create($user);
 				$userVerify->sendEmail($app, $user);
 				
@@ -314,7 +314,7 @@ class UserController {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				
-				$userRepository = new UserAccountRepository();
+				$userRepository = new UserAccountRepository($app);
 				$user = null;
 				// We are deliberately very forgiving about people putting the wrong thing in the wrong field.
 				if ($data['email']) {
@@ -333,7 +333,7 @@ class UserController {
 							$this->actionThingsToDoAfterGetUser($app, $user);
 
 							if ($data['rememberme']) {
-								$uarmr = new UserAccountRememberMeRepository();
+								$uarmr = new UserAccountRememberMeRepository($app);
 								$uarm = $uarmr->create($user);
 								$uarm->sendCookies();
 							}
@@ -361,7 +361,7 @@ class UserController {
 	
 	function verify($id, $code, Application  $app, Request $request) {
 		
-		$userRepository = new UserAccountRepository();
+		$userRepository = new UserAccountRepository($app);
 		
 		if ($app['currentUser'] && $app['currentUser']->getId() == $id) {
 			// we don't just do this to save a DB Query. We do this so when we mark user object 
@@ -381,7 +381,7 @@ class UserController {
 			return $app['twig']->render('index/user/verifyDone.html.twig', array('user'=>$user));
 		}
 
-		$repo = new UserAccountVerifyEmailRepository();
+		$repo = new UserAccountVerifyEmailRepository($app);
 		$userVerifyCode = $repo->loadByUserAccountIDAndAccessKey($id, $code);
 		
 		if ($userVerifyCode) {
@@ -420,7 +420,7 @@ class UserController {
 			if ($form->isValid()) {
 				$data = $form->getData();
 				
-				$userRepository = new UserAccountRepository();
+				$userRepository = new UserAccountRepository($app);
 				if ($data['email']) {
 					$user = $userRepository->loadByEmail($data['email']);
 				} else if ($data['username']) {
@@ -430,7 +430,7 @@ class UserController {
 					if ($user->getIsClosedBySysAdmin()) {
 						$form->addError(new FormError('There was a problem with this account and it has been closed: '.$user->getClosedBySysAdminReason()));
 					} else {
-						$aurr = new UserAccountResetRepository();
+						$aurr = new UserAccountResetRepository($app);
 						$uarLast = $aurr->loadRecentlyUnusedSentForUserAccountId($user->getId(), $app['config']->resetEmailsGapBetweenInSeconds);
 						if ($uarLast) {
 							$form->addError(new FormError('An email was sent recently; please try again soon'));
@@ -455,7 +455,7 @@ class UserController {
 	
 	function reset($id, $code, Request $request, Application $app) {
 		
-		$userRepository = new UserAccountRepository();
+		$userRepository = new UserAccountRepository($app);
 		
 		if ($app['currentUser'] && $app['currentUser']->getId() == $id) {
 			// We do this to save a DB Query
@@ -469,7 +469,7 @@ class UserController {
 			return $app['twig']->render('index/user/resetFail.html.twig', array());
 		}
 		
-		$userAccountResetRepository = new UserAccountResetRepository();
+		$userAccountResetRepository = new UserAccountResetRepository($app);
 		$userAccountReset = $userAccountResetRepository->loadByUserAccountIDAndAccessKey($id, $code);
 		
 		if (!$userAccountReset) {
@@ -509,7 +509,7 @@ class UserController {
 	
 	
 	function emails($id, $code, Request $request, Application $app) {		
-		$userRepository = new UserAccountRepository();
+		$userRepository = new UserAccountRepository($app);
 		
 		if ($app['currentUser'] && $app['currentUser']->getId() == $id) {
 			// We do this to save a DB Query
@@ -524,7 +524,7 @@ class UserController {
 			return $app['twig']->render('index/user/emails.fail.html.twig', array());
 		}
 		
-		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
+		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($app);
 		$userAccountGSK = $userAccountGeneralSecurityKeyRepository->loadByUserAccountIDAndAccessKey($id, $code);
 		
 		if (!$userAccountGSK) {

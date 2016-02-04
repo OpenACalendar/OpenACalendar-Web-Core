@@ -24,7 +24,7 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 	 */
 	function testCustomFieldChange1() {
 		
-		TimeSource::mock(2013,3,1,9,0,0);
+		$this->app['timesource']->mock(2013,3,1,9,0,0);
 
 		$customFieldDefinition1 = new EventCustomFieldDefinitionModel();
 		$customFieldDefinition1->setId(1);

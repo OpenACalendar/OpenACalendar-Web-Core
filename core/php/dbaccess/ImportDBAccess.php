@@ -6,6 +6,7 @@ namespace dbaccess;
 use models\ImportEditMetaDataModel;
 use models\UserAccountModel;
 use models\ImportModel;
+use Silex\Application;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -25,15 +26,11 @@ class ImportDBAccess {
 	/** @var  \TimeSource */
 	protected $timesource;
 
-	/** @var \UserAgent */
-	protected $useragent;
-
-	function __construct($db, $timesource, $useragent)
-	{
-		$this->db = $db;
-		$this->timesource = $timesource;
-		$this->useragent = $useragent;
-	}
+    function __construct(Application $application)
+    {
+        $this->db = $application['db'];
+        $this->timesource = $application['timesource'];
+    }
 
 
 	protected $possibleFields = array('country_id','area_id','title','is_enabled','expired_at','group_id','is_manual_events_creation');

@@ -22,7 +22,7 @@ class HistoryController {
 	
 	function index(Request $request, Application $app) {
 
-		$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+		$historyRepositoryBuilder = new HistoryRepositoryBuilder($app);
 		$historyRepositoryBuilder->setSite($app['currentSite']);
 		$historyRepositoryBuilder->getHistoryRepositoryBuilderConfig()->setLimit(200);
 		

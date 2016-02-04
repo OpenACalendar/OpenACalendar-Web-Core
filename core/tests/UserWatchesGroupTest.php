@@ -34,7 +34,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$userOwner->setUsername("test2");
 		$userOwner->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->create($userOwner);
 		
@@ -42,7 +42,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -50,16 +50,16 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $userOwner);
 		
-		$userWatchesgroupRepo = new UserWatchesGroupRepository();
+		$userWatchesgroupRepo = new UserWatchesGroupRepository($this->app);
 		
 		# Part 1: User does not watch group
 		$t = $userWatchesgroupRepo->loadByUserAndGroup($user, $group);
 		$this->assertNull($t);
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -73,7 +73,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(true, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -87,7 +87,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -107,7 +107,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->create($userOwner);
 		
@@ -115,7 +115,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -123,16 +123,16 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $userOwner);
 		
-		$userWatchesgroupRepo = new UserWatchesGroupRepository();
+		$userWatchesgroupRepo = new UserWatchesGroupRepository($this->app);
 		
 		# Part 1: User does not watch group
 		$t = $userWatchesgroupRepo->loadByUserAndGroup($user, $group);
 		$this->assertNull($t);
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -146,7 +146,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(true, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -154,10 +154,10 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		
 		
 		# Part 3: Starts watching site, automatically stops Watching group as reported by UserWatchesGroupRepositoryBuilder!
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->startUserWatchingSite($user, $site);
 
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -178,7 +178,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$userOwner->setUsername("test2");
 		$userOwner->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->create($userOwner);
 		
@@ -186,7 +186,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $userOwner, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -194,16 +194,16 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $userOwner);
 		
-		$userWatchesgroupRepo = new UserWatchesGroupRepository();
+		$userWatchesgroupRepo = new UserWatchesGroupRepository($this->app);
 		
 		# Part 1: User does not watch group
 		$t = $userWatchesgroupRepo->loadByUserAndGroup($user, $group);
 		$this->assertNull($t);
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -217,7 +217,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(true, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -231,7 +231,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();
@@ -244,7 +244,7 @@ class UserWatchesGroupTest extends \BaseAppWithDBTest {
 		$this->assertEquals(false, $t->getIsWatching());
 		$this->assertEquals(true, $t->getIsWasOnceWatching());
 		
-		$b = new UserWatchesGroupRepositoryBuilder();
+		$b = new UserWatchesGroupRepositoryBuilder($this->app);
 		$b->setGroup($group);
 		$b->setUser($user);
 		$t = $b->fetchAll();

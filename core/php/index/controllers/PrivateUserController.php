@@ -26,7 +26,7 @@ class PrivateUserController {
 	protected function build($username, $accesskey, Request $request, Application $app) {
 		$this->parameters = array('user'=>null);
 
-		$repository = new UserAccountRepository();
+		$repository = new UserAccountRepository($app);
 		$this->parameters['user'] =  $repository->loadByUserName($username);
 		if (!$this->parameters['user']) {
 			return false;
@@ -36,7 +36,7 @@ class PrivateUserController {
 			return false;
 		}
 		
-		$repository = new UserAccountPrivateFeedKeyRepository();
+		$repository = new UserAccountPrivateFeedKeyRepository($app);
 		$this->parameters['feedKey'] =  $repository->loadByUserAccountIDAndAccessKey($this->parameters['user']->getId(), $accesskey);
 		if (!$this->parameters['feedKey']) {
 			return false;

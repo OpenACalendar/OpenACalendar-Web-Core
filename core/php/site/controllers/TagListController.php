@@ -19,7 +19,7 @@ class TagListController {
 	
 	function index(Application $app) {
 		
-		$trb = new TagRepositoryBuilder();
+		$trb = new TagRepositoryBuilder($app);
 		$trb->setSite($app['currentSite']);
 		$trb->setIncludeDeleted(false);
 		$tags = $trb->fetchAll();

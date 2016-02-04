@@ -38,29 +38,29 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("Group");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 
 		// User will watch site automatically in site->create()
 		// We don't want that, we want the group instead
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($this->app);
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 
 
@@ -85,20 +85,20 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("Group");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -111,14 +111,14 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user, $group);
 
 		// User will watch site automatically in site->create()
 		// We don't want that, we want the group instead
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($this->app);
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 
 		# Test
@@ -144,20 +144,20 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("Group");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -170,15 +170,15 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user, $group);
 
 
 		// User will watch site automatically in site->create()
 		// We don't want that, we want the group instead
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($this->app);
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 
 
@@ -205,20 +205,20 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("Group");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -231,15 +231,15 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user, $group);
 
 
 		// User will watch site automatically in site->create()
 		// We don't want that, we want the group instead
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($this->app);
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 
 
@@ -268,20 +268,20 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("Group");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -294,14 +294,14 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user, $group);
 
 		// User will watch site automatically in site->create()
 		// We don't want that, we want the group instead
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($this->app);
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 
 		$this->app['timesource']->mock(2013, 5, 2, 0, 0, 0);
@@ -331,20 +331,20 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("Group");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -357,14 +357,14 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$end->setTime(1,0,0);
 		$event->setEndAt($end);
 
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user, $group);
 
 		// User will watch site automatically in site->create()
 		// We don't want that, we want the group instead
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($this->app);
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 
 
@@ -395,20 +395,20 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
 		$group->setTitle("Group");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 		$event = new EventModel();
@@ -421,14 +421,14 @@ class UserWatchesGroupPromptTest extends \BaseAppWithDBTest {
 		$end->setTime(12,0,0);
 		$event->setEndAt($end);
 		
-		$eventRepo = new EventRepository();
+		$eventRepo = new EventRepository($this->app);
 		$eventRepo->create($event, $site, $user, $group);
 		
 		// User will watch site automatically in site->create()
 		// We don't want that, we want the group instead
-		$userWatchesSiteRepo = new UserWatchesSiteRepository();
+		$userWatchesSiteRepo = new UserWatchesSiteRepository($this->app);
 		$userWatchesSiteRepo->stopUserWatchingSite($user, $site);
-		$userWatchesGroupRepo = new UserWatchesGroupRepository();
+		$userWatchesGroupRepo = new UserWatchesGroupRepository($this->app);
 		$userWatchesGroupRepo->startUserWatchingGroup($user, $group);
 		
 		#Before email sent!

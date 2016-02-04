@@ -16,7 +16,7 @@ use repositories\MediaRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$siteRepository = new SiteRepository();
+$siteRepository = new SiteRepository($app);
 $site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
 
 if (!$site) {
@@ -40,7 +40,7 @@ if (!$site) {
 	}
 
 	if ($site->getLogoMediaId()) {
-		$mediaRepository = new MediaRepository();
+		$mediaRepository = new MediaRepository($app);
 		$media = $mediaRepository->loadByID($site->getLogoMediaId());
 		if ($media && !$media->getIsDeleted()) {
 			if ($media->writeThumbnailImageToWebBrowser($CONFIG->cacheSiteLogoInSeconds)) {

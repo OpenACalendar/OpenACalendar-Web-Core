@@ -29,17 +29,17 @@ class VenueDeleteTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 
 		$venue = new VenueModel();
@@ -48,7 +48,7 @@ class VenueDeleteTest extends \BaseAppWithDBTest {
 		$venue->setCountryId($gb->getId());
 
 		$this->app['timesource']->mock(2014,1,1,1,0,0);
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue, $site, $user);
 
 		$this->app['timesource']->mock(2014,1,1,2,0,0);
@@ -58,11 +58,11 @@ class VenueDeleteTest extends \BaseAppWithDBTest {
 		$this->checkVenueInTest1($venueRepo->loadById($venue->getId()));
 		$this->checkVenueInTest1($venueRepo->loadBySlug($site, $venue->getSlug()));
 		
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($this->app);
 		$vrb->setIncludeDeleted(true);
 		$this->assertEquals(1, count($vrb->fetchAll()));
 
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($this->app);
 		$vrb->setIncludeDeleted(false);
 		$this->assertEquals(0, count($vrb->fetchAll()));
 

@@ -16,12 +16,6 @@ use \BaseUserNotificationModel;
  */
 class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 
-	/** @var \ExtensionManager **/
-	protected $extensionManager;
-	
-	function __construct(\ExtensionManager $extensionManager) {
-		$this->extensionManager = $extensionManager;
-	}
 
 	
 	/** @var SiteModel **/
@@ -65,7 +59,7 @@ class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-				global $DB;
+
 		
 		
 		
@@ -77,7 +71,7 @@ class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 				" ORDER BY user_notification.created_at DESC ".
 				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	
@@ -90,7 +84,7 @@ class UserNotificationRepositoryBuilder  extends BaseRepositoryBuilder {
 
 		$results = array();
 		while($data = $this->stat->fetch()) {
-			$extension = $this->extensionManager->getExtensionById($data['from_extension_id']);
+			$extension = $this->app['extensions']->getExtensionById($data['from_extension_id']);
 			if ($extension) {
 				$type = $extension->getUserNotificationType($data['from_user_notification_type']);
 				if ($type) {

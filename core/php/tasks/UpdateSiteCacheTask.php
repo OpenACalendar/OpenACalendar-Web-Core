@@ -35,15 +35,15 @@ class UpdateSiteCacheTask extends \BaseTask {
 
 	protected function run() {
 
-		$siteRepository = new SiteRepository();
+		$siteRepository = new SiteRepository($this->app);
 
-		$eventCustomFieldsRepo = new EventCustomFieldDefinitionRepository();
+		$eventCustomFieldsRepo = new EventCustomFieldDefinitionRepository($this->app);
 
-		$siteRepositoryBuilder = new SiteRepositoryBuilder();
+		$siteRepositoryBuilder = new SiteRepositoryBuilder($this->app);
 		$count = 0;
 		foreach($siteRepositoryBuilder->fetchAll() as $site) {
 
-			$crb = new CountryRepositoryBuilder();
+			$crb = new CountryRepositoryBuilder($this->app);
 			$crb->setSiteIn($site);
 			$countries = $crb->fetchAll();
 

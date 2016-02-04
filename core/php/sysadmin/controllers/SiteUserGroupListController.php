@@ -21,7 +21,7 @@ class SiteUserGroupListController {
 	function index($siteid, Request $request, Application $app) {
 
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 
 		if (!$site) {
@@ -29,7 +29,7 @@ class SiteUserGroupListController {
 		}
 
 
-		$ugrb = new UserGroupRepositoryBuilder();
+		$ugrb = new UserGroupRepositoryBuilder($app);
 		$ugrb->setSite($site);
 		$userGroups = $ugrb->fetchAll();
 

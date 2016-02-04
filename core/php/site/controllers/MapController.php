@@ -27,20 +27,20 @@ class MapController {
 		$this->parameters = array('country'=>null,'area'=>null,'venue'=>null);
 		
 		if ($areaSlug) {
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$this->parameters['area'] = $ar->loadBySlug($app['currentSite'], $areaSlug);
 		}
 		
 		if ($this->parameters['area']) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($app);
 			$this->parameters['country'] = $cr->loadById($this->parameters['area']->getCountryID());
 		} else if ($countryCode) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($app);
 			$this->parameters['country'] = $cr->loadByTwoCharCode($countryCode);
 		}
 
 		if ($venueSlug) {
-			$vr = new VenueRepository();
+			$vr = new VenueRepository($app);
 			$this->parameters['venue'] = $vr->loadBySlug($app['currentSite'], $venueSlug);
 		}
 
@@ -56,7 +56,7 @@ class MapController {
 				isset($_GET['venue']) ? $_GET['venue'] : null,
 				$request, $app);
 		
-		$vrb = new VenueRepositoryBuilder();
+		$vrb = new VenueRepositoryBuilder($app);
 		$vrb->setSite($app['currentSite']);
 		$vrb->setIncludeDeleted(false);
 		$vrb->setMustHaveLatLng(true);

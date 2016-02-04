@@ -29,7 +29,7 @@ class GroupRepositoryTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
@@ -37,7 +37,7 @@ class GroupRepositoryTest extends \BaseAppWithDBTest {
 		$site->setSlug("test");
 		$site->setPromptEmailsDaysInAdvance(28);
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -45,7 +45,7 @@ class GroupRepositoryTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		$event = new EventModel();
@@ -54,7 +54,7 @@ class GroupRepositoryTest extends \BaseAppWithDBTest {
 		$event->setStartAt(getUTCDateTime(2014,4,1,19,0,0,'Europe/London'));
 		$event->setEndAt(getUTCDateTime(2014,4,1,21,0,0,'Europe/London'));
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user, $group);
 		
 		### TEST

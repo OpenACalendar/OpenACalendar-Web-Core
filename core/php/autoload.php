@@ -67,7 +67,7 @@ $app['config'] = $CONFIG;
 $app['db'] = $DB;
 $app['timesource'] = new TimeSource();
 $app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
-$EXTENSIONHOOKRUNNER = new ExtensionHookRunner($app);
+$app['extensionhookrunner'] = new ExtensionHookRunner($app);
 
 ///////////////////////// LOGGING
 if ($CONFIG->logFile) {

@@ -30,7 +30,7 @@ class UserInAPI2ApplicationRepositoryTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($userAdmin);
 		$userRepo->create($user);
 		
@@ -38,13 +38,13 @@ class UserInAPI2ApplicationRepositoryTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $userAdmin, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$api2appRepo = new API2ApplicationRepository();
+		$api2appRepo = new API2ApplicationRepository($this->app);
 		$api2app = $api2appRepo->create($userAdmin, "Title");
 		
-		$userInApi2AppRepo = new UserInAPI2ApplicationRepository();
+		$userInApi2AppRepo = new UserInAPI2ApplicationRepository($this->app);
 		
 		#### Initial Set
 		$permissions = new API2ApplicationUserPermissionsModel();
@@ -94,7 +94,7 @@ class UserInAPI2ApplicationRepositoryTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($userAdmin);
 		$userRepo->create($user);
 		
@@ -102,13 +102,13 @@ class UserInAPI2ApplicationRepositoryTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $userAdmin, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$api2appRepo = new API2ApplicationRepository();
+		$api2appRepo = new API2ApplicationRepository($this->app);
 		$api2app = $api2appRepo->create($userAdmin, "Title");
 		
-		$userInApi2AppRepo = new UserInAPI2ApplicationRepository();
+		$userInApi2AppRepo = new UserInAPI2ApplicationRepository($this->app);
 		
 		#### Initial Set
 		$permissions = new API2ApplicationUserPermissionsModel();

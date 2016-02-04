@@ -6,6 +6,7 @@ namespace dbaccess;
 use models\GroupEditMetaDataModel;
 use models\UserAccountModel;
 use models\GroupModel;
+use Silex\Application;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -25,15 +26,11 @@ class GroupDBAccess {
 	/** @var  \TimeSource */
 	protected $timesource;
 
-	/** @var \UserAgent */
-	protected $useragent;
-
-	function __construct($db, $timesource, $useragent)
-	{
-		$this->db = $db;
-		$this->timesource = $timesource;
-		$this->useragent = $useragent;
-	}
+    function __construct(Application $application)
+    {
+        $this->db = $application['db'];
+        $this->timesource = $application['timesource'];
+    }
 
 	protected $possibleFields = array('title','description','url','twitter_username','is_deleted','is_duplicate_of_id');
 

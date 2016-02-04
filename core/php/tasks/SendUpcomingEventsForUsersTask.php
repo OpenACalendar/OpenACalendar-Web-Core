@@ -40,9 +40,9 @@ class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 
 	protected function run() {
 
-		$userRepoBuilder = new UserAccountRepositoryBuilder();
-		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository();
-		$userNotificationRepo = new UserNotificationRepository();
+		$userRepoBuilder = new UserAccountRepositoryBuilder($this->app);
+		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($this->app);
+		$userNotificationRepo = new UserNotificationRepository($this->app);
 
 		/** @var usernotifications/UpcomingEventsUserNotificationType **/
 		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UpcomingEvents');

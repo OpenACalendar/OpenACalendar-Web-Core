@@ -38,7 +38,7 @@ class UpdateCuratedListFutureEventsCacheTask extends \BaseTask {
     {
         $curatedListRepository = new CuratedListRepository();
 
-        $clrb = new CuratedListRepositoryBuilder();
+        $clrb = new CuratedListRepositoryBuilder($this->app);
         $count = 0;
         foreach($clrb->fetchAll() as $curatedList) {
 

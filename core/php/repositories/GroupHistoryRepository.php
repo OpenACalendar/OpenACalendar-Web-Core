@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\GroupModel;
 use models\GroupHistoryModel;
+use Silex\Application;
 
 /**
  *
@@ -15,15 +16,22 @@ use models\GroupHistoryModel;
  */
 class GroupHistoryRepository {
 
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
 	
 	public function ensureChangedFlagsAreSet(GroupHistoryModel $groupHistory) {
-		global $DB;
-		
+
 		// do we already have them?
 		if (!$groupHistory->isAnyChangeFlagsUnknown()) return;
 		
 		// load last.
-		$stat = $DB->prepare("SELECT * FROM group_history WHERE group_id = :id AND created_at < :at ".
+		$stat = $this->app['db']->prepare("SELECT * FROM group_history WHERE group_id = :id AND created_at < :at ".
 				"ORDER BY created_at DESC");
 		$stat->execute(array('id'=>$groupHistory->getId(),'at'=>$groupHistory->getCreatedAt()->format("Y-m-d H:i:s")));
 		
@@ -72,7 +80,7 @@ class GroupHistoryRepository {
 			$sqlParams['is_deleted_changed'] = $groupHistory->getIsDeletedChanged() ? 1 : -1;
 		}
 
-		$statUpdate = $DB->prepare("UPDATE group_history SET ".
+		$statUpdate = $this->app['db']->prepare("UPDATE group_history SET ".
 			" is_new = :is_new, ".
 			implode(" , ",$sqlFields).
 			" WHERE group_id = :id AND created_at = :created_at");

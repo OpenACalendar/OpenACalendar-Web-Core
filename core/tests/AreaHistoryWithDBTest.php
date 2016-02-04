@@ -32,17 +32,17 @@ class AreaHistoryWithDBTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 		
 		## Create area
@@ -52,7 +52,7 @@ class AreaHistoryWithDBTest extends \BaseAppWithDBTest {
 		$area->setDescription("test test");
 		$area->setCountryId($gb->getId());
 		
-		$areaRepo = new AreaRepository();
+		$areaRepo = new AreaRepository($this->app);
 		$areaRepo->create($area, null, $site, $gb, $user);
 		
 		## Edit area
@@ -63,7 +63,7 @@ class AreaHistoryWithDBTest extends \BaseAppWithDBTest {
 		$areaRepo->edit($area, $user);
 		
 		## Now save changed flags on these .....
-		$areaHistoryRepo = new AreaHistoryRepository();
+		$areaHistoryRepo = new AreaHistoryRepository($this->app);
 		$stat = $this->app['db']->prepare("SELECT * FROM area_history");
 		$stat->execute();
 		while($data = $stat->fetch()) {
@@ -73,7 +73,7 @@ class AreaHistoryWithDBTest extends \BaseAppWithDBTest {
 		}
 		
 		## Now load and check
-		$historyRepo = new HistoryRepositoryBuilder();
+		$historyRepo = new HistoryRepositoryBuilder($this->app);
 		$historyRepo->setIncludeEventHistory(false);
 		$historyRepo->setIncludeVenueHistory(false);
 		$historyRepo->setIncludeGroupHistory(false);

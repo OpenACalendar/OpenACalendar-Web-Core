@@ -39,7 +39,8 @@ class UserWatchesSiteNotifyContent extends BaseUserWatchesNotifyContent {
 
 	public function markNotificationSent(\DateTime $checkTime)
 	{
-		$userWatchesSiteRepository = new UserWatchesSiteRepository();
+        global $app;
+		$userWatchesSiteRepository = new UserWatchesSiteRepository($app);
 		$userWatchesSite = $userWatchesSiteRepository->loadByUserAndSite($this->userAccount, $this->site);
 		$userWatchesSiteRepository->markNotifyEmailSent($userWatchesSite, $checkTime);
 	}

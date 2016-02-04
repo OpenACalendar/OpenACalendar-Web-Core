@@ -24,8 +24,8 @@ class AreaPurgeTest extends BaseAppWithDBTest {
 	
 	function test1() {
 		$this->addCountriesToTestDB();
-		$countryRepo = new CountryRepository();
-		$areaRepo = new AreaRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$areaRepo = new AreaRepository($this->app);
 
 		$this->app['timesource']->mock(2014,10,1,1,0,0);
 
@@ -34,14 +34,14 @@ class AreaPurgeTest extends BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$area = new AreaModel();
@@ -68,10 +68,10 @@ class AreaPurgeTest extends BaseAppWithDBTest {
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0,'Europe/London'));
 		$event->setAreaId($area->getId());
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
-		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository();
+		$sysadminCommentRepo = new \repositories\SysAdminCommentRepository($this->app);
 		$sysadminCommentRepo->createAboutArea($area, "TEST", null);
 
 		## Test

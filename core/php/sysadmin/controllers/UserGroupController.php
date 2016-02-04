@@ -30,7 +30,7 @@ class UserGroupController {
 	protected function build($id, Request $request, Application $app) {
 		$this->parameters = array();
 
-		$ugr = new UserGroupRepository();
+		$ugr = new UserGroupRepository($app);
 		$this->parameters['usergroup'] = $ugr->loadByIdInIndex($id);
 
 		if (!$this->parameters['usergroup']) {
@@ -48,7 +48,7 @@ class UserGroupController {
 			if ($extension) {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
-					$ugr = new UserGroupRepository();
+					$ugr = new UserGroupRepository($app);
 					$ugr->addPermissionToGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/usergroup/'.$this->parameters['usergroup']->getId());
 				}
@@ -58,7 +58,7 @@ class UserGroupController {
 			if ($extension) {
 				$permission = $extension->getUserPermission($request->request->get("permission"));
 				if ($permission) {
-					$ugr = new UserGroupRepository();
+					$ugr = new UserGroupRepository($app);
 					$ugr->removePermissionFromGroup($permission, $this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/usergroup/'.$this->parameters['usergroup']->getId());
 				}
@@ -76,37 +76,37 @@ class UserGroupController {
 				$action = new ActionParser($data['action']);
 
 				if ($action->getCommand() == 'addusername') {
-					$uar = new UserAccountRepository();
+					$uar = new UserAccountRepository($app);
 					$user = $uar->loadByUserName($action->getParam(0));
 					if ($user) {
-						$ugr = new UserGroupRepository();
+						$ugr = new UserGroupRepository($app);
 						$ugr->addUserToGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 						return $app->redirect('/sysadmin/usergroup/'.$this->parameters['usergroup']->getId());
 					}
 
 				} else if ($action->getCommand() == 'removeusername') {
-					$uar = new UserAccountRepository();
+					$uar = new UserAccountRepository($app);
 					$user = $uar->loadByUserName($action->getParam(0));
 					if ($user) {
-						$ugr = new UserGroupRepository();
+						$ugr = new UserGroupRepository($app);
 						$ugr->removeUserFromGroup($user, $this->parameters['usergroup'], $app['currentUser']);
 						return $app->redirect('/sysadmin/usergroup/'.$this->parameters['usergroup']->getId());
 					}
 
 				} else if ($action->getCommand() == 'includesanonymous') {
-					$ugr = new UserGroupRepository();
+					$ugr = new UserGroupRepository($app);
 					$this->parameters['usergroup']->setIsIncludesAnonymous($action->getParamBoolean(0));
 					$ugr->editIsIncludesAnonymous($this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/usergroup/'.$this->parameters['usergroup']->getId());
 
 				} else if ($action->getCommand() == 'includesusers') {
-					$ugr = new UserGroupRepository();
+					$ugr = new UserGroupRepository($app);
 					$this->parameters['usergroup']->setIsIncludesUsers($action->getParamBoolean(0));
 					$ugr->editIsIncludesUser($this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/usergroup/'.$this->parameters['usergroup']->getId());
 
 				} else if ($action->getCommand() == 'includesverifiedusers') {
-					$ugr = new UserGroupRepository();
+					$ugr = new UserGroupRepository($app);
 					$this->parameters['usergroup']->setIsIncludesVerifiedUsers($action->getParamBoolean(0));
 					$ugr->editIsIncludesVerifiedUser($this->parameters['usergroup'], $app['currentUser']);
 					return $app->redirect('/sysadmin/usergroup/'.$this->parameters['usergroup']->getId());
@@ -119,11 +119,11 @@ class UserGroupController {
 
 		$this->parameters['form'] = $form->createView();
 
-		$urb = new UserAccountRepositoryBuilder();
+		$urb = new UserAccountRepositoryBuilder($app);
 		$urb->setInUserGroup($this->parameters['usergroup']);
 		$this->parameters['users'] = $urb->fetchAll();
 
-		$r = new UserPermissionsRepository($app['extensions']);
+		$r = new UserPermissionsRepository($app);
 		$this->parameters['userpermissions'] = $r->getPermissionsForUserGroup($this->parameters['usergroup'], false);
 
 		$this->parameters['userpermissionstoadd'] = array();

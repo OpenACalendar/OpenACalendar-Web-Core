@@ -134,7 +134,7 @@ class SiteFeatureRepository
 					'feature_id'=>$siteFeature->getFeatureId(),
 					'is_on'=>$value?1:0,
 					'user_account_id'=>$userAccountModel ? $userAccountModel->getId() : null,
-					'created_at'=>\TimeSource::getFormattedForDataBase(),
+					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				));
 			}
 

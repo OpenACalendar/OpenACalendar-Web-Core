@@ -61,6 +61,8 @@ class BaseAppWithDBTest extends \PHPUnit_Framework_TestCase {
 		$this->app['db'] = $DB;
 		$this->app['timesource'] = new TimeSource();
         $this->app['messagequeproducerhelper'] = function($app) { return new MessageQueProducerHelper($app); };
+        $this->app['userAgent'] = new UserAgent();
+        $this->app['extensionhookrunner'] = new ExtensionHookRunner($this->app);
 
         $EXTENSIONHOOKRUNNER = new ExtensionHookRunner($this->app);
 
@@ -79,14 +81,14 @@ class BaseAppWithDBTest extends \PHPUnit_Framework_TestCase {
 				$DB->query($line.';');
 			}
 		}
-		db\migrations\MigrationManager::upgrade(false);
+		db\migrations\MigrationManager::upgrade($this->app, false);
 
 	}
 
 
 	protected function getSiteQuotaUsedForTesting() {
 		global $CONFIG;
-		$siteQuotaRepository = new repositories\SiteQuotaRepository();
+		$siteQuotaRepository = new repositories\SiteQuotaRepository($this->app);
 		return $siteQuotaRepository->loadByCode($CONFIG->newSiteHasQuotaCode);
 	}
 

@@ -44,7 +44,7 @@ class VenueVirtualController {
 	
 	function calendarNow(Request $request, Application $app) {
 
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -63,7 +63,7 @@ class VenueVirtualController {
 	
 	function calendar($year, $month, Request $request, Application $app) {
 
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -84,7 +84,7 @@ class VenueVirtualController {
 		
 		
 		
-		$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+		$historyRepositoryBuilder = new HistoryRepositoryBuilder($app);
 		$historyRepositoryBuilder->setVenueVirtualOnly(true);
 		$this->parameters['historyItems'] = $historyRepositoryBuilder->fetchAll();
 		

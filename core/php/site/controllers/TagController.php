@@ -28,7 +28,7 @@ class TagController {
 			$slug = array_shift(explode("-", $slug, 2));
 		}
 		
-		$tr = new TagRepository();
+		$tr = new TagRepository($app);
 		$this->parameters['tag'] = $tr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['tag']) {
 			return false;
@@ -85,7 +85,7 @@ class TagController {
 
             if ($form->isValid()) {
 
-                $tagRepository = new TagRepository();
+                $tagRepository = new TagRepository($app);
                 $tagRepository->edit($this->parameters['tag'], $app['currentUser']);
 
                 return $app->redirect("/tag/".$this->parameters['tag']->getSlugForUrl());
@@ -111,7 +111,7 @@ class TagController {
         }
 
         if ($request->request->get('delete') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-            $tagRepository = new TagRepository();
+            $tagRepository = new TagRepository($app);
             $tagRepository->delete($this->parameters['tag'], $app['currentUser']);
             return $app->redirect("/tag/".$this->parameters['tag']->getSlugForUrl());
         }
@@ -132,7 +132,7 @@ class TagController {
 
         if ($request->request->get('undelete') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
             $this->parameters['tag']->setIsDeleted(false);
-            $tagRepository = new TagRepository();
+            $tagRepository = new TagRepository($app);
             $tagRepository->edit($this->parameters['tag'], $app['currentUser']);
             return $app->redirect("/tag/".$this->parameters['tag']->getSlugForUrl());
         }

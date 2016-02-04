@@ -6,6 +6,7 @@ namespace dbaccess;
 use models\TagEditMetaDataModel;
 use models\UserAccountModel;
 use models\TagModel;
+use Silex\Application;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -26,11 +27,11 @@ class TagDBAccess {
 	protected $timesource;
 
 
-	function __construct($db, $timesource)
-	{
-		$this->db = $db;
-		$this->timesource = $timesource;
-	}
+    function __construct(Application $application)
+    {
+        $this->db = $application['db'];
+        $this->timesource = $application['timesource'];
+    }
 
 	protected $possibleFields = array('title','description','is_deleted');
 

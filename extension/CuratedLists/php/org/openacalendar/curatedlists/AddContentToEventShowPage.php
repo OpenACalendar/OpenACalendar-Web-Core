@@ -34,7 +34,7 @@ class AddContentToEventShowPage extends \BaseAddContentToEventShowPage {
 	{
 		$parameters = array();
 
-		$curatedListRepoBuilder = new CuratedListRepositoryBuilder();
+		$curatedListRepoBuilder = new CuratedListRepositoryBuilder($this->app);
 		$curatedListRepoBuilder->setContainsEvent($this->parameters['event']);
 		$curatedListRepoBuilder->setIncludeDeleted(false);
 		$parameters['curatedLists'] = $curatedListRepoBuilder->fetchAll();

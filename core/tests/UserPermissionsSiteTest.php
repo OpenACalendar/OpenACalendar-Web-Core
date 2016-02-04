@@ -34,7 +34,7 @@ class UserPermissionsSiteTest extends \BaseAppWithDBTest {
 		$userUnverified->setUsername("unverified");
 		$userUnverified->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($userOwner);
 		$userRepo->verifyEmail($userOwner);
 		$userRepo->create($userVerified);
@@ -47,20 +47,20 @@ class UserPermissionsSiteTest extends \BaseAppWithDBTest {
 		$userUnverified = $userRepo->loadByUserName($userUnverified->getUsername());
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		$siteModel = new \models\SiteModel();
 		$siteModel->setTitle("Test");
 		$siteModel->setSlug("test");
 
-		$siteRepository = new \repositories\SiteRepository();
-		$countryRepository = new \repositories\CountryRepository();
+		$siteRepository = new \repositories\SiteRepository($this->app);
+		$countryRepository = new \repositories\CountryRepository($this->app);
 		$siteRepository->create($siteModel, $userOwner, array($countryRepository->loadByTwoCharCode("GB")), $this->getSiteQuotaUsedForTesting(), true);
 
 		## Check!
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		$permissions = $userPerRepo->getPermissionsForUserInSite($userOwner, $siteModel, false);
 		$this->assertEquals(2, count($permissions->getPermissions()));
@@ -110,7 +110,7 @@ class UserPermissionsSiteTest extends \BaseAppWithDBTest {
 		$userUnverified->setUsername("unverified");
 		$userUnverified->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($userOwner);
 		$userRepo->verifyEmail($userOwner);
 		$userRepo->create($userVerified);
@@ -123,20 +123,20 @@ class UserPermissionsSiteTest extends \BaseAppWithDBTest {
 		$userUnverified = $userRepo->loadByUserName($userUnverified->getUsername());
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		$siteModel = new \models\SiteModel();
 		$siteModel->setTitle("Test");
 		$siteModel->setSlug("test");
 
-		$siteRepository = new \repositories\SiteRepository();
-		$countryRepository = new \repositories\CountryRepository();
+		$siteRepository = new \repositories\SiteRepository($this->app);
+		$countryRepository = new \repositories\CountryRepository($this->app);
 		$siteRepository->create($siteModel, $userOwner, array($countryRepository->loadByTwoCharCode("GB")), $this->getSiteQuotaUsedForTesting(), false);
 
 		## Check!
 
 		$extensionsManager = new ExtensionManager($this->app);
-		$userPerRepo = new \repositories\UserPermissionsRepository($extensionsManager);
+		$userPerRepo = new \repositories\UserPermissionsRepository($this->app);
 
 		$permissions = $userPerRepo->getPermissionsForUserInSite($userOwner, $siteModel, false);
 		$this->assertEquals(2, count($permissions->getPermissions()));

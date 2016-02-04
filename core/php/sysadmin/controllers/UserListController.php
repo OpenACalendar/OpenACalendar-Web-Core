@@ -23,7 +23,7 @@ class UserListController {
 	
 	function index(Request $request, Application $app) {
 		
-		$erb = new UserAccountRepositoryBuilder();
+		$erb = new UserAccountRepositoryBuilder($app);
 		$users = $erb->fetchAll();
 		
 		

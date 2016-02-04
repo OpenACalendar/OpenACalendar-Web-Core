@@ -25,7 +25,7 @@ class AdminUserController {
 	protected function build($username, Request $request, Application $app) {
 		$this->parameters = array();
 
-		$repo = new UserAccountRepository();
+		$repo = new UserAccountRepository($app);
 		$this->parameters['user'] =  $repo->loadByUserName($username);
 		if (!$this->parameters['user']) {
 			return false;
@@ -40,7 +40,7 @@ class AdminUserController {
 			$app->abort(404, "User does not exist.");
 		}
 
-		$userPermissionRepo = new UserPermissionsRepository($app['extensions']);
+		$userPermissionRepo = new UserPermissionsRepository($app);
 
 		$this->parameters['userpermissions'] = $userPermissionRepo->getPermissionsForUserInSite($this->parameters['user'], $app['currentSite'], false, false)->getPermissions();
 

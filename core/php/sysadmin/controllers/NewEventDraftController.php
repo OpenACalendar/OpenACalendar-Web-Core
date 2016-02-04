@@ -29,14 +29,14 @@ class NewEventDraftController
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('user'=>null,'eventCreated'=>null, 'eventDupe'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 
-		$repo = new NewEventDraftRepository();
+		$repo = new NewEventDraftRepository($app);
 		$this->parameters['draft'] = $repo->loadBySlugForSite($slug, $this->parameters['site']);
 
 		if (!$this->parameters['draft']) {
@@ -44,17 +44,17 @@ class NewEventDraftController
 		}
 
 		if ($this->parameters['draft']->getUserAccountId()) {
-			$ur = new UserAccountRepository();
+			$ur = new UserAccountRepository($app);
 			$this->parameters['user'] = $ur->loadByID($this->parameters['draft']->getUserAccountId());
 		}
 
 		if ($this->parameters['draft']->getEventId()) {
-			$er = new EventRepository();
+			$er = new EventRepository($app);
 			$this->parameters['eventCreated'] = $er->loadByID($this->parameters['draft']->getEventId());
 		}
 
 		if ($this->parameters['draft']->getWasExistingEventId()) {
-			$er = new EventRepository();
+			$er = new EventRepository($app);
 			$this->parameters['eventDupe'] = $er->loadByID($this->parameters['draft']->getWasExistingEventId());
 		}
 

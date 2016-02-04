@@ -47,7 +47,7 @@ sleep(10);
 
 print "Starting ...\n";
 
-$userRepository = new UserAccountRepository();
+$userRepository = new UserAccountRepository($app);
 $user = $userRepository->loadByUserNameOrEmail($email);
 if (!$user) {
 	die("Can't load user!\n\n");
@@ -60,9 +60,9 @@ $site->setIsListedInIndex(true);
 $site->setIsWebRobotsAllowed(true);
 $site->setPromptEmailsDaysInAdvance($CONFIG->newSitePromptEmailsDaysInAdvance);
 
-$siteRepository = new SiteRepository();
-$countryRepository = new CountryRepository();
-$siteQuotaRepository = new SiteQuotaRepository();
+$siteRepository = new SiteRepository($app);
+$countryRepository = new CountryRepository($app);
+$siteQuotaRepository = new SiteQuotaRepository($app);
 
 $gb = $countryRepository->loadByTwoCharCode("GB") ;
 if (!$gb) {

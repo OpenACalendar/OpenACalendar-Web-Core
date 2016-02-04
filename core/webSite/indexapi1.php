@@ -21,7 +21,7 @@ use repositories\UserWatchesSiteRepository;
 
 $app->before(function (Request $request) use ($app) {
 	# ////////////// Site
-	$siteRepository = new SiteRepository();
+	$siteRepository = new SiteRepository($app);
 	$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
 	if (!$site) {
 		die ("404 Not Found"); // TODO

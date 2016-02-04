@@ -34,7 +34,7 @@ class AreaController {
 			$slug = $slugBits[0];
 		}
 
-		$ar = new AreaRepository();
+		$ar = new AreaRepository($app);
 		$this->parameters['area'] = $ar->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['area']) {
 			return false;

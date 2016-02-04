@@ -23,7 +23,7 @@ class HistoryController {
 	
 	function index(Request $request, Application $app) {
 		
-		$hrb = new HistoryRepositoryBuilder();
+		$hrb = new HistoryRepositoryBuilder($app);
 		
 		
 		return $app['twig']->render('sysadmin/history/index.html.twig', array(

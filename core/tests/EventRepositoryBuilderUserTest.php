@@ -34,13 +34,13 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$groupRepo = new GroupRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
-		$userAtEventRepo = new \repositories\UserAtEventRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$groupRepo = new GroupRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository($this->app);
+		$userAtEventRepo = new \repositories\UserAtEventRepository($this->app);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -74,12 +74,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, false, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -91,12 +91,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		$userAtEventRepo->save($userAtEvent);
 
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, false, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -108,13 +108,13 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$groupRepo = new GroupRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
-		$userAtEventRepo = new \repositories\UserAtEventRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$groupRepo = new GroupRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository($this->app);
+		$userAtEventRepo = new \repositories\UserAtEventRepository($this->app);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -145,12 +145,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		$eventRepository->create($event, $site, $user);
 
 		// test before
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, false, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -162,12 +162,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		$userAtEventRepo->save($userAtEvent);
 
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userAttending, false, false, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
@@ -179,12 +179,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$groupRepo = new GroupRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$groupRepo = new GroupRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesGroupRepo = new \repositories\UserWatchesGroupRepository($this->app);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -234,23 +234,23 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		// test before
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesOther, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesOther, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -258,12 +258,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		// test watching main group gets event
 		$userWatchesGroupRepo->startUserWatchingGroup($userWatchesMain, $groupMain);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -271,12 +271,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		// test watching other group gets event
 		$userWatchesGroupRepo->startUserWatchingGroup($userWatchesOther, $groupOther);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesOther, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesOther, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -288,12 +288,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$groupRepo = new GroupRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$groupRepo = new GroupRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesSiteRepo = new \repositories\UserWatchesSiteRepository($this->app);
 
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -326,12 +326,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		$eventRepository->create($event, $site, $user);
 
 		// test before
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -339,12 +339,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		// test watching main group gets event
 		$userWatchesSiteRepo->startUserWatchingSite($userWatchesMain, $site);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -354,17 +354,17 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 	function testUserWatchingArea() {
 
-		TimeSource::mock(2014,01,01,9,0,0);
+		$this->app['timesource']->mock(2014,01,01,9,0,0);
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$areaRepo = new AreaRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$groupRepo = new GroupRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$areaRepo = new AreaRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$groupRepo = new GroupRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository($this->app);
 		$GB = $countryRepo->loadByTwoCharCode("GB");
 
 		$user = new UserAccountModel();
@@ -403,16 +403,16 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$event->setAreaId($area->getId());
 
-		TimeSource::mock(2014,01,01,9,1,0);
+		$this->app['timesource']->mock(2014,01,01,9,1,0);
 		$eventRepository->edit($event);
 
 		// test before
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -420,12 +420,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		// test watching main group gets event
 		$userWatchesAreaRepo->startUserWatchingArea($userWatchesMain, $area);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -435,17 +435,17 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 	function testUserWatchingParentArea() {
 
-		TimeSource::mock(2014,01,01,9,0,0);
+		$this->app['timesource']->mock(2014,01,01,9,0,0);
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$areaRepo = new AreaRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$groupRepo = new GroupRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$areaRepo = new AreaRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$groupRepo = new GroupRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository($this->app);
 		$GB = $countryRepo->loadByTwoCharCode("GB");
 
 		$user = new UserAccountModel();
@@ -488,7 +488,7 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$event->setAreaId($areaChild->getId());
 
-		TimeSource::mock(2014,01,01,9,1,0);
+		$this->app['timesource']->mock(2014,01,01,9,1,0);
 		$eventRepository->edit($event);
 
 		// have to update child cache
@@ -496,12 +496,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		$areaRepo->buildCacheAreaHasParent($areaChild);
 
 		// test before
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -509,12 +509,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		// test watching main group gets event
 		$userWatchesAreaRepo->startUserWatchingArea($userWatchesMain, $area);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -523,17 +523,17 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 	}
 	function testUserWatchingAreaWithVenue() {
 
-		TimeSource::mock(2014,01,01,9,0,0);
+		$this->app['timesource']->mock(2014,01,01,9,0,0);
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$areaRepo = new AreaRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$venueRepo = new \repositories\VenueRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$areaRepo = new AreaRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$venueRepo = new \repositories\VenueRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository($this->app);
 		$GB = $countryRepo->loadByTwoCharCode("GB");
 
 		$user = new UserAccountModel();
@@ -578,16 +578,16 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$event->setVenueId($venue->getId());
 
-		TimeSource::mock(2014,01,01,9,1,0);
+		$this->app['timesource']->mock(2014,01,01,9,1,0);
 		$eventRepository->edit($event);
 
 		// test before
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -595,12 +595,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		// test watching main group gets event
 		$userWatchesAreaRepo->startUserWatchingArea($userWatchesMain, $area);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -610,17 +610,17 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 	function testUserWatchingParentAreaWithVenue() {
 
-		TimeSource::mock(2014,01,01,9,0,0);
+		$this->app['timesource']->mock(2014,01,01,9,0,0);
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
-		$areaRepo = new AreaRepository();
-		$userRepo = new UserAccountRepository();
-		$siteRepo = new SiteRepository();
-		$venueRepo = new \repositories\VenueRepository();
-		$eventRepository = new EventRepository();
-		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$areaRepo = new AreaRepository($this->app);
+		$userRepo = new UserAccountRepository($this->app);
+		$siteRepo = new SiteRepository($this->app);
+		$venueRepo = new \repositories\VenueRepository($this->app);
+		$eventRepository = new EventRepository($this->app);
+		$userWatchesAreaRepo = new \repositories\UserWatchesAreaRepository($this->app);
 		$GB = $countryRepo->loadByTwoCharCode("GB");
 
 		$user = new UserAccountModel();
@@ -670,7 +670,7 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 
 		$event->setVenueId($venue->getId());
 
-		TimeSource::mock(2014,01,01,9,1,0);
+		$this->app['timesource']->mock(2014,01,01,9,1,0);
 		$eventRepository->edit($event);
 
 		// have to update child cache
@@ -678,12 +678,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		$areaRepo->buildCacheAreaHasParent($areaChild);
 
 		// test before
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));
@@ -691,12 +691,12 @@ class EventRepositoryBuilderUserTest  extends \BaseAppWithDBTest {
 		// test watching main group gets event
 		$userWatchesAreaRepo->startUserWatchingArea($userWatchesMain, $area);
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, true);
 		$events = $erb->fetchAll();
 		$this->assertEquals(1, count($events));
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setUserAccount($userWatchesMain, false, true, true, false);
 		$events = $erb->fetchAll();
 		$this->assertEquals(0, count($events));

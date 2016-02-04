@@ -4,6 +4,7 @@ namespace repositories;
 
 use models\UserAccountModel;
 use models\UserAccountResetModel;
+use Silex\Application;
 
 /**
  *
@@ -14,9 +15,17 @@ use models\UserAccountResetModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class UserAccountResetRepository {
-	
-	public function create(UserAccountModel $user) {
-		global $DB;
+
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    public function create(UserAccountModel $user) {
+
 		
 		$uar = new UserAccountResetModel();
 		$uar->setUserAccountId($user->getId());
@@ -24,12 +33,12 @@ class UserAccountResetRepository {
 		
 		// TODO check not already used
 		
-		$stat = $DB->prepare("INSERT INTO user_account_reset (user_account_id, access_key, created_at) ".
+		$stat = $this->app['db']->prepare("INSERT INTO user_account_reset (user_account_id, access_key, created_at) ".
 				"VALUES (:user_account_id, :access_key, :created_at)");
 		$stat->execute(array(
 				'user_account_id'=>$uar->getUserAccountId(),
 				'access_key'=>$uar->getAccessKey(),
-				'created_at'=>\TimeSource::getFormattedForDataBase()
+				'created_at'=>$this->app['timesource']->getFormattedForDataBase()
 			));
 		$data = $stat->fetch();
 		
@@ -39,8 +48,8 @@ class UserAccountResetRepository {
 	
 	/** @return UserAccountResetModel **/
 	public function loadByUserAccountIDAndAccessKey($id, $access) {
-		global $DB;
-		$stat = $DB->prepare("SELECT user_account_reset.* FROM user_account_reset WHERE user_account_id =:user_account_id AND access_key=:access_key");
+
+		$stat = $this->app['db']->prepare("SELECT user_account_reset.* FROM user_account_reset WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));
 		if ($stat->rowCount() > 0) {
 			$uar = new UserAccountResetModel();
@@ -54,9 +63,9 @@ class UserAccountResetRepository {
 	 * @return \models\UserAccountResetModel A single one or NULL. Technically it may load multiple ones, but we only return one.
 	 */
 	public function loadRecentlyUnusedSentForUserAccountId($id, $seconds= 60) {
-		global $DB;
-		$stat = $DB->prepare("SELECT user_account_reset.* FROM user_account_reset WHERE reset_at IS NULL AND user_account_id =:user_account_id AND created_at > :since");
-		$time = \TimeSource::getDateTime();
+
+		$stat = $this->app['db']->prepare("SELECT user_account_reset.* FROM user_account_reset WHERE reset_at IS NULL AND user_account_id =:user_account_id AND created_at > :since");
+		$time = $this->app['timesource']->getDateTime();
 		$time->setTimestamp($time->getTimestamp() - $seconds);
 		$stat->execute(array( 'user_account_id'=>$id,'since'=>$time->format('Y-m-d H:i:s') ));
 		if ($stat->rowCount() > 0) {

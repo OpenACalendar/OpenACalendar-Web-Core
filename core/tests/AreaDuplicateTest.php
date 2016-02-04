@@ -28,22 +28,22 @@ class AreaDuplicateTest extends BaseAppWithDBTest {
 		$this->app['timesource']->mock(2014,1,1,0,0,0);
 
 		$this->addCountriesToTestDB();
-		$countryRepo = new CountryRepository();
-		$areaRepo = new AreaRepository();
+		$countryRepo = new CountryRepository($this->app);
+		$areaRepo = new AreaRepository($this->app);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array( $countryRepo->loadByTwoCharCode('GB') ), $this->getSiteQuotaUsedForTesting());
 
 		$area1 = new AreaModel();
@@ -67,7 +67,7 @@ class AreaDuplicateTest extends BaseAppWithDBTest {
 		$area1 = $areaRepo->loadById($area1->getId());
 		$area2 = $areaRepo->loadById($area2->getId());
 
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$gb = $countryRepo->loadByTwoCharCode('GB');
 
 		$venue = new VenueModel();
@@ -76,7 +76,7 @@ class AreaDuplicateTest extends BaseAppWithDBTest {
 		$venue->setCountryId($gb->getId());
 		$venue->setAreaId($area2->getId());
 
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($this->app);
 		$venueRepo->create($venue, $site, $user);
 
 		$event = new EventModel();
@@ -85,7 +85,7 @@ class AreaDuplicateTest extends BaseAppWithDBTest {
 		$event->setEndAt(getUTCDateTime(2014,5,10,21,0,0));
 		$event->setAreaId($area2->getId());
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event, $site, $user);
 
 		// Test before

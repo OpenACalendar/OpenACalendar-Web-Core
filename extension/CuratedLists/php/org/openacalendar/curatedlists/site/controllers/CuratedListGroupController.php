@@ -34,7 +34,7 @@ class CuratedListGroupController {
 			return false;
 		}
 		
-		$groupRepository = new GroupRepository();
+		$groupRepository = new GroupRepository($app);
 		$this->parameters['group'] =  $groupRepository->loadBySlug($app['currentSite'], $gslug);
 		if (!$this->parameters['group']) {
 			return false;

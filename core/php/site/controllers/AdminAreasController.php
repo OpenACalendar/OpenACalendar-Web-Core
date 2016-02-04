@@ -31,7 +31,7 @@ class AdminAreasController {
 	protected function build($countryslug, Request $request, Application $app) {
 		$this->parameters = array('country'=>null,'parentAreas'=>array());
 		
-		$cr = new CountryRepository();
+		$cr = new CountryRepository($app);
 		// we accept both ID and Slug. Slug is proper one to use, but some JS may need to load by ID.
 		$this->parameters['country'] = intval($countryslug) ? $cr->loadById($countryslug) :  $cr->loadByTwoCharCode($countryslug);
 		if (!$this->parameters['country']) {
@@ -39,7 +39,7 @@ class AdminAreasController {
 		}
 		
 		// check this country is or was valid for this site
-		$countryInSiteRepo = new CountryInSiteRepository();
+		$countryInSiteRepo = new CountryInSiteRepository($app);
 		if (!$countryInSiteRepo->isCountryInSite($this->parameters['country'], $app['currentSite'])) {
 			return false;
 		}
@@ -47,13 +47,13 @@ class AdminAreasController {
 		return true;
 	}
 	
-	protected function buildTree(SiteModel $site, AreaModel $parentArea = null) {
+	protected function buildTree(Application $app, SiteModel $site, AreaModel $parentArea = null) {
 		$data = array(
 				'area'=>$parentArea,
 				'children'=>array()
 			);
 		
-		$areaRepoBuilder = new AreaRepositoryBuilder();
+		$areaRepoBuilder = new AreaRepositoryBuilder($app);
 		$areaRepoBuilder->setSite($site);
 		$areaRepoBuilder->setCountry($this->parameters['country']);
 		if ($parentArea) {
@@ -63,7 +63,7 @@ class AdminAreasController {
 		}
 		
 		foreach($areaRepoBuilder->fetchAll() as $area) {
-			$data['children'][] = $this->buildTree($site, $area);
+			$data['children'][] = $this->buildTree($app, $site, $area);
 		}
 		
 		return $data;
@@ -78,7 +78,7 @@ class AdminAreasController {
 	
 		
 		
-		$this->parameters['areaTree'] = $this->buildTree($app['currentSite']);
+		$this->parameters['areaTree'] = $this->buildTree($app, $app['currentSite']);
 		
 		return $app['twig']->render('site/adminareas/index.html.twig', $this->parameters);
 		
@@ -92,7 +92,7 @@ class AdminAreasController {
 	
 		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
 			$areaSlugs = is_array($request->request->get('area')) ? $request->request->get('area') : array();
-			$areaRepository = new AreaRepository();
+			$areaRepository = new AreaRepository($app);
 			if ($request->request->get('action') == 'delete') {
 				foreach($areaSlugs as $areaSlug) {
 					$area = $areaRepository->loadBySlugAndCountry($app['currentSite'], $areaSlug, $this->parameters['country']);
@@ -125,7 +125,7 @@ class AdminAreasController {
 			$app->abort(404, "country does not exist.");
 		}	
 	
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($app);
 		
 		$parentArea = null; $parentAreas = array();
 		if (isset($_GET['parentAreaSlug'])) {

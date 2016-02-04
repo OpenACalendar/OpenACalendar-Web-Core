@@ -26,12 +26,11 @@ class RenderCalendar {
 	/** @var EventRepositoryBuilder **/
 	protected  $eventRepositoryBuilder;
 	
-	function __construct() {
-		global $CONFIG;
-		$this->eventRepositoryBuilder = new EventRepositoryBuilder();
+	function __construct(\Silex\Application $app) {
+		$this->eventRepositoryBuilder = new EventRepositoryBuilder($app);
 		$this->eventRepositoryBuilder->setLimit(0); // all of them
-		$this->minYear = $CONFIG->calendarEarliestYearAllowed;
-		$this->maxYear = (\TimeSource::getDateTime()->format("Y")+ $CONFIG->eventsCantBeMoreThanYearsInFuture);
+		$this->minYear = $app['config']->calendarEarliestYearAllowed;
+		$this->maxYear = (\TimeSource::getDateTime()->format("Y")+ $app['config']->eventsCantBeMoreThanYearsInFuture);
 	}
 
 	public function getEventRepositoryBuilder() {

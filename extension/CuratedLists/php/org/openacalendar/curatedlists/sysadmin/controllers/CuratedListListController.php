@@ -22,14 +22,14 @@ class CuratedListListController {
 	function index($siteid, Request $request, Application $app) {
 		
 		
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$site = $sr->loadById($siteid);
 		
 		if (!$site) {
 			die("404");
 		}
 		
-		$rb = new CuratedListRepositoryBuilder();
+		$rb = new CuratedListRepositoryBuilder($app);
 		$rb->setSite($site);
 		$curatedlists = $rb->fetchAll();
 		

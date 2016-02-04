@@ -24,7 +24,7 @@ class EventDuplicateTest extends \BaseAppWithDBTest {
 	
 	function test1() {
 
-		TimeSource::mock(2014,5,1,7,0,0);
+		$this->app['timesource']->mock(2014,5,1,7,0,0);
 		
 		$user = new UserAccountModel();
 		$user->setEmail("test@jarofgreen.co.uk");
@@ -41,7 +41,7 @@ class EventDuplicateTest extends \BaseAppWithDBTest {
 		$user2->setUsername("test2");
 		$user2->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		$userRepo->create($user1);
 		$userRepo->create($user2);
@@ -50,7 +50,7 @@ class EventDuplicateTest extends \BaseAppWithDBTest {
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$event1 = new EventModel();
@@ -69,11 +69,11 @@ class EventDuplicateTest extends \BaseAppWithDBTest {
 		$event2->setUrl("http://www.info.com");
 		$event2->setTicketUrl("http://www.tickets.com");
 
-		$eventRepository = new EventRepository();
+		$eventRepository = new EventRepository($this->app);
 		$eventRepository->create($event1, $site, $user);
 		$eventRepository->create($event2, $site, $user);
 
-		$userAtEventRepo = new \repositories\UserAtEventRepository();
+		$userAtEventRepo = new \repositories\UserAtEventRepository($this->app);
 
 		$user1AtEvent1 = $userAtEventRepo->loadByUserAndEventOrInstanciate($user1, $event1);
 		$user1AtEvent1->setIsPlanAttending(true);
@@ -121,7 +121,7 @@ class EventDuplicateTest extends \BaseAppWithDBTest {
 
 
 		//==================================================== Mark
-		TimeSource::mock(2014,5,1,8,0,0);
+		$this->app['timesource']->mock(2014,5,1,8,0,0);
 		$eventRepository->markDuplicate($event2, $event1, $user);
 
 

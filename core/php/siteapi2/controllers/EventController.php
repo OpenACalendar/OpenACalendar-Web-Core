@@ -24,7 +24,7 @@ class EventController {
 
 		
 		
-		$repo = new EventRepository();
+		$repo = new EventRepository($app);
 		$this->event = $repo->loadBySlug($app['currentSite'], $slug);
 		if (!$this->event) {
 			return false;
@@ -80,7 +80,7 @@ class EventController {
 		}
 
 		if ($edits) {
-			$repo = new EventRepository();
+			$repo = new EventRepository($app);
 			$repo->edit($this->event, $app['apiUser']);
 			$out = array(
 				'edited'=>true,

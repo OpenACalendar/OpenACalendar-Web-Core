@@ -93,10 +93,10 @@ class NewEventWhereDetails extends BaseNewEvent
 		} else if ($this->getCurrentMode() == $this->MODE_NEWVENUE) {
 			$out = array('areas'=>array(),'fieldAreaObject'=>null,'childAreas'=>null,'areaSearchRequired'=>false,'titleRequired'=>false);
 
-			$countryRepository = new CountryRepository();
+			$countryRepository = new CountryRepository($this->application);
 			$out['country'] = $countryRepository->loadById($this->draftEvent->getDetailsValue('event.country_id'));
 
-			$areaRepository = new AreaRepository();
+			$areaRepository = new AreaRepository($this->application);
 			$out['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas( $this->site, $out['country']);
 
 			$out['fieldTitle'] = $this->draftEvent->getDetailsValue('venue.title');
@@ -111,7 +111,7 @@ class NewEventWhereDetails extends BaseNewEvent
 			$area = $this->draftEvent->getDetailsValue('area.id') ? $areaRepository->loadById($this->draftEvent->getDetailsValue('area.id')) : null;
 
 			if (!$area && $out['fieldArea']) {
-				$areaRepoBuilder = new AreaRepositoryBuilder();
+				$areaRepoBuilder = new AreaRepositoryBuilder($this->application);
 				$areaRepoBuilder->setSite($this->site);
 				$areaRepoBuilder->setCountry($out['country']);
 				$areaRepoBuilder->setIncludeDeleted(false);
@@ -143,16 +143,16 @@ class NewEventWhereDetails extends BaseNewEvent
 		} else if ($this->getCurrentMode() == $this->MODE_AREA) {
 			$out = array('searchAreas'=>$this->request->get('searchAreas'), 'areas'=>array());
 
-			$countryRepository = new CountryRepository();
+			$countryRepository = new CountryRepository($this->application);
 			$out['country'] = $countryRepository->loadById($this->draftEvent->getDetailsValue('event.country_id'));
 
-			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder = new AreaRepositoryBuilder($this->application);
 			$areaRepoBuilder->setSite($this->site);
 			$areaRepoBuilder->setCountry($out['country']);
 			$areaRepoBuilder->setIncludeDeleted(false);
 			// If no user input sent, and incoming area, start on that.
 			if ($this->request->get('action') != 'searchAreas' && $this->draftEvent->getDetailsValue('incoming.area.id')) {
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($this->application);
 				$area = $areaRepository->loadById($this->draftEvent->getDetailsValue('incoming.area.id'));
 				if ($area) {
 					$out['searchAreas'] = $area->getTitle();
@@ -191,7 +191,7 @@ class NewEventWhereDetails extends BaseNewEvent
 			$venueModel->setAddressCode($this->request->request->get('fieldAddressCode'));
 
 			if ($this->request->request->get('fieldAreaSlug') && $this->request->request->get('fieldAreaSlug') != -1) {
-				$areaRepo = new AreaRepository();
+				$areaRepo = new AreaRepository($this->application);
 				$area = $areaRepo->loadBySlug($this->site, $this->request->request->get('fieldAreaSlug'));
 				if ($area) {
 					$venueModel->setAreaId($area->getId());
@@ -221,9 +221,9 @@ class NewEventWhereDetails extends BaseNewEvent
 			$this->draftEvent->unsetDetailsValue('venue.field_area_search_text');
 			$this->draftEvent->unsetDetailsValue('venue.area_id');
 			// Do we ask user for area or not?
-			$countryRepository = new CountryRepository();
+			$countryRepository = new CountryRepository($this->application);
 			$country = $countryRepository->loadById($this->draftEvent->getDetailsValue('event.country_id'));
-			$areaRepository = new AreaRepository();
+			$areaRepository = new AreaRepository($this->application);
 			if ($areaRepository->doesCountryHaveAnyNotDeletedAreas($this->site, $country)) {
 				$this->draftEvent->setDetailsValue('where.mode', $this->MODE_AREA);
 			} else {
@@ -236,7 +236,7 @@ class NewEventWhereDetails extends BaseNewEvent
 		// Secondly, any thing actually set?
 
 		if ($this->request->request->get('action') == 'setthisarea') {
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($this->application);
 			$area = $ar->loadBySlug($this->site, $this->request->request->get('area_slug'));
 			if ($area) {
 				$this->draftEvent->setDetailsValue('area.id', $area->getId());
@@ -247,7 +247,7 @@ class NewEventWhereDetails extends BaseNewEvent
 		}
 
 		if ($this->request->request->get('action') == 'setthisvenue') {
-			$vr = new VenueRepository();
+			$vr = new VenueRepository($this->application);
 			$venue = $vr->loadBySlug($this->site, $this->request->request->get('venue_slug'));
 			if ($venue) {
 				$this->draftEvent->setDetailsValue('venue.id', $venue->getId());
@@ -270,7 +270,7 @@ class NewEventWhereDetails extends BaseNewEvent
 			$venueModel->setAddressCode($this->request->request->get('fieldAddressCode'));
 			$venueModel->setDescription($this->request->request->get('fieldDescription'));
 
-			$areaRepo = new AreaRepository();
+			$areaRepo = new AreaRepository($this->application);
 
 			// Slightly ackward we have to set Area ID on venue object, then when extensions have done we need to reload the area object again.
 			if ($this->request->request->get('fieldAreaSlug') && $this->request->request->get('fieldAreaSlug') != -1) {
@@ -370,7 +370,7 @@ class NewEventWhereDetails extends BaseNewEvent
 			$vee->setUserAccount($this->application['currentUser']);
 			// TODO $vee->setFromRequest();
 
-			$venueRepository = new VenueRepository();
+			$venueRepository = new VenueRepository($this->application);
 			$venueRepository->createWithMetaData($venueModel, $this->site, $vee);
 
 			$eventModel->setVenueId($venueModel->getId());
@@ -393,7 +393,7 @@ class NewEventWhereDetails extends BaseNewEvent
 		$out = array();
 
 		if ($this->request->request->get('action') == 'searchAreas') {
-			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder = new AreaRepositoryBuilder($this->application);
 			$areaRepoBuilder->setSite($this->site);
 			$areaRepoBuilder->setIncludeDeleted(false);
 			if ($this->request->get('searchAreas')) {
@@ -443,7 +443,7 @@ class NewEventWhereDetails extends BaseNewEvent
 
 		if ($this->request->request->get('action') == 'setthisnewvenue') {
 			if ($this->request->get('fieldArea')) {
-				$areaRepoBuilder = new AreaRepositoryBuilder();
+				$areaRepoBuilder = new AreaRepositoryBuilder($this->application);
 				$areaRepoBuilder->setSite($this->site);
 				$areaRepoBuilder->setIncludeDeleted(false);
 				$areaRepoBuilder->setFreeTextSearch($this->request->get('fieldArea'));
@@ -479,15 +479,15 @@ class NewEventWhereDetails extends BaseNewEvent
 			'venueSearchDone'=>false
 		);
 
-		$countryRepository = new CountryRepository();
+		$countryRepository = new CountryRepository($this->application);
 		$out['country'] = $countryRepository->loadById($this->draftEvent->getDetailsValue('event.country_id'));
-		$areaRepository = new AreaRepository();
+		$areaRepository = new AreaRepository($this->application);
 		$out['doesCountryHaveAnyNotDeletedAreas'] = $areaRepository->doesCountryHaveAnyNotDeletedAreas( $this->site, $out['country']);
 
 		if ($out['doesCountryHaveAnyNotDeletedAreas']) {
 			// Area search
 			if ($out['searchArea']) {
-				$arb = new AreaRepositoryBuilder();
+				$arb = new AreaRepositoryBuilder($this->application);
 				$arb->setIncludeDeleted(false);
 				$arb->setIncludeParentLevels(1);
 				$arb->setSite($this->site);
@@ -512,7 +512,6 @@ class NewEventWhereDetails extends BaseNewEvent
 
 		// If user has not added any search fields. and the event is in a area. let's search by area by default.
 		if (!$out['searchFieldsSubmitted'] && !$out['searchAreaObject'] && $this->draftEvent->getDetailsValue('incoming.area.id')) {
-			$areaRepository = new AreaRepository();
 			$area = $areaRepository->loadById($this->draftEvent->getDetailsValue('incoming.area.id'));
 			if ($area) {
 				$out['searchAreaObject'] = $area;
@@ -523,7 +522,7 @@ class NewEventWhereDetails extends BaseNewEvent
 
 
 		if ($out['searchAddressCode'] || $out['searchAddress'] || $out['searchTitle'] || $out['searchAreaObject']) {
-			$vrb = new VenueRepositoryBuilder();
+			$vrb = new VenueRepositoryBuilder($this->application);
 			$vrb->setSite($this->site);
 			$vrb->setCountry($out['country']);
 			$vrb->setIncludeDeleted(false);
@@ -549,7 +548,7 @@ class NewEventWhereDetails extends BaseNewEvent
 	}
 
 	protected function getChildAreasForArea(AreaModel $areaModel=null, $limit=500) {
-		$arb = new AreaRepositoryBuilder();
+		$arb = new AreaRepositoryBuilder($this->application);
 		$arb->setSite($this->site);
 		$arb->setIncludeDeleted(false);
 		if ($areaModel) {

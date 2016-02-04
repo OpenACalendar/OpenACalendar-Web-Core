@@ -34,14 +34,14 @@ class UserAccountResetRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		$sql = "SELECT user_account_reset.* FROM user_account_reset ".
 				implode(" ", $this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
 				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

@@ -20,7 +20,7 @@ class AreaListController  {
 	public function listJson (Request $request, Application $app) {
 		
 		
-		$arb = new AreaRepositoryBuilder();
+		$arb = new AreaRepositoryBuilder($app);
 		$arb->setSite($app['currentSite']);
 				
 		$ourRequest = new \Request($request);

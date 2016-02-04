@@ -48,19 +48,19 @@ class VenueController {
 			$slug = array_shift(explode("-", $slug, 2));
 		}
 		
-		$vr = new VenueRepository();
+		$vr = new VenueRepository($app);
 		$this->parameters['venue'] = $vr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['venue']) {
 			return false;
 		}
 		
 		if ($this->parameters['venue']->getCountryID()) {
-			$cr = new CountryRepository();
+			$cr = new CountryRepository($app);
 			$this->parameters['country'] = $cr->loadById($this->parameters['venue']->getCountryID());
 		}
 		
 		if ($this->parameters['venue']->getAreaId()) {	
-			$ar = new AreaRepository();
+			$ar = new AreaRepository($app);
 			$this->parameters['area'] = $ar->loadById($this->parameters['venue']->getAreaId());
 			if (!$this->parameters['area']) {
 				return false;
@@ -72,14 +72,14 @@ class VenueController {
 				$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
 			}
 
-			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder = new AreaRepositoryBuilder($app);
 			$areaRepoBuilder->setSite($app['currentSite']);
 			$areaRepoBuilder->setCountry($this->parameters['country']);
 			$areaRepoBuilder->setParentArea($this->parameters['area']);
 			$areaRepoBuilder->setIncludeDeleted(false);
 			$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
 		} else {
-			$areaRepoBuilder = new AreaRepositoryBuilder();
+			$areaRepoBuilder = new AreaRepositoryBuilder($app);
 			$areaRepoBuilder->setSite($app['currentSite']);
 			$areaRepoBuilder->setCountry($this->parameters['country']);
 			$areaRepoBuilder->setNoParentArea(true);
@@ -133,7 +133,7 @@ class VenueController {
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setVenue($this->parameters['venue']);
@@ -165,8 +165,8 @@ class VenueController {
 				$area = null;
 				
 				if (is_array($request->request->get('areas'))) {
-					$areaRepository = new AreaRepository();
-					$countryRepository = new CountryRepository();
+					$areaRepository = new AreaRepository($app);
+					$countryRepository = new CountryRepository($app);
 					foreach ($request->request->get('areas') as $areaCode) {
 						if (substr($areaCode, 0, 9) == 'EXISTING:') {
 							$area = $areaRepository->loadBySlug($app['currentSite'], substr($areaCode,9));
@@ -197,7 +197,7 @@ class VenueController {
 				}
 				$venueEditMetaData->setFromRequest($request);
 
-				$venueRepository = new VenueRepository();
+				$venueRepository = new VenueRepository($app);
 				$venueRepository->editWithMetaData($this->parameters['venue'],$venueEditMetaData);
 				
 				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
@@ -216,7 +216,7 @@ class VenueController {
 			$app->abort(404, "GrouVenuep does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -238,7 +238,7 @@ class VenueController {
 		}
 
 		
-		$this->parameters['calendar'] = new \RenderCalendar();
+		$this->parameters['calendar'] = new \RenderCalendar($app);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
@@ -262,7 +262,7 @@ class VenueController {
 		
 		
 		
-		$historyRepositoryBuilder = new HistoryRepositoryBuilder();
+		$historyRepositoryBuilder = new HistoryRepositoryBuilder($app);
 		$historyRepositoryBuilder->setVenue($this->parameters['venue']);		
 		$this->parameters['historyItems'] = $historyRepositoryBuilder->fetchAll();
 		
@@ -296,13 +296,13 @@ class VenueController {
 
 				if ($form->isValid() && $form['media']->getData()) {
 
-					$mediaRepository = new MediaRepository();
+					$mediaRepository = new MediaRepository($app);
 					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
 							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
 
-						$mediaInVenueRepo = new MediaInVenueRepository();
+						$mediaInVenueRepo = new MediaInVenueRepository($app);
 						$mediaInVenueRepo->add($media, $this->parameters['venue'], $app['currentUser']);
 						
 						$app['flashmessages']->addMessage('Picture added!');
@@ -317,7 +317,7 @@ class VenueController {
 		}
 		
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setVenue($this->parameters['venue']);
@@ -332,10 +332,10 @@ class VenueController {
 		}
 		
 		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$mediaRepository = new MediaRepository();
+			$mediaRepository = new MediaRepository($app);
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $mediaslug);
 			if ($media) {
-				$mediaInVenueRepo = new MediaInVenueRepository();
+				$mediaInVenueRepo = new MediaInVenueRepository($app);
 				$mediaInVenueRepo->remove($media, $this->parameters['venue'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Removed!');
 			}
@@ -350,17 +350,17 @@ class VenueController {
 		}
 			
 		if ($request->request->get('addMedia') && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			$mediaRepository = new MediaRepository();
+			$mediaRepository = new MediaRepository($app);
 			$media = $mediaRepository->loadBySlug($app['currentSite'], $request->request->get('addMedia'));
 			if ($media) {
-				$mediaInVenueRepo = new MediaInVenueRepository();
+				$mediaInVenueRepo = new MediaInVenueRepository($app);
 				$mediaInVenueRepo->add($media, $this->parameters['venue'], $app['currentUser']);
 				$app['flashmessages']->addMessage('Added!');
 				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL().'/');
 			}
 		}
 		
-		$mrb = new MediaRepositoryBuilder();
+		$mrb = new MediaRepositoryBuilder($app);
 		$mrb->setIncludeDeleted(false);
 		$mrb->setSite($app['currentSite']);
 		$mrb->setNotInVenue($this->parameters['venue']);
@@ -379,12 +379,12 @@ class VenueController {
 			
 			if (intval($request->request->get('area'))) {
 				
-				$areaRepository = new AreaRepository();
+				$areaRepository = new AreaRepository($app);
 				$area = $areaRepository->loadBySlug($app['currentSite'], $request->request->get('area'));
 				if ($area && (!$this->parameters['area'] || $area->getId() != $this->parameters['area']->getId())) {
 
 					$this->parameters['venue']->setAreaId($area->getId());
-					$venueRepository = new VenueRepository();
+					$venueRepository = new VenueRepository($app);
 					$venueRepository->edit($this->parameters['venue'], $app['currentUser']);
 					$app['flashmessages']->addMessage('Thank you; venue updated!');
 				}
@@ -417,10 +417,10 @@ class VenueController {
 
 			if ($form->isValid()) {
 				
-				$eventRepository = new EventRepository();
+				$eventRepository = new EventRepository($app);
 				$eventRepository->moveAllFutureEventsAtVenueToNoSetVenue($this->parameters['venue'], $app['currentUser']);
 
-				$venueRepository = new VenueRepository();
+				$venueRepository = new VenueRepository($app);
 				$venueRepository->delete($this->parameters['venue'], $app['currentUser']);
 				
 				return $app->redirect("/venue/".$this->parameters['venue']->getSlugForURL());
@@ -429,7 +429,7 @@ class VenueController {
 		}
 		
 		
-		$rb = new EventRepositoryBuilder();
+		$rb = new EventRepositoryBuilder($app);
 		$rb->setVenue($this->parameters['venue']);
 		$rb->setAfterNow(true);
 		$rb->setIncludeDeleted(false);

@@ -38,14 +38,14 @@ class EventCustomFieldDefinitionController
 	protected function build($siteid, $fieldid, Request $request, Application $app) {
 		$this->parameters = array();
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 
-		$repo = new EventCustomFieldDefinitionRepository();
+		$repo = new EventCustomFieldDefinitionRepository($app);
 		$this->parameters['field'] = $repo->loadBySiteIDAndID($this->parameters['site']->getId(), $fieldid);
 		if (!$this->parameters['field']) {
 			$app->abort(404);

@@ -25,14 +25,14 @@ class GroupCreateTest extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -40,17 +40,17 @@ class GroupCreateTest extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		$this->checkGroupInTest1($groupRepo->loadById($group->getId()));
 		$this->checkGroupInTest1($groupRepo->loadBySlug($site, $group->getSlug()));
 		
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setFreeTextsearch('test');
 		$this->assertEquals(1, count($grb->fetchAll()));	
 		
-		$grb = new GroupRepositoryBuilder();
+		$grb = new GroupRepositoryBuilder($this->app);
 		$grb->setFreeTextsearch('cats');
 		$this->assertEquals(0, count($grb->fetchAll()));	
 

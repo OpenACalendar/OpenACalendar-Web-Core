@@ -16,6 +16,7 @@ use repositories\builders\EventRepositoryBuilder;
 use repositories\EventRecurSetRepository;
 use repositories\EventRepository;
 use repositories\ImportedEventIsEventRepository;
+use Silex\Application;
 
 /**
  *
@@ -26,6 +27,9 @@ use repositories\ImportedEventIsEventRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportedEventOccurrenceToEvent {
+
+    /** @var  Application */
+    protected $app;
 
 	/** @var  ImportModel */
 	protected $import;
@@ -49,7 +53,8 @@ class ImportedEventOccurrenceToEvent {
 
     protected $eventsSeenIDs;
 
-	public function __construct(ImportRun $importRun) {
+	public function __construct(Application $app, ImportRun $importRun) {
+        $this->app = $app;
 		$this->site = $importRun->getSite();
 		$this->group = $importRun->getGroup();
 		$this->country = $importRun->getCountry();
@@ -65,8 +70,8 @@ class ImportedEventOccurrenceToEvent {
 
 	public function run(ImportedEventOccurrenceModel $importedEventOccurrenceModel) {
 
-		$eventRepo = new EventRepository();
-		$eventRecurSetRepo = new EventRecurSetRepository();
+		$eventRepo = new EventRepository($this->app);
+		$eventRecurSetRepo = new EventRecurSetRepository($this->app);
 
 		if ($importedEventOccurrenceModel->hasReoccurence()) {
 			// Have to load it looking for the right time to!
@@ -115,8 +120,8 @@ class ImportedEventOccurrenceToEvent {
 
     public function deleteEventsNotSeenAfterRun() {
         $count = 0;
-        $eventRepo = new EventRepository();
-        $erb = new EventRepositoryBuilder();
+        $eventRepo = new EventRepository($this->app);
+        $erb = new EventRepositoryBuilder($this->app);
         $erb->setImport($this->import);
         $erb->setIncludeDeleted(false);
         $erb->setAfterNow();
@@ -131,7 +136,7 @@ class ImportedEventOccurrenceToEvent {
 
 	/** @var EventModel **/
 	protected function loadEventForImportedEvent(ImportedEventModel $importedEvent) {
-		$eventRepo = new \repositories\EventRepository;
+		$eventRepo = new \repositories\EventRepository($this->app);
 
 		// Try new way
 		$event = $eventRepo->loadByImportedEvent($importedEvent);
@@ -143,7 +148,7 @@ class ImportedEventOccurrenceToEvent {
 		$event = $eventRepo->loadByImportURLIDAndImportId($importedEvent->getImportId(), $importedEvent->getIdInImport());
 		if ($event) {
 			// Save this data as the new way
-			$repo = new ImportedEventIsEventRepository();
+			$repo = new ImportedEventIsEventRepository($this->app);
 			$repo->createLink($importedEvent, $event);
 			// .... and return
 			return $event;
@@ -155,7 +160,7 @@ class ImportedEventOccurrenceToEvent {
 
 
 	protected function loadEventForImportedReoccurredEvent(ImportedEventModel $importedEvent) {
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($this->app);
 		$erb->setImportedEvent($importedEvent);
 		foreach($erb->fetchAll() as $event) {
 			if (abs($event->getStartAt()->getTimestamp() - $importedEvent->getStartAt()->getTimestamp()) < 60*60 &&
@@ -199,7 +204,7 @@ class ImportedEventOccurrenceToEvent {
 		} else {
 
 			// if no country set on importer, we just pick first one at random :-/
-			$crb = new \repositories\builders\CountryRepositoryBuilder();
+			$crb = new \repositories\builders\CountryRepositoryBuilder($this->app);
 			$crb->setSiteIn($this->site);
 			$countries = $crb->fetchAll();
 			if (count($countries) > 0) {

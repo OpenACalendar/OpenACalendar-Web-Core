@@ -25,7 +25,7 @@ class SiteQuotaController {
 	protected function build($code, Request $request, Application $app) {
 		$this->parameters = array();
 
-		$sqr = new SiteQuotaRepository();
+		$sqr = new SiteQuotaRepository($app);
 		$this->parameters['sitequota'] = $sqr->loadByCode($code);
 		
 		if (!$this->parameters['sitequota']) {

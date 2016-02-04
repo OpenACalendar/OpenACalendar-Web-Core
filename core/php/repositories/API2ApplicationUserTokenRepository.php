@@ -5,6 +5,7 @@ namespace repositories;
 use models\API2ApplicationModel;
 use models\API2ApplicationUserTokenModel;
 use models\UserAccountModel;
+use Silex\Application;
 
 
 /**
@@ -17,16 +18,23 @@ use models\UserAccountModel;
  */
 class API2ApplicationUserTokenRepository {
 
+    /** @var Application */
+    private  $app;
+
+    function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
 	
 	public function createForAppAndUserId(API2ApplicationModel $app, $userID) {
-		global $DB;
-		
-		$stat = $DB->prepare("SELECT api2_application_user_token_information.* FROM api2_application_user_token_information WHERE ".
+
+		$stat = $this->app['db']->prepare("SELECT api2_application_user_token_information.* FROM api2_application_user_token_information WHERE ".
 				"api2_application_id =:api2_application_id AND user_id =:user_id");
 		$stat->execute(array( 'api2_application_id'=>$app->getId(), 'user_id'=>$userID ));
 		if ($stat->rowCount() == 0) {
 			
-			$stat = $DB->prepare("INSERT INTO api2_application_user_token_information ".
+			$stat = $this->app['db']->prepare("INSERT INTO api2_application_user_token_information ".
 					"(api2_application_id, user_id, user_token, user_secret, created_at) ".
 					"VALUES (:api2_application_id, :user_id, :user_token, :user_secret, :created_at)");
 			
@@ -35,7 +43,7 @@ class API2ApplicationUserTokenRepository {
 				'user_id'=> $userID ,
 				'user_token'=> createKey(1,255),
 				'user_secret'=> createKey(1,255),
-				'created_at'=>  \TimeSource::getFormattedForDataBase(),
+				'created_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 			));
 					
 			// TODO check for unique user_token
@@ -50,8 +58,7 @@ class API2ApplicationUserTokenRepository {
 	 * @return \models\API2ApplicationUserTokenModel
 	 */
 	public function loadByAppAndUserID(API2ApplicationModel $app, $userID) {
-		global $DB;
-		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_editor ".
+		$stat = $this->app['db']->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_editor ".
 				" FROM api2_application_user_token_information".
 				" JOIN user_in_api2_application_information ON user_in_api2_application_information.is_in_app = '1' ".
 				" AND user_in_api2_application_information.user_id = api2_application_user_token_information.user_id ".
@@ -73,8 +80,7 @@ class API2ApplicationUserTokenRepository {
 	 * @return \models\API2ApplicationUserTokenModel
 	 */
 	public function loadByAppAndUserTokenAndUserSecret(API2ApplicationModel $app, $userToken, $userSecret) {
-		global $DB;
-		$stat = $DB->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_editor ".
+		$stat = $this->app['db']->prepare("SELECT api2_application_user_token_information.*, user_in_api2_application_information.is_editor ".
 				" FROM api2_application_user_token_information".
 				" JOIN user_in_api2_application_information ON user_in_api2_application_information.is_in_app = '1' ".
 				" AND user_in_api2_application_information.user_id = api2_application_user_token_information.user_id ".

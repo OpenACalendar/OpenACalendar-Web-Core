@@ -33,7 +33,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 		
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$country = $countryRepo->loadByTwoCharCode("GB");
 
 		$user = new UserAccountModel();
@@ -41,14 +41,14 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 		
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 		
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 		
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 		
 		$group = new GroupModel();
@@ -56,7 +56,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 		
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 		
 		
@@ -90,7 +90,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 		
 		$createEvent->go();
 		
-		$eventRepoBuilder = new EventRepositoryBuilder();
+		$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 		$events = $eventRepoBuilder->fetchAll();
 	
 		$this->assertEquals(1, count($events));
@@ -114,7 +114,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 
 		$this->addCountriesToTestDB();
 
-		$countryRepo = new CountryRepository();
+		$countryRepo = new CountryRepository($this->app);
 		$country = $countryRepo->loadByTwoCharCode("DE");
 
 		$user = new UserAccountModel();
@@ -122,14 +122,14 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 		$user->setUsername("test");
 		$user->setPassword("password");
 
-		$userRepo = new UserAccountRepository();
+		$userRepo = new UserAccountRepository($this->app);
 		$userRepo->create($user);
 
 		$site = new SiteModel();
 		$site->setTitle("Test");
 		$site->setSlug("test");
 
-		$siteRepo = new SiteRepository();
+		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
 
 		$group = new GroupModel();
@@ -137,7 +137,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 		$group->setDescription("test test");
 		$group->setUrl("http://www.group.com");
 
-		$groupRepo = new GroupRepository();
+		$groupRepo = new GroupRepository($this->app);
 		$groupRepo->create($group, $site, $user);
 
 
@@ -175,7 +175,7 @@ class CLIAPI1CreateEventTest  extends \BaseAppWithDBTest {
 
 		$createEvent->go();
 
-		$eventRepoBuilder = new EventRepositoryBuilder();
+		$eventRepoBuilder = new EventRepositoryBuilder($this->app);
 		$events = $eventRepoBuilder->fetchAll();
 
 		$this->assertEquals(1, count($events));

@@ -6,6 +6,7 @@ namespace dbaccess;
 use models\AreaEditMetaDataModel;
 use models\UserAccountModel;
 use models\AreaModel;
+use Silex\Application;
 use sysadmin\controllers\API2Application;
 
 /**
@@ -25,14 +26,11 @@ class AreaDBAccess {
 	/** @var  \TimeSource */
 	protected $timesource;
 
-	/** @var \UserAgent */
-	protected $useragent;
 
-	function __construct($db, $timesource, $useragent)
+	function __construct(Application $application)
 	{
-		$this->db = $db;
-		$this->timesource = $timesource;
-		$this->useragent = $useragent;
+		$this->db = $application['db'];
+		$this->timesource = $application['timesource'];
 	}
 
 	protected $possibleFields = array('title','description','parent_area_id','is_duplicate_of_id','is_deleted','country_id');

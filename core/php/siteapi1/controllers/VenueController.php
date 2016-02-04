@@ -46,7 +46,7 @@ class VenueController {
 			$slug = $slugBits[0];
 		}
 
-		$vr = new VenueRepository();
+		$vr = new VenueRepository($app);
 		$this->parameters['venue'] = $vr->loadBySlug($app['currentSite'], $slug);
 		if (!$this->parameters['venue']) {
 			return false;

@@ -8,6 +8,7 @@ use models\SiteModel;
 use models\UserAccountModel;
 use models\SiteQuotaModel;
 use models\UserGroupModel;
+use Silex\Application;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
@@ -19,27 +20,29 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class SiteRepository {
-	
 
-	/** @var  \dbaccess\SiteDBAccess */
+    /** @var Application */
+    private  $app;
+
+
+    /** @var  \dbaccess\SiteDBAccess */
 	protected $siteDBAccess;
 
-	function __construct()
+	function __construct(Application $app)
 	{
-		global $DB, $USERAGENT;
-		$this->siteDBAccess = new SiteDBAccess($DB, new \TimeSource(), $USERAGENT);
+        $this->app = $app;
+		$this->siteDBAccess = new SiteDBAccess($app);
 	}
 
 	public function create(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota, $canAnyUserVerifiedEdit = false) {
-		global $DB, $CONFIG, $EXTENSIONHOOKRUNNER;
-		$createdat = \TimeSource::getFormattedForDataBase();
+		$createdat = $this->app['timesource']->getFormattedForDataBase();
 
-		if (!$site->isSlugValid($site->getSlug(), $CONFIG)) {
+		if (!$site->isSlugValid($site->getSlug(), $this->app['config'])) {
 			throw new Exception("Slug not valid");
 		}
 
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
 			// TODO should check slug not already exist and nice error
 			
@@ -54,7 +57,7 @@ class SiteRepository {
 
 			// Site
 
-			$stat = $DB->prepare("INSERT INTO site_information (title, slug, slug_canonical, ".
+			$stat = $this->app['db']->prepare("INSERT INTO site_information (title, slug, slug_canonical, ".
 						"created_at,cached_is_multiple_timezones,cached_is_multiple_countries,".
 						"cached_timezones, ".
 						"is_listed_in_index,is_web_robots_allowed, ".
@@ -80,7 +83,7 @@ class SiteRepository {
 			$data = $stat->fetch();
 			$site->setId($data['id']);
 			
-			$stat = $DB->prepare("INSERT INTO site_history (site_id, user_account_id, ".
+			$stat = $this->app['db']->prepare("INSERT INTO site_history (site_id, user_account_id, ".
 						"title, slug, slug_canonical, created_at,is_listed_in_index,is_web_robots_allowed, ".
 						" prompt_emails_days_in_advance, is_new ) ".
 					"VALUES (:site_id, :user_account_id, :title, ".
@@ -101,7 +104,7 @@ class SiteRepository {
 
 			// Permissions
 
-			$ugr = new UserGroupRepository();
+			$ugr = new UserGroupRepository($this->app);
 
 			$userGroupEditors = new UserGroupModel();
 			$userGroupEditors->setTitle("Editors");
@@ -114,58 +117,58 @@ class SiteRepository {
 
 			// Countries!
 
-			$stat = $DB->prepare("INSERT INTO country_in_site_information (site_id,country_id,is_in,is_previously_in,created_at) VALUES (:site_id,:country_id,'1','1',:created_at)");
+			$stat = $this->app['db']->prepare("INSERT INTO country_in_site_information (site_id,country_id,is_in,is_previously_in,created_at) VALUES (:site_id,:country_id,'1','1',:created_at)");
 			foreach($countries as $country) {
 				$stat->execute(array( 'country_id'=>$country->getId(), 'site_id'=>$site->getId(), 'created_at'=>$createdat ));				
 			}
 						
-			$stat = $DB->prepare("INSERT INTO user_watches_site_information (user_account_id,site_id,is_watching,is_was_once_watching,last_watch_started,created_at) ".
+			$stat = $this->app['db']->prepare("INSERT INTO user_watches_site_information (user_account_id,site_id,is_watching,is_was_once_watching,last_watch_started,created_at) ".
 					"VALUES (:user_account_id,:site_id,:is_watching,:is_was_once_watching,:last_watch_started,:created_at)");
 			$stat->execute(array(
 					'user_account_id'=>$owner->getId(),
 					'site_id'=>$site->getId(),
 					'is_watching'=>'1',
 					'is_was_once_watching'=>'1',
-					'created_at'=>  \TimeSource::getFormattedForDataBase(),
-					'last_watch_started'=>  \TimeSource::getFormattedForDataBase(),
+					'created_at'=>  $this->app['timesource']->getFormattedForDataBase(),
+					'last_watch_started'=>  $this->app['timesource']->getFormattedForDataBase(),
 				));			
 			
-			$DB->commit();
+			$this->app['db']->commit();
 
 			// Features
-			$statFeatureOn = $DB->prepare("INSERT INTO site_feature_information (site_id, extension_id, feature_id, is_on) VALUES (:id, :ext, :feature, '1')");
-			if($CONFIG->newSiteHasFeatureCuratedList) {
+			$statFeatureOn = $this->app['db']->prepare("INSERT INTO site_feature_information (site_id, extension_id, feature_id, is_on) VALUES (:id, :ext, :feature, '1')");
+			if($this->app['config']->newSiteHasFeatureCuratedList) {
 				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar.curatedlists','feature'=>'CuratedList'));
 			}
-			if($CONFIG->newSiteHasFeatureImporter) {
+			if($this->app['config']->newSiteHasFeatureImporter) {
 				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Importer'));
 			}
-			if($CONFIG->newSiteHasFeatureMap) {
+			if($this->app['config']->newSiteHasFeatureMap) {
 				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Map'));
 			}
-			if($CONFIG->newSiteHasFeatureVirtualEvents) {
+			if($this->app['config']->newSiteHasFeatureVirtualEvents) {
 				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'VirtualEvents'));
 			}
-			if($CONFIG->newSiteHasFeaturePhysicalEvents) {
+			if($this->app['config']->newSiteHasFeaturePhysicalEvents) {
 				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'PhysicalEvents'));
 			}
-			if($CONFIG->newSiteHasFeatureGroup) {
+			if($this->app['config']->newSiteHasFeatureGroup) {
 				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Group'));
 			}
-			if ($CONFIG->newSiteHasFeatureTag) {
+			if ($this->app['config']->newSiteHasFeatureTag) {
 				$statFeatureOn->execute(array('id'=>$site->getId(),'ext'=>'org.openacalendar','feature'=>'Tag'));
 			}
 
-			$EXTENSIONHOOKRUNNER->afterSiteCreate($site, $owner);
+			$this->app['extensionhookrunner']->afterSiteCreate($site, $owner);
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 
 	/** @deprecated */
 	public function loadLegacyFeaturesOnSite(SiteModel $siteModel) {
-		global $DB;
-		$stat = $DB->prepare("SELECT extension_id,feature_id,is_on FROM site_feature_information WHERE site_id=:site_id AND is_on = '1' ");
+
+		$stat = $this->app['db']->prepare("SELECT extension_id,feature_id,is_on FROM site_feature_information WHERE site_id=:site_id AND is_on = '1' ");
 		$stat->execute(array(
 			'site_id'=>$siteModel->getId(),
 		));
@@ -195,8 +198,7 @@ class SiteRepository {
 	}
 
 	public function loadByDomain($domain) {
-		global $CONFIG;
-		$compareTo = $CONFIG->webSiteDomain;
+		$compareTo = $this->app['config']->webSiteDomain;
 		if (strpos($compareTo, ":") > 0) {
 			$compareTo = array_shift(explode(":", $compareTo));
 		}
@@ -204,7 +206,7 @@ class SiteRepository {
 			$siteSlug = substr(strtolower($_SERVER['SERVER_NAME']), 0, 0- strlen($compareTo)-1);
 			return $this->loadBySlug($siteSlug);
 		}
-		foreach($CONFIG->webSiteAlternateDomains as $compareTo) {
+		foreach($this->app['config']->webSiteAlternateDomains as $compareTo) {
 			if (strpos($compareTo, ":") > 0) {
 				$compareTo = array_shift(explode(":", $compareTo));
 			}
@@ -221,8 +223,7 @@ class SiteRepository {
 	 * @deprecated
 	 */
 	public function loadByAPIDomain($domain) {
-		global $CONFIG;
-		foreach(array( $CONFIG->webAPI1Domain ) as $compareTo) {
+		foreach(array( $this->app['config']->webAPI1Domain ) as $compareTo) {
 			if (strpos($compareTo, ":") > 0) {
 				$compareTo = array_shift(explode(":", $compareTo));
 			}
@@ -235,8 +236,8 @@ class SiteRepository {
 	}
 	
 	public function loadBySlug($slug) {
-		global $DB;
-		$stat = $DB->prepare("SELECT site_information.*, site_profile_media_information.logo_media_id ".
+
+		$stat = $this->app['db']->prepare("SELECT site_information.*, site_profile_media_information.logo_media_id ".
 				"FROM site_information ".
 				"LEFT JOIN site_profile_media_information ON site_profile_media_information.site_id = site_information.id ".
 				"WHERE slug_canonical =:detail");
@@ -250,8 +251,8 @@ class SiteRepository {
 	
 	
 	public function loadById($id) {
-		global $DB;
-		$stat = $DB->prepare("SELECT site_information.* FROM site_information WHERE id =:id");
+
+		$stat = $this->app['db']->prepare("SELECT site_information.* FROM site_information WHERE id =:id");
 		$stat->execute(array( 'id'=>$id ));
 		if ($stat->rowCount() > 0) {
 			$site = new SiteModel();
@@ -261,10 +262,10 @@ class SiteRepository {
 	}
 	
 	public function edit(SiteModel $site, UserAccountModel $user) {
-		global $DB;
+
 
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
 			$fields = array('title','description_text','footer_text','is_web_robots_allowed',
 				'is_closed_by_sys_admin','is_listed_in_index','closed_by_sys_admin_reason',
@@ -272,17 +273,17 @@ class SiteRepository {
 
 			$this->siteDBAccess->update($site, $fields, $user);
 
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 	}
 	
 	
 	public function editCached(SiteModel $site) {
-		global $DB;
+
 	
-		$stat = $DB->prepare("UPDATE site_information SET cached_is_multiple_timezones=:cached_is_multiple_timezones, ".
+		$stat = $this->app['db']->prepare("UPDATE site_information SET cached_is_multiple_timezones=:cached_is_multiple_timezones, ".
 				" cached_is_multiple_countries = :cached_is_multiple_countries, ".
 				" cached_timezones= :cached_timezones".
 				" WHERE id=:id");
@@ -296,9 +297,9 @@ class SiteRepository {
 	
 	
 	public function editQuota(SiteModel $site, UserAccountModel $user = null) {
-		global $DB;
+
 	
-		$stat = $DB->prepare("UPDATE site_information SET site_quota_id=:site_quota_id WHERE id=:id");
+		$stat = $this->app['db']->prepare("UPDATE site_information SET site_quota_id=:site_quota_id WHERE id=:id");
 		$stat->execute(array(
 				'site_quota_id'=>$site->getSiteQuotaId(),
 				'id'=>$site->getId(),
@@ -312,19 +313,19 @@ class SiteRepository {
 	 * @TODO Nice error on duplicate slug
 	 */
 	public function editSlug(SiteModel $site, UserAccountModel $user = null) {
-		global $DB;
+
 		
 
 		try {
-			$DB->beginTransaction();
+			$this->app['db']->beginTransaction();
 
 
 			$this->siteDBAccess->update($site, array('slug'), $user);
 
 
-			$DB->commit();
+			$this->app['db']->commit();
 		} catch (Exception $e) {
-			$DB->rollBack();
+			$this->app['db']->rollBack();
 		}
 		
 	}

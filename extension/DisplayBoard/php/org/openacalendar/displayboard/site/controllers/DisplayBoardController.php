@@ -50,9 +50,9 @@ class DisplayBoardController {
 			$this->paramaters['configParameters']['refreshInMinutes'] = $_GET['refreshInMinutes'];
 		}
 
-		$areaRepository = new AreaRepository();
-		$groupRepository = new GroupRepository();
-		$venueRepository = new VenueRepository();
+		$areaRepository = new AreaRepository($app);
+		$groupRepository = new GroupRepository($app);
+		$venueRepository = new VenueRepository($app);
 
 		$this->paramaters['data'] = array();
 
@@ -80,7 +80,7 @@ class DisplayBoardController {
 						'group'=>null,
 						'venue'=>null,
 						'minorImportance'=>false,
-						'query'=>new EventRepositoryBuilder(),
+						'query'=>new EventRepositoryBuilder($app),
 					);
 				$queryData['query']->setSite($app['currentSite']);
 				$queryData['query']->setAfterNow();
@@ -120,7 +120,7 @@ class DisplayBoardController {
 					'group'=>null,
 					'venue'=>null,
 					'minorImportance'=>false,
-					'query'=>new EventRepositoryBuilder(),
+					'query'=>new EventRepositoryBuilder($app),
 				);
 			$queryData['query']->setSite($app['currentSite']);
 			$queryData['query']->setAfterNow();

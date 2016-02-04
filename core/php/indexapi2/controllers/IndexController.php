@@ -75,7 +75,7 @@ class IndexController {
 		}
 		
 		// Generate Token
-		$tokenRepo = new API2ApplicationRequestTokenRepository();
+		$tokenRepo = new API2ApplicationRequestTokenRepository($app);
 		$token = $tokenRepo->create($app['apiApp'], $requestToken);
 		
 		return json_encode(array(
@@ -89,9 +89,9 @@ class IndexController {
 			return $app['twig']->render('indexapi2/index/login.app.problem.html.twig', array());
 		}
 
-		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository();
-		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository();
-		$userInApp2Repo = new UserInAPI2ApplicationRepository();
+		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository($app);
+		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository($app);
+		$userInApp2Repo = new UserInAPI2ApplicationRepository($app);
 		
 		######################################## Check Data In
 		
@@ -122,7 +122,7 @@ class IndexController {
 			if ($form->isValid()) {
 				$formData = $form->getData();
 				
-				$userRepository = new UserAccountRepository();
+				$userRepository = new UserAccountRepository($app);
 				if ($formData['email']) {
 					$user = $userRepository->loadByEmail($formData['email']);
 				} else if ($formData['username']) {
@@ -202,10 +202,10 @@ class IndexController {
 	}
 	
 	public function userTokenJson(Application $app) {
-		$appRepo = new API2ApplicationRepository();
-		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository();
-		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository();
-		$userTokenRepo = new API2ApplicationUserTokenRepository();
+		$appRepo = new API2ApplicationRepository($app);
+		$appRequestTokenRepo = new API2ApplicationRequestTokenRepository($app);
+		$userAuthorisationTokenRepo =  new API2ApplicationUserAuthorisationTokenRepository($app);
+		$userTokenRepo = new API2ApplicationUserTokenRepository($app);
 
 		if (!$app['apiApp'] || !$app['apiAppLoadedBySecret']) {
 			return json_encode(array(

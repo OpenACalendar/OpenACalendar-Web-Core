@@ -129,7 +129,7 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 
 
     protected function build() {
-		global $DB;
+
 
 		$this->select[] = "  venue_information.* ";
 
@@ -147,7 +147,7 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
 			
 			$areaids = array( $this->area->getId() );
 			
-			$this->statAreas = $DB->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
+			$this->statAreas = $this->app['db']->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
 			$this->statAreas->execute(array('id'=>$this->area->getId()));
 			while($d = $this->statAreas->fetch()) {
 				$areaids[] = $d['area_id'];
@@ -215,14 +215,14 @@ class VenueRepositoryBuilder  extends BaseRepositoryBuilder {
     }
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		$sql = "SELECT".  implode(",", $this->select)." FROM venue_information ".
 			($this->where ? " WHERE ".implode(" AND ", $this->where) : '').
 				" ORDER BY venue_information.title ASC ".
 				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

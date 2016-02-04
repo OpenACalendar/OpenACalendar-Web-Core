@@ -156,7 +156,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 	
 	public function setAfterNow() {
-		$this->after = \TimeSource::getDateTime();
+		$this->after = $this->app['timesource']->getDateTime();
 		return $this;
 	}
 	
@@ -180,7 +180,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	protected $endBefore;
 
 	public function setBeforeNow() {
-		$this->endBefore = \TimeSource::getDateTime();
+		$this->endBefore = $this->app['timesource']->getDateTime();
 		return $this;
 	}
 	
@@ -293,7 +293,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 
 	
 	protected function build() {
-		global $DB;
+
 
 		$this->select[] = 'event_information.*';
 		$this->select[] = " group_information.title AS group_title ";
@@ -330,7 +330,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 			
 			$areaids = array( $this->area->getId() );
 			
-			$this->statAreas = $DB->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
+			$this->statAreas = $this->app['db']->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
 			$this->statAreas->execute(array('id'=>$this->area->getId()));
 			while($d = $this->statAreas->fetch()) {
 				$areaids[] = $d['area_id'];
@@ -549,7 +549,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 
 
 				
@@ -558,7 +558,7 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder {
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").
 				" ORDER BY  ".$this->orderBy." ".$this->orderDirection .( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 		
 	}

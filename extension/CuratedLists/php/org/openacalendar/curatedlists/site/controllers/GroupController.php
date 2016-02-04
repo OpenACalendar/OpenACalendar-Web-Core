@@ -26,7 +26,7 @@ class GroupController extends \site\controllers\GroupController {
 			die("No"); // TODO
 		}
 
-		$clrb = new CuratedListRepositoryBuilder();
+		$clrb = new CuratedListRepositoryBuilder($app);
 		$clrb->setSite($app['currentSite']);
 		$clrb->setUserCanEdit($app['currentUser']);
 		$clrb->setIncludeDeleted(false);

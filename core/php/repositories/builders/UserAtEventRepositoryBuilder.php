@@ -70,7 +70,7 @@ class UserAtEventRepositoryBuilder  extends BaseRepositoryBuilder {
 	}
 	
 	protected function buildStat() {
-		global $DB;
+
 		
 		
 		$sql = "SELECT user_at_event_information.*, user_account_information.username AS user_username FROM user_at_event_information ".
@@ -80,7 +80,7 @@ class UserAtEventRepositoryBuilder  extends BaseRepositoryBuilder {
 				" ORDER BY user_account_information.username ASC ".
 				( $this->limit > 0 ? " LIMIT ". $this->limit : "");
 	
-		$this->stat = $DB->prepare($sql);
+		$this->stat = $this->app['db']->prepare($sql);
 		$this->stat->execute($this->params);
 	}
 	

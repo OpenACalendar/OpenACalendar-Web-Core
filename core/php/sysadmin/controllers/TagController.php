@@ -30,14 +30,14 @@ class TagController {
 	protected function build($siteid, $slug, Request $request, Application $app) {
 		$this->parameters = array('group'=>null);
 
-		$sr = new SiteRepository();
+		$sr = new SiteRepository($app);
 		$this->parameters['site'] = $sr->loadById($siteid);
 		
 		if (!$this->parameters['site']) {
 			$app->abort(404);
 		}
 		
-		$tr = new TagRepository();
+		$tr = new TagRepository($app);
 		$this->parameters['tag'] = $tr->loadBySlug($this->parameters['site'], $slug);
 		
 		if (!$this->parameters['tag']) {
@@ -59,12 +59,12 @@ class TagController {
 				$action = new ActionParser($data['action']);
 			
 				if ($action->getCommand() == 'delete' && !$this->parameters['tag']->getIsDeleted()) {
-					$tr = new TagRepository();
+					$tr = new TagRepository($app);
 					$tr->delete($this->parameters['tag'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['tag']->getIsDeleted()) {
 					$this->parameters['tag']->setIsDeleted(false);
-					$tr = new TagRepository();
+					$tr = new TagRepository($app);
 					$tr->undelete($this->parameters['tag'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
 				}

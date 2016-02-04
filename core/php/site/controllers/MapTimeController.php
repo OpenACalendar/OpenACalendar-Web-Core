@@ -34,7 +34,7 @@ class MapTimeController {
 	function getDataJson(Application $app) {
 		
 		$steps = 120;
-		$venueRepo = new VenueRepository();
+		$venueRepo = new VenueRepository($app);
 		$data = array('data'=>array());
 			
 		if ($_POST['speed'] == '3600') {
@@ -54,7 +54,7 @@ class MapTimeController {
 			$end->add($interval);
 		}
 
-		$erb = new EventRepositoryBuilder();
+		$erb = new EventRepositoryBuilder($app);
 		$erb->setSite($app['currentSite']);
 		$erb->setAfter($start);
 		$erb->setBefore($end);

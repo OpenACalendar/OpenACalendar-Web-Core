@@ -23,7 +23,7 @@ class VenueController {
 	protected function build($slug, Request $request, Application $app) {
 
 		
-		$repo = new VenueRepository();
+		$repo = new VenueRepository($app);
 		$this->venue = $repo->loadBySlug($app['currentSite'], $slug);
 		if (!$this->venue) {
 			return false;
@@ -88,7 +88,7 @@ class VenueController {
 		}
 
 		if ($edits) {
-			$repo = new VenueRepository();
+			$repo = new VenueRepository($app);
 			$repo->edit($this->venue, $app['apiUser']);
 			$out = array(
 				'edited'=>true,

@@ -29,8 +29,9 @@ class UserWatchesSiteGroupPromptNotificationModel extends \BaseUserNotificationM
 	var $group;
 	
 	private function loadGroupIfNeeded() {
+        global $app;
 		if (!$this->group && property_exists($this->data, 'group') && $this->data->group) {
-			$repo = new GroupRepository;
+			$repo = new GroupRepository($app);
 			$this->group = $repo->loadById($this->data->group);
 		}
 	}
