@@ -47,13 +47,13 @@
 		{% if historyItem.getStartAtChanged %}
 			<div class="fieldChanged">
 				<div class="field">Start changed:</div>
-				<div class="value">{{ historyItem.startAt|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i', historyItem.timezone )(, currentUserClock12Hour, ) }} ({{ historyItem.timezone }})</div>
+				<div class="value">{{ historyItem.startAt|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i', historyItem.timezone ) }} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getEndAtChanged %}
 			<div class="fieldChanged">
 				<div class="field">End changed:</div>
-				<div class="value">{{ historyItem.endAt|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i', historyItem.timezone)}} ({{ historyItem.timezone }})</div>
+				<div class="value">{{ historyItem.endAt|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i', historyItem.timezone ) }} ({{ historyItem.timezone }})</div>
 			</div>
 		{% endif %}
 		{% if historyItem.getCountryIdChanged %}
