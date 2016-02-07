@@ -248,6 +248,10 @@ class UserController {
 			));
 		}
 
+        if ($app['currentUser']) {
+            return $app->redirect("/");
+        }
+
 		$this->processThingsToDoAfterGetUser($request, $app);
 
 		$userRepository = new UserAccountRepository($app);
@@ -301,8 +305,12 @@ class UserController {
 		return $app['twig']->render('index/user/register.html.twig', $this->parameters);
 		
 	}
-	
-	function login(Request $request, Application $app) {				
+
+    function login(Request $request, Application $app) {
+        if ($app['currentUser']) {
+            return $app->redirect("/");
+        }
+
 		$form = $app['form.factory']->create(new LogInUserForm());
 
 
@@ -409,9 +417,13 @@ class UserController {
 		}
 
 	}
-	
-	
-	function forgot(Request $request, Application $app) {		
+
+
+    function forgot(Request $request, Application $app) {
+        if ($app['currentUser']) {
+            return $app->redirect("/");
+        }
+
 		$form = $app['form.factory']->create(new ForgotUserForm());
 		
 		if ('POST' == $request->getMethod()) {
@@ -454,6 +466,9 @@ class UserController {
 	}
 	
 	function reset($id, $code, Request $request, Application $app) {
+        if ($app['currentUser']) {
+            return $app->redirect("/");
+        }
 		
 		$userRepository = new UserAccountRepository($app);
 		
