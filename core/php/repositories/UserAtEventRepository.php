@@ -88,6 +88,8 @@ class UserAtEventRepository {
 				'is_plan_public'=>$userAtEvent->getIsPlanPublic()?1:0,
 				'created_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 			));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserAtEventSaved', array('user_account_id'=>$userAtEvent->getUserAccountId(),'event_id'=>$userAtEvent->getEventId()));
 	}
 
 	public function edit(UserAtEventModel $userAtEvent) {
@@ -103,6 +105,8 @@ class UserAtEventRepository {
                 'is_plan_not_attending'=>$userAtEvent->getIsPlanNotAttending()?1:0,
 				'is_plan_public'=>$userAtEvent->getIsPlanPublic()?1:0,
 			));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserAtEventSaved', array('user_account_id'=>$userAtEvent->getUserAccountId(),'event_id'=>$userAtEvent->getEventId()));
 	}
 	
 }

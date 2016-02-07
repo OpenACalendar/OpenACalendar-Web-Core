@@ -139,6 +139,8 @@ class SiteFeatureRepository
 			}
 
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'SiteFeatureSaved', array('site_id'=>$site->getId(), 'feature_extension_id'=>$siteFeature->getExtensionId(), 'feature_id'=>$siteFeature->getFeatureId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}

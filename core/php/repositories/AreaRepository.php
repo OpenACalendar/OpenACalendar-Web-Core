@@ -87,6 +87,8 @@ class AreaRepository {
 				));
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -238,6 +240,8 @@ class AreaRepository {
 			$this->areaDBAccess->update($area, $fields, $areaEditMetaDataModel);
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -266,6 +270,8 @@ class AreaRepository {
 			$this->deleteParentCacheForArea($area);
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -292,6 +298,8 @@ class AreaRepository {
 			$this->areaDBAccess->update($area, array('is_deleted'), $areaEditMetaDataModel);
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -315,6 +323,8 @@ class AreaRepository {
 			$this->areaDBAccess->update($area, array('is_deleted'), $areaEditMetaDataModel);
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -449,6 +459,8 @@ class AreaRepository {
 			}
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$duplicateArea->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -521,6 +533,8 @@ class AreaRepository {
 			$stat->execute(array('id'=>$area->getId()));
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaPurged', array());
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 			throw $e;

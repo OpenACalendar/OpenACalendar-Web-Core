@@ -103,6 +103,8 @@ class VenueRepository {
 			$data = $stat->fetch();
 			
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -174,6 +176,8 @@ class VenueRepository {
 		$fields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_deleted');
 
 		$this->venueDBAccess->update($venue,$fields,$venueEditMetaDataModel);
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
 	}
 
 	/*
@@ -188,6 +192,8 @@ class VenueRepository {
 	public function deleteWithMetaData(VenueModel $venue, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		$venue->setIsDeleted(true);
 		$this->venueDBAccess->update($venue,array('is_deleted'),$venueEditMetaDataModel);
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
 	}
 
 	/*
@@ -202,6 +208,8 @@ class VenueRepository {
 	public function undeleteWithMetaData(VenueModel $venue, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		$venue->setIsDeleted(false);
 		$this->venueDBAccess->update($venue,array('is_deleted'),$venueEditMetaDataModel);
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
 	}
 
 
@@ -239,6 +247,8 @@ class VenueRepository {
 			}
 
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$duplicateVenue->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -288,6 +298,8 @@ class VenueRepository {
 			$stat->execute(array('id'=>$venue->getId()));
 
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenuePurged', array());
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 			throw $e;

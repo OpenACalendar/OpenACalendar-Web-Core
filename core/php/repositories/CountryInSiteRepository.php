@@ -38,12 +38,15 @@ class CountryInSiteRepository {
 			$stat = $this->app['db']->prepare("INSERT INTO country_in_site_information (site_id,country_id,is_in,is_previously_in,created_at) VALUES (:site_id,:country_id,'1','1',:created_at)");
 			$stat->execute(array( 'country_id'=>$country->getId(), 'site_id'=>$site->getId(), 'created_at'=>$this->app['timesource']->getFormattedForDataBase() ));
 		}
-		
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'CountryInSiteSaved', array('country_id'=>$country->getId(),'site_id'=>$site->getId()));
 	}
 
 	public function removeCountryFromSite(CountryModel $country, SiteModel $site, UserAccountModel $user) {
 		$stat = $this->app['db']->prepare("UPDATE country_in_site_information SET is_in='0' WHERE site_id =:site_id AND country_id =:country_id");
-		$stat->execute(array( 'country_id'=>$country->getId(), 'site_id'=>$site->getId() ));		
+		$stat->execute(array( 'country_id'=>$country->getId(), 'site_id'=>$site->getId() ));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'CountryInSiteSaved', array('country_id'=>$country->getId(),'site_id'=>$site->getId()));
 	}
 	
 	public function isCountryInSite(CountryModel $country, SiteModel $site) {

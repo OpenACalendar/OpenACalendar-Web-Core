@@ -51,6 +51,8 @@ class UserAccountRepository {
 		$user->setId($data['id']);
 
 
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
+
 		$this->app['extensionhookrunner']->afterUserAccountCreate($user);
 	}
 	
@@ -104,6 +106,8 @@ class UserAccountRepository {
 		$stat = $this->app['db']->prepare("UPDATE user_account_information SET  is_email_verified='t' WHERE id =:id");
 		$stat->execute(array( 'id'=>$user->getId() ));
 		$user->setIsEmailVerified(true);
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 	}
 	
 	public function resetAccount(UserAccountModel $user, UserAccountResetModel $reset ) {
@@ -127,6 +131,8 @@ class UserAccountRepository {
 			
 			$this->app['db']->commit();
 
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
+
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 
@@ -142,6 +148,8 @@ class UserAccountRepository {
 				'password_hash'=>$user->getPasswordHash(),
 			));
 
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 			
 	}
 
@@ -159,6 +167,8 @@ class UserAccountRepository {
 				'email_canonical'=>substr(UserAccountModel::makeCanonicalEmail($user->getEmail()),0,VARCHAR_COLUMN_LENGTH_USED),
 			));
 
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
+
 	}
 	
 	
@@ -173,6 +183,7 @@ class UserAccountRepository {
 				'is_system_admin'=>$user->getIsSystemAdmin()?1:0,
 			));
 
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 			
 	}
 	
@@ -188,6 +199,7 @@ class UserAccountRepository {
 				'email_upcoming_events_days_notice'=>$user->getEmailUpcomingEventsDaysNotice(),
 			));
 
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 			
 	}
 	
@@ -201,7 +213,7 @@ class UserAccountRepository {
 				'is_clock_12hour'=>$user->getIsClock12Hour()?1:0,
 			));
 
-			
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 	}
 	
 	public function systemAdminShuts(UserAccountModel $user, UserAccountModel $shutBy, $reason) {
@@ -211,6 +223,8 @@ class UserAccountRepository {
 				'id'=>$user->getId() ,
 				'reason'=>$reason,
 			));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 	}
 	
 	public function systemAdminOpens(UserAccountModel $user, UserAccountModel $shutBy) {
@@ -219,6 +233,8 @@ class UserAccountRepository {
 		$stat->execute(array( 
 				'id'=>$user->getId() ,
 			));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 	}
 	
 	public function hasMadeAnyEdits(UserAccountModel $user) {
@@ -266,6 +282,8 @@ class UserAccountRepository {
 		$stat->execute(array( 
 				'id'=>$user->getId() ,
 			));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('id'=>$user->getId()));
 	}
 	
 }

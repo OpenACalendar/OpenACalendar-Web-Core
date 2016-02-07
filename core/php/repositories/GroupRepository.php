@@ -84,6 +84,8 @@ class GroupRepository {
 			$ufgr->startUserWatchingGroupIfNotWatchedBefore($creator, $group);
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -157,6 +159,8 @@ class GroupRepository {
 			$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel->getUserAccount(), $group);
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -187,6 +191,8 @@ class GroupRepository {
 			$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel->getUserAccount(), $group);
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -218,6 +224,8 @@ class GroupRepository {
 			}
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -261,6 +269,8 @@ class GroupRepository {
 			));
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventInGroupSaved', array('group_id'=>$group->getId(),'event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -306,6 +316,8 @@ class GroupRepository {
 			}
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventInGroupSaved', array('group_id'=>$group->getId(),'event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -343,6 +355,8 @@ class GroupRepository {
 			}
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventInGroupSaved', array('group_id'=>$group->getId(),'event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -435,6 +449,8 @@ class GroupRepository {
 			}
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$duplicateGroup->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -477,6 +493,8 @@ class GroupRepository {
 			$stat->execute(array('id'=>$group->getId()));
 
             $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupPurged', array());
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 			throw $e;

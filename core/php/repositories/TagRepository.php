@@ -71,6 +71,8 @@ class TagRepository {
 				));
 						
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -143,6 +145,8 @@ class TagRepository {
 			$this->tagDBAccess->update($tag, $fields, $tagEditMetaDataModel);
 			
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -167,6 +171,8 @@ class TagRepository {
 			$this->tagDBAccess->update($tag, array('is_deleted'), $tagEditMetaDataModel);
 			
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -190,6 +196,8 @@ class TagRepository {
 			$this->tagDBAccess->update($tag, array('is_deleted'), $tagEditMetaDataModel);
 
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -220,6 +228,8 @@ class TagRepository {
 			'added_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 			'addition_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 		));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventHasTagSaved', array('tag_id'=>$tag->getId(),'event_id'=>$event->getId()));
 		
 	}
 
@@ -240,6 +250,8 @@ class TagRepository {
 				'removal_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 				'removed_by_user_account_id'=>($user?$user->getId():null),
 		));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventHasTagSaved', array('tag_id'=>$tag->getId(),'event_id'=>$event->getId()));
 	}
 
 	public function purge(TagModel $tag) {
@@ -257,6 +269,8 @@ class TagRepository {
 			$stat->execute(array('id'=>$tag->getId()));
 		
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagPurged', array());
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 			throw $e;
