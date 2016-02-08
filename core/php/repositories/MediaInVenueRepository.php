@@ -53,6 +53,8 @@ class MediaInVenueRepository {
 			'added_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 			'addition_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 		));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'MediaInVenueSaved', array('media_id'=>$media->getId(),'venue_id'=>$venue->getId()));
 		
 	}
 
@@ -69,6 +71,8 @@ class MediaInVenueRepository {
 				'removal_approved_at'=>  $this->app['timesource']->getFormattedForDataBase(),
 				'removed_by_user_account_id'=>$user->getId(),
 			));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'MediaInVenueSaved', array('media_id'=>$media->getId(),'venue_id'=>$venue->getId()));
 	}
 }
 

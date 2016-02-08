@@ -88,7 +88,7 @@ class AreaRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('area_id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -241,7 +241,7 @@ class AreaRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('area_id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -271,7 +271,7 @@ class AreaRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('area_id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -299,7 +299,7 @@ class AreaRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('area_id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -324,7 +324,7 @@ class AreaRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$area->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('area_id'=>$area->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -460,7 +460,7 @@ class AreaRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('id'=>$duplicateArea->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'AreaSaved', array('area_id'=>$duplicateArea->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}

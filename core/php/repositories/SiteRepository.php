@@ -161,7 +161,7 @@ class SiteRepository {
 
 			$this->app['extensionhookrunner']->afterSiteCreate($site, $owner);
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'SiteSaved', array('id'=>$site->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'SiteSaved', array('site_id'=>$site->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -277,7 +277,7 @@ class SiteRepository {
 
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'SiteSaved', array('id'=>$site->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'SiteSaved', array('site_id'=>$site->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}

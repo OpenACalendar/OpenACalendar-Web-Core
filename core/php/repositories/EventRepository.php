@@ -224,7 +224,7 @@ class EventRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('id'=>$event->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -367,7 +367,7 @@ class EventRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('id'=>$event->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -395,7 +395,7 @@ class EventRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('id'=>$event->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -423,7 +423,7 @@ class EventRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('id'=>$event->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -452,7 +452,7 @@ class EventRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('id'=>$event->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -480,7 +480,7 @@ class EventRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('id'=>$event->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('event_id'=>$event->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -648,7 +648,7 @@ class EventRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('id'=>$duplicateEvent->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventSaved', array('event_id'=>$duplicateEvent->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}

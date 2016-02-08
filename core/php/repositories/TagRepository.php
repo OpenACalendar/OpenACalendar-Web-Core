@@ -72,7 +72,7 @@ class TagRepository {
 						
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('tag_id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -146,7 +146,7 @@ class TagRepository {
 			
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('tag_id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -172,7 +172,7 @@ class TagRepository {
 			
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('tag_id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -197,7 +197,7 @@ class TagRepository {
 
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('id'=>$tag->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'TagSaved', array('tag_id'=>$tag->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}

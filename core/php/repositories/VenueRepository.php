@@ -104,7 +104,7 @@ class VenueRepository {
 			
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('venue_id'=>$venue->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -177,7 +177,7 @@ class VenueRepository {
 
 		$this->venueDBAccess->update($venue,$fields,$venueEditMetaDataModel);
 
-        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('venue_id'=>$venue->getId()));
 	}
 
 	/*
@@ -193,7 +193,7 @@ class VenueRepository {
 		$venue->setIsDeleted(true);
 		$this->venueDBAccess->update($venue,array('is_deleted'),$venueEditMetaDataModel);
 
-        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('venue_id'=>$venue->getId()));
 	}
 
 	/*
@@ -209,7 +209,7 @@ class VenueRepository {
 		$venue->setIsDeleted(false);
 		$this->venueDBAccess->update($venue,array('is_deleted'),$venueEditMetaDataModel);
 
-        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$venue->getId()));
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('venue_id'=>$venue->getId()));
 	}
 
 
@@ -248,7 +248,7 @@ class VenueRepository {
 
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('id'=>$duplicateVenue->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'VenueSaved', array('venue_id'=>$duplicateVenue->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}

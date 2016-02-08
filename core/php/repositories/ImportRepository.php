@@ -81,7 +81,7 @@ class ImportRepository {
 			
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('import_id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -128,7 +128,7 @@ class ImportRepository {
 			
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('import_id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -157,7 +157,7 @@ class ImportRepository {
 
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('import_id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -185,7 +185,7 @@ class ImportRepository {
 			
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('import_id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -223,7 +223,7 @@ class ImportRepository {
 
 			$this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('id'=>$importURL->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'ImportSaved', array('import_id'=>$importURL->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}

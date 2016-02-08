@@ -95,6 +95,8 @@ class MediaRepository {
 			));
 
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'MediaSaved', array('media_id'=>$media->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}
@@ -169,6 +171,8 @@ class MediaRepository {
 			));
 			
 			$this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'MediaSaved', array('media_id'=>$media->getId()));
 		} catch (Exception $e) {
 			$this->app['db']->rollBack();
 		}

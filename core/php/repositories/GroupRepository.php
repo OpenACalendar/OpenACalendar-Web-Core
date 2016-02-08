@@ -85,7 +85,7 @@ class GroupRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('group_id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -160,7 +160,7 @@ class GroupRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('group_id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -192,7 +192,7 @@ class GroupRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('group_id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -225,7 +225,7 @@ class GroupRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$group->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('group_id'=>$group->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
@@ -450,7 +450,7 @@ class GroupRepository {
 
             $this->app['db']->commit();
 
-            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('id'=>$duplicateGroup->getId()));
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'GroupSaved', array('group_id'=>$duplicateGroup->getId()));
 		} catch (Exception $e) {
             $this->app['db']->rollBack();
 		}
