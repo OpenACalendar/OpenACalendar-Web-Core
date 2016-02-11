@@ -117,6 +117,22 @@
 			({{ (config.taskRunImportURLsAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskRunImportURLsAutomaticUpdateInterval'} %}</td>
 	</tr>
+	<tr>
+		<th>taskDeleteOldTaskLogsAutomaticRunInterval</th>
+		<td>{{ config.taskDeleteOldTaskLogsAutomaticRunInterval }}
+			({{ (config.taskDeleteOldTaskLogsAutomaticRunInterval / 60) | round (0,'floor') }} mins)
+			({{ (config.taskDeleteOldTaskLogsAutomaticRunInterval / 60/60) | round (0,'floor') }} hours)
+			({{ (config.taskDeleteOldTaskLogsAutomaticRunInterval / 60/60/24) | round (0,'floor') }} days)
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskDeleteOldTaskLogsAutomaticRunInterval'} %}</td>
+	</tr>
+	<tr>
+		<th>taskDeleteOldTaskLogsDeleteOlderThan</th>
+		<td>{{ config.taskDeleteOldTaskLogsDeleteOlderThan }}
+			({{ (config.taskDeleteOldTaskLogsDeleteOlderThan / 60) | round (0,'floor') }} mins)
+			({{ (config.taskDeleteOldTaskLogsDeleteOlderThan / 60/60) | round (0,'floor') }} hours)
+			({{ (config.taskDeleteOldTaskLogsDeleteOlderThan / 60/60/24) | round (0,'floor') }} days)
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskDeleteOldTaskLogsDeleteOlderThan'} %}</td>
+	</tr>
 	</table>
 
 {% endblock %}

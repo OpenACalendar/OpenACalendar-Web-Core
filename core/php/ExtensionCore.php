@@ -149,6 +149,7 @@ class ExtensionCore extends BaseExtension {
 			new \tasks\SendUserWatchesGroupPromptEmailsTask($this->app),
 			new \tasks\SendUpcomingEventsForUsersTask($this->app),
 			new \tasks\RunImportsTask($this->app),
+            new \tasks\DeleteOldTaskLogsTask($this->app),
 		);
 	}
 
