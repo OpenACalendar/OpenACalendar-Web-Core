@@ -129,7 +129,7 @@
 		</script>		
 		<script type="text/javascript">var exportData = {user:'{{ currentUser.username }}', userAccessKey: '{{ currentUserPrivateFeedKey.accessKey }}'}</script>	
 		<script src="/info.js.php?v={{ config.assetsVersion }}{% if currentUser %}&u={{  currentUser.username|e('url') }}{%  endif %}" type="text/javascript"></script>
-		<script src="{%  if config.useLibraryCDNs %}https://code.jquery.com/jquery-1.10.2.min.js{%  else %}/js/jquery-1.10.2.min.js{%  endif %}" type="text/javascript"></script>
+		<script src="{%  if config.useLibraryCDNs %}https://code.jquery.com/jquery-1.12.0.min.js{%  else %}/js/jquery-1.12.0.min.js{%  endif %}" type="text/javascript"></script>
 		<script src="/theme/default/js/general.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		<script src="/theme/default/js/general.index.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		<script src="/theme/default/js/calendar.index.js?v={{ config.assetsVersion }}" type="text/javascript"></script>

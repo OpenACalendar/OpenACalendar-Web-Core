@@ -47,7 +47,7 @@ class UserEmailsForm  extends AbstractType {
 				'm'=>'You are or might be attending',
 				'w'=>'You are or might be attending, or you watch the event',
 			);
-		$builder->add('email_upcoming_events', 'choice', array('label'=>'Notify you of upcoming events','required'=>true,'choices'=>$choices,'expanded'=>true));
+		$builder->add('email_upcoming_events', 'choice', array('label'=>'Notify you of upcoming events','required'=>true,'choices'=>$choices,'expanded'=>true, 'choices_as_values'=>false));
 	
 		$builder->add("email_upcoming_events_days_notice",
 				"number",

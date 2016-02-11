@@ -32,7 +32,6 @@ if (!$site) {
 			"Disallow: /history\n".
 			"Disallow: /currentuser\n".
 			"Disallow: /demo\n".
-			"Disallow: /leaflet-0-7-1/\n".
 			"Disallow: /displayboard/run/\n";
 } else {
 	// DENY
@@ -50,7 +49,6 @@ if (!$site) {
 			"Disallow: /currentuser\n".
 			"Disallow: /places\n".
 			"Disallow: /demo\n".
-			"Disallow: /leaflet-0-7-1/\n".
 			"Disallow: /displayboard/run/\n".
 			"";
 }

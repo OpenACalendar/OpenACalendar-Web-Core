@@ -68,6 +68,7 @@ class VenueEditForm extends \BaseFormWithEditComment {
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
+            'choices_as_values'=>false,
 		));
 		
 		$builder->add('lat', 'hidden', array());

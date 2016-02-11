@@ -73,6 +73,7 @@ class ImportNewForm extends AbstractType{
 			'choices' => $countries,
 			'required' => true,
 			'data' => $defaultCountry,
+            'choices_as_values'=>false,
 		));
 
 

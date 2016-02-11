@@ -14,7 +14,12 @@
 		<title>{% block pageTitle %}{% endblock %} {{ currentSite.title }} {{ config.siteTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/main.css?v={{ config.assetsVersion }}">
 		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css{%  else %}/font-awesome-4.5.0/css/font-awesome.min.css{%  endif %}">
-		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.css{%  else %}/jqueryui/css/smoothness/jquery-ui-1.10.3.custom.min.css{%  endif %}">
+		{%  if config.useLibraryCDNs %}
+			<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+		{%  else %}
+			<link rel="stylesheet" type="text/css" href="/jqueryui-1.11.4/jquery-ui.theme.min.css">
+			<link rel="stylesheet" type="text/css" href="/jqueryui-1.11.4/jquery-ui.min.css">
+		{%  endif %}
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
 		{%  include 'site/ourMetaTags.html.twig' %}
@@ -47,8 +52,8 @@
 		</div>
 		{% block scriptsForState %}{% endblock %}
 		<script src="/info.js.php?v={{ config.assetsVersion }}{% if currentUser %}&u={{  currentUser.username|e('url') }}{%  endif %}" type="text/javascript"></script>
-		<script src="{%  if config.useLibraryCDNs %}https://code.jquery.com/jquery-1.10.2.min.js{%  else %}/js/jquery-1.10.2.min.js{%  endif %}" type="text/javascript"></script>
-		<script src="{%  if config.useLibraryCDNs %}https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js{% else %}/jqueryui/js/jquery-ui-1.10.3.custom.min.js{%  endif %}" type="text/javascript"></script>
+		<script src="{%  if config.useLibraryCDNs %}https://code.jquery.com/jquery-1.12.0.min.js{%  else %}/js/jquery-1.12.0.min.js{%  endif %}" type="text/javascript"></script>
+		<script src="{%  if config.useLibraryCDNs %}https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js{% else %}/jqueryui-1.11.4/jquery-ui.min.js{%  endif %}" type="text/javascript"></script>
 		<script src="/theme/default/js/general.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		<script src="/theme/default/js/general.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		{% block scripts %}{% endblock %}

@@ -74,6 +74,7 @@ class EventNewWhenDetailsForm extends AbstractType {
 				'choices' => $countriesForSelect,
 				'required' => true,
 				'data' => $defaultCountryID,
+                'choices_as_values'=>false,
 			));
 		} else if (count($countries) == 1) {
 			$this->defaultCountry = $countries[0];
@@ -93,6 +94,7 @@ class EventNewWhenDetailsForm extends AbstractType {
 				'label'=>'Time Zone',
 				'choices' => $timezones,
 				'required' => true,
+                'choices_as_values'=>false,
 			));
 		} else {
 			$timezone = array_pop($timezones);

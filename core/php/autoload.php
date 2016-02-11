@@ -26,8 +26,12 @@ function autoload($class) {
 			}
 		}
 	}
-	require_once APP_ROOT_DIR. DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.
-			'php'.DIRECTORY_SEPARATOR.str_replace("\\", DIRECTORY_SEPARATOR, $class).'.php';
+    $f = APP_ROOT_DIR. DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.
+        'php'.DIRECTORY_SEPARATOR.str_replace("\\", DIRECTORY_SEPARATOR, $class).'.php';
+    if (file_exists($f)) {
+        require_once $f;
+        return;
+    }
 }
 spl_autoload_register('autoload'); 
 

@@ -61,6 +61,7 @@ class ImportEditForm extends AbstractType{
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
+            'choices_as_values'=>false,
 		));
 		
 	}

@@ -59,6 +59,7 @@ class EventImportedEditForm extends AbstractType{
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
+            'choices_as_values'=>false,
 		));
 		
 		$timezones = array();
@@ -70,6 +71,7 @@ class EventImportedEditForm extends AbstractType{
 			'label'=>'Time Zone',
 			'choices' => $timezones,
 			'required' => true,
+            'choices_as_values'=>false,
 		));
 			
 				

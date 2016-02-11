@@ -1,7 +1,7 @@
 <?php
 
 namespace import;
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use models\ImportedEventModel;
 use models\ImportModel;
 use models\SiteModel;
@@ -76,8 +76,7 @@ class ImportRun {
             $groupRepository = new GroupRepository($this->app);
             $this->group = $groupRepository->loadById($import->getGroupId());
         }
-        $this->guzzle = new Client();
-        $this->guzzle->setUserAgent('OpenACalendar from ican.openacalendar.org, install '.$this->app['config']->webIndexDomain);
+        $this->guzzle = new Client(array('defaults' => array('headers' => array(  'User-Agent'=> 'OpenACalendar from ican.openacalendar.org, install '.$this->app['config']->webIndexDomain )) ));
     }
 
 	public function getImport() {
@@ -112,7 +111,7 @@ class ImportRun {
 		if ($this->temporaryFileStorageFromTesting) return $this->temporaryFileStorageFromTesting;
 		if ($this->temporaryFileStorage) return $this->temporaryFileStorage;
 		
-		$request = $this->guzzle->get($this->getRealUrl());
+		$request = $this->guzzle->createRequest("GET", $this->getRealUrl());
 		$response = $this->guzzle->send($request);
 		if ($response->getStatusCode() == 200) {
 			$this->temporaryFileStorage = tempnam("/tmp", "oacimport");

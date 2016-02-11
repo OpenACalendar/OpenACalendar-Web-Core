@@ -57,19 +57,19 @@ class CreateForm extends AbstractType{
 			}
 		};
 		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);		
-		
+
 		$readChoices = array(
 				'public'=>'Public, and listed on search engines and our directory',
 				'protected'=>'Public, but not listed so only people who know about it can find it',
 			);
-		$builder->add('read', 'choice', array('label'=>'Who can read?','required'=>true,'choices'=>$readChoices,'expanded'=>true));
+		$builder->add('read', 'choice', array('label'=>'Who can read?','required'=>true,'choices'=>$readChoices,'expanded'=>true, 'choices_as_values'=>false));
 		$builder->get('read')->setData( 'public' );
-		
+
 		$writeChoices = array(
 				'public'=>'Anyone can add data',
 				'protected'=>'Only people I say can add data',
 			);
-		$builder->add('write', 'choice', array('label'=>'Who can write?','required'=>true,'choices'=>$writeChoices,'expanded'=>true));
+		$builder->add('write', 'choice', array('label'=>'Who can write?','required'=>true,'choices'=>$writeChoices,'expanded'=>true, 'choices_as_values'=>false));
 		$builder->get('write')->setData( 'public' );
 	}
 	

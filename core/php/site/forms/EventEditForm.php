@@ -94,6 +94,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 				'label'=>'Country',
 				'choices' => $countries,
 				'required' => true,
+                'choices_as_values'=>false,
 			));
 		} else {
 			$countryID = array_shift(array_keys($countries));
@@ -113,6 +114,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 				'label'=>'Time Zone',
 				'choices' => $timezones,
 				'required' => true,
+                'choices_as_values'=>false,
 			));
 		} else {
 			$timezone = array_pop($timezones);
