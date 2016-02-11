@@ -21,7 +21,7 @@
 
 {% block content %}
 
-	{% if not currentSite.isFeatureGroup %}
+	{% if not currentSiteFeatures.has('org.openacalendar','Group') %}
 		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
 	{% endif %}
 		
