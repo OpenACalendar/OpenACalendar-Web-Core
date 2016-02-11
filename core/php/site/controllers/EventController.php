@@ -446,9 +446,6 @@ class EventController {
 
 			if ($form->isValid()) {
 
-				foreach($ourForm->getCustomFields() as $customField) {
-					$this->parameters['event']->setCustomField(  $customField, $form->get('custom_'.$customField->getKey())->getData() );
-				}
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
