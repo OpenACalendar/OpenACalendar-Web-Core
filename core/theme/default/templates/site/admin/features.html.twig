@@ -25,10 +25,10 @@
 			<input type="hidden" name="feature" value="{{ feature.featureID | e('html_attr') }}">
 			{% if feature.on %}
 				<input type="hidden" name="action" value="off">
-				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn Off"></div>
+				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn Off {{ feature.title|e('html_attr') }}"></div>
 			{%  else %}
 				<input type="hidden" name="action" value="on">
-				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn On"></div>
+				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn On {{ feature.title|e('html_attr') }}"></div>
 			{%  endif %}
 			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
