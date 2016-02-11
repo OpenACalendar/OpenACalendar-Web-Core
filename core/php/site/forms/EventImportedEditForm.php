@@ -43,8 +43,10 @@ class EventImportedEditForm extends AbstractType{
         $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
 	}
 
-	
-	public function buildForm(FormBuilderInterface $builder, array $options) {
+
+    protected $customFields;
+
+    public function buildForm(FormBuilderInterface $builder, array $options) {
 
 		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
@@ -105,7 +107,24 @@ class EventImportedEditForm extends AbstractType{
 
 
 		}
-		
+
+
+        $this->customFields = array();
+        foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
+            if ($customField->getIsActive()) {
+                $extension = $this->app['extensions']->getExtensionById($customField->getExtensionId());
+                if ($extension) {
+                    $fieldType = $extension->getEventCustomFieldByType($customField->getType());
+                    if ($fieldType) {
+                        $this->customFields[] = $customField;
+                        $options = $fieldType->getSymfonyFormOptions($customField);
+                        $options['mapped'] = false;
+                        $options['data'] = $builder->getData()->getCustomField($customField);
+                        $builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
+                    }
+                }
+            }
+        }
 		
 	}
 	
@@ -119,5 +138,14 @@ class EventImportedEditForm extends AbstractType{
 		return array(
 		);
 	}
-	
+
+    /**
+     * @return mixed
+     */
+    public function getCustomFields()
+    {
+        return $this->customFields;
+    }
+
 }
+
