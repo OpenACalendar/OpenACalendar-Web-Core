@@ -4,6 +4,7 @@ namespace site\controllers\newevent;
 
 
 use models\EventModel;
+use repositories\SiteFeatureRepository;
 use site\forms\EventNewWhatDetailsForm;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -127,17 +128,22 @@ class NewEventWhatDetails extends BaseNewEvent
 			}
 		}
 
-		if ($this->site->getIsFeaturePhysicalEvents() && $this->site->getIsFeatureVirtualEvents()) {
+        $siteFeatureRepo = new SiteFeatureRepository($this->application);
+        $siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
+        $siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
+
+
+		if ($siteFeaturePhysicalEvents && $siteFeatureVirtualEvents) {
 
 			$eventModel->setIsPhysical($this->draftEvent->getDetailsValue('event.is_physical'));
 			$eventModel->setIsVirtual($this->draftEvent->getDetailsValue('event.is_virtual'));
 
-		} else if ($this->site->getIsFeaturePhysicalEvents()) {
+		} else if ($siteFeaturePhysicalEvents) {
 
 			$eventModel->setIsPhysical(true);
 			$eventModel->setIsVirtual(false);
 
-		} else if ($this->site->getIsFeatureVirtualEvents()) {
+		} else if ($siteFeatureVirtualEvents) {
 
 			$eventModel->setIsPhysical(false);
 			$eventModel->setIsVirtual(true);

@@ -167,37 +167,6 @@ class SiteRepository {
 		}
 	}
 
-	/** @deprecated */
-	public function loadLegacyFeaturesOnSite(SiteModel $siteModel) {
-
-		$stat = $this->app['db']->prepare("SELECT extension_id,feature_id,is_on FROM site_feature_information WHERE site_id=:site_id AND is_on = '1' ");
-		$stat->execute(array(
-			'site_id'=>$siteModel->getId(),
-		));
-		while($data = $stat->fetch()) {
-			if ($data['extension_id'] == 'org.openacalendar.curatedlists' && $data['feature_id'] == 'CuratedList') {
-				$siteModel->setIsFeatureCuratedList(true);
-			}
-			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Importer') {
-				$siteModel->setIsFeatureImporter(true);
-			}
-			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Map') {
-				$siteModel->setIsFeatureMap(true);
-			}
-			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'VirtualEvents') {
-				$siteModel->setIsFeatureVirtualEvents(true);
-			}
-			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'PhysicalEvents') {
-				$siteModel->setIsFeaturePhysicalEvents(true);
-			}
-			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Group') {
-				$siteModel->setIsFeatureGroup(true);
-			}
-			if ($data['extension_id'] == 'org.openacalendar' && $data['feature_id'] == 'Tag') {
-				$siteModel->setIsFeatureTag(true);
-			}
-		}
-	}
 
 	public function loadByDomain($domain) {
 		$compareTo = $this->app['config']->webSiteDomain;

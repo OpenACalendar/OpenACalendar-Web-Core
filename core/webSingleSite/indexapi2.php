@@ -100,7 +100,7 @@ $app->before(function (Request $request) use ($app) {
 	$app['currentUserPermissions'] = $userPermissionsRepo->getPermissionsForUserInSite($app['apiUser'], $app['currentSite'], $removeEditPermissions, true);
 
 	// finally user actions
-	$app['currentUserActions'] = new UserActionsSiteList($app['currentSite'], $app['currentUserPermissions']);
+	$app['currentUserActions'] = new UserActionsSiteList($app, $app['currentSite'], $app['currentUserPermissions']);
 
 });
 

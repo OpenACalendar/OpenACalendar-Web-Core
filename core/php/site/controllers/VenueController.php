@@ -95,22 +95,22 @@ class VenueController {
 		$app['currentUserActions']->set("org.openacalendar","venueHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","venueEditDetails",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
-			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')
 			&& !$this->parameters['venue']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","venueDelete",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
-			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')
 			&& !$this->parameters['venue']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","venueEditMedia",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
-			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')
 			&& !$this->parameters['venue']->getIsDeleted()
 			&& $app['config']->isFileStore());
 
 		$app['currentUserActions']->set("org.openacalendar","venueEditPushToChildAreas",
 			$this->parameters['childAreas'] &&
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","VENUES_CHANGE")
-			&& $app['currentSite']->getIsFeaturePhysicalEvents()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')
 			&& !$this->parameters['venue']->getIsDeleted());
 
 
@@ -285,7 +285,7 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSite']->getIsFeaturePhysicalEvents()) {
+		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')) {
 			
 			
 			$form = $app['form.factory']->create(new UploadNewMediaForm( $this->parameters['venue']->getTitle()));

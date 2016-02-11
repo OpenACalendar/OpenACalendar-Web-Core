@@ -3,6 +3,7 @@
 namespace site\forms;
 
 use models\NewEventDraftModel;
+use repositories\SiteFeatureRepository;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,7 +27,10 @@ class EventNewWhatDetailsForm extends AbstractType {
 	/** @var SiteModel **/
 	protected $site;
 
-	protected $formWidgetTimeMinutesMultiples;
+    protected $siteFeaturePhysicalEvents = false;
+    protected $siteFeatureVirtualEvents = false;
+
+    protected $formWidgetTimeMinutesMultiples;
 
 	/** @var  ExtensionManager */
 	protected $extensionManager;
@@ -39,6 +43,9 @@ class EventNewWhatDetailsForm extends AbstractType {
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
 		$this->extensionManager = $application['extensions'];
 		$this->eventDraft = $newEventDraftModel;
+        $siteFeatureRepo = new SiteFeatureRepository($application);
+        $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
+        $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
 		// TODO $this->fieldIsVirtualDefault = from config!
 		// TODO $this->fieldIsPhysicalDefault  = from config!
 	}
@@ -95,10 +102,10 @@ class EventNewWhatDetailsForm extends AbstractType {
 			}
 		}
 
-		if ($this->site->getIsFeatureVirtualEvents()) {
+		if ($this->siteFeatureVirtualEvents) {
 
 			//  if both are an option, user must check which one.
-			if ($this->site->getIsFeaturePhysicalEvents()) {
+			if ($this->siteFeaturePhysicalEvents) {
 
 				$builder->add("is_virtual",
 					"checkbox",
@@ -117,10 +124,10 @@ class EventNewWhatDetailsForm extends AbstractType {
 
 		}
 
-		if ($this->site->getIsFeaturePhysicalEvents()) {
+		if ($this->siteFeaturePhysicalEvents) {
 
 			//  if both are an option, user must check which one.
-			if ($this->site->getIsFeatureVirtualEvents()) {
+			if ($this->siteFeatureVirtualEvents) {
 
 				$builder->add("is_physical",
 					"checkbox",

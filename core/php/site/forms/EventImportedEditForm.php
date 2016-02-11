@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use repositories\SiteFeatureRepository;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,11 +30,17 @@ class EventImportedEditForm extends AbstractType{
 	protected $timeZoneName;
 	/** @var SiteModel **/
 	protected $site;
-	
-	function __construct(Application $application, SiteModel $site, $timeZoneName) {
+
+    protected $siteFeaturePhysicalEvents = false;
+    protected $siteFeatureVirtualEvents = false;
+
+    function __construct(Application $application, SiteModel $site, $timeZoneName) {
         $this->app = $application;
 		$this->site = $site;
 		$this->timeZoneName = $timeZoneName;
+        $siteFeatureRepo = new SiteFeatureRepository($application);
+        $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
+        $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
 	}
 
 	
@@ -64,10 +71,10 @@ class EventImportedEditForm extends AbstractType{
 		));
 			
 				
-		if ($this->site->getIsFeatureVirtualEvents()) {
+		if ($this->siteFeatureVirtualEvents) {
 			
 			// if both are an option, user must check which one.
-			if ($this->site->getIsFeaturePhysicalEvents()) {
+			if ($this->siteFeaturePhysicalEvents) {
 			
 				$builder->add("is_virtual",
 					"checkbox",
@@ -81,10 +88,10 @@ class EventImportedEditForm extends AbstractType{
 		}
 
 		
-		if ($this->site->getIsFeaturePhysicalEvents()) {
+		if ($this->siteFeaturePhysicalEvents) {
 			
 			// if both are an option, user must check which one.
-			if ($this->site->getIsFeatureVirtualEvents()) {
+			if ($this->siteFeatureVirtualEvents) {
 				
 				$builder->add("is_physical",
 					"checkbox",

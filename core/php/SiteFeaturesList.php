@@ -36,32 +36,4 @@ class SiteFeaturesList {
 		return $out;
 	}
 
-	/**
-	 *
-	 * @deprecated */
-	public function  setFeaturesOnSite(SiteModel $siteModel)
-	{
-		if (isset($this->featuresAsTree['org.openacalendar']) && isset($this->featuresAsTree['org.openacalendar']['Map'])) {
-			$siteModel->setIsFeatureMap($this->featuresAsTree['org.openacalendar']['Map']->isOn());
-		}
-		if (isset($this->featuresAsTree['org.openacalendar']) && isset($this->featuresAsTree['org.openacalendar']['Group'])) {
-			$siteModel->setIsFeatureGroup($this->featuresAsTree['org.openacalendar']['Group']->isOn());
-		}
-		if (isset($this->featuresAsTree['org.openacalendar']) && isset($this->featuresAsTree['org.openacalendar']['Tag'])) {
-			$siteModel->setIsFeatureTag($this->featuresAsTree['org.openacalendar']['Tag']->isOn());
-		}
-		if (isset($this->featuresAsTree['org.openacalendar']) && isset($this->featuresAsTree['org.openacalendar']['Importer'])) {
-			$siteModel->setIsFeatureImporter($this->featuresAsTree['org.openacalendar']['Importer']->isOn());
-		}
-		if (isset($this->featuresAsTree['org.openacalendar']) && isset($this->featuresAsTree['org.openacalendar']['PhysicalEvents'])) {
-			$siteModel->setIsFeaturePhysicalEvents($this->featuresAsTree['org.openacalendar']['PhysicalEvents']->isOn());
-		}
-		if (isset($this->featuresAsTree['org.openacalendar']) && isset($this->featuresAsTree['org.openacalendar']['VirtualEvents'])) {
-			$siteModel->setIsFeatureVirtualEvents($this->featuresAsTree['org.openacalendar']['VirtualEvents']->isOn());
-		}
-		if (isset($this->featuresAsTree['org.openacalendar.curatedlists']) && isset($this->featuresAsTree['org.openacalendar.curatedlists']['CuratedList'])) {
-			$siteModel->setIsFeatureCuratedList($this->featuresAsTree['org.openacalendar.curatedlists']['CuratedList']->isOn());
-		}
-	}
-
 }

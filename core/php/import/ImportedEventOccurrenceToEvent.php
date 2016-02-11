@@ -16,6 +16,7 @@ use repositories\builders\EventRepositoryBuilder;
 use repositories\EventRecurSetRepository;
 use repositories\EventRepository;
 use repositories\ImportedEventIsEventRepository;
+use repositories\SiteFeatureRepository;
 use Silex\Application;
 
 /**
@@ -53,6 +54,9 @@ class ImportedEventOccurrenceToEvent {
 
     protected $eventsSeenIDs;
 
+    protected $siteFeaturePhysicalEvents = false;
+    protected $siteFeatureVirtualEvents = false;
+
 	public function __construct(Application $app, ImportRun $importRun) {
         $this->app = $app;
 		$this->site = $importRun->getSite();
@@ -61,6 +65,9 @@ class ImportedEventOccurrenceToEvent {
 		$this->area = $importRun->getArea();
 		$this->import = $importRun->getImport();
 		$this->eventsSeenIDs = array();
+        $siteFeatureRepo = new SiteFeatureRepository($app);
+        $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
+        $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
 	}
 
 	public function setEventRecurSet(EventRecurSetModel $eventRecurSet = null, $makeEventRecurSetIfNone = false) {
@@ -177,10 +184,10 @@ class ImportedEventOccurrenceToEvent {
 		$event = new EventModel();
 		$event->setFromImportedEventModel($importedEvent, $startAt, $endAt);
 
-		if ($this->site->getIsFeaturePhysicalEvents() && !$this->site->getIsFeatureVirtualEvents()) {
+		if ($this->siteFeaturePhysicalEvents && !$this->siteFeatureVirtualEvents) {
 			$event->setIsPhysical(true);
 			$event->setIsVirtual(false);
-		} else if (!$this->site->getIsFeaturePhysicalEvents() && $this->site->getIsFeatureVirtualEvents()) {
+		} else if (!$this->siteFeaturePhysicalEvents && $this->siteFeatureVirtualEvents) {
 			$event->setIsPhysical(false);
 			$event->setIsVirtual(true);
 		}

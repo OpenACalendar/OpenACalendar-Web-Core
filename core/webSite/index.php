@@ -43,7 +43,7 @@ $app->before(function (Request $request) use ($app) {
 		$app['twig']->addGlobal('currentUserCanAdminSite', false);
 		$app['twig']->addGlobal('currentUserCanEditSite', false);
 		$app['twig']->addGlobal('currentSiteFeatures', new SiteFeaturesList(array()));
-		$app['twig']->addGlobal('currentUserActions', new UserActionsSiteList($app['currentSite'], new UserPermissionsList($app['extensions'], array())));
+		$app['twig']->addGlobal('currentUserActions', new UserActionsSiteList($app, $app['currentSite'], new UserPermissionsList($app['extensions'], array())));
 		return new Response($app['twig']->render('site/closed_by_sys_admin.html.twig', array()));
 	}
 
@@ -51,7 +51,6 @@ $app->before(function (Request $request) use ($app) {
 	$siteFeaturesRepo = new repositories\SiteFeatureRepository($app);
 	$app['currentSiteFeatures'] = new SiteFeaturesList($siteFeaturesRepo->getForSiteAsTree($app['currentSite']));
 	$app['twig']->addGlobal('currentSiteFeatures', $app['currentSiteFeatures']);
-	$app['currentSiteFeatures']->setFeaturesOnSite($app['currentSite']);
 
 	# ////////////// Permissions and Watch
 	$userPermissionsRepo = new \repositories\UserPermissionsRepository($app);
@@ -64,7 +63,7 @@ $app->before(function (Request $request) use ($app) {
 
 
 	# ////////////// User and their watch and perms
-	$app['currentUserActions'] = new UserActionsSiteList($app['currentSite'], $app['currentUserPermissions']);
+	$app['currentUserActions'] = new UserActionsSiteList($app, $app['currentSite'], $app['currentUserPermissions']);
 	$app['currentUserWatchesSite'] = false;
 	if ($app['currentUser']) {
 		$uwsr = new UserWatchesSiteRepository($app);
@@ -78,7 +77,7 @@ $app->before(function (Request $request) use ($app) {
 	if (!$app['currentUser']) {
 		// We don't pass $removeEditorPermissions here because that is about specific users being banned and this is potential users
 		$app['anyVerifiedUserPermissions'] = $userPermissionsRepo->getPermissionsForAnyVerifiedUserInSite($app['currentSite'], false, true);
-		$app['anyVerifiedUserActions'] = new UserActionsSiteList($app['currentSite'], $app['anyVerifiedUserPermissions'] );
+		$app['anyVerifiedUserActions'] = new UserActionsSiteList($app, $app['currentSite'], $app['anyVerifiedUserPermissions'] );
 		$app['twig']->addGlobal('anyVerifiedUserActions', $app['anyVerifiedUserActions'] );
 	}
 
@@ -276,33 +275,33 @@ $appVerifiedUserRequired = function(Request $request) use ($app) {
 };
 
 $featureCuratedListRequired = function(Request $request)  use ($app) {
-	if (!$app['currentSite']->getIsFeatureCuratedList()) {
+	if (!$app['currentSiteFeatures']->has('org.openacalendar.curatedlists','CuratedList')) {
 		return new RedirectResponse('/curatedlist');
 	}
 };
 
 $featureGroupRequired = function(Request $request)  use ($app) {
-	if (!$app['currentSite']->getIsFeatureGroup()) {
+	if (!$app['currentSiteFeatures']->has('org.openacalendar','Group')) {
 		return new RedirectResponse('/group');
 	}
 };
 
 
 $featureTagRequired = function(Request $request)  use ($app) {
-	if (!$app['currentSite']->getIsFeatureTag()) {
+	if (!$app['currentSiteFeatures']->has('org.openacalendar','Tag')) {
 		return new RedirectResponse('/tag');
 	}
 };
 
 
 $featureImporterRequired = function(Request $request)  use ($app) {
-	if (!$app['currentSite']->getIsFeatureImporter()) {
+	if (!$app['currentSiteFeatures']->has('org.openacalendar','Importer')) {
 		return new RedirectResponse('/importurl');
 	}
 };
 
 $featurePhysicalEventsRequired = function(Request $request)  use ($app) {
-	if (!$app['currentSite']->getIsFeaturePhysicalEvents()) {
+	if (!$app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')) {
 		return new RedirectResponse('/venue');
 	}
 };

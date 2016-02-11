@@ -1,4 +1,5 @@
 <?php
+use Silex\Application;
 
 
 /**
@@ -15,16 +16,17 @@ class UserActionsSiteList {
 
 	protected $actions;
 
-	function __construct(\models\SiteModel $siteModel, UserPermissionsList $permissionsList)
+	function __construct(Application $app, \models\SiteModel $siteModel, UserPermissionsList $permissionsList)
 	{
+        $siteFeatureRepo = new \repositories\SiteFeatureRepository($app);
 		$this->actions = array('org.openacalendar'=>array(
 			'eventNew'=>$permissionsList->hasPermission("org.openacalendar","EVENTS_CHANGE"),
-			'groupNew'=>$permissionsList->hasPermission("org.openacalendar","GROUPS_CHANGE") && $siteModel->getIsFeatureGroup(),
-			'tagNew'=>$permissionsList->hasPermission("org.openacalendar","TAGS_CHANGE") && $siteModel->getIsFeatureTag(),
-			'venueNew'=>$permissionsList->hasPermission("org.openacalendar","VENUES_CHANGE") && $siteModel->getIsFeaturePhysicalEvents(),
-			'areaNew'=>$permissionsList->hasPermission("org.openacalendar","AREAS_CHANGE") && $siteModel->getIsFeaturePhysicalEvents(),
-			'curatedListNew'=>$permissionsList->hasPermission("org.openacalendar.curatedlists","CURATED_LISTS_CHANGE") && $siteModel->getIsFeatureCuratedList(),
-			'curatedListGeneralEdit'=>$permissionsList->hasPermission("org.openacalendar.curatedlists","CURATED_LISTS_CHANGE") && $siteModel->getIsFeatureCuratedList(),
+			'groupNew'=>$permissionsList->hasPermission("org.openacalendar","GROUPS_CHANGE") && $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($siteModel, 'org.openacalendar', 'Group'),
+			'tagNew'=>$permissionsList->hasPermission("org.openacalendar","TAGS_CHANGE") && $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($siteModel, 'org.openacalendar', 'Tag'),
+			'venueNew'=>$permissionsList->hasPermission("org.openacalendar","VENUES_CHANGE") && $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($siteModel, 'org.openacalendar', 'PhysicalEvents'),
+			'areaNew'=>$permissionsList->hasPermission("org.openacalendar","AREAS_CHANGE") && $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($siteModel, 'org.openacalendar', 'PhysicalEvents'),
+			'curatedListNew'=>$permissionsList->hasPermission("org.openacalendar.curatedlists","CURATED_LISTS_CHANGE") && $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($siteModel, 'org.openacalendar.curatedlists', 'CuratedList'),
+			'curatedListGeneralEdit'=>$permissionsList->hasPermission("org.openacalendar.curatedlists","CURATED_LISTS_CHANGE") && $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($siteModel, 'org.openacalendar.curatedlists', 'CuratedList'),
 			'admin'=>$permissionsList->hasPermission("org.openacalendar","CALENDAR_ADMINISTRATE"),
 		));
 	}

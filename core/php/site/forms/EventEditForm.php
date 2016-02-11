@@ -3,6 +3,7 @@
 namespace site\forms;
 
 use ExtensionManager;
+use repositories\SiteFeatureRepository;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,6 +33,9 @@ class EventEditForm extends \BaseFormWithEditComment {
 	/** @var SiteModel **/
 	protected $site;
 
+    protected $siteFeaturePhysicalEvents = false;
+    protected $siteFeatureVirtualEvents = false;
+
 	protected $formWidgetTimeMinutesMultiples;
 
 	/** @var  ExtensionManager */
@@ -44,6 +48,9 @@ class EventEditForm extends \BaseFormWithEditComment {
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
 		$this->extensionManager = $application['extensions'];
         $this->app = $application;
+        $siteFeatureRepo = new SiteFeatureRepository($application);
+        $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
+        $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
 	}
 
 	protected $customFields;
@@ -115,10 +122,10 @@ class EventEditForm extends \BaseFormWithEditComment {
 		}
 
 
-		if ($this->site->getIsFeatureVirtualEvents()) {
+		if ($this->siteFeatureVirtualEvents) {
 
 			//  if both are an option, user must check which one.
-			if ($this->site->getIsFeaturePhysicalEvents()) {
+			if ($this->siteFeaturePhysicalEvents) {
 
 				$builder->add("is_virtual",
 					"checkbox",
@@ -132,10 +139,10 @@ class EventEditForm extends \BaseFormWithEditComment {
 		}
 
 
-		if ($this->site->getIsFeaturePhysicalEvents()) {
+		if ($this->siteFeaturePhysicalEvents) {
 
 			// if both are an option, user must check which one.
-			if ($this->site->getIsFeatureVirtualEvents()) {
+			if ($this->siteFeatureVirtualEvents) {
 
 				$builder->add("is_physical",
 					"checkbox",

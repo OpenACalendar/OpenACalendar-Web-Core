@@ -127,7 +127,9 @@ class UserWatchesGroupRepository {
 	 */
 	public function getUserNotifyContentForSiteAndUser(\models\SiteModel $siteModel, UserAccountModel $userAccountModel) {
 
-		if (!$siteModel->getIsFeatureGroup()) {
+
+        $siteFeatureRepo = new SiteFeatureRepository($this->app);
+		if (!$siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($siteModel,  'org.openacalendar',  'Group')) {
 			return array();
 		}
 

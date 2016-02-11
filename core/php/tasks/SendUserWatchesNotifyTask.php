@@ -54,7 +54,6 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 		$countCheck = 0;
 		$countSend = 0;
 		foreach($siteRepoBuilder->fetchAll() as $site) {
-			$siteRepo->loadLegacyFeaturesOnSite($site);
 			$this->logVerbose("Site ".$site->getSlug());
 			$userRepoBuilder = new UserAccountRepositoryBuilder($this->app);
 			$userRepoBuilder->setIsOpenBySysAdminsOnly(true);

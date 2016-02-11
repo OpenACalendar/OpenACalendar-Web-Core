@@ -37,12 +37,12 @@ class EventNewController {
 
 	function getSteps(Request $request,Application $app, NewEventDraftModel $newEventDraftModel) {
 		$out = array();
-		if ($app['currentSite']->getIsFeatureGroup()) {
+		if ($app['currentSiteFeatures']->has('org.openacalendar','Group')) {
 			$out[] = new NewEventWhoGroup($newEventDraftModel, $app, $request);
 		}
 		$out[] = new NewEventWhatDetails($newEventDraftModel, $app, $request);
 		$out[] = new NewEventWhenDetails($newEventDraftModel, $app, $request);
-		if ($app['currentSite']->getIsFeaturePhysicalEvents() && (!$newEventDraftModel->hasDetailsValue('event.is_virtual') || $newEventDraftModel->getDetailsValue('event.is_physical') )) {
+		if ($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents') && (!$newEventDraftModel->hasDetailsValue('event.is_virtual') || $newEventDraftModel->getDetailsValue('event.is_physical') )) {
 			$out[] = new NewEventWhereDetails($newEventDraftModel, $app, $request);
 		}
 		$out[] = new NewEventPreview($newEventDraftModel, $app, $request);

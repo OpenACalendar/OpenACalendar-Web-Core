@@ -76,12 +76,12 @@ class GroupController {
 		$app['currentUserActions']->set("org.openacalendar","groupHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","groupEditDetails",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")
-			&& $app['currentSite']->getIsFeatureGroup()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','Group')
 			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupEditMedia",
             $app['config']->isFileStore()
 			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","GROUPS_CHANGE")
-			&& $app['currentSite']->getIsFeatureGroup()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','Group')
 			&& !$this->parameters['group']->getIsDeleted());
 		// There is curatedListGeneralEdit but we want to check details on this group to
 		$app['currentUserActions']->set("org.openacalendar","groupEditCuratedLists",
@@ -89,7 +89,7 @@ class GroupController {
 			&& !$this->parameters['group']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","groupNewEvent",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
-			&& $app['currentSite']->getIsFeatureGroup()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','Group')
 			&& !$this->parameters['group']->getIsDeleted());
 
 
@@ -128,7 +128,7 @@ class GroupController {
 		
 		$groupRepo = new GroupRepository($app);
 		if (!$this->parameters['group']->getIsDeleted() && $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
-			&& $app['currentSite']->getIsFeatureGroup() ) {
+			&& $app['currentSiteFeatures']->has('org.openacalendar','Group') ) {
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
 		} else {
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = 0;
@@ -191,7 +191,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSite']->getIsFeatureGroup()) {
+		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSiteFeatures']->has('org.openacalendar','Group')) {
 			
 			
 			$form = $app['form.factory']->create(new UploadNewMediaForm($this->parameters['group']->getTitle()));

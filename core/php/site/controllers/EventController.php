@@ -135,17 +135,17 @@ class EventController {
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& $app['currentSite']->getIsFeaturePhysicalEvents());
+			&& $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'));
 		$app['currentUserActions']->set("org.openacalendar","eventEditTags",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& $app['currentSite']->getIsFeatureTag());
+			&& $app['currentSiteFeatures']->has('org.openacalendar','Tag'));
 		$app['currentUserActions']->set("org.openacalendar","eventEditGroups",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
 			&& !$this->parameters['event']->getIsCancelled()
-			&& $app['currentSite']->getIsFeatureGroup());
+			&& $app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		$app['currentUserActions']->set("org.openacalendar","eventEditMedia",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& !$this->parameters['event']->getIsDeleted()
@@ -180,7 +180,7 @@ class EventController {
 
 	protected function addTagsToParameters(Application $app) {
 		if (!isset($this->parameters['tags'])) {
-			if ($app['currentSite']->getIsFeatureTag()) {
+			if ($app['currentSiteFeatures']->has('org.openacalendar','Tag')) {
 				$trb = new TagRepositoryBuilder($app);
 				$trb->setSite($app['currentSite']);
 				$trb->setIncludeDeleted(false);
@@ -283,7 +283,7 @@ class EventController {
 			$app['currentUserActions']->set("org.openacalendar","eventEditPushToChildAreas",
 				$this->parameters['childAreas'] &&
 				$app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")
-				&& $app['currentSite']->getIsFeaturePhysicalEvents()
+				&& $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')
 				&& $this->parameters['event']->getIsPhysical()
 				&& !$this->parameters['event']->getIsCancelled()
 				&& !$this->parameters['event']->getIsDeleted());
@@ -292,7 +292,7 @@ class EventController {
 		$this->parameters['isGroupRunningOutOfFutureEvents'] = 0;
 		if ($this->parameters['group'] &&
 			!$this->parameters['group']->getIsDeleted()
-			&& $app['currentSite']->getIsFeatureGroup()
+			&& $app['currentSiteFeatures']->has('org.openacalendar','Group')
 			&& $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
 			$groupRepo = new GroupRepository($app);
 			$this->parameters['isGroupRunningOutOfFutureEvents'] = $groupRepo->isGroupRunningOutOfFutureEvents($this->parameters['group'], $app['currentSite']);
@@ -894,7 +894,7 @@ class EventController {
 
 		$areaRepository = new AreaRepository($app);
 
-		$this->parameters['shouldWeAskForArea'] = $app['currentSite']->getIsFeaturePhysicalEvents() &&
+		$this->parameters['shouldWeAskForArea'] = $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents') &&
 			$areaRepository->doesCountryHaveAnyNotDeletedAreas($app['currentSite'], $this->parameters['country']);
 
 		$this->parameters['newVenueFieldsSubmitted'] = (boolean)('POST' == $request->getMethod() && $request->request->get('newVenueFieldsSubmitted'));

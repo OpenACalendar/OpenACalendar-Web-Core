@@ -65,7 +65,6 @@ class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 
 			$user = $userRepo->loadByID($userWatchesSite->getUserAccountId());
 			$site = $siteRepo->loadById($userWatchesSite->getSiteId());
-			$siteRepo->loadLegacyFeaturesOnSite($site);
 			// to avoid flooding user we only send one group email per run
 			$anyGroupNotificationsSent = false;
 

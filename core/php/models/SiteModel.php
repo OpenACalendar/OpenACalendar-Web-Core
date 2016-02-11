@@ -40,27 +40,6 @@ class SiteModel {
 	protected $is_listed_in_index = true;
 	protected $closed_by_sys_admin_reason;
 
-	/** @deprecated */
-	protected $is_feature_map = false;
-
-	/** @deprecated */
-	protected $is_feature_importer = false;
-
-	/** @deprecated */
-	protected $is_feature_curated_list =  false;
-
-	/** @deprecated */
-	protected $is_feature_virtual_events =  false;
-
-	/** @deprecated */
-	protected $is_feature_physical_events =  true;
-
-	/** @deprecated */
-	protected $is_feature_group =  true;
-
-	/** @deprecated */
-	protected $is_feature_tag =  false;
-
 	protected $prompt_emails_days_in_advance = 30;
 
 	protected $cached_is_multiple_timezones = false;
@@ -91,14 +70,7 @@ class SiteModel {
 		$this->cached_timezones = $data['cached_timezones'];
 		$this->site_quota_id = $data['site_quota_id'];
 		$this->logo_media_id = isset($data['logo_media_id']) ? $data['logo_media_id'] : null;
-		$this->is_feature_map = (boolean)$data['is_feature_map'];
-		$this->is_feature_importer = (boolean)$data['is_feature_importer'];
-		$this->is_feature_curated_list = (boolean)$data['is_feature_curated_list'];
 		$this->prompt_emails_days_in_advance = max(1,intval($data['prompt_emails_days_in_advance']));
-		$this->is_feature_virtual_events = (boolean)$data['is_feature_virtual_events'];
-		$this->is_feature_physical_events = (boolean)$data['is_feature_physical_events'];
-		$this->is_feature_group = (boolean)$data['is_feature_group'];
-		$this->is_feature_tag = (boolean)$data['is_feature_tag'];
 		$utc = new \DateTimeZone("UTC");
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->cached_event_custom_field_definitions = isset($data['cached_event_custom_field_definitions']) ? $data['cached_event_custom_field_definitions'] : json_encode(array());
@@ -227,38 +199,6 @@ class SiteModel {
 		return $this;
 	}
 
-	/** @deprecated */
-	public function getIsFeatureMap() {
-		return $this->is_feature_map;
-	}
-
-	/** @deprecated */
-	public function setIsFeatureMap($is_feature_map) {
-		$this->is_feature_map = $is_feature_map;
-		return $this;
-	}
-
-	/** @deprecated */
-	public function getIsFeatureImporter() {
-		return $this->is_feature_importer;
-	}
-
-	/** @deprecated */
-	public function setIsFeatureImporter($is_feature_importer) {
-		$this->is_feature_importer = $is_feature_importer;
-		return $this;
-	}
-
-	/** @deprecated */
-	public function getIsFeatureCuratedList() {
-		return $this->is_feature_curated_list;
-	}
-
-	/** @deprecated */
-	public function setIsFeatureCuratedList($is_feature_curated_list) {
-		$this->is_feature_curated_list = $is_feature_curated_list;
-		return $this;
-	}
 
 	public function getPromptEmailsDaysInAdvance() {
 		return $this->prompt_emails_days_in_advance;
@@ -267,50 +207,6 @@ class SiteModel {
 	public function setPromptEmailsDaysInAdvance($prompt_emails_days_in_advance) {
 		$val = intval($prompt_emails_days_in_advance);
 		$this->prompt_emails_days_in_advance = $val ? max(  1, min(60, $val) ): 30;
-		return $this;
-	}
-
-	/** @deprecated */
-	public function getIsFeatureVirtualEvents() {
-		return $this->is_feature_virtual_events;
-	}
-
-	/** @deprecated */
-	public function setIsFeatureVirtualEvents($is_feature_virtual_events) {
-		$this->is_feature_virtual_events = $is_feature_virtual_events;
-		return $this;
-	}
-
-	/** @deprecated */
-	public function getIsFeaturePhysicalEvents() {
-		return $this->is_feature_physical_events;
-	}
-
-	/** @deprecated */
-	public function setIsFeaturePhysicalEvents($is_feature_physical_events) {
-		$this->is_feature_physical_events = $is_feature_physical_events;
-		return $this;
-	}
-
-	/** @deprecated */
-	public function getIsFeatureGroup() {
-		return $this->is_feature_group;
-	}
-
-	/** @deprecated */
-	public function setIsFeatureGroup($is_feature_group) {
-		$this->is_feature_group = $is_feature_group;
-		return $this;
-	}
-
-	/** @deprecated */
-	public function getIsFeatureTag() {
-		return $this->is_feature_tag;
-	}
-
-	/** @deprecated */
-	public function setIsFeatureTag($is_feature_tag) {
-		$this->is_feature_tag = $is_feature_tag;
 		return $this;
 	}
 

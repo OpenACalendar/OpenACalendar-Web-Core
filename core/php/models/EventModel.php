@@ -77,16 +77,6 @@ class EventModel {
 
 	protected $custom_fields = array();
 
-	public function setDefaultOptionsFromSite(SiteModel $site) {
-		if ($site->getIsFeaturePhysicalEvents() && !$site->getIsFeatureVirtualEvents()) {
-			$this->is_physical = true;
-			$this->is_virtual = false;
-		} else if (!$site->getIsFeaturePhysicalEvents() && $site->getIsFeatureVirtualEvents()) {
-			$this->is_physical = false;
-			$this->is_virtual = true;
-		}				
-	}	
-
 	public function setFromDataBaseRow($data) {
 		$this->id = $data['id'];
 		$this->site_id = $data['site_id'];

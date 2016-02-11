@@ -73,7 +73,6 @@ class SendUserWatchesGroupPromptEmailsTask  extends \BaseTask  {
 			$user = $userRepo->loadByID($userWatchesGroup->getUserAccountId());
 			$group = $groupRepo->loadById($userWatchesGroup->getGroupId());
 			$site = $siteRepo->loadById($group->getSiteID());
-			$siteRepo->loadLegacyFeaturesOnSite($site);
 			// This is not the most efficient as it involves DB access and the results might not be used. But it'll do for now.
 			$userPermissions = $userPermissionsRepo->getPermissionsForUserInSite($user, $site, false, true);
 
