@@ -18,7 +18,13 @@ $extensionID = isset($argv[1]) ? trim($argv[1]) : null;
 $taskID = isset($argv[2]) ? trim($argv[2]) : null;
 
 if (!$extensionID && !$taskID) {
-	die("Must set a task!\n");
+    print "Must set a task!\n\n";
+    foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+        foreach($extension->getTasks() as $task) {
+            print "  ". $task->getExtensionId(). "  ". $task->getTaskId(). " \n";
+        }
+    }
+    die();
 }
 if ($extensionID && !$taskID) {
 	$taskID = $extensionID;
