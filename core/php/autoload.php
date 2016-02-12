@@ -14,8 +14,16 @@ define('COPYRIGHT_YEARS', '2013-2016');
 
 define('VARCHAR_COLUMN_LENGTH_USED', 255);
 
+if (file_exists(APP_ROOT_DIR.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'classmap.php')) {
+    require_once APP_ROOT_DIR.DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.'classmap.php';
+}
+
 function autoload($class) {
-	global $CONFIG;
+	global $CONFIG, $CLASSMAP;
+    if (isset($CONFIG) && is_array($CLASSMAP) && isset($CLASSMAP[$class])) {
+        require_once APP_ROOT_DIR. DIRECTORY_SEPARATOR. $CLASSMAP[$class];
+        return;
+    }
 	if (isset($CONFIG)) {
 		foreach($CONFIG->extensions as $extensionName) {
 			$f = APP_ROOT_DIR.DIRECTORY_SEPARATOR.'extension'.DIRECTORY_SEPARATOR.$extensionName.DIRECTORY_SEPARATOR.
