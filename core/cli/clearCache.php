@@ -13,5 +13,6 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-tasks\ClearCache::run($app, true);
 
+
+print "\n\nUSE clearAndBuildAppCache.php now!\n\n";

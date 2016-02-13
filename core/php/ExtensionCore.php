@@ -118,12 +118,12 @@ class ExtensionCore extends BaseExtension {
 		);
 	}
 
-	public function clearCache() {
+	public function clearAppCache() {
 		$cacheDir = APP_ROOT_DIR."/cache/";
-		foreach(glob($cacheDir."/templates.cli/*/*/*.php") as $file) {
+		foreach(glob($cacheDir."/templates.cli/*/*.php") as $file) {
 			unlink($file);
 		}
-		foreach(glob($cacheDir."/templates.web/*/*/*.php") as $file) {
+		foreach(glob($cacheDir."/templates.web/*/*.php") as $file) {
 			unlink($file);
 		}
 	}

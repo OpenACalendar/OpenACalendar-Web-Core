@@ -26,11 +26,24 @@ function processFolder($folder) {
     foreach($Iterator as $name) {
         if (substr($name , -4) == '.php') {
 
-            $className = substr($name, strlen($folder) + 1);
-            $className = substr($className, 0, -4);
+            $tokens = token_get_all(file_get_contents($name));
+            $classTokenFound = false;
+            foreach ($tokens as $token) {
+                if (is_array($token)) {
+                    if ($token[0] == T_CLASS) {
+                        $classTokenFound = true;
+                    }
+                }
+            }
 
-            if (!isset($classes[$className])) {
-                $classes[$className] = substr($name, strlen(realpath(APP_ROOT_DIR)));
+            if ($classTokenFound) {
+
+                $className = substr($name, strlen($folder) + 1);
+                $className = substr($className, 0, -4);
+
+                if (!isset($classes[$className])) {
+                    $classes[$className] = substr($name, strlen(realpath(APP_ROOT_DIR)));
+                }
             }
 
         }
@@ -48,4 +61,9 @@ fwrite($fp, '<?php'."\n");
 fwrite($fp, '$CLASSMAP = array();'. "\n");
 foreach($classes as $className=>$file) {
     fwrite($fp, '$CLASSMAP[\''.$className.'\'] = \''.$file. '\';'."\n");
+}
+
+//////////////////////////////////////////////////////////////////////////// EXTENSIONS
+foreach($app['extensions']->getExtensionsIncludingCore() as $ext) {
+    $ext->clearAppCache();
 }

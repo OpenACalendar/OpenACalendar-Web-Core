@@ -109,9 +109,9 @@ abstract class BaseExtension {
 	}
 
 	/**
-	 * This should be called on code update, config change or extension activated/deactivated
+	 * This should be called on server update, install update, code update, config change or extension activated/deactivated
 	 */
-	public function clearCache() {   }
+	public function clearAppCache() {   }
 
 	/**
 	 * Called to get template variables.
