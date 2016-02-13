@@ -6,6 +6,8 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 
+<h3>Where is the event?</h3>
+
 <form action="" method="post" class="styled" id="NewEventForm">
 	<input type="hidden" name="action" value="searchVenues">
 
@@ -88,7 +90,7 @@
 				<li class="venue">
 					<form method="post" action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" class="oneActionFormRight">
 						<input type="hidden" name="action" value="setarea">
-						<input type="submit" value="Not Known">
+						<input type="submit" value="I don't know the exact venue">
 					</form>
 					<div class="title">The exact venue is not known</div>
 					<div class="afterOneActionFormRight"></div>

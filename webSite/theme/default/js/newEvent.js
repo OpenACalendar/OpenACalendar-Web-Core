@@ -10,6 +10,16 @@ var notDuplicateOfEventSlugs = "";
 
 var loadDataAJAX;
 
+
+$( document ).ready(function() {
+	var elem = $('#stepDoneViews');
+	if (elem.length > 0 && elem.text().trim() == '') {
+		$('#stepDoneViewsShowHideLink').hide();
+	}
+	// Always load at start to look for dupe events straight away
+	loadData();
+});
+
 function loadDataSetLoadingIndicators() {
 
 }
@@ -26,7 +36,8 @@ function loadData() {
 	// set loading indicators
 	loadDataSetLoadingIndicators();
 	// load
-	var dataIn = $('#NewEventForm').serialize();
+	var newEventFormElem = $('#NewEventForm');
+	var dataIn = newEventFormElem.length > 0 ? newEventFormElem.serialize() : {};
 	loadDataAJAX = $.post('/event/new/'+newEventDraftSlug+'/'+currentStepID+'/creating.json?notDuplicateSlugs='+notDuplicateOfEventSlugs, dataIn,function(data) {
 		if (data.duplicates.length == 0) {
 			$('#DuplicateEventsContainer').hide();
@@ -140,4 +151,7 @@ function notDuplicateOfEvent(eventSlug) {
 	loadData();
 }
 
+function showHideStepDoneViews() {
+	$('#stepDoneViews').toggle();
+}
 

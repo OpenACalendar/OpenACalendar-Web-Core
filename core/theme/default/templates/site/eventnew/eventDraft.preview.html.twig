@@ -19,7 +19,7 @@
 
 {% block content %}
 
-	<h3>Add an event</h3>
+	<h2>Add an event</h2>
 
 	<div class="wizardProgressWrapper">
 		<ul class="steps">
@@ -77,12 +77,9 @@
 {% endblock %}
 
 {% block scriptsForState %}
-	<script type="text/javascript">var newEventDraftSlug = {{ draft.slug }}</script>
+	<script type="text/javascript">var newEventDraftSlug = {{ draft.slug }} ; var currentStepID = 'preview';</script>
 {% endblock %}
 
 {% block scripts %}
 	<script type="text/javascript" src="/theme/default/js/newEvent.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() { loadData(); });
-	</script>
 {% endblock %}

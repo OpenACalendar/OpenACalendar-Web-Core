@@ -7,6 +7,8 @@
  #}
 
 
+<h3>Where is the event?</h3>
+
 <p>Please set a rough area or city. This helps people find the event.</p>
 
 <form id="NewEventForm" action="" method="get" class="styled">
@@ -27,6 +29,13 @@
 
 		<div class="innerPageLeft">
 			<ul class="areasList" id="EditEventAreaResults">
+				<li class="area">
+					<form action="" class="styled" method="POST">
+						<input type="hidden" name="action" value="setvenue">
+						<div class="bigSubmitActionWrapper"><input type="submit" value="I know the exact Venue" class="bigSubmitAction"/></div>
+						<div class="afterBigSubmitActionWrapper"></div>
+					</form>
+				</li>
 				<li class="area">
 					<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight">
 						<input type="hidden" name="action" value="setnoareavenue">
@@ -60,8 +69,3 @@
 	</div>
 </div>
 
-<form action="" class="styled" method="POST">
-	<input type="hidden" name="action" value="setvenue">
-	<div class="bigSubmitActionWrapper"><input type="submit" value="I know the exact Venue" class="bigSubmitAction"/></div>
-	<div class="afterBigSubmitActionWrapper"></div>
-</form>

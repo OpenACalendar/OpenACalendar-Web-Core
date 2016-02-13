@@ -1451,6 +1451,24 @@ div.filterListImportedEventWrapper form.filterListImportedEvent div.submitField 
 #formRowEditCommentToggler .title {
   text-decoration: underline;
 }
+#stepDoneViewsShowHideLink {
+  text-align: right;
+}
+#stepDoneViewsShowHideLink a {
+  text-decoration: none;
+  background: #ccc;
+  font-size: 80%;
+  padding: 2px 5px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  color: #000000;
+}
+#stepDoneViewsShowHideLink a:visited {
+  color: #000000;
+}
 html {
   background-color: #B7CFB7;
 }

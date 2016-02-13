@@ -19,7 +19,7 @@
 
 {% block content %}
 
-	<h3>Add an event</h3>
+	<h2>Add an event</h2>
 
 	<div class="wizardProgressWrapper">
 		<ul class="steps">
@@ -39,21 +39,40 @@
 		</ul>
 	</div>
 
-
 	{%  set process = true %}
+	{%  set hasStepDoneViews = false %}
 	{%  for step in steps %}
 		{%  if step.stepID == currentStep.stepID  %}
-			{%  include step.onThisStepGetViewName %}
 			{%  set process = false %}
 		{% endif %}
 		{%  if process %}
-			{%  if step.stepDoneGetMinimalViewName %}
-				{%  include step.stepDoneGetMinimalViewName %}
-			{%  elseif step.stepDoneGetViewName %}
-				{%  include step.stepDoneGetViewName %}
-			{%  endif %}
+			{%  set hasStepDoneViews = true %}
 		{%  endif %}
 	{% endfor %}
+
+	{%  if hasStepDoneViews %}
+		<div id="stepDoneViewsShowHideLink">
+			<a href="#" onclick="showHideStepDoneViews(); return false;">Show/hide previous answers</a>
+		</div>
+
+		<div id="stepDoneViews" style="display: none;">
+			{%  set process = true %}
+			{%  for step in steps %}
+				{%  if step.stepID == currentStep.stepID  %}
+					{%  set process = false %}
+				{% endif %}
+				{%  if process %}
+					{%  if step.stepDoneGetMinimalViewName %}
+						{%  include step.stepDoneGetMinimalViewName %}
+					{%  elseif step.stepDoneGetViewName %}
+						{%  include step.stepDoneGetViewName %}
+					{%  endif %}
+				{%  endif %}
+			{% endfor %}
+		</div>
+	{%  endif %}
+
+	{%  include currentStep.onThisStepGetViewName %}
 
 	<div class="likeFormStyled">
 		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">

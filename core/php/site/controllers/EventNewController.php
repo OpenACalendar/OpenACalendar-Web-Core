@@ -169,6 +169,11 @@ class EventNewController {
 			}
 		}
 
+        // If user is looking at preview step, that's probably fine
+        if ($stepid == 'preview') {
+            return null;
+        }
+
 		// if user tries to look at step that doesn't exist ... normal next step
 		if ($idxWantedStep == -1) {
 			return $this->parameters['currentStep']->getStepID();
