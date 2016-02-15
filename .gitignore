@@ -1,5 +1,6 @@
 cache/templates.web/*
 cache/templates.cli/*
+cache/classmap.php
 config.php
 config.test.php
 webIndex/js/blank.js
