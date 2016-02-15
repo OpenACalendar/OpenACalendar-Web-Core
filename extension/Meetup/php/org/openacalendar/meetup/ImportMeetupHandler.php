@@ -102,7 +102,7 @@ class ImportMeetupHandler extends ImportHandlerBase {
 		// Avoid Throttling
 		sleep(1);
 
-		$request = $this->importRun->getGuzzle()->get("https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain");
+		$request = $this->importRun->getGuzzle()->createRequest("GET", "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain");
 		$response = $this->importRun->getGuzzle()->send($request);
 
 		if ($response->getStatusCode() == 200) {
@@ -137,7 +137,7 @@ class ImportMeetupHandler extends ImportHandlerBase {
 			"&fields=timezone&text_format=plain&group_urlname=".
 			str_replace(array("&","?"), array("",""),$groupName);
 
-		$request = $this->importRun->getGuzzle()->get($url);
+		$request = $this->importRun->getGuzzle()->createRequest("GET", $url);
 		$response = $this->importRun->getGuzzle()->send($request);
 
 		if ($response->getStatusCode() == 200) {
