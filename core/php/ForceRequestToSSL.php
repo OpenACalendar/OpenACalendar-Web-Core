@@ -38,14 +38,18 @@ class ForceRequestToSSL {
 
     }
 
-    function processForSite(SiteModel $site) {
+	function processForSite(SiteModel $site) {
 
-        if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) {
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: https://".$site->getSlug().".".$this->app['config']->webSiteDomainSSL.$_SERVER['REQUEST_URI']);
-            die();
-        }
+		if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) {
+			header("HTTP/1.1 301 Moved Permanently");
+			if ($this->app['config']->isSingleSiteMode) {
+				header( "Location: https://" . $this->app['config']->webSiteDomainSSL . $_SERVER['REQUEST_URI'] );
+			} else {
+				header( "Location: https://" . $site->getSlug() . "." . $this->app['config']->webSiteDomainSSL . $_SERVER['REQUEST_URI'] );
+			}
+			die();
+		}
 
-    }
+	}
 
 }
