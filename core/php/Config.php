@@ -207,7 +207,7 @@ class Config {
     public $beanstalkdConsumerConnectTimeOut = 60;
 
     public $messageQueConsumerProcessRunsForSeconds = 3900; // 65 * 60;
-    public $messageQueConsumerProcessChecksEverSeconds = 60;
+    public $messageQueConsumerProcessChecksEverySeconds = 60;
 
 	public $formWidgetTimeMinutesMultiples = 1;
 

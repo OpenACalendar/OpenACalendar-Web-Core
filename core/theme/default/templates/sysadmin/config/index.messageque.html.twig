@@ -49,11 +49,11 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'messageQueConsumerProcessRunsForSeconds'} %}</td>
 	</tr>
 	<tr>
-		<th>messageQueConsumerProcessChecksEverSeconds</th>
-		<td>{{ config.messageQueConsumerProcessChecksEverSeconds }}
-			({{ (config.messageQueConsumerProcessChecksEverSeconds / 60) | round (0,'floor') }} mins)
-			({{ (config.messageQueConsumerProcessChecksEverSeconds / 60/60) | round (0,'floor') }} hours)
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'messageQueConsumerProcessChecksEverSeconds'} %}</td>
+		<th>messageQueConsumerProcessChecksEverySeconds</th>
+		<td>{{ config.messageQueConsumerProcessChecksEverySeconds }}
+			({{ (config.messageQueConsumerProcessChecksEverySeconds / 60) | round (0,'floor') }} mins)
+			({{ (config.messageQueConsumerProcessChecksEverySeconds / 60/60) | round (0,'floor') }} hours)
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'messageQueConsumerProcessChecksEverySeconds'} %}</td>
 	</tr>
 	</table>
 

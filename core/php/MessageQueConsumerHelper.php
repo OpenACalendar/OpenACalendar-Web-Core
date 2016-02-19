@@ -66,7 +66,7 @@ class MessageQueConsumerHelper
                 $job = $this->pheanstalk
                     ->watch($this->app['config']->beanstalkdTube)
                     ->ignore('default')
-                    ->reserve($this->app['config']->messageQueConsumerProcessChecksEverSeconds);
+                    ->reserve($this->app['config']->messageQueConsumerProcessChecksEverySeconds);
 
                 if ($job) {
                     $jobData = json_decode($job->getData(), true);
