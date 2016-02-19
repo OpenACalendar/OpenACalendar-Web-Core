@@ -7,6 +7,13 @@
  #}
 {% extends 'site/import/page.html.twig' %}
 
+{% block htmlHeader %}
+	{{ parent() }}
+	{% if not hasLogEntries and  import.isEnabled and refreshForMoreLogEntries %}
+		<meta http-equiv="refresh" content="5">
+	{%  endif %}
+{% endblock %}
+
 {% block pageTitle %}{{ import.title }} - {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
@@ -54,7 +61,11 @@
 		{% endif %}
 
 		{% if not hasLogEntries and  import.isEnabled %}
-			<p>This importer has not been run yet. It will be run shortly, please return soon to check on the results.</p>
+			{%  if refreshForMoreLogEntries %}
+				<p>Please wait a few seconds while we import this ...</p>
+			{%  else %}
+				<p>This importer has not been run yet. It will be run shortly, please return soon to check on the results.</p>
+			{% endif %}
 		{% endif %}
 
 	</div>

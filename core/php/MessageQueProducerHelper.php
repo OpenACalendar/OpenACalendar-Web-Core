@@ -48,4 +48,8 @@ class MessageQueProducerHelper
         }
     }
 
+	public function hasMessageQue() {
+		return $this->loadMessageQue();
+	}
+
 }

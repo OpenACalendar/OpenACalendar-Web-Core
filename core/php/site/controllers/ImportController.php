@@ -91,6 +91,8 @@ class ImportController {
 		$irr->setImport($this->parameters['import']);
 		$this->parameters['hasLogEntries'] = (boolean)(count($irr->fetchAll()) > 0);
 
+		$this->parameters['refreshForMoreLogEntries'] = ($this->parameters['hasLogEntries'] == 0) ? $app['messagequeproducerhelper']->hasMessageQue() : false;
+
 		return $app['twig']->render('site/import/show.html.twig',$this->parameters);
 	}
 
