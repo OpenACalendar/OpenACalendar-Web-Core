@@ -175,7 +175,15 @@ abstract class BaseExtension {
 
 	}
 
-    public function getMessageQueWorkers() {
+	public function getSeriesReports() {
+		return array();
+	}
+
+	public function getValueReports() {
+		return array();
+	}
+
+	public function getMessageQueWorkers() {
         return array();
     }
 

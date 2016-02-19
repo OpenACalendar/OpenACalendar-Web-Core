@@ -193,13 +193,4 @@ abstract class BaseTask {
 		return $exception->message . " of code " . $exception->code." from line ".$exception->line ." from file ".$exception->file;
 	}
 
-	public function getSeriesReports() {
-		return array();
-	}
-
-	public function getValueReports() {
-		return array();
-	}
-
-
 }
