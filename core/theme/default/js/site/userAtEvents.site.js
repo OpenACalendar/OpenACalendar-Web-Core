@@ -18,13 +18,13 @@ function showCurrentUserAttendanceForEvent(eventSlug) {
 
 		if (data.inPast == 1) {
 			var html = '';
-			if (attendanceData.attending == 'unknown') {
+			if (data.attending == 'unknown') {
 				html = 'We didn\'t know your attendance plans.'
 			} else {
 				html += 'You said you ';
-				html += (attendanceData.attending == 'no' ? 'wouldn\'t' : '');
-				html += (attendanceData.attending == 'maybe' ? 'might' : '');
-				html += (attendanceData.attending == 'yes' ? 'would' : '');
+				html += (data.attending == 'no' ? 'wouldn\'t' : '');
+				html += (data.attending == 'maybe' ? 'might' : '');
+				html += (data.attending == 'yes' ? 'would' : '');
 				html += ' attend.';
 			}
 		
