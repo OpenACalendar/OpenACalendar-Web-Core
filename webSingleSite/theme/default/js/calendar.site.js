@@ -129,7 +129,7 @@ function showCurrentUserAttendanceForEventInPopup(eventSlug, contentWrapperID) {
 
 			html += 'You ';
 			html += '<select name="attending">';
-			html += '<option value="unknown" '+(data.attending == 'unknown'?'selected':'')+'>???</option>';
+			html += '<option value="unknown" '+(data.attending == 'unknown'?'selected':'')+'>?</option>';
 			html += '<option value="no" '+(data.attending == 'no'?'selected':'')+'>are not</option>';
 			html += '<option value="maybe" '+(data.attending == 'maybe'?'selected':'')+'>might be</option>';
 			html += '<option value="yes" '+(data.attending == 'yes'?'selected':'')+'>will be</option>';
