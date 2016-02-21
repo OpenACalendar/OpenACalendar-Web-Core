@@ -157,7 +157,16 @@ form.styled, .likeFormStyled  {
 	}
 }
 
-
+ul.mainListGroups li.group, ul.mainListVenues li.venue {
+	.futureEvents {
+		margin-left: 10px;
+		padding: 4px 20px 0px 20px;
+		font-size: 0.8em;
+		font-weight: normal;
+		background: @colourFutureEventsInMainListingTitleBackground;
+		.rounded-corners(3px);
+	}
+}
 
 ul.mainListGroups {
 	li.group {
@@ -186,14 +195,6 @@ ul.mainListGroups li.group, div.group {
 			font-size: 1.1em;
 			font-weight: bold;
 
-		}
-		.futureEvents {
-			margin-left: 10px;
-			padding: 4px 20px;
-			font-size: 0.8em;
-			font-weight: normal;
-			background: @colourFutureEventsInMainListingTitleBackground;
-			.rounded-corners(3px);
 		}
 		a {
 			color: #333;
@@ -271,14 +272,6 @@ ul.mainListVenues {
 				font-size: 1.1em;
 				font-weight: bold;
 
-			}
-			.futureEvents {
-				margin-left: 10px;
-				padding: 4px 20px;
-				font-size: 0.8em;
-				font-weight: normal;
-				background: @colourFutureEventsInMainListingTitleBackground;
-				.rounded-corners(3px);
 			}
 			a {
 				color: #333;

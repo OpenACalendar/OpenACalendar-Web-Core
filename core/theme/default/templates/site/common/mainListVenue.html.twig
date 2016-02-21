@@ -17,9 +17,9 @@
 		<a href="/venue/{{ venue.slugForUrl }}">
 			<span class="text">{{ venue.title }}</span>
 			{% if venue.cachedFutureEvents == 1 %}
-				<span class="futureEvents">1 Event</span>
+				<span class="futureEvents">1 Future Event</span>
 			{% elseif venue.cachedFutureEvents > 1 %}
-				<span class="futureEvents">{{  venue.cachedFutureEvents }} Events</span>
+				<span class="futureEvents">{{  venue.cachedFutureEvents }} Future Events</span>
 			{%  endif %}
 		</a>
 	</div>

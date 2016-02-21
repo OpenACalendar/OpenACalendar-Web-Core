@@ -16,9 +16,9 @@
 		<a href="/group/{{ group.slugForUrl }}">
 			<span class="text">{{ group.title }}</span>
 			{% if group.cachedFutureEvents == 1 %}
-				<span class="futureEvents">1 Event</span>
+				<span class="futureEvents">1 Future Event</span>
 			{% elseif group.cachedFutureEvents > 1 %}
-				<span class="futureEvents">{{  group.cachedFutureEvents }} Events</span>
+				<span class="futureEvents">{{  group.cachedFutureEvents }} Future Events</span>
 			{%  endif %}
 		</a>
 	</div>
