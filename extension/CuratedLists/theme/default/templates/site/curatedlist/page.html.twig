@@ -19,7 +19,7 @@
 
 {% block content %}
 
-	{% if not currentSite.isFeatureCuratedList %}
+	{% if not currentSiteFeatures.has('org.openacalendar.curatedlists','CuratedList') %}
 		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
 	{% endif %}
 		
