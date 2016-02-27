@@ -223,6 +223,7 @@ $app->match('/sysadmin/config/smtp', "sysadmin\controllers\ConfigController::smt
 $app->match('/sysadmin/config/logging', "sysadmin\controllers\ConfigController::logging");
 $app->match('/sysadmin/config/externalAnalytics', "sysadmin\controllers\ConfigController::externalAnalytics");
 $app->match('/sysadmin/config/import', "sysadmin\controllers\ConfigController::import");
+$app->match('/sysadmin/config/themes', "sysadmin\controllers\ConfigController::themes");
 
 
 $app->match('/sysadmin/extension', "sysadmin\controllers\ExtensionListController::index");

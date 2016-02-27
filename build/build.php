@@ -83,6 +83,9 @@ foreach($themes as $theme) {
 				$vars = array_merge( $vars, parse_ini_file( $file, false ) );
 			}
 		}
+		if (is_array($CONFIG->themeVariables) && isset($CONFIG->themeVariables[$theme]) && is_array($CONFIG->themeVariables[$theme]) ) {
+			$vars = array_merge($vars, $CONFIG->themeVariables[$theme]);
+		}
 		$cssFilterLess->setPresets( $vars );
 		foreach ( $CONFIG->extensions as $extension ) {
 			$dir = APP_ROOT_DIR . '/extension/' . $extension . '/theme/'.$theme.'/css/';

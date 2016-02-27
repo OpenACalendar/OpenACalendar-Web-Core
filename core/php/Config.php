@@ -215,6 +215,8 @@ class Config {
 
     public $useLibraryCDNs = true;
 
+	public $themeVariables = array('default'=>array());
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

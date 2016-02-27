@@ -93,6 +93,12 @@ class ConfigController {
 			));
 	}
 
+	function themes(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.themes.html.twig', array(
+				'configCheck'=>new \ConfigCheck($app['config']),
+			));
+	}
+
 }
 
 

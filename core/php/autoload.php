@@ -104,6 +104,9 @@ function configureAppForThemeVariables(\models\SiteModel $site  = null) {
 		}
 		$vars = array_merge($vars, $ext->getTemplateVariables($site));
 	}
+	if (is_array($app['config']->themeVariables) && isset($app['config']->themeVariables['default']) && is_array($app['config']->themeVariables['default']) ) {
+		$vars = array_merge($vars, $app['config']->themeVariables['default']);
+	}
 	$app['twig']->addGlobal('themeVariables', $vars);
 }
 
