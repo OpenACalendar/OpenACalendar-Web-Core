@@ -7,7 +7,7 @@
  #}
 {% if group is defined %}
 	{% set calURL = '/group/' ~ group.slugForUrl ~ '/calendar' %}
-	{% set addURL = '/group/' ~ group.slugForUrl ~ '/newevent/go?' %}
+	{% set addURL = '/event/new?group=' ~ group.slug %}
 {% elseif curatedlist is defined %}
 	{% set calURL = '/curatedlist/' ~ curatedlist.slug ~ '/calendar' %}
 	{% set addURL = false %}
