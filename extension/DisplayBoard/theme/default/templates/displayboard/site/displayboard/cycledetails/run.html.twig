@@ -1,0 +1,278 @@
+{#
+ # @package org.openacalendar.displayboard
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends '/site/page.html.twig' %}
+
+
+
+{% block pageTitle %}Display Board - {% endblock %} 
+
+{% block breadcrumbs %}
+	{%  set breadcrumbs = [ {'url':'/event' , 'label':'events' } ] %}
+	{%  set breadcrumbs = breadcrumbs|merge([  { 'url':'/event/'~event.slugForUrl, 'label':event.summary }  ])  %}
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': breadcrumbs  } %}
+{% endblock %}
+
+
+{%  block content %}
+
+	<h2>{{  event.summaryDisplay }}{%  if event.isCancelled  %} [CANCELLED]{%  endif %}</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+		</ul>
+		<div id="innerPage">
+
+
+			<div class="mainShowEvent" itemscope itemtype="http://schema.org/Event">
+			<meta itemprop="name" content="{{ event.summaryDisplay|e('html_attr') }}" />
+
+			{% if event.isdeleted %}
+				<p class="descriptionDeleted">This event has been deleted!</p>
+			{% elseif event.isCancelled %}
+				<p class="descriptionCancelled">This event has been cancelled!</p>
+			{%  endif %}
+
+			<div class="innerPageLeft">
+
+
+				{% if event.isdeleted %}
+					<div class="dateTimeIcon">
+						<div class="dateIcon">
+							<span class="deleted">Deleted!</span>
+						</div>
+					</div>
+				{% elseif event.isCancelled %}
+					<div class="dateTimeIcon">
+						<div class="dateIcon">
+							<span class="cancelled">Cancel<br>-led!</span>
+						</div>
+					</div>
+				{% else %}
+					<div class="dateTimeIcon">
+						<time datetime="{{ event.getStartAt|date('c', currentTimeZone) }}">
+							<div class="dateIcon">
+								<span class="startDay">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
+								<span class="startDate">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
+								<span class="startMonthYear">{{ event.getStartAt|date('M \'y', currentTimeZone) }}</span>
+							</div>
+							<div class="timeIcon">
+								<span class="startTime">{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia': 'H:i', currentTimeZone) }}</span>
+							</div>
+						</time>
+					</div>
+				{% endif %}
+
+				<p class="description" itemprop="description">
+					{%  if event.description %}
+					{{ event.description | nl2br  | linkify }}
+					{%  else %}
+
+					{% if event.url %}
+				<p>
+					More details: <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a>
+				</p>
+				{% endif %}
+
+				{% if event.ticketUrl %}
+					<p>
+						{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a>
+					</p>
+				{% endif %}
+
+				{%  endif %}
+
+				{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
+					{% if customField.isActive and event.hasCustomField(customField) %}
+						<p>
+							{{  customField.label }}:<br>
+							{{ event.getCustomField(customField) | nl2br | linkify }}
+						</p>
+					{%  endif %}
+				{%  endfor %}
+				</p>
+
+				{% if tags %}
+					<div class="inlineTags">
+						Tags:
+						<ul class="inlineTags">
+							{% for tag in tags %}
+								<li class="tag">
+									<span class="content"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></span>
+									<span class="aftercontent">&nbsp;</span>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+
+				{% if mediasForEvent %}
+					<ul class="mediaGrid">
+						{% for media in mediasForEvent %}
+							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+						{% endfor %}
+					</ul>
+					<div class="afterMediaGrid"></div>
+				{% endif %}
+
+				<div class="dateAndLocationWrapper">
+					{% if currentTimeZone == event.timezone %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+					{% else %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+					{% endif %}
+				</div>
+
+				{% if event.isImported %}
+					<p>Imported From: <a href="/import/{{ import.slug }}">{{ import.url | linkinfo }}</a></p>
+				{% endif %}
+
+			</div>
+
+			<div class="innerPageRight">
+
+				{%  if  event.url or event.ticketUrl %}
+					<div class="infoBoxWrapper">
+						<div class="infoBoxTitle">More Information</div>
+						<div class="infoBoxContent">
+
+
+							{% if event.url %}
+								<div class="innerPageRightLinkWrapper">
+									<div class="innerPageRightLinkHeader">More details</div>
+									<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
+								</div>
+							{% endif %}
+
+							{% if event.ticketUrl %}
+								<div class="innerPageRightLinkWrapper">
+									<div class="innerPageRightLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
+									<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></div>
+								</div>
+							{% endif %}
+
+						</div>
+					</div>
+				{%  endif %}
+
+			</div>
+
+			<div class="afterInnerPageContent"></div>
+
+			{% for displayGroup in groups %}
+				<div class="innerPageLeftRightTitle">
+					<p class="groupTitle">About <a href="/group/{{ displayGroup.slugForUrl }}">{{ displayGroup.title }}</a></p>
+				</div>
+				<div class="innerPageLeft">
+					{% if displayGroup.description  %}
+						<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
+					{% else %}
+						<p class="groupDescription">We don't know any more about {{ displayGroup.title }}.</p>
+					{% endif %}
+					{% if mediasForGroup[displayGroup.slug] is defined and mediasForGroup[displayGroup.slug] %}
+						<ul class="mediaGrid">
+							{% for media in mediasForGroup[displayGroup.slug] %}
+								<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+							{% endfor %}
+						</ul>
+						<div class="afterMediaGrid"></div>
+					{% endif %}
+				</div>
+				<div class="innerPageRight">
+					{% if displayGroup.url and displayGroup.url != event.url %}
+						<div class="innerPageRightLinkWrapper">
+							<div class="innerPageRightLinkHeader">More details</div>
+							<div class="innerPageRightLinkContent"><a href="{{ displayGroup.url }}" target="_blank">{{ displayGroup.url | linkinfo }}</a></div>
+						</div>
+					{% endif %}
+					{% if displayGroup.twitterUsername %}
+						<div class="innerPageRightLinkWrapper">
+							<div class="innerPageRightLinkHeader">On Twitter</div>
+							<div class="innerPageRightLinkContent"><a href="https://twitter.com/{{ displayGroup.twitterUsername }}" target="_blank">@{{ displayGroup.twitterUsername }}</a></div>
+						</div>
+					{% endif %}
+				</div>
+				<div class="afterInnerPageContent"></div>
+			{% endfor %}
+
+
+			{% if venue is not null or area is not null or country is not null %}
+				<div itemprop="location" itemscope itemtype="http://schema.org/Place">
+					<div class="innerPageLeftRightTitle">
+						{%  if venue is not null %}
+							<p class="venueTitle">At <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
+						{%  elseif area is not null  %}
+							<p class="areaTitle">In <a href="/area/{{ area.slugForUrl }}" itemprop="url"><span itemprop="name">{{ area.title }}</span></a></p>
+						{%  elseif country is not null  %}
+							<p class="countryTitle"><a href="/country/{{ country.twoCharCode }}" itemprop="url"><span itemprop="name">{{ country.title }}</span></a></p>
+						{%  endif  %}
+					</div>
+					<div class="innerPageLeft">
+						{%  if venue is not null %}
+							{% if venue.description %}
+								<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
+							{% endif %}
+							{% if mediasForVenue %}
+								<ul class="mediaGrid">
+									{% for media in mediasForVenue %}
+										<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+									{% endfor %}
+								</ul>
+								<div class="afterMediaGrid"></div>
+							{% endif %}
+						{% endif %}
+
+						<div class="dateAndLocationWrapper">
+							{% include 'site/common/eventLocationLine.html.twig' %}
+						</div>
+
+					</div>
+					<div class="innerPageRight">
+						<!---  MAP WOULD GO HERE! LEFT OUT FOR NOW.  --->
+					</div>
+					<div class="afterInnerPageContent"></div>
+				</div>
+			{% endif %}
+
+			<div class="afterEventListing"></div>
+			</div>
+
+
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+{%  endblock %}
+
+
+{% block scriptsForState %}
+	{# This is DEPRECATED. the name event is used inside several JS functions which overwrites this #}
+	<script type="text/javascript">var event = { slug: {{ event.slug }} };</script>
+	{# so we need a new name ... #}
+	<script type="text/javascript">var eventData = { slug: {{ event.slug }} };</script>
+	<script type="text/javascript">
+		var exportData = {
+			event:{{ event.slug }},
+			eventSlugURL:"{{ event.slugForURL|e('js') }}",
+			eventTitle:"{{ event.summaryDisplay|e('js') }}",
+			eventStartLocal:"{{  event.startAt|date('D jS M Y g:ia', event.timezone) }}"
+			{% if group is not null %}, group: {{ group.slug }}, groupTitle:"{{ group.title|e('js') }}"{% endif %}
+		}
+	</script>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		var country = { slug: "{{  country.twoCharCode|e('js') }}" };
+
+		var refreshTimerId = window.setTimeout(function() { window.location = "{{ nextPageURL | raw }}"; }, {{  refreshInSeconds*1000 }});
+	</script>
+{% endblock %}
+

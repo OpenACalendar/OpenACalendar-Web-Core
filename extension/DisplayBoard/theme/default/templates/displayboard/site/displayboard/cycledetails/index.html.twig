@@ -16,14 +16,14 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-	{%  set breadcrumbs = [ {'url':'/displayboard' , 'label':'Display Board' } ] %}
+	{%  set breadcrumbs = [ {'url':'/displayboard/cycledetails' , 'label':'Display Board' } ] %}
 	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': breadcrumbs  } %}
 {% endblock %}
 
 
 {% block content %}
 
-	<form action="/displayboard/todaynextlater/run/" method="GET" class="styled">
+	<form action="/displayboard/cycledetails/run/" method="GET" class="styled">
 
 
 		<ul class="eventsFilters">
@@ -48,13 +48,6 @@
 						<div class="labelWrapper"><label for="eventVenue{{ idx }}">Venue Filter:</label></div>
 						<div class="widgetWrapperPlacementOnly">
 							<input type="text" value="{% if eventQuery.venue %}{{ eventQuery.venue.id }}{% endif %}" name="eventVenue{{ idx }}">
-						</div>
-						<div class="after"></div>
-					</div>
-					<div class="rowWrapper">
-						<div class="labelWrapper">&nbsp;</div>
-						<div class="widgetWrapperPlacementOnly">
-							<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}" {% if eventQuery.minorImportance %}checked{% endif %}>Minor Importance</label>
 						</div>
 						<div class="after"></div>
 					</div>
@@ -84,48 +77,28 @@
 						</div>
 						<div class="after"></div>
 					</div>
-					<div class="rowWrapper">
-						<div class="labelWrapper">&nbsp;</div>
-						<div class="widgetWrapperPlacementOnly">
-							<label><input type="checkbox" value="yes" name="eventMinorImportance{{ idx }}">Minor Importance</label>
-						</div>
-						<div class="after"></div>
-					</div>
 				</li>
 			{% endif %}
 		</ul>
 
 
-
-
-
-
-
-
 		<div class="rowWrapper">
-			<div class="labelWrapper"><label for="daysAheadInNextBox">How many days to show in the next box?</label></div>
+			<div class="labelWrapper"><label for="daysInAdvance">How Many Days in advance to show?</label></div>
 			<div class="widgetWrapperPlacementOnly">
-				<input type="text" name="daysAheadInNextBox" value="{{ daysAheadInNextBox }}">
+				<input type="text" name="daysInAdvance" value="{{ daysInAdvance }}">
 			</div>
 			<div class="after"></div>
 		</div>
 
 
 		<div class="rowWrapper">
-			<div class="labelWrapper"><label for="showCharsOfDescription">How many characters of description to show?</label></div>
+			<div class="labelWrapper"><label for="refreshInSeconds">How Many Seconds To Refresh?</label></div>
 			<div class="widgetWrapperPlacementOnly">
-				<input type="text" name="showCharsOfDescription" value="{{ showCharsOfDescription }}">
+				<input type="text" name="refreshInSeconds" value="{{ refreshInSeconds }}">
 			</div>
 			<div class="after"></div>
 		</div>
 
-		<div class="rowWrapper">
-			<div class="labelWrapper"><label for="refreshInMinutes">Refresh after minutes? (0 to disable)</label></div>
-			<div class="widgetWrapperPlacementOnly">
-				<input type="text" name="refreshInMinutes" value="{{ refreshInMinutes }}">
-			</div>
-			<div class="after"></div>
-		</div>
 
 		<input type="submit" value="Run">
 	</form>
