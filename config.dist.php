@@ -2,9 +2,9 @@
 
 /**
  * Config file. For a full list of options, please see 
- * http://docs.openacalendar.org/
+ * http://docs-superusers.openacalendar.org/en/v1.6.x/config.html
  * 
- * @link http://docs.openacalendar.org/ Config File Options
+ * @link http://docs-superusers.openacalendar.org/en/v1.6.x/config.html Config File Options
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
  */
@@ -29,7 +29,7 @@ $CONFIG->siteTitle = "Open A Calendar";
 
 /**
  * To understand the differences between Single Site and Multi Site mode see
- * http://ican.openacalendar.org/docs/singlesite.html
+ * http://docs-superusers.openacalendar.org/en/v1.6.x/singleSiteOrMultiSiteMode.html
  */
 $CONFIG->isSingleSiteMode = TRUE;
 
@@ -72,3 +72,11 @@ $CONFIG->webCommonSessionDomain = "example.co.uk";
  * It is currently strongly recommended to have 'CuratedLists' installed, Parts of the core code use this.
  */
 $CONFIG->extensions = array('CuratedLists');
+
+/**
+ * This is used to make sure browser caching works properly. Every time you update the software, extensions or any
+ * assets add one to this variable.
+ * See http://docs-superusers.openacalendar.org/en/v1.6.x/upgrading.html#assets-version-and-browser-caching for more.
+ */
+$CONFIG->assetsVersion = 1;
+
