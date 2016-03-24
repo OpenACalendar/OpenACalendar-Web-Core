@@ -9,14 +9,14 @@
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$app->match('/sysadmin/site/{siteid}/curatedlist', "org\openacalendar\curatedlists\sysadmin\controllers\CuratedListListController::index")
+$app->match('/sysadmin/site/{siteid}/curatedlist', 'org\openacalendar\curatedlists\sysadmin\controllers\CuratedListListController::index')
 		->assert('siteid', '\d+');
-$app->match('/sysadmin/site/{siteid}/curatedlist/', "org\openacalendar\curatedlists\sysadmin\controllers\CuratedListListController::index")
+$app->match('/sysadmin/site/{siteid}/curatedlist/', 'org\openacalendar\curatedlists\sysadmin\controllers\CuratedListListController::index')
 		->assert('siteid', '\d+');
-$app->match('/sysadmin/site/{siteid}/curatedlist/{slug}', "org\openacalendar\curatedlists\sysadmin\controllers\CuratedListController::index")
+$app->match('/sysadmin/site/{siteid}/curatedlist/{slug}', 'org\openacalendar\curatedlists\sysadmin\controllers\CuratedListController::index')
 		->assert('siteid', '\d+')
 		->assert('slug', '\d+');
-$app->match('/sysadmin/site/{siteid}/curatedlist/{slug}/', "org\openacalendar\curatedlists\sysadmin\controllers\CuratedListController::index")
+$app->match('/sysadmin/site/{siteid}/curatedlist/{slug}/', 'org\openacalendar\curatedlists\sysadmin\controllers\CuratedListController::index')
 		->assert('siteid', '\d+')
 		->assert('slug', '\d+');
 

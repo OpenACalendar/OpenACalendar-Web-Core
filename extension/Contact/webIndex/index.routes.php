@@ -10,6 +10,6 @@
 
 
 
-$app->match('/contact', "org\openacalendar\contact\index\controllers\IndexController::contact");
-$app->match('/contact/', "org\openacalendar\contact\index\controllers\IndexController::contact");
+$app->match('/contact', 'org\openacalendar\contact\index\controllers\IndexController::contact');
+$app->match('/contact/', 'org\openacalendar\contact\index\controllers\IndexController::contact');
 

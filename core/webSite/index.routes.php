@@ -10,197 +10,197 @@
 
 
 
-$app->match('/requestaccess', "site\controllers\IndexController::requestAccess") 
+$app->match('/requestaccess', 'site\controllers\IndexController::requestAccess') 
 		->before($appUserRequired)
 		->before($canChangeSite); 
-$app->match('/requestaccess/', "site\controllers\IndexController::requestAccess") 
+$app->match('/requestaccess/', 'site\controllers\IndexController::requestAccess') 
 		->before($appUserRequired)
 		->before($canChangeSite); 
 
-$app->match('/places', "site\controllers\IndexController::places") ; 
-$app->match('/places/', "site\controllers\IndexController::places") ; 
+$app->match('/places', 'site\controllers\IndexController::places') ; 
+$app->match('/places/', 'site\controllers\IndexController::places') ; 
 
-$app->match('/currentuser', "site\controllers\IndexController::currentUser") ; 
-$app->match('/currentuser/', "site\controllers\IndexController::currentUser") ; 
+$app->match('/currentuser', 'site\controllers\IndexController::currentUser') ; 
+$app->match('/currentuser/', 'site\controllers\IndexController::currentUser') ; 
 
-$app->match('/mytimezone', "site\controllers\IndexController::myTimeZone") ; 
-$app->match('/mytimezone/', "site\controllers\IndexController::myTimeZone") ; 
+$app->match('/mytimezone', 'site\controllers\IndexController::myTimeZone') ; 
+$app->match('/mytimezone/', 'site\controllers\IndexController::myTimeZone') ; 
 
-$app->match('/history', "site\controllers\HistoryController::index") ; 
-$app->match('/history/', "site\controllers\HistoryController::index") ; 
+$app->match('/history', 'site\controllers\HistoryController::index') ; 
+$app->match('/history/', 'site\controllers\HistoryController::index') ; 
 
-$app->match('/event', "site\controllers\EventListController::index") ; 
-$app->match('/event/', "site\controllers\EventListController::index") ; 
-$app->match('/event/calendar', "site\controllers\EventListController::calendarNow") ; 
-$app->match('/event/calendar/', "site\controllers\EventListController::calendarNow") ; 
-$app->match('/event/calendar/{year}/{month}', "site\controllers\EventListController::calendar")
+$app->match('/event', 'site\controllers\EventListController::index') ; 
+$app->match('/event/', 'site\controllers\EventListController::index') ; 
+$app->match('/event/calendar', 'site\controllers\EventListController::calendarNow') ; 
+$app->match('/event/calendar/', 'site\controllers\EventListController::calendarNow') ; 
+$app->match('/event/calendar/{year}/{month}', 'site\controllers\EventListController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/event/calendar/{year}/{month}/', "site\controllers\EventListController::calendar")
+$app->match('/event/calendar/{year}/{month}/', 'site\controllers\EventListController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
 
-$app->match('/event/new', "site\controllers\EventNewController::newEvent")
+$app->match('/event/new', 'site\controllers\EventNewController::newEvent')
 		->before($permissionEventsChangeRequiredOrForAnyVerifiedUser)
 		->before($canChangeSite);
-$app->match('/event/new/', "site\controllers\EventNewController::newEvent")
+$app->match('/event/new/', 'site\controllers\EventNewController::newEvent')
 		->before($permissionEventsChangeRequiredOrForAnyVerifiedUser)
 		->before($canChangeSite);
-$app->match('/event/new/{draftslug}/{stepid}', "site\controllers\EventNewController::newEventDraft")
+$app->match('/event/new/{draftslug}/{stepid}', 'site\controllers\EventNewController::newEventDraft')
 		->assert('draftid', '\d+')
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/new/{draftslug}/{stepid}/creating.json', "site\controllers\EventNewController::newEventDraftJSON")
+$app->match('/event/new/{draftslug}/{stepid}/creating.json', 'site\controllers\EventNewController::newEventDraftJSON')
 	->assert('draftid', '\d+')
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/new/{draftslug}/isdupeof/{eventslug}', "site\controllers\EventNewController::newEventIsDupeOf")
+$app->match('/event/new/{draftslug}/isdupeof/{eventslug}', 'site\controllers\EventNewController::newEventIsDupeOf')
 		->assert('draftid', '\d+')
 		->assert('eventslug', '\d+')
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
 
-$app->match('/event/{slug}', "site\controllers\EventController::show")
+$app->match('/event/{slug}', 'site\controllers\EventController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/event/{slug}/', "site\controllers\EventController::show")
+$app->match('/event/{slug}/', 'site\controllers\EventController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/event/{slug}/myAttendance.json', "site\controllers\EventController::myAttendanceJson")
+$app->match('/event/{slug}/myAttendance.json', 'site\controllers\EventController::myAttendanceJson')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appUserRequired);  
-$app->match('/event/{slug}/userAttendance.html', "site\controllers\EventController::userAttendanceHtml")
+$app->match('/event/{slug}/userAttendance.html', 'site\controllers\EventController::userAttendanceHtml')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/event/{slug}/history', "site\controllers\EventController::history")
+$app->match('/event/{slug}/history', 'site\controllers\EventController::history')
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/event/{slug}/export/existinggooglecalendar', "site\controllers\EventController::exportExistingGoogleCalendar")
+$app->match('/event/{slug}/export/existinggooglecalendar', 'site\controllers\EventController::exportExistingGoogleCalendar')
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/event/{slug}/edit', "site\controllers\EventController::editSplash")
+$app->match('/event/{slug}/edit', 'site\controllers\EventController::editSplash')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite); 
-$app->match('/event/{slug}/edit/details', "site\controllers\EventController::editDetails")
+$app->match('/event/{slug}/edit/details', 'site\controllers\EventController::editDetails')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/edit/details/editing.json', "site\controllers\EventController::editDetailsEditingJSON")
+$app->match('/event/{slug}/edit/details/editing.json', 'site\controllers\EventController::editDetailsEditingJSON')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
 
-$app->match('/event/{slug}/edit/venue', "site\controllers\EventController::editVenue")
+$app->match('/event/{slug}/edit/venue', 'site\controllers\EventController::editVenue')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/edit/venue/search', "site\controllers\EventController::editVenueSearch")
+$app->match('/event/{slug}/edit/venue/search', 'site\controllers\EventController::editVenueSearch')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/edit/venue/search.json', "site\controllers\EventController::editVenueSearchJson")
+$app->match('/event/{slug}/edit/venue/search.json', 'site\controllers\EventController::editVenueSearchJson')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/edit/venue/new', "site\controllers\EventController::editVenueNew")
+$app->match('/event/{slug}/edit/venue/new', 'site\controllers\EventController::editVenueNew')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/edit/area', "site\controllers\EventController::editArea")
+$app->match('/event/{slug}/edit/area', 'site\controllers\EventController::editArea')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/edit/area.json', "site\controllers\EventController::editAreaJson")
+$app->match('/event/{slug}/edit/area.json', 'site\controllers\EventController::editAreaJson')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
 
-$app->match('/event/{slug}/edit/future', "site\controllers\EventController::editFuture")
+$app->match('/event/{slug}/edit/future', 'site\controllers\EventController::editFuture')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite); 
-$app->match('/event/{slug}/delete', "site\controllers\EventController::delete")
+$app->match('/event/{slug}/delete', 'site\controllers\EventController::delete')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite); 
-$app->match('/event/{slug}/undelete', "site\controllers\EventController::undelete")
+$app->match('/event/{slug}/undelete', 'site\controllers\EventController::undelete')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite); 
-$app->match('/event/{slug}/cancel', "site\controllers\EventController::cancel")
+$app->match('/event/{slug}/cancel', 'site\controllers\EventController::cancel')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/uncancel', "site\controllers\EventController::uncancel")
+$app->match('/event/{slug}/uncancel', 'site\controllers\EventController::uncancel')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/rollback/{timestamp}', "site\controllers\EventController::rollback")
+$app->match('/event/{slug}/rollback/{timestamp}', 'site\controllers\EventController::rollback')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('rollback', '\d+')
 		->before($permissionEventsChangeRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/recur', "site\controllers\EventController::recur")
+$app->match('/event/{slug}/recur', 'site\controllers\EventController::recur')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/', "site\controllers\EventController::recur")
+$app->match('/event/{slug}/recur/', 'site\controllers\EventController::recur')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/weekly', "site\controllers\EventController::recurWeekly")
+$app->match('/event/{slug}/recur/weekly', 'site\controllers\EventController::recurWeekly')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/weekly/', "site\controllers\EventController::recurWeekly")
+$app->match('/event/{slug}/recur/weekly/', 'site\controllers\EventController::recurWeekly')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/monthly', "site\controllers\EventController::recurMonthly")
+$app->match('/event/{slug}/recur/monthly', 'site\controllers\EventController::recurMonthly')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/monthly/', "site\controllers\EventController::recurMonthly")
+$app->match('/event/{slug}/recur/monthly/', 'site\controllers\EventController::recurMonthly')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/monthlyLast', "site\controllers\EventController::recurMonthlyLast")
+$app->match('/event/{slug}/recur/monthlyLast', 'site\controllers\EventController::recurMonthlyLast')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/monthlyLast/', "site\controllers\EventController::recurMonthlyLast")
+$app->match('/event/{slug}/recur/monthlyLast/', 'site\controllers\EventController::recurMonthlyLast')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/arbitrary', "site\controllers\EventController::recurArbitrary")
+$app->match('/event/{slug}/recur/arbitrary', 'site\controllers\EventController::recurArbitrary')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/recur/arbitrary/', "site\controllers\EventController::recurArbitrary")
+$app->match('/event/{slug}/recur/arbitrary/', 'site\controllers\EventController::recurArbitrary')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/moveToArea', "site\controllers\EventController::moveToArea")
+$app->match('/event/{slug}/moveToArea', 'site\controllers\EventController::moveToArea')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite); 
-$app->match('/event/{slug}/edit/tags', "site\controllers\EventController::editTags")
+$app->match('/event/{slug}/edit/tags', 'site\controllers\EventController::editTags')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($featureTagRequired)
 		->before($canChangeSite); 
-$app->match('/event/{slug}/edit/groups', "site\controllers\EventController::editGroups")
+$app->match('/event/{slug}/edit/groups', 'site\controllers\EventController::editGroups')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionEventsChangeRequired)
 		->before($featureGroupRequired)
 		->before($canChangeSite);
-$app->match('/event/{slug}/edit/media', "site\controllers\EventController::editMedia")
+$app->match('/event/{slug}/edit/media', 'site\controllers\EventController::editMedia')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($appFileStoreRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/edit/media/add/existing', "site\controllers\EventController::editMediaAddExisting")
+$app->match('/event/{slug}/edit/media/add/existing', 'site\controllers\EventController::editMediaAddExisting')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionEventsChangeRequired)
 	->before($appFileStoreRequired)
 	->before($canChangeSite);
-$app->match('/event/{slug}/edit/media/{mediaslug}/remove', "site\controllers\EventController::editMediaRemove")
+$app->match('/event/{slug}/edit/media/{mediaslug}/remove', 'site\controllers\EventController::editMediaRemove')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->assert('mediaslug', '\d+')
 	->before($permissionEventsChangeRequired)
@@ -208,157 +208,157 @@ $app->match('/event/{slug}/edit/media/{mediaslug}/remove', "site\controllers\Eve
 	->before($canChangeSite);
 
 
-$app->match('/group', "site\controllers\GroupListController::index"); 
-$app->match('/group/', "site\controllers\GroupListController::index"); 
+$app->match('/group', 'site\controllers\GroupListController::index'); 
+$app->match('/group/', 'site\controllers\GroupListController::index'); 
 
-$app->match('/group/new/', "site\controllers\GroupNewController::newGroup")
+$app->match('/group/new/', 'site\controllers\GroupNewController::newGroup')
 		->before($permissionGroupsChangeRequiredOrForAnyVerifiedUser)
 		->before($featureGroupRequired)
 		->before($canChangeSite); 
 
-$app->match('/group/{slug}', "site\controllers\GroupController::show")
+$app->match('/group/{slug}', 'site\controllers\GroupController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/group/{slug}/', "site\controllers\GroupController::show")
+$app->match('/group/{slug}/', 'site\controllers\GroupController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/group/{slug}/history', "site\controllers\GroupController::history")
+$app->match('/group/{slug}/history', 'site\controllers\GroupController::history')
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/group/{slug}/edit', "site\controllers\GroupController::editSplash")
+$app->match('/group/{slug}/edit', 'site\controllers\GroupController::editSplash')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionGroupsChangeRequired)
 		->before($featureGroupRequired)
 		->before($canChangeSite);
-$app->match('/group/{slug}/edit/media', "site\controllers\GroupController::editMedia")
+$app->match('/group/{slug}/edit/media', 'site\controllers\GroupController::editMedia')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appFileStoreRequired)
 		->before($canChangeSite); 
-$app->match('/group/{slug}/edit/media/add/existing', "site\controllers\GroupController::editMediaAddExisting")
+$app->match('/group/{slug}/edit/media/add/existing', 'site\controllers\GroupController::editMediaAddExisting')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionGroupsChangeRequired)
 		->before($appFileStoreRequired)
 		->before($canChangeSite);
-$app->match('/group/{slug}/edit/media/{mediaslug}/remove', "site\controllers\GroupController::editMediaRemove")
+$app->match('/group/{slug}/edit/media/{mediaslug}/remove', 'site\controllers\GroupController::editMediaRemove')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('mediaslug', '\d+')
 		->before($permissionGroupsChangeRequired)
 		->before($appFileStoreRequired)
 		->before($canChangeSite); 
-$app->match('/group/{slug}/edit/details', "site\controllers\GroupController::editDetails")
+$app->match('/group/{slug}/edit/details', 'site\controllers\GroupController::editDetails')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionGroupsChangeRequired)
 		->before($featureGroupRequired)
 		->before($canChangeSite);
-$app->match('/group/{slug}/watch', "site\controllers\GroupController::watch")
+$app->match('/group/{slug}/watch', 'site\controllers\GroupController::watch')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appUserRequired)
 		->before($canChangeSite);
-$app->match('/group/{slug}/watch/', "site\controllers\GroupController::watch")
+$app->match('/group/{slug}/watch/', 'site\controllers\GroupController::watch')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appUserRequired)
 		->before($canChangeSite);
-$app->match('/group/{slug}/calendar', "site\controllers\GroupController::calendarNow")
+$app->match('/group/{slug}/calendar', 'site\controllers\GroupController::calendarNow')
 		->assert('slug', FRIENDLY_SLUG_REGEX) ; 
-$app->match('/group/{slug}/calendar/', "site\controllers\GroupController::calendarNow")
+$app->match('/group/{slug}/calendar/', 'site\controllers\GroupController::calendarNow')
 		->assert('slug', FRIENDLY_SLUG_REGEX) ; 
-$app->match('/group/{slug}/calendar/{year}/{month}', "site\controllers\GroupController::calendar")
+$app->match('/group/{slug}/calendar/{year}/{month}', 'site\controllers\GroupController::calendar')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/group/{slug}/calendar/{year}/{month}/', "site\controllers\GroupController::calendar")
+$app->match('/group/{slug}/calendar/{year}/{month}/', 'site\controllers\GroupController::calendar')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/group/{slug}/stopWatchingFromEmail/{userid}/{code}', "site\controllers\GroupController::stopWatchingFromEmail")
+$app->match('/group/{slug}/stopWatchingFromEmail/{userid}/{code}', 'site\controllers\GroupController::stopWatchingFromEmail')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('userid', '\d+')
 		->before($canChangeSite); 
-$app->match('/group/{slug}/newimporturl', "site\controllers\GroupController::newImportURL")
+$app->match('/group/{slug}/newimporturl', 'site\controllers\GroupController::newImportURL')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('userid', '\d+')
 		->before($permissionImportURLsChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite); 
-$app->match('/group/{slug}/importers', "site\controllers\GroupController::importers")
+$app->match('/group/{slug}/importers', 'site\controllers\GroupController::importers')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 
 
-$app->match('/venue', "site\controllers\VenueListController::index"); 
-$app->match('/venue/', "site\controllers\VenueListController::index"); 
+$app->match('/venue', 'site\controllers\VenueListController::index'); 
+$app->match('/venue/', 'site\controllers\VenueListController::index'); 
 
-$app->match('/venue/new', "site\controllers\VenueNewController::newVenue")
+$app->match('/venue/new', 'site\controllers\VenueNewController::newVenue')
 		->before($permissionVenuesChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite); 
-$app->match('/venue/new/', "site\controllers\VenueNewController::newVenue")
+$app->match('/venue/new/', 'site\controllers\VenueNewController::newVenue')
 		->before($permissionVenuesChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite); 
-$app->match('/venue/new/json', "site\controllers\VenueNewController::newVenueJSON")
+$app->match('/venue/new/json', 'site\controllers\VenueNewController::newVenueJSON')
 		->before($permissionVenuesChangeRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite); 
-$app->match('/venue/new/json/', "site\controllers\VenueNewController::newVenueJSON")
+$app->match('/venue/new/json/', 'site\controllers\VenueNewController::newVenueJSON')
 		->before($permissionVenuesChangeRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite); 
 
 
 
-$app->match('/venue/virtual', "site\controllers\VenueVirtualController::show"); 
-$app->match('/venue/virtual/', "site\controllers\VenueVirtualController::show");
-$app->match('/venue/virtual/calendar', "site\controllers\VenueVirtualController::calendarNow") ; 
-$app->match('/venue/virtual/calendar/', "site\controllers\VenueVirtualController::calendarNow") ; 
-$app->match('/venue/virtual/calendar/{year}/{month}', "site\controllers\VenueVirtualController::calendar")
+$app->match('/venue/virtual', 'site\controllers\VenueVirtualController::show'); 
+$app->match('/venue/virtual/', 'site\controllers\VenueVirtualController::show');
+$app->match('/venue/virtual/calendar', 'site\controllers\VenueVirtualController::calendarNow') ; 
+$app->match('/venue/virtual/calendar/', 'site\controllers\VenueVirtualController::calendarNow') ; 
+$app->match('/venue/virtual/calendar/{year}/{month}', 'site\controllers\VenueVirtualController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/venue/virtual/calendar/{year}/{month}/', "site\controllers\VenueVirtualController::calendar")
+$app->match('/venue/virtual/calendar/{year}/{month}/', 'site\controllers\VenueVirtualController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/venue/virtual/history', "site\controllers\VenueVirtualController::history"); 
+$app->match('/venue/virtual/history', 'site\controllers\VenueVirtualController::history'); 
 
 
-$app->match('/venue/{slug}', "site\controllers\VenueController::show")
+$app->match('/venue/{slug}', 'site\controllers\VenueController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/venue/{slug}/', "site\controllers\VenueController::show")
+$app->match('/venue/{slug}/', 'site\controllers\VenueController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/venue/{slug}/edit', "site\controllers\VenueController::editSplash")
+$app->match('/venue/{slug}/edit', 'site\controllers\VenueController::editSplash')
 	->assert('slug', FRIENDLY_SLUG_REGEX)
 	->before($permissionCalendarChangeRequired)
 	->before($canChangeSite);
-$app->match('/venue/{slug}/edit/details', "site\controllers\VenueController::editDetails")
+$app->match('/venue/{slug}/edit/details', 'site\controllers\VenueController::editDetails')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionVenuesChangeRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite);
-$app->match('/venue/{slug}/delete', "site\controllers\VenueController::delete")
+$app->match('/venue/{slug}/delete', 'site\controllers\VenueController::delete')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionVenuesChangeRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite); 
-$app->match('/venue/{slug}/moveToArea', "site\controllers\VenueController::moveToArea")
+$app->match('/venue/{slug}/moveToArea', 'site\controllers\VenueController::moveToArea')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionVenuesChangeRequired)
 		->before($featurePhysicalEventsRequired)		
 		->before($canChangeSite); 
-$app->match('/venue/{slug}/calendar', "site\controllers\VenueController::calendarNow") ; 
-$app->match('/venue/{slug}/calendar/', "site\controllers\VenueController::calendarNow") ; 
-$app->match('/venue/{slug}/calendar/{year}/{month}', "site\controllers\VenueController::calendar")
+$app->match('/venue/{slug}/calendar', 'site\controllers\VenueController::calendarNow') ; 
+$app->match('/venue/{slug}/calendar/', 'site\controllers\VenueController::calendarNow') ; 
+$app->match('/venue/{slug}/calendar/{year}/{month}', 'site\controllers\VenueController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/venue/{slug}/calendar/{year}/{month}/', "site\controllers\VenueController::calendar")
+$app->match('/venue/{slug}/calendar/{year}/{month}/', 'site\controllers\VenueController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/venue/{slug}/history', "site\controllers\VenueController::history")
+$app->match('/venue/{slug}/history', 'site\controllers\VenueController::history')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/venue/{slug}/edit/media', "site\controllers\VenueController::editMedia")
+$app->match('/venue/{slug}/edit/media', 'site\controllers\VenueController::editMedia')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appFileStoreRequired)
 		->before($canChangeSite);
-$app->match('/venue/{slug}/edit/media/add/existing', "site\controllers\VenueController::editMediaAddExisting")
+$app->match('/venue/{slug}/edit/media/add/existing', 'site\controllers\VenueController::editMediaAddExisting')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appFileStoreRequired)
 		->before($permissionVenuesChangeRequired)
 		->before($canChangeSite);
-$app->match('/venue/{slug}/edit/media/{mediaslug}/remove', "site\controllers\VenueController::editMediaRemove")
+$app->match('/venue/{slug}/edit/media/{mediaslug}/remove', 'site\controllers\VenueController::editMediaRemove')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('mediaslug', '\d+')
 		->before($appFileStoreRequired)
@@ -366,294 +366,294 @@ $app->match('/venue/{slug}/edit/media/{mediaslug}/remove', "site\controllers\Ven
 		->before($canChangeSite); 
 
 
-$app->match('/country', "site\controllers\CountryListController::index"); 
-$app->match('/country/', "site\controllers\CountryListController::index"); 
+$app->match('/country', 'site\controllers\CountryListController::index'); 
+$app->match('/country/', 'site\controllers\CountryListController::index'); 
 
-$app->match('/country/{slug}', "site\controllers\CountryController::show"); 
-$app->match('/country/{slug}/', "site\controllers\CountryController::show"); 
-$app->match('/country/{slug}/calendar', "site\controllers\CountryController::calendarNow") ; 
-$app->match('/country/{slug}/calendar/', "site\controllers\CountryController::calendarNow") ; 
-$app->match('/country/{slug}/calendar/{year}/{month}', "site\controllers\CountryController::calendar")
+$app->match('/country/{slug}', 'site\controllers\CountryController::show'); 
+$app->match('/country/{slug}/', 'site\controllers\CountryController::show'); 
+$app->match('/country/{slug}/calendar', 'site\controllers\CountryController::calendarNow') ; 
+$app->match('/country/{slug}/calendar/', 'site\controllers\CountryController::calendarNow') ; 
+$app->match('/country/{slug}/calendar/{year}/{month}', 'site\controllers\CountryController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/country/{slug}/calendar/{year}/{month}/', "site\controllers\CountryController::calendar")
+$app->match('/country/{slug}/calendar/{year}/{month}/', 'site\controllers\CountryController::calendar')
 		->assert('year', '\d+')
 		->assert('month', '\d+') ;
 
 
-$app->match('/country/{slug}/new', "site\controllers\CountryController::newSplash")
+$app->match('/country/{slug}/new', 'site\controllers\CountryController::newSplash')
 		->before($permissionAreasChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite);
-$app->match('/country/{slug}/newArea', "site\controllers\CountryController::newArea")
+$app->match('/country/{slug}/newArea', 'site\controllers\CountryController::newArea')
 		->before($permissionAreasChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite);
 
 
-$app->match('/country/{slug}/info.json', "site\controllers\CountryController::infoJson"); 
+$app->match('/country/{slug}/info.json', 'site\controllers\CountryController::infoJson'); 
 
-$app->match('/area/{slug}', "site\controllers\AreaController::show")
+$app->match('/area/{slug}', 'site\controllers\AreaController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/area/{slug}/', "site\controllers\AreaController::show")
+$app->match('/area/{slug}/', 'site\controllers\AreaController::show')
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/area/{slug}/new', "site\controllers\AreaController::newSplash")
+$app->match('/area/{slug}/new', 'site\controllers\AreaController::newSplash')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionAreasChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite);
-$app->match('/area/{slug}/newArea', "site\controllers\AreaController::newArea")
+$app->match('/area/{slug}/newArea', 'site\controllers\AreaController::newArea')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionAreasChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite);
-$app->match('/area/{slug}/edit/details', "site\controllers\AreaController::editDetails")
+$app->match('/area/{slug}/edit/details', 'site\controllers\AreaController::editDetails')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionAreasChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite);
 
-$app->match('/area/{slug}/history', "site\controllers\AreaController::history")
+$app->match('/area/{slug}/history', 'site\controllers\AreaController::history')
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/area/{slug}/calendar', "site\controllers\AreaController::calendarNow")
+$app->match('/area/{slug}/calendar', 'site\controllers\AreaController::calendarNow')
 		->assert('slug', FRIENDLY_SLUG_REGEX) ; 
-$app->match('/area/{slug}/calendar/', "site\controllers\AreaController::calendarNow") 
+$app->match('/area/{slug}/calendar/', 'site\controllers\AreaController::calendarNow') 
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
-$app->match('/area/{slug}/calendar/{year}/{month}', "site\controllers\AreaController::calendar")
+$app->match('/area/{slug}/calendar/{year}/{month}', 'site\controllers\AreaController::calendar')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/area/{slug}/calendar/{year}/{month}/', "site\controllers\AreaController::calendar")
+$app->match('/area/{slug}/calendar/{year}/{month}/', 'site\controllers\AreaController::calendar')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('year', '\d+')
 		->assert('month', '\d+') ; 
-$app->match('/area/{slug}/info.json', "site\controllers\AreaController::infoJson")
+$app->match('/area/{slug}/info.json', 'site\controllers\AreaController::infoJson')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 
 
-$app->match('/area/{slug}/watch/', "site\controllers\AreaController::watch")
+$app->match('/area/{slug}/watch/', 'site\controllers\AreaController::watch')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appUserRequired)
 		->before($canChangeSite);
 
-$app->match('/area/{slug}/stopWatchingFromEmail/{userid}/{code}', "site\controllers\AreaController::stopWatchingFromEmail")
+$app->match('/area/{slug}/stopWatchingFromEmail/{userid}/{code}', 'site\controllers\AreaController::stopWatchingFromEmail')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->assert('userid', '\d+')
 		->before($canChangeSite);
 
 
 
-$app->match('/watch', "site\controllers\IndexController::watch")
+$app->match('/watch', 'site\controllers\IndexController::watch')
 		->before($appUserRequired)
 		->before($canChangeSite);
-$app->match('/watch/', "site\controllers\IndexController::watch")
+$app->match('/watch/', 'site\controllers\IndexController::watch')
 		->before($appUserRequired)
 		->before($canChangeSite);
 
 
-$app->match('/tag', "site\controllers\TagListController::index"); 
-$app->match('/tag/', "site\controllers\TagListController::index");
+$app->match('/tag', 'site\controllers\TagListController::index'); 
+$app->match('/tag/', 'site\controllers\TagListController::index');
 
-$app->match('/tag/new', "site\controllers\TagNewController::newTag")
+$app->match('/tag/new', 'site\controllers\TagNewController::newTag')
     ->before($permissionTagsChangeRequired)
     ->before($canChangeSite);
 
-$app->match('/tag/{slug}', "site\controllers\TagController::show")
+$app->match('/tag/{slug}', 'site\controllers\TagController::show')
     ->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/tag/{slug}/', "site\controllers\TagController::show")
-    ->assert('slug', FRIENDLY_SLUG_REGEX);
-
-$app->match('/tag/{slug}/edit', "site\controllers\TagController::edit")
-    ->before($permissionTagsChangeRequired)
-    ->before($canChangeSite)
-    ->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/tag/{slug}/delete', "site\controllers\TagController::delete")
-    ->before($permissionTagsChangeRequired)
-    ->before($canChangeSite)
-    ->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/tag/{slug}/undelete', "site\controllers\TagController::undelete")
-    ->before($permissionTagsChangeRequired)
-    ->before($canChangeSite)
+$app->match('/tag/{slug}/', 'site\controllers\TagController::show')
     ->assert('slug', FRIENDLY_SLUG_REGEX);
 
-$app->match('/admin', "site\controllers\AdminController::index")
+$app->match('/tag/{slug}/edit', 'site\controllers\TagController::edit')
+    ->before($permissionTagsChangeRequired)
+    ->before($canChangeSite)
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/tag/{slug}/delete', 'site\controllers\TagController::delete')
+    ->before($permissionTagsChangeRequired)
+    ->before($canChangeSite)
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
+$app->match('/tag/{slug}/undelete', 'site\controllers\TagController::undelete')
+    ->before($permissionTagsChangeRequired)
+    ->before($canChangeSite)
+    ->assert('slug', FRIENDLY_SLUG_REGEX);
+
+$app->match('/admin', 'site\controllers\AdminController::index')
 		->before($permissionCalendarAdministratorRequired);
-$app->match('/admin/', "site\controllers\AdminController::index")
+$app->match('/admin/', 'site\controllers\AdminController::index')
 		->before($permissionCalendarAdministratorRequired);
-$app->match('/admin/profile', "site\controllers\AdminController::profile")
+$app->match('/admin/profile', 'site\controllers\AdminController::profile')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/features', "site\controllers\AdminController::features")
+$app->match('/admin/features', 'site\controllers\AdminController::features')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/settings', "site\controllers\AdminController::settings")
+$app->match('/admin/settings', 'site\controllers\AdminController::settings')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/visibility', "site\controllers\AdminController::visibility")
+$app->match('/admin/visibility', 'site\controllers\AdminController::visibility')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/countries', "site\controllers\AdminController::countries")
+$app->match('/admin/countries', 'site\controllers\AdminController::countries')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/media', "site\controllers\AdminController::media")
+$app->match('/admin/media', 'site\controllers\AdminController::media')
 		->before($appFileStoreRequired)
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/sendemail', "site\controllers\SendEmailNewController::index")
+$app->match('/admin/sendemail', 'site\controllers\SendEmailNewController::index')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/sendemail/', "site\controllers\SendEmailNewController::index")
+$app->match('/admin/sendemail/', 'site\controllers\SendEmailNewController::index')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/sendemail/{slug}', "site\controllers\SendEmailController::show")
+$app->match('/admin/sendemail/{slug}', 'site\controllers\SendEmailController::show')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/sendemail/{slug}/', "site\controllers\SendEmailController::show")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-
-$app->match('/admin/areas/', "site\controllers\AdminController::areas")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-$app->match('/admin/areas/{countryslug}', "site\controllers\AdminAreasController::index")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-$app->match('/admin/areas/{countryslug}/new', "site\controllers\AdminAreasController::newArea")
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-$app->match('/admin/areas/{countryslug}/action', "site\controllers\AdminAreasController::action")
+$app->match('/admin/sendemail/{slug}/', 'site\controllers\SendEmailController::show')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
 
-$app->match('/admin/usergroup/', "site\controllers\AdminController::listUserGroups")
+$app->match('/admin/areas/', 'site\controllers\AdminController::areas')
+		->before($permissionCalendarAdministratorRequired)
+		->before($canChangeSite);
+$app->match('/admin/areas/{countryslug}', 'site\controllers\AdminAreasController::index')
+		->before($permissionCalendarAdministratorRequired)
+		->before($canChangeSite);
+$app->match('/admin/areas/{countryslug}/new', 'site\controllers\AdminAreasController::newArea')
+		->before($permissionCalendarAdministratorRequired)
+		->before($canChangeSite);
+$app->match('/admin/areas/{countryslug}/action', 'site\controllers\AdminAreasController::action')
+		->before($permissionCalendarAdministratorRequired)
+		->before($canChangeSite);
+
+$app->match('/admin/usergroup/', 'site\controllers\AdminController::listUserGroups')
 		->before($permissionCalendarAdministratorRequired);
-$app->match('/admin/usergroup/new', "site\controllers\AdminController::newUserGroup")
+$app->match('/admin/usergroup/new', 'site\controllers\AdminController::newUserGroup')
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/usergroup/{id}', "site\controllers\AdminUserGroupController::show")
+$app->match('/admin/usergroup/{id}', 'site\controllers\AdminUserGroupController::show')
 		->before($permissionCalendarAdministratorRequired)
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/admin/usergroup/{id}/users', "site\controllers\AdminUserGroupController::users")
+$app->match('/admin/usergroup/{id}/users', 'site\controllers\AdminUserGroupController::users')
 		->before($permissionCalendarAdministratorRequired)
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/admin/usergroup/{id}/permissions', "site\controllers\AdminUserGroupController::permissions")
+$app->match('/admin/usergroup/{id}/permissions', 'site\controllers\AdminUserGroupController::permissions')
 		->before($permissionCalendarAdministratorRequired)
 		->assert('slug', FRIENDLY_SLUG_REGEX);
-$app->match('/admin/usergroup/{id}/edit', "site\controllers\AdminUserGroupController::edit")
+$app->match('/admin/usergroup/{id}/edit', 'site\controllers\AdminUserGroupController::edit')
 		->before($permissionCalendarAdministratorRequired)
 		->assert('slug', FRIENDLY_SLUG_REGEX);
 
-$app->match('/admin/user/', "site\controllers\AdminController::listUsers")
+$app->match('/admin/user/', 'site\controllers\AdminController::listUsers')
 	->before($permissionCalendarAdministratorRequired);
-$app->match('/admin/user/{username}/', "site\controllers\AdminUserController::index")
+$app->match('/admin/user/{username}/', 'site\controllers\AdminUserController::index')
 	->before($permissionCalendarAdministratorRequired)
 	->before($canChangeSite);
 
 if (!$CONFIG->isSingleSiteMode) {
-	$app->match('/admin/usernoteditor/', "site\controllers\AdminController::listUsersNotEditors")
+	$app->match('/admin/usernoteditor/', 'site\controllers\AdminController::listUsersNotEditors')
 		->before($permissionCalendarAdministratorRequired);
 }
 
-$app->match('/map', "site\controllers\MapController::index");
-$app->match('/map/', "site\controllers\MapController::index");
+$app->match('/map', 'site\controllers\MapController::index');
+$app->match('/map/', 'site\controllers\MapController::index');
 
-$app->match('/map/time', "site\controllers\MapTimeController::index");
-$app->match('/map/time/', "site\controllers\MapTimeController::index");
-$app->match('/map/time/getdata.json', "site\controllers\MapTimeController::getDataJson");
+$app->match('/map/time', 'site\controllers\MapTimeController::index');
+$app->match('/map/time/', 'site\controllers\MapTimeController::index');
+$app->match('/map/time/getdata.json', 'site\controllers\MapTimeController::getDataJson');
 
 // OLD IMPORT URL ROUTES
-$app->match('/importurl', "site\controllers\ImportListController::index");
-$app->match('/importurl/', "site\controllers\ImportListController::index"); 
+$app->match('/importurl', 'site\controllers\ImportListController::index');
+$app->match('/importurl/', 'site\controllers\ImportListController::index'); 
 
-$app->match('/importurl/{slug}', "site\controllers\ImportController::show")
+$app->match('/importurl/{slug}', 'site\controllers\ImportController::show')
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/', "site\controllers\ImportController::show")
+$app->match('/importurl/{slug}/', 'site\controllers\ImportController::show')
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/edit', "site\controllers\ImportController::edit")
+$app->match('/importurl/{slug}/edit', 'site\controllers\ImportController::edit')
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/enable', "site\controllers\ImportController::enable")
+$app->match('/importurl/{slug}/enable', 'site\controllers\ImportController::enable')
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/disable', "site\controllers\ImportController::disable")
+$app->match('/importurl/{slug}/disable', 'site\controllers\ImportController::disable')
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+'); 
-$app->match('/importurl/{slug}/log', "site\controllers\ImportController::log")
+$app->match('/importurl/{slug}/log', 'site\controllers\ImportController::log')
 		->assert('slug', '\d+');
 
-$app->match('/importurl/{slug}/importedevent', "site\controllers\ImportImportedEventListController::index")
+$app->match('/importurl/{slug}/importedevent', 'site\controllers\ImportImportedEventListController::index')
 		->assert('slug', '\d+');
-$app->match('/importurl/{slug}/importedevent/{id}', "site\controllers\ImportImportedEventController::index")
+$app->match('/importurl/{slug}/importedevent/{id}', 'site\controllers\ImportImportedEventController::index')
 		->assert('slug', '\d+')
 		->assert('id', '\d+');
 
 // New IMPORT routes
 
-$app->match('/import', "site\controllers\ImportListController::index");
-$app->match('/import/', "site\controllers\ImportListController::index");
+$app->match('/import', 'site\controllers\ImportListController::index');
+$app->match('/import/', 'site\controllers\ImportListController::index');
 
-$app->match('/import/{slug}', "site\controllers\ImportController::show")
+$app->match('/import/{slug}', 'site\controllers\ImportController::show')
 		->assert('slug', '\d+');
-$app->match('/import/{slug}/', "site\controllers\ImportController::show")
+$app->match('/import/{slug}/', 'site\controllers\ImportController::show')
 		->assert('slug', '\d+');
-$app->match('/import/{slug}/edit', "site\controllers\ImportController::edit")
+$app->match('/import/{slug}/edit', 'site\controllers\ImportController::edit')
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+');
-$app->match('/import/{slug}/enable', "site\controllers\ImportController::enable")
+$app->match('/import/{slug}/enable', 'site\controllers\ImportController::enable')
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+');
-$app->match('/import/{slug}/disable', "site\controllers\ImportController::disable")
+$app->match('/import/{slug}/disable', 'site\controllers\ImportController::disable')
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+');
-$app->match('/import/{slug}/log', "site\controllers\ImportController::log")
+$app->match('/import/{slug}/log', 'site\controllers\ImportController::log')
 		->assert('slug', '\d+');
 
-$app->match('/import/{slug}/importedevent', "site\controllers\ImportImportedEventListController::index")
+$app->match('/import/{slug}/importedevent', 'site\controllers\ImportImportedEventListController::index')
 		->assert('slug', '\d+');
-$app->match('/import/{slug}/importedevent/{id}', "site\controllers\ImportImportedEventController::index")
+$app->match('/import/{slug}/importedevent/{id}', 'site\controllers\ImportImportedEventController::index')
 		->assert('slug', '\d+')
 		->assert('id', '\d+');
 
-$app->match('/media', "site\controllers\MediaListController::index")
+$app->match('/media', 'site\controllers\MediaListController::index')
 		->before($appFileStoreRequired); 
-$app->match('/media/', "site\controllers\MediaListController::index")
-		->before($appFileStoreRequired); 
-
-$app->match('/media/{slug}', "site\controllers\MediaController::show")
-		->assert('slug', '\d+')
-		->before($appFileStoreRequired); 
-$app->match('/media/{slug}/', "site\controllers\MediaController::show")
-		->assert('slug', '\d+')
-		->before($appFileStoreRequired); 
-$app->match('/media/{slug}/thumbnail', "site\controllers\MediaController::imageThumbnail")
-		->assert('slug', '\d+')
-		->before($appFileStoreRequired); 
-$app->match('/media/{slug}/normal', "site\controllers\MediaController::imageNormal")
-		->assert('slug', '\d+')
-		->before($appFileStoreRequired); 
-$app->match('/media/{slug}/full', "site\controllers\MediaController::imageFull")
-		->assert('slug', '\d+')
+$app->match('/media/', 'site\controllers\MediaListController::index')
 		->before($appFileStoreRequired); 
 
+$app->match('/media/{slug}', 'site\controllers\MediaController::show')
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
+$app->match('/media/{slug}/', 'site\controllers\MediaController::show')
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
+$app->match('/media/{slug}/thumbnail', 'site\controllers\MediaController::imageThumbnail')
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
+$app->match('/media/{slug}/normal', 'site\controllers\MediaController::imageNormal')
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
+$app->match('/media/{slug}/full', 'site\controllers\MediaController::imageFull')
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired); 
 
-$app->match('/stopWatchingFromEmail/{userid}/{code}', "site\controllers\IndexController::stopWatchingFromEmail")
+
+$app->match('/stopWatchingFromEmail/{userid}/{code}', 'site\controllers\IndexController::stopWatchingFromEmail')
 		->assert('userid', '\d+')
 		->before($canChangeSite); 
 
 // This route is duplicated from the index site so that JavaScript on the Site domain can get to it.
-$app->match('/me/notification.json', "index\controllers\CurrentUserController::listNotificationsJson") 
+$app->match('/me/notification.json', 'index\controllers\CurrentUserController::listNotificationsJson') 
 		->before($appUserRequired); 
 
 

@@ -10,6 +10,6 @@
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$app->match('/sysadmin/facebookuser', "org\openacalendar\\facebook\sysadmin\controllers\UserController::index"); 
+$app->match('/sysadmin/facebookuser', 'org\openacalendar\facebook\sysadmin\controllers\UserController::index');
 
 

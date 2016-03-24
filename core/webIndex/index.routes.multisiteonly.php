@@ -11,7 +11,7 @@
  */
 
 
-$app->match('/create', "index\controllers\IndexController::create")
+$app->match('/create', 'index\controllers\IndexController::create')
 	->before($permissionCreateSiteRequired)
 	->before($canChangeSite);
 

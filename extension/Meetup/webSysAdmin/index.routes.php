@@ -10,6 +10,6 @@
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$app->match('/sysadmin/meetupuser', "org\openacalendar\meetup\sysadmin\controllers\UserController::index"); 
+$app->match('/sysadmin/meetupuser', 'org\openacalendar\meetup\sysadmin\controllers\UserController::index');
 
 

@@ -11,9 +11,9 @@
  */
 
 
-$app->match('/sysadmin/contactsupport', "org\openacalendar\contact\sysadmin\controllers\ContactSupportListController::index");
-$app->match('/sysadmin/contactsupport/', "org\openacalendar\contact\sysadmin\controllers\ContactSupportListController::index");
+$app->match('/sysadmin/contactsupport', 'org\openacalendar\contact\sysadmin\controllers\ContactSupportListController::index');
+$app->match('/sysadmin/contactsupport/', 'org\openacalendar\contact\sysadmin\controllers\ContactSupportListController::index');
 
-$app->match('/sysadmin/contactsupport/{id}/', "org\openacalendar\contact\sysadmin\controllers\ContactSupportController::index")
+$app->match('/sysadmin/contactsupport/{id}/', 'org\openacalendar\contact\sysadmin\controllers\ContactSupportController::index')
 		->assert('id', '\d+');
 
