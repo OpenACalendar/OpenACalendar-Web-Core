@@ -38,11 +38,8 @@
 
 {% block content %}
 
-
-
-	<h2>{{  event.summaryDisplay }}{%  if event.isCancelled  %} [CANCELLED]{%  endif %}</h2>
-
-
+	<h2>{{  event.summaryDisplay }}{%  if event.isCancelled  %} [CANCELLED]{%  elseif event.isDeleted %} [DELETED]{%  endif %}</h2>
+	
 	{% if groups|length > 0 %}
 		<ul class="underTitleGroupListing">
 			{% for group in groups %}

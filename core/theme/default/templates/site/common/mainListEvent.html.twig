@@ -41,7 +41,7 @@
 	{%  endif %}
 	<div class="title" itemprop="name">
 		<a href="/event/{{ event.slugForUrl }}" itemprop="url">
-			{{ event.summaryDisplay}}
+			{{ event.summaryDisplay}}{%  if event.isCancelled  %} [CANCELLED]{%  elseif event.isDeleted%} [DELETED]{%  endif %}
 		</a>
 	</div>
 	<p class="description" itemprop="description">{{ event.description |  truncate(1000) | nl2br  | linkify }}</p>
