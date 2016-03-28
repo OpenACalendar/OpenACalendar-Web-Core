@@ -28,9 +28,9 @@
 	<form action="" method="post">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 		<input type="hidden" name="action" value="unwatch">
-		<input type="submit" value="Stop Watching">
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="Stop Watching" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
 	</form>
-		
 	
 {% endblock %}
 
