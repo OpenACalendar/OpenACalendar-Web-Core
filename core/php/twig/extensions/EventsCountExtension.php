@@ -51,6 +51,8 @@ class EventsCountExtension  extends \Twig_Extension {
 			$erb->setArea($data);
 		} else if ($data instanceof \models\GroupModel) {
 			$erb->setGroup($data);
+		} else if ($data instanceof \models\VenueModel) {
+			$erb->setVenue($data);
 		} else if ($data instanceof \models\TagModel) {
 			$erb->setTag($data);
 		}
@@ -73,6 +75,8 @@ class EventsCountExtension  extends \Twig_Extension {
 			$erb->setArea($data);
 		} else if ($data instanceof \models\GroupModel) {
 			$erb->setGroup($data);
+		} else if ($data instanceof \models\VenueModel) {
+			$erb->setVenue($data);
 		} else if ($data instanceof \models\TagModel) {
 			$erb->setTag($data);
 		}
