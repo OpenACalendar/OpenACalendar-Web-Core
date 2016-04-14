@@ -3,6 +3,7 @@
 
 namespace repositories\builders;
 
+use models\MediaHistoryModel;
 use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
@@ -436,6 +437,46 @@ class HistoryRepositoryBuilder {
 				$results[] = $tagHistory;
 			}
 			
+		}
+
+		/////////////////////////// Medias History
+
+		if ($this->historyRepositoryBuilderConfig->getIncludeMediaHistory()	) {
+			$where = array();
+			$params = array();
+
+			if ($this->historyRepositoryBuilderConfig->getSite()) {
+				$where[] = 'media_information.site_id =:site';
+				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
+			}
+
+			if ($this->historyRepositoryBuilderConfig->getSince()) {
+				$where[] = ' media_history.created_at >= :since ';
+				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");
+			}
+
+			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
+				$where[] = 'media_history.user_account_id != :userid ';
+				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
+			}
+
+			$sql = "SELECT media_history.*, media_information.slug AS media_slug, user_account_information.username AS user_account_username FROM media_history ".
+			       " LEFT JOIN user_account_information ON user_account_information.id = media_history.user_account_id ".
+			       " LEFT JOIN media_information ON media_information.id = media_history.media_id ".
+			       ($where ? " WHERE ".implode(" AND ", $where) : "").
+			       " ORDER BY media_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+
+			//var_dump($sql); var_dump($params);
+
+			$stat = $this->app['db']->prepare($sql);
+			$stat->execute($params);
+
+			while($data = $stat->fetch()) {
+				$mediaHistory = new MediaHistoryModel();
+				$mediaHistory->setFromDataBaseRow($data);
+				$results[] = $mediaHistory;
+			}
+
 		}
 		
 		

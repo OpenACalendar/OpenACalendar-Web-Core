@@ -1,0 +1,48 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<li class="media">
+	<div class="icon">
+		<a href="/media/{{ historyItem.mediaSlug }}">
+			<img src="/theme/default/img/historyMediaIcon.png" alt="Media" title="Media">
+		</a>
+	</div>
+	<div class="title"><a href="/media/{{ historyItem.mediaSlug }}">{{ historyItem.title }}</a></div>
+	{% if historyItem.getIsNew %}
+		<div class="new">New!</div>
+	{% endif %}
+	{% if historyItem.isAnyChangeFlagsUnknown %}
+		<div>{{ historyItem.title  }}</div>
+	{% else %}
+		{% if historyItem.getTitleChanged %}
+			<div class="fieldChanged">
+				<div class="field">Title changed:</div>
+				<div class="value">{{ historyItem.title }}</div>
+			</div>
+		{%endif %}
+		{% if historyItem.getSourceTextChanged %}
+			<div class="fieldChanged">
+				<div class="field">Source changed:</div>
+				<div class="value">{{ historyItem.sourceText | nl2br  }}</div>
+			</div>
+		{%endif %}
+		{% if historyItem.getSourceURLChanged %}
+			<div class="fieldChanged">
+				<div class="field">Source URL changed:</div>
+				<div class="value">{{ historyItem.sourceURL }}</div>
+			</div>
+		{%endif %}
+	{% endif %}
+	<div class="created">
+		Edited at
+		<time datetime="{{ historyItem.getCreatedAt|date('c', currentTimeZone) }}">
+			{{ historyItem.getCreatedAt|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i', currentTimeZone) }}
+			({{ historyItem.getCreatedAt | time_diff }})
+		</time>
+		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
+	</div>
+</li>

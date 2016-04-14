@@ -35,6 +35,7 @@ class HistoryRepositoryBuilderConfig {
 	protected $includeGroupHistory = true;
 	protected $includeVenueHistory = true;
 	protected $includeAreaHistory = true;
+	protected $includeMediaHistory = true;
 	protected $includeImportURLHistory = true;
 
 
@@ -85,6 +86,22 @@ class HistoryRepositoryBuilderConfig {
 	public function setIncludeImportURLHistory($includeImportURLHistory) {
 		$this->includeImportURLHistory = $includeImportURLHistory;
 	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIncludeMediaHistory() {
+		return $this->includeMediaHistory;
+	}
+
+	/**
+	 * @param boolean $includeMediaHistory
+	 */
+	public function setIncludeMediaHistory( $includeMediaHistory ) {
+		$this->includeMediaHistory = $includeMediaHistory;
+	}
+
+
 
 
 	protected $since;

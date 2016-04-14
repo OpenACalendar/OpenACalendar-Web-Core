@@ -140,6 +140,7 @@ class ExtensionCore extends BaseExtension {
 			new \tasks\UpdateAreaHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateEventHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateGroupHistoryChangeFlagsTask($this->app),
+			new \tasks\UpdateMediaHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateImportHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateSiteHistoryChangeFlagsTask($this->app),
 			new \tasks\UpdateTagHistoryChangeFlagsTask($this->app),
@@ -200,6 +201,8 @@ class ExtensionCore extends BaseExtension {
 			return new \newsfeedmodels\TagHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		} else if ($interfaceHistoryModel instanceof \models\VenueHistoryModel) {
 			return new \newsfeedmodels\VenueHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
+		} else if ($interfaceHistoryModel instanceof \models\MediaHistoryModel) {
+			return new \newsfeedmodels\MediaHistoryNewsFeedModel($interfaceHistoryModel, $siteModel);
 		}
 	}
 

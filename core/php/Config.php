@@ -190,6 +190,7 @@ class Config {
 	public $taskUpdateGroupHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateImportURLHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateSiteHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
+	public $taskUpdateMediaHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateTagHistoryChangeFlagsAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskUpdateHistoryChangeFlagsTaskAutomaticUpdateInterval = 1800; // 30 mins
 	public $taskRunImportURLsAutomaticUpdateInterval = 1800; // 30 mins

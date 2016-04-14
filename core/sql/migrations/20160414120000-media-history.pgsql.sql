@@ -1,0 +1,2 @@
+
+ALTER TABLE media_history ADD   is_new SMALLINT DEFAULT '0' NOT NULL;
