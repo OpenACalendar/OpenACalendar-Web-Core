@@ -645,8 +645,13 @@ $app->match('/media/{slug}/normal', 'site\controllers\MediaController::imageNorm
 		->before($appFileStoreRequired); 
 $app->match('/media/{slug}/full', 'site\controllers\MediaController::imageFull')
 		->assert('slug', '\d+')
-		->before($appFileStoreRequired); 
+		->before($appFileStoreRequired);
 
+$app->match('/media/{slug}/edit/details', 'site\controllers\MediaController::editDetails')
+    ->assert('slug', '\d+')
+	->before($permissionMediasChangeRequired)
+	->before($canChangeSite)
+    ->before($appFileStoreRequired);
 
 $app->match('/stopWatchingFromEmail/{userid}/{code}', 'site\controllers\IndexController::stopWatchingFromEmail')
 		->assert('userid', '\d+')

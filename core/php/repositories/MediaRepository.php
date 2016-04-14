@@ -3,6 +3,8 @@
 
 namespace repositories;
 
+use dbaccess\MediaDBAccess;
+use models\MediaEditMetaDataModel;
 use models\SiteModel;
 use models\MediaModel;
 use models\UserAccountModel;
@@ -23,9 +25,13 @@ class MediaRepository {
     /** @var Application */
     private  $app;
 
+	/** @var  \dbaccess\MediaDBAccess */
+	protected $mediaDBAccess;
+
     function __construct(Application $app)
     {
         $this->app = $app;
+	    $this->mediaDBAccess = new MediaDBAccess($app);
     }
 	
 	public function createFromFile(UploadedFile $newMedia, SiteModel $site, UserAccountModel $user, $title = null, $sourceText = null, $sourceURL = null) {
@@ -124,8 +130,28 @@ class MediaRepository {
 			$media->setFromDataBaseRow($stat->fetch());
 			return $media;
 		}
-	}	
-	
+	}
+
+	public function editWithMetaData(MediaModel $media,  MediaEditMetaDataModel $mediaEditMetaDataModel ) {
+		if ($media->getIsDeleted()) {
+			throw new \Exception("Can't edit deleted medias!");
+		}
+
+		try {
+			$this->app['db']->beginTransaction();
+
+			$fields = array('title','source_url','source_text');
+
+			$this->mediaDBAccess->update($media, $fields, $mediaEditMetaDataModel);
+
+			$this->app['db']->commit();
+
+			$this->app['messagequeproducerhelper']->send('org.openacalendar', 'MediaSaved', array('media_id'=>$media->getId()));
+		} catch (Exception $e) {
+			$this->app['db']->rollBack();
+		}
+	}
+
 	public function delete(MediaModel $media, UserAccountModel $user) {
 
 		try {

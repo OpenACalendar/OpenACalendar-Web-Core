@@ -1,0 +1,37 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block htmlHeader %}
+	<meta name="openacalendar:group:media" content="{{  media.slugForUrl }}" />
+{%  endblock %}
+
+{% block breadcrumbs %}
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/media', 'label':'media' }, { 'url':'/media/'~media.slugForUrl, 'label':media.title } ]  } %}
+{% endblock %}
+
+{% block content %}
+
+	<h2>{% if media.title %}{{ media.title }}{% else %}Media{% endif %}</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% block actions %}{% endblock %}
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/media/{{ media.slugForUrl }}">Details</a></li>
+		</ul>
+		<div id="innerPage">
+
+			{% block innerContent %}{% endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+{% endblock %}

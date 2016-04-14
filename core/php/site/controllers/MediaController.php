@@ -2,7 +2,9 @@
 
 namespace site\controllers;
 
+use models\MediaEditMetaDataModel;
 use Silex\Application;
+use site\forms\MediaEditForm;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
 use models\GroupModel;
@@ -35,8 +37,11 @@ class MediaController {
 		if ($this->parameters['media']->getIsDeleted()) {
 			return false;
 		}
-		
-		
+
+		$app['currentUserActions']->set("org.openacalendar","mediaEditDetails",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","MEDIAS_CHANGE")
+			&& !$this->parameters['media']->getIsDeleted());
+
 		return true;
 	}
 	
@@ -82,7 +87,41 @@ class MediaController {
 		
 		return $this->parameters['media']->getResponse($app['config']->mediaBrowserCacheExpiresInseconds);		
 	}
-	
+
+	function editDetails($slug, Request $request, Application $app) {
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Media does not exist.");
+		}
+
+		if ($this->parameters['media']->getIsDeleted()) {
+			die("No"); // TODO
+		}
+
+		$form = $app['form.factory']->create(new MediaEditForm($app), $this->parameters['media']);
+
+		if ('POST' == $request->getMethod()) {
+			$form->bind($request);
+
+			if ($form->isValid()) {
+
+				$mediaEditMetaDataModel = new MediaEditMetaDataModel();
+				$mediaEditMetaDataModel->setUserAccount($app['currentUser']);
+				$mediaEditMetaDataModel->setFromRequest($request);
+
+				$mediaRepository = new MediaRepository($app);
+				$mediaRepository->editWithMetaData($this->parameters['media'], $mediaEditMetaDataModel);
+
+				return $app->redirect("/media/".$this->parameters['media']->getSlugForUrl());
+
+			}
+		}
+
+
+		$this->parameters['form'] = $form->createView();
+		return $app['twig']->render('site/media/edit.details.html.twig', $this->parameters);
+
+	}
 }
 
 

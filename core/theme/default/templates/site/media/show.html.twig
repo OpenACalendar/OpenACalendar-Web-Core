@@ -5,71 +5,67 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/page.html.twig' %}
+{% extends 'site/media/page.html.twig' %}
 
 
 {% block pageTitle %}{% if media.title %}{{ media.title }}{% else %}Media{% endif %} - {% endblock %} 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/media/{{ media.slug }}" />
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/media/{{ media.slugForUrl }}" />
 	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 {% endblock %}
 
-{% block breadcrumbs %}
-	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/media', 'label':'media' }, { 'url':'/media/'~media.slug, 'label':media.title } ]  } %}
+
+{% block tabDetails %}currentTab{% endblock %}
+
+
+{% block actions %}
+	{% if currentUserActions.has("org.openacalendar","mediaEditDetails")  %}
+		<li class="action">
+			<a href="/media/{{ media.slugForUrl }}/edit/details"><div class="fa fa-pencil"></div> edit</a>
+		</li>
+	{%  endif %}
 {% endblock %}
 
-{% block content %}
+{% block innerContent %}
 
 	<div  class="mainShowMedia">
 
-		<h2>{% if media.title %}{{ media.title }}{% else %}Media{% endif %}</h2>
+		<img src="/media/{{ media.slugForUrl }}/normal">
 
-		<div id="innerPageWrapper">
-			<ul id="innerPageActions">
-				<li class="tab currentTab"><a href="/media/{{ media.slug }}">Details</a></li>
-			</ul>
-			<div id="innerPage">
+		<p>
+			Size:
+			{% set kilobyte = 1024 %}
+			{% set megabyte = kilobyte * 1024 %}
+			{% if media.storageSize < kilobyte %}
+				{{ bytmedia.storageSize ~ ' B' }}
+			{% elseif media.storageSize < megabyte %}
+				{{ (media.storageSize / kilobyte)|number_format(2, '.') ~ ' KB' }}
+			{% else %}
+				{{ (media.storageSize / megabyte)|number_format(2, '.') ~ ' MB' }}
+			{% endif %}
+		</p>
 
-				<img src="/media/{{ media.slug }}/normal">
+		<p><a href="/media/{{ media.slugForUrl }}/full" target="_blank">View Full Size Image</a></p>
 
-				<p>
-					Size:
-					{% set kilobyte = 1024 %}
-					{% set megabyte = kilobyte * 1024 %}
-					{% if media.storageSize < kilobyte %}
-						{{ bytmedia.storageSize ~ ' B' }}
-					{% elseif media.storageSize < megabyte %}
-						{{ (media.storageSize / kilobyte)|number_format(2, '.') ~ ' KB' }}
-					{% else %}
-						{{ (media.storageSize / megabyte)|number_format(2, '.') ~ ' MB' }}
-					{% endif %}
-				</p>
+		<p>
+			Source:
+			{% if media.sourceUrl %}<a href="{{ media.sourceUrl }}" target="_blank">{% endif %}
+				{% if media.sourceText %}{{ media.sourceText }}{% else %}not known{% endif%}
+			{% if media.sourceUrl %}</a>{% endif %}
+		</p>
 
-				<p><a href="/media/{{ media.slug }}/full" target="_blank">View Full Size Image</a></p>
-
-				<p>
-					Source:
-					{% if media.sourceUrl %}<a href="{{ media.sourceUrl }}" target="_blank">{% endif %}
-						{% if media.sourceText %}{{ media.sourceText }}{% else %}not known{% endif%}
-					{% if media.sourceUrl %}</a>{% endif %}
-				</p>
-
-				{% if currentSite.logoMediaId == media.id %}
-					<p>This is being used as the logo for the calendar.</p>
-				{% else %}
-					{% if currentUserActions.has("org.openacalendar","admin") %}
-						<form id="CountriesForm" action="" method="post" onsubmit="return confirm('Are you sure?');">
-							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-							<input type="hidden" name="action" value="makeSiteLogo">
-							<input type="submit" value="Make this the site logo">
-						</form>
-					{% endif %}
-				{% endif %}
-
-				<div id="afterInnerPageContent"></div>
-			</div>
-		</div>
+		{% if currentSite.logoMediaId == media.id %}
+			<p>This is being used as the logo for the calendar.</p>
+		{% else %}
+			{% if currentUserActions.has("org.openacalendar","admin") %}
+				<form id="CountriesForm" action="" method="post" onsubmit="return confirm('Are you sure?');">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="action" value="makeSiteLogo">
+					<input type="submit" value="Make this the site logo">
+				</form>
+			{% endif %}
+		{% endif %}
 
 	</div>
 		

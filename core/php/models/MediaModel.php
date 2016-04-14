@@ -73,6 +73,11 @@ class MediaModel {
 		return $this;
 	}
 
+	public function getSlugForUrl() {
+		// This is just a placeholder. Themes can use slugForURL like elsewhere (group, event, etc) and when we finally do proper slugs for media they will already use the right function.
+		return $this->slug;
+	}
+
 	public function getStorageSize() {
 		return $this->storage_size;
 	}
