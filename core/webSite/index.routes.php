@@ -636,7 +636,10 @@ $app->match('/media/{slug}', 'site\controllers\MediaController::show')
 		->before($appFileStoreRequired); 
 $app->match('/media/{slug}/', 'site\controllers\MediaController::show')
 		->assert('slug', '\d+')
-		->before($appFileStoreRequired); 
+		->before($appFileStoreRequired);
+$app->match('/media/{slug}/history', 'site\controllers\MediaController::history')
+		->assert('slug', '\d+')
+		->before($appFileStoreRequired);
 $app->match('/media/{slug}/thumbnail', 'site\controllers\MediaController::imageThumbnail')
 		->assert('slug', '\d+')
 		->before($appFileStoreRequired); 

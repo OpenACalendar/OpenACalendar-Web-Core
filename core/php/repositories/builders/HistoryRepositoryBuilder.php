@@ -450,6 +450,11 @@ class HistoryRepositoryBuilder {
 				$params['site'] = $this->historyRepositoryBuilderConfig->getSite()->getId();
 			}
 
+			if ($this->historyRepositoryBuilderConfig->getMedia()) {
+				$where[] = 'media_information.id =:media';
+				$params['media'] = $this->historyRepositoryBuilderConfig->getMedia()->getId();
+			}
+
 			if ($this->historyRepositoryBuilderConfig->getSince()) {
 				$where[] = ' media_history.created_at >= :since ';
 				$params['since'] = $this->historyRepositoryBuilderConfig->getSince()->format("Y-m-d H:i:s");

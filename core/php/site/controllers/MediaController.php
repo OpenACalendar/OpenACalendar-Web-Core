@@ -3,6 +3,7 @@
 namespace site\controllers;
 
 use models\MediaEditMetaDataModel;
+use repositories\builders\HistoryRepositoryBuilder;
 use Silex\Application;
 use site\forms\MediaEditForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,7 @@ class MediaController {
 			return false;
 		}
 
+		$app['currentUserActions']->set("org.openacalendar","mediaHistory",true);
 		$app['currentUserActions']->set("org.openacalendar","mediaEditDetails",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","MEDIAS_CHANGE")
 			&& !$this->parameters['media']->getIsDeleted());
@@ -63,7 +65,22 @@ class MediaController {
 		
 		return $app['twig']->render('site/media/show.html.twig', $this->parameters);
 	}
-	
+
+	function history($slug, Request $request, Application $app) {
+
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Media does not exist.");
+		}
+
+
+		$historyRepositoryBuilder = new HistoryRepositoryBuilder($app);
+		$historyRepositoryBuilder->getHistoryRepositoryBuilderConfig()->setMedia($this->parameters['media']);
+		$this->parameters['historyItems'] = $historyRepositoryBuilder->fetchAll();
+
+		return $app['twig']->render('site/media/history.html.twig', $this->parameters);
+	}
+
+
 	function imageThumbnail($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Media does not exist.");

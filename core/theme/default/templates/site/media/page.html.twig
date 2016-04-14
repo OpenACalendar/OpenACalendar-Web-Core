@@ -24,6 +24,7 @@
 		<ul id="innerPageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/media/{{ media.slugForUrl }}">Details</a></li>
+			{%  if currentUserActions.has("org.openacalendar","mediaHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/media/{{ media.slugForUrl }}/history">History of changes</a></li>{%  endif %}
 		</ul>
 		<div id="innerPage">
 

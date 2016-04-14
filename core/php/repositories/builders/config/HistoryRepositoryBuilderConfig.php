@@ -4,6 +4,7 @@
 namespace repositories\builders\config;
 
 use models\AreaModel;
+use models\MediaModel;
 use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
@@ -120,6 +121,7 @@ class HistoryRepositoryBuilderConfig {
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = true;
 		$this->includeTagHistory = true;
+		$this->includeMediaHistory = true;
 		$this->includeImportURLHistory = true;
 	}
 
@@ -134,6 +136,7 @@ class HistoryRepositoryBuilderConfig {
 		$this->includeVenueHistory = false;
 		$this->includeAreaHistory = false;
 		$this->includeTagHistory = false;
+		$this->includeMediaHistory = false;
 		$this->includeImportURLHistory = true;
 	}
 
@@ -147,6 +150,7 @@ class HistoryRepositoryBuilderConfig {
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = false;
 		$this->includeTagHistory = false;
+		$this->includeMediaHistory = false;
 		$this->includeImportURLHistory = false;
 	}
 
@@ -160,6 +164,7 @@ class HistoryRepositoryBuilderConfig {
 		$this->includeVenueHistory = true;
 		$this->includeAreaHistory = false;
 		$this->includeTagHistory = false;
+		$this->includeMediaHistory = false;
 		$this->includeImportURLHistory = false;
 	}
 
@@ -186,6 +191,21 @@ class HistoryRepositoryBuilderConfig {
 		$this->includeVenueHistory = false;
 		$this->includeAreaHistory = true;
 		$this->includeTagHistory = false;
+		$this->includeMediaHistory = false;
+		$this->includeImportURLHistory = false;
+	}
+
+	/** @var MediaModel **/
+	protected $media;
+
+	public function setMedia(MediaModel $media) {
+		$this->media = $media;
+		$this->includeEventHistory = false;
+		$this->includeGroupHistory = false;
+		$this->includeVenueHistory = false;
+		$this->includeAreaHistory = false;
+		$this->includeTagHistory = false;
+		$this->includeMediaHistory = true;
 		$this->includeImportURLHistory = false;
 	}
 
@@ -201,6 +221,7 @@ class HistoryRepositoryBuilderConfig {
 			$this->includeVenueHistory = false;
 			$this->includeAreaHistory = false;
 			$this->includeTagHistory = false;
+			$this->includeMediaHistory = false;
 			$this->includeImportURLHistory = false;
 		}
 	}
@@ -271,6 +292,15 @@ class HistoryRepositoryBuilderConfig {
 	{
 		return $this->group;
 	}
+
+	/**
+	 * @return MediaModel
+	 */
+	public function getMedia() {
+		return $this->media;
+	}
+
+
 
 	/**
 	 * @return \repositories\builders\UserModel
