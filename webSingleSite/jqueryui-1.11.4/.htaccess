@@ -1,5 +1,5 @@
 <IfModule mod_expires.c>
 	ExpiresActive On
-	ExpiresDefault "access plus 1 days"
+	ExpiresDefault "access plus 365 days"
 </IfModule>
 
