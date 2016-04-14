@@ -1814,7 +1814,9 @@ div.mainShowEvent .descriptionCancelled {
   font-weight: bold;
   font-size: 24pt;
   text-align: center;
-  padding: 10px 0;
+  padding: 20px 10px;
+  background: #000;
+  color: #fff;
 }
 ul.mainListEvents li.event p.description,
 div.mainShowEvent p.description {
@@ -1993,6 +1995,15 @@ div.mainShowArea .map {
 div.mainShowGroup p.description {
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 10px 0px;
+}
+div.mainShowGroup .descriptionDeleted {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 24pt;
+  text-align: center;
+  padding: 20px 10px;
+  background: #000;
+  color: #fff;
 }
 div.mainShowCountry .map {
   margin: 10px 0;
