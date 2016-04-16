@@ -567,6 +567,47 @@ class UserController {
 			'user'=>$user,
 		));
 	}
-	
+
+    function listUnsub($id, $code, Request $request, Application $app) {
+        $userRepository = new UserAccountRepository($app);
+
+        if ($app['currentUser'] && $app['currentUser']->getId() == $id) {
+            // We do this to save a DB Query
+            $user = $app['currentUser'];
+        } else {
+            $user = $userRepository->loadByID($id);
+        }
+
+        if (!$user) {
+            $app['monolog']->addError("Failed List-Unsubscribe - no account");
+            $app->abort(404, "No User");
+        }
+
+        $userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($app);
+        $userAccountGSK = $userAccountGeneralSecurityKeyRepository->loadByUserAccountIDAndAccessKey($id, $code);
+
+        if (!$userAccountGSK) {
+            $app['monolog']->addError("Failed List-Unsubscribe - account user ".$user->getId()." - code wrong");
+            $app->abort(404, "No User");
+        }
+
+        // Turn off email prefs on user
+        $user->setEmailUpcomingEvents('n');
+        $userRepository->editEmailsOptions($user);
+
+        // Turn off all user notification prefs
+        $repo = new \repositories\UserNotificationPreferenceRepository($app);
+        foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+            $extID = $extension->getId();
+            foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+                $repo->editEmailPreference($user,$extID, $type, false);
+            }
+        }
+
+        $app['monolog']->addError("List-Unsubscribe - account user ".$user->getId()." - done");
+
+        return 'Unsubscribed.';
+    }
+
 }
 

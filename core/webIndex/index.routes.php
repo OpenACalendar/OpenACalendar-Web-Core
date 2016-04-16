@@ -52,6 +52,8 @@ $app->match('/you/reset/{id}/{code}', "index\controllers\UserController::reset")
 		->before($canChangeSite); 
 $app->match('/you/emails/{id}/{code}', "index\controllers\UserController::emails")
 		->before($canChangeSite);
+$app->match('/you/listunsub/{id}/{code}', "index\controllers\UserController::listUnsub")
+		->before($canChangeSite);
 
 $app->match('/you/aftergetuserapi', "index\controllers\UserController::afterGetUserAPI");
 

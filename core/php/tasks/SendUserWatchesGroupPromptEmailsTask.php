@@ -117,7 +117,8 @@ class SendUserWatchesGroupPromptEmailsTask  extends \BaseTask  {
 						configureAppForUser($user);
 
 						$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
-						$unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.$user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
+                        $unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/listunsub/'.
+                            $user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
 						$lastEventsBuilder = new EventRepositoryBuilder($this->app);
 						$lastEventsBuilder->setSite($site);
@@ -156,7 +157,7 @@ class SendUserWatchesGroupPromptEmailsTask  extends \BaseTask  {
 						$message->addPart($messageHTML,'text/html');
 
 						$headers = $message->getHeaders();
-						$headers->addTextHeader('List-Unsubscribe', $unsubscribeURL);
+						$headers->addTextHeader('List-Unsubscribe', '<'.$unsubscribeURL.'>');
 
 						$this->logVerbose( " ... sending");
 						if (!$this->app['config']->isDebug) {
