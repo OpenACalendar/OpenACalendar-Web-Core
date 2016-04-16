@@ -43,6 +43,7 @@ class UserEmailsForm  extends AbstractType {
 		global $app;
 
 		$choices = array(
+				'n'=>'None',
 				'a'=>'You are attending',
 				'm'=>'You are or might be attending',
 				'w'=>'You are or might be attending, or you watch the event',
