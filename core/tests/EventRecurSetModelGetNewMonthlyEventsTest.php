@@ -416,5 +416,86 @@ class EventRecurSetModelGetNewMontlyEventsTest extends \BaseAppTest {
 
 
     }
+
+
+
+    /*
+     * 2nd Wed.
+     * This test makes sure we are offered events in the future from now only!
+     */
+    function testWeGetFutureEventsOnly1() {
+
+        $this->app['timesource']->mock(2012,7,1,7,0,0);
+
+
+        $event = new EventModel();
+        $event->setStartAt($this->mktime(2012,1,11,20,0,0));
+        $event->setEndAt($this->mktime(2012,1,11,22,0,0));
+        $event->setSummary("Event Please");
+
+        $eventSet = new EventRecurSetModel();
+        $eventSet->setTimeZoneName('Europe/London');
+
+        $newEvents = $eventSet->getNewMonthlyEventsOnSetDayInWeek($event, 6*31);
+
+        $this->assertTrue(count($newEvents) >= 6);
+
+        $this->assertEquals($this->mktime(2012,7,11,19,0,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,7,11,21,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+        $this->assertEquals("Event Please", $newEvents[0]->getSummary());
+
+        $this->assertEquals($this->mktime(2012,8,8,19,0,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,8,8,21,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+        $this->assertEquals("Event Please", $newEvents[1]->getSummary());
+
+        $this->assertEquals($this->mktime(2012,9,12,19,0,0)->format('r'), $newEvents[2]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,9,12,21,0,0)->format('r'), $newEvents[2]->getEndAt()->format('r'));
+        $this->assertEquals("Event Please", $newEvents[2]->getSummary());
+
+        $this->assertEquals($this->mktime(2012,10,10,19,0,0)->format('r'), $newEvents[3]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,10,10,21,0,0)->format('r'), $newEvents[3]->getEndAt()->format('r'));
+        $this->assertEquals("Event Please", $newEvents[3]->getSummary());
+
+        // DST shift happens here!
+        $this->assertEquals($this->mktime(2012,11,14,20,0,0)->format('r'), $newEvents[4]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,11,14,22,0,0)->format('r'), $newEvents[4]->getEndAt()->format('r'));
+        $this->assertEquals("Event Please", $newEvents[4]->getSummary());
+
+        $this->assertEquals($this->mktime(2012,12,12,20,0,0)->format('r'), $newEvents[5]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,12,12,22,0,0)->format('r'), $newEvents[5]->getEndAt()->format('r'));
+        $this->assertEquals("Event Please", $newEvents[5]->getSummary());
+
+    }
+
+
+    /**
+     * test event on 5TH sat in month.
+     * This test makes sure we are offered events in the future from now only!
+     **/
+    function testWeGetFutureEventsOnly2() {
+
+
+        $this->app['timesource']->mock(2012,11,20,14,27,0);
+
+        $event = new EventModel();
+        $event->setStartAt($this->mktime(2012,9,29,18,30,0));
+        $event->setEndAt($this->mktime(2012,9,29,21,0,0));
+
+        $eventSet = new EventRecurSetModel();
+        $eventSet->setTimeZoneName('Europe/London');
+
+        $newEvents = $eventSet->getNewMonthlyEventsOnLastDayInWeek($event, 6*31);
+
+        $this->assertTrue(count($newEvents) >= 2);
+
+        $this->assertEquals($this->mktime(2012,11,24,19,30,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,11,24,22,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2012,12,29,19,30,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2012,12,29,22,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+
+    }
+
+
 }
 

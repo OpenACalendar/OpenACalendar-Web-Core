@@ -20,33 +20,33 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 		return $dt;
 	}
 	
-	
+
 	/*
 	 * Basic test. In winter.
-	 * 
+	 *
 	 */
 	function test1() {
-		
+
 		$this->app['timesource']->mock(2012,12,1,9,0,0);
-		
-		
+
+
 		$event = new EventModel();
 		$event->setStartAt($this->mktime(2012,12,5,19,0,0));
-		$event->setEndAt($this->mktime(2012,12,5,21,0,0));		
-		
+		$event->setEndAt($this->mktime(2012,12,5,21,0,0));
+
 		$eventSet = new EventRecurSetModel();
 		$eventSet->setTimeZoneName('Europe/London');
-		
+
 		$newEvents = $eventSet->getNewWeeklyEvents($event, 60);
-		
+
 		$this->assertTrue(count($newEvents) >= 2);
-		
+
 		$this->assertEquals($this->mktime(2012,12,12,19,0,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
 		$this->assertEquals($this->mktime(2012,12,12,21,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
-		
+
 		$this->assertEquals($this->mktime(2012,12,19,19,0,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
 		$this->assertEquals($this->mktime(2012,12,19,21,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
-		
+
 	}
 	
 	/*
@@ -155,7 +155,45 @@ class EventRecurSetModelGetNewWeeklyEventsTest extends \BaseAppTest {
 
     }
 
+    /*
+     * Basic test. Across DST change.
+     * This test makes sure we are offered events in the future from now only!
+     *
+     */
+    function testGetFutureEventsOnly() {
 
+        $this->app['timesource']->mock(2013,3,25,9,0,0);
+
+        $event = new EventModel();
+        $event->setStartAt($this->mktime(2013,3,1,19,0,0));
+        $event->setEndAt($this->mktime(2013,3,1,21,0,0));
+
+        $eventSet = new EventRecurSetModel();
+        $eventSet->setTimeZoneName('Europe/London');
+
+        $newEvents = $eventSet->getNewWeeklyEvents($event, 60);
+
+        $this->assertTrue(count($newEvents) >= 5);
+
+        $this->assertEquals($this->mktime(2013,3,29,19,0,0)->format('r'), $newEvents[0]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2013,3,29,21,0,0)->format('r'), $newEvents[0]->getEndAt()->format('r'));
+
+        ### at his point DST kicks in and since we are getting data times (in UTC) they shifn by an hour.
+        $this->assertEquals($this->mktime(2013,4,5,18,0,0)->format('r'), $newEvents[1]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2013,4,5,20,0,0)->format('r'), $newEvents[1]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2013,4,12,18,0,0)->format('r'), $newEvents[2]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2013,4,12,20,0,0)->format('r'), $newEvents[2]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2013,4,19,18,0,0)->format('r'), $newEvents[3]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2013,4,19,20,0,0)->format('r'), $newEvents[3]->getEndAt()->format('r'));
+
+        $this->assertEquals($this->mktime(2013,4,26,18,0,0)->format('r'), $newEvents[4]->getStartAt()->format('r'));
+        $this->assertEquals($this->mktime(2013,4,26,20,0,0)->format('r'), $newEvents[4]->getEndAt()->format('r'));
+
+
+    }
 
 
 }
+

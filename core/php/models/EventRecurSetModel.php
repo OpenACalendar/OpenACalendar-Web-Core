@@ -5,6 +5,7 @@ namespace models;
 
 
 use JMBTechnologyLimited\RRuleUnravel\ICalData;
+use JMBTechnologyLimited\RRuleUnravel\ResultFilterAfterDateTime;
 use JMBTechnologyLimited\RRuleUnravel\Unraveler;
 use repositories\builders\EventRepositoryBuilder;
 
@@ -103,6 +104,7 @@ class EventRecurSetModel {
 			
 	
 	public function getNewWeeklyEvents(EventModel $event,  $daysInAdvance = 93) {
+        global $app;
         $untilDateTime = new \DateTime();
         $untilDateTime->setTimestamp(\TimeSource::time() + $daysInAdvance*24*60*60);
 
@@ -110,6 +112,7 @@ class EventRecurSetModel {
         // as well as the until clause above, we set a limit here for safety and robustness.
         $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 7) + 1);
         $rruleunraveller->setIncludeOriginalEvent(false);
+        $rruleunraveller->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
         $rruleunraveller->process();
         $out = array();
         foreach($rruleunraveller->getResults() as $result) {
@@ -174,6 +177,7 @@ class EventRecurSetModel {
 
 	
 	public function getNewMonthlyEventsOnLastDayInWeek(EventModel $event,  $daysInAdvance = 186) {
+        global $app;
         $dayOfWeek = substr(strtoupper($event->getStartAt()->format("l")),0,2);
 
         $untilDateTime = new \DateTime();
@@ -183,6 +187,7 @@ class EventRecurSetModel {
         // as well as the until clause above, we set a limit here for safety and robustness.
         $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 30) + 1);
         $rruleunraveller->setIncludeOriginalEvent(false);
+        $rruleunraveller->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
         $rruleunraveller->process();
         $out = array();
         $currentMonthLong = $event->getStartAtInTimezone()->format('F');
@@ -223,6 +228,7 @@ class EventRecurSetModel {
 	 * @return \models\EventModel
 	 */
 	public function getNewMonthlyEventsOnSetDayInWeek(EventModel $event,  $daysInAdvance = 186) {
+        global $app;
         $patternData = $this->getEventPatternData($event);
         $dayOfWeek = substr(strtoupper($event->getStartAt()->format("l")),0,2);
 
@@ -233,6 +239,7 @@ class EventRecurSetModel {
         // as well as the until clause above, we set a limit here for safety and robustness.
         $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 30) + 1);
         $rruleunraveller->setIncludeOriginalEvent(false);
+        $rruleunraveller->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
         $rruleunraveller->process();
         $out = array();
         $currentMonthLong = $event->getStartAtInTimezone()->format('F');
