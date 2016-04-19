@@ -196,7 +196,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 
 			$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($this->app);
 			$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($userAccountModel);
-            $unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/listunsub/'.
+            $unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.
                 $userAccountModel->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 			configureAppForSite($siteModel);
 			configureAppForUser($userAccountModel);
@@ -231,7 +231,8 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 			$message->addPart($messageHTML,'text/html');
 
 			$headers = $message->getHeaders();
-			$headers->addTextHeader('List-Unsubscribe', '<'.$unsubscribeURL.'>');
+			$headers->addTextHeader('List-Unsubscribe', '<'.$this->app['config']->getWebIndexDomainSecure().'/you/listunsub/'.
+                $userAccountModel->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey().'>');
 
 			$this->logVerbose("Sending ...");
 			if (!$this->app['config']->isDebug) {
