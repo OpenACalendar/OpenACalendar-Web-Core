@@ -22,12 +22,12 @@ use repositories\builders\EventRepositoryBuilder;
 
 class DisplayBoardController {
 	
-	protected $paramaters;
+	protected $parameters;
 
 	protected static $MAX_EVENT_QUERIES_ON_EVENT_BOARD = 5;
 
 	function build(Application $app) {
-		$this->paramaters = array(
+		$this->parameters = array(
 			'daysAheadInNextBox'=>3,
 			'showCharsOfDescription'=>0,
 			'refreshInMinutes'=>0,
@@ -36,25 +36,25 @@ class DisplayBoardController {
 		);
 		
 		if (isset($_GET['daysAheadInNextBox']) && intval($_GET['daysAheadInNextBox']) >= 0){
-			$this->paramaters['daysAheadInNextBox'] = intval($_GET['daysAheadInNextBox']);
-			$this->paramaters['configParameters']['daysAheadInNextBox'] = $_GET['daysAheadInNextBox'];
+			$this->parameters['daysAheadInNextBox'] = intval($_GET['daysAheadInNextBox']);
+			$this->parameters['configParameters']['daysAheadInNextBox'] = $_GET['daysAheadInNextBox'];
 		}
 		
 		if (isset($_GET['showCharsOfDescription']) && intval($_GET['showCharsOfDescription']) >= 0){
-			$this->paramaters['showCharsOfDescription'] = intval($_GET['showCharsOfDescription']);
-			$this->paramaters['configParameters']['showCharsOfDescription'] = $_GET['showCharsOfDescription'];
+			$this->parameters['showCharsOfDescription'] = intval($_GET['showCharsOfDescription']);
+			$this->parameters['configParameters']['showCharsOfDescription'] = $_GET['showCharsOfDescription'];
 		}
 
 		if (isset($_GET['refreshInMinutes']) && intval($_GET['refreshInMinutes']) >= 0){
-			$this->paramaters['refreshInMinutes'] = intval($_GET['refreshInMinutes']);
-			$this->paramaters['configParameters']['refreshInMinutes'] = $_GET['refreshInMinutes'];
+			$this->parameters['refreshInMinutes'] = intval($_GET['refreshInMinutes']);
+			$this->parameters['configParameters']['refreshInMinutes'] = $_GET['refreshInMinutes'];
 		}
 
 		$areaRepository = new AreaRepository($app);
 		$groupRepository = new GroupRepository($app);
 		$venueRepository = new VenueRepository($app);
 
-		$this->paramaters['data'] = array();
+		$this->parameters['data'] = array();
 
 
 
@@ -62,17 +62,17 @@ class DisplayBoardController {
 			$area = null;
 			if (isset($_GET['eventArea'.$i])) {
 				$area = $this->getIdFromPassedVariable($_GET['eventArea'.$i]);
-				$this->paramaters['configParameters']['eventArea'.$i] = $_GET['eventArea'.$i];
+				$this->parameters['configParameters']['eventArea'.$i] = $_GET['eventArea'.$i];
 			}
 			$group = null;
 			if (isset($_GET['eventGroup'.$i])) {
 				$group = $this->getIdFromPassedVariable($_GET['eventGroup'.$i]);
-				$this->paramaters['configParameters']['eventGroup'.$i] = $_GET['eventGroup'.$i];
+				$this->parameters['configParameters']['eventGroup'.$i] = $_GET['eventGroup'.$i];
 			}
 			$venue = null;
 			if (isset($_GET['eventVenue'.$i])) {
 				$venue = $this->getIdFromPassedVariable($_GET['eventVenue'.$i]);
-				$this->paramaters['configParameters']['eventVenue'.$i] = $_GET['eventVenue'.$i];
+				$this->parameters['configParameters']['eventVenue'.$i] = $_GET['eventVenue'.$i];
 			}
 			if ($area || $group || $venue) {
 				$queryData = array(
@@ -108,13 +108,13 @@ class DisplayBoardController {
 				}
 				if (isset($_GET['eventMinorImportance'.$i]) && $_GET['eventMinorImportance'.$i] == 'yes') {
 					$queryData['minorImportance'] = true;
-					$this->paramaters['configParameters']['eventMinorImportance'.$i] = 'yes';
+					$this->parameters['configParameters']['eventMinorImportance'.$i] = 'yes';
 				}
-				$this->paramaters['data'][] = $queryData;
+				$this->parameters['data'][] = $queryData;
 			}
 		}
 
-		if (count($this->paramaters['data']) == 0 ) {
+		if (count($this->parameters['data']) == 0 ) {
 			$queryData = array(
 					'area'=>null,
 					'group'=>null,
@@ -125,7 +125,7 @@ class DisplayBoardController {
 			$queryData['query']->setSite($app['currentSite']);
 			$queryData['query']->setAfterNow();
 			$queryData['query']->setIncludeDeleted(false);
-			$this->paramaters['data'][] = $queryData;
+			$this->parameters['data'][] = $queryData;
 		}
 
 	}
@@ -133,7 +133,7 @@ class DisplayBoardController {
 	function index(Request $request, Application $app) {
 		$this->build($app);
 		
-		return $app['twig']->render('displayboard/site/displayboard/index.html.twig', $this->paramaters);
+		return $app['twig']->render('displayboard/site/displayboard/index.html.twig', $this->parameters);
 	}
 
 	function run(Request $request, Application $app) {
@@ -145,30 +145,30 @@ class DisplayBoardController {
 
 		$today = $t->format('d-m-Y');
 		$nextDates = array();
-		for ($i = 1; $i <= $this->paramaters['daysAheadInNextBox']; $i++) {
+		for ($i = 1; $i <= $this->parameters['daysAheadInNextBox']; $i++) {
 			$t->add(new \DateInterval(('P1D')));
 			$nextDates[] = $t->format('d-m-Y');
 		}
 
 		// Sort events into dates
-		$this->paramaters['eventsToday'] = array();
-		$this->paramaters['eventsTodayMinorImportance'] = array();
-		$this->paramaters['eventsNext'] = array();
-		$this->paramaters['eventsNextMinorImportance'] = array();
-		$this->paramaters['eventsLater'] = array();
-		$this->paramaters['eventsLaterMinorImportance'] = array();
+		$this->parameters['eventsToday'] = array();
+		$this->parameters['eventsTodayMinorImportance'] = array();
+		$this->parameters['eventsNext'] = array();
+		$this->parameters['eventsNextMinorImportance'] = array();
+		$this->parameters['eventsLater'] = array();
+		$this->parameters['eventsLaterMinorImportance'] = array();
 
 		$eventIDsSeen = array();
-		foreach($this->paramaters['data'] as $queries) {
+		foreach($this->parameters['data'] as $queries) {
 			foreach($queries['query']->fetchAll() as $event) {
 				if (!in_array($event->getId(), $eventIDsSeen)) {
 					$eventStart = $event->getStartAt()->format('d-m-Y');
 					if ($eventStart == $today) {
-						$this->paramaters['eventsToday'.($queries['minorImportance']?'MinorImportance':'')][] = $event;
+						$this->parameters['eventsToday'.($queries['minorImportance']?'MinorImportance':'')][] = $event;
 					} else if (in_array ($eventStart,$nextDates)) {
-						$this->paramaters['eventsNext'.($queries['minorImportance']?'MinorImportance':'')][] = $event;
+						$this->parameters['eventsNext'.($queries['minorImportance']?'MinorImportance':'')][] = $event;
 					} else {
-						$this->paramaters['eventsLater'.($queries['minorImportance']?'MinorImportance':'')][] = $event;
+						$this->parameters['eventsLater'.($queries['minorImportance']?'MinorImportance':'')][] = $event;
 					}
 					$eventIDsSeen[] = $event->getId();
 				}
@@ -183,15 +183,15 @@ class DisplayBoardController {
 			return ($a->getStartAt()->getTimestamp() < $b->getStartAt()->getTimestamp()) ? -1 : 1;
 		};
 
-		usort($this->paramaters['eventsToday'], $cmp);
-		usort($this->paramaters['eventsTodayMinorImportance'], $cmp);
-		usort($this->paramaters['eventsNext'], $cmp);
-		usort($this->paramaters['eventsNextMinorImportance'], $cmp);
-		usort($this->paramaters['eventsLater'], $cmp);
-		usort($this->paramaters['eventsLaterMinorImportance'], $cmp);
+		usort($this->parameters['eventsToday'], $cmp);
+		usort($this->parameters['eventsTodayMinorImportance'], $cmp);
+		usort($this->parameters['eventsNext'], $cmp);
+		usort($this->parameters['eventsNextMinorImportance'], $cmp);
+		usort($this->parameters['eventsLater'], $cmp);
+		usort($this->parameters['eventsLaterMinorImportance'], $cmp);
 		
 		
-		return $app['twig']->render('displayboard/site/displayboard/run.html.twig', $this->paramaters);
+		return $app['twig']->render('displayboard/site/displayboard/run.html.twig', $this->parameters);
 	}
 
 	protected function getIdFromPassedVariable($var) {
