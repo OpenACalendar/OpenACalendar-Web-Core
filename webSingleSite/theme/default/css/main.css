@@ -716,7 +716,6 @@ ul.history li.media div.dateTimeIcon {
   width: 60px;
   height: 80px;
   position: relative;
-  z-index: 100;
   margin-right: 5px;
   border: 2px solid #231f20;
   -webkit-border-radius: 4px;
@@ -1309,7 +1308,6 @@ div.importedevent div.dateTimeIcon {
   width: 60px;
   height: 80px;
   position: relative;
-  z-index: 100;
   margin: 0 10px 10px 0;
   border: 2px solid #555555;
   -webkit-border-radius: 1px;
@@ -1860,7 +1858,6 @@ div.mainShowEvent div.dateTimeIcon {
   width: 60px;
   height: 80px;
   position: relative;
-  z-index: 100;
   margin: 0 10px 10px 0;
   border: 2px solid #231f20;
   -webkit-border-radius: 4px;
