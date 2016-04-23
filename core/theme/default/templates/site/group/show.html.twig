@@ -96,7 +96,7 @@
 			{% if group.url %}
 				<div class="innerPageRightLinkWrapper">
 					<div class="innerPageRightLinkHeader">More details</div>
-					<div class="innerPageRightLinkContent"><a href="{{ group.url }}" target="_blank">{{ group.url | linkinfo }}</a></div>
+					<div class="innerPageRightLinkContent"><a href="{{ group.url }}" target="_blank" rel="noopener">{{ group.url | linkinfo }}</a></div>
 				</div>
 			{% endif %}
 

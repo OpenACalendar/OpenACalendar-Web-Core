@@ -71,7 +71,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
                     return '<a href="mailto:'.$url.'">'.$url.'</a>';
                 } else {
                     $bits = parse_url($url);
-                    return '<a href="'.$url.'" target="_blank">'.(isset($bits['host']) ? $bits['host'] : $url).'</a>';
+                    return '<a href="'.$url.'" target="_blank" rel="noopener">'.(isset($bits['host']) ? $bits['host'] : $url).'</a>';
                 }
             }
     )));

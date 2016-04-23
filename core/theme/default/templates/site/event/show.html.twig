@@ -132,13 +132,13 @@
 
 					{% if event.url %}
 						<p>
-							More details: <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a>
+							More details: <a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a>
 						</p>
 					{% endif %}
 
 					{% if event.ticketUrl %}
 						<p>
-							{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a>
+							{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a>
 						</p>
 					{% endif %}
 
@@ -205,14 +205,14 @@
 						{% if event.url %}
 							<div class="innerPageRightLinkWrapper">
 								<div class="innerPageRightLinkHeader">More details</div>
-								<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
+								<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a></div>
 							</div>
 						{% endif %}
 
 						{% if event.ticketUrl %}
 							<div class="innerPageRightLinkWrapper">
 								<div class="innerPageRightLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
-								<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></div>
+								<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a></div>
 							</div>
 						{% endif %}
 
@@ -297,7 +297,7 @@
 				{% if displayGroup.url and displayGroup.url != event.url %}
 					<div class="innerPageRightLinkWrapper">
 						<div class="innerPageRightLinkHeader">More details</div>
-						<div class="innerPageRightLinkContent"><a href="{{ displayGroup.url }}" target="_blank">{{ displayGroup.url | linkinfo }}</a></div>
+						<div class="innerPageRightLinkContent"><a href="{{ displayGroup.url }}" target="_blank" rel="noopener">{{ displayGroup.url | linkinfo }}</a></div>
 					</div>
 				{% endif %}
 				{% if displayGroup.twitterUsername %}
