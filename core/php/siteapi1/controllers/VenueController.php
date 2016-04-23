@@ -3,6 +3,7 @@
 namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
+use api1exportbuilders\ICalEventIdConfig;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -62,7 +63,7 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['venue']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['venue']->getTitle(), new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$ical->build();
 		return $ical->getResponse();

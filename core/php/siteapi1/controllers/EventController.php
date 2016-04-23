@@ -2,6 +2,7 @@
 
 namespace siteapi1\controllers;
 
+use api1exportbuilders\ICalEventIdConfig;
 use repositories\builders\MediaRepositoryBuilder;
 use Silex\Application;
 use site\forms\EventNewForm;
@@ -91,7 +92,7 @@ class EventController {
 
 				
 		
-		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['event']->getSummaryDisplay());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['event']->getSummaryDisplay(), new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->addEvent($this->parameters['event']);
 		return $ical->getResponse();
 				

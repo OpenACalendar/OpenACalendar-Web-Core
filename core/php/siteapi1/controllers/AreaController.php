@@ -3,6 +3,7 @@
 namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
+use api1exportbuilders\ICalEventIdConfig;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use repositories\AreaRepository;
@@ -50,7 +51,7 @@ class AreaController {
 			$app->abort(404, "Area does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'],$this->parameters['area']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'],$this->parameters['area']->getTitle(), new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$ical->build();
 		return $ical->getResponse();

@@ -17,6 +17,7 @@
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>.</directory>
+            <directory>api1exportbuilders</directory>
             <directory>eventcustomfields</directory>
             <directory>repositories/builders</directory>
             <directory>models</directory>

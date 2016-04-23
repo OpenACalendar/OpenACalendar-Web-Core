@@ -3,6 +3,7 @@
 namespace org\openacalendar\curatedlists\siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
+use api1exportbuilders\ICalEventIdConfig;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use org\openacalendar\curatedlists\repositories\CuratedListRepository;
@@ -51,7 +52,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['curatedlist']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['curatedlist']->getTitle(), new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
 		$ical->build();
 		return $ical->getResponse();

@@ -20,16 +20,17 @@ use models\CountryModel;
  */
 class EventListICalBuilder extends BaseEventListBuilder  {
 	use TraitICal;
+
+	/** @var ICalEventIdConfig */
+	protected $iCalEventIdConfig;
 	
-	
-	
-	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null, $title = null) {
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null, $title = null, ICalEventIdConfig $ICalEventIdConfig = null) {
 		parent::__construct($app, $site, $timeZone, $title);
 		// We go back a month, just so calendars have a bit of the past available.
 		$time = \TimeSource::getDateTime();
 		$time->sub(new \DateInterval("P30D"));
 		$this->eventRepositoryBuilder->setAfter($time);
-		
+		$this->iCalEventIdConfig = $ICalEventIdConfig ? $ICalEventIdConfig : new ICalEventIdConfig();
 	}
 
 	
@@ -61,7 +62,13 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();
 		
 		$txt = $this->getIcalLine('BEGIN','VEVENT');
-		$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$this->app['config']->webSiteDomain);
+		if ($this->iCalEventIdConfig->isSlug()) {
+			$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$this->app['config']->webSiteDomain);
+		} else if ($this->iCalEventIdConfig->isSlugStartEnd()) {
+			$txt .= $this->getIcalLine('UID',$event->getSlug().'-'.
+			                                 md5($event->getStartAtInUTC()->format('c').'-'.$event->getEndAtInUTC()->format('c')).
+			                                 '@'.$siteSlug.".".$this->app['config']->webSiteDomain);
+		}
 
 		$url = $this->app['config']->isSingleSiteMode ?
 			'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl() :

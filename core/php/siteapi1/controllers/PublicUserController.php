@@ -3,6 +3,7 @@
 namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
+use api1exportbuilders\ICalEventIdConfig;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
@@ -51,7 +52,7 @@ class PublicUserController {
 		}
 				
 		// TODO should we be passing a better timeZone here?
-		$ical = new EventListICalBuilder($app, $app['currentSite'], "UTC", $this->parameters['user']->getUserName());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], "UTC", $this->parameters['user']->getUserName(), new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->getEventRepositoryBuilder()->setUserAccount($this->parameters['user'], false, false, true, false);
 		$ical->build();
 		return $ical->getResponse();

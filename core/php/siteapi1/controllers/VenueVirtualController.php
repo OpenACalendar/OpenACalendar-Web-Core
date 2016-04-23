@@ -3,6 +3,7 @@
 namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
+use api1exportbuilders\ICalEventIdConfig;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -42,7 +43,7 @@ class VenueVirtualController {
 	function ical(Request $request, Application $app) {
 		
 		
-		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], "Virtual Events");
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], "Virtual Events", new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$ical->build();
 		return $ical->getResponse();

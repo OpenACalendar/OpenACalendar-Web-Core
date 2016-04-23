@@ -3,6 +3,7 @@
 namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
+use api1exportbuilders\ICalEventIdConfig;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -62,7 +63,7 @@ class GroupController {
 			$app->abort(404, "Group does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'],$this->parameters['group']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'],$this->parameters['group']->getTitle(), new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$ical->build();
 		return $ical->getResponse();

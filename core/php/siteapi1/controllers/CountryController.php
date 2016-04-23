@@ -3,6 +3,7 @@
 namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
+use api1exportbuilders\ICalEventIdConfig;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
@@ -57,7 +58,7 @@ class CountryController {
 			$app->abort(404, "Country does not exist.");
 		}
 		
-		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['country']->getTitle());
+		$ical = new EventListICalBuilder($app, $app['currentSite'], $app['currentTimeZone'], $this->parameters['country']->getTitle(), new ICalEventIdConfig($request->get('eventidconfig'), $request->server->all()));
 		$ical->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$ical->build();
 		return $ical->getResponse();
