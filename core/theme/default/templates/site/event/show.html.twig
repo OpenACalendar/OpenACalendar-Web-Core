@@ -27,6 +27,10 @@
 		currentUserActions.has("org.openacalendar","eventEditTags") or
 		currentUserActions.has("org.openacalendar","eventEditGroups") or
 		currentUserActions.has("org.openacalendar.curatedlists","eventEditCuratedLists") or
+		currentUserActions.has("org.openacalendar","eventUndelete") or
+		currentUserActions.has("org.openacalendar","eventUncancel") or
+		currentUserActions.has("org.openacalendar","eventDelete") or
+		currentUserActions.has("org.openacalendar","eventCancel") or
 		currentUserActions.has("org.openacalendar","eventEditMedia")  %}
 		<li class="actionWithSubMenu">
 			<a href="/event/{{ event.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
@@ -49,32 +53,22 @@
 				{% if currentUserActions.has("org.openacalendar","eventEditMedia") %}
 					<li><a href="/event/{{ event.slugForUrl }}/edit/media">Edit Media</a></li>
 				{% endif %}
+				{% if currentUserActions.has("org.openacalendar","eventUndelete") %}
+					<li><a href="/event/{{ event.slugForUrl }}/undelete">Undelete</a></li>
+				{% endif %}
+				{% if currentUserActions.has("org.openacalendar","eventUncancel") %}
+					<li><a href="/event/{{ event.slugForUrl }}/uncancel">Uncancel</a></li>
+				{%  endif  %}
+				{% if currentUserActions.has("org.openacalendar","eventDelete") and currentUserActions.has("org.openacalendar","eventCancel") %}
+					<li><a href="/event/{{ event.slugForUrl }}/cancel">Cancel/Delete</a></li>
+				{%  elseif currentUserActions.has("org.openacalendar","eventDelete")  %}
+					<li><a href="/event/{{ event.slugForUrl }}/delete">Delete</a></li>
+				{% endif %}
 			</ul>
 		</li>
-	{%  elseif currentUserActions.has("org.openacalendar","eventEditDetails") %}
-		<li class="action">
-			<a href="/event/{{ event.slugForUrl }}/edit/details"><div class="fa fa-pencil"></div> edit</a>
-		</li>
 	{% endif %}
-	{% if currentUserActions.has("org.openacalendar","eventUndelete") %}
-		<li class="action"><a href="/event/{{ event.slugForUrl }}/undelete"><div class="fa fa-trash-o"></div> undelete</a></li>
-	{% endif %}
-	{% if currentUserActions.has("org.openacalendar","eventUncancel") %}
-		<li class="action"><a href="/event/{{ event.slugForUrl }}/uncancel"><div class="fa fa-trash-o"></div> uncancel</a></li>
-	{%  endif  %}
 	{% if currentUserActions.has("org.openacalendar","eventRecur") %}
 		<li class="action"><a href="/event/{{ event.slugForUrl }}/recur"><div class="fa fa-circle-o-notch"></div> recur</a></li>
-	{% endif %}
-	{% if currentUserActions.has("org.openacalendar","eventDelete") and currentUserActions.has("org.openacalendar","eventCancel") %}
-		<li class="actionWithSubMenu">
-			<a href="/event/{{ event.slugForUrl }}/delete"><div class="fa fa-trash-o"></div> delete</a>
-			<ul class="submenu">
-				<li><a href="/event/{{ event.slugForUrl }}/cancel">Cancel</a></li>
-				<li><a href="/event/{{ event.slugForUrl }}/delete">Delete</a></li>
-			</ul>
-		</li>
-	{%  elseif currentUserActions.has("org.openacalendar","eventDelete")  %}
-		<li class="action"><a href="/event/{{ event.slugForUrl }}/delete"><div class="fa fa-trash-o"></div> Delete</a></li>
 	{% endif %}
 	<li class="action">
 		<a href="/api1/event/{{ event.slug }}/info.ical" onclick="showExportSharePopup(); return false;">

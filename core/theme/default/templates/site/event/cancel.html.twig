@@ -21,7 +21,11 @@
 
 {% block innerContent %}
 
-	
+	{%  if currentUserActions.has("org.openacalendar","eventDelete") %}
+		<h3>Cancel this event</h3>
+		<p>If the event was going to happen but now isn't, mark it as cancelled so people who were going to attend will notice the cancellation.</p>
+	{% endif %}
+
 	<form action="#" method="post" class="styled">
 
 		{{ form_errors(form) }}
@@ -36,7 +40,12 @@
 		<div class="afterBigSubmitActionWrapper"></div>
 	</form>
 
+	{%  if currentUserActions.has("org.openacalendar","eventDelete") %}
 
+		<h3>Or you can delete?</h3>
+
+		<p>If the event was a mistake, <a href="/event/{{ event.slugForUrl }}/delete">you can delete this event</a>.</p>
+	{% endif %}
 
 {% endblock %}
 
