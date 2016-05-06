@@ -20,12 +20,14 @@
 	<form action="#" method="post" class="styled" id="EditFutureForm">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 		<input type="hidden" name="submitted" value="yes">
-		
-		<p>Do you want to change these future events to?</p>
+
+		<p>Your changes have been saved.</p>
+
+		<p>Do you want to change these future events too?</p>
 
 		<p>
-			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', true); return false;">Select all</a>
-			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', false); return false;">Select none</a>
+			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', true); updateFormSubmit(); return false;">Select all</a>
+			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', false); updateFormSubmit(); return false;">Select none</a>
 		</p>
 		
 		<ul class="mainListEvents">
@@ -151,21 +153,38 @@
 			{% endfor %}
 		</ul>
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
+		<div id="EditFutureFormSubmitCheckedWrapper">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Update these too!" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</div>
+		<div id="EditFutureFormSubmitNotCheckedWrapper" style="display: none;">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Continue without updating these" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</div>
 	</form>
 
-
-	<form action="/event/{{  event.slugForURL }}" method="get" class="styled"">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Cancel" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
-
+	<!-- No Cancel Button! Because that would imply to user they could "cancel" changes they just made, and they can't. https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/605 -->
 
 {% endblock %}
 
 
 {% block scripts %}
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			$('#EditFutureForm input[type="checkbox"]').change(function(){
+				updateFormSubmit();
+			});
+			updateFormSubmit();
+		});
+		function updateFormSubmit() {
+			if ($('#EditFutureForm input[type="checkbox"]').filter(':checked').length > 0) {
+				$('#EditFutureFormSubmitCheckedWrapper').show();
+				$('#EditFutureFormSubmitNotCheckedWrapper').hide();
+			} else {
+				$('#EditFutureFormSubmitCheckedWrapper').hide();
+				$('#EditFutureFormSubmitNotCheckedWrapper').show();
+			}
+		}
+	</script>
 {% endblock %}
 

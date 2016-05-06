@@ -1139,9 +1139,11 @@ class EventController {
 
 				if ($countEvents > 0) {
 					$app['flashmessages']->addMessage($countEvents > 1 ? $countEvents . " future events edited." : "Future event edited.");
-					return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
 				}
-				
+
+				// If submitted but no future events edited, still go back to event page
+				return $app->redirect("/event/".$this->parameters['event']->getSlugforURL());
+
 			}
 			
 			// Only pass $futureEvent to the view layer if there are actually changes that can be made.
