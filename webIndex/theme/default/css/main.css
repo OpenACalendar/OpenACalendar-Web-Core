@@ -1363,6 +1363,18 @@ form .afterBigSubmitActionWrapper {
 .popupBox .popupLink {
   text-align: right;
   padding: 5px 0;
+  line-height: 1.5;
+}
+.popupBox .popupLink a {
+  background: #36C036;
+  padding: 5px 10px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #333;
+}
+.popupBox .popupLink a:hover,
+.popupBox .popupLink a:focus {
+  color: black;
 }
 .popupBox ul.popupListGroups li.group .title {
   padding: 5px 0;
