@@ -27,7 +27,8 @@ $password = $argv[3];
 $extraFlags = explode(",", isset($argv[4]) ? strtolower($argv[4]) : '');
 $makeSysAdmin = in_array("sysadmin", $extraFlags);
 if (!$username || !$email || !$password) {
-	die("Username and Email and Password?\n\n");
+	print "Username and Email and Password?\n\n";
+	exit(1);
 }
 
 print "Username: ". $username."\n";
@@ -42,17 +43,20 @@ print "Starting ...\n";
 $userRepository = new UserAccountRepository($app);
 
 if (is_array($CONFIG->userNameReserved) && in_array($username, $CONFIG->userNameReserved)) {
-	die("That user name is reserved\n");
+	print "That user name is reserved\n";
+	exit(1);
 }
 
 $userExistingUserName = $userRepository->loadByUserName($username);
 if ($userExistingUserName) {
-	die("That user name is already taken\n");
+	print "That user name is already taken\n";
+	exit(1);
 }
 
 $userExistingEmail = $userRepository->loadByEmail($email);
 if ($userExistingEmail) {
-	die("That email address already has an account\n");
+	print "That email address already has an account\n";
+	exit(1);
 }
 
 $user = new UserAccountModel();
@@ -67,4 +71,9 @@ if ($makeSysAdmin) {
 }
 
 print "Done!\n";
+
+
+
+exit(0);
+
 

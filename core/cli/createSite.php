@@ -22,7 +22,14 @@ use models\SiteModel;
  * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
- 
+
+$siteRepository = new SiteRepository($app);
+$countryRepository = new CountryRepository($app);
+$siteQuotaRepository = new SiteQuotaRepository($app);
+$userRepository = new UserAccountRepository($app);
+
+
+
 $canAnyUserVerifiedEdit = false;
 $opts = getopt('',array('write'));
 if (isset($opts['write'])) { $canAnyUserVerifiedEdit = true; }
@@ -32,11 +39,18 @@ while(substr($argv[$i],0,1) == '-') $i++;
 $slug = $argv[$i];
 $email = $argv[$i+1];
 if (!$slug || !$email) {
-	die("Slug and Email?\n\n");
+	print "Slug and Email?\n\n";
+	exit(1);
 }
 
 if (!SiteModel::isSlugValid($slug, $CONFIG)) {
-	die("Slug is not valid!\n\n");
+	print "Slug is not valid!\n\n";
+	exit(1);
+}
+
+if ($siteRepository->loadBySlug(($slug))) {
+	print "Slug already used!\n\n";
+	exit(1);
 }
 
 print "Slug: ". $slug."\n";
@@ -47,7 +61,6 @@ sleep(10);
 
 print "Starting ...\n";
 
-$userRepository = new UserAccountRepository($app);
 $user = $userRepository->loadByUserNameOrEmail($email);
 if (!$user) {
 	die("Can't load user!\n\n");
@@ -60,9 +73,6 @@ $site->setIsListedInIndex(true);
 $site->setIsWebRobotsAllowed(true);
 $site->setPromptEmailsDaysInAdvance($CONFIG->newSitePromptEmailsDaysInAdvance);
 
-$siteRepository = new SiteRepository($app);
-$countryRepository = new CountryRepository($app);
-$siteQuotaRepository = new SiteQuotaRepository($app);
 
 $gb = $countryRepository->loadByTwoCharCode("GB") ;
 if (!$gb) {
@@ -76,6 +86,8 @@ $siteRepository->create(
 			$siteQuotaRepository->loadByCode($CONFIG->newSiteHasQuotaCode),
 			$canAnyUserVerifiedEdit
 		);
+
+exit(0);
 
 
 

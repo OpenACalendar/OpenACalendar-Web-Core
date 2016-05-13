@@ -24,7 +24,7 @@ if (!$extensionID && !$taskID) {
             print "  ". $task->getExtensionId(). "  ". $task->getTaskId(). " \n";
         }
     }
-    die();
+    exit(1);
 }
 if ($extensionID && !$taskID) {
 	$taskID = $extensionID;
@@ -44,4 +44,9 @@ foreach($extension->getTasks() as $task) {
 		$task->runManuallyNowIfShould($verbosePrint);
 	}
 }
+
+
+
+exit(0);
+
 

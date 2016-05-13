@@ -15,3 +15,8 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
 
 $helper = new MessageQueConsumerHelper($app);
 $helper->runWorkers();
+
+
+exit(0);
+
+

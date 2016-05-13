@@ -16,3 +16,8 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
 db\migrations\MigrationManager::upgrade($app, true);
 
 
+
+
+exit(0);
+
+

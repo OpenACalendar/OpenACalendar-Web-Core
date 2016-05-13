@@ -39,3 +39,8 @@ foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
 if ($verbosePrint) {
 	print "Done all tasks check ". $app['timesource']->getDateTime()->format("c")."\n";
 }
+
+
+exit(0);
+
+

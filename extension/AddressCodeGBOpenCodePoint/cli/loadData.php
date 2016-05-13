@@ -23,11 +23,13 @@ $opencodepointdir = isset($argv[1]) ? $argv[1] : null;
 $ourdir = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'data');
 
 if (!$opencodepointdir || !is_dir($opencodepointdir)) {
-	die("You must pass a directory that contains the csv's from Code Point Open!\n\n");
+	print "You must pass a directory that contains the csv's from Code Point Open!\n\n";
+	exit(1);
 }
 
 if (!$ourdir || !is_dir($ourdir)) {
-	die("Something went wrong finding our dir?\n\n");
+	print "Something went wrong finding our dir?\n\n";
+	exit(1);
 }
 
 if ($handleDir = opendir($opencodepointdir)) {
@@ -81,4 +83,7 @@ if ($handleDir = opendir($opencodepointdir)) {
    closedir($handleDir);
 }
 
+
+
+exit(0);
 

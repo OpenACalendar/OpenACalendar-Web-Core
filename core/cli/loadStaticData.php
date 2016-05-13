@@ -17,3 +17,8 @@ require_once APP_ROOT_DIR.'/core/php/autoloadCLI.php';
 tasks\LoadStaticData::load($app, true);
 
 
+
+
+exit(0);
+
+

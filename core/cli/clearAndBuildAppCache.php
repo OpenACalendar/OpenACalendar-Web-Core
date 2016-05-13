@@ -67,3 +67,8 @@ foreach($classes as $className=>$file) {
 foreach($app['extensions']->getExtensionsIncludingCore() as $ext) {
     $ext->clearAppCache();
 }
+
+
+exit(0);
+
+

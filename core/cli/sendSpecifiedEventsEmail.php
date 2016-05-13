@@ -59,8 +59,14 @@ use repositories\builders\VenueRepositoryBuilder;
 use repositories\AreaRepository;
 
 // ######################################################### Set up Enviroment, Check
-if (!isset($argv[1])) die("CONFIG?\n");
-if (!isset($argv[2])) die("Environment?\n");
+if (!isset($argv[1])) {
+	print "CONFIG?\n";
+	exit(1);
+}
+if (!isset($argv[2])) {
+	print "Environment?\n";
+	exit(1);
+}
 $environment = $argv[2];
 # change to directory of the ini file so all paths to intro files can be relative to that.
 if (substr($argv[1], 0,1) == '/') {
@@ -72,7 +78,8 @@ $thisconfig = new IniConfigWithEnvironment($environment, $argv[1]);
 
 foreach(array('SiteID','Subject','FromEmail','FromName','TimeZone','IntroTXTFile','IntroHTMLFile','To') as $key) {
 	if (!$thisconfig->hasValue($key)) {
-		die("NO CONFIG ". $key." ?\n");
+		print "NO CONFIG ". $key." ?\n";
+		exit(1);
 	}
 }
 
@@ -189,5 +196,10 @@ $message->addPart($messageHTML,'text/html');
 $app['mailer']->send($message);
 
 print "Done, Sent To: ".$thisconfig->get('To')."\n\n\n";
+
+
+
+
+exit(0);
 
 
