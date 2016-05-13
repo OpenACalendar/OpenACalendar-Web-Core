@@ -2689,8 +2689,16 @@ form .afterBigSubmitActionWrapper {
 .popupBox ul.popupListEvents li.event {
   padding: 4px 0;
 }
-.popupBox ul.popupListEvents li.event .time {
+.popupBox ul.popupListEvents li.event a {
+  text-decoration: none;
+  color: #333;
+}
+.popupBox ul.popupListEvents li.event a:hover,
+.popupBox ul.popupListEvents li.event a:focus {
+  text-decoration: underline;
   color: black;
+}
+.popupBox ul.popupListEvents li.event .time {
   font-weight: 400;
   background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
   padding: 5px 10px 5px 20px;

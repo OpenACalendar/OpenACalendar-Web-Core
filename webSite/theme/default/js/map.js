@@ -101,7 +101,7 @@ function onClickMarker() {
 		} else {
 			for(i in venuedata.data) {
 				var event = venuedata.data[i];
-				html += '<li class="event"><span class="time">'+event.start.displaylocal+'</span> <span class="summary">'+event.summaryDisplay+'</span></li>';
+				html += '<li class="event"><a href="/event/'+event.slugforurl+'"><span class="time">'+event.start.displaylocal+'</span> <span class="summary">'+event.summaryDisplay+'</span></a></li>';
 			}
 		}
 		$('#VenuePopupEvents').html(html+'</ul>');

@@ -70,8 +70,15 @@
 	ul.popupListEvents {
 		li.event {
 			padding: 4px 0;
-			.time {
+			a {
+				text-decoration: none;
+				color: #333;
+			}
+			a:hover, a:focus {
+				text-decoration: underline;
 				color: black;
+			}
+			.time {
 				font-weight: 400;
 				background: url('/theme/default/img/eventFooterCalendarIcon.png') no-repeat;
 				padding: 5px 10px 5px 20px;
