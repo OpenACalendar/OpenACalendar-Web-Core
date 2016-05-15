@@ -45,6 +45,28 @@
 
 {% block scripts %}
 	<script type="text/javascript" src="/theme/default/js/loginOrRegister.js?v={{ config.assetsVersion }}"></script>
+	<script type="text/javascript">
+		function emailOrUsernameAction() {
+			var emailField = $('#LogInUserForm_username');
+			var usernameField = $('#LogInUserForm_email');
+			if (emailField.val() && !usernameField.val()) {
+				emailField.prop( "disabled", false );
+				usernameField.prop( "disabled", true );
+			} else if (!emailField.val() && usernameField.val()) {
+				emailField.prop( "disabled", true );
+				usernameField.prop( "disabled", false );
+			} else {
+				emailField.prop("disabled", false);
+				usernameField.prop("disabled", false);
+			}
+		};
+
+		$( document ).ready(function() {
+			$('#LogInUserForm_username').keyup(function() { emailOrUsernameAction() }).change(function() { emailOrUsernameAction() });
+			$('#LogInUserForm_email').keyup(function() { emailOrUsernameAction() }).change(function() { emailOrUsernameAction() });
+			emailOrUsernameAction();
+		});
+	</script>
 {% endblock %}
 
 
