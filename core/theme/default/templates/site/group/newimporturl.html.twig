@@ -23,6 +23,9 @@
 
 		{{ form_row(form.title) }}
 		{{ form_row(form.url) }}
+
+		<ul id="ImportURLRecommendations"></ul>
+
 		{# { form_row(form.is_manual_events_creation) } #}
 		{{ form_row(form.country_id) }}
 		
@@ -49,8 +52,53 @@
 {% block scripts %}
 	<script type="text/javascript" src="/theme/default/js/importform.js?v={{ config.assetsVersion }}"></script>
 	<script type="text/javascript">
+		var lastURLChecked = '';
+
+		var recommendationsRefused = [];
+
+		function onURLChange() {
+			var field = $('#ImportNewForm_url');
+			if (lastURLChecked != field.val()) {
+				lastURLChecked = field.val();
+				$.ajax({
+					dataType: "json",
+					url: '/group/{{  group.slugForURL }}/newimporturl/inprogressjson',
+					data: {'url': field.val()},
+					success: function (data) {
+						var html = '';
+						for (var idx in data.importURLRecommendations) {
+							if (!hasRecommendationBeenRefused(data.importURLRecommendations[idx].extensionID, data.importURLRecommendations[idx].recommendationID)) {
+								html += '<li class="ImportURLRecommendation">';
+								html += '<div class="title">' + escapeHTML(data.importURLRecommendations[idx].title) + '</div>';
+								html += '<div class="description">' + escapeHTML(data.importURLRecommendations[idx].description) + '</div>';
+								html += '<div class="action"><a href="#" onclick="$(\'#ImportNewForm_url\').val(\'' + escapeHTMLAttribute(data.importURLRecommendations[idx].newURL) + '\'); $(\'#ImportURLRecommendations\').html(\'\'); onURLChange(); return false;">' + escapeHTML(data.importURLRecommendations[idx].actionAcceptLabel) + '</a></div>';
+								html += '<div class="action"><a href="#" onclick="refuseRecommendation(this, \'' + escapeHTMLAttribute(data.importURLRecommendations[idx].extensionID) + '\',\'' + escapeHTMLAttribute(data.importURLRecommendations[idx].recommendationID) + '\'); onURLChange(); return false;">' + escapeHTML(data.importURLRecommendations[idx].actionRefuseLabel) + '</a></div>';
+								html += '</li>';
+							}
+						}
+						$('#ImportURLRecommendations').html(html);
+					}
+				});
+			}
+		}
+
+		function hasRecommendationBeenRefused(extID, recID) {
+			for (var idx in recommendationsRefused) {
+				if (recommendationsRefused[idx][0] == extID && recommendationsRefused[idx][1] == recID) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		function refuseRecommendation(link, extID, recID) {
+			recommendationsRefused.push([extID, recID]);
+			$(link).parents('li.ImportURLRecommendation').remove();
+		}
+
 		$(document).ready(function() {
 			onCountryChange();
+			$('#ImportNewForm_url').keyup(function() { onURLChange(); }).change(function() { onURLChange()});
 		});		
 	</script>
 {% endblock %}

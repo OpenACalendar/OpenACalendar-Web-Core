@@ -273,10 +273,14 @@ $app->match('/group/{slug}/stopWatchingFromEmail/{userid}/{code}', 'site\control
 		->before($canChangeSite); 
 $app->match('/group/{slug}/newimporturl', 'site\controllers\GroupController::newImportURL')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
-		->assert('userid', '\d+')
 		->before($permissionImportURLsChangeRequired)
 		->before($featureImporterRequired)
-		->before($canChangeSite); 
+		->before($canChangeSite);
+$app->match('/group/{slug}/newimporturl/inprogressjson', 'site\controllers\GroupController::newImportURLInProgressJSON')
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionImportURLsChangeRequired)
+		->before($featureImporterRequired)
+		->before($canChangeSite);
 $app->match('/group/{slug}/importers', 'site\controllers\GroupController::importers')
 		->assert('slug', FRIENDLY_SLUG_REGEX); 
 

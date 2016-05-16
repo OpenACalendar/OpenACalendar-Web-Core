@@ -1480,6 +1480,34 @@ div.filterListImportedEventWrapper form.filterListImportedEvent div.submitField 
 #stepDoneViewsShowHideLink a:visited {
   color: #000000;
 }
+ul#ImportURLRecommendations li.ImportURLRecommendation {
+  border: 2px solid #004300;
+  background: #72DA72;
+  padding: 10px;
+}
+ul#ImportURLRecommendations li.ImportURLRecommendation .title {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+ul#ImportURLRecommendations li.ImportURLRecommendation .description {
+  padding-bottom: 5px;
+}
+ul#ImportURLRecommendations li.ImportURLRecommendation .action {
+  text-align: right;
+  padding: 5px 0;
+  line-height: 1.5;
+}
+ul#ImportURLRecommendations li.ImportURLRecommendation .action a {
+  background: #36C036;
+  padding: 5px 10px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #333;
+}
+ul#ImportURLRecommendations li.ImportURLRecommendation .action a:hover,
+ul#ImportURLRecommendations li.ImportURLRecommendation .action a:focus {
+  color: black;
+}
 html {
   background-color: #B7CFB7;
 }

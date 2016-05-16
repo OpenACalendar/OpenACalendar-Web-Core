@@ -187,5 +187,9 @@ abstract class BaseExtension {
         return array();
     }
 
+	public function getImportURLRecommendations(\import\ImportURLRecommendationDataToCheck $dataToCheck) {
+		return array();
+	}
+
 }
 

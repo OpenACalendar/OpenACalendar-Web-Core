@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use import\ImportURLRecommendationDataToCheck;
 use models\EventEditMetaDataModel;
 use models\GroupEditMetaDataModel;
 use Silex\Application;
@@ -34,6 +35,7 @@ use site\forms\ImportNewForm;
 use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 
 use repositories\builders\filterparams\EventFilterParams;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -486,7 +488,36 @@ class GroupController {
 		
 		
 	}
-	
+
+	function newImportURLInProgressJSON($slug, Request $request, Application $app) {
+		if ( ! $this->build( $slug, $request, $app ) ) {
+			$app->abort( 404, "Group does not exist." );
+		}
+
+		$data = array('importURLRecommendations'=>array());
+
+		$importURLRecommendationDataToCheck = new ImportURLRecommendationDataToCheck($request->query->get('url'));
+
+		foreach($app['extensions']->getExtensionsIncludingCore() as $ext) {
+			foreach($ext->getImportURLRecommendations($importURLRecommendationDataToCheck) as $importURLRecommendation) {
+				$data['importURLRecommendations'][] = array(
+					'newURL' => $importURLRecommendation->getNewURL(),
+					'title' => $importURLRecommendation->getTitle(),
+					'description' => $importURLRecommendation->getDescription(),
+					'actionAcceptLabel' => $importURLRecommendation->getActionAcceptLabel(),
+					'actionRefuseLabel' => $importURLRecommendation->getActionRefuseLabel(),
+					'extensionID' => $importURLRecommendation->getExtensionID(),
+					'recommendationID' => $importURLRecommendation->getRecommendationID(),
+				);
+			}
+		}
+
+		$response = new Response(json_encode($data));
+		$response->headers->set('Content-Type', 'application/json');
+		return $response;
+
+	}
+
 }
 
 

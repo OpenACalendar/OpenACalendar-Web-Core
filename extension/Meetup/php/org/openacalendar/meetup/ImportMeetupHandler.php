@@ -35,6 +35,8 @@ class ImportMeetupHandler extends ImportHandlerBase {
 		
 		$urlBits = parse_url($this->importRun->getRealURL());
 
+		// If you are about to edit the code below stop right there!
+		// TODO refactor it to use MeetupURLParser class instead and update that instead.
 		if (in_array(strtolower($urlBits['host']), array('meetup.com','www.meetup.com')) && $appKey) {
 			
 			$bits = explode("/", $urlBits['path']);

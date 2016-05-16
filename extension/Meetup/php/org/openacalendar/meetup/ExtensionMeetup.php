@@ -44,4 +44,14 @@ class ExtensionMeetup extends \BaseExtension {
 			new \SysAdminLink("Setup Meetup Access",'/sysadmin/meetupuser')
 		);
 	}
+
+	public function getImportURLRecommendations(\import\ImportURLRecommendationDataToCheck $dataToCheck) {
+		$importURLRecommendation = new ImportURLRecommendation($dataToCheck->getUrl());
+		if ($importURLRecommendation->hasNewURL()) {
+			return array($importURLRecommendation);
+		} else {
+			return array();
+		}
+	}
+
 }
