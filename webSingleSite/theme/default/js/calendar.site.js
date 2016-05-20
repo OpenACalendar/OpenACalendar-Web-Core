@@ -29,6 +29,7 @@ function showEventPopup(data) {
 		'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
 		'<div id="EventPopupTimes" class="times"></div>'+
 		'<div class="popupLink"><a href="/event/' + data.slugForURL + '">View More Details</a></div>'+
+		'<div id="EventPopupTickets" class="popupLink"><a href="/event/' + data.slugForURL + '" target="_blank" rel="noopener">Tickets from </a></div>'+
 		'</div>');
 	$.ajax({
 		url: "/api1/event/"+data.slug+"/info.json?includeMedias=yes"
@@ -72,6 +73,14 @@ function showEventPopup(data) {
 			html += '</ul>';
 		}
 		$('#EventPopupGroupsWrapper').html(html);
+		if (event.ticket_url) {
+			$('#EventPopupTickets').show();
+			var link = $('#EventPopupTickets a');
+			link.prop('href', event.ticket_url);
+			link.text("Tickets from " + link.prop('host'));
+		} else {
+			$('#EventPopupTickets').hide();
+		}
 	});
 	if (showCurrentUserOptions) {
 		showCurrentUserAttendanceForEventInPopup(data.slug,'EventPopupAttendanceContent');

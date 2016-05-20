@@ -2114,11 +2114,23 @@ div.mainShowEvent div.currentUserAttendance .savingIndicator,
 div.mainShowEvent div.currentUserAttendance .savedIndicator {
   font-style: italic;
 }
+ul.mainListEvents li.event div.currentUserAttendance .ticketWrapper,
+div.mainShowEvent div.currentUserAttendance .ticketWrapper {
+  display: inline;
+}
+ul.mainListEvents li.event div.currentUserAttendance .ticketWrapper .ticketIconPrompt,
+div.mainShowEvent div.currentUserAttendance .ticketWrapper .ticketIconPrompt {
+  color: red;
+}
 ul.mainListEvents li.event form.UserAttendingOptions .savingIndicator,
 ul.mainListEvents li.event form.UserAttendingOptions .savedIndicator,
 div.mainShowEvent form.UserAttendingOptions .savingIndicator,
 div.mainShowEvent form.UserAttendingOptions .savedIndicator {
   font-style: italic;
+}
+ul.mainListEvents li.event .ticketIconInfo,
+div.mainShowEvent .ticketIconInfo {
+  color: black;
 }
 ul.mainListEvents li.event .GetTicket,
 div.mainShowEvent .GetTicket {
@@ -2130,6 +2142,26 @@ div.mainShowEvent .GetTicket {
   ul.mainListEvents li.event .media,
   div.mainShowEvent .media {
     display: none;
+  }
+  ul.mainListEvents li.event div.currentUserAttendance div.formWrapper,
+  div.mainShowEvent div.currentUserAttendance div.formWrapper {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: block;
+  }
+  ul.mainListEvents li.event div.currentUserAttendance .savingIndicator,
+  ul.mainListEvents li.event div.currentUserAttendance .savedIndicator,
+  div.mainShowEvent div.currentUserAttendance .savingIndicator,
+  div.mainShowEvent div.currentUserAttendance .savedIndicator {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: block;
+  }
+  ul.mainListEvents li.event div.currentUserAttendance .ticketWrapper,
+  div.mainShowEvent div.currentUserAttendance .ticketWrapper {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: block;
   }
 }
 .dateAndLocationWrapper {

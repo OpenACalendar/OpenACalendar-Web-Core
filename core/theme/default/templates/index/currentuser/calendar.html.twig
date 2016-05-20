@@ -108,6 +108,7 @@
 									</span>
 									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug }}' }); return false;">
 										{{ event.getSummaryDisplay() }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
+										{%  if event.hasTicketUrl %}<span class="fa fa-ticket" title="See information about tickets"></span>{%  endif %}
 									</a>
 									<div class="below"></div>
 								</div>

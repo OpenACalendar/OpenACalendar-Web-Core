@@ -505,6 +505,10 @@ class EventModel {
 		return false;
 	}
 
+	public function hasTicketUrl() {
+		return (boolean)$this->getTicketUrl();
+	}
+
 	public function getTicketUrl() {
 		return $this->ticket_url;
 	}

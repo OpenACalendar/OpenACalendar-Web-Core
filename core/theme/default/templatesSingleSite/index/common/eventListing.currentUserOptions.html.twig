@@ -16,4 +16,9 @@
 		{% endif %}
 	</a>
 	<div class="formWrapper"></div>
+	<div class="ticketWrapper" style="display: none;">
+		{%  if event.hasTicketUrl %}
+			<a href="{{  event.ticketUrl }}" target="_blank" rel="noopener" class="ticketIconPrompt"> Make sure you get a <span class="fa fa-ticket" title="See information about tickets"></span></a>
+		{% endif %}
+	</div>
 </div>	

@@ -404,12 +404,21 @@ ul.mainListEvents li.event, div.mainShowEvent {
 		.savingIndicator, .savedIndicator {
 			font-style: italic;
 		}
+		.ticketWrapper {
+			display: inline;
+			.ticketIconPrompt {
+				color: red;
+			}
+		}
 	}
 	/** this is used on event page **/
 	form.UserAttendingOptions {
 		.savingIndicator, .savedIndicator {
 			font-style: italic;
 		}
+	}
+	.ticketIconInfo {
+		color: black;
 	}
 	.GetTicket {
 		font-weight: bold;
@@ -422,6 +431,23 @@ ul.mainListEvents li.event, div.mainShowEvent {
 	ul.mainListEvents li.event, div.mainShowEvent {
 		.media {
 			display: none;
+		}
+		div.currentUserAttendance {
+			div.formWrapper {
+				padding-top: 5px;
+				padding-bottom: 5px;
+				display: block;
+			}
+			.savingIndicator, .savedIndicator {
+				padding-top: 5px;
+				padding-bottom: 5px;
+				display: block;
+			}
+			.ticketWrapper {
+				padding-top: 5px;
+				padding-bottom: 5px;
+				display: block;
+			}
 		}
 	}
 }
