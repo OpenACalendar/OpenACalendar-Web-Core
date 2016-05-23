@@ -72,41 +72,47 @@ function showExportSharePopup() {
 		}
 		html += '<div id="ExportSharePopupExportIntroText"><p class="header">Export your data!</p>';
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
-			html += '<label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label>';
+			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label></div>';
 			if (exportData.hasOwnProperty("country") ) {
 				html += '<label><input type="radio" name="ExportWhat" id="ExportCountry"> all events from ';
 				html += (exportData.hasOwnProperty("countryTitle") ? 'country: '+ escapeHTML(exportData.countryTitle) : 'this country' );
-				html += '</label>';
+				html += '</label></div>';
 			}
 			if (exportData.hasOwnProperty("area") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportArea"> all events from ';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportArea"> all events from ';
 				html += (exportData.hasOwnProperty("areaTitle") ? 'area: '+ escapeHTML(exportData.areaTitle) : 'this area' );
-				html += '</label>';
+				html += '</label></div>';
 			}
 			if (exportData.hasOwnProperty("venueVirtual") && exportData.venueVirtual) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportVenueVirtual"> all virtual events</label>';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportVenueVirtual"> all virtual events</label></div>';
 			} else if (exportData.hasOwnProperty("venue") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportVenue"> all events from ';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportVenue"> all events from ';
 				html += (exportData.hasOwnProperty("venueTitle") ? 'venue: '+ escapeHTML(exportData.venueTitle) : 'this venue' );
-				html += '</label>';
+				html += '</label></div>';
 			}
 			if (exportData.hasOwnProperty("group") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportGroup"> all events from ';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportGroup"> all events from ';
 				html += (exportData.hasOwnProperty("groupTitle") ? 'group: '+ escapeHTML(exportData.groupTitle) : 'this group' );
-				html += '</label>';
+				html += '</label></div>';
 			}
 			if (exportData.hasOwnProperty("tag") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportTag"> all events from ';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportTag"> all events from ';
 				html += (exportData.hasOwnProperty("tagTitle") ? 'tag: '+ escapeHTML(exportData.tagTitle) : 'this tag' );
-				html += '</label>';
+				html += '</label></div>';
 			}
 			if (exportData.hasOwnProperty("curatedlist") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportCuratedList"> all events from ';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportCuratedList"> all events from ';
 				html += (exportData.hasOwnProperty("curatedlistTitle") ? 'curated list: '+ escapeHTML(exportData.curatedlistTitle) : 'this curated list' );
-				html += '</label>';
+				html += '</label></div>';
 			}			
 			if (exportData.hasOwnProperty("event") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportEvent"> just this event</label>';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportEvent"> just this event</label>';
+                if (exportData.eventTicketURL) {
+                    var link = $('<a/>');
+                    link.prop('href', exportData.eventTicketURL);
+                    html += ' <div id="ExportSharePopupExportFilterEventOnlyTicketWarning">(Make sure you <a href="'+ escapeHTMLAttribute(exportData.eventTicketURL) +'" target="_blank" rel="noopener">get your ticket from '+link.prop('host')+'</a>)</div>';
+                }
+                html += '</div>';
 			}
 		} else {
 			html  += '<p>Hint: if you browse round the calendar, you can export filtered feeds of only what interests you!</p>';
@@ -256,6 +262,7 @@ function showLinksFor(showFor) {
 		hasAtom = false;
         hasCSV = false;
 		hasExistingGoogleCalendar = true;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').show();
 	} else if (exportData.hasOwnProperty("group") && showFor == "group") {
 		icalURL += "/group/"+exportData.group+"/events.ical";
 		csvURL += "/group/"+exportData.group+"/events.csv";
@@ -263,6 +270,7 @@ function showLinksFor(showFor) {
 		jsonpURL += "/group/"+exportData.group+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/group/"+exportData.group+"/events.create.atom";
 		atomBeforeURL += "/group/"+exportData.group+"/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	} else if (exportData.hasOwnProperty("venueVirtual") && showFor == "venueVirtual") {
 		icalURL += "/venue/virtual/events.ical";
 		csvURL += "/venue/virtual/events.csv";
@@ -270,6 +278,7 @@ function showLinksFor(showFor) {
 		jsonpURL += "/venue/virtual/events.jsonp?callback=myfunc";
 		atomCreateURL += "/venue/virtual/events.create.atom";
 		atomBeforeURL += "/venue/virtual/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	} else if (exportData.hasOwnProperty("venue") && showFor == "venue") {
 		icalURL += "/venue/"+exportData.venue+"/events.ical";
         csvURL += "/venue/"+exportData.venue+"/events.csv";
@@ -277,41 +286,47 @@ function showLinksFor(showFor) {
 		jsonpURL += "/venue/"+exportData.venue+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/venue/"+exportData.venue+"/events.create.atom";
 		atomBeforeURL += "/venue/"+exportData.venue+"/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	} else if (exportData.hasOwnProperty("area") && showFor == "area") {
 		icalURL += "/area/"+exportData.area+"/events.ical";
 		csvURL += "/area/"+exportData.area+"/events.csv";
 		jsonURL += "/area/"+exportData.area+"/events.json";
 		jsonpURL += "/area/"+exportData.area+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/area/"+exportData.area+"/events.create.atom";
-		atomBeforeURL += "/area/"+exportData.area+"/events.before.atom?days="+atomBeforeDays;		
+		atomBeforeURL += "/area/"+exportData.area+"/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	} else if (exportData.hasOwnProperty("tag") && showFor == "tag") {
 		icalURL += "/tag/"+exportData.tag+"/events.ical";
 		csvURL += "/tag/"+exportData.tag+"/events.csv";
 		jsonURL += "/tag/"+exportData.tag+"/events.json";
 		jsonpURL += "/tag/"+exportData.tag+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/tag/"+exportData.tag+"/events.create.atom";
-		atomBeforeURL += "/tag/"+exportData.tag+"/events.before.atom?days="+atomBeforeDays;			
+		atomBeforeURL += "/tag/"+exportData.tag+"/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	} else if (exportData.hasOwnProperty("country") && showFor == "country") {
 		icalURL += "/country/"+exportData.country+"/events.ical";
 		csvURL += "/country/"+exportData.country+"/events.csv";
 		jsonURL += "/country/"+exportData.country+"/events.json";
 		jsonpURL += "/country/"+exportData.country+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/country/"+exportData.country+"/events.create.atom";
-		atomBeforeURL += "/country/"+exportData.country+"/events.before.atom?days="+atomBeforeDays;		
+		atomBeforeURL += "/country/"+exportData.country+"/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	} else if (exportData.hasOwnProperty("curatedlist") && showFor == "curatedlist") {
 		csvURL += "/curatedlist/"+exportData.curatedlist+"/events.csv";
 		icalURL += "/curatedlist/"+exportData.curatedlist+"/events.ical";
 		jsonURL += "/curatedlist/"+exportData.curatedlist+"/events.json";
 		jsonpURL += "/curatedlist/"+exportData.curatedlist+"/events.jsonp?callback=myfunc";
 		atomCreateURL += "/curatedlist/"+exportData.curatedlist+"/events.create.atom";
-		atomBeforeURL += "/curatedlist/"+exportData.curatedlist+"/events.before.atom?days="+atomBeforeDays;		
+		atomBeforeURL += "/curatedlist/"+exportData.curatedlist+"/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	} else {
 		icalURL += "/events.ical";
 		csvURL += "/events.csv";
 		jsonURL += "/events.json";
 		jsonpURL += "/events.jsonp?callback=myfunc";
 		atomCreateURL += "/events.create.atom";
-		atomBeforeURL += "/events.before.atom?days="+atomBeforeDays;		
+		atomBeforeURL += "/events.before.atom?days="+atomBeforeDays;
+        $('#ExportSharePopupExportFilterEventOnlyTicketWarning').hide();
 	}
 	var div = $('#ExportSharePopup');
 	div.find('#ExportSharePopupExportIntroText a.icalexportlink').attr('href',icalURL);

@@ -82,7 +82,8 @@
 			event:{{ event.slug }},
 			eventSlugURL:"{{ event.slugForURL|e('js') }}",
 			eventTitle:"{{ event.summaryDisplay|e('js') }}",
-			eventStartLocal:"{{  event.startAt|date('D jS M Y g:ia', event.timezone) }}"
+			eventStartLocal:"{{  event.startAt|date('D jS M Y g:ia', event.timezone) }}",
+			eventTicketURL: "{{  event.ticketURL|e('js') }}"
 			{% if group is not null %}, group: {{ group.slug }}, groupTitle:"{{ group.title|e('js') }}"{% endif %}
 		}
 	</script>

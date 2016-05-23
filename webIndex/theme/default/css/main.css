@@ -1467,9 +1467,26 @@ form .afterBigSubmitActionWrapper {
 .popupBox #ExportSharePopupExportIntroText div {
   display: inline;
 }
-.popupBox #ExportSharePopupShareIntroText label,
-.popupBox #ExportSharePopupExportIntroText label {
+.popupBox #ExportSharePopupShareIntroText .ExportSharePopupExportFilterOption,
+.popupBox #ExportSharePopupExportIntroText .ExportSharePopupExportFilterOption {
   display: block;
+  line-height: 1.3;
+}
+.popupBox #ExportSharePopupShareIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning,
+.popupBox #ExportSharePopupExportIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning {
+  display: inline;
+  color: red;
+}
+.popupBox #ExportSharePopupShareIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning a,
+.popupBox #ExportSharePopupExportIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning a {
+  color: red;
+  text-decoration: none;
+}
+.popupBox #ExportSharePopupShareIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning a:hover,
+.popupBox #ExportSharePopupShareIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning a:focus,
+.popupBox #ExportSharePopupExportIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning a:hover,
+.popupBox #ExportSharePopupExportIntroText .ExportSharePopupExportFilterOption #ExportSharePopupExportFilterEventOnlyTicketWarning a:focus {
+  text-decoration: underline;
 }
 .popupBox #ExportSharePopupShareIntroText .header,
 .popupBox #ExportSharePopupExportIntroText .header {
