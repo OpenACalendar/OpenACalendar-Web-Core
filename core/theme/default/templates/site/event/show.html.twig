@@ -144,6 +144,7 @@
 							{{  customField.label }}:<br>
 							{{ event.getCustomField(customField) | nl2br | linkify }}
 						</p>
+						{% include  ['site/event/show.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/event/show.custom_field.after.html.twig'] with { 'customField':customField } %}
 					{%  endif %}
 				{%  endfor %}
 			</p>

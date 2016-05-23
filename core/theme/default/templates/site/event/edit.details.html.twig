@@ -56,6 +56,7 @@
 
 		{%  for customField in formCustomFields %}
 			{{ form_row(form['custom_' ~ customField.key]) }}
+			{% include  ['site/event/edit.details.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/event/edit.details.custom_field.after.html.twig'] with { 'customField':customField } %}
 		{%  endfor %}
 
 		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}

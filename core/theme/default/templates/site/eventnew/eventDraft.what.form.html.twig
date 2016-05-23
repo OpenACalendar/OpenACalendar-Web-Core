@@ -20,6 +20,7 @@
 
 	{%  for customField in formCustomFields %}
 		{{ form_row(form['custom_' ~ customField.key]) }}
+		{% include  ['site/eventnew/eventDraft.what.form.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/eventnew/eventDraft.what.form.custom_field.after.html.twig'] with { 'customField':customField } %}
 	{%  endfor %}
 
 	{%  if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
