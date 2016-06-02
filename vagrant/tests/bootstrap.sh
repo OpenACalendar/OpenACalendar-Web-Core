@@ -24,8 +24,6 @@ chown vagrant:users  /home/vagrant/fileStore
 mkdir /home/vagrant/logs
 chown vagrant:users  /home/vagrant/logs
 
-su --login -c "psql -c \"CREATE USER openacalendar WITH PASSWORD 'password';\"" postgres
-su --login -c "psql -c \"CREATE DATABASE openacalendar WITH OWNER openacalendar ENCODING 'UTF8'  LC_COLLATE='en_GB.UTF-8' LC_CTYPE='en_GB.UTF-8'  TEMPLATE=template0 ;\"" postgres
 
 cp /vagrant/vagrant/tests/config.test.php /vagrant/config.test.php
 cp /vagrant/vagrant/tests/test /home/vagrant/test
