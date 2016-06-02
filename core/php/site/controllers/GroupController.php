@@ -103,13 +103,15 @@ class GroupController {
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Group does not exist.");
 		}
-		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
+
+
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
 		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
+		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}

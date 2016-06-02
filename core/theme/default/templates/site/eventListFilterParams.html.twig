@@ -19,6 +19,14 @@
 			</div>
 		{% endif %}
 
+		{% if eventListFilterParams.isHasTagControl %}
+			<div class="inputField">
+				<label>
+					Tag: <input type="text" name="tagSearch" value="{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.title  }}{%  endif %}" autocomplete="off">
+				</label>
+			</div>
+		{% endif %}
+
 		<div class="inputField">
 			<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
 		</div>

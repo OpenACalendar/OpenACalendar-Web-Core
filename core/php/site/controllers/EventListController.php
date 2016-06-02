@@ -18,12 +18,12 @@ class EventListController {
 	function index(Application $app) {
 		
 		
-		$params = new EventFilterParams($app);
+		$params = new EventFilterParams($app, null, $app['currentSite']);
 		$params->set($_GET);
-		$params->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
+		$params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
 		if ($app['currentUser']) {
 			$params->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}

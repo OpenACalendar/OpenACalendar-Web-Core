@@ -60,13 +60,13 @@ class CountryController {
 			$app->abort(404, "Country does not exist.");
 		}
 		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
 		$this->parameters['eventListFilterParams']->set($_GET);
-		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
+		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}

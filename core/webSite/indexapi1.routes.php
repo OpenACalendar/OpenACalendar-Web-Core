@@ -31,6 +31,7 @@ $app->match('/api1/event/{slug}/info.jsonp', 'siteapi1\controllers\EventControll
 
 
 $app->match('/api1/groups.json', 'siteapi1\controllers\GroupListController::json'); 
+$app->match('/api1/tags.json', 'siteapi1\controllers\TagListController::json');
 
 
 $app->match('/api1/group/{slug}/events.ical', 'siteapi1\controllers\GroupController::ical')

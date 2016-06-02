@@ -54,12 +54,12 @@ class TagController {
 		}
 		
 			
-		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
 		$this->parameters['eventListFilterParams']->set($_GET);
-		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
+		$this->parameters['eventListFilterParams']->setHasTagControl(false);
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}

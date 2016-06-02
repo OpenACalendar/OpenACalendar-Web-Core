@@ -29,4 +29,26 @@ $(document).ready(function() {
 			dateFormat:'d MM yy'
 		});
 	}
+	$('form.filterListEvent input[name="tagSearch"]').autocomplete(
+		{
+			source:  function( request, response ) {
+				$.ajax({
+					url: "/api1/tags.json",
+					dataType: "json",
+					data: {
+						titleSearch: request.term, includeDeleted: "no"
+					},
+					success: function( data ) {
+						var out = [];
+						for(idx in data.data) {
+							out.push(data.data[idx].title);
+						}
+						response( out );
+					}
+				});
+			},
+			minLength: 2
+		}
+	);
+
 });

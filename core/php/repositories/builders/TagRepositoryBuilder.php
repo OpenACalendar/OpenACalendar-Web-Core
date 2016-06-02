@@ -49,6 +49,17 @@ class TagRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->include_deleted = $value;
 	}
 
+	protected $titleSearch;
+
+	/**
+	 * @param mixed $titleSearch
+	 */
+	public function setTitleSearch( $titleSearch ) {
+		$this->titleSearch = $titleSearch;
+	}
+
+
+
 	protected function build() {
 
 		if ($this->site) {
@@ -68,6 +79,11 @@ class TagRepositoryBuilder  extends BaseRepositoryBuilder {
 		
 		if (!$this->include_deleted) {
 			$this->where[] = " tag_information.is_deleted = '0' ";
+		}
+
+		if ($this->titleSearch) {
+			$this->where[] =  'tag_information.title ILIKE :title_search ';
+			$this->params['title_search'] = "%".strtolower($this->titleSearch)."%";
 		}
 	}
 	

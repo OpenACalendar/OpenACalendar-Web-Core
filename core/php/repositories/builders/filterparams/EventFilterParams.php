@@ -5,8 +5,11 @@ namespace repositories\builders\filterparams;
 use models\SiteModel;
 use models\EventModel;
 use models\GroupModel;
+use models\TagModel;
 use models\UserAccountModel;
 use repositories\builders\EventRepositoryBuilder;
+use repositories\builders\TagRepositoryBuilder;
+use repositories\TagRepository;
 use Silex\Application;
 
 
@@ -20,32 +23,45 @@ use Silex\Application;
  */
 class EventFilterParams {
 
-	function __construct(Application $app, EventRepositoryBuilder $erb = null) {
+	function __construct(Application $app, EventRepositoryBuilder $erb = null, SiteModel $siteModel = null) {
+		$this->app = $app;
 		if ($erb) {
 			$this->eventRepositoryBuilder = $erb;
 		} else {
 			$this->eventRepositoryBuilder = new EventRepositoryBuilder($app);
 			$this->eventRepositoryBuilder->setLimit(100);
 		}
+		if ($siteModel) {
+			$this->eventRepositoryBuilder->setSite($siteModel);
+			$this->siteModel = $siteModel;
+		}
 	}
 
-	
+	protected  $app;
+
+	/** @var EventRepositoryBuilder */
 	protected $eventRepositoryBuilder;
-	
+
+	/** @var  SiteModel */
+	protected $siteModel;
+
 	public function getEventRepositoryBuilder() {
 		return $this->eventRepositoryBuilder;
 	}
 
 
 	public function isDefaultFilters() {
-		return  !$this->freeTextSearch && $this->fromNow && !$this->include_deleted;
+		return  !$this->freeTextSearch && $this->fromNow && !$this->include_deleted && !$this->tagSearch;
 	}
 
 	// ############################### optional controls; turn on and off
 	
 	protected $freeTextSearch = null;
+	/** @var TagModel  */
+	protected $tagSearch = null;
 	protected $hasDateControls = true;
-	
+	protected $hasTagControl = false;
+
 	public function getDateControls() {
 		return $this->hasDateControls;
 	}
@@ -53,6 +69,22 @@ class EventFilterParams {
 	public function setHasDateControls($hasDateControls) {
 		$this->hasDateControls = $hasDateControls;
 	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isHasTagControl() {
+		return $this->hasTagControl;
+	}
+
+	/**
+	 * @param boolean $hasTagControl
+	 */
+	public function setHasTagControl( $hasTagControl ) {
+		$this->hasTagControl = $hasTagControl;
+	}
+
+
 	
 	protected $hasSpecifiedUserControls = false;
 	protected $hasSpecifiedUser = null;
@@ -124,8 +156,20 @@ class EventFilterParams {
 			if (isset($data['freeTextSearch']) && trim($data['freeTextSearch'])) {
 				$this->freeTextSearch = $data['freeTextSearch'];
 			}
-			
-			
+
+			// Tag
+			if (isset($data['tagSearch']) && trim($data['tagSearch'])) {
+				$tagRepositoryBuilder = new TagRepositoryBuilder($this->app);
+				$tagRepositoryBuilder->setSite($this->siteModel);
+				$tagRepositoryBuilder->setTitleSearch($data['tagSearch']);
+				$tagRepositoryBuilder->setIncludeDeleted(false);
+				$tagRepositoryBuilder->setLimit(1);
+				$tags = $tagRepositoryBuilder->fetchAll();
+				if ($tags) {
+					$this->tagSearch = $tags[0];
+				}
+			}
+
 		}
 		
 		// apply to search
@@ -141,6 +185,9 @@ class EventFilterParams {
 		}
 		if ($this->freeTextSearch) {
 			$this->eventRepositoryBuilder->setFreeTextsearch($this->freeTextSearch);
+		}
+		if ($this->tagSearch) {
+			$this->eventRepositoryBuilder->setTag($this->tagSearch);
 		}
 	}
 	
@@ -184,6 +231,13 @@ class EventFilterParams {
 
 	public function getFreeTextSearch() {
 		return $this->freeTextSearch;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getTagSearch() {
+		return $this->tagSearch;
 	}
 
 
