@@ -3,6 +3,7 @@
 namespace org\openacalendar\curatedlists\site\controllers;
 
 
+use repositories\builders\EventRepositoryBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use org\openacalendar\curatedlists\models\CuratedListModel;
@@ -66,8 +67,18 @@ class CuratedListController {
 		}
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
-		
-		
+
+		if (count($this->parameters['events']) == 0) {
+			$erb = new EventRepositoryBuilder($app);
+			$erb->setCuratedList($this->parameters['curatedlist'], false);
+			$erb->setAfterNow();
+			$this->parameters['eventsDefaultCount'] = $erb->fetchCount();
+
+			$erb = new EventRepositoryBuilder($app);
+			$erb->setCuratedList($this->parameters['curatedlist'], false);
+			$erb->setBeforeNow();
+			$this->parameters['eventsPastCount'] = $erb->fetchCount();
+		}
 		
 		return $app['twig']->render('site/curatedlist/show.html.twig',$this->parameters);
 	}

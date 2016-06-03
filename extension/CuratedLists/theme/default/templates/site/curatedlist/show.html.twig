@@ -72,7 +72,27 @@
 			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true, extraHTMLAtEnd: html }  %}
 		{% else %}
 			<li>
-				No events found.
+				<p>
+					{%  if not eventListFilterParams.isDefaultFilters %}
+						{%  if eventsDefaultCount == 1 %}
+							No events found with that filter. Do you want to see <a href="/curatedlist/{{  curatedlist.slugForURL }}">the one future event</a> instead?
+						{%  elseif eventsDefaultCount > 1 %}
+							No events found with that filter. Do you want to see <a href="/curatedlist/{{  curatedlist.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
+						{%  else %}
+							No events found.
+						{%  endif %}
+					{%  else  %}
+						No events found.
+					{%  endif %}
+				</p>
+
+				{%  if eventListFilterParams.isDefaultFilters %}
+					{%  if eventsPastCount == 1 %}
+						<p>(Sorry, you've already missed 1 event.)</p>
+					{% elseif eventsPastCount > 1 %}
+						<p>(Sorry, you've already missed {{ eventsPastCount  }} events.)</p>
+					{%  endif %}
+				{%  endif %}
 			</li>		
 		{% endfor %}
 	</ul>
