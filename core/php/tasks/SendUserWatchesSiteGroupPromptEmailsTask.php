@@ -108,40 +108,45 @@ class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 								$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
                                 $unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.
                                     $user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
-								$lastEventsBuilder = new EventRepositoryBuilder($this->app);
-								$lastEventsBuilder->setSite($site);
-								$lastEventsBuilder->setGroup($group);
-								$lastEventsBuilder->setOrderByStartAt(true);
-								$lastEventsBuilder->setIncludeDeleted(false);
-								$lastEventsBuilder->setIncludeImported(false);
-								$lastEventsBuilder->setLimit($this->app['config']->userWatchesSiteGroupPromptEmailShowEvents);
-								$lastEvents = $lastEventsBuilder->fetchAll();
+
+								$futureEventsBuilder = new EventRepositoryBuilder($this->app);
+								$futureEventsBuilder->setSite($site);
+								$futureEventsBuilder->setGroup($group);
+								$futureEventsBuilder->setOrderByStartAt(false);
+								$futureEventsBuilder->setIncludeDeleted(false);
+								$futureEventsBuilder->setIncludeImported(true);
+								$futureEventsBuilder->setLimit($this->app['config']->userWatchesSiteGroupPromptEmailShowEventsMax);
+								$futureEvents = $futureEventsBuilder->fetchAll();
 
 								$message = \Swift_Message::newInstance();
-								$message->setSubject("Any news about ".$group->getTitle()."?");
 								$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 								$message->setTo($user->getEmail());
 
-								$messageText = $this->app['twig']->render('email/userWatchesSiteGroupPromptEmail.txt.twig', array(
+								$templateData = array(
 									'user'=>$user,
 									'group'=>$group,
-									'lastEvents'=>$lastEvents,
+									'futureEvents'=>$futureEvents,
 									'stopCode'=>$userWatchesSiteStop->getAccessKey(),
 									'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
 									'unsubscribeURL'=>$unsubscribeURL,
-								));
-								if ($this->app['config']->isDebug) file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.txt', $messageText);
+								);
+
+								$messageSubject = $this->app['twig']->render('email/userWatchesSiteGroupPromptEmail.subject.twig', $templateData);
+								if ($this->app['config']->isDebug) {
+									file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.subject', $messageSubject);
+								}
+								$message->setSubject(trim($messageSubject));
+
+								$messageText = $this->app['twig']->render('email/userWatchesSiteGroupPromptEmail.txt.twig', $templateData);
+								if ($this->app['config']->isDebug) {
+									file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.txt', $messageText);
+								}
 								$message->setBody($messageText);
 
-								$messageHTML = $this->app['twig']->render('email/userWatchesSiteGroupPromptEmail.html.twig', array(
-									'user'=>$user,
-									'group'=>$group,
-									'lastEvents'=>$lastEvents,
-									'stopCode'=>$userWatchesSiteStop->getAccessKey(),
-									'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-									'unsubscribeURL'=>$unsubscribeURL,
-								));
-								if ($this->app['config']->isDebug) file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.html', $messageHTML);
+								$messageHTML = $this->app['twig']->render('email/userWatchesSiteGroupPromptEmail.html.twig', $templateData);
+								if ($this->app['config']->isDebug) {
+									file_put_contents('/tmp/userWatchesSiteGroupPromptEmail.html', $messageHTML);
+								}
 								$message->addPart($messageHTML,'text/html');
 
 								$headers = $message->getHeaders();

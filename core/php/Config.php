@@ -114,9 +114,9 @@ class Config {
 	
 	public $resetEmailsGapBetweenInSeconds = 600; // 10 mins
 	
-	public $userWatchesGroupPromptEmailShowEvents = 3;
-	public $userWatchesSitePromptEmailShowEvents = 3;
-	public $userWatchesSiteGroupPromptEmailShowEvents = 3;
+	public $userWatchesGroupPromptEmailShowEventsMax = 100;
+	public $userWatchesSitePromptEmailShowEventsMax = 100;
+	public $userWatchesSiteGroupPromptEmailShowEventsMax = 100;
 	public $userWatchesPromptEmailSafeGapDays = 30;
 	
 	public $newSiteHasFeatureMap = true;

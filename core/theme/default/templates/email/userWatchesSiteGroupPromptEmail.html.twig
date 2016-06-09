@@ -12,17 +12,26 @@
 	<p>Hello {{ user.username }}</p>
 
 	<p>
-		<span style="font-weight: bold;">Do you know of any more events for <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}">{{ group.title }}</a>?</span> 
-		There will soon be no events, and that makes people sad.
+		We are trying to list events from: {{ group.title }}.
 	</p>
 
-	{% if lastEvents %}
-		<p>Is one of these events a recurring event? If so, you can easily add more.</p>
+	{% if futureEvents %}
+		<p>We only know of these future events:</p>
 
-		{% for event in lastEvents %}
-			{% include 'email/common/promptEmailEventToRecur.html.twig' with { event: event } %}
-		{% endfor %}
+		<ul>
+			{% for event in futureEvents %}
+				<li><a href="/event/{{  event.slugForURL }}">{{ event.getStartAt|date("D jS M", event.timeZone) }}: {{  event.summaryDisplay }}</a></li>
+			{% endfor %}
+		</ul>
+	{%  else %}
+		<p>We don't know of any future events.</p>
 	{% endif %}
+
+	<p>If you know about any more events, can you tell everyone? You don't have to be the organiser.</p>
+
+	<p>It's easy to add events or recur an event that is continuing.</p>
+
+	{% include 'email/common/actionButton.html.twig' with { link:config.getWebSiteDomainSecure(site.slug) ~ '/group/' ~ group.slugForUrl, text: 'Add more events to ' ~ site.title} %}
 
 	<p>Thanks,<br>
 	{{ config.siteTitle }}</p>

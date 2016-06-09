@@ -11,7 +11,15 @@
 	
 Hello {{ user.username }}
 
-You watch {{ site.title }}. Do you know of any more events to add? We will soon run out.
+We are trying to list events on: {{ site.title }}.
+
+{%  if futureEvents|length > 0 %}We only know of some future events.{%  else %}We don't know of any future events.{%  endif %}
+
+If you know about any more events, can you tell everyone? You don't have to be the organiser.
+
+It's easy to add events or recur an event that is continuing.
+
+Do so at:
 {{ config.getWebSiteDomainSecure(site.slug) }}
 
 To stop watching {{ site.title }}:

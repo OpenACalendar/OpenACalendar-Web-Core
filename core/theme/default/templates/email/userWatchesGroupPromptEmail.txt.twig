@@ -11,7 +11,15 @@
 	
 Hello {{ user.username }}
 
-You watch {{ group.title }}. Do you know of any more events to add? We will soon run out.
+We are trying to list events from: {{ group.title }}.
+
+{%  if futureEvents|length > 0 %}We only know of some future events.{%  else %}We don't know of any future events.{%  endif %}
+
+If you know about any more events, can you tell everyone? You don't have to be the organiser.
+
+It's easy to add events or recur an event that is continuing.
+
+Do so at:
 {{ config.getWebSiteDomainSecure(site.slug) }}/group/{{ group.slugForUrl }}/
 
 To stop watching {{ group.title }}:
@@ -19,7 +27,6 @@ To stop watching {{ group.title }}:
 
 To change which emails you get:
 {{ unsubscribeURL }}
-
 
 Thanks,
 {{ config.siteTitle }}
