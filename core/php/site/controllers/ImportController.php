@@ -2,6 +2,8 @@
 
 namespace site\controllers;
 
+use repositories\UserAccountGeneralSecurityKeyRepository;
+use repositories\UserAccountRepository;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use models\ImportModel;
@@ -216,5 +218,41 @@ class ImportController {
 		
 		return $app['twig']->render('site/import/disable.html.twig',$this->parameters);
 	}
+
+
+	function enableFromNotification($slug, $userid, $usercode, Request $request, Application $app) {
+		// Check Import ......
+		if (!$this->build($slug, $request, $app)) {
+			$app->abort(404, "Import does not exist.");
+		}
+
+		if ($this->parameters['import']->getIsEnabled() && !$this->parameters['import']->getIsExpired()) {
+			return $app['twig']->render('site/import/enable.fromNotification.alreadyDone.html.twig',$this->parameters);
+		}
+
+		$iRepository = new ImportRepository($app);
+		$this->parameters['clashimport'] = $iRepository->loadClashForImportUrl($this->parameters['import']);
+		if ($this->parameters['clashimport']) {
+			return $app['twig']->render('site/import/enable.clash.html.twig',$this->parameters);
+		}
+
+		// Check User ....
+		$userAccountGeneralSecurityKeyRepository = new UserAccountGeneralSecurityKeyRepository($app);
+		$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->loadByUserAccountIDAndAccessKey($userid, $usercode);
+		if (!$userAccountGeneralSecurityKey) {
+			$app->abort(404, "User does not exist.");
+		}
+		$userRepo = new UserAccountRepository($app);
+		$this->parameters['user'] = $userRepo->loadByID($userAccountGeneralSecurityKey->getUserAccountId());
+
+		// Lets go
+		if ($request->request->get('enable') == 'yes' && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+			$iRepository->enable($this->parameters['import'], $this->parameters['user']);
+			return $app->redirect("/import/".$this->parameters['import']->getSlug());
+		}
+
+		return $app['twig']->render('site/import/enable.fromNotification.html.twig',$this->parameters);
+	}
+
 }
 

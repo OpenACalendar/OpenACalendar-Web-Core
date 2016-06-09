@@ -13,24 +13,23 @@
 		Hello {{ user.username }},
 	</p>
 	<p>
-		We used to import data from the following resource:
+		We were importing events into the group: {{ group.title }}
 	</p>
 	<p>
-		{{import.url}}
+		We were checking regularly for events on: {{import.url}}
 	</p>
 	<p>
-		But we are not sure it is up to date. 
-	</P>
+		We haven't had confirmation for a while that this source is correct. To make sure our events data is good, we like to check regularly that a source is correct and still useful.
+	</p>
 	<p>
-		We want to make sure that the data we have is up to date, so we have temporarily disabled it.
-	</P>
-	<P>
-		If you can confirm it is up to date, 
-		<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/import/{{ import.slug }}">
-		please can you visit the site and log in and press "enable"
-		</a> 
-		to re-enable it.
-	</P>
+		Can you confirm this source is still correct?
+	</p>
+
+	{% include 'email/common/actionButton.html.twig' with { link: config.getWebSiteDomainSecure(currentSite.slug) ~ '/import/' ~ import.slug ~ '/enablefromnotification/' ~  user.id ~ '/' ~ generalSecurityCode, text: 'Confirm source is still correct' } %}
+
+	<p>If this source is confirmed as correct, we will carry on checking regularly for events information there.</p>
+
+	<p>If this source is no longer correct or no longer useful, you can just ignore this email.</p>
 
 	<p>Thanks,<br>
 	{{ currentSite.title }} {{ config.siteTitle }}</p>

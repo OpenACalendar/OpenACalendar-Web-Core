@@ -118,26 +118,33 @@ class RunImportsTask extends \BaseTask  {
                         $userWatchesSiteStop = $userWatchesSiteStopRepository->getForUserAndSite($user, $site);
 
                         $message = \Swift_Message::newInstance();
-                        $message->setSubject("Please confirm this is still valid: ".$import->getTitle());
                         $message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
                         $message->setTo($user->getEmail());
 
-                        $messageText = $this->app['twig']->render('email/importExpired.watchesSite.txt.twig', array(
+                        $templateData =array(
                             'user'=>$user,
                             'import'=>$import,
                             'stopCode'=>$userWatchesSiteStop->getAccessKey(),
                             'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-                        ));
-                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesSite.txt', $messageText);
+                            'group'=>$group,
+                        );
+
+                        $messageSubject = $this->app['twig']->render('email/importExpired.watchesSite.subject.twig', $templateData);
+                        if ($this->app['config']->isDebug) {
+                            file_put_contents('/tmp/importExpired.watchesSite.subject', $messageSubject);
+                        }
+                        $message->setSubject(trim($messageSubject));
+
+                        $messageText = $this->app['twig']->render('email/importExpired.watchesSite.txt.twig', $templateData);
+                        if ($this->app['config']->isDebug) {
+                            file_put_contents('/tmp/importExpired.watchesSite.txt', $messageText);
+                        }
                         $message->setBody($messageText);
 
-                        $messageHTML = $this->app['twig']->render('email/importExpired.watchesSite.html.twig', array(
-                            'user'=>$user,
-                            'import'=>$import,
-                            'stopCode'=>$userWatchesSiteStop->getAccessKey(),
-                            'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-                        ));
-                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesSite.html', $messageHTML);
+                        $messageHTML = $this->app['twig']->render('email/importExpired.watchesSite.html.twig', $templateData);
+                        if ($this->app['config']->isDebug) {
+                            file_put_contents('/tmp/importExpired.watchesSite.html', $messageHTML);
+                        }
                         $message->addPart($messageHTML,'text/html');
 
                         if (!$this->app['config']->isDebug) {
@@ -168,28 +175,33 @@ class RunImportsTask extends \BaseTask  {
                         $userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($user, $group);
 
                         $message = \Swift_Message::newInstance();
-                        $message->setSubject("Please confirm this is still valid: ".$import->getTitle());
                         $message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
                         $message->setTo($user->getEmail());
 
-                        $messageText = $this->app['twig']->render('email/importExpired.watchesGroup.txt.twig', array(
+                        $templateData = array(
                             'user'=>$user,
                             'import'=>$import,
                             'stopCode'=>$userWatchesGroupStop->getAccessKey(),
                             'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
                             'group'=>$group,
-                        ));
-                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesGroup.txt', $messageText);
+                        );
+
+                        $messageSubject = $this->app['twig']->render('email/importExpired.watchesGroup.subject.twig', $templateData);
+                        if ($this->app['config']->isDebug) {
+                            file_put_contents('/tmp/importExpired.watchesGroup.subject', $messageSubject);
+                        }
+                        $message->setSubject(trim($messageSubject));
+
+                        $messageText = $this->app['twig']->render('email/importExpired.watchesGroup.txt.twig', $templateData);
+                        if ($this->app['config']->isDebug) {
+                            file_put_contents('/tmp/importExpired.watchesGroup.txt', $messageText);
+                        }
                         $message->setBody($messageText);
 
-                        $messageHTML = $this->app['twig']->render('email/importExpired.watchesGroup.html.twig', array(
-                            'user'=>$user,
-                            'import'=>$import,
-                            'stopCode'=>$userWatchesGroupStop->getAccessKey(),
-                            'generalSecurityCode'=>$userAccountGeneralSecurityKey->getAccessKey(),
-                            'group'=>$group,
-                        ));
-                        if ($this->app['config']->isDebug) file_put_contents('/tmp/importExpired.watchesGroup.html', $messageHTML);
+                        $messageHTML = $this->app['twig']->render('email/importExpired.watchesGroup.html.twig', $templateData);
+                        if ($this->app['config']->isDebug) {
+                            file_put_contents('/tmp/importExpired.watchesGroup.html', $messageHTML);
+                        }
                         $message->addPart($messageHTML,'text/html');
 
                         if (!$this->app['config']->isDebug) {

@@ -587,7 +587,7 @@ $app->match('/importurl/{slug}/disable', 'site\controllers\ImportController::dis
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)
 		->before($canChangeSite)
-		->assert('slug', '\d+'); 
+		->assert('slug', '\d+');
 $app->match('/importurl/{slug}/log', 'site\controllers\ImportController::log')
 		->assert('slug', '\d+');
 
@@ -616,6 +616,11 @@ $app->match('/import/{slug}/enable', 'site\controllers\ImportController::enable'
 		->before($featureImporterRequired)
 		->before($canChangeSite)
 		->assert('slug', '\d+');
+$app->match('/import/{slug}/enablefromnotification/{userid}/{usercode}', 'site\controllers\ImportController::enableFromNotification')
+    ->before($featureImporterRequired)
+    ->before($canChangeSite)
+    ->assert('slug', '\d+')
+    ->assert('userid', '\d+');
 $app->match('/import/{slug}/disable', 'site\controllers\ImportController::disable')
 		->before($permissionCalendarChangeRequired)
 		->before($featureImporterRequired)

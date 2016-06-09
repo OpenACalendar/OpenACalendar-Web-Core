@@ -1,0 +1,27 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/pageMinimal.html.twig' %}
+
+
+{% block pageTitle %}Enable {{ import.title }} - {% endblock %}
+
+{% block content %}
+
+	<h2>Enable Import {{  import.title }}</h2>
+
+	<form action="#" method="post" class="styled">
+		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<input type="hidden" name="enable" value="yes">
+
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="Enable" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
+	</form>
+
+{% endblock %}
+
+

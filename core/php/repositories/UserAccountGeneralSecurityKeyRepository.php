@@ -58,7 +58,7 @@ class UserAccountGeneralSecurityKeyRepository {
 		
 	}
 	
-	/** @return UserAccountPrivateFeedKeyModel **/
+	/** @return UserAccountGeneralSecurityKeyModel **/
 	public function loadByUserAccountIDAndAccessKey($id, $access) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_general_security_key.* FROM user_account_general_security_key WHERE user_account_id =:user_account_id AND access_key=:access_key");
