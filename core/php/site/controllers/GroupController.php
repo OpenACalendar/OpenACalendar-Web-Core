@@ -5,6 +5,8 @@ namespace site\controllers;
 use import\ImportURLRecommendationDataToCheck;
 use models\EventEditMetaDataModel;
 use models\GroupEditMetaDataModel;
+use repositories\builders\TagRepositoryBuilder;
+use repositories\TagRepository;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -89,6 +91,10 @@ class GroupController {
 		$app['currentUserActions']->set("org.openacalendar","groupEditCuratedLists",
 			$app['currentUserActions']->has("org.openacalendar","curatedListGeneralEdit")
 			&& !$this->parameters['group']->getIsDeleted());
+        $app['currentUserActions']->set("org.openacalendar","groupEditEventTags",
+            $app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
+            && !$this->parameters['group']->getIsDeleted()
+            && $app['currentSiteFeatures']->has('org.openacalendar','Tag'));
 		$app['currentUserActions']->set("org.openacalendar","groupNewEvent",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","EVENTS_CHANGE")
 			&& $app['currentSiteFeatures']->has('org.openacalendar','Group')
@@ -317,7 +323,61 @@ class GroupController {
 		$this->parameters['form'] = $form->createView();
 		return $app['twig']->render('site/group/edit.details.html.twig', $this->parameters);
 		
-	}	
+	}
+
+
+    function editEventsTags($slug, Request $request, Application $app) {
+
+        if (!$this->build($slug, $request, $app)) {
+            $app->abort(404, "Group does not exist.");
+        }
+
+        if ($this->parameters['group']->getIsDeleted()) {
+            die("No"); // TODO
+        }
+
+        $eventRepositoryBuilder = new EventRepositoryBuilder($app);
+        $eventRepositoryBuilder->setAfterNow();
+        $eventRepositoryBuilder->setGroup($this->parameters['group']);
+        $this->parameters['events'] = $eventRepositoryBuilder->fetchAll();
+        if (count($this->parameters['events']) == 0) {
+            return $app['twig']->render('site/group/edit.events.tags.noFutureEvents.html.twig', $this->parameters);
+        }
+
+        $trb = new TagRepositoryBuilder($app);
+        $trb->setSite($app['currentSite']);
+        $trb->setIncludeDeleted(false);
+        $this->parameters['tags'] = $trb->fetchAll();
+        if (count($this->parameters['tags']) == 0) {
+            return $app['twig']->render('site/group/edit.events.tags.noTags.html.twig', $this->parameters);
+        }
+
+        if ('POST' == $request->getMethod() && $request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
+            $tagRepo = new TagRepository($app);
+            if ($request->request->get('addTag')) {
+                $tag = $tagRepo->loadBySlug($app['currentSite'], $request->request->get('addTag'));
+                if ($tag) {
+                    foreach($this->parameters['events'] as $event) {
+                        $tagRepo->addTagToEvent( $tag, $event, $app['currentUser'] );
+                    }
+                    $app['flashmessages']->addMessage("Tag added!");
+                    return $app->redirect("/group/".$this->parameters['group']->getSlugForUrl().'/edit/events/tags');
+                }
+            } elseif ($request->request->get('removeTag')) {
+                $tag = $tagRepo->loadBySlug($app['currentSite'], $request->request->get('removeTag'));
+                if ($tag) {
+                    foreach($this->parameters['events'] as $event) {
+                        $tagRepo->removeTagFromEvent( $tag, $event, $app['currentUser'] );
+                    }
+                    $app['flashmessages']->addMessage("Tag removed!");
+                    return $app->redirect("/group/".$this->parameters['group']->getSlugForUrl().'/edit/events/tags');
+                }
+            }
+        }
+
+        return $app['twig']->render('site/group/edit.events.tags.html.twig', $this->parameters);
+
+    }
 
 	function calendarNow($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {

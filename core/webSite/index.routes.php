@@ -247,6 +247,12 @@ $app->match('/group/{slug}/edit/details', 'site\controllers\GroupController::edi
 		->before($permissionGroupsChangeRequired)
 		->before($featureGroupRequired)
 		->before($canChangeSite);
+$app->match('/group/{slug}/edit/events/tags', 'site\controllers\GroupController::editEventsTags')
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionEventsChangeRequired)
+		->before($featureGroupRequired)
+		->before($featureTagRequired)
+		->before($canChangeSite);
 $app->match('/group/{slug}/watch', 'site\controllers\GroupController::watch')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($appUserRequired)

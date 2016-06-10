@@ -1,0 +1,22 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/group/page.html.twig' %}
+
+{% block pageTitle %}Edit Tags for Events by {{ group.title }} - {% endblock %}
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{{ parent() }}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<p>This group has no future events.</p>
+
+{% endblock %}

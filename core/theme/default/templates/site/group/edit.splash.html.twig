@@ -27,6 +27,9 @@
 		{%  if currentUserActions.has("org.openacalendar","groupEditMedia") %}
 			<li><a href="/group/{{ group.slugForUrl }}/edit/media"><div class="fa fa-pencil"></div> Edit Media</a></li>
 		{%  endif %}
+		{%  if currentUserActions.has("org.openacalendar","groupEditEventTags") %}
+			<li><a href="/group/{{ group.slugForUrl }}/edit/events/tags"><div class="fa fa-pencil"></div> Edit Event Tags</a></li>
+		{%  endif %}
 	</ul>
 {% endblock %}
 
