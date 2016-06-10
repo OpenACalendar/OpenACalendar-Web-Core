@@ -11,10 +11,11 @@
 	
 	<p>Hello {{ user.username }}</p>
 
-	<p>
-		To reset your account please visit 
-		<a href="{{ config.getWebIndexDomainSecure() }}/you/reset/{{ user.id }}/{{ code }}">this webpage</a>
-	</p>
+	<p>Someone has requested to reset your password.</p>
+
+	{% include 'email/common/actionButton.html.twig' with { link: config.getWebIndexDomainSecure() ~ '/you/reset/' ~ user.id ~ '/' ~  code, text: 'Reset your password' } %}
+
+	<p>If this was not you, please ignore this email or contact support by hitting reply.</p>
 
 	<p>Thanks,<br>
 	{{ config.siteTitle }}</p>
