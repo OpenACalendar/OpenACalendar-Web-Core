@@ -2,10 +2,10 @@
 
 $CONFIG->isDebug = true;
 
-$CONFIG->databaseName = 'openacalendar';
+$CONFIG->databaseName = 'openacalendartest';
 $CONFIG->databaseHost = 'localhost';
-$CONFIG->databaseUser = 'openacalendar';
-$CONFIG->databasePassword = 'password';
+$CONFIG->databaseUser = 'openacalendartest';
+$CONFIG->databasePassword = 'testpassword';
 
 $CONFIG->isSingleSiteMode = true;
 $CONFIG->singleSiteID = 1;
