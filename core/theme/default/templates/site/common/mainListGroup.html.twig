@@ -24,4 +24,5 @@
 	</div>
 	{{ group.description |  truncate(1000) | nl2br | linkify }}
 	<div class="afterGroupListing"></div>
+	{%  if extraHTMLAtEnd is defined and extraHTMLAtEnd %}{{  extraHTMLAtEnd | raw }}{%  endif %}
 </li>

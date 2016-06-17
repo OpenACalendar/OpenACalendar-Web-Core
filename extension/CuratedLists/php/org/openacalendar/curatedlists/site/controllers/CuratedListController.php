@@ -120,7 +120,20 @@ class CuratedListController {
 		
 		return $app['twig']->render('site/curatedlist/curators.html.twig',$this->parameters);
 	}
-	
+
+    function groups($slug,Request $request, Application $app) {
+        if (!$this->build($slug, $request, $app)) {
+            $app->abort(404, "curatedlist does not exist.");
+        }
+
+
+        $groupBuilder = new \org\openacalendar\curatedlists\repositories\builders\GroupRepositoryBuilder($app);
+        $groupBuilder->setCuratedList($this->parameters['curatedlist']);
+        $this->parameters['groups'] = $groupBuilder->fetchAll();
+
+        return $app['twig']->render('site/curatedlist/groups.html.twig',$this->parameters);
+    }
+
 	
 	function editDetails($slug,Request $request, Application $app) {
 		

@@ -56,12 +56,14 @@ class CuratedListGroupController {
 			$curatedlistRepository = new CuratedListRepository();
 			$curatedlistRepository->removeGroupFromCuratedList($this->parameters['group'], $this->parameters['curatedlist'], $app['currentUser']);
 		}
-		
-		if ($request->request->get('returnTo','group') == 'group') {
-			return $app->redirect("/group/".$this->parameters['group']->getSlugForURL());
-		} elseif ($request->request->get('returnTo','group') == 'curatedlist') {
-			return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getSlug());
-		}
+
+        if ($request->request->get('returnTo','group') == 'group') {
+            return $app->redirect("/group/".$this->parameters['group']->getSlugForURL());
+        } elseif ($request->request->get('returnTo','group') == 'curatedlist') {
+            return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getSlug());
+        } elseif ($request->request->get('returnTo','group') == 'curatedlistgroups') {
+            return $app->redirect("/curatedlist/".$this->parameters['curatedlist']->getSlug().'/groups');
+        }
 		
 	}
 	

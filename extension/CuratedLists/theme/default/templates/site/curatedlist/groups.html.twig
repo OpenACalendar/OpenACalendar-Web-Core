@@ -1,0 +1,50 @@
+{#
+ # @package org.openacalendar.curatedlists
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/curatedlist/page.html.twig' %}
+
+{% block pageTitle %}Groups in {{ curatedlist.title }} - {% endblock %}
+
+{% block tabGroups %}currentTab{% endblock %}
+
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slugForUrl }}/groups" />
+	{% if not currentSite.isWebRobotsAllowed or curatedlist.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{{ parent() }}
+{% endblock %}
+
+{% block actions %}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<ul class="mainListGroups">
+		{% for group in groups %}
+			{%  set html %}
+				{% if actionCuratedListEditContents %}
+					<div class="curatedListOptions">
+						<form action="/curatedlist/{{ curatedlist.slug }}/group/{{ group.slug }}/remove" method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="returnTo" value="curatedlistgroups">
+							<div class="curatedlistOptionsActionWrapper"><input type="submit" value="Remove Group {{ group.title | e('html_attr') }}"></div>
+						</form>
+						<div class="afterCuratedlistOptionsActionWrapper"></div>
+					</div>
+				{% endif %}
+			{%  endset %}
+			{% include '/site/common/mainListGroup.html.twig' with {'group':group, extraHTMLAtEnd: html }  %}
+		{% else %}
+			<li class="nodata">
+				There are no groups.
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
+

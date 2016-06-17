@@ -99,6 +99,9 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
 
+        $groupRepositoryBuilder = new \org\openacalendar\curatedlists\repositories\builders\GroupRepositoryBuilder($this->app);
+        $groupRepositoryBuilder->setCuratedList($curatedList);
+        $this->assertEquals(0, count($groupRepositoryBuilder->fetchAll()));
 
 		// Add group to list
 		TimeSource::mock(2014,5,1,8,0,0);
@@ -160,6 +163,10 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(1, count($curatedListsContainsGroup));
 
+        $groupRepositoryBuilder = new \org\openacalendar\curatedlists\repositories\builders\GroupRepositoryBuilder($this->app);
+        $groupRepositoryBuilder->setCuratedList($curatedList);
+        $this->assertEquals(1, count($groupRepositoryBuilder->fetchAll()));
+
 		// Remove group from list
 		TimeSource::mock(2014,5,1,9,0,0);
 		$clRepo->removeGroupFromCuratedList($group, $curatedList, $user);
@@ -196,6 +203,10 @@ class CuratedListGroupTest extends \BaseAppWithDBTest {
 		$curatedListRepoBuilder->setContainsGroup($group);
 		$curatedListsContainsGroup = $curatedListRepoBuilder->fetchAll();
 		$this->assertEquals(0, count($curatedListsContainsGroup));
+
+        $groupRepositoryBuilder = new \org\openacalendar\curatedlists\repositories\builders\GroupRepositoryBuilder($this->app);
+        $groupRepositoryBuilder->setCuratedList($curatedList);
+        $this->assertEquals(0, count($groupRepositoryBuilder->fetchAll()));
 	}
 
 	function testEventInTwoGroupsOneAdded() {

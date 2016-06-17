@@ -58,7 +58,10 @@ $app->match('/curatedlist/{slug}/edit/details', 'org\openacalendar\curatedlists\
 		->before($canChangeSite); 
 $app->match('/curatedlist/{slug}/curators', 'org\openacalendar\curatedlists\site\controllers\CuratedListController::curators')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
-		->before($canChangeSite); 
+		->before($canChangeSite);
+$app->match('/curatedlist/{slug}/groups', 'org\openacalendar\curatedlists\site\controllers\CuratedListController::groups')
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($canChangeSite);
 $app->match('/curatedlist/{slug}/calendar', 'org\openacalendar\curatedlists\site\controllers\CuratedListController::calendarNow')
 		->assert('slug', FRIENDLY_SLUG_REGEX) ; 
 $app->match('/curatedlist/{slug}/calendar/', 'org\openacalendar\curatedlists\site\controllers\CuratedListController::calendarNow')
