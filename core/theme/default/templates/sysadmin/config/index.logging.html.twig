@@ -19,6 +19,12 @@
 			</td>
 		</tr>
 		<tr>
+			<th>logLevel</th>
+			<td>{{ config.logLevel }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logLevel'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>logToStdError</th>
 			<td>{% if config.logToStdError %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'logToStdError'} %}

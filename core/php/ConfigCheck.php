@@ -90,6 +90,11 @@ class ConfigCheck {
 			$out[] = 'This task is disabled';
 		}
 
+        $logLevels = array('emergency','alert','critical','warning','notice','info','debug','error');
+        if ($field == 'logLevel' && !in_array($this->config->logLevel, $logLevels)) {
+            $out[] = 'This is not a recognised level! Try: '. implode(", ", $logLevels);
+        }
+
 		return $out;
 	}
 

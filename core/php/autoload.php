@@ -83,13 +83,29 @@ $app['extensionhookrunner'] = new ExtensionHookRunner($app);
 
 ///////////////////////// LOGGING
 if ($CONFIG->logFile) {
+    $level = \Symfony\Bridge\Monolog\Logger::ERROR;
+    if ($CONFIG->logLevel == 'emergency') {
+        $level = \Symfony\Bridge\Monolog\Logger::EMERGENCY;
+    } else if ($CONFIG->logLevel == 'alert') {
+        $level = \Symfony\Bridge\Monolog\Logger::ALERT;
+    } else if ($CONFIG->logLevel == 'critical') {
+        $level = \Symfony\Bridge\Monolog\Logger::CRITICAL;
+    } else if ($CONFIG->logLevel == 'warning') {
+        $level = \Symfony\Bridge\Monolog\Logger::WARNING;
+    } else if ($CONFIG->logLevel == 'notice') {
+        $level = \Symfony\Bridge\Monolog\Logger::NOTICE;
+    } else if ($CONFIG->logLevel == 'info') {
+        $level = \Symfony\Bridge\Monolog\Logger::INFO;
+    } else if ($CONFIG->logLevel == 'debug') {
+        $level = \Symfony\Bridge\Monolog\Logger::DEBUG;
+    }
 	$app->register(new Silex\Provider\MonologServiceProvider(), array(
 		'monolog.logfile' => $CONFIG->logFile,
 		'monolog.name'=>$CONFIG->siteTitle,
-		'monolog.level'=>  \Symfony\Bridge\Monolog\Logger::ERROR,
+		'monolog.level'=>  $level,
 	));
 	if ($CONFIG->logToStdError) {
-		$app['monolog']->pushHandler(new Monolog\Handler\StreamHandler('php://stderr', Monolog\Logger::ERROR));
+		$app['monolog']->pushHandler(new Monolog\Handler\StreamHandler('php://stderr', $level));
 	}
 }
 

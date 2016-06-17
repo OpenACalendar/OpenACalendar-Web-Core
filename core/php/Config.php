@@ -96,6 +96,7 @@ class Config {
 
 
 	public $logFile = '/tmp/openacalendar.log';
+	public $logLevel = 'error';
 	public $logToStdError = false;
 		
 	public $logFileParseDateTimeRange = '/tmp/openacalendarParseDateTimeRange.log';

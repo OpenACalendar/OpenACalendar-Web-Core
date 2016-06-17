@@ -97,5 +97,55 @@ class ConfigCheckTest extends \BaseAppTest {
 		$this->assertEquals(0, count($configCheck->getErrors('logFile')));
 		$this->assertEquals(1, count($configCheck->getErrors('logToStdError')));
 	}
+
+
+    function dataForTestLogLevelGood() {
+        return array(
+            array('error'),
+            array('emergency'),
+            array('alert'),
+            array('critical'),
+            array('warning'),
+            array('notice'),
+            array('info'),
+            array('debug'),
+        );
+    }
+
+    /**
+     * @dataProvider dataForTestLogLevelGood
+     */
+    function testLogLevelGood($set) {
+        $config = new Config();
+        $config->logFile = '/tmp/test.log';
+        $config->logLevel = $set;
+
+        $configCheck = new ConfigCheck($config);
+
+        $this->assertEquals(0, count($configCheck->getErrors('logLevel')));
+    }
+
+
+    function dataForTestLogLevelBad() {
+        return array(
+            array('ERROR'),
+            array('emergency!!'),
+            array('alert  '),
+            array('cats'),
+        );
+    }
+
+    /**
+     * @dataProvider dataForTestLogLevelBad
+     */
+    function testLogLevelBad($set) {
+        $config = new Config();
+        $config->logFile = '/tmp/test.log';
+        $config->logLevel = $set;
+
+        $configCheck = new ConfigCheck($config);
+
+        $this->assertEquals(1, count($configCheck->getErrors('logLevel')));
+    }
 }
 
