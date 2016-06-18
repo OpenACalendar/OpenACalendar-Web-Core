@@ -23,6 +23,7 @@
 		{% block htmlHeader %}{% endblock %}
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+		<link rel="manifest" href="/manifest.json">
 		<link rel="webmention" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/receivewebmention.php" />
 	</head>
 	<body>

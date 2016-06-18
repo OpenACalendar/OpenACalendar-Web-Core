@@ -24,6 +24,7 @@ RewriteRule  ^places(.*)$ /index.php/places$1  [L]
 RewriteRule  ^currentuser(.*)$ /index.php/currentuser$1  [L]
 RewriteRule  ^media(.*)$ /index.php/media$1  [L]
 RewriteRule  ^me(.*)$ /index.php/me$1  [L]
+RewriteRule  ^manifest.json$ /manifest.php [L]
 
 RewriteRule  ^sitemap.xml$ /indexsitemap.php$1  [L]
 
