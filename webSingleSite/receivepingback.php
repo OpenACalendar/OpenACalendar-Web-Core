@@ -18,7 +18,10 @@ use repositories\SiteRepository;
 
 $siteRepository = new SiteRepository($ap);
 $site = $siteRepository->loadById($CONFIG->singleSiteID);
-
+if (!$site) {
+    die ("404 Not Found");
+    // maybe could do something better here, but this will only happen if site config is broken
+}
 
 \incominglinks\PingBackIncomingLink::receive($app, $site);
 

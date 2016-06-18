@@ -18,6 +18,10 @@ use repositories\SiteRepository;
 
 $siteRepository = new SiteRepository($app);
 $site = $siteRepository->loadById($CONFIG->singleSiteID);
+if (!$site) {
+    die ("404 Not Found");
+    // maybe could do something better here, but this will only happen if site config is broken
+}
 
 \incominglinks\WebMentionIncomingLink::receive($app, $site);
 

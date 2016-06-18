@@ -19,6 +19,10 @@ use repositories\UserHasNoEditorPermissionsInSiteRepository;
 
 $siteRepository = new SiteRepository($app);
 $site = $siteRepository->loadById($CONFIG->singleSiteID);
+if (!$site) {
+    die ("404 Not Found");
+    // maybe could do something better here, but this will only happen if site config is broken
+}
 
 // ================ cache for a bit
 // the v and u passed to this have no effect here - they are just cache busters
