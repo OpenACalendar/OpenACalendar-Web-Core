@@ -20,7 +20,7 @@
 
 		<ul>
 			{% for event in futureEvents %}
-				<li><a href="/event/{{  event.slugForURL }}">{{ event.getStartAt|date("D jS M", event.timeZone) }}: {{  event.summaryDisplay }}</a></li>
+				<li><a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/{{  event.slugForURL }}">{{ event.getStartAt|date("D jS M", event.timeZone) }}: {{  event.summaryDisplay }}</a></li>
 			{% endfor %}
 		</ul>
 	{%  else %}

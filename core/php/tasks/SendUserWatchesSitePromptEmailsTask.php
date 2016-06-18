@@ -109,6 +109,7 @@ class SendUserWatchesSitePromptEmailsTask  extends \BaseTask  {
                             $user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
 
 						$futureEventsBuilder = new EventRepositoryBuilder($this->app);
+						$futureEventsBuilder->setAfterNow();
 						$futureEventsBuilder->setSite($site);
 						$futureEventsBuilder->setOrderByStartAt(false);
 						$futureEventsBuilder->setIncludeDeleted(false);
