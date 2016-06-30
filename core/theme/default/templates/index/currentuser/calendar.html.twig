@@ -77,16 +77,16 @@
 						<div class="date">{{data.display}}</div>
 						<div class="events">
 							{% for event in data.eventsContinuing %}
-								<div class="event continuing {% if event.isDeleted %}deleted{% endif %}">
+								<div class="event continuing {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
 									<div class="above"></div>
 									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug |e('js')}}' }); return false;">
-										{{ event.getSummaryDisplay()  }}  {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
+										{{ event.getSummaryDisplay()  }}  {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
 									</a>
 									<div class="below"></div>
 								</div>
 							{% endfor %}
 							{% for event in data.events %}
-								<div class="event starting {% if event.isDeleted %}deleted{% endif %}">
+								<div class="event starting {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
 									<div class="above"></div>
 									{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
 										<div class="currentUserAttendance" id="currentUserAttendanceForSite{{ event.siteSlug }}Event{{ event.slug }}">
@@ -107,7 +107,7 @@
 										{{ event.getStartAt|date( currentUserClock12Hour ? 'g:ia' : 'H:i', currentTimeZone ) }}
 									</span>
 									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug }}' }); return false;">
-										{{ event.getSummaryDisplay() }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
+										{{ event.getSummaryDisplay() }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
 										{%  if event.hasTicketUrl %}<span class="fa fa-ticket" title="See information about tickets"></span>{%  endif %}
 									</a>
 									<div class="below"></div>

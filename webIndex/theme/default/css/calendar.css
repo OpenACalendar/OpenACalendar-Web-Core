@@ -355,6 +355,9 @@ table.calendar .event .below {
 table.calendar .deleted {
   background: url('/theme/default/img/deletedBackground.png');
 }
+table.calendar .cancelled {
+  background: url('/theme/default/img/cancelledBackground.png');
+}
 #footer {
   padding: 10px 5px;
   text-align: center;
