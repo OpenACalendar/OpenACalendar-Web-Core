@@ -190,7 +190,29 @@ class EventFilterParams {
 			$this->eventRepositoryBuilder->setTag($this->tagSearch);
 		}
 	}
-	
+
+    public function getGetString() {
+        $out = array('eventListFilterDataSubmitted=1');
+
+
+
+        // USER CONTROLS
+        if ($this->hasSpecifiedUserControls) {
+            if ($this->includeSpecifiedUserAttending && $this->includeSpecifiedUserWatching) {
+                $out[] = 'specifiedUserWhich=AW';
+            } else {
+                $out[] = 'specifiedUserWhich=A';
+            }
+        }
+
+        // DELETED
+        if ($this->include_deleted) {
+            $out[] = 'includeDeleted=1';
+        }
+
+        return implode('&',$out);
+    }
+
 	public function getFrom() {
 		return $this->from;
 	}

@@ -25,15 +25,15 @@
 						<div class="fa fa-download fa-2x" title="Export"></div>
 					</a>
 					{% if prevYear %}
-						<a href="/me/calendar/{{ prevYear }}/{{ prevMonth }}">
+						<a href="/me/calendar/{{ prevYear }}/{{ prevMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
 							<div class="fa fa-arrow-left fa-2x" title="Previous"></div>
 						</a>
 					{% endif %}
-					<a href="/me/calendar/">
+					<a href="/me/calendar/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
 						<div class="fa fa-clock-o fa-2x" title="Today"></div>
 					</a>
 					{% if nextYear %}
-						<a href="/me/calendar/{{ nextYear }}/{{ nextMonth }}">
+						<a href="/me/calendar/{{ nextYear }}/{{ nextMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
 							<div class="fa fa-arrow-right fa-2x" title="Next"></div>
 						</a>
 					{% endif %}
