@@ -22,7 +22,11 @@ class GroupListController {
 		
 		$groupRepoBuilder = new GroupRepositoryBuilder($app);
 		$groupRepoBuilder->setSite($app['currentSite']);
-		
+
+        if (isset($_GET['titleSearch']) && trim($_GET['titleSearch'])) {
+            $groupRepoBuilder->setTitleSearch($_GET['titleSearch']);
+        }
+
 		if (isset($_GET['search']) && trim($_GET['search'])) {
 			$groupRepoBuilder->setFreeTextsearch($_GET['search']);
 		}

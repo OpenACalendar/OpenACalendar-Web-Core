@@ -40,6 +40,12 @@
 		<title>{{ pageTitle }} - {% if not config.isSingleSiteMode %}{{ currentSite.title }} {% endif %}{{ config.siteTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
 		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css{%  else %}/font-awesome-4.5.0/css/font-awesome.min.css{%  endif %}">
+		{%  if config.useLibraryCDNs %}
+			<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+		{%  else %}
+			<link rel="stylesheet" type="text/css" href="/jqueryui-1.11.4/jquery-ui.theme.min.css">
+			<link rel="stylesheet" type="text/css" href="/jqueryui-1.11.4/jquery-ui.min.css">
+		{%  endif %}
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 		{% if calendar.modeByMonth %}
 			{% if group is defined %}
@@ -91,15 +97,15 @@
 						<div class="fa fa-download fa-2x" title="Export"></div>
 					</a>
 					{% if prevYear %}
-						<a href="{{ calURL }}/{{ prevYear }}/{{ prevMonth }}">
+						<a href="{{ calURL }}/{{ prevYear }}/{{ prevMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
 							<div class="fa fa-arrow-left fa-2x" title="Previous"></div>
 						</a>
 					{% endif %}
-					<a href="{{ calURL }}">
+					<a href="{{ calURL }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
 						<div class="fa fa-clock-o fa-2x" title="Today"></div>
 					</a>
 					{% if nextYear %}
-						<a href="{{ calURL }}/{{ nextYear }}/{{ nextMonth }}">
+						<a href="{{ calURL }}/{{ nextYear }}/{{ nextMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
 							<div class="fa fa-arrow-right fa-2x" title="Next"></div>
 						</a>
 					{% endif %}
@@ -167,6 +173,9 @@
 					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
 				{% endif %}
 			</div>
+			{%  if eventListFilterParams is defined and eventListFilterParams %}
+				{% include '/site/eventListFilterParams.html.twig' %}
+			{% endif %}
 			<table class="calendar">
 				<tr>
 					<th>Mon</th>
@@ -191,16 +200,16 @@
 						</div>
 						<div class="events">
 							{% for event in data.eventsContinuing %}
-								<div class="event continuing">
+								<div class="event continuing {% if event.isDeleted %}deleted{% endif %}">
 									<div class="above"></div>
 									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
-										{{ event.getSummaryDisplay()  }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
+										{{ event.getSummaryDisplay()  }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
 									</a>
 									<div class="below"></div>
 								</div>
 							{% endfor %}
 							{% for event in data.events %}
-								<div class="event starting">
+								<div class="event starting {% if event.isDeleted %}deleted{% endif %}">
 									<div class="above"></div>
 									{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
 										<div class="currentUserAttendance" id="currentUserAttendanceForEvent{{ event.slug }}">
@@ -221,7 +230,7 @@
 										{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}
 									</span>
 									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
-										{{ event.getSummaryDisplay() }} {%  if event.isCancelled  %}[CANCELLED]{%  endif %}
+										{{ event.getSummaryDisplay() }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
 										{%  if event.hasTicketUrl %}<span class="fa fa-ticket" title="See information about tickets"></span>{%  endif %}
 									</a>
 									<div class="below"></div>
@@ -236,6 +245,7 @@
 		{% include 'site/calendarPage.footer.html.twig' %}
 		<script src="/info.js.php?v={{ config.assetsVersion }}{% if currentUser %}&u={{  currentUser.username|e('url') }}{%  endif %}" type="text/javascript"></script>
 		<script src="{%  if config.useLibraryCDNs %}https://code.jquery.com/jquery-1.12.0.min.js{%  else %}/js/jquery-1.12.0.min.js{%  endif %}" type="text/javascript"></script>
+		<script src="{%  if config.useLibraryCDNs %}https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js{% else %}/jqueryui-1.11.4/jquery-ui.min.js{%  endif %}" type="text/javascript"></script>
 		<script type="text/javascript">
 			{% if group is defined and group %} 
 				var exportData = { group:{{ group.slug }}, groupTitle: "{{  group.title | e('js') }}" };
@@ -261,6 +271,7 @@
 		<script src="/theme/default/js/general.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		<script src="/theme/default/js/general.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		<script src="/theme/default/js/calendar.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+		<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 		{% include 'analytics.html.twig' %}
 	</body>
 </html>

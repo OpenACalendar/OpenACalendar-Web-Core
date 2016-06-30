@@ -27,6 +27,14 @@
 			</div>
 		{% endif %}
 
+		{% if eventListFilterParams.isHasGroupControl %}
+			<div class="inputField">
+				<label>
+					Group: <input type="text" name="groupSearch" value="{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.title  }}{%  endif %}" autocomplete="off">
+				</label>
+			</div>
+		{% endif %}
+
 		<div class="inputField">
 			<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
 		</div>

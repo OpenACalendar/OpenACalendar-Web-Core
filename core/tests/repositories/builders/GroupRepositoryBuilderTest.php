@@ -95,6 +95,45 @@ class GroupRepositoryBuilderTest extends \BaseAppWithDBTest
 		$this->assertEquals(1, count($grb->fetchAll()));
 	}
 
+	function testTitleSearch() {
+
+		$this->app['timesource']->mock(2013,7,1,7,0,0);
+
+		$user = new UserAccountModel();
+		$user->setEmail("test@jarofgreen.co.uk");
+		$user->setUsername("test");
+		$user->setPassword("password");
+
+		$userRepo = new UserAccountRepository($this->app);
+		$userRepo->create($user);
+
+		$site = new SiteModel();
+		$site->setTitle("Test");
+		$site->setSlug("test");
+
+		$siteRepo = new SiteRepository($this->app);
+		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
+
+		$group = new GroupModel();
+		$group->setTitle("test");
+		$group->setDescription("test test");
+		$group->setUrl("http://www.group.com");
+
+
+		$groupRepo = new GroupRepository($this->app);
+		$groupRepo->create($group, $site, $user);
+
+		## Test found
+		$grb = new GroupRepositoryBuilder($this->app);
+		$grb->setTitleSearch('Tes');
+		$this->assertEquals(1, count($grb->fetchAll()));
+
+		## Test Not Found
+		$grb = new GroupRepositoryBuilder($this->app);
+		$grb->setTitleSearch('CATS');
+		$this->assertEquals(0, count($grb->fetchAll()));
+
+	}
 
 
 }

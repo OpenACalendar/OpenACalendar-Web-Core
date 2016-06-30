@@ -50,5 +50,26 @@ $(document).ready(function() {
 			minLength: 2
 		}
 	);
+	$('form.filterListEvent input[name="groupSearch"]').autocomplete(
+		{
+			source:  function( request, response ) {
+				$.ajax({
+					url: "/api1/groups.json",
+					dataType: "json",
+					data: {
+						titleSearch: request.term, includeDeleted: "no"
+					},
+					success: function( data ) {
+						var out = [];
+						for(idx in data.data) {
+							out.push(data.data[idx].title);
+						}
+						response( out );
+					}
+				});
+			},
+			minLength: 2
+		}
+	);
 
 });

@@ -7,6 +7,7 @@ use models\EventModel;
 use models\GroupModel;
 use models\TagModel;
 use models\UserAccountModel;
+use org\openacalendar\curatedlists\repositories\builders\GroupRepositoryBuilder;
 use repositories\builders\EventRepositoryBuilder;
 use repositories\builders\TagRepositoryBuilder;
 use repositories\TagRepository;
@@ -59,8 +60,11 @@ class EventFilterParams {
 	protected $freeTextSearch = null;
 	/** @var TagModel  */
 	protected $tagSearch = null;
+    /** @var GroupModel  */
+    protected $groupSearch = null;
 	protected $hasDateControls = true;
 	protected $hasTagControl = false;
+	protected $hasGroupControl = false;
 
 	public function getDateControls() {
 		return $this->hasDateControls;
@@ -69,6 +73,20 @@ class EventFilterParams {
 	public function setHasDateControls($hasDateControls) {
 		$this->hasDateControls = $hasDateControls;
 	}
+
+    /**
+     * @return boolean
+     */
+    public function isHasGroupControl() {
+        return $this->hasGroupControl;
+    }
+
+    /**
+     * @param boolean $hasGroupControl
+     */
+    public function setHasGroupControl( $hasGroupControl ) {
+        $this->hasGroupControl = $hasGroupControl;
+    }
 
 	/**
 	 * @return boolean
@@ -158,7 +176,7 @@ class EventFilterParams {
 			}
 
 			// Tag
-			if (isset($data['tagSearch']) && trim($data['tagSearch'])) {
+			if ($this->hasTagControl && isset($data['tagSearch']) && trim($data['tagSearch'])) {
 				$tagRepositoryBuilder = new TagRepositoryBuilder($this->app);
 				$tagRepositoryBuilder->setSite($this->siteModel);
 				$tagRepositoryBuilder->setTitleSearch($data['tagSearch']);
@@ -169,6 +187,19 @@ class EventFilterParams {
 					$this->tagSearch = $tags[0];
 				}
 			}
+
+            // Group
+            if ($this->hasGroupControl && isset($data['groupSearch']) && trim($data['groupSearch'])) {
+                $groupRepositoryBuilder = new GroupRepositoryBuilder($this->app);
+                $groupRepositoryBuilder->setSite($this->siteModel);
+                $groupRepositoryBuilder->setTitleSearch($data['groupSearch']);
+                $groupRepositoryBuilder->setIncludeDeleted(false);
+                $groupRepositoryBuilder->setLimit(1);
+                $groups = $groupRepositoryBuilder->fetchAll();
+                if ($groups) {
+                    $this->groupSearch = $groups[0];
+                }
+            }
 
 		}
 		
@@ -189,11 +220,23 @@ class EventFilterParams {
 		if ($this->tagSearch) {
 			$this->eventRepositoryBuilder->setTag($this->tagSearch);
 		}
+		if ($this->groupSearch) {
+			$this->eventRepositoryBuilder->setGroup($this->groupSearch);
+		}
 	}
 
     public function getGetString() {
         $out = array('eventListFilterDataSubmitted=1');
 
+
+        // DATE
+        if ($this->hasDateControls) {
+            if ( $this->fromNow ) {
+                $out[] = 'fromNow=1';
+            } else {
+                $out[] = 'from=' . $this->from;
+            }
+        }
 
 
         // USER CONTROLS
@@ -210,9 +253,24 @@ class EventFilterParams {
             $out[] = 'includeDeleted=1';
         }
 
+        // FREE TEXT
+        if ($this->freeTextSearch) {
+            $out[]  = 'freeTextSearch='.urlencode($this->freeTextSearch);
+        }
+
+        // TAG
+        if ($this->hasTagControl && $this->tagSearch) {
+            $out[] = 'tagSearch='.urlencode($this->tagSearch->getTitle());
+        }
+
+        // GROUP
+        if ($this->hasGroupControl && $this->groupSearch) {
+            $out[] = 'groupSearch='.urlencode($this->groupSearch->getTitle());
+        }
+
         return implode('&',$out);
     }
-
+	
 	public function getFrom() {
 		return $this->from;
 	}
@@ -256,11 +314,18 @@ class EventFilterParams {
 	}
 
 	/**
-	 * @return null
+	 * @return TagModel
 	 */
 	public function getTagSearch() {
 		return $this->tagSearch;
 	}
+
+    /**
+     * @return GroupModel
+     */
+    public function getGroupSearch() {
+        return $this->groupSearch;
+    }
 
 
 

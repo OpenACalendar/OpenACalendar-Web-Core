@@ -61,15 +61,16 @@ class CountryController {
 		}
 		
 		$this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
-		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
+        $this->parameters['eventListFilterParams']->set($_GET);
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
 		
@@ -85,10 +86,14 @@ class CountryController {
 			$app->abort(404, "Country does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
+        //$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        //$this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+		$this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
 		if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
@@ -106,11 +111,14 @@ class CountryController {
 			$app->abort(404, "Country does not exist.");
 		}
 
-		
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
+        //$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        //$this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
 		if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;

@@ -19,14 +19,15 @@ class EventListController {
 		
 		
 		$params = new EventFilterParams($app, null, $app['currentSite']);
-		$params->set($_GET);
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		$params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+		$params->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		if ($app['currentUser']) {
 			$params->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
+        $params->set($_GET);
 		
 		$events = $params->getEventRepositoryBuilder()->fetchAll();
 		
@@ -40,9 +41,14 @@ class EventListController {
 	
 	
 	function calendarNow(Application $app) {
-		$cal = new \RenderCalendar($app);
-		$cal->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$cal->getEventRepositoryBuilder()->setIncludeDeleted(false);
+
+        $params = new EventFilterParams($app, null, $app['currentSite']);
+        $params->setHasDateControls(false);
+        //$params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        //$params->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $params->set($_GET);
+
+		$cal = new \RenderCalendar($app, $params);
 		if ($app['currentUser']) {
 			$cal->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
@@ -57,13 +63,20 @@ class EventListController {
 				'nextYear' => $nextYear,
 				'nextMonth' => $nextMonth,
 				'pageTitle' => 'Calendar',
+                'eventListFilterParams' => $params,
 				'showCurrentUserOptions' => true,
 			));
 	}
 	
 	function calendar($year, $month, Application $app) {
-		
-		$cal = new \RenderCalendar($app);
+
+        $params = new EventFilterParams($app, null, $app['currentSite']);
+        $params->setHasDateControls(false);
+        //$params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        //$params->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $params->set($_GET);
+
+        $cal = new \RenderCalendar($app, $params);
 		$cal->getEventRepositoryBuilder()->setSite($app['currentSite']);
 		$cal->getEventRepositoryBuilder()->setIncludeDeleted(false);
 		if ($app['currentUser']) {
@@ -80,6 +93,7 @@ class EventListController {
 				'nextYear' => $nextYear,
 				'nextMonth' => $nextMonth,
 				'pageTitle' => 'Calendar',
+                'eventListFilterParams' => $params,
 				'showCurrentUserOptions' => true,
 			));
 	}

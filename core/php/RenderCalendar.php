@@ -1,6 +1,7 @@
 <?php
 
 use repositories\builders\EventRepositoryBuilder;
+use repositories\builders\filterparams\EventFilterParams;
 
 /**
  *
@@ -26,8 +27,12 @@ class RenderCalendar {
 	/** @var EventRepositoryBuilder **/
 	protected  $eventRepositoryBuilder;
 	
-	function __construct(\Silex\Application $app) {
-		$this->eventRepositoryBuilder = new EventRepositoryBuilder($app);
+	function __construct(\Silex\Application $app, EventFilterParams $eventFilterParams = null) {
+        if ($eventFilterParams) {
+            // The Calendar adds it's own data controls. Turn them off now.
+            $eventFilterParams->setHasDateControls(false);
+        }
+		$this->eventRepositoryBuilder = $eventFilterParams ? $eventFilterParams->getEventRepositoryBuilder() : new EventRepositoryBuilder($app);
 		$this->eventRepositoryBuilder->setLimit(0); // all of them
 		$this->minYear = $app['config']->calendarEarliestYearAllowed;
 		$this->maxYear = (\TimeSource::getDateTime()->format("Y")+ $app['config']->eventsCantBeMoreThanYearsInFuture);

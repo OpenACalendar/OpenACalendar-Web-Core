@@ -102,16 +102,17 @@ class AreaController {
 		}
 		
 		$this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
-		$this->parameters['eventListFilterParams']->set($_GET);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
-		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));;
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
-		
+        $this->parameters['eventListFilterParams']->set($_GET);
+
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
 
 
@@ -206,11 +207,15 @@ class AreaController {
 			$app->abort(404, "Area does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if ($app['currentUser']) {
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
+        //$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        //$this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+		$this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
+        if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}
@@ -227,12 +232,15 @@ class AreaController {
 			$app->abort(404, "area does not exist.");
 		}
 
-		
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if ($app['currentUser']) {
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setArea($this->parameters['area']);
+        //$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        //$this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
+        if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}

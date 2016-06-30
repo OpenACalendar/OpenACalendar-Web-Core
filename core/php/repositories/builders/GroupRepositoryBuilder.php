@@ -87,6 +87,15 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->editedByUser = $editedByUser;
 	}
 
+    protected $titleSearch;
+
+    /**
+     * @param mixed $titleSearch
+     */
+    public function setTitleSearch( $titleSearch ) {
+        $this->titleSearch = $titleSearch;
+    }
+
 
 
 	protected function build() {
@@ -115,7 +124,12 @@ class GroupRepositoryBuilder  extends BaseRepositoryBuilder {
 					' ILIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
 		}
-		
+
+        if ($this->titleSearch) {
+            $this->where[] =  'group_information.title ILIKE :title_search ';
+            $this->params['title_search'] = "%".strtolower($this->titleSearch)."%";
+        }
+
 		if (!$this->include_deleted) {
 			$this->where[] = " group_information.is_deleted = '0' ";
 		}
