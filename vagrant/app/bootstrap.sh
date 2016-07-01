@@ -30,6 +30,7 @@ php /home/vagrant/bin/composer.phar install
 cp /vagrant/vagrant/app/apache.conf /etc/apache2/sites-enabled/
 cp /vagrant/vagrant/app/config.test.php /vagrant/config.test.php
 cp /vagrant/vagrant/app/config.php /vagrant/config.php
+cp /vagrant/vagrant/app/99-custom.ini /etc/php5/apache2/conf.d/
 cp /vagrant/vagrant/app/test /home/vagrant/test
 chmod a+rx /home/vagrant/test
 
