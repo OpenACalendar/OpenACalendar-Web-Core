@@ -26,7 +26,7 @@ function showMediaPopup(mediaSlug) {
 	} else if (thisMediaData.sourceText) {
 		html += '<div class="source">Source: '+escapeHTML(thisMediaData.sourceText)+'</div>';
 	} 
-	html += '<div class="link"><a href="/media/'+thisMediaData.slug+'/">More info</a></div>';
+	html += '<div class="popupLink"><a href="/media/'+thisMediaData.slug+'/">More info</a></div>';
 	$('#MediaPopupContents').html(html);
 	$('#MediaPopup').show();
 	showPopup();
