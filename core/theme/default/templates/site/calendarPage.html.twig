@@ -191,7 +191,6 @@
 						</div>
 						<div class="events">
 							{% for event in data.eventsContinuing %}
-								<div class="event continuing">
 								<div class="event continuing {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
 									<div class="above"></div>
 									<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
