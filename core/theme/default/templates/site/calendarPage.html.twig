@@ -74,7 +74,7 @@
 				<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/event/calendar/" />
 			{% endif %}				
 		{% endif %}
-		{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 		{%  include 'site/ourMetaTags.html.twig' %}
 		{% if group is defined and group %}<meta name="openacalendar:group:slug" content="{{  group.slugForURL}}" />{%  endif %}
 		{% if country is defined and country %}<meta name="openacalendar:country:code" content="{{  country.twoCharCode }}" />{% endif %}
