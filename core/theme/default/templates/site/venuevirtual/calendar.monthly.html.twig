@@ -1,0 +1,38 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/venuevirtual/page.mainTab.html.twig' %}
+
+{% block bodyClass %}calendarContent{% endblock %}
+
+{% block pageTitle %}Events - {% endblock %} 
+
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
+
+{% block switcherMonthly %}current{% endblock %}
+
+{% block eventsContent %}
+
+	{%  include '/site/common/calendar.monthly.html.twig' with {'showCurrentUserOptions':true, 'addURL':'/event/new', 'calURL':'/venue/virtual/calendar' } %}
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	<script type="text/javascript">var exportData = {}</script>
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		var showCurrentUserOptions = {% if currentUser is not null %}true{% else %}false{% endif %};
+	</script>
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	<script src="/theme/default/js/calendar.site.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}

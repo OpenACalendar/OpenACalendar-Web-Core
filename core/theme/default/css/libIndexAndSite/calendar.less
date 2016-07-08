@@ -6,128 +6,28 @@
  * @author James Baster <james@jarofgreen.co.uk>
 */
 
-html {
-	background-color: #eeeeee;
-}
-body {
-	padding: 0;
-	margin: 0;
-	font-family: arial, sans-serif;
-	background-color: #eeeeee;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#eeeeee)); /* Chrome, Safari 4+ */
-	background-image: -webkit-linear-gradient(top, #dddddd, #eeeeee); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
-	background-image:    -moz-linear-gradient(top, #dddddd, #eeeeee); /* Firefox 3.6-15 */
-	background-image:      -o-linear-gradient(top, #dddddd, #eeeeee); /* Opera 11.10-12.00 */
-	background-image:         linear-gradient(to bottom, #dddddd, #eeeeee); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+
+#page.calendarContent {
+    max-width: 1600px;
 }
 
-
-p {
-	margin: 10px 0;
-}
-
-
-#header {
-	padding: 5px;
-	background-color: @colourMain;
-	background-image: -webkit-linear-gradient(top, @colourLighter1, @colourMain); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
-	background-image:         linear-gradient(to bottom, @colourLighter1, @colourMain); /* Chrome 26, Firefox 16+, IE 10+, Opera */
-	border-bottom: @colourDarker2 2px solid;
-	#headerOptions {
-		float: right;
-		text-align: right;
-		#actions {
-			a {
-				margin: 0px 5px;
-				text-decoration: none;
-				color: #000000;
-			}
-			.currentCalendarDate {
-				font-size: 1.1em;
-				font-weight: bold;
-			}
-		}
-	}
-	img.logo {
-		max-width: 20px;
-		max-height: 20px;
-		display: inline;
-	}
-	h1 {
-		display: inline;
-		font-size: 1.6em;
-		font-weight: bold;
-		a {
-			text-decoration: none;
-			color: black;
-		}
-	}
-	h2 {
-		display: inline;
-		font-size: 1.4em;
-		a {
-			text-decoration: none;
-			color: black;
-		}
-	}
-	h3 {
-		padding: 0px 0px 0px 15px;
-		display: inline;
-		font-size: 1.3em;
-		a {
-			text-decoration: none;
-			color: black;
-		}
-	}
-	#afterHeader {
-		clear: both;
-	}
-}
-
-#calendarPosition {
+.calendarLabel, .calendarControls {
 	text-align: right;
 	padding: 5px 0 10px 0;
 	.date {
 		font-size: 1.6em;
 		font-weight: bold;
 	}
-	.timezone {
-		font-size: 1.0em;
+}
+
+.calendarControls {
+	a {
+		margin: 0px 5px;
+		text-decoration: none;
+		color: #000000;
 	}
 }
 
-#page {
-	clear: both;
-	padding: 5px;
-}
-
-div.filterListEventWrapper {
-	padding: 5px 0;
-	form.filterListEvent {
-		background: @colourLighter2;
-		padding: 10px;
-		div.inputField {
-			display: inline;
-			padding: 10px;
-		}
-		#eventListFilterFromWrapper {
-			input {
-				background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
-			}
-		}
-		div.submitField {
-			display: inline;
-			padding: 10px;
-			input {
-				background: @colourLighter1;
-				color: black;
-				border: 2px solid @colourLighter1;
-				.rounded-corners(2px);
-				cursor:pointer;
-			}
-		}
-	}
-}
 
 
 table.calendar {
@@ -194,11 +94,4 @@ table.calendar {
 	.cancelled {
 		background: url('/theme/default/img/cancelledBackground.png');
 	}
-}
-
-#footer {
-	padding: 10px 5px;
-	text-align: center;
-	font-style: italic;
-	font-size: 0.8em;
 }

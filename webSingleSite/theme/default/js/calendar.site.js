@@ -83,7 +83,7 @@ function showEventPopup(data) {
 		}
 	});
 	if (showCurrentUserOptions) {
-		showCurrentUserAttendanceForEventInPopup(data.slug,'EventPopupAttendanceContent');
+        showCurrentUserAttendanceForEventInPopupFromCalendar(data.slug,'EventPopupAttendanceContent');
 	}
 }
 
@@ -93,7 +93,7 @@ function escapeHTML(inString) {
 }
 
 
-function showCurrentUserAttendanceForEvent(eventSlug) {
+function showCurrentUserAttendanceForEventFromCalendar(eventSlug) {
 	if ($('#EventAttendancePopup').size() == 0) {
 		var html = '<div id="EventAttendancePopup" class="popupBox" style="display: none">';
 		html +=	'<div id="EventAttendancePopupClose" class="popupBoxClose"><a href="#" onclick="closePopup(); return false;" title="Close"><div class="fa fa-times fa-lg"></div></a></div>';
@@ -104,10 +104,10 @@ function showCurrentUserAttendanceForEvent(eventSlug) {
 	}
 	$('#EventAttendancePopup').fadeIn(500);
 	showPopup();
-	showCurrentUserAttendanceForEventInPopup(eventSlug,'EventAttendancePopupContent');
+    showCurrentUserAttendanceForEventInPopupFromCalendar(eventSlug,'EventAttendancePopupContent');
 }
 
-function showCurrentUserAttendanceForEventInPopup(eventSlug, contentWrapperID) {
+function showCurrentUserAttendanceForEventInPopupFromCalendar(eventSlug, contentWrapperID) {
 
 	var wrapper = $('#'+contentWrapperID);
 	wrapper.html("Loading ...");

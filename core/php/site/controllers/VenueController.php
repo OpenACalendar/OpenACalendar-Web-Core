@@ -116,14 +116,28 @@ class VenueController {
 
 		return true;
 	}
-	
-	function show($slug, Request $request, Application $app) {
+
+    function setUpMainTab(Application $app) {
+
+
+        $mrb = new MediaRepositoryBuilder($app);
+        $mrb->setIncludeDeleted(false);
+        $mrb->setSite($app['currentSite']);
+        $mrb->setVenue($this->parameters['venue']);
+        $this->parameters['medias'] = $mrb->fetchAll();
+
+
+    }
+
+    function show($slug, Request $request, Application $app) {
 		
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
 		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		if ($app['currentUser']) {
@@ -132,13 +146,9 @@ class VenueController {
         $this->parameters['eventListFilterParams']->set($_GET);
 		
 		$this->parameters['events'] = $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->fetchAll();
-		
-		$mrb = new MediaRepositoryBuilder($app);
-		$mrb->setIncludeDeleted(false);
-		$mrb->setSite($app['currentSite']);
-		$mrb->setVenue($this->parameters['venue']);
-		$this->parameters['medias'] = $mrb->fetchAll();
-				
+
+        $this->setUpMainTab($app);
+
 		return $app['twig']->render('site/venue/show.html.twig', $this->parameters);
 	}
 	
@@ -216,20 +226,28 @@ class VenueController {
 			$app->abort(404, "GrouVenuep does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+
+
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setFallBackFrom(true);
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
+
 		if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
-			$this->parameters['showCurrentUserOptions'] = true;
-		}	
+		}
 		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
 		
 		list($this->parameters['prevYear'],$this->parameters['prevMonth'],$this->parameters['nextYear'],$this->parameters['nextMonth']) = $this->parameters['calendar']->getPrevNextLinksByMonth();
 		
 		$this->parameters['pageTitle'] = $this->parameters['venue']->getTitle();
-		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
+        $this->setUpMainTab($app);
+		return $app['twig']->render('/site/venue/calendar.monthly.html.twig', $this->parameters);
 	}
 	
 	function calendar($slug, $year, $month, Request $request, Application $app) {
@@ -237,12 +255,19 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 
-		
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
-		if ($app['currentUser']) {
+
+
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setFallBackFrom(true);
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
+
+        if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
 		}	
@@ -251,7 +276,8 @@ class VenueController {
 		list($this->parameters['prevYear'],$this->parameters['prevMonth'],$this->parameters['nextYear'],$this->parameters['nextMonth']) = $this->parameters['calendar']->getPrevNextLinksByMonth();
 		
 		$this->parameters['pageTitle'] = $this->parameters['venue']->getTitle();
-		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
+        $this->setUpMainTab($app);
+		return $app['twig']->render('/site/venue/calendar.monthly.html.twig', $this->parameters);
 	}
 	
 	function history($slug, Request $request, Application $app) {

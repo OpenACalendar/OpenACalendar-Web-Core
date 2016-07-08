@@ -29,9 +29,8 @@
 
 		<ul class="actionList">
 			<li><a href="/me/notification"><div class="fa fa-bell-o fa-2x"></div> Notifications</a></li>
-			<li class="header">Your Personal Calendar</li>
-			<li><a href="/me/agenda"><div class="fa fa-calendar-o fa-2x"></div> Agenda</a></li>
-			<li><a href="/me/calendar"><div class="fa fa-calendar-o fa-2x"></div> Calendar</a></li>
+			<li class="header">Your Personal Events</li>
+			<li><a href="/me/agenda"><div class="fa fa-calendar-o fa-2x"></div> View</a></li>
 			<li>
 				<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
 					<div class="fa fa-download fa-2x"></div> Export

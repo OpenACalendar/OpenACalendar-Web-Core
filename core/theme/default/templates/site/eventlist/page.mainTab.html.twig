@@ -1,0 +1,74 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/page.html.twig' %}
+
+
+{% block pageTitle %}Events - {% endblock %}
+
+{% block breadcrumbs %}
+	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/event', 'label':'events' } ]  } %}
+{% endblock %}
+
+{% block content %}
+
+	<h2>Events</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			{% if currentUserActions.has("org.openacalendar","eventNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","eventNew") ) %}
+				<li class="action">
+					<a href="/event/new"><div class="fa fa-pencil"></div> Add an event</a>
+				</li>
+			{% endif %}
+			{# lists link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
+			{% if currentSiteFeatures.has('org.openacalendar.curatedlists','CuratedList') %}
+				<li class="action"><a href="/curatedlist"><div class="fa fa-list"></div> Lists</a></li>
+			{% endif %}
+			{# tags link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
+			{% if currentSiteFeatures.has('org.openacalendar','Tag') %}
+				<li class="action"><a href="/tag"><div class="fa fa-tags"></div> Tags</a></li>
+			{% endif %}
+			{# imports link is needed: if we have user who can't use menus for some reason, this is their way to find that page  #}
+			{% if currentSiteFeatures.has('org.openacalendar','Importer') %}
+				<li class="action"><a href="/import"><div class="fa fa-cloud-download"></div> Imports</a></li>
+			{% endif %}
+			<li class="action">
+				<a href="/api1/events.ical" onclick="showExportSharePopup(); return false;">
+					{%  include '/site/common/actionExportShareLabel.html.twig' %}
+				</a>
+			</li>
+			<li class="tab currentTab"><a href="/event">Events</a></li>
+		</ul>
+		<div id="innerPage">
+
+			{% include '/site/eventListFilterParams.html.twig' %}
+
+			<div class="switcherWrapper">
+				<div class="switcherList">
+					<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+						<a href="/event/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+					</div>
+					<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+						<a href="/event/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+					</div>
+				</div>
+			</div>
+
+			{% block eventsContent %}{%  endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	<script type="text/javascript">var exportData = {}</script>
+{% endblock %}
+

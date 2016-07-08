@@ -1,0 +1,91 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+<div class="calendarControls">
+	{% if prevYear %}
+		<a href="{{ calURL }}/{{ prevYear }}/{{ prevMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
+			<div class="fa fa-arrow-left fa-2x" title="Previous"></div>
+		</a>
+	{% endif %}
+	<a href="{{ calURL }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
+		<div class="fa fa-clock-o fa-2x" title="Today"></div>
+	</a>
+	{% if nextYear %}
+		<a href="{{ calURL }}/{{ nextYear }}/{{ nextMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
+			<div class="fa fa-arrow-right fa-2x" title="Next"></div>
+		</a>
+	{% endif %}
+</div>
+
+<div class="calendarLabel">
+	{% if calendar.modeByMonth %}
+		<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
+	{% endif %}
+</div>
+
+<table class="calendar">
+	<tr>
+		<th>Mon</th>
+		<th>Tue</th>
+		<th>Wed</th>
+		<th>Thu</th>
+		<th>Fri</th>
+		<th>Sat</th>
+		<th>Sun</th>
+	</tr>
+	{% for data in calendar.getData() %}
+		{% if data.dayOfWeek == 1 %}<tr>{% endif %}
+		{#  the "Now" ID is used in URLs to make browser scroll to today's box #}
+		<td {% if data.today %}id="Now"{% endif %} class="day{{data.dayOfWeek}} {% if data.today %}today{% endif %}">
+			<div class="date">
+				{{data.display}}
+			</div>
+			<div class="events">
+				{% for event in data.eventsContinuing %}
+					<div class="event continuing {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
+						<div class="above"></div>
+						<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
+							{{ event.getSummaryDisplay()  }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
+						</a>
+						<div class="below"></div>
+					</div>
+				{% endfor %}
+				{% for event in data.events %}
+					<div class="event starting {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
+						<div class="above"></div>
+						{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
+							<div class="currentUserAttendance" id="currentUserAttendanceForSite{{ event.siteSlug }}Event{{ event.slug }}">
+								<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slugForUrl }}" onclick="showCurrentUserAttendanceForEvent({slug: {{ event.slug }}, site: '{{ event.siteSlug |e('js')}}' }); return false;" class="activationLinkWrapper">
+									{% if event.userIsPlanAttending %}
+										<div class="iconUserAttendingSmall" title="You are attending"></div>
+									{% elseif event.userIsPlanMaybeAttending %}
+										<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>
+									{% elseif event.userIsPlanNotAttending %}
+										<div class="iconUserNotAttendingSmall" title="You are not attending"></div>
+									{% else %}
+										<div class="iconUserUnknownAttendingSmall" title="Are you attending?"></div>
+									{% endif %}
+								</a>
+							</div>
+						{% endif %}
+						<span class="start_at">
+							{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}
+						</span>
+						<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug }}' }); return false;">
+							{{ event.getSummaryDisplay() }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
+							{%  if event.hasTicketUrl %}<span class="fa fa-ticket" title="See information about tickets"></span>{%  endif %}
+						</a>
+						<div class="below"></div>
+					</div>
+				{% endfor %}
+			</div>
+		</td>
+		{% if data.dayOfWeek == 7 %}</tr>{% endif %}
+	{% endfor %}
+</table>
+

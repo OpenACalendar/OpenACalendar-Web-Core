@@ -5,10 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/group/page.html.twig' %}
-
-{% block pageTitle %}{{ group.title }} - {% endblock %} 
-
+{% extends 'site/group/page.mainTab.html.twig' %}
 
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/{{ group.slugForUrl }}/" />
@@ -17,123 +14,9 @@
 	{{ parent() }}
 {% endblock %}
 
-{% block tabDetails %}currentTab{% endblock %}
+{% block switcherAgenda %}current{% endblock %}
 
-{% block actions %}
-	{% if currentUserActions.has("org.openacalendar","groupEditDetails")
-		or currentUserActions.has("org.openacalendar","groupEditCuratedLists")
-		or currentUserActions.has("org.openacalendar","groupEditMedia") %}
-		<li class="actionWithSubMenu">
-			<a href="/group/{{ group.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
-			<ul class="submenu">
-				{%  if currentUserActions.has("org.openacalendar","groupEditDetails") %}
-					<li><a href="/group/{{ group.slugForUrl }}/edit/details">Edit Details</a></li>
-				{%  endif %}
-				{%  if currentUserActions.has("org.openacalendar","groupEditCuratedLists") %}
-					<li><a href="/group/{{ group.slugForUrl }}/edit/curatedlists">Edit Curated Lists</a></li>
-				{%  endif %}
-				{%  if currentUserActions.has("org.openacalendar","groupEditMedia") %}
-					<li><a href="/group/{{ group.slugForUrl }}/edit/media">Edit Media</a></li>
-				{%  endif %}
-				{%  if currentUserActions.has("org.openacalendar","groupEditEventTags") %}
-					<li><a href="/group/{{ group.slugForUrl }}/edit/events/tags">Edit Event Tags</a></li>
-				{%  endif %}
-			</ul>
-		</li>
-	{%  endif %}
-	{%  if currentUserActions.has("org.openacalendar","groupNewEvent") %}
-		<li class="action">
-			<a href="/event/new?group={{ group.slug }}"><div class="fa fa-pencil"></div> new event</a>
-		</li>
-	{% endif %}
-	{% if currentSiteFeatures.has('org.openacalendar','Importer') and currentUserActions.has("org.openacalendar","groupNewEvent") %}{# TODO #}
-		<li class="action">
-			<a href="/group/{{ group.slugForURL }}/newimporturl"><div class="fa fa-pencil"></div> import an event</a>
-		</li>
-	{% endif %}
-	<li class="action">
-		<a href="/api1/group/{{ group.slug }}/events.ical" onclick="showExportSharePopup(); return false;">
-			{%  include '/site/common/actionExportShareLabel.html.twig' %}
-		</a>
-	</li>
-	{% if currentUser is not null and not currentUserWatchesSite %}
-		<li class="action">
-			{% if currentUserWatchesGroup %}
-				<a href="/group/{{ group.slugForUrl }}/watch/">Watching!</a>
-			{% else %}
-				<a href="/group/{{ group.slugForUrl }}/watch/">Watch?</a>
-			{% endif %}
-		</li>
-	{% endif %}
-{% endblock %}
-
-
-{% block innerContent %}
-
-	<div  class="mainShowGroup" itemscope itemtype="http://schema.org/Organization">
-		<meta itemprop="name" content="{{ group.title|e('html_attr') }}" />
-
-		{% if group.isdeleted %}
-			<p class="descriptionDeleted">This group has been deleted!</p>
-		{%  endif %}
-
-		<div class="innerPageLeft">
-
-			<p itemprop="description" class="description">{{ group.description | nl2br  | linkify }}</p>
-
-			{% if medias %}
-				<ul class="mediaGrid">
-					{% for media in medias %}
-						<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
-					{% endfor %}
-				</ul>
-				<div class="afterMediaGrid"></div>
-			{% endif %}
-
-
-
-		</div>
-
-		<div class="innerPageRight">
-
-			{% if group.url %}
-				<div class="innerPageRightLinkWrapper">
-					<div class="innerPageRightLinkHeader">More details</div>
-					<div class="innerPageRightLinkContent"><a href="{{ group.url }}" target="_blank" rel="noopener">{{ group.url | linkinfo }}</a></div>
-				</div>
-			{% endif %}
-
-			{% if group.twitterUsername %}
-				<div class="innerPageRightLinkWrapper">
-					<div class="innerPageRightLinkHeader">On Twitter</div>
-					<div class="innerPageRightLinkContent"><a href="https://twitter.com/{{ group.twitterUsername }}" target="_blank">@{{ group.twitterUsername }}</a></div>
-				</div>
-			{% endif %}
-
-			{% if importurls %}
-				<ul class="actionList">
-					<li><p><a href="/group/{{ group.slugForUrl }}/importers"><div class="fa fa-cloud-download"></div> List importers</a></p></li>
-				</ul>
-			{% endif %}
-
-			{%  if curatedLists|length > 0 %}
-				<div class="infoBoxWrapper">
-					<div class="infoBoxTitle">Is in Curated Lists</div>
-					<div class="infoBoxContent">
-						<ul class="infoBoxListCuratedLists">
-							{% for curatedList in curatedLists %}
-								<li class="curatedlist"><a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a></li>
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
-			{%  endif %}
-
-		</div>
-
-		<div class="afterInnerPageContent"></div>
-
-		{% include '/site/eventListFilterParams.html.twig' %}
+{% block eventsContent %}
 
 		<ul class="mainListEvents">
 			{%  if events|length > 0 %}
@@ -184,18 +67,11 @@
 			{% endif %}
 		</ul>
 
-
-	</div>
 {% endblock %}
 
-{% block scriptsForState %}
-	{% include '/site/common/mediasJavaScriptInformation.html.twig' with { medias:medias } %}
-	{{ parent() }}
-{% endblock %}		
 		
 {% block scripts %}
-	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-	<script src="/theme/default/js/mediaPopup.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{{ parent() }}
 	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
 {% endblock %}
 

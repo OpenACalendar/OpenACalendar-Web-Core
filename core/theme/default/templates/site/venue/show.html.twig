@@ -6,7 +6,7 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 
-{% extends 'site/venue/page.html.twig' %}
+{% extends 'site/venue/page.mainTab.html.twig' %}
 
 {% block pageTitle %}{{ venue.title }} - {% endblock %} 
 
@@ -18,161 +18,54 @@
 	{{ parent() }}
 {% endblock %}
 
-{% block actions %}
-	{% if currentUserActions.has("org.openacalendar","venueEditDetails")
-		or currentUserActions.has("org.openacalendar","venueEditMedia") %}
-		<li class="actionWithSubMenu">
-			<a href="/venue/{{ venue.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
-			<ul class="submenu">
-				{%  if currentUserActions.has("org.openacalendar","venueEditDetails") %}
-					<li><a href="/venue/{{ venue.slugForUrl }}/edit/details">Edit Details</a></li>
-				{%  endif %}
-				{%  if currentUserActions.has("org.openacalendar","venueEditMedia") %}
-					<li><a href="/venue/{{ venue.slugForUrl }}/edit/media">Edit Media</a></li>
-				{%  endif %}
-			</ul>
-		</li>
-	{%  endif %}
-	{% if currentUserActions.has("org.openacalendar","venueDelete") %}
-		<li class="action"><a href="/venue/{{ venue.slugForUrl }}/delete"><div class="fa fa-trash-o"></div> delete</a></li>
-	{%  endif %}
-	<li class="action">
-		<a href="/api1/venue/{{ venue.slug }}/events.ical" onclick="showExportSharePopup(); return false;">
-			{%  include '/site/common/actionExportShareLabel.html.twig' %}
-		</a>
-	</li>
-{% endblock %}
+{% block switcherAgenda %}current{% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
-		
-{% block innerContent %}
 
-	<div class="mainShowVenue" itemscope itemtype="http://schema.org/Place">
-		<meta itemprop="name" content="{{ venue.title|e('html_attr') }}" />
+{% block eventsContent %}
 
-		<div class="innerPageLeft">
-
-			<p itemprop="description" class="description">{{ venue.description | nl2br  | linkify }}</p>
-
-			<div class="locationWrapper">
-				<div class="location" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-					{% if venue.address %}<div class="address">{{ venue.address | nl2br }}</div>{% endif %}
-					{% if area %}
-						<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
-					{% endif %}
-					{% for parentArea in parentAreas|reverse %}
-						<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
-					{% endfor %}	
-					{% if venue.addressCode %}<div class="addressCode" itemprop="postalCode">{{ venue.addressCode  }}</div>{% endif %}
-					{% if country %}
-						<div class="country" itemprop="addressCountry">
-							<a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a>
-						</div>
-					{% endif %}	
-				</div>
-			</div>
-			
-			{% if medias %}
-				<ul class="mediaGrid">
-					{% for media in medias %}
-						<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
-					{% endfor %}
-				</ul>
-				<div class="afterMediaGrid"></div>
-			{% endif %}
-
-			{% if currentUserActions.has("org.openacalendar","venueEditPushToChildAreas") %}
-				<div class="highlightInfoBoxWrapper">
-					<div class="highlightInfoBoxTitle">Where is this?</div>
-					<div class="highlightInfoBoxContent">
-						<p>Is "{{ venue.title }}" in one of these places?</p>
-						<form action="/venue/{{ venue.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
-							{%  include 'site/common/pushToChildArea.html.twig' %}
-						</form>
-					</div>
-				</div>
-			{% endif %}
-
-		</div>
-			
-		<div class="innerPageRight">
-
-			{%  if venue.hasLatLng %}
-				<div id="Map" class="map"></div>
-				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-					<ul class="actionList">
-						<li><a href="/map?venue={{ venue.slugForURL }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
-					</ul>
-				{% endif %}
-			{% endif %}
-
-		</div>
-
-		<div class="afterInnerPageContent"></div>
-
-
-		{% include '/site/eventListFilterParams.html.twig' %}
-
-		<ul class="mainListEvents">
-			{% for event in events %}
-				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
-			{% else %}
-				<li class="nodata">
-					<p>
-						{%  if not eventListFilterParams.isDefaultFilters %}
-							{%  set eventsDefaultCount = venue|futureeventscount %}
-							{%  if eventsDefaultCount == 1 %}
-								No events found with that filter. Do you want to see <a href="/venue/{{  venue.slugForURL }}">the one future event</a> instead?
-							{%  elseif eventsDefaultCount > 1 %}
-								No events found with that filter. Do you want to see <a href="/venue/{{  venue.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
-							{%  else %}
-								No events found.
-							{%  endif %}
-						{%  else  %}
+	<ul class="mainListEvents">
+		{% for event in events %}
+			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true}  %}
+		{% else %}
+			<li class="nodata">
+				<p>
+					{%  if not eventListFilterParams.isDefaultFilters %}
+						{%  set eventsDefaultCount = venue|futureeventscount %}
+						{%  if eventsDefaultCount == 1 %}
+							No events found with that filter. Do you want to see <a href="/venue/{{  venue.slugForURL }}">the one future event</a> instead?
+						{%  elseif eventsDefaultCount > 1 %}
+							No events found with that filter. Do you want to see <a href="/venue/{{  venue.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
+						{%  else %}
 							No events found.
 						{%  endif %}
-					</p>
-
-					{%  if eventListFilterParams.isDefaultFilters %}
-						{%  set eventsPastCount = venue|pasteventscount %}
-						{%  if eventsPastCount == 1 %}
-							<p>(Sorry, you've already missed 1 event.)</p>
-						{% elseif eventsPastCount > 1 %}
-							<p>(Sorry, you've already missed {{ eventsPastCount  }} events.)</p>
-						{%  endif %}
+					{%  else  %}
+						No events found.
 					{%  endif %}
-				</li>
-			{% endfor %}
-		</ul>
+				</p>
 
-	
-	</div>
-
+				{%  if eventListFilterParams.isDefaultFilters %}
+					{%  set eventsPastCount = venue|pasteventscount %}
+					{%  if eventsPastCount == 1 %}
+						<p>(Sorry, you've already missed 1 event.)</p>
+					{% elseif eventsPastCount > 1 %}
+						<p>(Sorry, you've already missed {{ eventsPastCount  }} events.)</p>
+					{%  endif %}
+				{%  endif %}
+			</li>
+		{% endfor %}
+	</ul>
 
 {% endblock %}
 
 
 {% block scriptsForState %}
-	{% include '/site/common/mediasJavaScriptInformation.html.twig' with { medias:medias } %}
 	{{ parent() }}
 {% endblock %}		
 		
 {% block scripts %}
-	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-	<script type="text/javascript">
-		{% if venue.lat is not null and venue.lng is not null %}
-			var mapData = { lat: {{ venue.lat }}, lng: {{ venue.lng }} }
-		{% else %}
-			var mapData = { lat: null, lng:null }
-		{% endif %}
-	</script>
-	{% include 'site/common/mapLibrary.js.html.twig' %}
-	<script type="text/javascript" src="/theme/default/js/venueshow.js?v={{ config.assetsVersion }}"></script>
+	{{ parent() }}
 	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
-	<script src="/theme/default/js/mediaPopup.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-	{%  if currentUserActions.has("org.openacalendar","venueEditPushToChildAreas") %}
-		<script src="/theme/default/js/pushToChildArea.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-	{%  endif %}
 {% endblock %}
 
 

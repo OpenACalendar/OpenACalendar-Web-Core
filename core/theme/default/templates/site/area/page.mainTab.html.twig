@@ -1,0 +1,142 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/area/page.html.twig' %}
+
+{% block pageTitle %}{{ area.title }} - {% endblock %}
+
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/" />
+	{% if not currentSite.isWebRobotsAllowed or area.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+	{{ parent() }}
+{% endblock %}
+
+{% block actions %}
+	{% if currentUser is not null and not currentUserWatchesSite %}
+		<li class="action">
+			{% if currentUserWatchesArea %}
+				<a href="/area/{{ area.slugForUrl }}/watch/">Watching!</a>
+			{% else %}
+				<a href="/area/{{ area.slugForUrl }}/watch/">Watch?</a>
+			{% endif %}
+		</li>
+	{%  endif %}
+	{% if currentUserActions.has("org.openacalendar","actionAreaEditDetails") %}
+		<li class="action">
+			<a href="/area/{{ area.slugForUrl }}/edit/details"><div class="fa fa-pencil"></div> edit</a>
+		</li>
+	{%  endif %}
+	{%  if currentUserActions.has("org.openacalendar","actionAreaNew") %}
+		<li class="action">
+			<a href="/area/{{ area.slugForUrl }}/new"><div class="fa fa-pencil"></div> new</a>
+		</li>
+	{% endif %}
+	{% if currentUserActions.has("org.openacalendar","eventNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","eventNew") ) %}
+		<li class="action"><a href="/event/new?area={{  area.slug }}"><div class="fa fa-pencil"></div>Add an event</a></li>
+	{% endif %}
+	<li class="action">
+		<a href="/api1/area/{{ area.slug }}/events.ical" onclick="showExportSharePopup(); return false;">
+			{%  include '/site/common/actionExportShareLabel.html.twig' %}
+		</a>
+	</li>
+{% endblock %}
+
+{% block tabDetails %}currentTab{% endblock %}
+
+{% block innerContent %}
+
+
+	<div class="mainShowArea" itemscope itemtype="http://schema.org/Place">
+		<meta itemprop="name" content="{{ area.title|e('html_attr') }}" />
+
+
+		<div  class="innerPageLeft">
+			<p>{{ area.description | nl2br  | linkify }}</p>
+
+
+
+			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+
+			<div class="locationWrapper">
+				<div class="location">
+					<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
+					{% for parentArea in parentAreas|reverse %}
+						<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
+					{% endfor %}
+					<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+				</div>
+			</div>
+
+		</div>
+
+		<div  class="innerPageRight">
+
+			{%  if not currentUser %}
+				<div class="infoBoxWrapper">
+					<div class="infoBoxTitle">Get notifications?</div>
+					<div class="infoBoxContent">
+						<p>
+							Get reminders and notifications of events in this area!
+						</p>
+						<p>
+							<a href="{{ config.getWebIndexDomainSecure() }}/you/register?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
+								Create your free account
+							</a>
+						</p>
+						<p>
+							<a href="{{ config.getWebIndexDomainSecure() }}/you/login?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
+								Login
+							</a>
+						</p>
+					</div>
+				</div>
+			{% endif %}
+
+			<div id="MapWrapper">
+				<div id="Map" class="map"></div>
+				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
+					<ul class="actionList">
+						<li><a href="/map?area={{ area.slug }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
+					</ul>
+				{% endif %}
+			</div>
+
+		</div>
+
+		<div class="afterInnerPageContent"></div>
+
+		{% include '/site/eventListFilterParams.html.twig' %}
+
+		<div class="switcherWrapper">
+			<div class="switcherList">
+				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+					<a href="/area/{{ area.slugForURL }}/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+				</div>
+				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+					<a href="/area/{{ area.slugForURL }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+				</div>
+			</div>
+		</div>
+
+		{% block eventsContent %}{%  endblock %}
+
+	</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script src="/theme/default/js/areaShow.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}
+
+
+
+

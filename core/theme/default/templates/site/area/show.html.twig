@@ -5,13 +5,12 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/area/page.html.twig' %}
+{% extends 'site/area/page.mainTab.html.twig' %}
 
 {% block pageTitle %}{{ area.title }} - {% endblock %} 
 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForUrl }}/" />
 	{% if not currentSite.isWebRobotsAllowed or area.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
 	{{ parent() }}
@@ -48,104 +47,43 @@
 {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
-		
-{% block innerContent %}
 
+{% block switcherAgenda %}current{% endblock %}
 
-	<div class="mainShowArea" itemscope itemtype="http://schema.org/Place">
-		<meta itemprop="name" content="{{ area.title|e('html_attr') }}" />
+{% block eventsContent %}
 
-
-		<div  class="innerPageLeft">
-			<p>{{ area.description | nl2br  | linkify }}</p>
-
-
-
-			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
-
-			<div class="locationWrapper">
-				<div class="location">
-					<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
-					{% for parentArea in parentAreas|reverse %}
-						<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
-					{% endfor %}
-					<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
-				</div>
-			</div>
-
-		</div>
-		
-		<div  class="innerPageRight">
-
-			{%  if not currentUser %}
-				<div class="infoBoxWrapper">
-					<div class="infoBoxTitle">Get notifications?</div>
-					<div class="infoBoxContent">
-						<p>
-							Get reminders and notifications of events in this area!
-						</p>
-						<p>
-							<a href="{{ config.getWebIndexDomainSecure() }}/you/register?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
-								Create your free account
-							</a>
-						</p>
-						<p>
-							<a href="{{ config.getWebIndexDomainSecure() }}/you/login?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
-								Login
-							</a>
-						</p>
-					</div>
-				</div>
-			{% endif %}
-
-			<div id="MapWrapper">
-				<div id="Map" class="map"></div>
-				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-					<ul class="actionList">
-						<li><a href="/map?area={{ area.slug }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
-					</ul>
-				{% endif %}
-			</div>
-
-		</div>
-
-		<div class="afterInnerPageContent"></div>
-
-		{% include '/site/eventListFilterParams.html.twig' %}
-
-		<ul class="mainListEvents">
-			{% for event in events %}
-				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-			{% else %}
-				<li class="nodata">
-					<p>
-						{%  if not eventListFilterParams.isDefaultFilters %}
-							{%  set eventsDefaultCount = area|futureeventscount %}
-							{%  if eventsDefaultCount == 1 %}
-								No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the one future event</a> instead?
-							{%  elseif eventsDefaultCount > 1 %}
-								No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
-							{%  else %}
-								No events found.
-							{%  endif %}
-						{%  else  %}
+	<ul class="mainListEvents">
+		{% for event in events %}
+			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
+		{% else %}
+			<li class="nodata">
+				<p>
+					{%  if not eventListFilterParams.isDefaultFilters %}
+						{%  set eventsDefaultCount = area|futureeventscount %}
+						{%  if eventsDefaultCount == 1 %}
+							No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the one future event</a> instead?
+						{%  elseif eventsDefaultCount > 1 %}
+							No events found with that filter. Do you want to see <a href="/area/{{  area.slugForURL }}">the {{ eventsDefaultCount }} future events</a> instead?
+						{%  else %}
 							No events found.
 						{%  endif %}
-					</p>
-
-					{%  if eventListFilterParams.isDefaultFilters %}
-						{%  set eventsPastCount = area|pasteventscount %}
-						{%  if eventsPastCount == 1 %}
-							<p>(Sorry, you've already missed 1 event here.)</p>
-						{% elseif eventsPastCount > 1 %}
-							<p>(Sorry, you've already missed {{ eventsPastCount  }} events here.)</p>
-						{%  endif %}
+					{%  else  %}
+						No events found.
 					{%  endif %}
-				</li>
-			{% endfor %}
-		</ul>
+				</p>
 
-	</div>
+				{%  if eventListFilterParams.isDefaultFilters %}
+					{%  set eventsPastCount = area|pasteventscount %}
+					{%  if eventsPastCount == 1 %}
+						<p>(Sorry, you've already missed 1 event here.)</p>
+					{% elseif eventsPastCount > 1 %}
+						<p>(Sorry, you've already missed {{ eventsPastCount  }} events here.)</p>
+					{%  endif %}
+				{%  endif %}
+			</li>
+		{% endfor %}
+	</ul>
+
 
 {% endblock %}
 

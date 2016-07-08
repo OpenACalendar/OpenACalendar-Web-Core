@@ -1,0 +1,90 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/country/page.html.twig' %}
+
+
+{% block pageTitle %}{{ country.title }} - {% endblock %}
+
+{% block tabDetails %}currentTab{% endblock %}
+
+{% block htmlHeader %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block actions %}
+	{% if currentUserActions.has("org.openacalendar","areaNew") %}
+		<li class="action">
+			<a href="/country/{{ country.twoCharCode }}/new"><div class="fa fa-pencil"></div> new</a>
+		</li>
+	{%  endif  %}
+	<li class="action">
+		<a href="/api1/country/{{ country.twoCharCode }}/events.ical" onclick="showExportSharePopup(); return false;">
+			{%  include '/site/common/actionExportShareLabel.html.twig' %}
+		</a>
+	</li>
+{% endblock %}
+
+
+{% block innerContent %}
+
+
+	<div class="mainShowCountry" itemscope itemtype="http://schema.org/Place">
+		<meta itemprop="name" content="{{ country.title|e('html_attr') }}" />
+
+		<div  class="innerPageLeft">
+
+			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+
+		</div>
+
+		<div  class="innerPageRight">
+
+			<div id="MapWrapper">
+				<div id="Map" class="map"></div>
+				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
+					<ul class="actionList">
+						<li><a href="/map?country={{ country.twoCharCode }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
+					</ul>
+				{% endif %}
+			</div>
+
+		</div>
+
+		<div class="afterInnerPageContent"></div>
+
+		{% include '/site/eventListFilterParams.html.twig' %}
+
+		<div class="switcherWrapper">
+			<div class="switcherList">
+				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+					<a href="/country/{{ country.twoCharCode }}/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+				</div>
+				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+					<a href="/country/{{ country.twoCharCode }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+				</div>
+			</div>
+		</div>
+
+		{% block eventsContent %}{%  endblock %}
+
+		</ul>
+
+	</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{% include 'site/common/mapLibrary.js.html.twig' %}
+	<script src="/theme/default/js/countryShow.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{{ parent() }}
+{% endblock %}
+

@@ -31,6 +31,8 @@ class VenueVirtualController {
 		$this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
@@ -45,29 +47,38 @@ class VenueVirtualController {
 	
 	function calendarNow(Request $request, Application $app) {
 
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setFallBackFrom(true);
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
 		if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
-			$this->parameters['showCurrentUserOptions'] = true;
-		}	
+		}
 		$this->parameters['calendar']->byDate(\TimeSource::getDateTime(), 31, true);
 		
 		list($this->parameters['prevYear'],$this->parameters['prevMonth'],$this->parameters['nextYear'],$this->parameters['nextMonth']) = $this->parameters['calendar']->getPrevNextLinksByMonth();
 		
 		$this->parameters['pageTitle'] = "Virtual";
 		$this->parameters['venueVirtual'] = true;
-		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
+		return $app['twig']->render('/site/venuevirtual/calendar.monthly.html.twig', $this->parameters);
 	}
 	
 	function calendar($year, $month, Request $request, Application $app) {
 
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenueVirtualOnly(true);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setFallBackFrom(true);
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
 		if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
@@ -78,7 +89,7 @@ class VenueVirtualController {
 		
 		$this->parameters['pageTitle'] = "Virtual";
 		$this->parameters['venueVirtual'] = true;
-		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
+		return $app['twig']->render('/site/venuevirtual/calendar.monthly.html.twig', $this->parameters);
 	}
 	
 	function history(Request $request, Application $app) {

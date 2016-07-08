@@ -1,0 +1,63 @@
+{#
+ # @package org.openacalendar.curatedlists
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/curatedlist/page.html.twig' %}
+
+
+{% block pageTitle %}{{ curatedlist.title }} - {% endblock %}
+
+
+{% block tabDetails %}currentTab{% endblock %}
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slug }}/" />
+	{{ parent() }}
+{% endblock %}
+
+
+{% block actions %}
+	{% if actionCuratedListEditDetails %}
+		<li class="action">
+			<a href="/curatedlist/{{ curatedlist.slug }}/edit/details"><div class="fa fa-pencil"></div> edit</a>
+		</li>
+	{% endif %}
+	<li class="action">
+		<a href="/api1/curatedlist/{{ curatedlist.slug }}/events.ical" onclick="showExportSharePopup(); return false;">
+			{%  include '/site/common/actionExportShareLabel.html.twig' %}
+		</a>
+	</li>
+{% endblock %}
+
+{% block innerContent %}
+
+	<p>{{ curatedlist.description | nl2br | linkify }}</p>
+
+	{% include '/site/eventListFilterParams.html.twig' %}
+
+	<div class="switcherWrapper">
+		<div class="switcherList">
+			<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+				<a href="/curatedlist/{{ curatedlist.slug }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+			</div>
+			<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+				<a href="/curatedlist/{{ curatedlist.slug }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+			</div>
+		</div>
+	</div>
+
+	{% block eventsContent %}{%  endblock %}
+
+	<div id="afterInnerPageContent"></div>
+{% endblock %}
+
+
+
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}
+
+

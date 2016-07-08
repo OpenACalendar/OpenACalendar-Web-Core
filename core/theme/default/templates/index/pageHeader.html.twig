@@ -27,8 +27,7 @@
 					{# At the moment only logged in users can see any times on the Index site, so let's not confuse logged out users #}
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/mytimezone">{{ currentTimeZone }}</a></li>
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/sites">Calendars</a></li>
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/agenda">My Personal Agenda</a></li>
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/calendar">My Personal Calendar</a></li>
+					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/agenda">Your personal events</a></li>
 					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
 					{% if currentUser.isSystemAdmin %}
 						<li><a href="{{  config.getWebIndexDomainSecure() }}/sysadmin">Sys Admin</a></li>

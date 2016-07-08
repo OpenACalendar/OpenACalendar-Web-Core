@@ -5,45 +5,18 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/curatedlist/page2col.html.twig' %}
+{% extends 'site/curatedlist/page.mainTab.html.twig' %}
 
+{% block pageTitle %}{{ curatedlist.title }} - {% endblock %}
 
-{% block pageTitle %}{{ curatedlist.title }} - {% endblock %} 
+{% block switcherAgenda %}current{% endblock %}
 
-
-{% block tabDetails %}currentTab{% endblock %}
-	
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/{{ curatedlist.slug }}/" />
 	{% if not currentSite.isWebRobotsAllowed or curatedlist.isDeleted %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{{ parent() }}
 {% endblock %}
 
-
-{% block actions %}
-	{% if actionCuratedListEditDetails %}
-		<li class="action">
-			<a href="/curatedlist/{{ curatedlist.slug }}/edit/details"><div class="fa fa-pencil"></div> edit</a>
-		</li>
-	{% endif %}
-	<li class="action">
-		<a href="/api1/curatedlist/{{ curatedlist.slug }}/events.ical" onclick="showExportSharePopup(); return false;">
-			{%  include '/site/common/actionExportShareLabel.html.twig' %}
-		</a>
-	</li>
-{% endblock %}
-
-
-{% block innerContentLeft %}
-
-	<p>{{ curatedlist.description | nl2br | linkify }}</p>
-
-{% endblock %}
-
-	
-{% block innerContentRight %}
-
-	{% include '/site/eventListFilterParams.html.twig' %}
+{% block eventsContent %}
 
 	<ul class="mainListEvents">
 		{% for event in events %}
@@ -100,7 +73,7 @@
 
 
 {% block scripts %}
-	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{{ parent() }}
 	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
 {% endblock %}
 

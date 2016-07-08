@@ -62,6 +62,7 @@ class CuratedListController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
@@ -172,10 +173,15 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setFallBackFrom(true);
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
 		if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
@@ -185,7 +191,7 @@ class CuratedListController {
 		list($this->parameters['prevYear'],$this->parameters['prevMonth'],$this->parameters['nextYear'],$this->parameters['nextMonth']) = $this->parameters['calendar']->getPrevNextLinksByMonth();
 		
 		$this->parameters['pageTitle'] = $this->parameters['curatedlist']->getTitle();
-		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
+		return $app['twig']->render('/site/curatedlist/calendar.monthly.html.twig', $this->parameters);
 	}
 	
 	function calendar($slug, $year, $month, Request $request, Application $app) {
@@ -193,11 +199,15 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist.");
 		}
 
-		
-		$this->parameters['calendar'] = new \RenderCalendar($app);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setSite($app['currentSite']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
-		$this->parameters['calendar']->getEventRepositoryBuilder()->setIncludeDeleted(false);
+        $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
+        $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCuratedList($this->parameters['curatedlist']);
+        $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setFallBackFrom(true);
+        $this->parameters['eventListFilterParams']->set($_GET);
+
+        $this->parameters['calendar'] = new \RenderCalendar($app, $this->parameters['eventListFilterParams']);
+
 		if ($app['currentUser']) {
 			$this->parameters['calendar']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 			$this->parameters['showCurrentUserOptions'] = true;
@@ -207,7 +217,7 @@ class CuratedListController {
 		list($this->parameters['prevYear'],$this->parameters['prevMonth'],$this->parameters['nextYear'],$this->parameters['nextMonth']) = $this->parameters['calendar']->getPrevNextLinksByMonth();
 		
 		$this->parameters['pageTitle'] = $this->parameters['curatedlist']->getTitle();
-		return $app['twig']->render('/site/calendarPage.html.twig', $this->parameters);
+		return $app['twig']->render('/site/curatedlist/calendar.monthly.html.twig', $this->parameters);
 	}
 	
 	

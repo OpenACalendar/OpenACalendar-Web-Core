@@ -1,0 +1,54 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/venuevirtual/page.html.twig' %}
+
+{% block pageTitle %}Virtual - {% endblock %}
+
+
+{% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/virtual/" />
+	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% include 'site/common/mapLibrary.css.html.twig' %}
+	{{ parent() }}
+{% endblock %}
+
+{% block actions %}
+{% endblock %}
+
+{% block tabDetails %}currentTab{% endblock %}
+
+{% block innerContent %}
+
+	<p>This lists events that happen online and can be accessed from any place.</p>
+
+	{% include '/site/eventListFilterParams.html.twig' %}
+
+	<div class="switcherWrapper">
+		<div class="switcherList">
+			<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+				<a href="/venue/virtual/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+			</div>
+			<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+				<a href="/venue/virtual/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+			</div>
+		</div>
+	</div>
+
+	{% block eventsContent %}{%  endblock %}
+
+	<div id="afterInnerPageContent"></div>
+{% endblock %}
+
+
+{% block scripts %}
+	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}
+
+
+
+

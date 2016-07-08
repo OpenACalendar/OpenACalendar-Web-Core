@@ -5,7 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/venuevirtual/page.html.twig' %}
+{% extends 'site/venuevirtual/page.mainTab.html.twig' %}
 
 {% block pageTitle %}Virtual - {% endblock %} 
 
@@ -21,12 +21,10 @@
 {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
-		
-{% block innerContent %}
-		
-	<p>This lists events that happen online and can be accessed from any place.</p>
 
-	{% include '/site/eventListFilterParams.html.twig' %}
+{% block switcherAgenda %}current{% endblock %}
+
+{% block eventsContent %}
 
 	<ul class="mainListEvents">
 		{% for event in events %}
@@ -42,7 +40,7 @@
 
 
 {% block scripts %}
-	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{{ parent() }}
 	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
 {% endblock %}
 

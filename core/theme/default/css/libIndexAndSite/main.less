@@ -18,11 +18,13 @@ body {
 }
 
 #page {
-	max-width: 1200px;
 	margin: 0 auto;
 	background: white;
 }
 
+#page.normalContent {
+    max-width: 1200px;
+}
 
 #header {
 	background-color: @colourMain;
@@ -967,6 +969,36 @@ form {
 		li.arrow {
 			display: inline;
 			padding: 3px;
+		}
+	}
+}
+
+.switcherWrapper {
+	text-align: right;
+	margin: 10px 0;
+	.switcherList {
+		line-height: 2;
+		.switcherAction {
+			background: #EEEEEE;
+			display: inline;
+			padding: 5px 15px;
+			.rounded-corners(2px);
+			a {
+				padding: 10px 30px;
+				text-decoration: none;
+				color: #333;
+			}
+			a:hover, a:focus {
+				text-decoration: underline;
+			}
+		}
+		.current {
+			border: 1px solid #000000;
+			.rounded-corners(2px);
+			background: @colourLighter2;
+			a {
+				font-weight: bold;
+			}
 		}
 	}
 }

@@ -5,136 +5,39 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<!DOCTYPE html>
-{% set currentUserPrivateFeedKey = getCurrentUserPrivateFeedKey() %}
-<html>
-	<head>
-        <meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>Your Personal Calendar - {{ config.siteTitle  }}</title>
-		<link rel="stylesheet" type="text/css" href="/theme/default/css/calendar.css?v={{ config.assetsVersion }}">
-		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css{%  else %}/font-awesome-4.5.0/css/font-awesome.min.css{%  endif %}">
-		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
-	</head>
-	<body>
-		<div id="header">
-			<div id="headerOptions">
-				<div id="actions">
-					<a href="/api1/person/{{ currentUser.username }}/private/{{ currentUserPrivateFeedKey.accessKey }}/events.aw.ical" onclick="showExportPopup(); return false;">
-						<div class="fa fa-download fa-2x" title="Export"></div>
-					</a>
-					{% if prevYear %}
-						<a href="/me/calendar/{{ prevYear }}/{{ prevMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
-							<div class="fa fa-arrow-left fa-2x" title="Previous"></div>
-						</a>
-					{% endif %}
-					<a href="/me/calendar/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
-						<div class="fa fa-clock-o fa-2x" title="Today"></div>
-					</a>
-					{% if nextYear %}
-						<a href="/me/calendar/{{ nextYear }}/{{ nextMonth }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">
-							<div class="fa fa-arrow-right fa-2x" title="Next"></div>
-						</a>
-					{% endif %}
-					<a href="/me/">
-						<div class="fa fa-home fa-2x" title="Home"></div>
-					</a>
-				</div>
-			</div>
-				
-			<img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo">
-			<h1><a href="/">Your Calendar</a></h1>
-			<h2><a href="/">{{ config.siteTitle }}</a></h2>
-			<div id="afterHeader"></div>
-		</div>
-		<div id="page">
-			<div id="calendarPosition">
-				<span class="timezone">(in <a href="/mytimezone">{{ currentTimeZone }}</a> time)</span>
-				{% if calendar.modeByMonth %}
-					<span class="date">{{ calendar.monthLongName }} {{ calendar.year }}</span>
-				{% endif %}
-			</div>
-			{% if not calendar.isAnyEvents() %}
-				<p>You can watch groups of events or say you are attending them - and
-					then your personal list of only the events you are interested in will build up here.</p>
-			{% endif %}
-			{% include '/index/eventListFilterParams.html.twig' %}
-			<table class="calendar">
-				<tr>
-					<th>Mon</th>
-					<th>Tue</th>
-					<th>Wed</th>
-					<th>Thu</th>
-					<th>Fri</th>
-					<th>Sat</th>
-					<th>Sun</th>
-				</tr>
-				{% for data in calendar.getData() %}
-					{% if data.dayOfWeek == 1 %}<tr>{% endif %}
-					{#  the "Now" ID is used in URLs to make browser scroll to today's box #}
-					<td {% if data.today %}id="Now"{% endif %} class="day{{data.dayOfWeek}} {% if data.today %}today{% endif %}">
-						<div class="date">{{data.display}}</div>
-						<div class="events">
-							{% for event in data.eventsContinuing %}
-								<div class="event continuing {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
-									<div class="above"></div>
-									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug |e('js')}}' }); return false;">
-										{{ event.getSummaryDisplay()  }}  {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
-									</a>
-									<div class="below"></div>
-								</div>
-							{% endfor %}
-							{% for event in data.events %}
-								<div class="event starting {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
-									<div class="above"></div>
-									{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
-										<div class="currentUserAttendance" id="currentUserAttendanceForSite{{ event.siteSlug }}Event{{ event.slug }}">
-											<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showCurrentUserAttendanceForEvent({slug: {{ event.slug }}, site: '{{ event.siteSlug |e('js')}}' }); return false;" class="activationLinkWrapper">
-												{% if event.userIsPlanAttending %}
-													<div class="iconUserAttendingSmall" title="You are attending"></div>
-												{% elseif event.userIsPlanMaybeAttending %}
-													<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>
-												{% elseif event.userIsPlanNotAttending %}
-													<div class="iconUserNotAttendingSmall" title="You are not attending"></div>
-												{% else %}
-													<div class="iconUserUnknownAttendingSmall" title="Are you attending?"></div>
-												{% endif %}
-											</a>
-										</div>
-									{% endif %}		
-									<span class="start_at">
-										{{ event.getStartAt|date( currentUserClock12Hour ? 'g:ia' : 'H:i', currentTimeZone ) }}
-									</span>
-									<a href="{{ config.getWebSiteDomainSecure(event.siteSlug) }}/event/{{ event.slug }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}', site: '{{ event.siteSlug }}' }); return false;">
-										{{ event.getSummaryDisplay() }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
-										{%  if event.hasTicketUrl %}<span class="fa fa-ticket" title="See information about tickets"></span>{%  endif %}
-									</a>
-									<div class="below"></div>
-								</div>
-							{% endfor %}
-						</div>
-					</td>
-					{% if data.dayOfWeek == 7 %}</tr>{% endif %}
-				{% endfor %}	
-			</table>
-		</div>
-		<div id="footer">
-			{%  if extensions.hasExtensionID('org.openacalendar.contact') %}<a href="{{ config.getWebIndexDomainSecure() }}/contact">contact</a>{% endif %}
-			<a href="/terms">terms</a>
-			<a href="/privacy">privacy</a>
-			<a href="http://jmbtechnology.co.uk/">&copy; JMB Technology Limited {{ COPYRIGHT_YEARS }}</a>
-		</div>
-		<script type="text/javascript">
-			var showCurrentUserOptions = true;
-		</script>		
-		<script type="text/javascript">var exportData = {user:'{{ currentUser.username }}', userAccessKey: '{{ currentUserPrivateFeedKey.accessKey }}'}</script>	
-		<script src="/info.js.php?v={{ config.assetsVersion }}{% if currentUser %}&u={{  currentUser.username|e('url') }}{%  endif %}" type="text/javascript"></script>
-		<script src="{%  if config.useLibraryCDNs %}https://code.jquery.com/jquery-1.12.0.min.js{%  else %}/js/jquery-1.12.0.min.js{%  endif %}" type="text/javascript"></script>
-		<script src="/theme/default/js/general.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-		<script src="/theme/default/js/general.index.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-		<script src="/theme/default/js/calendar.index.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
-		{% include 'analytics.html.twig' %}
-	</body>
-</html>
+{% extends 'index/currentuser/page.events.html.twig' %}
+
+{% block bodyClass %}calendarContent{% endblock %}
+
+{% block htmlHeader %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block switcherMonthly %}current{% endblock %}
+
+{% block eventsContent %}
+
+	{%  include '/index/common/calendar.monthly.html.twig' with { 'showCurrentUserOptions':true, 'calURL':'/me/calendar' } %}
+
+{% endblock %}
+
+
+{% block scriptsForState %}
+	{{  parent() }}
+	<script type="text/javascript">
+		var showCurrentUserOptions = true;
+	</script>
+{%  endblock %}
+
+
+{% block scripts %}
+	{{  parent() }}
+	{% if config.isSingleSiteMode %}
+		<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
+	{% else %}
+		<script type="text/javascript" src="/theme/default/js/userAtEvents.index.js?v={{ config.assetsVersion }}"></script>
+	{% endif %}
+	<script src="/theme/default/js/calendar.index.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+{% endblock %}
 

@@ -27,7 +27,7 @@
 		<link rel="webmention" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/receivewebmention.php" />
 	</head>
 	<body>
-		<div id="page">
+		<div id="page" class="{% block bodyClass %}normalContent{% endblock %}">
 			{% include 'index/pageHeader.html.twig' %}
 			<div id="body">
 				{% if  currentUser is not null and config.siteReadOnly %}

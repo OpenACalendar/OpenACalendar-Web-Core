@@ -5,84 +5,41 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/country/page.html.twig' %}
+{% extends 'site/country/page.mainTab.html.twig' %}
 
 
-{% block pageTitle %}{{ country.title }} - {% endblock %} 
+{% block pageTitle %}{{ country.title }} - {% endblock %}
 
 {% block tabDetails %}currentTab{% endblock %}
-	
+
+{% block switcherAgenda %}current{% endblock %}
+
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/" />
 	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
-	{% include 'site/common/mapLibrary.css.html.twig' %}
 	{{ parent() }}
 {% endblock %}
 
 
-{% block actions %}
-	{% if currentUserActions.has("org.openacalendar","areaNew") %}
-		<li class="action">
-			<a href="/country/{{ country.twoCharCode }}/new"><div class="fa fa-pencil"></div> new</a>
-		</li>
-	{%  endif  %}
-	<li class="action">
-		<a href="/api1/country/{{ country.twoCharCode }}/events.ical" onclick="showExportSharePopup(); return false;">
-			{%  include '/site/common/actionExportShareLabel.html.twig' %}
-		</a>
-	</li>
-{% endblock %}
 	
-	
-{% block innerContent %}
+{% block eventsContent %}
 
-
-	<div class="mainShowCountry" itemscope itemtype="http://schema.org/Place">
-		<meta itemprop="name" content="{{ country.title|e('html_attr') }}" />
-
-		<div  class="innerPageLeft">
-
-			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
-
-		</div>
-
-		<div  class="innerPageRight">
-
-			<div id="MapWrapper">
-				<div id="Map" class="map"></div>
-				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-					<ul class="actionList">
-						<li><a href="/map?country={{ country.twoCharCode }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
-					</ul>
-				{% endif %}
-			</div>
-
-		</div>
-
-		<div class="afterInnerPageContent"></div>
-
-		{% include '/site/eventListFilterParams.html.twig' %}
-
-		<ul class="mainListEvents">
-			{% for event in events %}
-				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-			{% else %}
-				<li class="nodata">
-					No events found.
-					{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
-				</li>
-			{% endfor %}
-		</ul>
-
-	</div>
+	<ul class="mainListEvents">
+		{% for event in events %}
+			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
+		{% else %}
+			<li class="nodata">
+				No events found.
+				{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
 
 {% endblock %}
 
 	
 {% block scripts %}
-	<script src="/theme/default/js/eventFilterParams.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
 	<script type="text/javascript" src="/theme/default/js/userAtEvents.site.js?v={{ config.assetsVersion }}"></script>
-	{% include 'site/common/mapLibrary.js.html.twig' %}
-	<script src="/theme/default/js/countryShow.js?v={{ config.assetsVersion }}" type="text/javascript"></script>
+	{{ parent() }}
 {% endblock %}
 

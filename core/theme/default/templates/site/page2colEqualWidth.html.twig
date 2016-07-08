@@ -25,7 +25,7 @@
 		{% block htmlHeader %}{% endblock %}
 	</head>
 	<body>
-		<div id="page">
+		<div id="page" class="{% block bodyClass %}normalContent{% endblock %}">
 			{% include 'site/pageHeader.html.twig' %}
 			<div id="body">
 				{% if  currentUser is not null and config.siteReadOnly %}

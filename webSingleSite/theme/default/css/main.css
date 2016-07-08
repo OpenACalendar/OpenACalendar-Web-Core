@@ -1657,9 +1657,11 @@ body {
   background-color: #B7CFB7;
 }
 #page {
-  max-width: 1200px;
   margin: 0 auto;
   background: white;
+}
+#page.normalContent {
+  max-width: 1200px;
 }
 #header {
   background-color: #0DA20D;
@@ -2686,6 +2688,44 @@ form .afterBigSubmitActionWrapper {
   display: inline;
   padding: 3px;
 }
+.switcherWrapper {
+  text-align: right;
+  margin: 10px 0;
+}
+.switcherWrapper .switcherList {
+  line-height: 2;
+}
+.switcherWrapper .switcherList .switcherAction {
+  background: #EEEEEE;
+  display: inline;
+  padding: 5px 15px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+}
+.switcherWrapper .switcherList .switcherAction a {
+  padding: 10px 30px;
+  text-decoration: none;
+  color: #333;
+}
+.switcherWrapper .switcherList .switcherAction a:hover,
+.switcherWrapper .switcherList .switcherAction a:focus {
+  text-decoration: underline;
+}
+.switcherWrapper .switcherList .current {
+  border: 1px solid #000000;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  background: #72DA72;
+}
+.switcherWrapper .switcherList .current a {
+  font-weight: bold;
+}
 #PopupMask {
   position: fixed;
   top: 0px;
@@ -2920,4 +2960,88 @@ form .afterBigSubmitActionWrapper {
 }
 .popupBox .afterMediaGrid {
   clear: left;
+}
+#page.calendarContent {
+  max-width: 1600px;
+}
+.calendarLabel,
+.calendarControls {
+  text-align: right;
+  padding: 5px 0 10px 0;
+}
+.calendarLabel .date,
+.calendarControls .date {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+.calendarControls a {
+  margin: 0px 5px;
+  text-decoration: none;
+  color: #000000;
+}
+table.calendar {
+  width: 100%;
+}
+table.calendar td {
+  border: 1px solid black;
+  padding: 2px;
+  width: 14%;
+  background: white;
+}
+table.calendar td div.date {
+  font-weight: bold;
+  text-align: center;
+}
+table.calendar td .addURL {
+  display: none;
+}
+table.calendar td:hover .addURL,
+table.calendar td:focus .addURL {
+  display: inline;
+}
+table.calendar td.day6,
+table.calendar td.day7 {
+  background: none repeat scroll 0 0 #EEEEEE;
+}
+table.calendar td.today {
+  background: none repeat scroll 0 0 #F8E8D7;
+  border: 3px solid #F89E3E;
+}
+table.calendar .events {
+  min-height: 50px;
+}
+table.calendar .event {
+  background: none repeat scroll 0 0 #36C036;
+  border: 1px solid #007900;
+  border-radius: 3px 3px 3px 3px;
+  margin: 5px 15px;
+  padding: 5px;
+}
+table.calendar .event .start_at {
+  font-size: 0.8em;
+}
+table.calendar .event a {
+  color: #222;
+  text-decoration: none;
+}
+table.calendar .event a:hover,
+table.calendar .event a:focus {
+  color: block;
+  text-decoration: underline;
+}
+table.calendar .event div.currentUserAttendance {
+  float: right;
+  padding: 0px 0px 5px 5px;
+}
+table.calendar .event div.currentUserAttendance a {
+  text-decoration: none;
+}
+table.calendar .event .below {
+  clear: both;
+}
+table.calendar .deleted {
+  background: url('/theme/default/img/deletedBackground.png');
+}
+table.calendar .cancelled {
+  background: url('/theme/default/img/cancelledBackground.png');
 }
