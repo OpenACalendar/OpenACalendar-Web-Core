@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "720c67df793bd6c1f392e579f3838e6e",
-    "content-hash": "4715d13349afa9bcb3ad1e1969df4dca",
+    "hash": "1f6e6cf321556c69068ae09dbc898e02",
+    "content-hash": "1c85ddd2146aad64dac157f0024d5e6e",
     "packages": [
         {
             "name": "facebook/php-sdk-v4",
@@ -301,6 +301,69 @@
                 "ical"
             ],
             "time": "2015-07-30 21:26:48"
+        },
+        {
+            "name": "jmbtechnologylimited/osdata",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JMB-Technology-Limited/OSData.git",
+                "reference": "d1dc81165a30c2f45bf9fabf5e01ca984fdb3783"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/OSData/zipball/d1dc81165a30c2f45bf9fabf5e01ca984fdb3783",
+                "reference": "d1dc81165a30c2f45bf9fabf5e01ca984fdb3783",
+                "shasum": ""
+            },
+            "require": {
+                "jmbtechnologylimited/osmaths": "1.0.*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JMBTechnologyLimited": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "description": "for working with Ordnance Survey Open Data",
+            "homepage": "https://github.com/JMB-Technology-Limited/OSData",
+            "time": "2016-07-09 10:30:28"
+        },
+        {
+            "name": "jmbtechnologylimited/osmaths",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JMB-Technology-Limited/OSMaths.git",
+                "reference": "0ec1a8f2731378f23859e40892f580072baf323d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/OSMaths/zipball/0ec1a8f2731378f23859e40892f580072baf323d",
+                "reference": "0ec1a8f2731378f23859e40892f580072baf323d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JMBTechnologyLimited": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "description": "conversations around the coordinate systems used for Ordnance Survey Open Data only",
+            "homepage": "https://github.com/JMB-Technology-Limited/OSMaths",
+            "time": "2016-07-09 10:03:47"
         },
         {
             "name": "jmbtechnologylimited/parsedatetimerangestring",
@@ -719,7 +782,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "1.0.0",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "shasum": ""
             },
             "type": "library",

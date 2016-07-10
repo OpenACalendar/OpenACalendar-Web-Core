@@ -26,6 +26,7 @@
 		"facebook/php-sdk-v4" : "4.0.*",
 		"jmbtechnologylimited/rruleunravel" : "0.4.*",
 		"jmbtechnologylimited/icaldissect" : "1.2.*",
+		"jmbtechnologylimited/osdata" : "1.0.*",
 		"guzzlehttp/guzzle":"5.3.*",
 		"pda/pheanstalk":"3.1.*"
 	},

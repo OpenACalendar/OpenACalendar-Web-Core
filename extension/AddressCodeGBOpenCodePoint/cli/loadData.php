@@ -22,68 +22,15 @@ require_once APP_ROOT_DIR.'/extension/AddressCodeGBOpenCodePoint/php/org/openaca
 $opencodepointdir = isset($argv[1]) ? $argv[1] : null;
 $ourdir = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'data');
 
-if (!$opencodepointdir || !is_dir($opencodepointdir)) {
-	print "You must pass a directory that contains the csv's from Code Point Open!\n\n";
-	exit(1);
-}
-
-if (!$ourdir || !is_dir($ourdir)) {
-	print "Something went wrong finding our dir?\n\n";
-	exit(1);
-}
-
-if ($handleDir = opendir($opencodepointdir)) {
-    while (false !== ($entry = readdir($handleDir))) {
-		if ($entry != '.' && $entry != '..' && substr($entry, -4) == '.csv') {
-			
-			
-			## Stage 0: set up
-			$outputfiles = array();
-			
-			## Stage 1: loop over each file
-			print "Starting ".$entry."\n";
-			if (($handle = fopen($opencodepointdir.DIRECTORY_SEPARATOR.$entry, "r")) !== FALSE) {
-				while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-					
-					if (count($data) > 3) {
-						
-						$postcode = strtoupper(str_replace(" ","",$data[0]));
-						list($lat,$lng) = org\openacalendar\addresscode\gb\opencodepoint\AddressCodeGBOpenCodePointConvert::Convert($data[2],$data[3]);
-						$postcodeTwoChars = substr($postcode, 0,2);
-						
-						if (!isset($outputfiles[$postcodeTwoChars])) {
-							$outputfiles[$postcodeTwoChars] = fopen($ourdir.DIRECTORY_SEPARATOR.$postcodeTwoChars.".tmp.csv", 'w');
-							if (!$outputfiles[$postcodeTwoChars]) {
-								die("Could not open output file: ".$ourdir.DIRECTORY_SEPARATOR.$postcodeTwoChars.".tmp.csv\n\n");
-							}
-						}
-						fwrite($outputfiles[$postcodeTwoChars], '"'.$postcode.'",'.$lat.','.$lng."\n");
-						
-					}
-				}
-				fclose($handle);
-			}
-
-			## Stage 2: close all open files
-			print "Cleaning up ".$entry."\n";
-			foreach($outputfiles as $key=>$fh) {
-				fclose($fh);
-			}
-			
-			## Stage 3: Copy 
-			print "Installing ".$entry."\n";
-			foreach($outputfiles as $key=>$fh) {
-				rename($ourdir.DIRECTORY_SEPARATOR.$key.".tmp.csv",$ourdir.DIRECTORY_SEPARATOR.$key.".csv");
-			}
-			
-			print "Done ".$entry."\n";
-			
-		}
-    }
-   closedir($handleDir);
-}
 
 
+$dataAdaptor = new \JMBTechnologyLimited\OSData\CodePointOpen\FileDataAdaptor($ourdir);
+
+$service = new \JMBTechnologyLimited\OSData\CodePointOpen\CodePointOpenService($dataAdaptor);
+
+$service->loadData($opencodepointdir);
+
+print "Done";
 
 exit(0);
 
