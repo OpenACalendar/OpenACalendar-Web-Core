@@ -16,8 +16,12 @@
 		{% for event in events %}
 			{% include '/index/common/eventListing.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
 		{% else %}
-			<li class="info">You can watch groups of events or say you are attending them - and
-				then your personal list of only the events you are interested in will build up here.</li>
+			{%  if eventListFilterParams.isDefaultFilters %}
+				<li class="info">You can watch groups of events or say you are attending them - and
+					then your personal list of only the events you are interested in will build up here.</li>
+			{%  else %}
+				<li class="info">No events found with that filter.</li>
+			{%  endif %}
 		{% endfor %}
 	</ul>
 

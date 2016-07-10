@@ -26,6 +26,9 @@
 			</select>
 		{% endif %}
 
+		<div class="inputField">
+			<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+		</div>
 
 		<div class="inputField">
 			<label><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</label>
