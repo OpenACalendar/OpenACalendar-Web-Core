@@ -956,7 +956,7 @@ div.filterListWrapper form.filterList div.submitField input {
   text-decoration: underline;
 }
 #innerPageWrapper #innerPageActions {
-  padding: 10px 0 6px 0;
+  padding: 10px 0 0 0;
   border-bottom: 1px solid #666;
 }
 #innerPageWrapper #innerPageActions li.action,
@@ -1031,12 +1031,10 @@ div.filterListWrapper form.filterList div.submitField input {
   -ms-border-radius-topleft: 3px;
   -o-border-top-left-radius: 3px;
   border-top-left-radius: 3px;
-  display: inline;
+  display: inline-block;
   padding: 5px;
-  margin: 0;
-  border-top: 1px solid #666;
-  border-left: 1px solid #666;
-  border-right: 1px solid #666;
+  margin: 0 0 -1px 0;
+  border: 1px solid #666;
   background: #f2f2f2;
 }
 #innerPageWrapper #innerPageActions li.tab a {
