@@ -37,7 +37,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 	public function getContents() {
 		$txt = $this->getIcalLine('BEGIN','VCALENDAR');
 		$txt .= $this->getIcalLine('VERSION','2.0');
-		$txt .= $this->getIcalLine('PRODID','-//JarOfGreen//NONSGML JarOfGreenWikiCalendarBundle//EN');
+		$txt .= $this->getIcalLine('PRODID','-//OpenACalendar//NONSGML OpenACalendar//EN');
 		if ($this->site && !$this->app['config']->isSingleSiteMode) {
 			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->site->getTitle().' '.$this->app['config']->siteTitle);
 		} else {
