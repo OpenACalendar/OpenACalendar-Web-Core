@@ -1,0 +1,18 @@
+{#
+ # @package Mapbox
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ #}
+<script type="text/javascript" src="/leaflet-0.7.7/leaflet.js"></script>
+<script type="text/javascript" src="/leaflet-0.7.7/markercluster1/leaflet.markercluster.js"></script>
+<script>
+function configureBasicMap(mapObject) {
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		maxZoom: 18,
+		id: '{{  config.mapboxProjectId }}',
+		accessToken: '{{  config.mapboxPublicAPIToken }}'
+	}).addTo(mapObject);
+}
+</script>
