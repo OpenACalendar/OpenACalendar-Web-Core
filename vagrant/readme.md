@@ -44,6 +44,9 @@ You can also run tests on this box, but this will run slowly and we recommend yo
     vagrant ssh app
     ./test
 
+## The app box (in php7)
+
+The box app7 is the same as the box app, except it runs PHP7 instead. Set it up the same way.
 
 ## The tests box
 
@@ -64,4 +67,3 @@ Now to run the tests, go back to your dev machine and run:
 
     vagrant ssh frontendtests
     ./test
-
