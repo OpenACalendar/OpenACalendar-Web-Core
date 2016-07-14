@@ -993,8 +993,8 @@ form {
 }
 
 .switcherWrapper {
+    margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
 	text-align: right;
-	margin: 10px 0;
 	.switcherList {
 		line-height: 2;
 		.switcherAction {
@@ -1020,5 +1020,10 @@ form {
 			}
 		}
 	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+    .switcherWrapper {
+        margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+    }
 }
 

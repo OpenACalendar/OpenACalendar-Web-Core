@@ -2572,8 +2572,8 @@ form .afterBigSubmitActionWrapper {
   padding: 3px;
 }
 .switcherWrapper {
+  margin: 5px 5px;
   text-align: right;
-  margin: 10px 0;
 }
 .switcherWrapper .switcherList {
   line-height: 2;
@@ -2608,6 +2608,11 @@ form .afterBigSubmitActionWrapper {
 }
 .switcherWrapper .switcherList .current a {
   font-weight: bold;
+}
+@media screen and (min-width: 750px) {
+  .switcherWrapper {
+    margin: 5px 50px;
+  }
 }
 #PopupMask {
   position: fixed;
