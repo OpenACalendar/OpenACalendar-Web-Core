@@ -28,6 +28,9 @@ class CuratedListFilterParams {
         return $this->curatedListRepositoryBuilder;
     }
 
+    public function isDefaultFilters() {
+        return  !$this->freeTextSearch && !$this->withFutureEventsOnly;
+    }
 
     // ############################### params
 
@@ -70,6 +73,23 @@ class CuratedListFilterParams {
         return $this->withFutureEventsOnly;
     }
 
+
+
+    public function getHumanTextRepresentation() {
+        $out = array();
+
+        //
+        if ($this->withFutureEventsOnly) {
+            $out[] = 'with future events only';
+        }
+
+        // FREE TEXT
+        if ($this->freeTextSearch) {
+            $out[]  = 'free text search: '.$this->freeTextSearch;
+        }
+
+        return implode(", ",$out);
+    }
 
 
 

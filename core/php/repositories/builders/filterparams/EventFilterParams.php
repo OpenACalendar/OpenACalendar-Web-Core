@@ -294,6 +294,47 @@ class EventFilterParams {
 
         return implode('&',$out);
     }
+
+    public function getHumanTextRepresentation() {
+        $out = array();
+
+        if ($this->hasDateControls) {
+            if ( !$this->fromNow && $this->from) {
+                $out[] = 'from ' . $this->from;
+            }
+        }
+
+        // USER CONTROLS
+        if ($this->hasSpecifiedUserControls) {
+            if ($this->includeSpecifiedUserAttending && $this->includeSpecifiedUserWatching) {
+                $out[] = 'attending or watching';
+            } else {
+                $out[] = 'attending';
+            }
+        }
+
+        // DELETED
+        if ($this->include_deleted) {
+            $out[] = 'show deleted';
+        }
+
+        // FREE TEXT
+        if ($this->freeTextSearch) {
+            $out[]  = 'free text search: '.$this->freeTextSearch;
+        }
+
+        // TAG
+        if ($this->hasTagControl && $this->tagSearch) {
+            $out[] = 'tag:'. $this->tagSearch->getTitle();
+        }
+
+        // GROUP
+        if ($this->hasGroupControl && $this->groupSearch) {
+            $out[] = 'group: '.$this->groupSearch->getTitle();
+        }
+
+        return implode(", ",$out);
+    }
 	
 	public function getFrom() {
 		return $this->from;

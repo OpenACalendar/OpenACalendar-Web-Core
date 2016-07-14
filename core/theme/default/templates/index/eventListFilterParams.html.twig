@@ -6,36 +6,60 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="filterListWrapper filterListEventWrapper">
-	<form method="get" class="filterList filterListEvent">
-		<input type="hidden" name="eventListFilterDataSubmitted" value="1">
+	<div id="FilterListEventWrapperSectionHidden" {% if not eventListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListEventWrapperSectionHidden').hide(); $('#FilterListEventWrapperSectionShown').show();">
+				Show Filters <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+			</a>
+		</div>
+		{% if not eventListFilterParams.isDefaultFilters %}
+			<div class="currentFilters">
+				{{ eventListFilterParams.getHumanTextRepresentation }}
+			</div>
+		{%  endif %}
+		<div style="clear: both"></div>
+	</div>
+	<div id="FilterListEventWrapperSectionShown"  {% if eventListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
 
-		{% if eventListFilterParams.dateControls %}
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListEventWrapperSectionHidden').show(); $('#FilterListEventWrapperSectionShown').hide();">
+				Hide Filters <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+			</a>
+		</div>
+
+		<form method="get" class="filterList filterListEvent">
+			<input type="hidden" name="eventListFilterDataSubmitted" value="1">
+
+			{% if eventListFilterParams.dateControls %}
+				<div class="inputField">
+					<label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label>
+				</div>
+
+				<div class="inputField" id="eventListFilterFromWrapper">
+					<label>From <input type="text" name="from" value="{{  eventListFilterParams.from }}"></label>
+				</div>
+			{% endif %}
+
+			{% if eventListFilterParams.specifiedUserControls %}
+				<div class="inputField">
+					<select name="specifiedUserWhich">
+						<option value="AW" {% if eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending or Watching</option>
+						<option value="A" {% if not eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending</option>
+					</select>
+				</div>
+			{% endif %}
+
 			<div class="inputField">
-				<label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label>
+				<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
 			</div>
 
-			<div class="inputField" id="eventListFilterFromWrapper">
-				<label>From <input type="text" name="from" value="{{  eventListFilterParams.from }}"></label>
+			<div class="inputField">
+				<label><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</label>
 			</div>
-		{% endif %}
-		
-		{% if eventListFilterParams.specifiedUserControls %}
-			<select name="specifiedUserWhich">
-				<option value="AW" {% if eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending or Watching</option>
-				<option value="A" {% if not eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending</option>
-			</select>
-		{% endif %}
 
-		<div class="inputField">
-			<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
-		</div>
-
-		<div class="inputField">
-			<label><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</label>
-		</div>
-
-		<div class="submitField">
-			<input type="submit" value="Filter">
-		</div>
-	</form>
+			<div class="submitField">
+				<input type="submit" value="Filter">
+			</div>
+		</form>
+	</div>
 </div>

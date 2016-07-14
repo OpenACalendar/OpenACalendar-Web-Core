@@ -2096,26 +2096,50 @@ div.mainShowCountry .map {
   height: 150px;
 }
 div.filterListWrapper {
+  padding: 10px;
   padding: 5px 0;
+  border: #72DA72 2px solid;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
   margin: 5px 5px;
 }
-div.filterListWrapper form.filterList {
-  background: #72DA72;
+div.filterListWrapper .showHideLink {
+  float: right;
+  text-align: right;
   padding: 10px;
 }
+div.filterListWrapper .showHideLink a {
+  padding: 10px;
+  text-decoration: none;
+  color: #333333;
+}
+div.filterListWrapper .showHideLink a:hover,
+div.filterListWrapper .showHideLink a:focus {
+  text-decoration: underline;
+  color: #000000;
+}
+div.filterListWrapper .currentFilters {
+  padding: 10px;
+  font-style: italic;
+}
 div.filterListWrapper form.filterList div.inputField {
-  display: inline;
+  display: block;
   padding: 10px;
 }
 div.filterListWrapper form.filterList #eventListFilterFromWrapper input {
   background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
 }
 div.filterListWrapper form.filterList div.submitField {
-  display: inline;
+  display: block;
+  text-align: right;
   padding: 10px;
 }
 div.filterListWrapper form.filterList div.submitField input {
   background: #36C036;
+  padding: 5px 10px;
   color: black;
   border: 2px solid #36C036;
   -webkit-border-radius: 2px;

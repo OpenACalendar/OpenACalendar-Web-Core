@@ -6,45 +6,67 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="filterListWrapper filterListEventWrapper">
-	<form method="get" class="filterList filterListEvent">
-		<input type="hidden" name="eventListFilterDataSubmitted" value="1">
-
-		{% if eventListFilterParams.dateControls %}
-			<div class="inputField">
-				<label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label>
+	<div id="FilterListEventWrapperSectionHidden" {% if not eventListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListEventWrapperSectionHidden').hide(); $('#FilterListEventWrapperSectionShown').show();">
+				Show Filters <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+			</a>
+		</div>
+		{% if not eventListFilterParams.isDefaultFilters %}
+			<div class="currentFilters">
+				{{ eventListFilterParams.getHumanTextRepresentation }}
 			</div>
+		{%  endif %}
+		<div style="clear: both"></div>
+	</div>
+	<div id="FilterListEventWrapperSectionShown"  {% if eventListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
 
-			<div class="inputField" id="eventListFilterFromWrapper">
-				<label>From <input type="text" name="from" value="{{  eventListFilterParams.from }}" autocomplete="off"></label>
-			</div>
-		{% endif %}
-
-		{% if eventListFilterParams.isHasTagControl %}
-			<div class="inputField">
-				<label>
-					Tag: <input type="text" name="tagSearch" value="{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.title  }}{%  endif %}" autocomplete="off">
-				</label>
-			</div>
-		{% endif %}
-
-		{% if eventListFilterParams.isHasGroupControl %}
-			<div class="inputField">
-				<label>
-					Group: <input type="text" name="groupSearch" value="{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.title  }}{%  endif %}" autocomplete="off">
-				</label>
-			</div>
-		{% endif %}
-
-		<div class="inputField">
-			<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListEventWrapperSectionHidden').show(); $('#FilterListEventWrapperSectionShown').hide();">
+				Hide Filters <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+			</a>
 		</div>
 
-		<div class="inputField">
-			<label><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</label>
-		</div>
+		<form method="get" class="filterList filterListEvent">
+			<input type="hidden" name="eventListFilterDataSubmitted" value="1">
 
-		<div class="submitField">
-			<input type="submit" value="Filter">
-		</div>
-	</form>
+			{% if eventListFilterParams.dateControls %}
+				<div class="inputField">
+					<label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label>
+				</div>
+
+				<div class="inputField" id="eventListFilterFromWrapper">
+					<label>From <input type="text" name="from" value="{{  eventListFilterParams.from }}" autocomplete="off"></label>
+				</div>
+			{% endif %}
+
+			{% if eventListFilterParams.isHasTagControl %}
+				<div class="inputField">
+					<label>
+						Tag: <input type="text" name="tagSearch" value="{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.title  }}{%  endif %}" autocomplete="off">
+					</label>
+				</div>
+			{% endif %}
+
+			{% if eventListFilterParams.isHasGroupControl %}
+				<div class="inputField">
+					<label>
+						Group: <input type="text" name="groupSearch" value="{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.title  }}{%  endif %}" autocomplete="off">
+					</label>
+				</div>
+			{% endif %}
+
+			<div class="inputField">
+				<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+			</div>
+
+			<div class="inputField">
+				<label><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</label>
+			</div>
+
+			<div class="submitField">
+				<input type="submit" value="Filter">
+			</div>
+		</form>
+	</div>
 </div>

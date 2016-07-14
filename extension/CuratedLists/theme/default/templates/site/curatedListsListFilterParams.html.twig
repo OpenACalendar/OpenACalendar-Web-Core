@@ -6,19 +6,42 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="filterListWrapper">
-	<form method="get" class="filterList">
-		<input type="hidden" name="curatedListListFilterDataSubmitted" value="1">
+	<div id="FilterListEventWrapperSectionHidden" {% if not curatedListListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListEventWrapperSectionHidden').hide(); $('#FilterListEventWrapperSectionShown').show();">
+				Show Filters <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+			</a>
+		</div>
+		{% if not curatedListListFilterParams.isDefaultFilters %}
+			<div class="currentFilters">
+				{{ curatedListListFilterParams.getHumanTextRepresentation }}
+			</div>
+		{%  endif %}
+		<div style="clear: both"></div>
+	</div>
+	<div id="FilterListEventWrapperSectionShown"  {% if curatedListListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
 
-		<div class="inputField">
-			<label>Search: <input type="text" name="freeTextSearch" value="{{ curatedListListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListEventWrapperSectionHidden').show(); $('#FilterListEventWrapperSectionShown').hide();">
+				Hide Filters <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+			</a>
 		</div>
 
-		<div class="inputField">
-			<label><input type="checkbox" name="withFutureEventsOnly" value="1" {% if curatedListListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</label>
-		</div>
+		<form method="get" class="filterList">
+			<input type="hidden" name="curatedListListFilterDataSubmitted" value="1">
 
-		<div class="submitField">
-			<input type="submit" value="Filter">
-		</div>
-	</form>
+			<div class="inputField">
+				<label>Search: <input type="text" name="freeTextSearch" value="{{ curatedListListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+			</div>
+
+			<div class="inputField">
+				<label><input type="checkbox" name="withFutureEventsOnly" value="1" {% if curatedListListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</label>
+			</div>
+
+			<div class="submitField">
+				<input type="submit" value="Filter">
+			</div>
+		</form>
+
+	</div>
 </div>

@@ -529,13 +529,32 @@ div.mainShowCountry {
 }
 
 div.filterListWrapper {
+    padding: 10px;
 	padding: 5px 0;
+    border: @colourLighter2 2px solid;
+    .rounded-corners(2px);
 	margin: @listDataItemsFilterMarginTopBottom @listDataItemsFilterMarginLeftRightNarrowScreen;
+    .showHideLink {
+        float: right;
+        text-align: right;
+        padding: 10px;
+        a {
+            padding: 10px;
+            text-decoration: none;
+            color: #333333;
+        }
+        a:hover, a:focus {
+            text-decoration: underline;
+            color: #000000;
+        }
+    }
+    .currentFilters {
+        padding: 10px;
+        font-style: italic;
+    }
 	form.filterList {
-		background: @colourLighter2;
-		padding: 10px;
 		div.inputField {
-			display: inline;
+			display: block;
 			padding: 10px;
 		}
 		#eventListFilterFromWrapper {
@@ -544,10 +563,12 @@ div.filterListWrapper {
 			}
 		}
 		div.submitField {
-			display: inline;
+			display: block;
+            text-align: right;
 			padding: 10px;
 			input {
 				background: @colourLighter1;
+                padding: 5px 10px;
 				color: black;
 				border: 2px solid @colourLighter1;
 				.rounded-corners(2px);
