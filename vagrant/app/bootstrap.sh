@@ -7,10 +7,6 @@ locale-gen
 sudo apt-get update
 sudo apt-get install -y postgresql apache2 php5-gd php5 php5-curl php5-pgsql git php5-intl php5-geoip curl zip  phpunit
 
-mkdir /home/vagrant/bin
-cd /home/vagrant/bin
-wget https://getcomposer.org/composer.phar
-
 cd /vagrant
 php /home/vagrant/bin/composer.phar  install
 
@@ -22,7 +18,7 @@ chown www-data:www-data  /home/vagrant/logs
 
 mkdir /home/vagrant/bin
 cd /home/vagrant/bin
-wget https://getcomposer.org/composer.phar
+wget -q https://getcomposer.org/composer.phar
 
 cd /vagrant
 php /home/vagrant/bin/composer.phar install

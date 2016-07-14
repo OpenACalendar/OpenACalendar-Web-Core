@@ -19,7 +19,7 @@ sudo apt-get install -y postgresql apache2 php5-gd php5 php5-curl php5-pgsql git
 
 mkdir /home/vagrant/bin
 cd /home/vagrant/bin
-wget https://getcomposer.org/composer.phar
+wget -q https://getcomposer.org/composer.phar
 
 cd /vagrant
 php /home/vagrant/bin/composer.phar  install
@@ -29,10 +29,6 @@ chown www-data:www-data  /home/vagrant/fileStore
 
 mkdir /home/vagrant/logs
 chown www-data:www-data  /home/vagrant/logs
-
-mkdir /home/vagrant/bin
-cd /home/vagrant/bin
-wget https://getcomposer.org/composer.phar
 
 cd /vagrant
 php /home/vagrant/bin/composer.phar install
