@@ -178,7 +178,11 @@ class ImportModel {
 		return $this->is_manual_events_creation;
 	}
 
-
+    public function guessATitleIfMissing() {
+        if (!$this->title && $this->url) {
+            $this->title = $this->url;
+        }
+    }
 
 
 }

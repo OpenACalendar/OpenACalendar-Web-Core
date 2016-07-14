@@ -36,6 +36,8 @@ class ImportRepository {
 
 	public function create(ImportModel $importURL, SiteModel $site, UserAccountModel $creator) {
 
+       $importURL->guessATitleIfMissing();
+
 		try {
 			$this->app['db']->beginTransaction();
 

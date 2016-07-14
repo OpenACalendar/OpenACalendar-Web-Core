@@ -35,12 +35,7 @@ class ImportNewForm extends AbstractType{
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('title', 'text', array(
-			'label'=>'Title',
-			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
-		
+
 		$builder->add('url', 'url', array(
 			'label'=>'URL',
 			'required'=>true, 
