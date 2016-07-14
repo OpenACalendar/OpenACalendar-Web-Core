@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+## Drop and recreate cluster.
+##   As RAM disk is limited this saves space.
+##   Also if VM just started RAM disk will be empty so need to create
+sudo /etc/init.d/postgresql stop
+## Sleep to make sure server has shut down properly before trying the next bit.
+sleep 2s
+sudo pg_dropcluster 9.4 main
+sudo pg_createcluster 9.4 main
+sudo /etc/init.d/postgresql start
+## Sleep to make sure server has started up properly before trying the next bit.
+sleep 2s
+## Create database access
+sudo su --login -c "psql -c \"CREATE USER openacalendartest WITH PASSWORD 'testpassword';\"" postgres
+sudo su --login -c "psql -c \"CREATE DATABASE openacalendartest WITH OWNER openacalendartest ENCODING 'UTF8'  LC_COLLATE='en_GB.UTF-8' LC_CTYPE='en_GB.UTF-8'  TEMPLATE=template0 ;\"" postgres
+## Now test!
+cp /vagrant/vagrant/frontendtests/config.test.php /vagrant/config.test.php
+cp /vagrant/vagrant/frontendtests/config.php /vagrant/config.php
+phpunit -c /vagrant/core/frontendtests
+

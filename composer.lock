@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1f6e6cf321556c69068ae09dbc898e02",
-    "content-hash": "1c85ddd2146aad64dac157f0024d5e6e",
+    "hash": "cb3cac7529f026a5e0feb9515911d9ec",
+    "content-hash": "5ae5aa87c74782edff34ff7bc2b67cff",
     "packages": [
         {
             "name": "facebook/php-sdk-v4",
@@ -2608,7 +2608,52 @@
             "time": "2016-01-11 14:02:19"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "facebook/webdriver",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/php-webdriver.git",
+                "reference": "0b889d7de7461439f8a3bbcca46e0f696cb27986"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/0b889d7de7461439f8a3bbcca46e0f696cb27986",
+                "reference": "0b889d7de7461439f8a3bbcca46e0f696cb27986",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.19"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.6.*"
+            },
+            "suggest": {
+                "phpdocumentor/phpdocumentor": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Facebook\\WebDriver\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "A PHP client for WebDriver",
+            "homepage": "https://github.com/facebook/php-webdriver",
+            "keywords": [
+                "facebook",
+                "php",
+                "selenium",
+                "webdriver"
+            ],
+            "time": "2016-06-04 00:02:34"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],

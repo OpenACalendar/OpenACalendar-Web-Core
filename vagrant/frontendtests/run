@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar /home/vagrant/selenium/selenium-server-standalone-2.53.0.jar &
