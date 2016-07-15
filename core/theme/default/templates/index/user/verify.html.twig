@@ -13,6 +13,8 @@
 
 	<p>Hello {{  user.username }}</p>
 
+	<p>To verify {{ user.email }} as your email simply press here:</p>
+
 	<form action="" method="post">
 		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 		<input type="hidden" name="action" value="verify">
