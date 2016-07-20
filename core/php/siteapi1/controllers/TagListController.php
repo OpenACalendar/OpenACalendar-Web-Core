@@ -34,6 +34,12 @@ class TagListController {
 				$tagRepoBuilder->setIncludeDeleted(false);
 			}
 		}
+
+        if (isset($_GET['limit']) && intval($_GET['limit']) > 0) {
+            $tagRepoBuilder->setLimit(intval($_GET['limit']));
+        } else {
+            $tagRepoBuilder->setLimit($app['config']->api1TagListLimit);
+        }
 		
 		$out = array();
 		

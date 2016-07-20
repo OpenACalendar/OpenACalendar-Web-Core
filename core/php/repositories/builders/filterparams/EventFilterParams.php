@@ -3,13 +3,14 @@
 namespace repositories\builders\filterparams;
 
 use models\SiteModel;
-use models\EventModel;
 use models\GroupModel;
 use models\TagModel;
 use models\UserAccountModel;
-use org\openacalendar\curatedlists\repositories\builders\GroupRepositoryBuilder;
+use repositories\AreaRepository;
 use repositories\builders\EventRepositoryBuilder;
-use repositories\builders\TagRepositoryBuilder;
+use repositories\CountryInSiteRepository;
+use repositories\CountryRepository;
+use repositories\GroupRepository;
 use repositories\TagRepository;
 use Silex\Application;
 
@@ -51,9 +52,17 @@ class EventFilterParams {
 	}
 
 
-	public function isDefaultFilters() {
-		return  !$this->freeTextSearch && $this->fromNow && !$this->include_deleted && !$this->tagSearch && !$this->groupSearch && $this->includeSpecifiedUserWatching && $this->includeSpecifiedUserAttending;
-	}
+    public function isDefaultFilters() {
+        return  !$this->freeTextSearch &&
+                $this->fromNow &&
+                !$this->include_deleted &&
+                !$this->tagSearch &&
+                !$this->groupSearch &&
+                $this->includeSpecifiedUserWatching &&
+                $this->includeSpecifiedUserAttending &&
+                !$this->countrySearch &&
+                !$this->areaSearch;
+    }
 
 	// ############################### optional controls; turn on and off
 	
@@ -62,6 +71,12 @@ class EventFilterParams {
 	protected $tagSearch = null;
     /** @var GroupModel  */
     protected $groupSearch = null;
+    /** @var CountryModel  */
+    protected $countrySearch = null;
+    /** @var CountryModel  */
+    protected $areaSearchLockedToCountry = null;
+    /** @var AreaModel  */
+    protected $areaSearch = null;
 	protected $hasDateControls = true;
 	protected $hasTagControl = false;
 	protected $hasGroupControl = false;
@@ -101,6 +116,44 @@ class EventFilterParams {
 	public function setHasTagControl( $hasTagControl ) {
 		$this->hasTagControl = $hasTagControl;
 	}
+
+
+    protected $hasCountryControl = false;
+    protected $hasAreaControl = false;
+
+    /**
+     * @param boolean $hasAreaControl
+     */
+    public function setHasAreaControl($hasAreaControl, $areaSearchLockedToCountry = null)
+    {
+        $this->hasAreaControl = $hasAreaControl;
+        $this->areaSearchLockedToCountry = $areaSearchLockedToCountry;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isHasAreaControl()
+    {
+        return $this->hasAreaControl;
+    }
+
+    /**
+     * @param boolean $hasCountryControl
+     */
+    public function setHasCountryControl($hasCountryControl)
+    {
+        $this->hasCountryControl = $hasCountryControl;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isHasCountryControl()
+    {
+        return $this->hasCountryControl;
+    }
+
 
 
 	
@@ -188,29 +241,40 @@ class EventFilterParams {
 				$this->freeTextSearch = $data['freeTextSearch'];
 			}
 
-			// Tag
-			if ($this->hasTagControl && isset($data['tagSearch']) && trim($data['tagSearch'])) {
-				$tagRepositoryBuilder = new TagRepositoryBuilder($this->app);
-				$tagRepositoryBuilder->setSite($this->siteModel);
-				$tagRepositoryBuilder->setTitleSearch($data['tagSearch']);
-				$tagRepositoryBuilder->setIncludeDeleted(false);
-				$tagRepositoryBuilder->setLimit(1);
-				$tags = $tagRepositoryBuilder->fetchAll();
-				if ($tags) {
-					$this->tagSearch = $tags[0];
-				}
-			}
+            // Tag
+            if ($this->hasTagControl && isset($data['tagSearchSlug']) && trim($data['tagSearchSlug'])) {
+                $tagRepo = new TagRepository($this->app);
+                $tag = $tagRepo->loadBySlug($this->siteModel, $data['tagSearchSlug']);
+                if ($tag) {
+                    $this->tagSearch = $tag;
+                }
+            }
 
             // Group
-            if ($this->hasGroupControl && isset($data['groupSearch']) && trim($data['groupSearch'])) {
-                $groupRepositoryBuilder = new GroupRepositoryBuilder($this->app);
-                $groupRepositoryBuilder->setSite($this->siteModel);
-                $groupRepositoryBuilder->setTitleSearch($data['groupSearch']);
-                $groupRepositoryBuilder->setIncludeDeleted(false);
-                $groupRepositoryBuilder->setLimit(1);
-                $groups = $groupRepositoryBuilder->fetchAll();
-                if ($groups) {
-                    $this->groupSearch = $groups[0];
+            if ($this->hasGroupControl && isset($data['groupSearchSlug']) && trim($data['groupSearchSlug'])) {
+                $groupRepo = new GroupRepository($this->app);
+                $group = $groupRepo->loadBySlug($this->siteModel, $data['groupSearchSlug']);
+                if ($group) {
+                    $this->groupSearch = $group;
+                }
+            }
+
+            // Country
+            if ($this->siteModel && $this->hasCountryControl && isset($data['countrySearchTwoCharCode']) && trim($data['countrySearchTwoCharCode'])) {
+                $countryRepo = new CountryRepository($this->app);
+                $country = $countryRepo->loadByTwoCharCode($data['countrySearchTwoCharCode']);
+                $countryInSiteRepo = new CountryInSiteRepository($this->app);
+                if ($countryInSiteRepo->isCountryInSite($country, $this->siteModel)) {
+                    $this->countrySearch = $country;
+                };
+            }
+
+            // Area
+            if ($this->siteModel && $this->hasAreaControl && isset($data['areaSearchSlug']) && trim($data['areaSearchSlug'])) {
+                $areaRepo = new AreaRepository($this->app);
+                $area = $areaRepo->loadBySiteIDAndAreaSlug($this->siteModel->getId(), $data['areaSearchSlug']);
+                if ($area) {
+                    $this->areaSearch = $area;
                 }
             }
 
@@ -236,6 +300,12 @@ class EventFilterParams {
 		if ($this->groupSearch) {
 			$this->eventRepositoryBuilder->setGroup($this->groupSearch);
 		}
+        if ($this->countrySearch) {
+            $this->eventRepositoryBuilder->setCountry($this->countrySearch);
+        }
+        if ($this->areaSearch) {
+            $this->eventRepositoryBuilder->setArea($this->areaSearch);
+        }
 	}
 
     public function getGetString() {
@@ -284,12 +354,22 @@ class EventFilterParams {
 
         // TAG
         if ($this->hasTagControl && $this->tagSearch) {
-            $out[] = 'tagSearch='.urlencode($this->tagSearch->getTitle());
+            $out[] = 'tagSearchSlug='.urlencode($this->tagSearch->getSlug());
         }
 
         // GROUP
         if ($this->hasGroupControl && $this->groupSearch) {
-            $out[] = 'groupSearch='.urlencode($this->groupSearch->getTitle());
+            $out[] = 'groupSearchSlug='.urlencode($this->groupSearch->getSlug());
+        }
+
+        // COUNTRY
+        if ($this->hasCountryControl && $this->countrySearch) {
+            $out[] = 'countrySearchTwoCharCode='.urlencode($this->countrySearch->getTwoCharCode());
+        }
+
+        // AREA
+        if ($this->hasAreaControl && $this->areaSearch) {
+            $out[] = 'areaSearchSlug='.urlencode($this->areaSearch->getSlug());
         }
 
         return implode('&',$out);
@@ -331,6 +411,16 @@ class EventFilterParams {
         // GROUP
         if ($this->hasGroupControl && $this->groupSearch) {
             $out[] = 'group: '.$this->groupSearch->getTitle();
+        }
+
+        // Country
+        if ($this->hasGroupControl && $this->countrySearch) {
+            $out[] = 'country: '.$this->countrySearch->getTitle();
+        }
+
+        // Area
+        if ($this->hasAreaControl && $this->areaSearch) {
+            $out[] = 'area: '.$this->areaSearch->getTitle();
         }
 
         return implode(", ",$out);
@@ -392,10 +482,31 @@ class EventFilterParams {
         return $this->groupSearch;
     }
 
+    /**
+     * @return \repositories\builders\filterparams\AreaModel
+     */
+    public function getAreaSearch()
+    {
+        return $this->areaSearch;
+    }
+
+    /**
+     * @return \repositories\builders\filterparams\CountryModel
+     */
+    public function getCountrySearch()
+    {
+        return $this->countrySearch;
+    }
 
 
+    /**
+     * @return \repositories\builders\filterparams\CountryModel
+     */
+    public function getAreaSearchLockedToCountry()
+    {
+        return $this->areaSearchLockedToCountry;
+    }
 
-	
 }
 
 

@@ -160,6 +160,10 @@ class Config {
 	public $apiExtraFooter1Text = null;
 
 	public $api1EventListLimit = 1000;
+	public $api1CountryListLimit = 1000;
+	public $api1AreaListLimit = 1000;
+	public $api1TagListLimit = 1000;
+	public $api1GroupListLimit = 1000;
 
 	public $findDuplicateEventsShow = 3;
 	public $findDuplicateEventsThreshhold = 2;

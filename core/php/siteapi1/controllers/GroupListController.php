@@ -38,6 +38,12 @@ class GroupListController {
 				$groupRepoBuilder->setIncludeDeleted(false);
 			}
 		}
+
+        if (isset($_GET['limit']) && intval($_GET['limit']) > 0) {
+            $groupRepoBuilder->setLimit(intval($_GET['limit']));
+        } else {
+            $groupRepoBuilder->setLimit($app['config']->api1GroupListLimit);
+        }
 		
 		$out = array();
 		

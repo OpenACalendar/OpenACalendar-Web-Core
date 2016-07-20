@@ -67,6 +67,7 @@ class CountryController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
         $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $this->parameters['country']);
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
@@ -90,6 +91,7 @@ class CountryController {
         $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
         $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
         $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $this->parameters['country']);
         $this->parameters['eventListFilterParams']->setFallBackFrom(true);
         $this->parameters['eventListFilterParams']->set($_GET);
 
@@ -115,6 +117,7 @@ class CountryController {
         $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
         $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
         $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $this->parameters['country']);
         $this->parameters['eventListFilterParams']->setFallBackFrom(true);
         $this->parameters['eventListFilterParams']->set($_GET);
 

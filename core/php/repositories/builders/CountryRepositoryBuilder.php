@@ -30,8 +30,18 @@ class CountryRepositoryBuilder  extends BaseRepositoryBuilder {
 		$this->site = $site;
 		$this->siteIn = true;		
 	}
-	
-	protected function build() {
+
+
+    protected $titleSearch;
+
+    /**
+     * @param mixed $titleSearch
+     */
+    public function setTitleSearch( $titleSearch ) {
+        $this->titleSearch = $titleSearch;
+    }
+
+    protected function build() {
 
 		$this->select[] = 'country.*';
 		
@@ -46,6 +56,11 @@ class CountryRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->where[] = " country_in_site_information.is_in = '1'";
 			$this->params['site_id'] = $this->site->getId();
 		}
+
+        if ($this->titleSearch) {
+            $this->where[] =  'country.title ILIKE :title_search ';
+            $this->params['title_search'] = "%".strtolower($this->titleSearch)."%";
+        }
 	}
 	
 	protected function buildStat() {

@@ -2129,6 +2129,23 @@ div.filterListWrapper form.filterList div.inputField {
   display: block;
   padding: 10px;
 }
+div.filterListWrapper form.filterList div.inputField .inputFieldLabelWrapper,
+div.filterListWrapper form.filterList div.inputField .inputFieldSearch,
+div.filterListWrapper form.filterList div.inputField .inputFieldLabel,
+div.filterListWrapper form.filterList div.inputField .inputFieldClear {
+  display: inline;
+}
+div.filterListWrapper form.filterList div.inputField .inputFieldLabel {
+  font-style: italic;
+}
+div.filterListWrapper form.filterList div.inputField .inputFieldClear a {
+  text-decoration: none;
+  color: #666;
+}
+div.filterListWrapper form.filterList div.inputField .inputFieldClear a:hover,
+div.filterListWrapper form.filterList div.inputField .inputFieldClear a:focus {
+  color: black;
+}
 div.filterListWrapper form.filterList #eventListFilterFromWrapper input {
   background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
 }

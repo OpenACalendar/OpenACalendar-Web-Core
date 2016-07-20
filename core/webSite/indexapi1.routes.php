@@ -32,6 +32,7 @@ $app->match('/api1/event/{slug}/info.jsonp', 'siteapi1\controllers\EventControll
 
 $app->match('/api1/groups.json', 'siteapi1\controllers\GroupListController::json'); 
 $app->match('/api1/tags.json', 'siteapi1\controllers\TagListController::json');
+$app->match('/api1/countries.json', 'siteapi1\controllers\CountryListController::json');
 
 
 $app->match('/api1/group/{slug}/events.ical', 'siteapi1\controllers\GroupController::ical')
@@ -110,7 +111,9 @@ $app->match('/api1/country/{slug}/events.json', 'siteapi1\controllers\CountryCon
 $app->match('/api1/country/{slug}/events.jsonp', 'siteapi1\controllers\CountryController::eventsJsonp'); 
 $app->match('/api1/country/{slug}/events.csv', 'siteapi1\controllers\CountryController::eventsCSV');
 $app->match('/api1/country/{slug}/events.create.atom', 'siteapi1\controllers\CountryController::eventsAtomCreate');
-$app->match('/api1/country/{slug}/events.before.atom', 'siteapi1\controllers\CountryController::eventsAtomBefore'); 
+$app->match('/api1/country/{slug}/events.before.atom', 'siteapi1\controllers\CountryController::eventsAtomBefore');
+$app->match('/api1/country/{slug}/areas.json', 'siteapi1\controllers\CountryController::areasJson');
+
 
 
 $app->match('/api1/histories.atom', 'siteapi1\controllers\HistoryListController::atom'); 

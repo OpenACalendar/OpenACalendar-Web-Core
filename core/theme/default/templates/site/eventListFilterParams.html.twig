@@ -27,7 +27,7 @@
 			</a>
 		</div>
 
-		<form method="get" class="filterList filterListEvent">
+		<form method="get" class="filterList filterListEvent" id="FilterListEventForm">
 			<input type="hidden" name="eventListFilterDataSubmitted" value="1">
 
 			{% if eventListFilterParams.dateControls %}
@@ -43,17 +43,75 @@
 			{% if eventListFilterParams.isHasTagControl %}
 				<div class="inputField">
 					<label>
-						Tag: <input type="text" name="tagSearch" value="{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.title  }}{%  endif %}" autocomplete="off">
+						Tag:
+						<div id="FilterListEventInputFieldTagSearch" {%  if eventListFilterParams.tagSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+							<input type="text" name="tagSearch" value="" autocomplete="off">
+						</div>
+						<div id="FilterListEventInputFieldTagLabelWrapper" {%  if not eventListFilterParams.tagSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+							<div class="inputFieldLabel" id="FilterListEventInputFieldTagLabel">{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.title  }}{%  endif %}</div>
+							<div class="inputFieldClear">
+								<a href="#" onclick="eventListFilterParams.onClickInputFieldTagClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+							</div>
+						</div>
 					</label>
 				</div>
+				<input type="hidden" name="tagSearchSlug" value="{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.slug  }}{%  endif %}">
 			{% endif %}
 
 			{% if eventListFilterParams.isHasGroupControl %}
 				<div class="inputField">
 					<label>
-						Group: <input type="text" name="groupSearch" value="{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.title  }}{%  endif %}" autocomplete="off">
+						Group:
+						<div id="FilterListEventInputFieldGroupSearch" {%  if eventListFilterParams.groupSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+							<input type="text" name="groupSearch" value="" autocomplete="off">
+						</div>
+						<div id="FilterListEventInputFieldGroupLabelWrapper" {%  if not eventListFilterParams.groupSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+							<div class="inputFieldLabel" id="FilterListEventInputFieldGroupLabel">{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.title  }}{%  endif %}</div>
+							<div class="inputFieldClear">
+								<a href="#" onclick="eventListFilterParams.onClickInputFieldGroupClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+							</div>
+						</div>
 					</label>
 				</div>
+				<input type="hidden" name="groupSearchSlug" value="{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.slug  }}{%  endif %}">
+			{% endif %}
+
+			{% if eventListFilterParams.isHasCountryControl %}
+				<div class="inputField">
+					<label>
+						Country:
+						<div id="FilterListEventInputFieldCountrySearch" {%  if eventListFilterParams.countrySearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+							<input type="text" name="countrySearch" value="" autocomplete="off">
+						</div>
+						<div id="FilterListEventInputFieldCountryLabelWrapper" {%  if not eventListFilterParams.countrySearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+							<div class="inputFieldLabel" id="FilterListEventInputFieldCountryLabel">{%  if eventListFilterParams.countrySearch %}{{ eventListFilterParams.countrySearch.title  }}{%  endif %}</div>
+							<div class="inputFieldClear">
+								<a href="#" onclick="eventListFilterParams.onClickInputFieldCountryClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+							</div>
+						</div>
+					</label>
+				</div>
+				<input type="hidden" name="countrySearchTwoCharCode" value="{%  if eventListFilterParams.countrySearch %}{{ eventListFilterParams.countrySearch.twoCharCode  }}{%  endif %}">
+			{%  elseif eventListFilterParams.isHasAreaControl and eventListFilterParams.areaSearchLockedToCountry %}
+				<script>var eventListFilterAreaSearchLockedToCountry = '{{  eventListFilterParams.areaSearchLockedToCountry.twoCharCode }}';</script>
+			{% endif %}
+
+			{% if eventListFilterParams.isHasAreaControl %}
+				<div class="inputField">
+					<label>
+						Area:
+						<div id="FilterListEventInputFieldAreaSearch" {%  if eventListFilterParams.areaSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+							<input type="text" name="areaSearch" value="" autocomplete="off" {% if eventListFilterParams.isHasCountryControl and not eventListFilterParams.countrySearch %}disabled="disabled"{% endif %}>
+						</div>
+						<div id="FilterListEventInputFieldAreaLabelWrapper" {%  if not eventListFilterParams.areaSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+							<div class="inputFieldLabel" id="FilterListEventInputFieldAreaLabel">{%  if eventListFilterParams.areaSearch %}{{ eventListFilterParams.areaSearch.title  }}{%  endif %}</div>
+							<div class="inputFieldClear">
+								<a href="#" onclick="eventListFilterParams.onClickInputFieldAreaClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+							</div>
+						</div>
+					</label>
+				</div>
+				<input type="hidden" name="areaSearchSlug" value="{%  if eventListFilterParams.areaSearch %}{{ eventListFilterParams.areaSearch.slug  }}{%  endif %}">
 			{% endif %}
 
 			<div class="inputField">

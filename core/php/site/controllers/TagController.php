@@ -58,6 +58,9 @@ class TagController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setTag($this->parameters['tag']);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
+        $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
+        $this->parameters['eventListFilterParams']->setHasCountryControl($app['currentSite']->getCachedIsMultipleCountries());
+        $this->parameters['eventListFilterParams']->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $app['currentSiteHasOneCountry']);
 		$this->parameters['eventListFilterParams']->setHasTagControl(false);
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);

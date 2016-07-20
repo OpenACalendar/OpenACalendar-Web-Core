@@ -115,7 +115,9 @@ $app->before(function (Request $request) use ($app) {
 	if (!$app['currentSite']->getCachedIsMultipleCountries()) {
 		$cr = new CountryRepository($app);
 		$app['currentSiteHasOneCountry'] = $cr->loadBySite($app['currentSite']);
-		$app['twig']->addGlobal('currentSiteHasOneCountry', $app['currentSiteHasOneCountry']);	
+		$app['twig']->addGlobal('currentSiteHasOneCountry', $app['currentSiteHasOneCountry']);
+    } else {
+        $app['currentSiteHasOneCountry'] = null;
 	}
 
 	# ////////////// Misc

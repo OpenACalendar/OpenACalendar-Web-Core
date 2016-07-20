@@ -338,6 +338,30 @@
 			</td>
 		</tr>
 		<tr>
+			<th>api1CountryListLimit</th>
+			<td>{{ config.api1CountryListLimit }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'api1CountryListLimit'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>api1AreaListLimit</th>
+			<td>{{ config.api1AreaListLimit }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'api1AreaListLimit'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>api1TagListLimit</th>
+			<td>{{ config.api1TagListLimit }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'api1TagListLimit'} %}
+			</td>
+		</tr>
+		<tr>
+			<th>api1GroupListLimit</th>
+			<td>{{ config.api1GroupListLimit }}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'api1GroupListLimit'} %}
+			</td>
+		</tr>
+		<tr>
 			<th>findDuplicateEventsShow</th>
 			<td>{{ config.findDuplicateEventsShow }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'findDuplicateEventsShow'} %}

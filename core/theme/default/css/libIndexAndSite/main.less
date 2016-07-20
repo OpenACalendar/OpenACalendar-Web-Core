@@ -556,6 +556,21 @@ div.filterListWrapper {
 		div.inputField {
 			display: block;
 			padding: 10px;
+            .inputFieldLabelWrapper, .inputFieldSearch, .inputFieldLabel, .inputFieldClear {
+                display: inline;
+            }
+            .inputFieldLabel {
+                font-style: italic;
+            }
+            .inputFieldClear {
+                a {
+                    text-decoration: none;
+                    color: #666;
+                }
+                a:hover, a:focus {
+                    color: black;
+                }
+            }
 		}
 		#eventListFilterFromWrapper {
 			input {

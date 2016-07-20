@@ -139,6 +139,8 @@ class GroupController {
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
 		$this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasCountryControl($app['currentSite']->getCachedIsMultipleCountries());
+        $this->parameters['eventListFilterParams']->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $app['currentSiteHasOneCountry']);
 		if ($app['currentUser']) {
 			$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setUserAccount($app['currentUser'], true);
 		}
@@ -395,6 +397,8 @@ class GroupController {
         $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
         $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
         $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasCountryControl($app['currentSite']->getCachedIsMultipleCountries());
+        $this->parameters['eventListFilterParams']->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $app['currentSiteHasOneCountry']);
         $this->parameters['eventListFilterParams']->setFallBackFrom(true);
         $this->parameters['eventListFilterParams']->set($_GET);
 
@@ -421,6 +425,8 @@ class GroupController {
         $this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
         $this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setGroup($this->parameters['group']);
         $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
+        $this->parameters['eventListFilterParams']->setHasCountryControl($app['currentSite']->getCachedIsMultipleCountries());
+        $this->parameters['eventListFilterParams']->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $app['currentSiteHasOneCountry']);
         $this->parameters['eventListFilterParams']->setFallBackFrom(true);
         $this->parameters['eventListFilterParams']->set($_GET);
 

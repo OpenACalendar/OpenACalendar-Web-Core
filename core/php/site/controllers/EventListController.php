@@ -22,6 +22,8 @@ class EventListController {
 		$params->getEventRepositoryBuilder()->setIncludeAreaInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeVenueInformation(true);
 		$params->getEventRepositoryBuilder()->setIncludeMediasSlugs(true);
+        $params->setHasCountryControl($app['currentSite']->getCachedIsMultipleCountries());
+        $params->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $app['currentSiteHasOneCountry']);
 		$params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
 		$params->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		if ($app['currentUser']) {
@@ -44,6 +46,8 @@ class EventListController {
 
         $params = new EventFilterParams($app, null, $app['currentSite']);
         $params->setHasDateControls(false);
+        $params->setHasCountryControl($app['currentSite']->getCachedIsMultipleCountries());
+        $params->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $app['currentSiteHasOneCountry']);
         $params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
         $params->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
         $params->setFallBackFrom(true);
@@ -72,6 +76,8 @@ class EventListController {
 
         $params = new EventFilterParams($app, null, $app['currentSite']);
         $params->setHasDateControls(false);
+        $params->setHasCountryControl($app['currentSite']->getCachedIsMultipleCountries());
+        $params->setHasAreaControl($app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents'), $app['currentSiteHasOneCountry']);
         $params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
         $params->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
         $params->setFallBackFrom(true);

@@ -94,6 +94,15 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 
 
 
+    protected $titleSearch;
+
+    /**
+     * @param mixed $titleSearch
+     */
+    public function setTitleSearch( $titleSearch ) {
+        $this->titleSearch = $titleSearch;
+    }
+
 	protected function build() {
 
 		$this->select[] = 'area_information.*';
@@ -127,6 +136,11 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->where[] =  ' area_information.title ILIKE :free_text_search ';
 			$this->params['free_text_search'] = "%".strtolower($this->freeTextSearch)."%";
 		}
+
+        if ($this->titleSearch) {
+            $this->where[] =  'area_information.title ILIKE :title_search ';
+            $this->params['title_search'] = "%".strtolower($this->titleSearch)."%";
+        }
 
 		if ($this->include_parent_levels > 0) {
 			$this->joins[] = " LEFT JOIN area_information AS area_information_parent_1 ON area_information.parent_area_id = area_information_parent_1.id ";

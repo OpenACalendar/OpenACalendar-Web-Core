@@ -4,6 +4,7 @@ namespace siteapi1\controllers;
 
 use api1exportbuilders\EventListCSVBuilder;
 use api1exportbuilders\ICalEventIdConfig;
+use repositories\builders\AreaRepositoryBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use models\SiteModel;
@@ -21,6 +22,7 @@ use api1exportbuilders\EventListATOMBeforeBuilder;
 use api1exportbuilders\EventListATOMCreateBuilder;
 
 use repositories\builders\filterparams\EventFilterParams;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -145,8 +147,52 @@ class CountryController {
 		$atom->getEventRepositoryBuilder()->setCountry($this->parameters['country']);
 		$atom->build();
 		return $atom->getResponse();
-	}	
-	
+	}
+
+    function areasJson($slug, Request $request, Application $app) {
+
+        if (!$this->build($slug, $request, $app)) {
+            $app->abort(404, "Country does not exist.");
+        }
+
+        $areaRepoBuilder = new AreaRepositoryBuilder($app);
+        $areaRepoBuilder->setCountry($this->parameters['country']);
+        $areaRepoBuilder->setSite($app['currentSite']);
+
+        if (isset($_GET['includeDeleted'])) {
+            if (in_array(strtolower($_GET['includeDeleted']),array('yes','on','1'))) {
+                $areaRepoBuilder->setIncludeDeleted(true);
+            } else if (in_array(strtolower($_GET['includeDeleted']),array('no','off','0'))) {
+                $areaRepoBuilder->setIncludeDeleted(false);
+            }
+        }
+        if (isset($_GET['titleSearch']) && trim($_GET['titleSearch'])) {
+            $areaRepoBuilder->setTitleSearch($_GET['titleSearch']);
+        }
+
+        if (isset($_GET['limit']) && intval($_GET['limit']) > 0) {
+            $areaRepoBuilder->setLimit(intval($_GET['limit']));
+        } else {
+            $areaRepoBuilder->setLimit($app['config']->api1AreaListLimit);
+        }
+
+        $out = array();
+
+        foreach($areaRepoBuilder->fetchAll() as $area) {
+            $out[] = array(
+                'slug'=>$area->getSlug(),
+                'title'=>$area->getTitle(),
+            );
+        }
+
+        $response = new Response(json_encode(array('data'=>$out)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+
+
+
+    }
+
 	
 	
 }
