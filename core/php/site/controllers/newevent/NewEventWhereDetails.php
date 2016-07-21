@@ -394,6 +394,8 @@ class NewEventWhereDetails extends BaseNewEvent
 
 		if ($this->request->request->get('action') == 'searchAreas') {
 			$areaRepoBuilder = new AreaRepositoryBuilder($this->application);
+            $countryRepository = new CountryRepository($this->application);
+            $areaRepoBuilder->setCountry($countryRepository->loadById($this->draftEvent->getDetailsValue('event.country_id')));
 			$areaRepoBuilder->setSite($this->site);
 			$areaRepoBuilder->setIncludeDeleted(false);
 			if ($this->request->get('searchAreas')) {
