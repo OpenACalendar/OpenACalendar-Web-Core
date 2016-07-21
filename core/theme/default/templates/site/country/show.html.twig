@@ -15,8 +15,11 @@
 {% block switcherAgenda %}current{% endblock %}
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/" />
-	{% if not currentSite.isWebRobotsAllowed or not eventListFilterParams.isDefaultFilters %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% if not currentSite.isWebRobotsAllowed or not eventListFilterParams.isDefaultFilters %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{% else %}
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/country/{{ country.twoCharCode }}/" />
+	{% endif %}
 	{{ parent() }}
 {% endblock %}
 

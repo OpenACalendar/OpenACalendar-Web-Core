@@ -11,7 +11,11 @@
 
 
 {% block htmlHeader %}
-	{% if not currentSite.isWebRobotsAllowed or area.isDeleted or not eventListFilterParams.isDefaultFilters %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% if not currentSite.isWebRobotsAllowed or area.isDeleted or not eventListFilterParams.isDefaultFilters %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{%  else %}
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/area/{{ area.slugForURL }}/" />
+	{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
 	{{ parent() }}
 {% endblock %}
