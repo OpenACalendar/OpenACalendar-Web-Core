@@ -12,6 +12,8 @@
 
 
 {% block htmlHeader %}
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/tag/{{ tag.slugForUrl }}/" />
+	{% if not currentSite.isWebRobotsAllowed or tag.isDeleted or not eventListFilterParams.isDefaultFilters %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{{ parent() }}
 {% endblock %}
 
