@@ -42,7 +42,7 @@
 				<div class="value">{{ historyItem.addressCode }}</div>
 			</div>
 		{% endif %}
-		{% if historyItem.getLatChanged or historyItem.getLatChanged %}
+		{% if historyItem.getLatChanged or historyItem.getLngChanged %}
 			<div class="fieldChanged">
 				<div class="field">Position on map changed:</div>
 				<div class="value">Yes ({{ historyItem.lat }},{{ historyItem.lng }})</div>
