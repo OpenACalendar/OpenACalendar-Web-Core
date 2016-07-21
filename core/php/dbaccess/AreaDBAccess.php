@@ -33,7 +33,12 @@ class AreaDBAccess {
 		$this->timesource = $application['timesource'];
 	}
 
-	protected $possibleFields = array('title','description','parent_area_id','is_duplicate_of_id','is_deleted','country_id');
+    protected $possibleFields = array('title','description',
+        'parent_area_id',
+        'is_duplicate_of_id',
+        'is_deleted',
+        'country_id',
+        'min_lat','max_lat','min_lng','max_lng');
 
 	public function update(AreaModel $area, $fields, AreaEditMetaDataModel $areaEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
@@ -55,6 +60,14 @@ class AreaDBAccess {
 				$fieldsParams1['is_duplicate_of_id'] = $area->getIsDuplicateOfId();
 			} else if ($field == 'is_deleted') {
 				$fieldsParams1['is_deleted'] = ($area->getIsDeleted()?1:0);
+			} else if ($field == 'min_lat') {
+				$fieldsParams1['min_lat'] = $area->getMinLat();
+			} else if ($field == 'max_lat') {
+				$fieldsParams1['max_lat'] = $area->getMaxLat();
+			} else if ($field == 'min_lng') {
+				$fieldsParams1['min_lng'] = $area->getMinLng();
+			} else if ($field == 'max_lng') {
+				$fieldsParams1['max_lng'] = $area->getMaxLng();
 			}
 		}
 
@@ -89,6 +102,14 @@ class AreaDBAccess {
 					$fieldsParams2['is_duplicate_of_id'] = $area->getIsDuplicateOfId();
 				} else if ($field == 'is_deleted') {
 					$fieldsParams2['is_deleted'] = ($area->getIsDeleted()?1:0);
+                } else if ($field == 'min_lat') {
+                    $fieldsParams2['min_lat'] = $area->getMinLat();
+                } else if ($field == 'max_lat') {
+                    $fieldsParams2['max_lat'] = $area->getMaxLat();
+                } else if ($field == 'min_lng') {
+                    $fieldsParams2['min_lng'] = $area->getMinLng();
+                } else if ($field == 'max_lng') {
+                    $fieldsParams2['max_lng'] = $area->getMaxLng();
 				}
 				$fieldsSQL2[] = " ".$field."_changed ";
 				$fieldsSQLParams2[] = " 0 ";

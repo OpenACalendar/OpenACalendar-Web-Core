@@ -30,11 +30,20 @@
 			{% endif %}
 		</li>
 	{%  endif %}
-	{% if currentUserActions.has("org.openacalendar","actionAreaEditDetails") %}
-		<li class="action">
-			<a href="/area/{{ area.slugForUrl }}/edit/details"><div class="fa fa-pencil"></div> edit</a>
+	{%  if currentUserActions.has("org.openacalendar","actionAreaEditDetails") or
+	currentUserActions.has("org.openacalendar","actionAreaEditBounds")  %}
+		<li class="actionWithSubMenu">
+			<a href="/area/{{ area.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
+			<ul class="submenu">
+				{%  if currentUserActions.has("org.openacalendar","actionAreaEditDetails") %}
+					<li><a href="/area/{{ area.slugForURL }}/edit/details">Edit Details</a></li>
+				{%  endif %}
+				{% if currentUserActions.has("org.openacalendar","actionAreaEditBounds") %}
+					<li><a href="/area/{{ area.slugForUrl }}/edit/bounds">Edit Bounds</a></li>
+				{% endif %}
+			</ul>
 		</li>
-	{%  endif %}
+	{% endif %}
 	{%  if currentUserActions.has("org.openacalendar","actionAreaNew") %}
 		<li class="action">
 			<a href="/area/{{ area.slugForUrl }}/new"><div class="fa fa-pencil"></div> new</a>

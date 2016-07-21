@@ -39,6 +39,14 @@ class AreaHistoryTest extends \BaseAppTest {
 			'country_id_changed'=>0,
 			'parent_area_id_changed'=>0,
 			'is_deleted_changed'=>0,
+            'min_lat'=>null,
+            'max_lat'=>null,
+            'min_lng'=>null,
+            'max_lng'=>null,
+            'min_lat_changed'=>0,
+            'max_lat_changed'=>0,
+            'min_lng_changed'=>0,
+            'max_lng_changed'=>0,
 		));
 		
 		$areaHistory->setChangedFlagsFromNothing();
@@ -68,6 +76,14 @@ class AreaHistoryTest extends \BaseAppTest {
 			'country_id_changed'=>0,
 			'parent_area_id_changed'=>0,
 			'is_deleted_changed'=>0,
+            'min_lat'=>null,
+            'max_lat'=>null,
+            'min_lng'=>null,
+            'max_lng'=>null,
+            'min_lat_changed'=>0,
+            'max_lat_changed'=>0,
+            'min_lng_changed'=>0,
+            'max_lng_changed'=>0,
 		));
 		
 		$areaHistory = new AreaHistoryModel();
@@ -85,6 +101,14 @@ class AreaHistoryTest extends \BaseAppTest {
 			'country_id_changed'=>0,
 			'parent_area_id_changed'=>0,
 			'is_deleted_changed'=>0,
+            'min_lat'=>null,
+            'max_lat'=>null,
+            'min_lng'=>null,
+            'max_lng'=>null,
+            'min_lat_changed'=>0,
+            'max_lat_changed'=>0,
+            'min_lng_changed'=>0,
+            'max_lng_changed'=>0,
 		));
 		
 		$areaHistory->setChangedFlagsFromLast($lastHistory);

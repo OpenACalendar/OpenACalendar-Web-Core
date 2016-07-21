@@ -78,6 +78,22 @@ class AreaHistoryRepository {
 			$sqlFields[] = " is_deleted_changed = :is_deleted_changed ";
 			$sqlParams['is_deleted_changed'] = $areaHistory->getIsDeletedChanged() ? 1 : -1;
 		}
+		if ($areaHistory->getMinLatChangedKnown()) {
+			$sqlFields[] = " min_lat_changed = :min_lat_changed ";
+			$sqlParams['min_lat_changed'] = $areaHistory->getMinLatChanged() ? 1 : -1;
+		}
+		if ($areaHistory->getMaxLatChangedKnown()) {
+			$sqlFields[] = " max_lat_changed = :max_lat_changed ";
+			$sqlParams['max_lat_changed'] = $areaHistory->getMinLatChanged() ? 1 : -1;
+		}
+		if ($areaHistory->getMinLngChangedKnown()) {
+			$sqlFields[] = " min_lng_changed = :min_lng_changed ";
+			$sqlParams['min_lng_changed'] = $areaHistory->getMinLngChanged() ? 1 : -1;
+		}
+		if ($areaHistory->getMaxLngChangedKnown()) {
+			$sqlFields[] = " max_lng_changed = :max_lng_changed ";
+			$sqlParams['max_lng_changed'] = $areaHistory->getMinLngChanged() ? 1 : -1;
+		}
 
 		$statUpdate = $this->app['db']->prepare("UPDATE area_history SET ".
 			" is_new = :is_new, ".

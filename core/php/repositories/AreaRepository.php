@@ -235,7 +235,7 @@ class AreaRepository {
 
 			$area->setIsDeleted(false);
 
-			$fields = array('title','description','is_deleted');
+			$fields = array('title','description','is_deleted','min_lat','max_lat','min_lng','max_lng');
 
 			$this->areaDBAccess->update($area, $fields, $areaEditMetaDataModel);
 
@@ -343,42 +343,6 @@ class AreaRepository {
 		$statUpdate->execute(array('count'=>$count,'id'=>$area->getId()));
 
 		$area->setCachedFutureEvents($count);
-	}
-
-	public function updateBoundsCache(AreaModel $area) {
-		$statUpdate = $this->app['db']->prepare("UPDATE area_information SET cached_max_lat=:cached_max_lat, ".
-				"cached_max_lng=:cached_max_lng, cached_min_lat=:cached_min_lat, cached_min_lng=:cached_min_lng ".
-				" WHERE id=:id");
-
-		$vrb = new VenueRepositoryBuilder($this->app);
-		$vrb->setArea($area);
-		$vrb->setIncludeDeleted(false);
-		$cachedMinLat = null;
-		$cachedMaxLat = null;
-		$cachedMinLng = null;
-		$cachedMaxLng = null;
-		foreach($vrb->fetchAll() as $venue) {
-			if ($venue->getLat() && $venue->getLng()) {
-				if (is_null($cachedMaxLat)) {
-					$cachedMaxLat = $cachedMinLat = $venue->getLat();
-					$cachedMaxLng = $cachedMinLng = $venue->getLng();
-				} else {
-					$cachedMaxLat = max($cachedMaxLat, $venue->getLat());
-					$cachedMaxLng = max($cachedMaxLng, $venue->getLng());
-					$cachedMinLat = min($cachedMinLat, $venue->getLat());
-					$cachedMinLng = min($cachedMinLng, $venue->getLng());
-				}
-			}
-		}
-		
-		$statUpdate->execute(array(
-			'id'=>$area->getId(),
-					'cached_max_lat'=>$cachedMaxLat,
-					'cached_min_lat'=>$cachedMinLat,
-					'cached_max_lng'=>$cachedMaxLng,
-					'cached_min_lng'=>$cachedMinLng,
-				));
-		
 	}
 
 	public function doesCountryHaveAnyNotDeletedAreas(SiteModel $site, CountryModel $country) {

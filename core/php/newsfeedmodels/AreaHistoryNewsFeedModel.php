@@ -81,6 +81,9 @@ class AreaHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 			if ($this->areaHistoryModel->getCountryIdChanged()) {
 				$txt .= 'Country Changed. '."\n";
 			}
+			if ($this->areaHistoryModel->getMinMaxLatLngChanged()) {
+				$txt .= 'Bounds Changed. '."\n";
+			}
 			if ($this->areaHistoryModel->getIsDeletedChanged()) {
 				$txt .= 'Deleted Changed: '.($this->areaHistoryModel->getIsDeleted() ? "Deleted":"Restored")."\n\n";
 			}

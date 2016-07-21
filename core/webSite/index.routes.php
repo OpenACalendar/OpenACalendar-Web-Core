@@ -417,7 +417,17 @@ $app->match('/area/{slug}/newArea', 'site\controllers\AreaController::newArea')
 		->before($permissionAreasChangeRequired)
 		->before($featurePhysicalEventsRequired)
 		->before($canChangeSite);
+$app->match('/area/{slug}/edit', 'site\controllers\AreaController::editSplash')
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionAreasChangeRequired)
+		->before($featurePhysicalEventsRequired)
+		->before($canChangeSite);
 $app->match('/area/{slug}/edit/details', 'site\controllers\AreaController::editDetails')
+		->assert('slug', FRIENDLY_SLUG_REGEX)
+		->before($permissionAreasChangeRequired)
+		->before($featurePhysicalEventsRequired)
+		->before($canChangeSite);
+$app->match('/area/{slug}/edit/bounds', 'site\controllers\AreaController::editBounds')
 		->assert('slug', FRIENDLY_SLUG_REGEX)
 		->before($permissionAreasChangeRequired)
 		->before($featurePhysicalEventsRequired)

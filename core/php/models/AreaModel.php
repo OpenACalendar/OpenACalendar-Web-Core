@@ -28,10 +28,10 @@ class AreaModel {
 	protected $cache_area_has_parent_generated;
 	protected $created_at;
 	protected $cached_future_events;
-	protected $cached_min_lat;
-	protected $cached_max_lat;
-	protected $cached_min_lng;
-	protected $cached_max_lng;
+	protected $min_lat;
+	protected $max_lat;
+	protected $min_lng;
+	protected $max_lng;
 	protected $is_duplicate_of_id;
 
 	protected $parent_1_title;
@@ -50,10 +50,10 @@ class AreaModel {
 		$this->cache_area_has_parent_generated = $data['cache_area_has_parent_generated'];
 		$this->created_at = $data['created_at'];
 		$this->cached_future_events = $data['cached_future_events'];
-		$this->cached_min_lat = $data['cached_min_lat'];
-		$this->cached_max_lat = $data['cached_max_lat'];
-		$this->cached_min_lng = $data['cached_min_lng'];
-		$this->cached_max_lng = $data['cached_max_lng'];
+		$this->min_lat = $data['min_lat'];
+		$this->max_lat = $data['max_lat'];
+		$this->min_lng = $data['min_lng'];
+		$this->max_lng = $data['max_lng'];
 		$this->parent_1_title = isset($data['parent_1_title']) ? $data['parent_1_title'] : null;
 		$this->is_duplicate_of_id = $data['is_duplicate_of_id'];
 	}
@@ -187,44 +187,59 @@ class AreaModel {
 		$this->cached_future_events = $cached_future_events;
 	}
 
-
-	
-	public function getCachedMinLat() {
-		return $this->cached_min_lat;
-	}
-
-	public function getCachedMaxLat() {
-		return $this->cached_max_lat;
-	}
-
-	public function getCachedMinLng() {
-		return $this->cached_min_lng;
-	}
-
-	public function getCachedMaxLng() {
-		return $this->cached_max_lng;
-	}
-	
-	
 	public function getMinLat() {
-		return $this->cached_min_lat;
+		return $this->min_lat;
 	}
 
 	public function getMaxLat() {
-		return $this->cached_max_lat;
+		return $this->max_lat;
 	}
 
 	public function getMinLng() {
-		return $this->cached_min_lng;
+		return $this->min_lng;
 	}
 
 	public function getMaxLng() {
-		return $this->cached_max_lng;
+		return $this->max_lng;
 	}
 
 	public function getHasBounds() {
-		return (boolean)$this->cached_max_lat;
+		return (boolean)$this->max_lat;
 	}
+
+    /**
+     * @param mixed $max_lat
+     */
+    public function setMaxLat($max_lat)
+    {
+        $this->max_lat = $max_lat;
+    }
+
+    /**
+     * @param mixed $max_lng
+     */
+    public function setMaxLng($max_lng)
+    {
+        $this->max_lng = $max_lng;
+    }
+
+    /**
+     * @param mixed $min_lat
+     */
+    public function setMinLat($min_lat)
+    {
+        $this->min_lat = $min_lat;
+    }
+
+    /**
+     * @param mixed $min_lng
+     */
+    public function setMinLng($min_lng)
+    {
+        $this->min_lng = $min_lng;
+    }
+
+
 
 	/**
 	 * @return mixed

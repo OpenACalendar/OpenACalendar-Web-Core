@@ -2,11 +2,10 @@
 
 namespace tasks;
 
-
-use repositories\builders\AreaRepositoryBuilder;
-use repositories\AreaRepository;
-
 /**
+ *
+ * This task is dead - the thing it did isn't needed now.
+ * Left so that past results still show OK in logs for now.
  *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
@@ -17,43 +16,35 @@ use repositories\AreaRepository;
 class UpdateAreaBoundsCacheTask extends \BaseTask {
 
 
-	public function getExtensionId()
-	{
-		return 'org.openacalendar';
-	}
+    public function getExtensionId()
+    {
+        return 'org.openacalendar';
+    }
 
-	public function getTaskId()
-	{
-		return 'UpdateAreaBoundsCache';
-	}
+    public function getTaskId()
+    {
+        return 'UpdateAreaBoundsCache';
+    }
 
-	public function getShouldRunAutomaticallyNow() {
-		return $this->app['config']->taskUpdateAreaBoundsCacheAutomaticUpdateInterval > 0 &&
-		$this->getLastRunEndedAgoInSeconds() > $this->app['config']->taskUpdateAreaBoundsCacheAutomaticUpdateInterval;
-	}
+    public function getShouldRunAutomaticallyNow() {
+        return false;
+    }
 
-	protected  function run() {
+    public function getCanRunManuallyNow() {
+        return false;
+    }
 
-		$areaRepository = new AreaRepository($this->app);
+    protected  function run() {
+        return array('result'=>'Fail');
+    }
 
-		$arb = new AreaRepositoryBuilder($this->app);
-		$count = 0;
-		foreach($arb->fetchAll() as $area) {
-			$areaRepository->updateBoundsCache($area);
-			++$count;
-		}
-
-		return array('result'=>'ok','count'=>$count);
-	}
-
-	public function getResultDataAsString(\models\TaskLogModel $taskLogModel) {
-		if ($taskLogModel->getIsResultDataHaveKey("result") && $taskLogModel->getResultDataValue("result") == "ok") {
-			return "Ok";
-		} else {
-			return "Fail";
-		}
-
-	}
+    public function getResultDataAsString(\models\TaskLogModel $taskLogModel) {
+        if ($taskLogModel->getIsResultDataHaveKey("result") && $taskLogModel->getResultDataValue("result") == "ok") {
+            return "Ok";
+        } else {
+            return "Fail";
+        }
+    }
 
 
 

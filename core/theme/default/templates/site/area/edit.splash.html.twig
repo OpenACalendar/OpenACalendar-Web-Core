@@ -1,0 +1,38 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+{% extends 'site/area/page.html.twig' %}
+
+{% block pageTitle %}Edit {{ area.title }} - {% endblock %}
+
+
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{{ parent() }}
+{% endblock %}
+
+
+{% block innerContent %}
+
+	<ul class="actionList">
+
+		{%  if currentUserActions.has("org.openacalendar","actionAreaEditDetails") %}
+			<li><a href="/area/{{ area.slugForURL }}/edit/details"><div class="fa fa-pencil"></div> Edit Details</a></li>
+		{%  endif %}
+
+		{%  if currentUserActions.has("org.openacalendar","actionAreaEditBounds") %}
+			<li><a href="/area/{{ area.slugForURL }}/edit/bounds"><div class="fa fa-pencil"></div> Edit Bounds</a></li>
+		{%  endif %}
+
+	</ul>
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
+

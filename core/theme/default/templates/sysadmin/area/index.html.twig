@@ -54,6 +54,10 @@
 			<td>{{ area.description | nl2br }}</td>
 		</tr>
 		<tr>
+			<th>Lat, Lng</th>
+			<td>{%  if area.hasBounds %}{{ area.minLat }},{{ area.minLng }} - {{  area.maxLat }},{{ area.maxLng }}{%  else %}No{%  endif %}</td>
+		</tr>
+		<tr>
 			<th>More</th>
 			<td>
 				<ul>

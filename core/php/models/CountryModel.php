@@ -79,6 +79,10 @@ class CountryModel {
 		return $this->site_is_in;
 	}
 
+    public function getHasBounds() {
+        return (boolean)$this->max_lat;
+    }
+
 	public function getMaxLat() {
 		return $this->max_lat;
 	}

@@ -41,7 +41,7 @@
 					'cached_events': '{{ vd.cachedFutureEvents }}'
 				},
 			{% endfor %}  ];
-			{% if country %}
+			{% if country and country.hasBounds %}
 				var country = {
 					maxLat: {% if country.maxLat %}{{ country.maxLat }}{% else %}null{% endif %},
 					maxLng: {% if country.maxLng %}{{ country.maxLng }}{% else %}null{% endif %}, 
@@ -50,7 +50,7 @@
 			{% else %}
 				var country = null;
 			{% endif %}
-			{% if area %}
+			{% if area and area.hasBounds %}
 				var area = {
 					maxLat: {% if area.maxLat %}{{ area.maxLat }}{% else %}null{% endif %},
 					maxLng: {% if area.maxLng %}{{ area.maxLng }}{% else %}null{% endif %}, 

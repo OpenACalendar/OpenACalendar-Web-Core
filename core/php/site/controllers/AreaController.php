@@ -88,6 +88,9 @@ class AreaController {
 		$app['currentUserActions']->set("org.openacalendar","actionAreaEditDetails",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")
 			&& !$this->parameters['area']->getIsDeleted());
+        $app['currentUserActions']->set("org.openacalendar","actionAreaEditBounds",
+			$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")
+			&& !$this->parameters['area']->getIsDeleted());
 		$app['currentUserActions']->set("org.openacalendar","actionAreaNew",
 			$app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")
 			&& !$this->parameters['area']->getIsDeleted());
@@ -158,8 +161,24 @@ class AreaController {
 		return $app['twig']->render('site/area/newarea.html.twig', $this->parameters);
 		
 	}
-	
-	function editDetails($slug, Request $request, Application $app) {
+
+
+    function editSplash($slug, Request $request, Application $app) {
+
+        if (!$this->build($slug, $request, $app)) {
+            $app->abort(404, "Area does not exist.");
+        }
+
+
+        if ($this->parameters['area']->getIsDeleted()) {
+            die("No"); // TODO
+        }
+
+        return $app['twig']->render('site/area/edit.splash.html.twig', $this->parameters);
+
+    }
+
+    function editDetails($slug, Request $request, Application $app) {
 
 		if (!$this->build($slug, $request, $app)) {
 			$app->abort(404, "Area does not exist.");
@@ -197,10 +216,45 @@ class AreaController {
 		$this->parameters['form'] = $form->createView();
 		return $app['twig']->render('site/area/edit.details.html.twig', $this->parameters);
 		
-	}	
-	
-	
-	
+	}
+
+
+
+    function editBounds($slug, Request $request, Application $app) {
+
+        if (!$this->build($slug, $request, $app)) {
+            $app->abort(404, "Area does not exist.");
+        }
+
+
+        if ($this->parameters['area']->getIsDeleted()) {
+            die("No"); // TODO
+        }
+
+        if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken() && $request->request->get('action') == 'edit') {
+
+            $this->parameters['area']->setMinLat($request->request->get('minLat'));
+            $this->parameters['area']->setMinLng($request->request->get('minLng'));
+            $this->parameters['area']->setMaxLat($request->request->get('maxLat'));
+            $this->parameters['area']->setMaxLng($request->request->get('maxLng'));
+
+            $areaEditMetaDataModel = new AreaEditMetaDataModel();
+            $areaEditMetaDataModel->setUserAccount($app['currentUser']);
+            $areaEditMetaDataModel->setFromRequest($request);
+
+            $areaRepository = new AreaRepository($app);
+            $areaRepository->editWithMetaData($this->parameters['area'], $areaEditMetaDataModel);
+
+            return $app->redirect("/area/".$this->parameters['area']->getSlugForURL());
+
+        }
+
+        return $app['twig']->render('site/area/edit.bounds.html.twig', $this->parameters);
+
+    }
+
+
+
 	
 	function calendarNow($slug, Request $request, Application $app) {
 		if (!$this->build($slug, $request, $app)) {

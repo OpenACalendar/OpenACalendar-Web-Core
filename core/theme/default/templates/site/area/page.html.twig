@@ -63,11 +63,37 @@
 {% block scriptsForState %}
 	<script type="text/javascript">
 		var exportData = { area:{{ area.slug }} , areaSlugURL: "{{ area.slugForURL | e('js') }}" , areaTitle: "{{  area.title | e('js') }}", country: "{{ country.twoCharCode }}", countryTitle: "{{  country.title | e('js') }}"  };
-		var areaData = { slug: {{ area.slug }},
-					maxLat: {% if area.maxLat %}{{ area.maxLat }}{% else %}null{% endif %},
-					maxLng: {% if area.maxLng %}{{ area.maxLng }}{% else %}null{% endif %}, 
-					minLat: {% if area.minLat %}{{ area.minLat }}{% else %}null{% endif %},
-					minLng: {% if area.minLng %}{{ area.minLng }}{% else %}null{% endif %} };
+		var areaData = { slug: {{ area.slug }} };
+		{% if area.hasBounds %}
+			areaData['maxLat'] = {{ area.maxLat }};
+			areaData['maxLng'] = {{ area.maxLng }};
+			areaData['minLat'] = {{ area.minLat }};
+			areaData['minLng'] = {{ area.minLng }};
+		{% else %}
+			{% set latLngFound = false %}
+			{% for parentArea in parentAreas|reverse %}
+				{%  if not latLngFound and parentArea.hasBounds %}
+					{% set latLngFound = true %}
+					areaData['maxLat'] = {{ parentArea.maxLat }};
+					areaData['maxLng'] = {{ parentArea.maxLng }};
+					areaData['minLat'] = {{ parentArea.minLat }};
+					areaData['minLng'] = {{ parentArea.minLng }};
+				{%  endif %}
+			{% endfor %}
+			{%  if not latLngFound %}
+				{%  if country and country.hasBounds %}
+					areaData['maxLat'] = {{ country.maxLat }};
+					areaData['maxLng'] = {{ country.maxLng }};
+					areaData['minLat'] = {{ country.minLat }};
+					areaData['minLng'] = {{ country.minLng }};
+				{%  else %}
+					areaData['maxLat'] = null;
+					areaData['maxLng'] = null;
+					areaData['minLat'] = null;
+					areaData['minLng'] = null;
+				{% endif  %}
+			{% endif %}
+		{%  endif %}
 	</script>
 {% endblock %}
 
