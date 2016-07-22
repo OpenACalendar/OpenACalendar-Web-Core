@@ -7,9 +7,6 @@ locale-gen
 sudo apt-get update
 sudo apt-get install -y postgresql apache2 php5-gd php5 php5-curl php5-pgsql git php5-intl php5-geoip curl zip  phpunit
 
-cd /vagrant
-php /home/vagrant/bin/composer.phar  install
-
 mkdir /home/vagrant/fileStore
 chown www-data:www-data  /home/vagrant/fileStore
 
