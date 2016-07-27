@@ -56,6 +56,8 @@ class EventModel {
 	protected $end_at;
 	/** @var DateTime **/
 	protected $created_at;
+	/** @var DateTime **/
+	protected $updated_at;
 
 	/** @var VenueModel **/
 	protected $venue;
@@ -89,6 +91,7 @@ class EventModel {
 		$this->start_at = new \DateTime($data['start_at'], $utc);
 		$this->end_at = new \DateTime($data['end_at'], $utc);
 		$this->created_at = $data['created_at'] ? new \DateTime($data['created_at'], $utc) : null;
+		$this->updated_at = $data['cached_updated_at'] ? new \DateTime($data['cached_updated_at'], $utc) : null;
 		$this->group_id = isset($data['group_id']) ? $data['group_id'] : null;
 		$this->group_title = isset($data['group_title']) ? $data['group_title'] : null;
 		$this->is_deleted = $data['is_deleted'];
@@ -379,11 +382,17 @@ class EventModel {
 	public function setEndAt(\DateTime $end_at) {
 		$this->end_at = $end_at;
 	}
-	
+
+    /** @return \DateTime **/
 	public function getCreatedAt() {
 		return $this->created_at;
 	}
-	
+
+    /** @return \DateTime **/
+	public function getUpdatedAt() {
+		return $this->updated_at;
+	}
+
 	public function getGroupId() {
 		return $this->group_id;
 	}

@@ -342,6 +342,7 @@ class SearchForDuplicateEventsTest  extends \BaseAppTest {
 			'is_duplicate_of_id'=>null,
 			'custom_fields'=>null,
 			'custom_fields_changed'=>null,
+            'cached_updated_at'=> null,
 		));
 
 		$sfde = new SearchForDuplicateEvents($eventNew, $site);

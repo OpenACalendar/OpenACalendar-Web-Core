@@ -3,6 +3,10 @@ namespace api1exportbuilders;
 
 /**
  *
+ * This was at one stage used for a Google Calendar import hack.
+ * (See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/176 )
+ * However, now it's not needed and we may remove it.
+ *
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
@@ -25,13 +29,6 @@ class ICalEventIdConfig {
 		if (strtolower(trim($option)) == 'slugstartend') {
 			$this->isSlugStartEnd = true;
 			return;
-		}
-
-		if (is_array($server) && isset($server['HTTP_USER_AGENT'])) {
-			if (trim($server['HTTP_USER_AGENT']) == 'Google-Calendar-Importer') {
-				$this->isSlugStartEnd = true;
-				return;
-			}
 		}
 
 		// Nothing selected. The Default.

@@ -71,8 +71,8 @@ class ICalEventIdConfigTest extends BaseAppTest {
 
 	public function testSlugStartEndSetbyUserAgent() {
 		$iCalEventIdConfig = new ICalEventIdConfig(null, array('HTTP_USER_AGENT'=>'Google-Calendar-Importer'));
-		$this->assertFalse($iCalEventIdConfig->isSlug());
-		$this->assertTrue($iCalEventIdConfig->isSlugStartEnd());
+		$this->assertTrue($iCalEventIdConfig->isSlug());
+		$this->assertFalse($iCalEventIdConfig->isSlugStartEnd());
 	}
 
 }

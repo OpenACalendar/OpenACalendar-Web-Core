@@ -47,8 +47,8 @@ class SiteDBAccess {
 
 
 		// Make Information Data
-		$fieldsSQL1 = array();
-		$fieldsParams1 = array( 'id'=>$site->getId() );
+		$fieldsSQL1 = array( 'cached_updated_at = :cached_updated_at ');
+		$fieldsParams1 = array( 'id'=>$site->getId() , 'cached_updated_at'=> $this->timesource->getFormattedForDataBase() );
 		foreach($fields as $field) {
 			$fieldsSQL1[] = " ".$field."=:".$field." ";
 			if ($field == 'title') {

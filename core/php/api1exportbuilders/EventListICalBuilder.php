@@ -131,6 +131,15 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		
 		$txt .= $this->getIcalLine('DTSTART',$event->getStartAt()->format("Ymd")."T".$event->getStartAt()->format("His")."Z");
 		$txt .= $this->getIcalLine('DTEND',$event->getEndAt()->format("Ymd")."T".$event->getEndAt()->format("His")."Z");
+
+        if ($event->getUpdatedAt()) {
+            $txt .= $this->getIcalLine('LAST-MODIFIED', $event->getUpdatedAt()->format("Ymd") . "T" . $event->getUpdatedAt()->format("His") . "Z");
+            // 1469647083 is a magic number - it's the timestamp at the time we introduced this feature.
+            // Since we can't have any values less than that, we will reduce SEQUENCE by that to keep SEQUENCE reasonably small.
+            $txt .= $this->getIcalLine('SEQUENCE', $event->getUpdatedAt()->getTimestamp() - 1469647083);
+        } else {
+            $txt .= $this->getIcalLine('SEQUENCE', 0);
+        }
 		if ($event->getCreatedAt()) {
 			$txt .= $this->getIcalLine('DTSTAMP', $event->getCreatedAt()->format("Ymd") . "T" . $event->getCreatedAt()->format("His") . "Z");
 		} else {
