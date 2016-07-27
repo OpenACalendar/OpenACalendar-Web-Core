@@ -46,6 +46,28 @@ trait TraitICal {
 			return $out."\r\n";			
 		}		
 	}
+
+    /** Special function as this needs a ; that is not escaped in it! */
+    public function getIcalGeoLine($lat,$lng) {
+        $value = $lat. ";" . $lng;
+        // google calendar does not like a space after the ':'.
+        $out = "GEO:".$value;
+        if(strlen($out) > 75) {
+            $out = "GEO:";
+            # first Line;
+            $charsToAdd = 75-strlen($out);
+            $out .= substr($value, 0, $charsToAdd)."\r\n";
+            $value = substr($value, $charsToAdd);
+            # rest of the lines
+            while ($value) {
+                $out .= " ".substr($value,0,74)."\r\n";
+                $value = substr($value, 74);
+            }
+            return $out;
+        } else {
+            return $out."\r\n";
+        }
+    }
 	
 	
 	

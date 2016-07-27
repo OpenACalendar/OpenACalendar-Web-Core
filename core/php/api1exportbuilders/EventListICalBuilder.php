@@ -125,7 +125,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 				$txt .= $this->getIcalLine('LOCATION',implode(", ", $locationDetails));
 			}
 			if ($event->getVenue() && $event->getVenue()->getLat() && $event->getVenue()->getLng()) {
-				$txt .= $this->getIcalLine('GEO',$event->getVenue()->getLat().";".$event->getVenue()->getLng());
+				$txt .= $this->getIcalGeoLine($event->getVenue()->getLat(),$event->getVenue()->getLng());
 			}
 		}
 		
