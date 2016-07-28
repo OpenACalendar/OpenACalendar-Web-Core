@@ -2,14 +2,13 @@
 
 namespace sysadmin\controllers;
 
+use repositories\UserAccountRepository;
+use repositories\UserWatchesGroupRepository;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
-use models\SiteModel;
-use models\EventModel;
 use repositories\SiteRepository;
 use repositories\GroupRepository;
-use repositories\builders\SiteRepositoryBuilder;
 use repositories\builders\UserAccountRepositoryBuilder;
 use sysadmin\forms\ActionWithCommentForm;
 use sysadmin\ActionParser;
@@ -47,7 +46,10 @@ class GroupController {
 		}
 
 		$this->parameters['groupisduplicateof'] = $this->parameters['group']->getIsDuplicateOfId() ? $gr->loadById($this->parameters['group']->getIsDuplicateOfId()) : null;
-	
+
+        $sacrb = new SysadminCommentRepositoryBuilder($app);
+        $sacrb->setGroup($this->parameters['group']);
+        $this->parameters['comments'] = $sacrb->fetchAll();
 	}
 	
 	function index($siteid, $slug, Request $request, Application $app) {
@@ -108,10 +110,6 @@ class GroupController {
 		
 		$this->parameters['form'] = $form->createView();
 
-
-		$sacrb = new SysadminCommentRepositoryBuilder($app);
-		$sacrb->setGroup($this->parameters['group']);
-		$this->parameters['comments'] = $sacrb->fetchAll();
 		
 		return $app['twig']->render('sysadmin/group/index.html.twig', $this->parameters);		
 	
@@ -121,7 +119,63 @@ class GroupController {
 	function watchers($siteid, $slug, Request $request, Application $app) {
 
 		$this->build($siteid, $slug, $request, $app);
-		
+
+        $form = $app['form.factory']->create(new ActionWithCommentForm());
+
+        if ('POST' == $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $action = new ActionParser($data['action']);
+
+                $redirect = false;
+
+                if ($data['comment']) {
+                    $scr = new SysAdminCommentRepository($app);
+                    $scr->createAboutGroup($this->parameters['group'], $data['comment'], $app['currentUser']);
+                    $redirect = true;
+                }
+
+                if ($action->getCommand() == 'add') {
+
+                    $userRepo = new UserAccountRepository( $app );
+                    $user     = $userRepo->loadByEmail( $action->getParam( 0 ) );
+                    if ( $user ) {
+                        $userWatchesGroupRepo = new UserWatchesGroupRepository( $app );
+                        $userWatchesGroupRepo->startUserWatchingGroupIfNotWatchedBefore( $user, $this->parameters['group'] );
+                        $redirect = true;
+                    }
+
+                } elseif ($action->getCommand() == 'addevenifstoppedbefore') {
+
+                    $userRepo = new UserAccountRepository($app);
+                    $user = $userRepo->loadByEmail($action->getParam(0));
+                    if ($user) {
+                        $userWatchesGroupRepo = new UserWatchesGroupRepository($app);
+                        $userWatchesGroupRepo->startUserWatchingGroup($user, $this->parameters['group']);
+                        $redirect = true;
+                    }
+
+                } else if ($action->getCommand() == 'remove') {
+
+                    $userRepo = new UserAccountRepository($app);
+                    $user = $userRepo->loadByEmail($action->getParam(0));
+                    if ($user) {
+                        $userWatchesGroupRepo = new UserWatchesGroupRepository($app);
+                        $userWatchesGroupRepo->stopUserWatchingGroup($user, $this->parameters['group']);
+                        $redirect = true;
+                    }
+
+                }
+
+                if ($redirect) {
+
+                    return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/group/'.$this->parameters['group']->getSlug().'/watchers');
+                }
+            }
+        }
+
+        $this->parameters['form'] = $form->createView();
 				
 		$uarb = new UserAccountRepositoryBuilder($app);
 		$uarb->setWatchesGroup($this->parameters['group']);
