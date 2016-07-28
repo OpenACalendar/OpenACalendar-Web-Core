@@ -26,5 +26,18 @@
 		{% endfor %}
 	</table>
 
+	{%  include 'sysadmin/common/sysadminCommentsList.html.twig' %}
+
+	<form action="#" method="post" class="action">
+		{{ form_errors(form) }}
+		{{ form_rest(form) }}
+		<input type="submit" name="Do Action" />
+	</form>
+
+	<ul class="actionHelp">
+		<li>add <span class="param">email</span></li>
+		<li>addevenifstoppedbefore <span class="param">email</span></li>
+		<li>remove <span class="param">email</span></li>
+	</ul>
 
 {% endblock %}
