@@ -195,10 +195,10 @@ class CountryController {
 			$data['childAreas'][] = array(
 				'slug'=>$childArea->getSlug(),
 				'title'=>$childArea->getTitle(),
-				'max_lat'=>$childArea->getCachedMaxLat(),
-				'max_lng'=>$childArea->getCachedMaxLng(),
-				'min_lat'=>$childArea->getCachedMinLat(),
-				'min_lng'=>$childArea->getCachedMinLng(),
+				'max_lat'=>$childArea->getMaxLat(),
+				'max_lng'=>$childArea->getMaxLng(),
+				'min_lat'=>$childArea->getMinLat(),
+				'min_lng'=>$childArea->getMinLng(),
 			);
 		}
 

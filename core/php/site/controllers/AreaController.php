@@ -316,10 +316,10 @@ class AreaController {
 				'area'=>array(
 					'slug'=>$this->parameters['area']->getSlug(),
 					'title'=>$this->parameters['area']->getTitle(),
-					'max_lat'=>$this->parameters['area']->getCachedMaxLat(),
-					'max_lng'=>$this->parameters['area']->getCachedMaxLng(),
-					'min_lat'=>$this->parameters['area']->getCachedMinLat(),
-					'min_lng'=>$this->parameters['area']->getCachedMinLng(),
+					'max_lat'=>$this->parameters['area']->getMaxLat(),
+					'max_lng'=>$this->parameters['area']->getMaxLng(),
+					'min_lat'=>$this->parameters['area']->getMinLat(),
+					'min_lng'=>$this->parameters['area']->getMinLng(),
 				),
 				'childAreas'=>array(),
 				'venues'=>array(),
@@ -329,10 +329,10 @@ class AreaController {
 			$data['childAreas'][] = array(
 				'slug'=>$childArea->getSlug(),
 				'title'=>$childArea->getTitle(),
-				'max_lat'=>$childArea->getCachedMaxLat(),
-				'max_lng'=>$childArea->getCachedMaxLng(),
-				'min_lat'=>$childArea->getCachedMinLat(),
-				'min_lng'=>$childArea->getCachedMinLng(),
+				'max_lat'=>$childArea->getMaxLat(),
+				'max_lng'=>$childArea->getMaxLng(),
+				'min_lat'=>$childArea->getMinLat(),
+				'min_lng'=>$childArea->getMinLng(),
 			);
 		}
 		
