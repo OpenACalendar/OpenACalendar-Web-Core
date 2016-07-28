@@ -41,6 +41,9 @@ class EventEditForm extends \BaseFormWithEditComment {
 	/** @var  ExtensionManager */
 	protected $extensionManager;
 
+    protected $countries = array();
+    protected $timezones = array();
+
 	function __construct(SiteModel $site, $timeZoneName, Application $application) {
 		parent::__construct($application);
 		$this->site = $site;
@@ -51,6 +54,19 @@ class EventEditForm extends \BaseFormWithEditComment {
         $siteFeatureRepo = new SiteFeatureRepository($application);
         $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
         $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
+
+        $crb = new CountryRepositoryBuilder($this->app);
+        $crb->setSiteIn($this->site);
+        foreach($crb->fetchAll() as $country) {
+            $this->countries[$country->getId()] = $country->getTitle();
+        }
+        // TODO if current country not in list add it now
+
+        // Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
+        foreach($this->site->getCachedTimezonesAsList() as $timezone) {
+            $this->timezones[$timezone] = $timezone;
+        }
+        // TODO if current timezone not in list add it now
 	}
 
 	protected $customFields;
@@ -82,42 +98,32 @@ class EventEditForm extends \BaseFormWithEditComment {
 			'required'=>false
 		));
 
-		$crb = new CountryRepositoryBuilder($this->app);
-		$crb->setSiteIn($this->site);
-		$countries = array();
-		foreach($crb->fetchAll() as $country) {
-			$countries[$country->getId()] = $country->getTitle();
-		}
-		// TODO if current country not in list add it now
-		if (count($countries) != 1) {
+		if (count($this->countries) != 1) {
 			$builder->add('country_id', 'choice', array(
 				'label'=>'Country',
-				'choices' => $countries,
+				'choices' => $this->countries,
 				'required' => true,
                 'choices_as_values'=>false,
 			));
 		} else {
-			$countryID = array_shift(array_keys($countries));
+            // Note we must have array_keys here - if we don't we are changing a class variable and we re-use that class variable later!
+			$countryID = array_shift(array_keys($this->countries));
 			$builder->add('country_id', 'hidden', array(
 				'data' => $countryID,
 			));
 		}
 
-		$timezones = array();
-		// Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
-		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
-			$timezones[$timezone] = $timezone;
-		}
-		// TODO if current timezone not in list add it now
-		if (count($timezones) != 1) {
+
+		if (count($this->timezones) != 1) {
 			$builder->add('timezone', 'choice', array(
 				'label'=>'Time Zone',
-				'choices' => $timezones,
+				'choices' => $this->timezones,
 				'required' => true,
                 'choices_as_values'=>false,
 			));
 		} else {
-			$timezone = array_pop($timezones);
+            // Note we must have array_keys here - if we don't we are changing a class variable and we re-use that class variable later!
+			$timezone = array_pop(array_keys($this->timezones));
 			$builder->add('timezone', 'hidden', array(
 				'data' => $timezone,
 			));
@@ -258,6 +264,20 @@ class EventEditForm extends \BaseFormWithEditComment {
 			if (strpos($form->get("ticket_url")->getData(), " ") !== false) {
 				$form['ticket_url']->addError(new FormError("Please enter a URL"));
 			}
+            // Country
+            if (!in_array($form->get('country_id')->getData(), array_keys($this->countries))) {
+                $form['country_id']->addError(new FormError("Please select a country"));
+            }
+            // Timezone
+            if (!in_array($form->get('timezone')->getData(), array_keys($this->timezones))) {
+                $form['timezone']->addError(new FormError("Please select a timezone"));
+                // The user will see this error if they try to pass
+                // 1) ''
+                // 2) A timezone not enabled in this site
+                // If they pass
+                // 3) made up string that is not a valid timezone
+                // the page will crash and they won't see this error. But never mind.
+            }
 		};
 
 		// adding the validator to the FormBuilderInterface
