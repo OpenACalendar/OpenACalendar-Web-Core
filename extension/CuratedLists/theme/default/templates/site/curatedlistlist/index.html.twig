@@ -12,9 +12,12 @@
 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/" />
+	{% if not currentSite.isWebRobotsAllowed or not curatedListListFilterParams.isDefaultFilters  %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{%  else %}
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/curatedlist/" />
+	{%  endif %}
 	<link rel="stylesheet" type="text/css" href="/theme/default/css/curatedlists.css?v={{ config.assetsVersion }}">
-	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 {% endblock %}
 
 {% block breadcrumbs %}

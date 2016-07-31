@@ -11,8 +11,11 @@
 {% block pageTitle %}Venues - {% endblock %} 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/" />
-	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% if not currentSite.isWebRobotsAllowed or not venueListFilterParams.isDefaultFilters %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{%  else %}
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/venue/" />
+	{% endif %}
 {% endblock %}
 
 {% block breadcrumbs %}

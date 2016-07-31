@@ -31,8 +31,11 @@ class GroupFilterParams {
 		return $this->groupRepositoryBuilder;
 	}
 
-		
-	// ############################### params
+    public function isDefaultFilters() {
+        return !$this->freeTextSearch && !$this->withFutureEventsOnly;
+    }
+
+    // ############################### params
 	
 	protected $freeTextSearch = null;
     protected $withFutureEventsOnly = false;

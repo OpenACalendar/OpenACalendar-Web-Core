@@ -11,8 +11,11 @@
 {% block pageTitle %}Groups - {% endblock %} 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/" />
-	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% if not currentSite.isWebRobotsAllowed or not groupListFilterParams.isDefaultFilters %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{%  else %}
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/group/" />
+	{% endif %}
 {% endblock %}
 
 {% block breadcrumbs %}
