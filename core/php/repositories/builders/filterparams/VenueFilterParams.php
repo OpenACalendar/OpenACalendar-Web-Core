@@ -31,6 +31,9 @@ class VenueFilterParams {
 		return $this->venueRepositoryBuilder;
 	}
 
+    public function isDefaultFilters() {
+        return !$this->freeTextSearch && !$this->withFutureEventsOnly;
+    }
 		
 	// ############################### params
 	

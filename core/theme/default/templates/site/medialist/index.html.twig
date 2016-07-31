@@ -11,8 +11,11 @@
 {% block pageTitle %}Media - {% endblock %} 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/media/" />
-	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
+	{% if not currentSite.isWebRobotsAllowed %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{% else %}
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/media/" />
+	{% endif %}
 {% endblock %}
 
 {% block breadcrumbs %}
