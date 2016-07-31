@@ -17,15 +17,36 @@
 
 {% block innerContent %}
 
-	<P>Is this an area with several venues?</P>
 
-	{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
-	
-	<p><a href="/area/{{ area.slugForUrl }}/newArea">New Area</a></p>
-	
-	<p>Is this a distinct venues with events?</P>
-	
-	<p><a href="/venue/new/?area_id={{ area.slug }}">New Venue</a></p>
+	{% if currentUserActions.has("org.openacalendar","eventNew") %}
+		<p>Is this an event?</p>
+
+		<form method="get" action="/event/new?area={{  area.slug }}">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="New Event" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+	{% endif %}
+
+	{%  if currentUserActions.has("org.openacalendar","actionAreaNew") %}
+		<P>Is this an area with several venues?</P>
+
+		{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+
+		<form method="get" action="/area/{{ area.slugForUrl }}/newArea">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="New Area" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+	{%  endif %}
+
+	{% if currentUserActions.has("org.openacalendar","venueNew") %}
+		<p>Is this a distinct venues with events?</P>
+
+		<form method="get" action="/venue/new/">
+			<input type="hidden" name="area_id" value="{{ area.slug }}">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="New Venue" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+	{%  endif %}
 
 {% endblock %}
 
