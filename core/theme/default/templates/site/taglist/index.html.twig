@@ -10,6 +10,14 @@
 
 {% block pageTitle %}Tags - {% endblock %} 
 
+{% block htmlHeader %}
+	{% if not currentSite.isWebRobotsAllowed %}
+		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	{% else %}
+		<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/tag" />
+	{% endif %}
+{% endblock %}
+
 {% block breadcrumbs %}
 	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/tag', 'label':'tags' } ]  } %}
 {% endblock %}
