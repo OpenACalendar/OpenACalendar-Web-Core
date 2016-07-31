@@ -65,8 +65,8 @@
 
 {% block scripts %}
 	<script type="text/javascript">
-		{% if area and area.cachedMinLat and area.cachedMaxLat and area.cachedMinLng and area.cachedMaxLng %}
-			var mapData = { lat: null, lng:null, min_lat:{{ area.cachedMinLat }}, max_lat:{{ area.cachedMaxLat }}, min_lng: {{ area.cachedMinLng }}, max_lng:{{ area.cachedMaxLng }} };
+		{% if area and area.hasBounds %}
+			var mapData = { lat: null, lng:null, min_lat:{{ area.minLat }}, max_lat:{{ area.maxLat }}, min_lng: {{ area.minLng }}, max_lng:{{ area.maxLng }} };
 		{% else %}
 			var mapData = { lat: null, lng:null, min_lat:null, max_lat:null, min_lng: null, max_lng:null };
 		{% endif %}
