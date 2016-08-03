@@ -1,0 +1,49 @@
+/**
+ * @package org.openacalendar.maptime
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+*/
+
+#MapTimeControls {
+	input {
+		width: 75px;
+	}
+}
+#MapTimeDisplay .value {
+	display: inline;
+	padding: 2px 5px;
+	div {
+		display: inline;
+	}
+}
+ul.mapTimeEvents {
+	li {
+		width: 30%;
+		background: #dcc;
+		.rounded-corners(4px);
+		border: 2px solid black;
+		margin: 5px;
+		padding: 5px;
+		p.eventTitle {
+			margin: 2px 0;
+			padding: 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover, a:focus {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+		p.venueTitle {
+			margin: 2px 0;
+			padding: 0;
+			font-style: italic;
+			text-align: right;
+		}
+	}
+}
+.afterMapTimeEvents { clear: both; }

@@ -1,20 +1,8 @@
 <?php
 
-namespace site\controllers;
-
-use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use repositories\builders\EventRepositoryBuilder;
-use repositories\VenueRepository;
-
 /**
  *
- * @package Core
- * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
- * @license http://ican.openacalendar.org/license.html 3-clause BSD
- * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
- * @author James Baster <james@jarofgreen.co.uk>
+ * This moved to separate extension
  */
 class MapTimeController {
 	

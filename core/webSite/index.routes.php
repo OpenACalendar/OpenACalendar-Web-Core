@@ -577,10 +577,6 @@ if (!$CONFIG->isSingleSiteMode) {
 $app->match('/map', 'site\controllers\MapController::index');
 $app->match('/map/', 'site\controllers\MapController::index');
 
-$app->match('/map/time', 'site\controllers\MapTimeController::index');
-$app->match('/map/time/', 'site\controllers\MapTimeController::index');
-$app->match('/map/time/getdata.json', 'site\controllers\MapTimeController::getDataJson');
-
 // OLD IMPORT URL ROUTES
 $app->match('/importurl', 'site\controllers\ImportListController::index');
 $app->match('/importurl/', 'site\controllers\ImportListController::index'); 
