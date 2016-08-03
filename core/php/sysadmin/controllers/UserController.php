@@ -134,17 +134,41 @@ class UserController {
 	}
 	
 	
+	function listNotificationPreferences($id, Request $request, Application $app) {
+		$this->build($id, $request, $app);
+
+
+        $repo = new \repositories\UserNotificationPreferenceRepository($app);
+
+        $this->parameters['userNotificationPreferences'] = array();
+
+        foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+            foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+                $preference = $extension->getUserNotificationPreference($type);
+                $userPref = $repo->load( $this->parameters['user'], $preference->getUserNotificationPreferenceExtensionID(),
+                    $preference->getUserNotificationPreferenceType() );
+                $this->parameters['userNotificationPreferences'][] = array(
+                    'pref' => $preference,
+                    'userPref' => $userPref,
+                );
+            }
+        }
+		
+		return $app['twig']->render('sysadmin/user/notificationPrefs.html.twig', $this->parameters);
+	}
+
+
 	function verify($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
-		
-		
+
+
 		$rb = new UserAccountVerifyEmailRepositoryBuilder($app);
 		$rb->setUser($this->parameters['user']);
 		$this->parameters['verifies'] = $rb->fetchAll();
-		
+
 		return $app['twig']->render('sysadmin/user/verify.html.twig', $this->parameters);
 	}
-	
+
 	function reset($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 		
