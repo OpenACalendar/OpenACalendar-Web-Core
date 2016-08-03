@@ -181,6 +181,8 @@ $app->match('/sysadmin/user/{id}/reset', 'sysadmin\controllers\UserController::r
 		->assert('id', '\d+');
 $app->match('/sysadmin/user/{id}/notification', 'sysadmin\controllers\UserController::listNotifications')
 		->assert('id', '\d+');
+$app->match('/sysadmin/user/{id}/notificationprefs', 'sysadmin\controllers\UserController::listNotificationPreferences')
+		->assert('id', '\d+');
 $app->match('/sysadmin/user/{id}/event/edited', 'sysadmin\controllers\UserController::eventEdited')
 		->assert('id', '\d+');
 $app->match('/sysadmin/user/{id}/area/edited', 'sysadmin\controllers\UserController::areaEdited')
