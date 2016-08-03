@@ -55,6 +55,8 @@ class EventsCountExtension  extends \Twig_Extension {
 			$erb->setVenue($data);
 		} else if ($data instanceof \models\TagModel) {
 			$erb->setTag($data);
+		} else if ($data instanceof \models\CountryModel) {
+			$erb->setCountry($data);
 		}
 
 		return $erb->fetchCount();
@@ -79,6 +81,8 @@ class EventsCountExtension  extends \Twig_Extension {
 			$erb->setVenue($data);
 		} else if ($data instanceof \models\TagModel) {
 			$erb->setTag($data);
+        } else if ($data instanceof \models\CountryModel) {
+            $erb->setCountry($data);
 		}
 
 		return $erb->fetchCount();
