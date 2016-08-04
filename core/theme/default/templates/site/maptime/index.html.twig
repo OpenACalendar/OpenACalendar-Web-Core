@@ -11,7 +11,7 @@
 {% block pageTitle %}Map by time - {% endblock %} 
 
 {% block htmlHeader %}
-	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/maptime" />
+	<link rel="canonical" href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/map/time" />
 	{% if not currentSite.isWebRobotsAllowed %}<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">{% endif %}
 	{% include 'site/common/mapLibrary.css.html.twig' %}
 {% endblock %}
