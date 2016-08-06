@@ -44,7 +44,7 @@ class VenueNewController {
 				$checkArea = $this->parameters['area']->getParentAreaId() ? $areaRepository->loadById($this->parameters['area']->getParentAreaId())  : null;
 				while($checkArea) {
 					array_unshift($this->parameters['parentAreas'],$checkArea);
-					$checkArea = $checkArea->getParentAreaId() ? $ar->loadById($checkArea->getParentAreaId())  : null;
+					$checkArea = $checkArea->getParentAreaId() ? $areaRepository->loadById($checkArea->getParentAreaId())  : null;
 				}
 
 				$cr = new CountryRepository($app);
