@@ -19,11 +19,14 @@
 
 
 {% block actions %}
-	{% if currentUserActions.has("org.openacalendar","areaNew") %}
+	{%  if currentUserActions.has("org.openacalendar","actionAreaNew")  %}
 		<li class="action">
 			<a href="/country/{{ country.twoCharCode }}/new"><div class="fa fa-pencil"></div> new</a>
 		</li>
 	{%  endif  %}
+	{% if currentUserActions.has("org.openacalendar","eventNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","eventNew") ) %}
+		<li class="action"><a href="/event/new?country={{  country.twoCharCode }}"><div class="fa fa-pencil"></div>Add an event</a></li>
+	{% endif %}
 	<li class="action">
 		<a href="/api1/country/{{ country.twoCharCode }}/events.ical" onclick="showExportSharePopup(); return false;">
 			{%  include '/site/common/actionExportShareLabel.html.twig' %}

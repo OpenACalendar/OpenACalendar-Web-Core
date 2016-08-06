@@ -49,7 +49,10 @@ class CountryController {
 		$areaRepoBuilder->setNoParentArea(true);
 		$areaRepoBuilder->setIncludeDeleted(false);
 		$this->parameters['childAreas'] = $areaRepoBuilder->fetchAll();
-		
+
+        $app['currentUserActions']->set("org.openacalendar","actionAreaNew",
+            $app['currentUserPermissions']->hasPermission("org.openacalendar","AREAS_CHANGE")
+        );
 		
 		return true;
 	}
