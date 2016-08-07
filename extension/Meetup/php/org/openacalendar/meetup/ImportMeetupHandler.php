@@ -268,6 +268,14 @@ class ImportMeetupHandler extends ImportHandlerBase {
 			$importedEvent->setTicketUrl($meetupData['event_url']);
 			$changesToSave = true;
 		}
+        if (isset($meetupData['venue']) && isset($meetupData['venue']['lon']) && $meetupData['venue']['lon'] != $importedEvent->getLng()) {
+            $importedEvent->setLng($meetupData['venue']['lon']);
+            $changesToSave = true;
+        }
+        if (isset($meetupData['venue']) && isset($meetupData['venue']['lat']) && $meetupData['venue']['lat'] != $importedEvent->getLat()) {
+            $importedEvent->setLat($meetupData['venue']['lat']);
+            $changesToSave = true;
+        }
 		return $changesToSave;
 	}
 	

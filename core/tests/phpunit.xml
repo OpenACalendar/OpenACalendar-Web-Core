@@ -21,6 +21,8 @@
             <directory>eventcustomfields</directory>
             <directory>repositories/builders</directory>
             <directory>models</directory>
+            <directory>actions</directory>
+            <directory>import</directory>
             <directory>../../extension/CuratedLists/tests/</directory>
             <directory>../../extension/Meetup/tests/</directory>
         </testsuite>

@@ -103,6 +103,15 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
         $this->titleSearch = $titleSearch;
     }
 
+    protected $lat;
+
+    protected $lng;
+
+    public function setLatLng($lat, $lng) {
+        $this->lat = $lat;
+        $this->lng = $lng;
+    }
+
 	protected function build() {
 
 		$this->select[] = 'area_information.*';
@@ -151,6 +160,13 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder {
 			$this->where[] = " area_information.id IN (SELECT area_id FROM area_history WHERE user_account_id = :editedByUser) ";
 			$this->params['editedByUser'] = $this->editedByUser->getId();
 		}
+
+        if ($this->lat && $this->lng) {
+            $this->where[] = " area_information.min_lat <= :lat AND area_information.max_lat >= :lat AND area_information.min_lng <= :lng AND area_information.max_lng >= :lng ";
+            $this->params['lat'] = $this->lat;
+            $this->params['lng'] = $this->lng;
+        }
+
 	}
 	
 	protected function buildStat() {

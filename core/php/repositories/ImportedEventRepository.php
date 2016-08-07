@@ -64,9 +64,9 @@ class ImportedEventRepository {
 	public function create(ImportedEventModel $importedEvent) {
 
 		$stat = $this->app['db']->prepare("INSERT INTO imported_event ( import_url_id, import_id, title, ".
-				"description, start_at, end_at, timezone, is_deleted, url, ticket_url, created_at, reoccur ) ".
+				"description, start_at, end_at, timezone, is_deleted, url, ticket_url, created_at, reoccur , lat, lng) ".
 				" VALUES (  :import_id, :id_in_import, :title, ".
-				":description, :start_at, :end_at, :timezone,  '0', :url, :ticket_url, :created_at, :reoccur ) RETURNING id");
+				":description, :start_at, :end_at, :timezone,  '0', :url, :ticket_url, :created_at, :reoccur, :lat, :lng ) RETURNING id");
 		$stat->execute(array(
 				'import_id'=>$importedEvent->getImportId(),
 				'id_in_import'=>$importedEvent->getIdInImport(),
@@ -77,6 +77,8 @@ class ImportedEventRepository {
 				'timezone'=>$importedEvent->getTimezone(),				
 				'url'=>$importedEvent->getUrl(),				
 				'ticket_url'=>$importedEvent->getTicketUrl(),
+                'lat' => $importedEvent->getLat(),
+                'lng' => $importedEvent->getLng(),
 				'reoccur' => $importedEvent->getReoccur() ? json_encode($importedEvent->getReoccur()) : null,
 				'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 			));
@@ -90,7 +92,7 @@ class ImportedEventRepository {
             throw new Exception("Can't edit a deleted imported event.\n");
         }
 		$stat = $this->app['db']->prepare("UPDATE imported_event SET title=:title, description=:description, ".
-				"start_at=:start_at, end_at=:end_at, timezone=:timezone,  is_deleted='0', url = :url, ".
+				"start_at=:start_at, end_at=:end_at, timezone=:timezone,  is_deleted='0', url = :url, lng = :lng, lat = :lat, ".
 				"ticket_url = :ticket_url, reoccur=:reoccur WHERE id=:id");
 		$stat->execute(array(
 			'id'=>$importedEvent->getId(),
@@ -99,7 +101,9 @@ class ImportedEventRepository {
 			'start_at'=>$importedEvent->getStartAtInUTC()->format("Y-m-d H:i:s"),
 			'end_at'=>$importedEvent->getEndAtInUTC()->format("Y-m-d H:i:s"),
 			'timezone'=>$importedEvent->getTimezone(),				
-			'url'=>$importedEvent->getUrl(),				
+			'url'=>$importedEvent->getUrl(),
+            'lat' => $importedEvent->getLat(),
+            'lng' => $importedEvent->getLng(),
 			'ticket_url'=>$importedEvent->getTicketUrl(),
 			'reoccur' => $importedEvent->getReoccur() ? json_encode($importedEvent->getReoccur()) : null,
 		));

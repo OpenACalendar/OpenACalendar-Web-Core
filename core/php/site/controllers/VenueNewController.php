@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use actions\GetAreaForLatLng;
 use models\VenueEditMetaDataModel;
 use Silex\Application;
 use site\forms\VenueNewForm;
@@ -91,14 +92,20 @@ class VenueNewController {
 						$venue->setAreaId($area->getId());
 					}
 				}
-				
-
 
 				foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
 					$extension->addDetailsToVenue($venue);
 				}
 
-				$venueEditMetaData = new VenueEditMetaDataModel();
+                if (!$venue->getAreaId() && $venue->getLat()) {
+                    $getAreaFromLatLng = new GetAreaForLatLng($app, $app['currentSite']);
+                    $area = $getAreaFromLatLng->getArea($venue->getLat(), $venue->getLng(), $countryRepository->loadById($venue->getCountryId()));
+                    if ($area) {
+                        $venue->setAreaId($area->getId());
+                    }
+                }
+
+                $venueEditMetaData = new VenueEditMetaDataModel();
 				$venueEditMetaData->setUserAccount($app['currentUser']);
 				if ($form->has('edit_comment')) {
 					$venueEditMetaData->setEditComment($form->get('edit_comment')->getData());

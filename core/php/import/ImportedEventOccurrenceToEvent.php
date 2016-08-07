@@ -3,6 +3,7 @@
 
 namespace import;
 
+use actions\GetAreaForLatLng;
 use models\EventRecurSetModel;
 use models\ImportedEventModel;
 use models\ImportedEventOccurrenceModel;
@@ -57,6 +58,9 @@ class ImportedEventOccurrenceToEvent {
     protected $siteFeaturePhysicalEvents = false;
     protected $siteFeatureVirtualEvents = false;
 
+    /** @var  GetAreaForLatLng */
+    protected $getAreaForLatLng;
+
 	public function __construct(Application $app, ImportRun $importRun) {
         $this->app = $app;
 		$this->site = $importRun->getSite();
@@ -68,6 +72,7 @@ class ImportedEventOccurrenceToEvent {
         $siteFeatureRepo = new SiteFeatureRepository($app);
         $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
         $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
+        $this->getAreaForLatLng = new GetAreaForLatLng($app, $importRun->getSite());
 	}
 
 	public function setEventRecurSet(EventRecurSetModel $eventRecurSet = null, $makeEventRecurSetIfNone = false) {
@@ -207,6 +212,16 @@ class ImportedEventOccurrenceToEvent {
 			if ($this->area) {
 				$event->setAreaId($this->area->getId());
 			}
+
+            // If no area set but we have lat & lng, try and get area from that.
+            // TODO even if areas set, could look for sub areas?
+            if (!$event->getAreaId() && $importedEvent->getLat()) {
+                $area = $this->getAreaForLatLng->getArea($importedEvent->getLat(), $importedEvent->getLng(), $this->country);
+                if ($area) {
+                    $event->setAreaId($area->getId());
+                }
+            }
+
 
 		} else {
 

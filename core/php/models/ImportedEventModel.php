@@ -33,6 +33,8 @@ class ImportedEventModel {
 	protected $is_deleted;
 	protected $url;
 	protected $ticket_url;
+    protected $lat;
+    protected $lng;
 
 	protected $reoccur;
 
@@ -51,6 +53,8 @@ class ImportedEventModel {
 		$this->url = $data['url'];
 		$this->ticket_url = $data['ticket_url'];
 		$this->timezone = $data['timezone'];
+        $this->lat = $data['lat'];
+        $this->lng = $data['lng'];
 		if (isset($data['reoccur']) && $data['reoccur']) {
 			// we want to turn stdClass to arrays, all of it
 			$this->reoccur = $this->get_object_vars_recursive(json_decode($data['reoccur']));
@@ -240,6 +244,34 @@ class ImportedEventModel {
 		return $this->reoccur != null && is_array($this->reoccur)
 		&& isset($this->reoccur['ical_rrule']) && is_array($this->reoccur['ical_rrule']);
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getLat() {
+        return $this->lat;
+    }
+
+    /**
+     * @param mixed $lat
+     */
+    public function setLat( $lat ) {
+        $this->lat = $lat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLng() {
+        return $this->lng;
+    }
+
+    /**
+     * @param mixed $lng
+     */
+    public function setLng( $lng ) {
+        $this->lng = $lng;
+    }
 
 
 
