@@ -9,14 +9,6 @@
  */
 
 
-
-$app->match('/requestaccess', 'site\controllers\IndexController::requestAccess') 
-		->before($appUserRequired)
-		->before($canChangeSite); 
-$app->match('/requestaccess/', 'site\controllers\IndexController::requestAccess') 
-		->before($appUserRequired)
-		->before($canChangeSite); 
-
 $app->match('/places', 'site\controllers\IndexController::places') ; 
 $app->match('/places/', 'site\controllers\IndexController::places') ; 
 
