@@ -1,22 +1,4 @@
 {#
- # @package Core
- # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
- # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
- # @author James Baster <james@jarofgreen.co.uk>
+ # This feature removed
+ # https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/647
  #}
-{% extends 'email/email.txt.twig' %}
-
-{% block content %}
-
-Hello {{ admin.username }},
-
-User {{ user.username }} has requested access to {{ currentSite.title }} which you are an administrator for.
-	
-Please <a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/admin/users">go here to refuse or accept this</a>.
-	
-Thanks,
-{{ currentSite.title }} {{ config.siteTitle }}
-	
-	
-{% endblock %}
