@@ -30,14 +30,15 @@
 				{% include 'site/adminareas/index.areaAsTree.html.twig' with {'areaData':area} %}
 			{% endfor %}
 			<li class="area">
-				<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new">New</a></class>
+				<span class="contentNew"><a href="/admin/areas/{{ country.twoCharCode }}/new">New</a></span>
 			</li>
 		</ul>
 		<select name="action">
 			<option value="delete">Delete</option>
 			<option value="undelete">Undelete</option>
 		</select>
-		<input type="submit" value="Go">
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="Perform selected action" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
 	</form>
 
 
