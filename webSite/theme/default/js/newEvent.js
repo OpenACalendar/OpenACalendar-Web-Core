@@ -66,6 +66,10 @@ function loadData() {
 				}
 				html += '</a></div>';
 				html += '<div class="description">'+(event.description ? escapeHTMLNewLine(event.description) : '')+'</div>';
+				html += '<form onsubmit="showEventPopup('+ event.slug +'); return false;">'
+				html += '<div class="bigSubmitActionWrapper"><input type="submit"  value="See more info" class="bigSubmitAction"/></div>';
+				html += '<div class="afterBigSubmitActionWrapper"></div>';
+				html += '</form>';
 				html += '<div class="afterEventListing"></div>';
 				html += '</li>';
 			}
@@ -100,7 +104,7 @@ function showEventPopup(eventSlug) {
 			'<div id="EventPopupGroupsWrapper"></div>'+
 			'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
 			'<div id="EventPopupTimes" class="times"></div>'+
-			'<div class="popupLink" id="EventPopupLinkYes"><a href="/event/new/'+newEventDraftSlug+'/isdupeof/' + eventSlug + '">Yes, this is the event!</a></div>'+
+			'<div class="popupLink" id="EventPopupLinkYes"><a href="/event/new/'+newEventDraftSlug+'/isdupeof/' + eventSlug + '">Yes, this is the event! (View or Edit this instead)</a></div>'+
 			'<div class="popupLink" id="EventPopupLinkNo"><a href="#" onclick="notDuplicateOfEvent(' + eventSlug + '); return false;">No, this is a different event!</a></div>'+
 			'</div>');
 	$.ajax({
