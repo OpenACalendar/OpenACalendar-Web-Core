@@ -17,10 +17,6 @@ $app->match('/privacy/', "index\controllers\IndexController::privacy");
 $app->match('/about', "index\controllers\IndexController::about"); 
 $app->match('/about/', "index\controllers\IndexController::about");
 
-
-$app->match('/widgethelp', "index\controllers\WidgetHelpController::index"); 
-$app->match('/widgethelp/', "index\controllers\WidgetHelpController::index"); 
-
 $app->match('/discover',"index\controllers\IndexController::discover");
 $app->match('/discover/',"index\controllers\IndexController::discover");
 
