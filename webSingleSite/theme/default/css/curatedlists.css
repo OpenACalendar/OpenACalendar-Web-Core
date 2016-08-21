@@ -1,19 +1,24 @@
+ul.mainListCuratedLists {
+  max-width: 800px;
+  margin: 0px auto;
+  padding: 0 3px;
+}
 ul.mainListCuratedLists li.curatedlist {
   min-height: 50px;
-  margin: 5px 5px;
+  margin: 5px 0;
   border-bottom: 2px solid #E9E9E9;
 }
 ul.mainListCuratedLists li.curatedlist .title {
   padding: 2px 0 5px 0;
 }
 ul.mainListCuratedLists li.curatedlist .title .text {
-  font-size: 1.1em;
+  font-size: 1.125rem;
   font-weight: bold;
 }
 ul.mainListCuratedLists li.curatedlist .title .futureEvents {
   margin-left: 10px;
   padding: 4px 20px 0px 20px;
-  font-size: 0.8em;
+  font-size: 0.875rem;
   font-weight: normal;
   background: #ddd;
   -webkit-border-radius: 3px;
@@ -39,17 +44,11 @@ ul.mainListCuratedLists li.curatedlist .editContentsWrapper .addedViaGroup {
   font-style: italic;
 }
 ul.mainListCuratedLists li.nodata {
-  margin: 5px 5px;
+  margin: 5px 0;
   font-style: italic;
 }
-@media screen and (min-width: 750px) {
-  ul.mainListCuratedLists li.curatedlist,
-  ul.mainListCuratedLists li.nodata {
-    margin: 5px 50px;
-  }
-}
 ul.infoBoxListCuratedLists li.curatedlist {
-  font-size: 0.8em;
+  font-size: 0.875rem;
 }
 ul.mainListEvents li.event .curatedListOptions {
   text-align: right;
@@ -70,7 +69,7 @@ ul.mainListEvents li.event .curatedListOptions {
   border-radius: 3px;
   margin: 1px;
   color: #333;
-  font-size: 1.0em;
+  font-size: 1.125rem;
   text-decoration: none;
 }
 .curatedListOptions .curatedlistOptionsActionWrapper input[type="submit"]:hover,

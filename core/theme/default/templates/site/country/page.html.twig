@@ -19,22 +19,18 @@
 
 {% block content %}
 
-	<h2>{{  country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></h2>
-	
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
-			{% block actions %}{% endblock %}
-			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/country/{{ country.twoCharCode }}">Details &amp; Events</a></li>
-			<li class="tab"><a href="/country/{{ country.twoCharCode }}/calendar">Calendar</a></li>
-		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
+	<div class="contentMain">
+		<h2>{{  country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></h2>
 	</div>
 
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
+			{% block actions %}{% endblock %}
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/country/{{ country.twoCharCode }}">Details &amp; Events</a></li>
+		</ul>
+	</div>
+
+	{% block innerContent %}{% endblock %}
 
 {% endblock %}
 

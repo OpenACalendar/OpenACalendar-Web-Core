@@ -17,17 +17,20 @@
 
 {% block innerContent %}
 
-	<p>Note disabling the import will delete all future events.</p>
+	<div class="contentMain">
+
+		<p>Note disabling the import will delete all future events.</p>
 
 
-	<form action="#" method="post" class="styled">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="disable" value="yes">
+		<form action="#" method="post" class="styled">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="disable" value="yes">
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Disable" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Disable" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
 
+	</div>
 
 {% endblock %}
 

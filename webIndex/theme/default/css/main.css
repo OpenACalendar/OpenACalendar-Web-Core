@@ -177,101 +177,9 @@ table {
     -moz-background-size: 16px 16px;
   }
 }
-p.FrontPage {
-  font-size: 16pt;
-  margin-bottom: 20px;
-  line-height: 1.2;
-  color: #333;
-}
-p.FrontPage a {
-  color: #333;
-}
-p.FrontPage a:hover,
-p.FrontPage a:focus {
-  color: black;
-}
-p.ForPage {
-  font-size: 16pt;
-  margin-bottom: 20px;
-  line-height: 1.2;
-}
 ul.loginOrRegisterInterestedIn li {
   margin: 3px 3px 3px 20px;
   list-style-type: circle;
-}
-form.styled .rowWrapper,
-.likeFormStyled .rowWrapper {
-  padding: 10px 0;
-}
-form.styled .rowWrapper .labelWrapper,
-.likeFormStyled .rowWrapper .labelWrapper {
-  padding: 0px 5px 0px 0px;
-  text-align: right;
-  display: block;
-  width: 20%;
-  float: left;
-}
-form.styled .rowWrapper .widgetWrapper,
-.likeFormStyled .rowWrapper .widgetWrapper {
-  display: block;
-  width: 70%;
-  float: left;
-}
-form.styled .rowWrapper .widgetWrapper input[type="text"],
-.likeFormStyled .rowWrapper .widgetWrapper input[type="text"] {
-  width: 80%;
-}
-form.styled .rowWrapper .widgetWrapper div.dateInput input[type="text"],
-.likeFormStyled .rowWrapper .widgetWrapper div.dateInput input[type="text"] {
-  width: 100px;
-}
-form.styled .rowWrapper .widgetWrapper input[type="url"],
-.likeFormStyled .rowWrapper .widgetWrapper input[type="url"] {
-  width: 80%;
-}
-form.styled .rowWrapper .widgetWrapper textarea,
-.likeFormStyled .rowWrapper .widgetWrapper textarea {
-  width: 80%;
-  height: 100px;
-}
-form.styled .rowWrapper .widgetWrapperPlacementOnly,
-.likeFormStyled .rowWrapper .widgetWrapperPlacementOnly {
-  display: block;
-  width: 70%;
-  float: left;
-}
-form.styled .rowWrapper .after,
-.likeFormStyled .rowWrapper .after {
-  clear: both;
-}
-form.styled ul.formErrors li,
-.likeFormStyled ul.formErrors li {
-  margin: 5px 0;
-  background: #eb6c6c;
-  border: 2px solid #6f1818;
-  padding: 5px;
-}
-form.styled input[type="url"],
-.likeFormStyled input[type="url"] {
-  width: 80%;
-}
-form.styled input[type="text"],
-.likeFormStyled input[type="text"] {
-  width: 80%;
-}
-form.styled textarea,
-.likeFormStyled textarea {
-  width: 80%;
-  height: 100px;
-}
-form.styled .smallInputs input[type="text"],
-.likeFormStyled .smallInputs input[type="text"] {
-  width: 40%;
-}
-form.styled p.information,
-.likeFormStyled p.information {
-  font-style: italic;
-  font-size: 0.8em;
 }
 ul.sites li {
   margin: 5px 0;
@@ -282,7 +190,7 @@ ul.sites li {
 }
 ul.sites li a.title {
   text-decoration: none;
-  font-size: 1.3em;
+  font-size: 1.25rem;
   color: black;
 }
 ul.sites li a.title .logoWrapper {
@@ -308,29 +216,26 @@ ul.sites li .link {
   display: block;
   text-align: right;
 }
-.codeExample {
-  padding: 10px;
-  background: #ddd;
-  font-family: serif;
-}
 .alternativeToFormAction {
   text-align: right;
 }
 html {
-  background-color: #B7CFB7;
+  background-color: #EEEEEE;
 }
 body {
   padding: 0;
   margin: 0;
   font-family: arial, sans-serif;
-  background-color: #B7CFB7;
+  background-color: #EEEEEE;
 }
 #page {
-  margin: 0 auto;
   background: white;
 }
-#page.normalContent {
+.contentMain {
   max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 3px;
 }
 #header {
   background-color: #0DA20D;
@@ -347,13 +252,12 @@ body {
   color: black;
   display: inline;
   font-weight: bold;
-  font-size: 1.6em;
+  font-size: 1.875rem;
 }
 #header .title a {
   text-decoration: none;
   color: #333;
-  font-size: 14pt;
-  padding: 5px;
+  padding: 5px 5px 5px 0;
   display: inline-block;
 }
 #header .title a:hover,
@@ -375,25 +279,23 @@ body {
 }
 #header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .title a {
   display: block;
-  font-size: 10pt;
   color: #999;
   padding: 0;
 }
 #header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .timesince,
 #header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li .site {
   display: inline;
-  font-size: 8pt;
+  font-size: 0.875rem;
   color: #999;
   padding: 2px;
 }
 #header ul.menu li#NotificationMenu ul.submenu#NotificationSubMenu li.unread .title a {
-  font-size: 12pt;
   color: #333;
 }
 #header ul.menu li {
   list-style-type: none;
   display: inline-block;
-  font-size: 1.4em;
+  font-size: 1.25REM;
 }
 #header ul.menu li a {
   text-decoration: none;
@@ -419,7 +321,6 @@ body {
 #header ul.menu li ul.submenu li a {
   text-decoration: none;
   color: #333;
-  font-size: 14pt;
   padding: 5px;
   display: inline-block;
 }
@@ -436,60 +337,22 @@ body {
 }
 #body {
   min-height: 400px;
-  padding: 5px;
+  padding: 5px 0;
 }
 h2 {
   font-weight: bold;
-  font-size: 1.5em;
+  font-size: 1.5rem;
   padding: 10px 0;
 }
 h3 {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.25rem;
   padding: 10px 0;
 }
 ul.normal li {
   padding: 3px 3px 3px 20px;
   list-style-type: disc;
   list-style-position: inside;
-}
-#bodyLeft,
-#bodyRight {
-  padding: 10px 2px;
-}
-#bodyLeft img,
-#bodyRight img {
-  max-width: 100%;
-}
-#bodyLeft p,
-#bodyRight p {
-  padding: 5px 0;
-}
-@media screen and (min-width: 750px) {
-  #bodyLeft {
-    width: 57%;
-    float: left;
-  }
-  #bodyRight {
-    width: 37%;
-    float: right;
-  }
-  #afterPage2Col {
-    clear: both;
-  }
-}
-@media screen and (min-width: 750px) {
-  #bodyLeftEqualWidth {
-    width: 47%;
-    float: left;
-  }
-  #bodyRightEqualWidth {
-    width: 47%;
-    float: right;
-  }
-  #afterPage2Col {
-    clear: both;
-  }
 }
 .flash-notice {
   margin: 10px 5px;
@@ -518,8 +381,13 @@ ul.normal li {
 p {
   margin: 10px 0;
 }
+ul.mainListEvents {
+  max-width: 800px;
+  margin: 0px auto;
+  padding: 0 3px;
+}
 ul.mainListEvents li.event {
-  margin: 5px 5px;
+  margin: 5px 0;
   border-bottom: 2px solid #E9E9E9;
 }
 ul.mainListEvents li.export {
@@ -536,23 +404,14 @@ ul.mainListEvents li.export a:focus {
 }
 ul.mainListEvents li.nodata,
 ul.mainListEvents li.info {
-  margin: 5px 5px;
+  margin: 5px 0;
   font-style: italic;
 }
-@media screen and (min-width: 750px) {
-  ul.mainListEvents li.event,
-  ul.mainListEvents li.nodata,
-  ul.mainListEvents li.info {
-    margin: 5px 50px;
-  }
-}
-ul.mainListEvents li.event,
-div.mainShowEvent {
-  margin-bottom: 10px;
-  padding: 20px 0;
-}
 ul.mainListEvents li.event div.dateTimeIcon,
-div.mainShowEvent div.dateTimeIcon {
+div.mainShowEvent div.dateTimeIcon,
+ul.history li.event div.dateTimeIcon,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon,
+div.importedevent div.dateTimeIcon {
   float: left;
   width: 60px;
   height: 80px;
@@ -566,70 +425,115 @@ div.mainShowEvent div.dateTimeIcon {
   border-radius: 4px;
 }
 ul.mainListEvents li.event div.dateTimeIcon div.dateIcon,
-div.mainShowEvent div.dateTimeIcon div.dateIcon {
+div.mainShowEvent div.dateTimeIcon div.dateIcon,
+ul.history li.event div.dateTimeIcon div.dateIcon,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon div.dateIcon,
+div.importedevent div.dateTimeIcon div.dateIcon {
   width: 60px;
   height: 60px;
   text-align: center;
   background: #231f20;
 }
 ul.mainListEvents li.event div.dateTimeIcon div.timeIcon,
-div.mainShowEvent div.dateTimeIcon div.timeIcon {
+div.mainShowEvent div.dateTimeIcon div.timeIcon,
+ul.history li.event div.dateTimeIcon div.timeIcon,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon div.timeIcon,
+div.importedevent div.dateTimeIcon div.timeIcon {
   padding: 1px;
   text-align: center;
 }
 ul.mainListEvents li.event div.dateTimeIcon span.deleted,
 ul.mainListEvents li.event div.dateTimeIcon span.cancelled,
 div.mainShowEvent div.dateTimeIcon span.deleted,
-div.mainShowEvent div.dateTimeIcon span.cancelled {
+div.mainShowEvent div.dateTimeIcon span.cancelled,
+ul.history li.event div.dateTimeIcon span.deleted,
+ul.history li.event div.dateTimeIcon span.cancelled,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.deleted,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.cancelled,
+div.importedevent div.dateTimeIcon span.deleted,
+div.importedevent div.dateTimeIcon span.cancelled {
   padding-top: 5px;
   display: block;
   color: white;
 }
 ul.mainListEvents li.event div.dateTimeIcon span.startDay,
-div.mainShowEvent div.dateTimeIcon span.startDay {
+div.mainShowEvent div.dateTimeIcon span.startDay,
+ul.history li.event div.dateTimeIcon span.startDay,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startDay,
+div.importedevent div.dateTimeIcon span.startDay {
+  font-size: 0.875rem;
   font-weight: 200;
   padding-top: 5px;
   display: block;
   color: white;
 }
 ul.mainListEvents li.event div.dateTimeIcon span.startDate,
-div.mainShowEvent div.dateTimeIcon span.startDate {
-  font-size: 16pt;
+div.mainShowEvent div.dateTimeIcon span.startDate,
+ul.history li.event div.dateTimeIcon span.startDate,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startDate,
+div.importedevent div.dateTimeIcon span.startDate {
+  font-size: 1.25rem;
   font-weight: 400;
   display: block;
   color: white;
 }
 ul.mainListEvents li.event div.dateTimeIcon span.startMonthYear,
-div.mainShowEvent div.dateTimeIcon span.startMonthYear {
+div.mainShowEvent div.dateTimeIcon span.startMonthYear,
+ul.history li.event div.dateTimeIcon span.startMonthYear,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startMonthYear,
+div.importedevent div.dateTimeIcon span.startMonthYear {
   font-weight: 200;
+  font-size: 0.875rem;
   display: block;
-  font-size: 0.75em;
   color: white;
 }
 ul.mainListEvents li.event div.dateTimeIcon span.startTime,
-div.mainShowEvent div.dateTimeIcon span.startTime {
-  font-size: 11pt;
+div.mainShowEvent div.dateTimeIcon span.startTime,
+ul.history li.event div.dateTimeIcon span.startTime,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon span.startTime,
+div.importedevent div.dateTimeIcon span.startTime {
+  font-size: 0.875rem;
   color: black;
 }
 ul.mainListEvents li.event div.dateTimeIcon a,
-div.mainShowEvent div.dateTimeIcon a {
+div.mainShowEvent div.dateTimeIcon a,
+ul.history li.event div.dateTimeIcon a,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a,
+div.importedevent div.dateTimeIcon a {
   text-decoration: none;
 }
 ul.mainListEvents li.event div.dateTimeIcon a span.startDay,
-div.mainShowEvent div.dateTimeIcon a span.startDay {
+div.mainShowEvent div.dateTimeIcon a span.startDay,
+ul.history li.event div.dateTimeIcon a span.startDay,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startDay,
+div.importedevent div.dateTimeIcon a span.startDay {
   color: white;
 }
 ul.mainListEvents li.event div.dateTimeIcon a span.startDate,
-div.mainShowEvent div.dateTimeIcon a span.startDate {
+div.mainShowEvent div.dateTimeIcon a span.startDate,
+ul.history li.event div.dateTimeIcon a span.startDate,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startDate,
+div.importedevent div.dateTimeIcon a span.startDate {
   color: white;
 }
 ul.mainListEvents li.event div.dateTimeIcon a span.startMonthYear,
-div.mainShowEvent div.dateTimeIcon a span.startMonthYear {
+div.mainShowEvent div.dateTimeIcon a span.startMonthYear,
+ul.history li.event div.dateTimeIcon a span.startMonthYear,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startMonthYear,
+div.importedevent div.dateTimeIcon a span.startMonthYear {
   color: white;
 }
 ul.mainListEvents li.event div.dateTimeIcon a span.startTime,
-div.mainShowEvent div.dateTimeIcon a span.startTime {
+div.mainShowEvent div.dateTimeIcon a span.startTime,
+ul.history li.event div.dateTimeIcon a span.startTime,
+ul.mainListImportedEvents li.importedevent div.dateTimeIcon a span.startTime,
+div.importedevent div.dateTimeIcon a span.startTime {
   color: black;
+}
+ul.mainListEvents li.event,
+div.mainShowEvent {
+  margin-bottom: 10px;
+  padding: 20px 0;
 }
 ul.mainListEvents li.event .media,
 div.mainShowEvent .media {
@@ -647,7 +551,7 @@ div.mainShowEvent .media img {
 }
 ul.mainListEvents li.event div.title,
 div.mainShowEvent div.title {
-  font-size: 16pt;
+  font-size: 1.125rem;
   font-weight: bold;
   line-height: 1.25em;
   padding: 2px 0 10px 70px;
@@ -672,7 +576,7 @@ div.mainShowEvent .descriptionDeleted,
 div.mainShowEvent .descriptionCancelled {
   font-style: italic;
   font-weight: bold;
-  font-size: 24pt;
+  font-size: 2rem;
   text-align: center;
   padding: 20px 10px;
   background: #000;
@@ -692,7 +596,6 @@ div.mainShowEvent p.venueTitle,
 div.mainShowEvent p.areaTitle,
 div.mainShowEvent p.countryTitle {
   font-weight: bold;
-  font-size: 0.8em;
 }
 ul.mainListEvents li.event p.groupTitle a,
 ul.mainListEvents li.event p.venueTitle a,
@@ -727,7 +630,6 @@ ul.mainListEvents li.event p.groupDescription,
 ul.mainListEvents li.event p.venueDescription,
 div.mainShowEvent p.groupDescription,
 div.mainShowEvent p.venueDescription {
-  font-size: 0.8em;
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 10px 0px;
 }
@@ -806,7 +708,7 @@ div.mainShowEvent .ticketIconInfo {
 ul.mainListEvents li.event .GetTicket,
 div.mainShowEvent .GetTicket {
   font-weight: bold;
-  font-size: 120%;
+  font-size: 1.25rem;
   font-style: italic;
 }
 @media screen and (max-width: 750px) {
@@ -891,7 +793,7 @@ div.mainShowGroup p.description {
 div.mainShowGroup .descriptionDeleted {
   font-style: italic;
   font-weight: bold;
-  font-size: 24pt;
+  font-size: 2rem;
   text-align: center;
   padding: 20px 10px;
   background: #000;
@@ -904,15 +806,15 @@ div.mainShowCountry .map {
   height: 150px;
 }
 div.filterListWrapper {
-  padding: 10px;
-  padding: 5px 0;
+  max-width: 800px;
+  margin: 5px auto;
+  padding: 0 3px;
   border: #72DA72 2px solid;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
-  margin: 5px 5px;
 }
 div.filterListWrapper .showHideLink {
   float: right;
@@ -933,108 +835,58 @@ div.filterListWrapper .currentFilters {
   padding: 10px;
   font-style: italic;
 }
-div.filterListWrapper form.filterList div.inputField {
-  display: block;
-  padding: 10px;
-}
-div.filterListWrapper form.filterList div.inputField .inputFieldLabelWrapper,
-div.filterListWrapper form.filterList div.inputField .inputFieldSearch,
-div.filterListWrapper form.filterList div.inputField .inputFieldLabel,
-div.filterListWrapper form.filterList div.inputField .inputFieldClear {
-  display: inline;
-}
-div.filterListWrapper form.filterList div.inputField .inputFieldLabel {
-  font-style: italic;
-}
-div.filterListWrapper form.filterList div.inputField .inputFieldClear a {
-  text-decoration: none;
-  color: #666;
-}
-div.filterListWrapper form.filterList div.inputField .inputFieldClear a:hover,
-div.filterListWrapper form.filterList div.inputField .inputFieldClear a:focus {
-  color: black;
-}
-div.filterListWrapper form.filterList #eventListFilterFromWrapper input {
+div.filterListWrapper form.filterList #eventListFilterFromWrapper input,
+div.filterListWrapper form.filterList #importedEventListFilterFromWrapper input {
   background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
 }
-div.filterListWrapper form.filterList div.submitField {
-  display: block;
-  text-align: right;
-  padding: 10px;
-}
-div.filterListWrapper form.filterList div.submitField input {
-  background: #36C036;
-  padding: 5px 10px;
-  color: black;
-  border: 2px solid #36C036;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -o-border-radius: 2px;
-  border-radius: 2px;
-  cursor: pointer;
-}
-@media screen and (min-width: 750px) {
-  div.filterListWrapper {
-    margin: 5px 40px;
-  }
-}
-#innerPageWrapper {
+.pageActionsWrapper {
   clear: both;
-}
-#innerPageWrapper #innerPageActionsShow {
-  padding: 0px 5px;
-  display: block;
-  text-align: right;
-}
-#innerPageWrapper #innerPageActionsShow a {
-  color: #333;
-  text-decoration: none;
-}
-#innerPageWrapper #innerPageActionsShow a:hover,
-#innerPageWrapper #innerPageActionsShow a:focus {
-  color: black;
-  text-decoration: underline;
-}
-#innerPageWrapper #innerPageActions {
-  padding: 10px 0 0 0;
   border-bottom: 1px solid #666;
+  margin: 10px 0;
 }
-#innerPageWrapper #innerPageActions li.action,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu,
-#innerPageWrapper #innerPageActions li.hide {
+.pageActionsWrapper .pageActions {
+  font-size: 0.875rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 3px;
+  padding: 10px 0 0 0;
+}
+.pageActionsWrapper .pageActions li.action,
+.pageActionsWrapper .pageActions li.actionWithSubMenu,
+.pageActionsWrapper .pageActions li.hide {
   padding: 0px 5px;
   display: inline;
   float: right;
 }
-#innerPageWrapper #innerPageActions li.action a,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu a,
-#innerPageWrapper #innerPageActions li.hide a {
+.pageActionsWrapper .pageActions li.action a,
+.pageActionsWrapper .pageActions li.actionWithSubMenu a,
+.pageActionsWrapper .pageActions li.hide a {
   color: #333;
   text-decoration: none;
 }
-#innerPageWrapper #innerPageActions li.action a:hover,
-#innerPageWrapper #innerPageActions li.action a:focus,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu a:hover,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu a:focus,
-#innerPageWrapper #innerPageActions li.hide a:hover,
-#innerPageWrapper #innerPageActions li.hide a:focus {
+.pageActionsWrapper .pageActions li.action a:hover,
+.pageActionsWrapper .pageActions li.action a:focus,
+.pageActionsWrapper .pageActions li.actionWithSubMenu a:hover,
+.pageActionsWrapper .pageActions li.actionWithSubMenu a:focus,
+.pageActionsWrapper .pageActions li.hide a:hover,
+.pageActionsWrapper .pageActions li.hide a:focus {
   color: black;
   text-decoration: underline;
 }
 @media screen and (max-width: 500px) {
-  #innerPageWrapper #innerPageActions li.action,
-  #innerPageWrapper #innerPageActions li.actionWithSubMenu,
-  #innerPageWrapper #innerPageActions li.hide {
+  .pageActionsWrapper .pageActions li.action,
+  .pageActionsWrapper .pageActions li.actionWithSubMenu,
+  .pageActionsWrapper .pageActions li.hide {
     display: block;
     float: none;
     margin: 15px 0;
   }
 }
-#innerPageWrapper #innerPageActions li.hide {
+.pageActionsWrapper .pageActions li.hide {
   text-align: right;
 }
-#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu {
+.pageActionsWrapper .pageActions li.actionWithSubMenu ul.submenu {
   padding: 0;
   margin: 0;
   display: none;
@@ -1045,23 +897,22 @@ div.filterListWrapper form.filterList div.submitField input {
   border-right: #4d3e04 2px solid;
   z-index: 999;
 }
-#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li {
+.pageActionsWrapper .pageActions li.actionWithSubMenu ul.submenu li {
   list-style-type: none;
   display: block;
 }
-#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a {
+.pageActionsWrapper .pageActions li.actionWithSubMenu ul.submenu li a {
   text-decoration: none;
   color: #333;
-  font-size: 12pt;
   padding: 5px;
   display: inline-block;
 }
-#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a:hover,
-#innerPageWrapper #innerPageActions li.actionWithSubMenu ul.submenu li a:focus {
+.pageActionsWrapper .pageActions li.actionWithSubMenu ul.submenu li a:hover,
+.pageActionsWrapper .pageActions li.actionWithSubMenu ul.submenu li a:focus {
   color: black;
   text-decoration: underline;
 }
-#innerPageWrapper #innerPageActions li.tab {
+.pageActionsWrapper .pageActions li.tab {
   -webkit-border-top-right-radius: 3px;
   -moz-border-radius-topright: 3px;
   -ms-border-radius-topright: 3px;
@@ -1078,87 +929,101 @@ div.filterListWrapper form.filterList div.submitField input {
   border: 1px solid #666;
   background: #f2f2f2;
 }
-#innerPageWrapper #innerPageActions li.tab a {
+.pageActionsWrapper .pageActions li.tab a {
   color: black;
   text-decoration: none;
 }
 @media screen and (max-width: 500px) {
-  #innerPageWrapper #innerPageActions li.tab a {
+  .pageActionsWrapper .pageActions li.tab a {
     display: block;
   }
 }
-#innerPageWrapper #innerPageActions li.tab a:hover,
-#innerPageWrapper #innerPageActions li.tab a:focus {
+.pageActionsWrapper .pageActions li.tab a:hover,
+.pageActionsWrapper .pageActions li.tab a:focus {
   color: blue;
   text-decoration: underline;
 }
 @media screen and (max-width: 500px) {
-  #innerPageWrapper #innerPageActions li.tab {
+  .pageActionsWrapper .pageActions li.tab {
     display: block;
     padding: 15px 5px;
   }
 }
-#innerPageWrapper #innerPageActions li.currentTab {
+.pageActionsWrapper .pageActions li.currentTab {
   background: #fff;
   border-top: 1px solid black;
   border-left: 1px solid black;
   border-right: 1px solid black;
   border-bottom: 1px solid #fff;
 }
-#innerPageWrapper #innerPageActions li.currentTab a,
-#innerPageWrapper #innerPageActions li.currentTab a:hover,
-#innerPageWrapper #innerPageActions li.currentTab a:focus {
+.pageActionsWrapper .pageActions li.currentTab a,
+.pageActionsWrapper .pageActions li.currentTab a:hover,
+.pageActionsWrapper .pageActions li.currentTab a:focus {
   color: black;
   text-decoration: none;
 }
-#innerPageWrapper #innerPage {
-  clear: both;
-  padding: 5px;
-  margin: 2px;
+.pageActionsShow {
+  padding: 0px 5px;
+  display: block;
+  text-align: right;
 }
-#innerPageWrapper #innerPage .innerPageLeftRightTitle {
+.pageActionsShow a {
+  color: #333;
+  text-decoration: none;
+}
+.pageActionsShow a:hover,
+.pageActionsShow a:focus {
+  color: black;
+  text-decoration: underline;
+}
+.contentTwoColumns {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 3px;
+}
+.contentTwoColumns .contentTwoColumnsTitle {
   border-top: 1px solid #ccc;
   margin-top: 5px;
 }
-#innerPageWrapper #innerPage .innerPageLeftRightTitle .title {
+.contentTwoColumns .contentTwoColumnsTitle .title {
   font-weight: bold;
-  font-size: 0.8em;
 }
-#innerPageWrapper #innerPage .innerPageLeftRightTitle .title a {
+.contentTwoColumns .contentTwoColumnsTitle .title a {
   color: black;
   text-decoration: none;
 }
-#innerPageWrapper #innerPage .innerPageLeftRightTitle .title a:hover,
-#innerPageWrapper #innerPage .innerPageLeftRightTitle .title a:focus {
+.contentTwoColumns .contentTwoColumnsTitle .title a:hover,
+.contentTwoColumns .contentTwoColumnsTitle .title a:focus {
   text-decoration: underline;
 }
 @media screen and (min-width: 750px) {
-  #innerPageWrapper #innerPage .innerPageLeft {
+  .contentTwoColumns .contentTwoColumnsLeft {
     width: 57%;
     float: left;
   }
-  #innerPageWrapper #innerPage .innerPageRight {
+  .contentTwoColumns .contentTwoColumnsRight {
     width: 37%;
     float: right;
   }
 }
 @media screen and (max-width: 750px) {
-  #innerPageWrapper #innerPage .innerPageLeft.hideIfOneCol,
-  #innerPageWrapper #innerPage .innerPageRight.hideIfOneCol {
+  .contentTwoColumns .contentTwoColumnsLeft.hideIfOneCol,
+  .contentTwoColumns .contentTwoColumnsRight.hideIfOneCol {
     display: none;
   }
 }
-#innerPageWrapper #innerPage .afterInnerPageContent {
-  clear: both;
-}
-#innerPageWrapper #innerPage .innerPageRight .innerPageRightLinkWrapper {
+.contentTwoColumns .contentTwoColumnsRight .contentTwoColumnsLinkWrapper {
   padding-bottom: 10px;
 }
-#innerPageWrapper #innerPage .innerPageRight .innerPageRightLinkWrapper .innerPageRightLinkHeader {
-  font-size: 0.8em;
+.contentTwoColumns .contentTwoColumnsRight .contentTwoColumnsLinkWrapper .contentTwoColumnsLinkHeader {
+  font-size: 0.875rem;
 }
-#innerPageWrapper #innerPage .innerPageRight .innerPageRightLinkWrapper .innerPageRightLinkContent a {
-  font-size: 0.8em;
+.contentTwoColumns .contentTwoColumnsRight .contentTwoColumnsLinkWrapper .contentTwoColumnsLinkContent a {
+  font-size: 0.875rem;
+}
+.contentTwoColumns .afterContentTwoColumns {
+  clear: both;
 }
 #MenuMask {
   position: fixed;
@@ -1212,19 +1077,25 @@ ul.listOfTextItems li {
   background-color: #36C036;
   color: #333;
   padding: 5px;
-  font-size: 0.8em;
+  font-size: 0.875rem;
 }
 .infoBoxWrapper .infoBoxContent {
   padding: 5px;
+  font-size: 0.875rem;
 }
 ul.breadcrumbs {
-  padding: 10px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 3px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   text-transform: lowercase;
 }
 ul.breadcrumbs li {
   display: inline;
-  font-size: 0.8em;
-  padding: 5px 10px 5px 15px;
+  font-size: 0.875rem;
+  padding: 5px 20px 5px 0px;
 }
 @media screen and (max-width: 500px) {
   ul.breadcrumbs li {
@@ -1245,7 +1116,7 @@ ul.breadcrumbs li.current {
 }
 ul.actionList li.header {
   padding: 10px 0;
-  font-size: 1.3em;
+  font-size: 1.125rem;
   font-weight: bold;
 }
 ul.actionList li img {
@@ -1264,14 +1135,14 @@ ul.actionList li a:focus {
 }
 p.errorPageHeader {
   color: #333;
-  font-size: 4em;
+  font-size: 2em;
   font-weight: bold;
   margin: 2px 0;
 }
 p.errorPageText {
   text-align: right;
   color: #333;
-  font-size: 1.4em;
+  font-size: 1.25rem;
   margin: 2px 0;
 }
 p.errorPageText a {
@@ -1280,6 +1151,12 @@ p.errorPageText a {
 p.errorPageText a:hover,
 p.errorPageText a:focus {
   color: black;
+}
+ul.usernotifications {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 3px;
 }
 ul.usernotifications li.usernotificationunread,
 ul.usernotifications li.usernotificationread {
@@ -1303,21 +1180,19 @@ ul.usernotifications li.usernotificationread div.timesince,
 ul.usernotifications li.usernotificationread div.site {
   display: inline;
   color: #999;
-  font-size: 0.8em;
+  font-size: 0.875rem;
   padding: 5px 0;
 }
-ul.usernotifications li.usernotificationunread a.title {
-  font-size: 1.4em;
-}
-ul.usernotifications li.usernotificationunread a.title {
-  font-size: 1.1em;
+ul.usernotifications li.usernotificationread a.title {
+  color: #aaa;
 }
 #footer {
+  background-color: #EEEEEE;
   margin-top: 50px;
-  padding: 10px 5px;
+  padding: 50px 5px;
   text-align: center;
   font-style: italic;
-  font-size: 0.8em;
+  font-size: 0.875rem;
   color: #333;
 }
 #footer a {
@@ -1353,7 +1228,7 @@ form .bigSubmitActionWrapper input[type="submit"] {
   border-radius: 3px;
   margin: 1px;
   color: #333;
-  font-size: 1.20em;
+  font-size: 1.25rem;
   text-decoration: none;
 }
 form .bigSubmitActionWrapper input[type="submit"]:hover,
@@ -1396,14 +1271,19 @@ form .afterBigSubmitActionWrapper {
   display: inline;
   padding: 3px;
 }
-.switcherWrapper {
-  margin: 5px 5px;
+.contentSwitcher {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 3px;
+}
+.contentSwitcher .switcherWrapper {
+  margin: 10px 0;
   text-align: right;
 }
-.switcherWrapper .switcherList {
+.contentSwitcher .switcherWrapper .switcherList {
   line-height: 2;
 }
-.switcherWrapper .switcherList .switcherAction {
+.contentSwitcher .switcherWrapper .switcherList .switcherAction {
   background: #EEEEEE;
   display: inline;
   padding: 5px 15px;
@@ -1413,16 +1293,16 @@ form .afterBigSubmitActionWrapper {
   -o-border-radius: 2px;
   border-radius: 2px;
 }
-.switcherWrapper .switcherList .switcherAction a {
+.contentSwitcher .switcherWrapper .switcherList .switcherAction a {
   padding: 10px 30px;
   text-decoration: none;
   color: #333;
 }
-.switcherWrapper .switcherList .switcherAction a:hover,
-.switcherWrapper .switcherList .switcherAction a:focus {
+.contentSwitcher .switcherWrapper .switcherList .switcherAction a:hover,
+.contentSwitcher .switcherWrapper .switcherList .switcherAction a:focus {
   text-decoration: underline;
 }
-.switcherWrapper .switcherList .current {
+.contentSwitcher .switcherWrapper .switcherList .current {
   border: 1px solid #000000;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1431,13 +1311,94 @@ form .afterBigSubmitActionWrapper {
   border-radius: 2px;
   background: #72DA72;
 }
-.switcherWrapper .switcherList .current a {
+.contentSwitcher .switcherWrapper .switcherList .current a {
   font-weight: bold;
 }
-@media screen and (min-width: 750px) {
-  .switcherWrapper {
-    margin: 5px 50px;
-  }
+form.styled .rowWrapper,
+.likeFormStyled .rowWrapper {
+  padding: 10px 0;
+}
+form.styled .rowWrapper .labelWrapper,
+.likeFormStyled .rowWrapper .labelWrapper {
+  padding: 0px 5px 0px 0px;
+  text-align: right;
+  display: block;
+  width: 20%;
+  float: left;
+}
+form.styled .rowWrapper .widgetWrapper,
+.likeFormStyled .rowWrapper .widgetWrapper {
+  display: block;
+  width: 70%;
+  float: left;
+}
+form.styled .rowWrapper .widgetWrapper input[type="text"],
+.likeFormStyled .rowWrapper .widgetWrapper input[type="text"] {
+  width: 80%;
+}
+form.styled .rowWrapper .widgetWrapper div.dateInput input[type="text"],
+.likeFormStyled .rowWrapper .widgetWrapper div.dateInput input[type="text"] {
+  width: 100px;
+}
+form.styled .rowWrapper .widgetWrapper input[type="url"],
+.likeFormStyled .rowWrapper .widgetWrapper input[type="url"] {
+  width: 80%;
+}
+form.styled .rowWrapper .widgetWrapper textarea,
+.likeFormStyled .rowWrapper .widgetWrapper textarea {
+  width: 80%;
+  height: 100px;
+}
+form.styled .rowWrapper .widgetWrapperPlacementOnly,
+.likeFormStyled .rowWrapper .widgetWrapperPlacementOnly {
+  display: block;
+  width: 70%;
+  float: left;
+}
+form.styled .rowWrapper .after,
+form.styled .rowWrapper .afterRowWrapper,
+.likeFormStyled .rowWrapper .after,
+.likeFormStyled .rowWrapper .afterRowWrapper {
+  clear: both;
+}
+form.styled ul.formErrors li,
+.likeFormStyled ul.formErrors li {
+  margin: 5px 0;
+  background: #eb6c6c;
+  border: 2px solid #6f1818;
+  padding: 5px;
+}
+form.styled input[type="url"],
+.likeFormStyled input[type="url"] {
+  width: 80%;
+}
+form.styled input[type="text"],
+.likeFormStyled input[type="text"] {
+  width: 80%;
+}
+form.styled textarea,
+.likeFormStyled textarea {
+  width: 80%;
+  height: 100px;
+}
+form.styled .smallInputs input[type="text"],
+.likeFormStyled .smallInputs input[type="text"] {
+  width: 40%;
+}
+form.styled img.logo,
+.likeFormStyled img.logo {
+  max-width: 60px;
+  max-height: 60px;
+}
+form.styled #Map,
+.likeFormStyled #Map {
+  width: 50%;
+  height: 200px;
+}
+form.styled p.information,
+.likeFormStyled p.information {
+  font-style: italic;
+  font-size: 0.875rem;
 }
 #PopupMask {
   position: fixed;
@@ -1523,7 +1484,7 @@ form .afterBigSubmitActionWrapper {
 .popupBox .popupShowEvent .title {
   padding: 5px 0;
   font-weight: bold;
-  font-size: 110%;
+  font-size: 1.125rem;
 }
 .popupBox .popupShowEvent .description {
   padding: 5px 0;
@@ -1674,8 +1635,8 @@ form .afterBigSubmitActionWrapper {
 .popupBox .afterMediaGrid {
   clear: left;
 }
-#page.calendarContent {
-  max-width: 1600px;
+.contentCalendar {
+  padding: 0 3px;
 }
 .calendarLabel,
 .calendarControls {
@@ -1684,7 +1645,7 @@ form .afterBigSubmitActionWrapper {
 }
 .calendarLabel .date,
 .calendarControls .date {
-  font-size: 1.6em;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 .calendarControls a {
@@ -1731,7 +1692,7 @@ table.calendar .event {
   padding: 5px;
 }
 table.calendar .event .start_at {
-  font-size: 0.8em;
+  font-size: 0.875rem;
 }
 table.calendar .event a {
   color: #222;

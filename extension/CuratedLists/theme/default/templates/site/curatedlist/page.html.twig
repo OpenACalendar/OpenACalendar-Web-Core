@@ -23,24 +23,21 @@
 	{% if not currentSiteFeatures.has('org.openacalendar.curatedlists','CuratedList') %}
 		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
 	{% endif %}
-		
-	<h2>{{  curatedlist.title }}</h2>
-	
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+
+	<div class="contentMain">
+		<h2>{{  curatedlist.title }}</h2>
+	</div>
+
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/curatedlist/{{ curatedlist.slug }}">Details &amp; Events</a></li>
 			<li class="tab {% block tabCurators %}{% endblock %}"><a href="/curatedlist/{{ curatedlist.slugForUrl }}/curators">Curators</a></li>
 			<li class="tab {% block tabGroups %}{% endblock %}"><a href="/curatedlist/{{ curatedlist.slugForUrl }}/groups">Groups</a></li>
 		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
 
+	{% block innerContent %}{% endblock %}
 
 {% endblock %}
 

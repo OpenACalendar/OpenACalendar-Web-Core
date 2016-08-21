@@ -18,85 +18,89 @@
 
 {% block innerContent %}
 
-	<h3>Imported event</h3>
+	<div class="contentMain">
 
-	<div class="importedevent">
+		<h3>Imported event</h3>
 
-		{% if true %}
-			<div class="dateTimeIcon">
-				<time datetime="{{ importedEvent.getStartAt|date('c', currentTimeZone) }}">
-					<div class="dateIcon">
-						<span class="startDay">{{ importedEvent.getStartAt|date('D', currentTimeZone) }}</span>
-						<span class="startDate">{{ importedEvent.getStartAt|date('jS', currentTimeZone) }}</span>
-						<span class="startMonthYear">{{ importedEvent.getStartAt|date('M \'y', currentTimeZone) }}</span>
-					</div>
-					<div class="timeIcon">
-						<span class="startTime">{{ importedEvent.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}</span>
-					</div>
-				</time>
-			</div>
-		{% endif %}
-		<div class="title">{{ importedEvent.title }}</div>
-		<p class="description">{{ importedEvent.description |  truncate(1000) | nl2br  | linkify }}</p>
+		<div class="importedevent">
+
+			{% if true %}
+				<div class="dateTimeIcon">
+					<time datetime="{{ importedEvent.getStartAt|date('c', currentTimeZone) }}">
+						<div class="dateIcon">
+							<span class="startDay">{{ importedEvent.getStartAt|date('D', currentTimeZone) }}</span>
+							<span class="startDate">{{ importedEvent.getStartAt|date('jS', currentTimeZone) }}</span>
+							<span class="startMonthYear">{{ importedEvent.getStartAt|date('M \'y', currentTimeZone) }}</span>
+						</div>
+						<div class="timeIcon">
+							<span class="startTime">{{ importedEvent.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}</span>
+						</div>
+					</time>
+				</div>
+			{% endif %}
+			<div class="title">{{ importedEvent.title }}</div>
+			<p class="description">{{ importedEvent.description |  truncate(1000) | nl2br  | linkify }}</p>
 
 
-		<div class="dateAndLocationWrapper">
-			{% if  importedEvent.timezone %}
-				{% if currentTimeZone == importedEvent.timezone %}
-					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+			<div class="dateAndLocationWrapper">
+				{% if  importedEvent.timezone %}
+					{% if currentTimeZone == importedEvent.timezone %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+					{% else %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':importedEvent.timezone, 'showTimeZone':true} %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+					{% endif %}
 				{% else %}
-					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':importedEvent.timezone, 'showTimeZone':true} %}
 					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
 				{% endif %}
-			{% else %}
-				{% include 'site/common/eventFromToLine.html.twig' with {'startAt': importedEvent.startAtInUTC, 'endAt': importedEvent.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+			</div>
+
+
+			{%  if importedEvent.hasReoccurence %}
+				 <div class="reoccur">
+					 This event reoccurs!
+					 {#  TODO add some showing of rules #}
+				 </div>
 			{% endif %}
+
+
+
+			<div class="afterEventListing"></div>
 		</div>
 
+		{%  if importedEventReoccurs %}
 
-		{%  if importedEvent.hasReoccurence %}
-			 <div class="reoccur">
-				 This event reoccurs!
-				 {#  TODO add some showing of rules #}
-			 </div>
-		{% endif %}
+			<h3>Real events</h3>
 
+			{% include '/site/eventListFilterParams.html.twig' %}
 
+			<ul class="mainListEvents">
+				{% for event in events %}
+					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
+				{% else %}
+					<li class="nodata">
+						No events found.
+					</li>
+				{% endfor %}
+			</ul>
 
-		<div class="afterEventListing"></div>
+		{% else %}
+
+			<h3>Real event</h3>
+
+			<ul class="mainListEvents">
+				{% if event %}
+					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
+				{% else %}
+					<li class="nodata">
+						No events found.
+					</li>
+				{% endif %}
+			</ul>
+
+		{%  endif %}
+
 	</div>
-
-	{%  if importedEventReoccurs %}
-
-		<h3>Real events</h3>
-
-		{% include '/site/eventListFilterParams.html.twig' %}
-
-		<ul class="mainListEvents">
-			{% for event in events %}
-				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
-			{% else %}
-				<li class="nodata">
-					No events found.
-				</li>
-			{% endfor %}
-		</ul>
-
-	{% else %}
-
-		<h3>Real event</h3>
-
-		<ul class="mainListEvents">
-			{% if event %}
-				{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':false, 'showVenueAndArea':true}  %}
-			{% else %}
-				<li class="nodata">
-					No events found.
-				</li>
-			{% endif %}
-		</ul>
-
-	{%  endif %}
 
 
 {% endblock %}

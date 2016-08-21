@@ -15,18 +15,20 @@
 
 {% block content %}
 
-	<p>
-		Currently using: 
-		{% set kilobyte = 1024 %}
-		{% set megabyte = kilobyte * 1024 %}
-		{% if size < kilobyte %}
-			{{ size ~ ' B' }}
-		{% elseif size < megabyte %}
-			{{ (size / kilobyte)|number_format(2, '.') ~ ' KB' }}
-		{% else %}
-			{{ (size / megabyte)|number_format(2, '.') ~ ' MB' }}
-		{% endif %}
-	</p>
+	<div class="contentMain">
+		<p>
+			Currently using:
+			{% set kilobyte = 1024 %}
+			{% set megabyte = kilobyte * 1024 %}
+			{% if size < kilobyte %}
+				{{ size ~ ' B' }}
+			{% elseif size < megabyte %}
+				{{ (size / kilobyte)|number_format(2, '.') ~ ' KB' }}
+			{% else %}
+				{{ (size / megabyte)|number_format(2, '.') ~ ' MB' }}
+			{% endif %}
+		</p>
+	</div>
 		
 {% endblock %}
 

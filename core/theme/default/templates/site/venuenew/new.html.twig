@@ -32,33 +32,37 @@
 {% endblock %}
 
 {% block content %}
-	
-	<form action="#" method="post" class="styled">
 
-		{{ form_errors(form) }}
+	<div class="contentMain">
 
-		{{ form_row(form.title) }}
-		{{ form_row(form.description) }}
-		{{ form_row(form.address) }}
-		
-		{% include 'site/common/venueFormAreaBrowser.html.twig' %}
-		
-		{{ form_row(form.address_code) }}
-		{{ form_row(form.country_id) }}
-		
-		<div class="rowWrapper">
-			<div class="labelWrapper">Map (Click to set location)</div>
-			<div class="widgetWrapperPlacementOnly"><div id="Map"></div></div>
-			<div class="after"></div>
-		</div>
+		<form action="#" method="post" class="styled">
 
-		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+			{{ form_errors(form) }}
 
-		{{ form_rest(form) }}
+			{{ form_row(form.title) }}
+			{{ form_row(form.description) }}
+			{{ form_row(form.address) }}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			{% include 'site/common/venueFormAreaBrowser.html.twig' %}
+
+			{{ form_row(form.address_code) }}
+			{{ form_row(form.country_id) }}
+
+			<div class="rowWrapper">
+				<div class="labelWrapper">Map (Click to set location)</div>
+				<div class="widgetWrapperPlacementOnly"><div id="Map"></div></div>
+				<div class="after"></div>
+			</div>
+
+			{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
+			{{ form_rest(form) }}
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}
 

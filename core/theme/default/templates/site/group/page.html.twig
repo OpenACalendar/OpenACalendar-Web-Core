@@ -20,30 +20,28 @@
 {% block content %}
 
 	{% if not currentSiteFeatures.has('org.openacalendar','Group') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
-		
-	<h2>{{  group.title }}</h2>
+
+	<div class="contentMain">
+		<h2>{{  group.title }}</h2>
+	</div>
 
 	{%  if groupIsDuplicateOf %}
-		<div class="flash-notice">
+		<div class="flash-notice"><div class="contentMain">
 			This group is a duplicate of <a href="/group/{{  groupIsDuplicateOf.slugForURL }}">{{  groupIsDuplicateOf.title }}</a>.
-		</div>
+		</div></div>
 	{% endif %}
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/group/{{ group.slugForUrl }}">Details &amp; Events</a></li>
 			{%  if currentUserActions.has("org.openacalendar","groupHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/group/{{ group.slugForUrl }}/history">History of changes</a></li>{%  endif %}
 		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
+
+	{% block innerContent %}{% endblock %}
 
 
 {% endblock %}

@@ -69,73 +69,81 @@
 			<p class="descriptionDeleted">This group has been deleted!</p>
 		{%  endif %}
 
-		<div class="innerPageLeft">
+		<div class="contentTwoColumns">
 
-			<p itemprop="description" class="description">{{ group.description | nl2br  | linkify }}</p>
+			<div class="contentTwoColumnsLeft">
 
-			{% if medias %}
-				<ul class="mediaGrid">
-					{% for media in medias %}
-						<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
-					{% endfor %}
-				</ul>
-				<div class="afterMediaGrid"></div>
-			{% endif %}
+				<p itemprop="description" class="description">{{ group.description | nl2br  | linkify }}</p>
+
+				{% if medias %}
+					<ul class="mediaGrid">
+						{% for media in medias %}
+							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+						{% endfor %}
+					</ul>
+					<div class="afterMediaGrid"></div>
+				{% endif %}
 
 
 
-		</div>
+			</div>
 
-		<div class="innerPageRight">
+			<div class="contentTwoColumnsRight">
 
-			{% if group.url %}
-				<div class="innerPageRightLinkWrapper">
-					<div class="innerPageRightLinkHeader">More details</div>
-					<div class="innerPageRightLinkContent"><a href="{{ group.url }}" target="_blank" rel="noopener">{{ group.url | linkinfo }}</a></div>
-				</div>
-			{% endif %}
-
-			{% if group.twitterUsername %}
-				<div class="innerPageRightLinkWrapper">
-					<div class="innerPageRightLinkHeader">On Twitter</div>
-					<div class="innerPageRightLinkContent"><a href="https://twitter.com/{{ group.twitterUsername }}" target="_blank">@{{ group.twitterUsername }}</a></div>
-				</div>
-			{% endif %}
-
-			{% if importurls %}
-				<ul class="actionList">
-					<li><p><a href="/group/{{ group.slugForUrl }}/importers"><div class="fa fa-cloud-download"></div> List importers</a></p></li>
-				</ul>
-			{% endif %}
-
-			{%  if curatedLists|length > 0 %}
-				<div class="infoBoxWrapper">
-					<div class="infoBoxTitle">Is in Curated Lists</div>
-					<div class="infoBoxContent">
-						<ul class="infoBoxListCuratedLists">
-							{% for curatedList in curatedLists %}
-								<li class="curatedlist"><a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a></li>
-							{% endfor %}
-						</ul>
+				{% if group.url %}
+					<div class="contentTwoColumnsLinkWrapper">
+						<div class="contentTwoColumnsLinkHeader">More details</div>
+						<div class="contentTwoColumnsLinkContent"><a href="{{ group.url }}" target="_blank" rel="noopener">{{ group.url | linkinfo }}</a></div>
 					</div>
-				</div>
-			{%  endif %}
+				{% endif %}
+
+				{% if group.twitterUsername %}
+					<div class="contentTwoColumnsLinkWrapper">
+						<div class="contentTwoColumnsLinkHeader">On Twitter</div>
+						<div class="contentTwoColumnsLinkContent"><a href="https://twitter.com/{{ group.twitterUsername }}" target="_blank">@{{ group.twitterUsername }}</a></div>
+					</div>
+				{% endif %}
+
+				{% if importurls %}
+					<ul class="actionList">
+						<li><p><a href="/group/{{ group.slugForUrl }}/importers"><div class="fa fa-cloud-download"></div> List importers</a></p></li>
+					</ul>
+				{% endif %}
+
+				{%  if curatedLists|length > 0 %}
+					<div class="infoBoxWrapper">
+						<div class="infoBoxTitle">Is in Curated Lists</div>
+						<div class="infoBoxContent">
+							<ul class="infoBoxListCuratedLists">
+								{% for curatedList in curatedLists %}
+									<li class="curatedlist"><a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				{%  endif %}
+
+			</div>
+
+			<div class="afterContentTwoColumns"></div>
 
 		</div>
 
-		<div class="afterInnerPageContent"></div>
 
 		{% include '/site/eventListFilterParams.html.twig' %}
 
-		<div class="switcherWrapper">
-			<div class="switcherList">
-				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
-					<a href="/group/{{  group.slug }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
-				</div>
-				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
-					<a href="/group/{{  group.slug }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+		<div class="contentSwitcher">
+			<div class="switcherWrapper">
+				<div class="switcherList">
+					<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+						<a href="/group/{{  group.slug }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+					</div>
+					<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+						<a href="/group/{{  group.slug }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+					</div>
 				</div>
 			</div>
+
 		</div>
 
 		{% block eventsContent %}{%  endblock %}

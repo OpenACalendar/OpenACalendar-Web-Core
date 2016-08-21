@@ -41,36 +41,42 @@
 	<div class="mainShowCountry" itemscope itemtype="http://schema.org/Place">
 		<meta itemprop="name" content="{{ country.title|e('html_attr') }}" />
 
-		<div  class="innerPageLeft">
+		<div class="contentTwoColumns">
 
-			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+			<div  class="contentTwoColumnsLeft">
 
-		</div>
+				{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
 
-		<div  class="innerPageRight">
-
-			<div id="MapWrapper">
-				<div id="Map" class="map"></div>
-				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-					<ul class="actionList">
-						<li><a href="/map?country={{ country.twoCharCode }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
-					</ul>
-				{% endif %}
 			</div>
 
-		</div>
+			<div  class="contentTwoColumnsRight">
 
-		<div class="afterInnerPageContent"></div>
+				<div id="MapWrapper">
+					<div id="Map" class="map"></div>
+					{% if currentSiteFeatures.has('org.openacalendar','Map') %}
+						<ul class="actionList">
+							<li><a href="/map?country={{ country.twoCharCode }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
+						</ul>
+					{% endif %}
+				</div>
+
+			</div>
+
+			<div class="afterContentTwoColumns"></div>
+
+		</div>
 
 		{% include '/site/eventListFilterParams.html.twig' %}
 
-		<div class="switcherWrapper">
-			<div class="switcherList">
-				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
-					<a href="/country/{{ country.twoCharCode }}/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
-				</div>
-				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
-					<a href="/country/{{ country.twoCharCode }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+		<div class="contentSwitcher">
+			<div class="switcherWrapper">
+				<div class="switcherList">
+					<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+						<a href="/country/{{ country.twoCharCode }}/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+					</div>
+					<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+						<a href="/country/{{ country.twoCharCode }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+					</div>
 				</div>
 			</div>
 		</div>

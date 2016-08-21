@@ -15,24 +15,32 @@
 
 {% block content %}
 
-	{% for feature in currentSiteFeatures.asList %}
+	<div class="contentMain">
 
-		<h3>{{ feature.title }} {% if feature.on %}<span class="fa fa-check"></span>{% else %}<span class="fa fa-times"></span>{%  endif %}</h3>
-		<p>{{  feature.description }}</p>
-		<form action="#" method="post"  class="styled">
-			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-			<input type="hidden" name="extension" value="{{ feature.extensionID | e('html_attr') }}">
-			<input type="hidden" name="feature" value="{{ feature.featureID | e('html_attr') }}">
-			{% if feature.on %}
-				<input type="hidden" name="action" value="off">
-				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn Off {{ feature.title|e('html_attr') }}"></div>
-			{%  else %}
-				<input type="hidden" name="action" value="on">
-				<div class="bigSubmitActionWrapper"><input type="submit" value="Turn On {{ feature.title|e('html_attr') }}"></div>
-			{%  endif %}
-			<div class="afterBigSubmitActionWrapper"></div>
-		</form>
-	{% endfor %}
+		<ul class="listFeatures">
+			{% for feature in currentSiteFeatures.asList %}
+
+				<li class="feature">
+					<h3>{{ feature.title }} {% if feature.on %}<span class="fa fa-check"></span>{% else %}<span class="fa fa-times"></span>{%  endif %}</h3>
+					<p>{{  feature.description }}</p>
+					<form action="#" method="post"  class="styled">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						<input type="hidden" name="extension" value="{{ feature.extensionID | e('html_attr') }}">
+						<input type="hidden" name="feature" value="{{ feature.featureID | e('html_attr') }}">
+						{% if feature.on %}
+							<input type="hidden" name="action" value="off">
+							<div class="bigSubmitActionWrapper"><input type="submit" value="Turn Off {{ feature.title|e('html_attr') }}"></div>
+						{%  else %}
+							<input type="hidden" name="action" value="on">
+							<div class="bigSubmitActionWrapper"><input type="submit" value="Turn On {{ feature.title|e('html_attr') }}"></div>
+						{%  endif %}
+						<div class="afterBigSubmitActionWrapper"></div>
+					</form>
+				</li>
+			{% endfor %}
+		</ul>
+
+	</div>
 
 {% endblock %}
 

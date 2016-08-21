@@ -29,22 +29,25 @@
 			</div>
 			<div id="body">
 				{% block breadcrumbs %}{% endblock %}
-				<div id="bodyLeft">
-					<p class="errorPageHeader">{{ exception.statusCode }}</p>
-					<p class="errorPageHeader">{{ exception.message }}</p>
-					<p class="errorPageHeader">Error</p>
+				<div class="contentTwoColumns">
+					<div class="contentTwoColumnsLeft">
+
+						<p class="errorPageHeader">{{ exception.statusCode }}</p>
+						<p class="errorPageHeader">{{ exception.message }}</p>
+						<p class="errorPageHeader">Error</p>
+					</div>
+					<div class="contentTwoColumnsRight">
+
+						<p class="errorPageText">Sorry, there was a problem.</p>
+
+						<p  class="errorPageText">
+							Please <a href="/">return to the home page and try again</a>
+							{%  if extensions.hasExtensionID('org.openacalendar.contact') %}, or <a href="/contact">contact us</a> with any problems.{%  endif %}
+						</p>
+
+					</div>
+					<div class="afterContentTwoColumns"></div>
 				</div>
-				<div id="bodyRight">
-				
-					<p class="errorPageText">Sorry, there was a problem.</p>
-					
-					<p  class="errorPageText">
-						Please <a href="/">return to the home page and try again</a>
-						{%  if extensions.hasExtensionID('org.openacalendar.contact') %}, or <a href="/contact">contact us</a> with any problems.{%  endif %}
-					</p>
-				
-				</div>
-				<div id="afterPage2Col"></div>
 			</div>
 			<div id="footer">
 				{%  if extensions.hasExtensionID('org.openacalendar.contact') %}<a href="{{ config.getWebIndexDomainSecure() }}/contact">contact</a>{% endif %}

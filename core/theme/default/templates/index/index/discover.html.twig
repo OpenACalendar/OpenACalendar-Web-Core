@@ -16,25 +16,26 @@
 	
 {% block content %}
 
+	<div class="contentMain">
 
-	<p>Discover some of the calendars we host. An administrator of a calendar can choose whether it appears on this page.</p>
+		<p>Discover some of the calendars we host. An administrator of a calendar can choose whether it appears on this page.</p>
 
-	<ul class="sites">
-		{% for site in sites %}
-			<li class="site">
-				<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="title">
-					<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
-					<span class="titleWrapper">{{ site.title }}</span>
-				</a>
-				<p class="description">{{ site.descriptionText | nl2br }}</p>
-				<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="link">
-					View
-				</a>
-			</li>
-		{% endfor %}
-	</ul>
+		<ul class="sites">
+			{% for site in sites %}
+				<li class="site">
+					<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="title">
+						<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
+						<span class="titleWrapper">{{ site.title }}</span>
+					</a>
+					<p class="description">{{ site.descriptionText | nl2br }}</p>
+					<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="link">
+						View
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
 
-
+	</div>
 
 
 {% endblock %}

@@ -22,41 +22,41 @@
 
 {% block content %}
 
-	<div id="innerPageWrapper">
-		<div id="innerPage">
+	<div class="contentTwoColumns">
 
-			<div class="innerPageLeft">
-				{% if currentSite.descriptionText %}
-					<p>{{ currentSite.descriptionText | nl2br | linkify }}</p>
-				{% else %}
-					<p>Welcome to the calender for {{ currentSite.title  }}.</p>
-				{% endif %}
-			</div>
-
-			<div class="innerPageRight">
-				&nbsp;
-			</div>
-
-			<div class="afterInnerPageContent"></div>
-
-			<ul class="mainListEvents">
-				<li class="export">
-					<a href="/api1/events.ical" onclick="showExportSharePopup(); return false;">
-						{%  include '/site/common/actionExportShareLabel.html.twig' %}
-					</a>
-				</li>
-				{% for event in events %}
-					{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
-				{% else %}
-					<li class="nodata">
-						There are no upcoming events.
-						{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
-					</li>
-				{% endfor %}
-			</ul>
-
+		<div class="contentTwoColumnsLeft">
+			{% if currentSite.descriptionText %}
+				<p>{{ currentSite.descriptionText | nl2br | linkify }}</p>
+			{% else %}
+				<p>Welcome to the calender for {{ currentSite.title  }}.</p>
+			{% endif %}
 		</div>
+
+		<div class="contentTwoColumnsRight">
+			&nbsp;
+		</div>
+
+		<div class="afterContentTwoColumns"></div>
+
+
 	</div>
+
+	<ul class="mainListEvents">
+		<li class="export">
+			<a href="/api1/events.ical" onclick="showExportSharePopup(); return false;">
+				{%  include '/site/common/actionExportShareLabel.html.twig' %}
+			</a>
+		</li>
+		{% for event in events %}
+			{% include '/site/common/mainListEvent.html.twig' with {'event':event, 'showCurrentUserOptions':true, 'showVenueAndArea':true}  %}
+		{% else %}
+			<li class="nodata">
+				There are no upcoming events.
+				{% if currentUserActions.has("org.openacalendar","eventNew") %}Why not <a href="/event/new">add one</a>?{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+
 
 {% endblock %}
 

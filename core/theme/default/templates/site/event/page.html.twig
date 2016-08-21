@@ -38,14 +38,16 @@
 
 {% block content %}
 
-	<h2>
-		{{  event.summaryDisplay }}
-		{# Events can be both deleted and cancelled. In that case, show the more serious one. #}
-		{%  if event.isDeleted %} [DELETED]{%  elseif event.isCancelled  %} [CANCELLED]{%  endif %}
-	</h2>
-	
+	<div class="contentMain">
+		<h2>
+			{{  event.summaryDisplay }}
+			{# Events can be both deleted and cancelled. In that case, show the more serious one. #}
+			{%  if event.isDeleted %} [DELETED]{%  elseif event.isCancelled  %} [CANCELLED]{%  endif %}
+		</h2>
+	</div>
+
 	{% if groups|length > 0 %}
-		<ul class="underTitleGroupListing">
+		<ul class="underTitleGroupListing contentMain">
 			{% for group in groups %}
 				<li>by <a href="/group/{{ group.slugForUrl }}" class="title">{{ group.title }}</a></li>
 			{% endfor %}
@@ -53,24 +55,21 @@
 	{% endif %}
 
 	{%  if eventIsDuplicateOf %}
-		<div class="flash-notice">
+		<div class="flash-notice"><div class="contentMain">
 			This event is a duplicate of <a href="/event/{{  eventIsDuplicateOf.slugForURL }}">{{  eventIsDuplicateOf.summaryDisplay }}</a>.
-		</div>
+		</div></div>
 	{% endif %}
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/event/{{ event.slugForUrl }}">Details</a></li>
 			{%  if currentUserActions.has("org.openacalendar","eventHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/event/{{ event.slugForUrl }}/history">History of changes</a></li>{%  endif %}
 		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
+
+	{% block innerContent %}{% endblock %}
+
 
 
 {% endblock %}

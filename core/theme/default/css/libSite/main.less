@@ -9,73 +9,8 @@
 
 
 
-
-form.styled, .likeFormStyled  {
-	.rowWrapper {
-		padding: 10px 0;
-		.labelWrapper {
-			padding: 0px 5px 0px 0px;
-			text-align: right;
-			display: block;
-			width: 20%;
-			float: left;
-		}
-		.widgetWrapper {
-			display: block;
-			width: 70%;
-			float: left;
-			.sectionHeader {
-				font-weight: bold;
-				font-size: 110%;
-			}
-		}
-		.after {
-			clear: both;
-		}
-	}
-	input[type="text"] {
-		width: 80%; 
-	}
-	div.dateInput input[type="text"] {
-		width: 100px; 
-	}
-	input[type="url"] {
-		width: 80%; 
-	}
-	textarea { 
-		width: 80%; 
-		height: 100px;
-	}
-	ul.formErrors {
-		li {
-			margin: 5px 0;
-			background: #eb6c6c;
-			border: 2px solid #6f1818;
-			padding: 5px;
-		}
-	}
-	img.logo {
-		max-width: 60px;
-		max-height: 60px;
-	}
-	.widgetWrapperPlacementOnly {
-		display: block;
-		width: 70%;
-		float: left;
-	}
-	#Map {
-		width: 50%;
-		height: 200px;
-	}
-	p.information {
-		font-style: italic;
-		font-size: 0.8em;
-	}
-}
-
 .likeFormStyledMinimal {
 	color: #666666;
-	font-size: 90%;
 	.rowWrapper {
 		padding: 10px 0;
 		.labelWrapper {
@@ -129,7 +64,7 @@ form.styled, .likeFormStyled  {
 		border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */
 		margin: 1px;
 		color: #333;
-		font-size: 1.20em;
+		font-size: 1.25rem;
 		text-decoration: none;
 	}
 	input[type="submit"]:hover, a.button:hover, input[type="submit"]:focus, a.button:focus {
@@ -148,6 +83,8 @@ form.styled, .likeFormStyled  {
 
 .underTitleGroupListing {
 	padding: 5px 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
 	li {
 		display: inline;
 		font-style: italic;
@@ -161,7 +98,7 @@ ul.mainListGroups li.group, ul.mainListVenues li.venue {
 	.futureEvents {
 		margin-left: 10px;
 		padding: 4px 20px 0px 20px;
-		font-size: 0.8em;
+		font-size: 0.75rem;
 		font-weight: normal;
 		background: @colourFutureEventsInMainListingTitleBackground;
 		.rounded-corners(3px);
@@ -169,20 +106,16 @@ ul.mainListGroups li.group, ul.mainListVenues li.venue {
 }
 
 ul.mainListGroups {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.group {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 	}
 	li.nodata {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		font-style: italic;
-	}
-}
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListGroups {
-		li.group, li.nodata {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
 	}
 }
 
@@ -192,7 +125,7 @@ ul.mainListGroups li.group, div.group {
 	.title {
 		padding: 2px 0 5px 0;
 		.text {
-			font-size: 1.1em;
+			font-size: 1.125rem;
 			font-weight: bold;
 
 		}
@@ -235,11 +168,14 @@ ul.mainListGroups li.group, div.group {
 }
 
 ul.mainListCountries {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.country {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
-			font-size: 1.1em;
+			font-size: 1.125rem;
 			font-weight: bold;
 			padding: 2px 0;
 			a {
@@ -253,23 +189,19 @@ ul.mainListCountries {
 		}
 	}
 }
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListCountries {
-		li.country {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
-	}
-}
 
 ul.mainListVenues {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.venue {
 		min-height: 50px;
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
 			padding: 2px 0 5px 0;
 			.text {
-				font-size: 1.1em;
+				font-size: 1.125rem;
 				font-weight: bold;
 
 			}
@@ -299,22 +231,9 @@ ul.mainListVenues {
 			clear: both;
 		}
 	}
-	li.information {
-		text-align: center;
-		font-style: italic;
-		font-size: 1.3em;
-		line-height: 1.5em;
-	}
 	li.nodata {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		font-style: italic;
-	}
-}
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListVenues {
-		li.venue, li.nodata {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
 	}
 }
 
@@ -343,11 +262,14 @@ ul.selectvenue {
 }
 
 ul.mainListImports {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.import {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
-			font-size: 1.1em;
+			font-size: 1.125rem;
 			font-weight: bold;
 			padding: 2px 0;
 			a {
@@ -361,27 +283,21 @@ ul.mainListImports {
 		}
 	}
 	li.nodata {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		font-style: italic;
 	}
 }
-
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListImports {
-		li.import, li.nodata {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
-	}
-}
-
 
 
 ul.mainListUserGroups {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.userGroup {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
-			font-size: 1.1em;
+			font-size: 1.125rem;
 			font-weight: bold;
 			padding: 2px 0;
 			a {
@@ -395,27 +311,22 @@ ul.mainListUserGroups {
 		}
 	}
 	li.nodata {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		font-style: italic;
-	}
-}
-
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListUserGroups {
-		li.userGroup, li.nodata {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
 	}
 }
 
 
 
 ul.mainListTags {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.tag {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
-			font-size: 1.1em;
+			font-size: 1.125rem;
 			font-weight: bold;
 			padding: 2px 0;
 			a {
@@ -428,7 +339,7 @@ ul.mainListTags {
 			}
 		}
 		span.tagTitleWrapper {
-			font-size: 13pt;
+			font-size: 1.125rem;
 			background: url('/theme/default/img/tagBackground.png') no-repeat left center #4F4F4F;
 			white-space: nowrap;
 			.rounded-corners-right(2px);
@@ -441,15 +352,8 @@ ul.mainListTags {
 		}
 	}
 	li.nodata {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		font-style: italic;
-	}
-}
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListTags {
-		li.tag, li.nodata {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
 	}
 }
 
@@ -463,7 +367,6 @@ div.inlineTags {
 			display: inline;
 			line-height: 1.8em;
 			span.content {
-				font-size: 13pt;
 				background: url('/theme/default/img/tagBackground.png') no-repeat left center #4F4F4F;
 				white-space: nowrap;
 				.rounded-corners-right(2px);
@@ -479,7 +382,7 @@ div.inlineTags {
 }
 
 table.data {
-	margin: 10px 20px;
+	margin: 10px 0;
 	tr th {
 		background: #ccc;
 		border-bottom: 1px solid black;
@@ -523,73 +426,11 @@ table.data {
 }
 
 ul.history {
+	.contentMain();
 	li.event, li.group, li.venue, li.area, li.tag, li.import, li.media {
 		padding: 5px;
 		margin: 5px 0 5px 0;
 		.rounded-corners (5px);
-		div.dateTimeIcon {
-			float: left;
-			width: 60px;
-			height: 80px;
-			position: relative;
-			margin-right: 5px;
-			border: 2px solid #231f20;
-			.rounded-corners(4px);
-			div.dateIcon {
-				width: 60px;
-				height: 60px;
-				text-align: center;
-				background: #231f20;
-				.rounded-corners-bottom(2px);
-			}
-			div.timeIcon {
-				padding: 1px;
-				text-align: center;
-			}
-			span.deleted, span.cancelled {
-				padding-top: 5px;
-				display: block;
-				color: white;
-			}
-			span.startDay {
-				font-weight: 200;
-				padding-top: 5px;
-				display: block;
-				color: white;
-			}
-			span.startDate {
-				font-size: 16pt;
-				font-weight: 400;
-				display: block;
-				color: white;
-			}
-			span.startMonthYear {
-				font-weight: 200;
-				display: block;
-				font-size: 0.75em;
-				color: white;
-			}
-			span.startTime {
-				font-size: 11pt;
-				color: black;
-			}
-			a {
-				text-decoration: none;
-				span.startDay {
-					color: white;
-				}
-				span.startDate {
-					color: white;
-				}
-				span.startMonthYear {
-					color: white;
-				}
-				span.startTime {
-					color: black;
-				}
-			}
-		}
-
 		div.icon {
 			float: left;
 			width: 60px;
@@ -615,7 +456,7 @@ ul.history {
 			padding: 5px 0 0 0;
 			clear:both;
 			font-style: italic;
-			font-size: 0.8em;
+			font-size: 0.815rem;
 		}
 		.fieldChanged {
 			.field {
@@ -668,9 +509,8 @@ ul.history {
 		}
 	}
 	.title {
-		font-size: 1.1em;
+		font-size: 1.125rem;
 		font-weight: bold;
-		
 	}
 	.link {
 		text-align: right;
@@ -694,7 +534,6 @@ ul.newRecuringEvents li.newRecuringEvent {
 	.rounded-corners(5px);
 	.summary {
 		display: inline;
-		font-size: 1.0em;
 		font-weight: bold;
 		line-height: 1.25em;
 	}
@@ -754,7 +593,7 @@ ul.newRecuringEvents li.newRecuringEvent {
 		border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */            
 		margin: 1px;
 		color: #333;
-		font-size: 1.20em;
+		font-size: 1.25rem;
 		text-decoration: none;
 	}
 	a.button:hover, input.button:hover,a.button:focus, input.button:focus  {
@@ -782,16 +621,12 @@ ul.mediaGrid {
 }
 
 ul.mainListMedias {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.media {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
-	}
-}
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListMedias {
-		li.media, li.nodata {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
 	}
 }
 
@@ -820,7 +655,7 @@ ul.areasList {
 	li.area {
 		border-bottom: 2px solid #E9E9E9;
 		.title {
-			font-size: 1.1em;
+			font-size: 1.125rem;
 			font-weight: bold;
 			padding: 2px 0;
 			a {
@@ -843,15 +678,13 @@ ul.areas {
 		display: inline;
 		line-height: 1.8em;
 		span.content {
-			font-size: 13pt;
 			background: url('/theme/default/img/areaBackground.png') no-repeat @colourDarker2;
 		}
 		span.contentWithEvents {
-			font-size: 13pt;
 			background: url('/theme/default/img/areaBackground.png') no-repeat @colourDarker2;
 		}
 		span.contentWithNoEvents {
-			font-size: 10pt;
+			font-size: 0.875rem;
 			background: url('/theme/default/img/areaBackground.png') no-repeat #676767;
 		}
 		span.content, span.contentWithEvents, span.contentWithNoEvents {
@@ -865,12 +698,6 @@ ul.areas {
 			}
 		}
 	}
-	li.information {
-		text-align: center;
-		font-style: italic;
-		font-size: 1.3em;
-		line-height: 1.5em;
-	}
 }
 
 ul.areasAdmin {
@@ -879,19 +706,17 @@ ul.areasAdmin {
 	li.area {
 		padding: 2px;
 		span.content {
-			font-size: 13pt;
 			background: url('/theme/default/img/areaBackground.png') no-repeat @colourDarker2;
 		}
 		span.contentWithEvents {
-			font-size: 13pt;
 			background: url('/theme/default/img/areaBackground.png') no-repeat @colourDarker2;
 		}
 		span.contentWithNoEvents {
-			font-size: 10pt;
+			font-size: 0.875rem;
 			background: url('/theme/default/img/areaBackground.png') no-repeat @colourDarker2;
 		}
 		span.contentNew {
-			font-size: 10pt;
+			font-size: 0.875rem;
 			background: url('/theme/default/img/areaBackground.png') no-repeat #676767;
 		}
 		span.content, span.contentWithEvents, span.contentWithNoEvents, span.contentNew {
@@ -924,75 +749,18 @@ ul.areasAdmin {
 	}
 }
 
+ul.mainListImportedEvents {
+    .contentMain();
+}
+
 ul.mainListImportedEvents li.importedevent, div.importedevent {
 	border: 2px solid #E9E9E9;
 	background: #eeeeee;
 	.rounded-corners(5px);
 	margin: 10px 0;
 	padding: 5px;
-	div.dateTimeIcon {
-		float: left;
-		width: 60px;
-		height: 80px;
-		position: relative;
-		margin: 0 10px 10px 0;
-		border: 2px solid #555555;
-		.rounded-corners(1px);
-		div.dateIcon {
-			width: 60px;
-			height: 60px;
-			text-align: center;
-			background: #555555;
-		}
-		div.timeIcon {
-			padding: 1px;
-			text-align: center;
-		}
-		span.deleted, span.cancelled {
-			padding-top: 5px;
-			display: block;
-			color: white;
-		}
-		span.startDay {
-			font-weight: 200;
-			padding-top: 5px;
-			display: block;
-			color: white;
-		}
-		span.startDate {
-			font-size: 16pt;
-			font-weight: 400;
-			display: block;
-			color: white;
-		}
-		span.startMonthYear {
-			font-weight: 200;
-			display: block;
-			font-size: 0.75em;
-			color: white;
-		}
-		span.startTime {
-			font-size: 11pt;
-			color: black;
-		}
-		a {
-			text-decoration: none;
-			span.startDay {
-				color: white;
-			}
-			span.startDate {
-				color: white;
-			}
-			span.startMonthYear {
-				color: white;
-			}
-			span.startTime {
-				color: black;
-			}
-		}
-	}
 	div.title {
-		font-size: 16pt;
+		font-size: 1.125rem;
 		font-weight: bold;
 		line-height: 1.25em;
 		padding: 2px 0 10px 70px;
@@ -1028,38 +796,9 @@ ul.mainListImportedEvents li.importedevent, div.importedevent {
 	}
 }
 
-
-div.filterListImportedEventWrapper {
-	padding: 5px 0;
-	form.filterListImportedEvent {
-		background: @colourLighter2;
-		padding: 10px;
-		div.inputField {
-			display: inline;
-			padding: 10px;
-		}
-		#importedEventListFilterFromWrapper {
-			input {
-				background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
-			}
-		}
-		div.submitField {
-			display: inline;
-			padding: 10px;
-			input {
-				background: @colourDarker2;
-				color: white;
-				border: 2px solid @colourDarker2;
-				.rounded-corners(2px);
-				cursor:pointer;
-			}
-		}
-	}
-}
-
 #formRowEditCommentToggler {
 	.title, .arrow {
-		font-size: 12px;
+		font-size: 0.875rem;
 	}
 	.title {
 		text-decoration: underline;
@@ -1072,7 +811,7 @@ div.filterListImportedEventWrapper {
 	a {
 		text-decoration: none;
 		background: #ccc;
-		font-size: 80%;
+		font-size: 0.875rem;
 		padding: 2px 5px;
 		.rounded-corners(2px);
 		color: #000000;
@@ -1110,4 +849,10 @@ ul#ImportURLRecommendations {
 			}
 		}
 	}
+}
+
+ul.listFeatures {
+    li.feature {
+        border-bottom: 2px solid #E9E9E9;
+    }
 }

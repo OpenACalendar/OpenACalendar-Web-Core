@@ -16,10 +16,12 @@
 
 {% block content %}
 
-	<h2>Events</h2>
+	<div class="contentMain">
+		<h2>Events</h2>
+	</div>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% if currentUserActions.has("org.openacalendar","eventNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","eventNew") ) %}
 				<li class="action">
 					<a href="/event/new"><div class="fa fa-pencil"></div> Add an event</a>
@@ -44,26 +46,26 @@
 			</li>
 			<li class="tab currentTab"><a href="/event">Events</a></li>
 		</ul>
-		<div id="innerPage">
+	</div>
 
-			{% include '/site/eventListFilterParams.html.twig' %}
+	{% include '/site/eventListFilterParams.html.twig' %}
 
-			<div class="switcherWrapper">
-				<div class="switcherList">
-					<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
-						<a href="/event/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
-					</div>
-					<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
-						<a href="/event/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
-					</div>
+	<div class="contentSwitcher">
+		<div class="switcherWrapper">
+			<div class="switcherList">
+				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+					<a href="/event/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+				</div>
+				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+					<a href="/event/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
 				</div>
 			</div>
-
-			{% block eventsContent %}{%  endblock %}
-
-			<div id="afterInnerPageContent"></div>
 		</div>
 	</div>
+
+	{% block eventsContent %}{%  endblock %}
+
+
 
 {% endblock %}
 

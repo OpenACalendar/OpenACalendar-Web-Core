@@ -14,55 +14,60 @@
 {% endblock %}
 
 {% block content %}
-	
-	{% if config.contactEmailHTML %}
-	
-		<h2>Email Us</h2>
 
-		<p>Email us on {{ config.contactEmailHTML }}</p>
-	
-	{% endif %}
+	<div class="contentMain">
+			
+		{% if config.contactEmailHTML %}
 
-	<h2>Contact Us</h2>
+			<h2>Email Us</h2>
 
-	{% if config.siteReadOnly %}
+			<p>Email us on {{ config.contactEmailHTML }}</p>
 
-		<p>Sorry, the contact form is not available at the moment.</p>
+		{% endif %}
 
-	{%  else %}
+		<h2>Contact Us</h2>
 
-		<form action="#" method="post" class="styled">
-			{{ form_errors(form) }}
+		{% if config.siteReadOnly %}
 
-			{{ form_row(form.subject) }}
-			{{ form_row(form.email) }}
-			{{ form_row(form.message) }}
+			<p>Sorry, the contact form is not available at the moment.</p>
 
-			{{ form_rest(form) }}
+		{%  else %}
 
-			<div style="display: none;">
-				<label>URL<input type="text" name="url"></label>
-			</div>
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="Send Message" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>
-		</form>
+			<form action="#" method="post" class="styled">
+				{{ form_errors(form) }}
 
-	{%  endif %}
-	
-	{% if config.contactTwitter or config.facebookPage or config.googlePlusPage %}
-		<h2>Social?</h2>
-	{% endif %}
-	
-	{% if config.contactTwitter %}
-		<p>Follow us on <a target="_blank" href="http://twitter.com/{{  config.contactTwitter }}">Twitter @{{  config.contactTwitter }}</a>.</p>
-	{% endif %}
-		
-	{% if config.facebookPage %}
-		<p>Follow us on <a target="_blank" href="{{ config.facebookPage }}">Facebook</a>.</p>
-	{% endif %}
-		
-	{% if config.googlePlusPage %}
-		<p>Follow us on <a target="_blank" href="{{ config.googlePlusPage }}">Google+</a>.</p>
-	{% endif %}
+				{{ form_row(form.subject) }}
+				{{ form_row(form.email) }}
+				{{ form_row(form.message) }}
+
+				{{ form_rest(form) }}
+
+				<div style="display: none;">
+					<label>URL<input type="text" name="url"></label>
+				</div>
+				<div class="bigSubmitActionWrapper"><input type="submit"  value="Send Message" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</form>
+
+		{%  endif %}
+
+		{% if config.contactTwitter or config.facebookPage or config.googlePlusPage %}
+			<h2>Social?</h2>
+		{% endif %}
+
+		{% if config.contactTwitter %}
+			<p>Follow us on <a target="_blank" href="http://twitter.com/{{  config.contactTwitter }}">Twitter @{{  config.contactTwitter }}</a>.</p>
+		{% endif %}
+
+		{% if config.facebookPage %}
+			<p>Follow us on <a target="_blank" href="{{ config.facebookPage }}">Facebook</a>.</p>
+		{% endif %}
+
+		{% if config.googlePlusPage %}
+			<p>Follow us on <a target="_blank" href="{{ config.googlePlusPage }}">Google+</a>.</p>
+		{% endif %}
+
+	</div>
+
 
 {% endblock %}

@@ -16,94 +16,99 @@
 
 {% block innerContent %}
 
-	<p>
-		Includes all anonymous users:
-		{%  if usergroup.isIncludesAnonymous %}
-			Yes
-			<form method="post" action="">
-				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-				<input type="hidden" name="action" value="removeanonymous">
-				<input type="submit" value="Remove!">
-			</form>
-		{%  else %}
-			No
-			<form method="post" action="">
-				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-				<input type="hidden" name="action" value="addanonymous">
-				<input type="submit" value="Add!">
-			</form>
-		{%  endif %}
-	</p>
+	<div class="contentMain">
 
-	<p>
-		Includes all users:
-		{%  if usergroup.isIncludesUsers %}
-			Yes
-			<form method="post" action="">
-				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-				<input type="hidden" name="action" value="removeusers">
-				<input type="submit" value="Remove!">
-			</form>
-		{%  else %}
-			No
-			<form method="post" action="">
-				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-				<input type="hidden" name="action" value="addusers">
-				<input type="submit" value="Add!">
-			</form>
-		{%  endif %}
-	</p>
+		<p>
+			Includes all anonymous users:
+			{%  if usergroup.isIncludesAnonymous %}
+				Yes
+				<form method="post" action="">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="action" value="removeanonymous">
+					<input type="submit" value="Remove!">
+				</form>
+			{%  else %}
+				No
+				<form method="post" action="">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="action" value="addanonymous">
+					<input type="submit" value="Add!">
+				</form>
+			{%  endif %}
+		</p>
 
-	<p>
-		Includes verified all users:
-		{%  if usergroup.isIncludesVerifiedUsers %}
-			Yes
-			<form method="post" action="">
-				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-				<input type="hidden" name="action" value="removeverifiedusers">
-				<input type="submit" value="Remove!">
-			</form>
-		{%  else %}
-			No
-			<form method="post" action="">
-				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-				<input type="hidden" name="action" value="addverifiedusers">
-				<input type="submit" value="Add!">
-			</form>
-		{%  endif %}
-	</p>
+		<p>
+			Includes all users:
+			{%  if usergroup.isIncludesUsers %}
+				Yes
+				<form method="post" action="">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="action" value="removeusers">
+					<input type="submit" value="Remove!">
+				</form>
+			{%  else %}
+				No
+				<form method="post" action="">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="action" value="addusers">
+					<input type="submit" value="Add!">
+				</form>
+			{%  endif %}
+		</p>
+
+		<p>
+			Includes verified all users:
+			{%  if usergroup.isIncludesVerifiedUsers %}
+				Yes
+				<form method="post" action="">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="action" value="removeverifiedusers">
+					<input type="submit" value="Remove!">
+				</form>
+			{%  else %}
+				No
+				<form method="post" action="">
+					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+					<input type="hidden" name="action" value="addverifiedusers">
+					<input type="submit" value="Add!">
+				</form>
+			{%  endif %}
+		</p>
 
 
-	<h3>Users</h3>
+		<h3>Users</h3>
 
-	<table class="data">
-		<tr>
-			<th>Username</th>
-			<th>&nbsp;</th>
-		</tr>
-		{% for user in users %}
-			<tr {% if loop.index is even %}class="alternative"{% endif %}>
-				<td><a href="/admin/user/{{  user.username }}">{{ user.username }}</a></td>
-				<td>
-					<form method="post" action="">
-						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-						<input type="hidden" name="action" value="removeuser">
-						<input type="hidden" name="id" value="{{ user.id }}">
-						<input type="submit" value="Remove!">
-					</form>
-				</td>
+		<table class="data">
+			<tr>
+				<th>Username</th>
+				<th>&nbsp;</th>
 			</tr>
-		{% endfor %}
-	</table>
+			{% for user in users %}
+				<tr {% if loop.index is even %}class="alternative"{% endif %}>
+					<td><a href="/admin/user/{{  user.username }}">{{ user.username }}</a></td>
+					<td>
+						<form method="post" action="">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="action" value="removeuser">
+							<input type="hidden" name="id" value="{{ user.id }}">
+							<input type="submit" value="Remove!">
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
 
-	<h3>Add User</h3>
+		<h3>Add User</h3>
 
-	<form action="" method="post">
+		<form action="" method="post">
 
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="action" value="adduser">
-		<input type="text" name="username" value="">
-		<input type="submit" value="Add Username!">
-	</form>
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="action" value="adduser">
+			<input type="text" name="username" value="">
+			<input type="submit" value="Add Username!">
+		</form>
+
+	</div>
+
 
 {% endblock %}

@@ -17,15 +17,18 @@
 
 {% block innerContent %}
 
-	
+	<div class="contentMain">
+		
+		<form action="#" method="post" class="styled">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="enable" value="yes">
 
-	<form action="#" method="post" class="styled">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="enable" value="yes">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Enable" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Enable" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+	</div>
+
 
 
 {% endblock %}

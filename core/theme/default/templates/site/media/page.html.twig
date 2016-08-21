@@ -18,21 +18,19 @@
 
 {% block content %}
 
-	<h2>{% if media.title %}{{ media.title }}{% else %}Media{% endif %}</h2>
+	<div class="contentMain">
+		<h2>{% if media.title %}{{ media.title }}{% else %}Media{% endif %}</h2>
+	</div>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/media/{{ media.slugForUrl }}">Details</a></li>
 			{%  if currentUserActions.has("org.openacalendar","mediaHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/media/{{ media.slugForUrl }}/history">History of changes</a></li>{%  endif %}
 		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
+
+	{% block innerContent %}{% endblock %}
 
 
 {% endblock %}

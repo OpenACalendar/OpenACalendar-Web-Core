@@ -15,28 +15,29 @@
 
 {% block content %}
 
+	<div class="contentMain">
+		<form action="#" method="post"  class="styled">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="submitted" value="yes">
 
-	<form action="#" method="post"  class="styled">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="submitted" value="yes">
-
-		<div class="rowWrapper">
-			<div class="labelWrapper">When out of events, prompt how many days before last event?</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">
-				<input type="text" name="PromptEmailsDaysInAdvance" value="{{ currentSite.promptEmailsDaysInAdvance }}">
-				<p class="information">
-					When a user follows a group or a calendar, they are warned when we are about to run out of events so they can add more. 
-					How many days in advance should they be warned? Individual users can turn these warnings off if they are not wanted.
-				</p>
+			<div class="rowWrapper">
+				<div class="labelWrapper">When out of events, prompt how many days before last event?</div>
+				<div class="widgetWrapperPlacementOnly smallInputs">
+					<input type="text" name="PromptEmailsDaysInAdvance" value="{{ currentSite.promptEmailsDaysInAdvance }}">
+					<p class="information">
+						When a user follows a group or a calendar, they are warned when we are about to run out of events so they can add more.
+						How many days in advance should they be warned? Individual users can turn these warnings off if they are not wanted.
+					</p>
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
 
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 
-	</form>
+		</form>
+	</div>
 
 {% endblock %}
 		

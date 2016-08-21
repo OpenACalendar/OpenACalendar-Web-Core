@@ -31,21 +31,21 @@
 			{% include 'site/pageHeader.html.twig' %}
 			<div id="body">
 				{% if  currentUser is not null and config.siteReadOnly %}
-					<div class="flash-error">
-						Sorry, the site is currently read only. {{ config.siteReadOnlyReason }}
-					</div>				
+					<div class="flash-error"><div class="contentMain">
+							Sorry, the site is currently read only. {{ config.siteReadOnlyReason }}
+						</div></div>
 				{% elseif currentUser is not null and not currentUser.isEmailVerified %}
-					<div class="flash-notice">
-						Please check your email for instructions on how to verify your account. Until you do, some features are not available.
-						<a href="{{ config.getWebIndexDomainSecure() }}/me/resendverifyemail">Click here to resend the email</a>.
-					</div>
+					<div class="flash-notice"><div class="contentMain">
+							Please check your email for instructions on how to verify your account. Until you do, some features are not available. (Remember it may be in your spam folder.)
+							<a href="{{ config.getWebIndexDomainSecure() }}/me/resendverifyemail">Click here to resend the email</a>.
+						</div></div>
 				{% endif %}
 				{% for msg in getAndClearFlashErrors() %}
-					<div class="flash-error">{{ msg }}</div>
+					<div class="flash-error"><div class="contentMain">{{ msg }}</div></div>
 				{% endfor %}
 				{% for msg in getAndClearFlashMessages() %}
-					<div class="flash-notice">{{ msg }}</div>
-				{% endfor %}						
+					<div class="flash-notice"><div class="contentMain">{{ msg }}</div></div>
+				{% endfor %}
 				{% block breadcrumbs %}{% endblock %}
 				{% block content %}{% endblock %}
 			</div>

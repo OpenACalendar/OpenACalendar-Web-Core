@@ -10,32 +10,36 @@
 {% block pageTitle %}Emails - {% endblock %} 
 
 {% block content %}
+
+	<div class="contentMain">
 	
-	<form action="#" method="post" class="styled">
+		<form action="#" method="post" class="styled">
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Username</div>
-			<div class="widgetWrapperPlacementOnly">{{ user.username }}</div>
-			<div class="after"></div>
-		</div>
-		
-		<div class="rowWrapper">
-			<div class="labelWrapper">Email</div>
-			<div class="widgetWrapperPlacementOnly">{{ user.email }}</div>
-			<div class="after"></div>
-		</div>
-		
-		{{ form_errors(form) }}
+			<div class="rowWrapper">
+				<div class="labelWrapper">Username</div>
+				<div class="widgetWrapperPlacementOnly">{{ user.username }}</div>
+				<div class="after"></div>
+			</div>
 
-		{{ form_row(form.email_upcoming_events) }}
-		
-		{{ form_row(form.email_upcoming_events_days_notice) }}
-				
-		{{ form_rest(form) }}
+			<div class="rowWrapper">
+				<div class="labelWrapper">Email</div>
+				<div class="widgetWrapperPlacementOnly">{{ user.email }}</div>
+				<div class="after"></div>
+			</div>
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			{{ form_errors(form) }}
+
+			{{ form_row(form.email_upcoming_events) }}
+
+			{{ form_row(form.email_upcoming_events_days_notice) }}
+
+			{{ form_rest(form) }}
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}
 

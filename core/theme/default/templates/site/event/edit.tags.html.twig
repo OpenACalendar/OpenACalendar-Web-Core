@@ -20,63 +20,67 @@
 
 {% block innerContent %}
 
-	<div class="innerPageRight">
+	<div class="contentTwoColumns">
 
-	<h3>Current Tags</h3>
+		<div class="contentTwoColumnsRight">
 
-		<ul class="mainListTags">
-			{% for tag in tags %}
-				<li class="tag">
-					<form method="post">
-						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-						<input type="hidden" name="removeTag" value="{{ tag.slug }}">
-						<span class="tagTitleWrapper">{{ tag.title }}</a></span>
-						<div class="bigSubmitActionWrapper"><input type="submit"  value="Remove Tag" class="bigSubmitAction"/></div>
-						<div class="afterBigSubmitActionWrapper"></div>
-					</form>
-					<p>{{ tag.description | nl2br | linkify }}</p>
-				</li>
-			{% else %}
-				<li>
-					This event has no tags.
-				</li>
-			{% endfor %}
-		</ul>
+			<h3>Current Tags</h3>
 
-		<form method="get" action="/event/{{ event.slugForURL }}">
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="OK, Finished editing!" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>
-		</form>
+			<ul class="mainListTags">
+				{% for tag in tags %}
+					<li class="tag">
+						<form method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="removeTag" value="{{ tag.slug }}">
+							<span class="tagTitleWrapper">{{ tag.title }}</a></span>
+							<div class="bigSubmitActionWrapper"><input type="submit"  value="Remove Tag" class="bigSubmitAction"/></div>
+							<div class="afterBigSubmitActionWrapper"></div>
+						</form>
+						<p>{{ tag.description | nl2br | linkify }}</p>
+					</li>
+				{% else %}
+					<li>
+						This event has no tags.
+					</li>
+				{% endfor %}
+			</ul>
+
+			<form method="get" action="/event/{{ event.slugForURL }}">
+				<div class="bigSubmitActionWrapper"><input type="submit"  value="OK, Finished editing!" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</form>
+
+		</div>
+
+
+		<div class="contentTwoColumnsLeft">
+
+			<h3>Add other Tags</h3>
+
+			<ul class="mainListTags">
+				{% for tag in tagsToAdd %}
+					<li class="tag">
+						<form method="post">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="addTag" value="{{ tag.slug }}">
+							<span class="tagTitleWrapper">{{ tag.title }}</span>
+							<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Tag" class="bigSubmitAction"/></div>
+							<div class="afterBigSubmitActionWrapper"></div>
+						</form>
+						<p>{{ tag.description | nl2br | linkify }}</p>
+					</li>
+				{% else %}
+					<li>
+						No tags found to add.
+					</li>
+				{% endfor %}
+			</ul>
+
+		</div>
+
+		<div class="afterContentTwoColumns"></div>
 
 	</div>
-
-
-	<div class="innerPageLeft">
-
-		<h3>Add other Tags</h3>
-
-		<ul class="mainListTags">
-			{% for tag in tagsToAdd %}
-				<li class="tag">
-					<form method="post">
-						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-						<input type="hidden" name="addTag" value="{{ tag.slug }}">
-						<span class="tagTitleWrapper">{{ tag.title }}</span>
-						<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Tag" class="bigSubmitAction"/></div>
-						<div class="afterBigSubmitActionWrapper"></div>
-					</form>
-					<p>{{ tag.description | nl2br | linkify }}</p>
-				</li>
-			{% else %}
-				<li>
-					No tags found to add.
-				</li>
-			{% endfor %}
-		</ul>
-
-	</div>
-
-	<div class="afterInnerPageContent"></div>
 
 {% endblock %}
 

@@ -19,7 +19,9 @@
 
 {% block content %}
 
-	<h2>Add an event</h2>
+	<div class="contentMain">
+		<h2>Add an event</h2>
+	</div>
 
 	<div class="wizardProgressWrapper">
 		<ul class="steps">
@@ -39,57 +41,60 @@
 		</ul>
 	</div>
 
-	{%  set process = true %}
-	{%  set hasStepDoneViews = false %}
-	{%  for step in steps %}
-		{%  if step.stepID == currentStep.stepID  %}
-			{%  set process = false %}
-		{% endif %}
-		{%  if process %}
-			{%  set hasStepDoneViews = true %}
-		{%  endif %}
-	{% endfor %}
+	<div class="contentMain">
 
-	{%  if hasStepDoneViews %}
-		<div id="stepDoneViewsShowHideLink">
-			<a href="#" onclick="showHideStepDoneViews(); return false;">Show/hide previous answers</a>
-		</div>
+		{%  set process = true %}
+		{%  set hasStepDoneViews = false %}
+		{%  for step in steps %}
+			{%  if step.stepID == currentStep.stepID  %}
+				{%  set process = false %}
+			{% endif %}
+			{%  if process %}
+				{%  set hasStepDoneViews = true %}
+			{%  endif %}
+		{% endfor %}
 
-		<div id="stepDoneViews" style="display: none;">
-			{%  set process = true %}
-			{%  for step in steps %}
-				{%  if step.stepID == currentStep.stepID  %}
-					{%  set process = false %}
-				{% endif %}
-				{%  if process %}
-					{%  if step.stepDoneGetMinimalViewName %}
-						{%  include step.stepDoneGetMinimalViewName %}
-					{%  elseif step.stepDoneGetViewName %}
-						{%  include step.stepDoneGetViewName %}
+		{%  if hasStepDoneViews %}
+			<div id="stepDoneViewsShowHideLink">
+				<a href="#" onclick="showHideStepDoneViews(); return false;">Show/hide previous answers</a>
+			</div>
+
+			<div id="stepDoneViews" style="display: none;">
+				{%  set process = true %}
+				{%  for step in steps %}
+					{%  if step.stepID == currentStep.stepID  %}
+						{%  set process = false %}
+					{% endif %}
+					{%  if process %}
+						{%  if step.stepDoneGetMinimalViewName %}
+							{%  include step.stepDoneGetMinimalViewName %}
+						{%  elseif step.stepDoneGetViewName %}
+							{%  include step.stepDoneGetViewName %}
+						{%  endif %}
 					{%  endif %}
-				{%  endif %}
-			{% endfor %}
-		</div>
-	{%  endif %}
+				{% endfor %}
+			</div>
+		{%  endif %}
 
-	{%  include currentStep.onThisStepGetViewName %}
+		{%  include currentStep.onThisStepGetViewName %}
 
-	<div class="likeFormStyled">
-		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
-			<div class="labelWrapper">&nbsp;</div>
-			<div class="widgetWrapperPlacementOnly">
-				<div class="highlightInfoBoxWrapper">
-					<div class="highlightInfoBoxTitle">Duplicate?</div>
-					<div class="highlightInfoBoxContent">
-						<p>Wait, is this event maybe a duplicate of one of these? Click for more information - you won't lose what you have already entered. You can also edit these events yourself to add more information.</p>
-						<ul id="DuplicateEventsList" class="mainListEvents"></ul>
+		<div class="likeFormStyled">
+			<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
+				<div class="labelWrapper">&nbsp;</div>
+				<div class="widgetWrapperPlacementOnly">
+					<div class="highlightInfoBoxWrapper">
+						<div class="highlightInfoBoxTitle">Duplicate?</div>
+						<div class="highlightInfoBoxContent">
+							<p>Wait, is this event maybe a duplicate of one of these? Click for more information - you won't lose what you have already entered. You can also edit these events yourself to add more information.</p>
+							<ul id="DuplicateEventsList" class="mainListEvents"></ul>
+						</div>
 					</div>
 				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
 		</div>
-	</div>
 
+	</div>
 {% endblock %}
 
 

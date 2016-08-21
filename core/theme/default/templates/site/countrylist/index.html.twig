@@ -26,33 +26,37 @@
 
 {% block content %}
 
+	<div class="contentTwoColumns">
 
-	<div id="bodyLeft">
-		<ul class="mainListCountries">
-			{% for country in countries %}
-				<li class="country">
-					<div class="title"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
-				</li>
-			{% else %}
-				<li>
-					There are no countries.
-				</li>
-			{% endfor %}
-		</ul>
-	</div>
-				
-	<div id="bodyRight">
-		<div id="MapWrapper">
-			<div id="Map" class="fullWidth"></div>
-			{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-				<ul class="actionList">
-					<li><a href="/map"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
-				</ul>
-			{% endif %}
+		<div class="contentTwoColumnsLeft">
+			<ul class="mainListCountries">
+				{% for country in countries %}
+					<li class="country">
+						<div class="title"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+					</li>
+				{% else %}
+					<li>
+						There are no countries.
+					</li>
+				{% endfor %}
+			</ul>
 		</div>
+
+		<div class="contentTwoColumnsRight hideIfOneCol">
+			<div id="MapWrapper">
+				<div id="Map" class="fullWidth"></div>
+				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
+					<ul class="actionList">
+						<li><a href="/map"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
+					</ul>
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="afterContentTwoColumns"></div>
+
 	</div>
 
-	<div id="afterPage2Col"></div>
 
 {% endblock %}
 

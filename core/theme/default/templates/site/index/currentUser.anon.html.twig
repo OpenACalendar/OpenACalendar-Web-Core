@@ -5,7 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/page2col.html.twig' %}
+{% extends 'site/page.html.twig' %}
 
 
 {% block pageTitle %}You - {% endblock %} 
@@ -15,23 +15,31 @@
 	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/currentuser', 'label':'Your details' } ]  } %}
 {% endblock %}
 
-{% block contentLeft %}
-	Let's talk about you.
-{% endblock %}
+{% block content %}
+
+	<div class="contentTwoColumns">
+
+		<div class="contentTwoColumnsLeft">
 
 
-{% block contentRight %}
+			<p>Let's talk about you.</p>
 
-	<ul class="actionList">
-		
-		{% if currentSite.cachedIsMultipleTimezones %}
-			<li><a href="/mytimezone"><div class="fa fa-globe fa-2x"></div> Timezone: {{ currentTimeZone }}</a></li>
-		{% endif %}
-					
-		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login"><div class="fa fa-user fa-2x"></div> Login</a></li>
-		<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register"><div class="fa fa-user fa-2x"></div> Register</a></li>
+		</div>
 
-	</ul>
+		<div class="contentTwoColumnsRight">
 
+			<ul class="actionList">
+
+				{% if currentSite.cachedIsMultipleTimezones %}
+					<li><a href="/mytimezone"><div class="fa fa-globe fa-2x"></div> Timezone: {{ currentTimeZone }}</a></li>
+				{% endif %}
+
+				<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login"><div class="fa fa-user fa-2x"></div> Login</a></li>
+				<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register"><div class="fa fa-user fa-2x"></div> Register</a></li>
+
+			</ul>
+
+		</div>
+	</div>
 {% endblock %}
 

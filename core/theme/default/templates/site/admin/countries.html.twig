@@ -15,34 +15,36 @@
 
 {% block content %}
 
-	<a href="#" onclick="selectAll(); return false;">Select all</a>
-	<a href="#" onclick="selectNone(); return false;">Select none</a>
-		
-	<form id="CountriesForm" action="" method="post">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="submitted" value="yes">
+	<div class="contentMain">
 
-		<div id="searchWrapper" style="display: none;">
-			Search by country: <input type="text" id="searchTerm">
-		</div>
-		
-		<ul class="selectCountries">
-			{% for country in countries %}
-				<li class="country">
-					<label>
-						<input type="checkbox" name="country[{{ country.twoCharCode }}]" value="yes" {% if country.siteIsIn %}checked{% endif %}>
-						<img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag">  {{ country.title }}
-					</label>
-				</li>
-			{% endfor %}
-		</ul>
+		<a href="#" onclick="selectAll(); return false;">Select all</a>
+		<a href="#" onclick="selectNone(); return false;">Select none</a>
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
-		
-		
-		
+		<form id="CountriesForm" action="" method="post">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="submitted" value="yes">
+
+			<div id="searchWrapper" style="display: none;">
+				Search by country: <input type="text" id="searchTerm">
+			</div>
+
+			<ul class="selectCountries">
+				{% for country in countries %}
+					<li class="country">
+						<label>
+							<input type="checkbox" name="country[{{ country.twoCharCode }}]" value="yes" {% if country.siteIsIn %}checked{% endif %}>
+							<img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag">  {{ country.title }}
+						</label>
+					</li>
+				{% endfor %}
+			</ul>
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
+
 {% endblock %}
 
 {% block scripts %}

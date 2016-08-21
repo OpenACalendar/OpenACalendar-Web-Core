@@ -10,25 +10,29 @@
 {% block pageTitle %}Forgot your password - {% endblock %} 
 
 {% block content %}
-	
-	<form action="#" method="post" class="styled">
 
-		{{ form_errors(form) }}
+	<div class="contentMain">
 
-		{{ form_row(form.username) }}
-		
-		<div class="rowWrapper">
-			<div class="labelWrapper">&nbsp;</div>
-			<div class="widgetWrapperPlacementOnly">OR</div>
-			<div class="after"></div>
-		</div>
-		
-		{{ form_row(form.email) }}
+		<form action="#" method="post" class="styled">
 
-		{{ form_rest(form) }}
+			{{ form_errors(form) }}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Send details" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			{{ form_row(form.username) }}
+
+			<div class="rowWrapper">
+				<div class="labelWrapper">&nbsp;</div>
+				<div class="widgetWrapperPlacementOnly">OR</div>
+				<div class="after"></div>
+			</div>
+
+			{{ form_row(form.email) }}
+
+			{{ form_rest(form) }}
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Send details" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}

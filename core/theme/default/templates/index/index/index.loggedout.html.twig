@@ -5,7 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'index/page2col.html.twig' %}
+{% extends 'index/page.html.twig' %}
 
 {% block pageTitle %}Welcome - {% endblock %}
 
@@ -14,45 +14,57 @@
 {% endblock %}
 
 	
-{% block contentLeft %}
-	<p>Welcome</p>
-{% endblock %}
-	
-	
-{% block contentRight %}
-	
-	<ul class="sites">
-		{% for site in sites %}
-			<li class="site">
-				<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="title">
-					<span class="logoWrapper"><img src="http://{{ site.slug }}.{{ config.webSiteDomain }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
-					<span class="titleWrapper">{{ site.title }}</span>
-				</a>
-				<a href="http://{{ site.slug }}.{{ config.webSiteDomain }}" class="link">
-					View
-				</a>
-			</li>
-		{% endfor %}
-		{% if config.siteSlugDemoSite %}
-			<li class="site">
-				<a href="{{ config.getWebSiteDomainSecure(config.siteSlugDemoSite) }}" class="title">
-					<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(config.siteSlugDemoSite) }}/getLogo.php" alt="logo"></span>
-					<span class="titleWrapper">Try the demo!</span>
-				</a>
-				<a href="{{ config.getWebSiteDomainSecure(config.siteSlugDemoSite) }}" class="link">
-					View the demo
-				</a>					
-			</li>			
-		{% endif %}		
-		<li class="site">
-			<a href="/create" class="title">
-				<span class="logoWrapper"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo"></span>
-				<span class="titleWrapper">Create a calendar?</span>
-			</a>
-			<div class="link">
-				<a href="/you/login">Login</a> or <a href="/you/register">Register</a> to get started!
-			</div>					
-		</li>	
-	</ul>
-	
+{% block content %}
+
+	<div class="contentTwoColumns">
+
+		<div class="contentTwoColumnsLeft">
+
+			<p>Welcome</p>
+
+		</div>
+
+		<div class="contentTwoColumnsRight">
+
+
+			<ul class="sites">
+				{% for site in sites %}
+					<li class="site">
+						<a href="{{ config.getWebSiteDomainSecure(site.slug) }}" class="title">
+							<span class="logoWrapper"><img src="http://{{ site.slug }}.{{ config.webSiteDomain }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
+							<span class="titleWrapper">{{ site.title }}</span>
+						</a>
+						<a href="http://{{ site.slug }}.{{ config.webSiteDomain }}" class="link">
+							View
+						</a>
+					</li>
+				{% endfor %}
+				{% if config.siteSlugDemoSite %}
+					<li class="site">
+						<a href="{{ config.getWebSiteDomainSecure(config.siteSlugDemoSite) }}" class="title">
+							<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(config.siteSlugDemoSite) }}/getLogo.php" alt="logo"></span>
+							<span class="titleWrapper">Try the demo!</span>
+						</a>
+						<a href="{{ config.getWebSiteDomainSecure(config.siteSlugDemoSite) }}" class="link">
+							View the demo
+						</a>
+					</li>
+				{% endif %}
+				<li class="site">
+					<a href="/create" class="title">
+						<span class="logoWrapper"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo"></span>
+						<span class="titleWrapper">Create a calendar?</span>
+					</a>
+					<div class="link">
+						<a href="/you/login">Login</a> or <a href="/you/register">Register</a> to get started!
+					</div>
+				</li>
+			</ul>
+
+		</div>
+
+		<div class="afterContentTwoColumns"></div>
+
+	</div>
+
 {% endblock %}

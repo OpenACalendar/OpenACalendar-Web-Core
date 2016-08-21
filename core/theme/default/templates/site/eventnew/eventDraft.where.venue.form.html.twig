@@ -55,57 +55,55 @@
 </form>
 
 
-<div id="innerPageWrapper">
-	<div id="innerPage">
+<div class="contentTwoColumns">
 
 
-		<div class="innerPageLeft">
-			<ul class="mainListVenues" id="EditEventVenueSearchResults">
-				{% for venue in venues %}
-					<li class="venue result">
-						<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight">
-							<input type="hidden" name="action" value="setthisvenue">
-							<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
-							<input type="submit" value="Select {{ venue.title }}">
-						</form>
-						<div class="title">{{ venue.title }}</div>
-						{%  if venue.address %}<div>{{  venue.address | nl2br }}</div>{%  endif %}
-						{%  if venue.addressCode %}<div>{{  venue.addressCode }}</div>{%  endif %}
-						<div class="afterOneActionFormRight"></div>
-					</li>
-				{% endfor %}
-				<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
-					<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight" onsubmit="onSubmitNewVenue();">
-						<input type="hidden" name="action" value="setnewvenue">
-						<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
-						<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
-						<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
-						<input type="hidden" name="fieldAreaSearchText" value="{{ searchArea | e('html_attr') }}">
-						<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
-						<input type="submit" value="New">
+	<div class="contentTwoColumnsLeft">
+		<ul class="mainListVenues" id="EditEventVenueSearchResults">
+			{% for venue in venues %}
+				<li class="venue result">
+					<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight">
+						<input type="hidden" name="action" value="setthisvenue">
+						<input type="hidden" name="venue_slug" value="{{  venue.slug }}">
+						<input type="submit" value="Select {{ venue.title }}">
 					</form>
-					<div class="title">This is a new venue</div>
+					<div class="title">{{ venue.title }}</div>
+					{%  if venue.address %}<div>{{  venue.address | nl2br }}</div>{%  endif %}
+					{%  if venue.addressCode %}<div>{{  venue.addressCode }}</div>{%  endif %}
 					<div class="afterOneActionFormRight"></div>
 				</li>
-				<li class="venue">
-					<form method="post" action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" class="oneActionFormRight">
-						<input type="hidden" name="action" value="setarea">
-						<input type="submit" value="I don't know the exact venue">
-					</form>
-					<div class="title">The exact venue is not known</div>
-					<div class="afterOneActionFormRight"></div>
-				</li>
-			</ul>
-		</div>
-
-
-		<div class="innerPageRight hideIfOneCol">
-			<div id="MapWrapper">
-				<div id="Map" class="fullWidth"></div>
-			</div>
-		</div>
-
-		<div class="afterInnerPageContent"></div>
-
+			{% endfor %}
+			<li class="venue" id="VenueNewWrapper" {%  if not venueSearchDone %}style="display:none;"{%  endif %}>
+				<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight" onsubmit="onSubmitNewVenue();">
+					<input type="hidden" name="action" value="setnewvenue">
+					<input type="hidden" name="fieldTitle" value="{{ searchTitle | e('html_attr') }}">
+					<input type="hidden" name="fieldAddress" value="{{ searchAddress | e('html_attr')  }}">
+					<input type="hidden" name="fieldAddressCode" value="{{ searchAddressCode | e('html_attr')  }}">
+					<input type="hidden" name="fieldAreaSearchText" value="{{ searchArea | e('html_attr') }}">
+					<input type="hidden" name="fieldAreaSlug" value="{{ searchAreaSlug | e('html_attr')  }}">
+					<input type="submit" value="New">
+				</form>
+				<div class="title">This is a new venue</div>
+				<div class="afterOneActionFormRight"></div>
+			</li>
+			<li class="venue">
+				<form method="post" action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" class="oneActionFormRight">
+					<input type="hidden" name="action" value="setarea">
+					<input type="submit" value="I don't know the exact venue">
+				</form>
+				<div class="title">The exact venue is not known</div>
+				<div class="afterOneActionFormRight"></div>
+			</li>
+		</ul>
 	</div>
+
+
+	<div class="contentTwoColumnsRight hideIfOneCol">
+		<div id="MapWrapper">
+			<div id="Map" class="fullWidth"></div>
+		</div>
+	</div>
+
+	<div class="afterContentTwoColumns"></div>
+
 </div>

@@ -5,7 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<div class="filterListWrapper filterListEventWrapper">
+<div class="filterListWrapper filterListEventWrapper contentMain">
 	<div id="FilterListEventWrapperSectionHidden" {% if not eventListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
 		<div class="showHideLink">
 			<a href="#" onclick="$('#FilterListEventWrapperSectionHidden').hide(); $('#FilterListEventWrapperSectionShown').show();">
@@ -27,68 +27,83 @@
 			</a>
 		</div>
 
-		<form method="get" class="filterList filterListEvent" id="FilterListEventForm">
+		<form method="get" class="filterList filterListEvent styled" id="FilterListEventForm" style="clear: both;">
 			<input type="hidden" name="eventListFilterDataSubmitted" value="1">
 
 			{% if eventListFilterParams.dateControls %}
-				<div class="inputField">
-					<label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label>
+				<div class="rowWrapper">
+					<div class="labelWrapper">&nbsp;</div>
+					<div class="widgetWrapper"><label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label></div>
+					<div class="afterRowWrapper"></div>
 				</div>
 
-				<div class="inputField" id="eventListFilterFromWrapper">
-					<label>From <input type="text" name="from" value="{{  eventListFilterParams.from }}" autocomplete="off"></label>
+				<div class="rowWrapper" id="eventListFilterFromWrapper">
+					<label>
+						<div class="labelWrapper">From:</div>
+						<div class="widgetWrapper"><input type="text" name="from" value="{{  eventListFilterParams.from }}" autocomplete="off"></div>
+						<div class="afterRowWrapper"></div>
+					</label>
 				</div>
 			{% endif %}
 
 			{% if eventListFilterParams.isHasTagControl %}
-				<div class="inputField">
+				<div class="rowWrapper">
 					<label>
-						Tag:
-						<div id="FilterListEventInputFieldTagSearch" {%  if eventListFilterParams.tagSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
-							<input type="text" name="tagSearch" value="" autocomplete="off">
-						</div>
-						<div id="FilterListEventInputFieldTagLabelWrapper" {%  if not eventListFilterParams.tagSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
-							<div class="inputFieldLabel" id="FilterListEventInputFieldTagLabel">{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.title  }}{%  endif %}</div>
-							<div class="inputFieldClear">
-								<a href="#" onclick="eventListFilterParams.onClickInputFieldTagClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+						<div class="labelWrapper">Tag:</div>
+						<div class="widgetWrapper">
+							<div id="FilterListEventInputFieldTagSearch" {%  if eventListFilterParams.tagSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+								<input type="text" name="tagSearch" value="" autocomplete="off">
+							</div>
+							<div id="FilterListEventInputFieldTagLabelWrapper" {%  if not eventListFilterParams.tagSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+								<div class="inputFieldLabel" id="FilterListEventInputFieldTagLabel">{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.title  }}{%  endif %}</div>
+								<div class="inputFieldClear">
+									<a href="#" onclick="eventListFilterParams.onClickInputFieldTagClear(); return false;" title="Clear Filter"><i class="fa fa-times" aria-hidden="true"></i></a>
+								</div>
 							</div>
 						</div>
+						<div class="afterRowWrapper"></div>
 					</label>
 				</div>
 				<input type="hidden" name="tagSearchSlug" value="{%  if eventListFilterParams.tagSearch %}{{ eventListFilterParams.tagSearch.slug  }}{%  endif %}">
 			{% endif %}
 
 			{% if eventListFilterParams.isHasGroupControl %}
-				<div class="inputField">
+				<div class="rowWrapper">
 					<label>
-						Group:
-						<div id="FilterListEventInputFieldGroupSearch" {%  if eventListFilterParams.groupSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
-							<input type="text" name="groupSearch" value="" autocomplete="off">
-						</div>
-						<div id="FilterListEventInputFieldGroupLabelWrapper" {%  if not eventListFilterParams.groupSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
-							<div class="inputFieldLabel" id="FilterListEventInputFieldGroupLabel">{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.title  }}{%  endif %}</div>
-							<div class="inputFieldClear">
-								<a href="#" onclick="eventListFilterParams.onClickInputFieldGroupClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+						<div class="labelWrapper">Group:</div>
+						<div class="widgetWrapper">
+							<div id="FilterListEventInputFieldGroupSearch" {%  if eventListFilterParams.groupSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+								<input type="text" name="groupSearch" value="" autocomplete="off">
+							</div>
+							<div id="FilterListEventInputFieldGroupLabelWrapper" {%  if not eventListFilterParams.groupSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+								<div class="inputFieldLabel" id="FilterListEventInputFieldGroupLabel">{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.title  }}{%  endif %}</div>
+								<div class="inputFieldClear">
+									<a href="#" onclick="eventListFilterParams.onClickInputFieldGroupClear(); return false;" title="Clear Filter"><i class="fa fa-times" aria-hidden="true"></i></a>
+								</div>
 							</div>
 						</div>
+						<div class="afterRowWrapper"></div>
 					</label>
 				</div>
 				<input type="hidden" name="groupSearchSlug" value="{%  if eventListFilterParams.groupSearch %}{{ eventListFilterParams.groupSearch.slug  }}{%  endif %}">
 			{% endif %}
 
 			{% if eventListFilterParams.isHasCountryControl %}
-				<div class="inputField">
+				<div class="rowWrapper">
 					<label>
-						Country:
-						<div id="FilterListEventInputFieldCountrySearch" {%  if eventListFilterParams.countrySearch %}style="display: none;"{% endif %} class="inputFieldSearch">
-							<input type="text" name="countrySearch" value="" autocomplete="off">
-						</div>
-						<div id="FilterListEventInputFieldCountryLabelWrapper" {%  if not eventListFilterParams.countrySearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
-							<div class="inputFieldLabel" id="FilterListEventInputFieldCountryLabel">{%  if eventListFilterParams.countrySearch %}{{ eventListFilterParams.countrySearch.title  }}{%  endif %}</div>
-							<div class="inputFieldClear">
-								<a href="#" onclick="eventListFilterParams.onClickInputFieldCountryClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+						<div class="labelWrapper">Country:</div>
+						<div class="widgetWrapper">
+							<div id="FilterListEventInputFieldCountrySearch" {%  if eventListFilterParams.countrySearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+								<input type="text" name="countrySearch" value="" autocomplete="off">
+							</div>
+							<div id="FilterListEventInputFieldCountryLabelWrapper" {%  if not eventListFilterParams.countrySearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+								<div class="inputFieldLabel" id="FilterListEventInputFieldCountryLabel">{%  if eventListFilterParams.countrySearch %}{{ eventListFilterParams.countrySearch.title  }}{%  endif %}</div>
+								<div class="inputFieldClear">
+									<a href="#" onclick="eventListFilterParams.onClickInputFieldCountryClear(); return false;" title="Clear Filter"><i class="fa fa-times" aria-hidden="true"></i></a>
+								</div>
 							</div>
 						</div>
+						<div class="afterRowWrapper"></div>
 					</label>
 				</div>
 				<input type="hidden" name="countrySearchTwoCharCode" value="{%  if eventListFilterParams.countrySearch %}{{ eventListFilterParams.countrySearch.twoCharCode  }}{%  endif %}">
@@ -97,34 +112,46 @@
 			{% endif %}
 
 			{% if eventListFilterParams.isHasAreaControl %}
-				<div class="inputField">
+				<div class="rowWrapper">
 					<label>
-						Area:
-						<div id="FilterListEventInputFieldAreaSearch" {%  if eventListFilterParams.areaSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
-							<input type="text" name="areaSearch" value="" autocomplete="off" {% if eventListFilterParams.isHasCountryControl and not eventListFilterParams.countrySearch %}disabled="disabled"{% endif %}>
-						</div>
-						<div id="FilterListEventInputFieldAreaLabelWrapper" {%  if not eventListFilterParams.areaSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
-							<div class="inputFieldLabel" id="FilterListEventInputFieldAreaLabel">{%  if eventListFilterParams.areaSearch %}{{ eventListFilterParams.areaSearch.title  }}{%  endif %}</div>
-							<div class="inputFieldClear">
-								<a href="#" onclick="eventListFilterParams.onClickInputFieldAreaClear(); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
+						<div class="labelWrapper">Area:</div>
+						<div class="widgetWrapper">
+							<div id="FilterListEventInputFieldAreaSearch" {%  if eventListFilterParams.areaSearch %}style="display: none;"{% endif %} class="inputFieldSearch">
+								<input type="text" name="areaSearch" value="" autocomplete="off" {% if eventListFilterParams.isHasCountryControl and not eventListFilterParams.countrySearch %}disabled="disabled"{% endif %}>
+							</div>
+							<div id="FilterListEventInputFieldAreaLabelWrapper" {%  if not eventListFilterParams.areaSearch %}style="display: none;"{% endif %} class="inputFieldLabelWrapper">
+								<div class="inputFieldLabel" id="FilterListEventInputFieldAreaLabel">{%  if eventListFilterParams.areaSearch %}{{ eventListFilterParams.areaSearch.title  }}{%  endif %}</div>
+								<div class="inputFieldClear">
+									<a href="#" onclick="eventListFilterParams.onClickInputFieldAreaClear(); return false;" title="Clear Filter"><i class="fa fa-times" aria-hidden="true"></i></a>
+								</div>
 							</div>
 						</div>
+						<div class="afterRowWrapper"></div>
 					</label>
 				</div>
 				<input type="hidden" name="areaSearchSlug" value="{%  if eventListFilterParams.areaSearch %}{{ eventListFilterParams.areaSearch.slug  }}{%  endif %}">
 			{% endif %}
 
-			<div class="inputField">
-				<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">Search:</div>
+					<div class="widgetWrapper"><input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></div>
+					<div class="afterRowWrapper"></div>
+				</label>
 			</div>
 
-			<div class="inputField">
-				<label><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</label>
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">&nbsp;</div>
+					<div class="widgetWrapper"><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</div>
+					<div class="afterRowWrapper"></div>
+				</label>
 			</div>
 
-			<div class="submitField">
-				<input type="submit" value="Filter">
-			</div>
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Filter" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+
 		</form>
 	</div>
 </div>

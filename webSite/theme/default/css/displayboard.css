@@ -149,7 +149,7 @@ html {
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h1 {
   display: inline;
-  font-size: 1.3em;
+  font-size: 1.5rem;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h1 a {
   text-decoration: none;
@@ -157,7 +157,6 @@ html {
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 {
   display: inline;
-  font-size: 1.0em;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper #headerWrapper h2 a {
   text-decoration: none;
@@ -175,7 +174,7 @@ html {
   border-radius: 3px;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment h3 {
-  font-size: 2em;
+  font-size: 1.875rem;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents {
   margin-top: 15px;
@@ -216,28 +215,24 @@ html {
   display: block;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startDate {
-  font-size: 16pt;
   font-weight: 400;
   display: block;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startMonthYear {
   font-weight: 200;
   display: block;
-  font-size: 0.75em;
+  font-size: 0.875rem;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startTime1 {
-  font-size: 16pt;
   font-weight: 400;
   display: block;
   padding-top: 5px;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.dateIcon a span.startTime2 {
-  font-size: 16pt;
   font-weight: 400;
   display: block;
 }
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li div.title {
-  font-size: 16pt;
   font-weight: bold;
   line-height: 1.25em;
   padding: 2px 0 10px 70px;
@@ -251,9 +246,6 @@ html {
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li.minorImportance div.dateIcon {
   background: #726568;
 }
-#pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li.minorImportance div.title {
-  font-size: 14pt;
-}
 #pageWrapper.displayBoard #headerAndBodyWrapper .displayBoardSegment ul.displayBoardEvents li.minorImportance div.title a {
   color: #726568;
 }
@@ -264,5 +256,5 @@ html {
   padding: 10px 5px;
   text-align: center;
   font-style: italic;
-  font-size: 0.8em;
+  font-size: 0.875rem;
 }

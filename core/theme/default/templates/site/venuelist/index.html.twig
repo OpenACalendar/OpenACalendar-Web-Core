@@ -26,14 +26,15 @@
 
 		
 	{% if not currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
-		
-		
-	<h2>Venues</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="contentMain">
+		<h2>Venues</h2>
+	</div>
+
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% if currentUserActions.has("org.openacalendar","venueNew") %}
 				<li class="action">
 					<a href="/venue/new"><div class="fa fa-pencil"></div> Add a venue</a>
@@ -49,26 +50,20 @@
 			
 			<li class="tab currentTab">List</li>
 		</ul>
-		<div id="innerPage">
-
-			{% include '/site/venueListFilterParams.html.twig' %}
-			
-			<ul class="mainListVenues">
-				{% for venue in venues %}
-					{% include '/site/common/mainListVenue.html.twig' with {'venue':venue }  %}
-				{% else %}
-					<li class="nodata">
-						There are no venues.
-						{% if currentUserActions.has("org.openacalendar","venueNew") %}Why not <a href="/venue/new">add one</a>?{% endif %}
-					</li>								
-				{% endfor %}
-			</ul>
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
 
+	{% include '/site/venueListFilterParams.html.twig' %}
 
+	<ul class="mainListVenues">
+		{% for venue in venues %}
+			{% include '/site/common/mainListVenue.html.twig' with {'venue':venue }  %}
+		{% else %}
+			<li class="nodata">
+				There are no venues.
+				{% if currentUserActions.has("org.openacalendar","venueNew") %}Why not <a href="/venue/new">add one</a>?{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
 
 {% endblock %}
 

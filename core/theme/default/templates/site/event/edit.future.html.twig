@@ -17,153 +17,157 @@
 
 {% block innerContent %}
 
-	<form action="#" method="post" class="styled" id="EditFutureForm">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="submitted" value="yes">
+	<div class="contentMain">
 
-		<p>Your changes have been saved.</p>
+		<form action="#" method="post" class="styled" id="EditFutureForm">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="submitted" value="yes">
 
-		<p>Do you want to change these future events too?</p>
+			<p>Your changes have been saved.</p>
 
-		<p>
-			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', true); updateFormSubmit(); return false;">Select all</a>
-			<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', false); updateFormSubmit(); return false;">Select none</a>
-		</p>
-		
-		<ul class="mainListEvents">
-			{% for event in futureEvents %}
-				<li class="event">
-					<div class="dateTimeIcon">
-						<time datetime="{{ event.getStartAt|date('c', currentTimeZone) }}">
-							<div class="dateIcon">
-								<span class="startDay">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
-								<span class="startDate">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
-								<span class="startMonthYear">{{ event.getStartAt|date('M \'y', currentTimeZone) }}</span>
-							</div>
-							<div class="timeIcon">
-								<span class="startTime">{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia': 'H:i', currentTimeZone) }}</span>
-							</div>
-						</time>				
-					</div>
-					<div class="title">
-						{{ event.summaryDisplay}}
-					</div>
-						
-					<ul>
-						{% if futureEventsProposedChanges[event.slug].getSummaryChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldSummary" value="1" {% if futureEventsProposedChanges[event.slug].getSummaryChangeSelected %}checked="checked"{% endif %}>
-									Change Summary to: {{  futureEventsProposedChanges[event.slug].getSummary }}
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].getDescriptionChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldDescription" value="1" {% if futureEventsProposedChanges[event.slug].getDescriptionChangeSelected %}checked="checked"{% endif %}>
-									Change Description
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].countryAreaVenueIdChangePossible  %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldCountryAreaVenue" value="1" {% if futureEventsProposedChanges[event.slug].countryAreaVenueIdChangeSelected  %}checked="checked"{% endif %}>
-									Change Country, Area and Venue
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].getTimezoneChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldTimezone" value="1" {% if futureEventsProposedChanges[event.slug].getTimezoneChangeSelected %}checked="checked"{% endif %}>
-									Change Timezone
-								</label>
-							</li>
-						{% endif %}						
-						{% if futureEventsProposedChanges[event.slug].getUrlChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldUrl" value="1" {% if futureEventsProposedChanges[event.slug].getUrlChangeSelected %}checked="checked"{% endif %}>
-									Change Information Url
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].getTicketUrlChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldTicketUrl" value="1" {% if futureEventsProposedChanges[event.slug].getTicketUrlChangeSelected %}checked="checked"{% endif %}>
-									Change Ticket Url
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].getIsVirtualChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsVirtual" value="1" {% if futureEventsProposedChanges[event.slug].getIsVirtualChangeSelected %}checked="checked"{% endif %}>
-									Is Virtual
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].getIsPhysicalChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsPhysical" value="1" {% if futureEventsProposedChanges[event.slug].getIsPhysicalChangeSelected %}checked="checked"{% endif %}>
-									Is Physical
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].getStartEndAtChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldStartEnd" value="1" checked="checked">
-									Change Start and End to:
-									{% if currentTimeZone == event.timezone %}
-										{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
-									{% else %}
-										{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':event.timezone, 'showTimeZone':true} %}				
-										{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':currentTimeZone, 'showTimeZone':true} %}
-									{% endif %}
-								</label>
-							</li>
-						{% endif %}
-						{% if futureEventsProposedChanges[event.slug].getIsCancelledChangePossible %}
-							<li>
-								<label>
-									<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsCancelled" value="1" {% if futureEventsProposedChanges[event.slug].getIsCancelledChangeSelected %}checked="checked"{% endif %}>
-									Is Cancelled
-								</label>
-							</li>
-						{% endif %}
-						{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
-							{% if futureEventsProposedChanges[event.slug].getCustomFieldChangePossible(customField) %}
+			<p>Do you want to change these future events too?</p>
+
+			<p>
+				<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', true); updateFormSubmit(); return false;">Select all</a>
+				<a href="#" onclick="$('#EditFutureForm input[type=checkbox]').prop('checked', false); updateFormSubmit(); return false;">Select none</a>
+			</p>
+
+			<ul class="mainListEvents">
+				{% for event in futureEvents %}
+					<li class="event">
+						<div class="dateTimeIcon">
+							<time datetime="{{ event.getStartAt|date('c', currentTimeZone) }}">
+								<div class="dateIcon">
+									<span class="startDay">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
+									<span class="startDate">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
+									<span class="startMonthYear">{{ event.getStartAt|date('M \'y', currentTimeZone) }}</span>
+								</div>
+								<div class="timeIcon">
+									<span class="startTime">{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia': 'H:i', currentTimeZone) }}</span>
+								</div>
+							</time>
+						</div>
+						<div class="title">
+							{{ event.summaryDisplay}}
+						</div>
+
+						<ul>
+							{% if futureEventsProposedChanges[event.slug].getSummaryChangePossible %}
 								<li>
 									<label>
-										<input type="checkbox" name="eventSlug{{ event.slug }}fieldCustom{{ customField.key }}" value="1" {% if futureEventsProposedChanges[event.slug].getCustomFieldChangeSelected(customField) %}checked="checked"{% endif %}>
-										{{  customField.label }}
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldSummary" value="1" {% if futureEventsProposedChanges[event.slug].getSummaryChangeSelected %}checked="checked"{% endif %}>
+										Change Summary to: {{  futureEventsProposedChanges[event.slug].getSummary }}
 									</label>
 								</li>
-							{%  endif %}
-						{%  endfor %}
-					</ul>
-						
-					<div class="afterEventListing"></div>
-				</li>
-			{% endfor %}
-		</ul>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getDescriptionChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldDescription" value="1" {% if futureEventsProposedChanges[event.slug].getDescriptionChangeSelected %}checked="checked"{% endif %}>
+										Change Description
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].countryAreaVenueIdChangePossible  %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldCountryAreaVenue" value="1" {% if futureEventsProposedChanges[event.slug].countryAreaVenueIdChangeSelected  %}checked="checked"{% endif %}>
+										Change Country, Area and Venue
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getTimezoneChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldTimezone" value="1" {% if futureEventsProposedChanges[event.slug].getTimezoneChangeSelected %}checked="checked"{% endif %}>
+										Change Timezone
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getUrlChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldUrl" value="1" {% if futureEventsProposedChanges[event.slug].getUrlChangeSelected %}checked="checked"{% endif %}>
+										Change Information Url
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getTicketUrlChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldTicketUrl" value="1" {% if futureEventsProposedChanges[event.slug].getTicketUrlChangeSelected %}checked="checked"{% endif %}>
+										Change Ticket Url
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getIsVirtualChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsVirtual" value="1" {% if futureEventsProposedChanges[event.slug].getIsVirtualChangeSelected %}checked="checked"{% endif %}>
+										Is Virtual
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getIsPhysicalChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsPhysical" value="1" {% if futureEventsProposedChanges[event.slug].getIsPhysicalChangeSelected %}checked="checked"{% endif %}>
+										Is Physical
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getStartEndAtChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldStartEnd" value="1" checked="checked">
+										Change Start and End to:
+										{% if currentTimeZone == event.timezone %}
+											{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+										{% else %}
+											{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':event.timezone, 'showTimeZone':true} %}
+											{% include 'site/common/eventFromToLine.html.twig' with {'startAt': futureEventsProposedChanges[event.slug].getStartAt, 'endAt': futureEventsProposedChanges[event.slug].getEndAt, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+										{% endif %}
+									</label>
+								</li>
+							{% endif %}
+							{% if futureEventsProposedChanges[event.slug].getIsCancelledChangePossible %}
+								<li>
+									<label>
+										<input type="checkbox" name="eventSlug{{ event.slug }}fieldIsCancelled" value="1" {% if futureEventsProposedChanges[event.slug].getIsCancelledChangeSelected %}checked="checked"{% endif %}>
+										Is Cancelled
+									</label>
+								</li>
+							{% endif %}
+							{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
+								{% if futureEventsProposedChanges[event.slug].getCustomFieldChangePossible(customField) %}
+									<li>
+										<label>
+											<input type="checkbox" name="eventSlug{{ event.slug }}fieldCustom{{ customField.key }}" value="1" {% if futureEventsProposedChanges[event.slug].getCustomFieldChangeSelected(customField) %}checked="checked"{% endif %}>
+											{{  customField.label }}
+										</label>
+									</li>
+								{%  endif %}
+							{%  endfor %}
+						</ul>
 
-		<div id="EditFutureFormSubmitCheckedWrapper">
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="Update these too!" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>
-		</div>
-		<div id="EditFutureFormSubmitNotCheckedWrapper" style="display: none;">
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="Continue without updating these" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>
-		</div>
-	</form>
+						<div class="afterEventListing"></div>
+					</li>
+				{% endfor %}
+			</ul>
 
-	<!-- No Cancel Button! Because that would imply to user they could "cancel" changes they just made, and they can't. https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/605 -->
+			<div id="EditFutureFormSubmitCheckedWrapper">
+				<div class="bigSubmitActionWrapper"><input type="submit"  value="Update these too!" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</div>
+			<div id="EditFutureFormSubmitNotCheckedWrapper" style="display: none;">
+				<div class="bigSubmitActionWrapper"><input type="submit"  value="Continue without updating these" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</div>
+		</form>
+
+		<!-- No Cancel Button! Because that would imply to user they could "cancel" changes they just made, and they can't. https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/605 -->
+	</div>
+
 
 {% endblock %}
 

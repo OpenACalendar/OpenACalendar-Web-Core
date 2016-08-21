@@ -27,13 +27,15 @@
 {% block content %}
 
 	{% if not currentSiteFeatures.has('org.openacalendar.curatedlists','CuratedList') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
-		
-	<h2>Curated Lists</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="contentMain">
+		<h2>Curated Lists</h2>
+	</div>
+
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% if currentUserActions.has("org.openacalendar","curatedListNew") %}
 				<li class="action">
 					<a href="/curatedlist/new"><div class="fa fa-pencil"></div> new list of events</a>
@@ -44,40 +46,34 @@
 					<a href="/event/new"><div class="fa fa-pencil"></div> new event</a>
 				</li>
 			{% endif %}
-			<li class="tab">List</li>
+			<li class="tab currentTab">List</li>
 		</ul>
-		<div id="innerPage">
-
-			{% include '/site/curatedListsListFilterParams.html.twig' %}
-
-			<ul class="mainListCuratedLists">
-				{% for curatedlist in curatedlists %}
-					<li class="curatedlist">
-						<div class="title">
-							<a href="/curatedlist/{{ curatedlist.slug }}">
-								<span class="text">{{ curatedlist.title }}</span>
-								{% if curatedlist.cachedFutureEvents == 1 %}
-									<span class="futureEvents">1 Future Event</span>
-								{% elseif curatedlist.cachedFutureEvents > 1 %}
-									<span class="futureEvents">{{  curatedlist.cachedFutureEvents }} Future Events</span>
-								{%  endif %}
-							</a>
-						</div>
-						<div class="description">{{ curatedlist.description | truncate(500) | nl2br  }}</div>
-					</li>
-				{% else %}
-					<li>
-						There are no lists.
-						{# TODO why not create one? link #}
-					</li>								
-				{% endfor %}
-			</ul>
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
 
+	{% include '/site/curatedListsListFilterParams.html.twig' %}
 
+	<ul class="mainListCuratedLists">
+		{% for curatedlist in curatedlists %}
+			<li class="curatedlist">
+				<div class="title">
+					<a href="/curatedlist/{{ curatedlist.slug }}">
+						<span class="text">{{ curatedlist.title }}</span>
+						{% if curatedlist.cachedFutureEvents == 1 %}
+							<span class="futureEvents">1 Future Event</span>
+						{% elseif curatedlist.cachedFutureEvents > 1 %}
+							<span class="futureEvents">{{  curatedlist.cachedFutureEvents }} Future Events</span>
+						{%  endif %}
+					</a>
+				</div>
+				<div class="description">{{ curatedlist.description | truncate(500) | nl2br  }}</div>
+			</li>
+		{% else %}
+			<li>
+				There are no lists.
+				{# TODO why not create one? link #}
+			</li>
+		{% endfor %}
+	</ul>
 
 {% endblock %}
 

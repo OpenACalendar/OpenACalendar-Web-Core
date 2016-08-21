@@ -21,33 +21,30 @@
 {% block content %}
 
 	{% if not currentSiteFeatures.has('org.openacalendar','Importer') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
-		
-	<h2>Import from web</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
-			<li class="tab currentTab">List</li>
-		</ul>
-		<div id="innerPage">
-
-			<ul class="mainListImports">
-				{% for import in imports %}
-					<li class="import">
-						<div class="title"><a href="/import/{{ import.slug }}">{{ import.title }}</a></div>
-					</li>
-				{% else %}
-					<li class="nodata">
-						There are no imports.
-					</li>								
-				{% endfor %}
-			</ul>
-
-			<div id="afterInnerPageContent"></div>
-		</div>
+	<div class="contentMain">
+		<h2>Import from web</h2>
 	</div>
 
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
+			<li class="tab currentTab">List</li>
+		</ul>
+	</div>
+
+	<ul class="mainListImports">
+		{% for import in imports %}
+			<li class="import">
+				<div class="title"><a href="/import/{{ import.slug }}">{{ import.title }}</a></div>
+			</li>
+		{% else %}
+			<li class="nodata">
+				There are no imports.
+			</li>
+		{% endfor %}
+	</ul>
 
 
 {% endblock %}

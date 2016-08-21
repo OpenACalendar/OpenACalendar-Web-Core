@@ -11,10 +11,12 @@
 
 {% block content %}
 
-	<h3>About {{  user.username }}</h3>
-	
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="contentMain">
+		<h2>About {{  user.username }}</h2>
+	</div>
+
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% block actions %}{% endblock %}
 			<li class="action">
 				<a href="/api1/person/{{ user.username }}/events.ical" onclick="showExportPopup(); return false;">
@@ -23,14 +25,9 @@
 			</li>				
 			<li class="tab {% block tabIndex %}currentTab{% endblock %}"><a href="/person/{{ user.username }}">Upcoming events</a></li>
 		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
 
+	{% block innerContent %}{% endblock %}
 
 {% endblock %}
 

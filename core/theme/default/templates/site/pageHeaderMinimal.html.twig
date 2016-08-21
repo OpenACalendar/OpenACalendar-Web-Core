@@ -6,14 +6,16 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div id="header">
-	<div class="title">
-		<a href="/">
-			<img src="/{% if config.isSingleSiteMode %}theme/default/img/logo.png{% else %}getLogo.php{% endif %}?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
-			<h1>{{ currentSite.title }}</h1>
-		</a>
+	<div class="contentMain">
+		<div class="title">
+			<a href="/">
+				<img src="/{% if config.isSingleSiteMode %}theme/default/img/logo.png{% else %}getLogo.php{% endif %}?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
+				<h1>{{ currentSite.title }}</h1>
+			</a>
+		</div>
+		<ul class="menu">
+		</ul>
+		<div class="afterMenu"></div>
 	</div>
-	<ul class="menu">
-	</ul>
-	<div class="afterMenu"></div>
 </div>
 

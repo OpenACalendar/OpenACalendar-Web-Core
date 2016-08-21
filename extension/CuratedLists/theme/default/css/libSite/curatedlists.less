@@ -8,21 +8,24 @@
 
 
 ul.mainListCuratedLists {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.curatedlist {
 		min-height: 50px;
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 		.title {
 			padding: 2px 0 5px 0;
 			.text {
-				font-size: 1.1em;
+				font-size: 1.125rem;
 				font-weight: bold;
 
 			}
 			.futureEvents {
 				margin-left: 10px;
 				padding: 4px 20px 0px 20px;
-				font-size: 0.8em;
+				font-size: 0.875rem;
 				font-weight: normal;
 				background: @colourFutureEventsInMainListingTitleBackground;
 				.rounded-corners(3px);
@@ -45,22 +48,14 @@ ul.mainListCuratedLists {
 		}
 	}
 	li.nodata {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		font-style: italic;
-	}
-}
-
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListCuratedLists {
-		li.curatedlist, li.nodata {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
 	}
 }
 
 ul.infoBoxListCuratedLists {
 	li.curatedlist {
-		font-size: 0.8em;
+		font-size: 0.875rem;
 	}
 }
 
@@ -85,7 +80,7 @@ ul.mainListEvents li.event .curatedListOptions {
 			border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */
 			margin: 1px;
 			color: #333;
-			font-size: 1.0em;
+			font-size: 1.125rem;
 			text-decoration: none;
 		}
 		input[type="submit"]:hover, input[type="submit"]:focus {

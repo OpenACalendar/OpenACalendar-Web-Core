@@ -37,7 +37,7 @@
 				<p class="descriptionCancelled">This event has been cancelled!</p>
 			{%  endif %}
 
-			<div class="innerPageLeft">
+			<div class="contentTwoColumnsLeft">
 
 
 				{% if event.isdeleted %}
@@ -134,7 +134,7 @@
 
 			</div>
 
-			<div class="innerPageRight">
+			<div class="contentTwoColumnsRight">
 
 				{%  if  event.url or event.ticketUrl %}
 					<div class="infoBoxWrapper">
@@ -143,16 +143,16 @@
 
 
 							{% if event.url %}
-								<div class="innerPageRightLinkWrapper">
-									<div class="innerPageRightLinkHeader">More details</div>
-									<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
+								<div class="contentTwoColumnsLinkWrapper">
+									<div class="contentTwoColumnsLinkHeader">More details</div>
+									<div class="contentTwoColumnsLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
 								</div>
 							{% endif %}
 
 							{% if event.ticketUrl %}
-								<div class="innerPageRightLinkWrapper">
-									<div class="innerPageRightLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
-									<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></div>
+								<div class="contentTwoColumnsLinkWrapper">
+									<div class="contentTwoColumnsLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
+									<div class="contentTwoColumnsLinkContent"><a href="{{ event.ticketUrl }}" target="_blank">{{ event.ticketUrl | linkinfo }}</a></div>
 								</div>
 							{% endif %}
 
@@ -162,13 +162,13 @@
 
 			</div>
 
-			<div class="afterInnerPageContent"></div>
+			<div class="afterContentTwoColumns"></div>
 
 			{% for displayGroup in groups %}
-				<div class="innerPageLeftRightTitle">
+				<div class="contentTwoColumnsTitle">
 					<p class="groupTitle">About <a href="/group/{{ displayGroup.slugForUrl }}">{{ displayGroup.title }}</a></p>
 				</div>
-				<div class="innerPageLeft">
+				<div class="contentTwoColumnsLeft">
 					{% if displayGroup.description  %}
 						<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
 					{% else %}
@@ -183,27 +183,27 @@
 						<div class="afterMediaGrid"></div>
 					{% endif %}
 				</div>
-				<div class="innerPageRight">
+				<div class="contentTwoColumnsRight">
 					{% if displayGroup.url and displayGroup.url != event.url %}
-						<div class="innerPageRightLinkWrapper">
-							<div class="innerPageRightLinkHeader">More details</div>
-							<div class="innerPageRightLinkContent"><a href="{{ displayGroup.url }}" target="_blank">{{ displayGroup.url | linkinfo }}</a></div>
+						<div class="contentTwoColumnsLinkWrapper">
+							<div class="contentTwoColumnsLinkHeader">More details</div>
+							<div class="contentTwoColumnsLinkContent"><a href="{{ displayGroup.url }}" target="_blank">{{ displayGroup.url | linkinfo }}</a></div>
 						</div>
 					{% endif %}
 					{% if displayGroup.twitterUsername %}
-						<div class="innerPageRightLinkWrapper">
-							<div class="innerPageRightLinkHeader">On Twitter</div>
-							<div class="innerPageRightLinkContent"><a href="https://twitter.com/{{ displayGroup.twitterUsername }}" target="_blank">@{{ displayGroup.twitterUsername }}</a></div>
+						<div class="contentTwoColumnsLinkWrapper">
+							<div class="contentTwoColumnsLinkHeader">On Twitter</div>
+							<div class="contentTwoColumnsLinkContent"><a href="https://twitter.com/{{ displayGroup.twitterUsername }}" target="_blank">@{{ displayGroup.twitterUsername }}</a></div>
 						</div>
 					{% endif %}
 				</div>
-				<div class="afterInnerPageContent"></div>
+				<div class="afterContentTwoColumns"></div>
 			{% endfor %}
 
 
 			{% if venue is not null or area is not null or country is not null %}
 				<div itemprop="location" itemscope itemtype="http://schema.org/Place">
-					<div class="innerPageLeftRightTitle">
+					<div class="contentTwoColumnsTitle">
 						{%  if venue is not null %}
 							<p class="venueTitle">At <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
 						{%  elseif area is not null  %}
@@ -212,7 +212,7 @@
 							<p class="countryTitle"><a href="/country/{{ country.twoCharCode }}" itemprop="url"><span itemprop="name">{{ country.title }}</span></a></p>
 						{%  endif  %}
 					</div>
-					<div class="innerPageLeft">
+					<div class="contentTwoColumnsLeft">
 						{%  if venue is not null %}
 							{% if venue.description %}
 								<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
@@ -232,10 +232,10 @@
 						</div>
 
 					</div>
-					<div class="innerPageRight">
+					<div class="contentTwoColumnsRight">
 						<!---  MAP WOULD GO HERE! LEFT OUT FOR NOW.  --->
 					</div>
-					<div class="afterInnerPageContent"></div>
+					<div class="afterContentTwoColumns"></div>
 				</div>
 			{% endif %}
 
@@ -244,7 +244,7 @@
 
 
 
-			<div id="afterInnerPageContent"></div>
+			<div id="afterContentTwoColumns"></div>
 		</div>
 	</div>
 

@@ -25,13 +25,15 @@
 {% block content %}
 
 	{% if not currentSiteFeatures.has('org.openacalendar','Group') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
-		
-	<h2>Groups</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="contentMain">
+		<h2>Groups</h2>
+	</div>
+
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% if currentUserActions.has("org.openacalendar","groupNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","groupNew") )  %}
 				<li class="action">
 					<a href="/group/new"><div class="fa fa-pencil"></div> Add a group</a>
@@ -39,24 +41,20 @@
 			{% endif %}
 			<li class="tab currentTab">List</li>
 		</ul>
-		<div id="innerPage">
-			 
-			{% include '/site/groupListFilterParams.html.twig' %}
-			
-			<ul class="mainListGroups">
-				{% for group in groups %}
-					{% include '/site/common/mainListGroup.html.twig' with {'group':group }  %}
-				{% else %}
-					<li class="nodata">
-						There are no groups.
-						{% if currentUserActions.has("org.openacalendar","groupNew") %}Why not <a href="/group/new">add one</a>?{% endif %}
-					</li>								
-				{% endfor %}
-			</ul>
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
+
+	{% include '/site/groupListFilterParams.html.twig' %}
+
+	<ul class="mainListGroups">
+		{% for group in groups %}
+			{% include '/site/common/mainListGroup.html.twig' with {'group':group }  %}
+		{% else %}
+			<li class="nodata">
+				There are no groups.
+				{% if currentUserActions.has("org.openacalendar","groupNew") %}Why not <a href="/group/new">add one</a>?{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
 
 
 

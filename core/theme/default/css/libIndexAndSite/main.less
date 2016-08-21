@@ -18,12 +18,11 @@ body {
 }
 
 #page {
-	margin: 0 auto;
 	background: white;
 }
 
-#page.normalContent {
-    max-width: 1200px;
+.contentMain {
+	.contentMain();
 }
 
 #header {
@@ -41,13 +40,12 @@ body {
 			color: black;
 			display: inline;
 			font-weight: bold;
-			font-size: 1.6em;
+			font-size: 1.875rem;
 		}
 		a {
 			text-decoration: none;
 			color: #333;
-			font-size: 14pt;
-			padding: 5px;
+			padding: 5px 5px 5px 0;
 			display:inline-block;
 		}
 		a:hover, a:focus {
@@ -69,19 +67,17 @@ body {
 					border-bottom: 1px solid #ccc;
 					.title a {
 						display: block;
-						font-size: 10pt;
 						color: #999;
 						padding: 0;
 					}
 					.timesince, .site {
 						display: inline;
-						font-size: 8pt;
+						font-size: 0.875rem;
 						color: #999;
 						padding: 2px;
 					}
 				}
 				li.unread .title a {
-					font-size: 12pt;
 					color: #333;
 				}
 			}
@@ -89,7 +85,7 @@ body {
 		li {
 			list-style-type: none;
 			display: inline-block;
-			font-size: 1.4em;
+			font-size: 1.25REM;
 			a {
 				text-decoration: none;
 				color: #333;
@@ -112,7 +108,6 @@ body {
 					a {
 						text-decoration: none;
 						color: #333;
-						font-size: 14pt;
 						padding: 5px;
 						display:inline-block;
 					}
@@ -134,18 +129,18 @@ body {
 
 #body {
 	min-height: 400px;
-	padding: 5px ;
+	padding: 5px 0 ;
 }
 
 h2 {
 	font-weight: bold;
-	font-size: 1.5em;
+	font-size: 1.5rem;
 	padding: 10px 0;
 }
 
 h3 {
 	font-weight: bold;
-	font-size: 1.2em;
+	font-size: 1.25rem;
 	padding: 10px 0;
 }
 
@@ -154,46 +149,6 @@ ul.normal {
 		padding: 3px 3px 3px 20px;
 		list-style-type: disc;
 		list-style-position: inside;
-	}
-}
-
-#bodyLeft, #bodyRight {
-	padding: 10px 2px;
-	img {
-		max-width: 100%;
-	}
-	p {
-		padding: 5px 0;
-	}
-}
-/** on wide screens have 2 columns here **/
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	#bodyLeft{
-		width: 57%;
-		float: left;
-	}
-	#bodyRight{
-		width: 37%;
-		float: right;
-	}
-	#afterPage2Col {
-		clear: both;
-	}
-}
-
-
-/** on wide screens have 2 columns here **/
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	#bodyLeftEqualWidth {
-		width: 47%;
-		float: left;
-	}
-	#bodyRightEqualWidth{
-		width: 47%;
-		float: right;
-	}
-	#afterPage2Col {
-		clear: both;
 	}
 }
 
@@ -223,8 +178,11 @@ p {
 }
 
 ul.mainListEvents {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0px auto;
+	padding: 0 @contentSideGap;
 	li.event {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		border-bottom: 2px solid #E9E9E9;
 	}
 	li.export {
@@ -239,21 +197,12 @@ ul.mainListEvents {
 		}
 	}
 	li.nodata, li.info {
-		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		margin: @listDataItemsMarginTopBottom 0;
 		font-style: italic;
 	}
 }
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	ul.mainListEvents {
-		li.event, li.nodata, li.info {
-			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-		}
-	}
-}
 
-ul.mainListEvents li.event, div.mainShowEvent {
-	margin-bottom: 10px;
-	padding: 20px 0;
+ul.mainListEvents li.event, div.mainShowEvent, ul.history li.event, ul.mainListImportedEvents li.importedevent, div.importedevent {
 	div.dateTimeIcon {
 		float: left;
 		width: 60px;
@@ -278,25 +227,26 @@ ul.mainListEvents li.event, div.mainShowEvent {
 			color: white;
 		}
 		span.startDay {
+			font-size: 0.875rem;
 			font-weight: 200;
 			padding-top: 5px;
 			display: block;
 			color: white;
 		}
 		span.startDate {
-			font-size: 16pt;
+			font-size: 1.25rem;
 			font-weight: 400;
 			display: block;
 			color: white;
 		}
 		span.startMonthYear {
 			font-weight: 200;
+			font-size: 0.875rem;
 			display: block;
-			font-size: 0.75em;
 			color: white;
 		}
 		span.startTime {
-			font-size: 11pt;
+			font-size: 0.875rem;
 			color: black;
 		}
 		a {
@@ -315,6 +265,11 @@ ul.mainListEvents li.event, div.mainShowEvent {
 			}
 		}
 	}
+}
+
+ul.mainListEvents li.event, div.mainShowEvent {
+	margin-bottom: 10px;
+	padding: 20px 0;
 	.media {
 		width: 100px;
 		height: 100px;
@@ -328,7 +283,7 @@ ul.mainListEvents li.event, div.mainShowEvent {
 		}
 	}
 	div.title {
-		font-size: 16pt;
+		font-size: 1.125rem;
 		font-weight: bold;
 		line-height: 1.25em;
 		padding: 2px 0 10px 70px;
@@ -346,7 +301,7 @@ ul.mainListEvents li.event, div.mainShowEvent {
 	.descriptionDeleted, .descriptionCancelled {
 		font-style: italic;
 		font-weight: bold;
-		font-size: 24pt;
+		font-size: 2rem;
 		text-align: center;
 		padding: 20px 10px;
 		background: #000;
@@ -358,7 +313,6 @@ ul.mainListEvents li.event, div.mainShowEvent {
 	}
 	p.groupTitle, p.venueTitle, p.areaTitle, p.countryTitle {
 		font-weight: bold;
-		font-size: 0.8em;
 		a {
 			color: black;
 			text-decoration: none;
@@ -368,7 +322,6 @@ ul.mainListEvents li.event, div.mainShowEvent {
 		}
 	}
 	p.groupDescription, p.venueDescription {
-		font-size: 0.8em;
 		padding: 0px 0px 0px 0px;
 		margin: 0px 0px 10px 0px;
 		a {
@@ -424,7 +377,7 @@ ul.mainListEvents li.event, div.mainShowEvent {
 	}
 	.GetTicket {
 		font-weight: bold;
-		font-size: 120%;
+		font-size:1.25rem;
 		font-style: italic;
 	}
 }
@@ -511,7 +464,7 @@ div.mainShowGroup {
 	.descriptionDeleted {
 		font-style: italic;
 		font-weight: bold;
-		font-size: 24pt;
+		font-size: 2rem;
 		text-align: center;
 		padding: 20px 10px;
 		background: #000;
@@ -529,11 +482,11 @@ div.mainShowCountry {
 }
 
 div.filterListWrapper {
-    padding: 10px;
-	padding: 5px 0;
+	max-width: @listDataItemsMaxWidth;
+	margin: @listDataItemsFilterMarginTopBottom auto;
+	padding: 0 @contentSideGap;
     border: @colourLighter2 2px solid;
     .rounded-corners(2px);
-	margin: @listDataItemsFilterMarginTopBottom @listDataItemsFilterMarginLeftRightNarrowScreen;
     .showHideLink {
         float: right;
         text-align: right;
@@ -553,70 +506,24 @@ div.filterListWrapper {
         font-style: italic;
     }
 	form.filterList {
-		div.inputField {
-			display: block;
-			padding: 10px;
-            .inputFieldLabelWrapper, .inputFieldSearch, .inputFieldLabel, .inputFieldClear {
-                display: inline;
-            }
-            .inputFieldLabel {
-                font-style: italic;
-            }
-            .inputFieldClear {
-                a {
-                    text-decoration: none;
-                    color: #666;
-                }
-                a:hover, a:focus {
-                    color: black;
-                }
-            }
-		}
-		#eventListFilterFromWrapper {
+		#eventListFilterFromWrapper,#importedEventListFilterFromWrapper {
 			input {
 				background: url('/theme/default/img/dateFilterBackground.png') no-repeat right white;
 			}
 		}
-		div.submitField {
-			display: block;
-            text-align: right;
-			padding: 10px;
-			input {
-				background: @colourLighter1;
-                padding: 5px 10px;
-				color: black;
-				border: 2px solid @colourLighter1;
-				.rounded-corners(2px);
-				cursor:pointer;
-			}
-		}
-	}
-}
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-	div.filterListWrapper {
-		margin: @listDataItemsFilterMarginTopBottom @listDataItemsFilterMarginLeftRightWideScreen;
 	}
 }
 
 
-#innerPageWrapper {
+.pageActionsWrapper {
 	clear: both;
-	#innerPageActionsShow {
-		padding: 0px 5px;
-		display: block;
-		text-align: right;
-		a {
-			color: #333;
-			text-decoration: none;
-		}
-		a:hover, a:focus {
-			color: black;
-			text-decoration: underline;
-		}
-	}
-	#innerPageActions {
+	border-bottom: 1px solid #666;
+    margin: 10px 0;
+
+	.pageActions {
+		font-size: 0.875rem;
+		.contentMain();
 		padding: 10px 0 0 0;
-		border-bottom: 1px solid #666;
 		li.action, li.actionWithSubMenu, li.hide {
 			padding: 0px 5px;
 			display: inline;
@@ -654,7 +561,6 @@ div.filterListWrapper {
 				a {
 					text-decoration: none;
 					color: #333;
-					font-size: 12pt;
 					padding: 5px;
 					display:inline-block;
 				}
@@ -681,7 +587,7 @@ div.filterListWrapper {
 			a:hover, a:focus {
 				color: blue;
 				text-decoration: underline;
-				
+
 			}
 			@media screen and (max-width: @narrowScreensMakeEverythingHorizontalIntoVerticalBoundary) {
 				display:block;
@@ -689,7 +595,7 @@ div.filterListWrapper {
 			}
 		}
 		li.currentTab {
-			background: #fff;	
+			background: #fff;
 			border-top: 1px solid black;
 			border-left: 1px solid black;
 			border-right: 1px solid black;
@@ -699,61 +605,75 @@ div.filterListWrapper {
 				text-decoration: none;
 			}
 		}
-	}
-	#innerPage {
-		clear: both;
-		padding: 5px;
-		margin: 2px;
-		.innerPageLeftRightTitle {
-			border-top: 1px solid #ccc;
-			margin-top: 5px;
-			.title {
-				font-weight: bold;
-				font-size: 0.8em;
-				a {
-					color: black;
-					text-decoration: none;
-				}
-				a:hover, a:focus {
-					text-decoration: underline;
-				}
-			}
-		}
-		@media screen and (min-width: 750px) {
-			.innerPageLeft, {
-				width: 57%;
-				float: left;
-			}
-			.innerPageRight {
-				width: 37%;
-				float: right;
-			}
-		}
-		@media screen and (max-width: 750px) {
-			.innerPageLeft.hideIfOneCol, .innerPageRight.hideIfOneCol {
-				display: none;
-			}
-		}
 
-		.afterInnerPageContent {
-			clear: both;
-		}
-		.innerPageRight {
-			.innerPageRightLinkWrapper {
-				padding-bottom: 10px;
-				.innerPageRightLinkHeader {
-					font-size: 0.8em;
-				}
-				.innerPageRightLinkContent {
-					a {
-						font-size: 0.8em;
-					}
-				}
-			}
-		}
 	}
 }
 
+.pageActionsShow {
+    padding: 0px 5px;
+    display: block;
+    text-align: right;
+    a {
+        color: #333;
+        text-decoration: none;
+    }
+    a:hover, a:focus {
+        color: black;
+        text-decoration: underline;
+    }
+}
+
+.contentTwoColumns {
+	.contentMain();
+
+	.contentTwoColumnsTitle {
+		border-top: 1px solid #ccc;
+		margin-top: 5px;
+		.title {
+			font-weight: bold;
+			a {
+				color: black;
+				text-decoration: none;
+			}
+			a:hover, a:focus {
+				text-decoration: underline;
+			}
+		}
+	}
+	@media screen and (min-width: 750px) {
+		.contentTwoColumnsLeft, {
+			width: 57%;
+			float: left;
+		}
+		.contentTwoColumnsRight {
+			width: 37%;
+			float: right;
+		}
+	}
+	@media screen and (max-width: 750px) {
+		.contentTwoColumnsLeft.hideIfOneCol, .contentTwoColumnsRight.hideIfOneCol {
+			display: none;
+		}
+	}
+
+	.contentTwoColumnsRight {
+		.contentTwoColumnsLinkWrapper {
+			padding-bottom: 10px;
+			.contentTwoColumnsLinkHeader {
+				font-size: 0.875rem;
+			}
+			.contentTwoColumnsLinkContent {
+				a {
+					font-size: 0.875rem;
+				}
+			}
+		}
+	}
+
+	.afterContentTwoColumns {
+		clear: both;
+	}
+}
 
 
 #MenuMask {
@@ -810,24 +730,27 @@ ul.listOfTextItems {
 		background-color: @colourLighter1;
 		color: #333;
 		padding: 5px;
-		font-size: 0.8em;
+		font-size: 0.875rem;
 	}
 	.infoBoxContent {
 		padding: 5px;
+		font-size: 0.875rem;
 	}
 }
 
 
 ul.breadcrumbs {
-	padding: 10px;
+    .contentMain();
+	padding-top: 10px;
+	padding-bottom: 10px;
 	text-transform:lowercase;
 	li {
 		display: inline;
 		@media screen and (max-width: @narrowScreensMakeEverythingHorizontalIntoVerticalBoundary) {
 			display:block;
 		}
-		font-size: 0.8em;
-		padding: 5px 10px 5px 15px;
+		font-size: 0.875rem;
+		padding: 5px 20px 5px 0px;
 		a {
 			text-decoration: none;
 			color: black;
@@ -845,7 +768,7 @@ ul.breadcrumbs {
 ul.actionList {
 	li.header {
 		padding: 10px 0;
-		font-size: 1.3em;
+		font-size: 1.125rem;
 		font-weight: bold;
 	}
 	li {
@@ -867,7 +790,7 @@ ul.actionList {
 
 p.errorPageHeader {
 	color: #333;
-	font-size: 4em;
+	font-size: 2em;
 	font-weight: bold;
 	margin: 2px 0;
 }
@@ -875,7 +798,7 @@ p.errorPageHeader {
 p.errorPageText {
 	text-align: right;
 	color: #333;
-	font-size: 1.4em;
+	font-size: 1.25rem;
 	margin: 2px 0;
 	a {
 		color: #333;
@@ -888,6 +811,7 @@ p.errorPageText {
 /** These Style rules are for the  list of notifications on the users notifications page, not in the header.
 **/
 ul.usernotifications {
+    .contentMain();
 	li.usernotificationunread, li.usernotificationread {
 		padding: 10px;
 		border-bottom: 2px solid #ccc;
@@ -901,25 +825,23 @@ ul.usernotifications {
 		div.timesince, div.site  {
 			display: inline;
 			color: #999;
-			font-size: 0.8em;
+			font-size: 0.875rem;
 			padding: 5px 0;
 		}
 	}
-	li.usernotificationunread a.title {
-		font-size: 1.4em;
-	}
-	li.usernotificationunread a.title {
-		font-size: 1.1em;
+	li.usernotificationread a.title {
+		color: #aaa;
 	}
 }
 
 
 #footer {
+	background-color: @colourBackgroundOutsidePage;
 	margin-top: 50px;
-	padding: 10px 5px;
+	padding: 50px 5px;
 	text-align: center;
 	font-style: italic;
-	font-size: 0.8em;
+	font-size: 0.875rem;
 	color: #333;
 	a {
 		color: #333;
@@ -958,7 +880,7 @@ form {
 			border-radius: 3px; /* Opera 10.5, IE9, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */
 			margin: 1px;
 			color: #333;
-			font-size: 1.20em;
+			font-size: 1.25rem;
 			text-decoration: none;
 		}
 		input[type="submit"]:hover, input[type="submit"]:focus {
@@ -1007,38 +929,112 @@ form {
 	}
 }
 
-.switcherWrapper {
-    margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
-	text-align: right;
-	.switcherList {
-		line-height: 2;
-		.switcherAction {
-			background: #EEEEEE;
-			display: inline;
-			padding: 5px 15px;
-			.rounded-corners(2px);
-			a {
-				padding: 10px 30px;
-				text-decoration: none;
-				color: #333;
+.contentSwitcher {
+	max-width: @listDataItemsMaxWidth;
+	margin: 0 auto;
+	padding: 0 @contentSideGap;
+	.switcherWrapper {
+		margin: 10px 0;
+		text-align: right;
+		.switcherList {
+			line-height: 2;
+			.switcherAction {
+				background: #EEEEEE;
+				display: inline;
+				padding: 5px 15px;
+				.rounded-corners(2px);
+				a {
+					padding: 10px 30px;
+					text-decoration: none;
+					color: #333;
+				}
+				a:hover, a:focus {
+					text-decoration: underline;
+				}
 			}
-			a:hover, a:focus {
-				text-decoration: underline;
-			}
-		}
-		.current {
-			border: 1px solid #000000;
-			.rounded-corners(2px);
-			background: @colourLighter2;
-			a {
-				font-weight: bold;
+			.current {
+				border: 1px solid #000000;
+				.rounded-corners(2px);
+				background: @colourLighter2;
+				a {
+					font-weight: bold;
+				}
 			}
 		}
 	}
 }
-@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
-    .switcherWrapper {
-        margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
-    }
-}
 
+form.styled, .likeFormStyled {
+	.rowWrapper {
+		padding: 10px 0;
+		.labelWrapper {
+			padding: 0px 5px 0px 0px;
+			text-align: right;
+			display: block;
+			width: 20%;
+			float: left;
+		}
+		.widgetWrapper {
+			display: block;
+			width: 70%;
+			float: left;
+			input[type="text"] {
+				width: 80%;
+			}
+			div.dateInput input[type="text"] {
+				width: 100px;
+			}
+			input[type="url"] {
+				width: 80%;
+			}
+			textarea {
+				width: 80%;
+				height: 100px;
+			}
+		}
+		.widgetWrapperPlacementOnly {
+			display: block;
+			width: 70%;
+			float: left;
+		}
+		/**  It should only be .afterRowWrapper - left .after for backwards compat **/
+		.after, .afterRowWrapper {
+			clear: both;
+		}
+	}
+	ul.formErrors {
+		li {
+			margin: 5px 0;
+			background: #eb6c6c;
+			border: 2px solid #6f1818;
+			padding: 5px;
+		}
+	}
+	input[type="url"] {
+		width: 80%;
+	}
+	input[type="text"] {
+		width: 80%;
+	}
+	textarea {
+		width: 80%;
+		height: 100px;
+	}
+	.smallInputs {
+		input[type="text"] {
+			width: 40%;
+		}
+	}
+	img.logo {
+		max-width: 60px;
+		max-height: 60px;
+	}
+	#Map {
+		width: 50%;
+		height: 200px;
+	}
+	p.information {
+		font-style: italic;
+		font-size: 0.875rem;
+	}
+}

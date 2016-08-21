@@ -20,19 +20,21 @@
 {% block content %}
 
 	{% if not currentSiteFeatures.has('org.openacalendar','Importer') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
 
-	<h2>{{  import.title }} ({% if not import.isEnabled %}disabled{% elseif import.expiredat %}expired{% else %}enabled{% endif %})</h2>
+	<div class="contentMain">
+		<h2>{{  import.title }} ({% if not import.isEnabled %}disabled{% elseif import.expiredat %}expired{% else %}enabled{% endif %})</h2>
+	</div>
 
 	{% if group %}
-		<ul class="underTitleGroupListing">
+		<ul class="underTitleGroupListing contentMain">
 			<li>Importing to <a href="/group/{{ group.slugForUrl }}" class="title">{{ group.title }}</a></li>
 		</ul>
 	{% endif %}
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/import/{{ import.slug }}">Details</a></li>
 			{% if currentUserActions.has("org.openacalendar","importLog") %}
@@ -40,13 +42,9 @@
 			{% endif %}
 			<li class="tab {% block tabImportedEvents %}{% endblock %}"><a href="/import/{{ import.slug }}/importedevent">Imported Events</a></li>
 		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
+
+	{% block innerContent %}{% endblock %}
 
 
 {% endblock %}

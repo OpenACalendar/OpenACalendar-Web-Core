@@ -20,34 +20,36 @@
 	<body>
 		<div id="page">
 			<div id="header">
-				<ul class="menu">
-					<li class="title">
-						<a href="/">
-							<img src="/{% if config.isSingleSiteMode %}theme/default/img/logo.png{% else %}getLogo.php{% endif %}?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
-							<h1>{{ currentSite.title }}</h1>
-						</a>
-					</li>
-				</ul>
-				<div class="afterMenu"></div>
+				<div class="contentMain">
+					<ul class="menu">
+						<li class="title">
+							<a href="/"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.siteTitle  }}</h1></a>
+						</li>
+					</ul>
+					<div class="afterMenu"></div>
+				</div>
 			</div>
 			<div id="body">
 				{% block breadcrumbs %}{% endblock %}
-				<div id="bodyLeft">
-					
-					<p class="errorPageHeader">404</p>
-					<p class="errorPageHeader">Not found</p>
-					<p class="errorPageHeader">Error</p>
-				</div>
-				<div id="bodyRight">
-				
-					<p class="errorPageText">Sorry, we can't find this page.</p>
+				<div class="contentTwoColumns">
+					<div class="contentTwoColumnsLeft">
 
-					<p  class="errorPageText">
-						Please <a href="/">return to the home page and try again</a>
-						{%  if extensions.hasExtensionID('org.openacalendar.contact') %}, or <a href="/contact">contact us</a> with any problems.{%  endif %}
-					</p>
+						<p class="errorPageHeader">404</p>
+						<p class="errorPageHeader">Not found</p>
+						<p class="errorPageHeader">Error</p>
+					</div>
+					<div class="contentTwoColumnsRight">
+
+						<p class="errorPageText">Sorry, we can't find this page.</p>
+
+						<p  class="errorPageText">
+							Please <a href="/">return to the home page and try again</a>
+							{%  if extensions.hasExtensionID('org.openacalendar.contact') %}, or <a href="/contact">contact us</a> with any problems.{%  endif %}
+						</p>
+
+					</div>
+					<div class="afterContentTwoColumns"></div>
 				</div>
-				<div id="afterPage2Col"></div>
 			</div>
 			<div id="footer">
 				{%  if extensions.hasExtensionID('org.openacalendar.contact') %}<a href="{{ config.getWebIndexDomainSecure() }}/contact">contact</a>{% endif %}

@@ -5,7 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'site/page2col.html.twig' %}
+{% extends 'site/page.html.twig' %}
 
 {% block pageTitle %}Admin - {% endblock %} 
 
@@ -13,42 +13,51 @@
 	{%  include 'site/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/admin', 'label':'admin' }  ]  } %}
 {% endblock %}
 
-{% block contentLeft %}
-	This is the admin interface.
-{% endblock %}
+{% block content %}
 
 
-{% block contentRight %}
+	<div class="contentTwoColumns">
 
-	<ul class="actionList">
-	
-		<li><a href="/admin/profile"><div class="fa fa-user fa-2x"></div> Profile</a></li>
+		<div class="contentTwoColumnsLeft">
 
-		<li><a href="/admin/visibility"><div class="fa fa-eye fa-2x"></div> Visiblity</a></li>
 
-		<li><a href="/admin/usergroup"><div class="fa fa-users fa-2x"></div> User Groups (Permissions)</a></li>
+			<p>This is the admin interface.</p>
 
-		<li><a href="/admin/user"><div class="fa fa-users fa-2x"></div> Users (Permissions)</a></li>
+		</div>
 
-		{%  if not config.isSingleSiteMode %}
-			<li><a href="/admin/usernoteditor"><div class="fa fa-users fa-2x"></div> Users blocked from being editors (Permissions)</a></li>
-		{% endif %}
+		<div class="contentTwoColumnsRight">
 
-		<li><a href="/admin/countries"><div class="fa fa-globe fa-2x"></div> Countries</a></li>
-		
-		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-			<li><a href="/admin/areas"><div class="fa fa-globe fa-2x"></div> Areas in a country</a></li>
-		{% endif %}
-		
-		<li><a href="/admin/sendemail"><div class="fa fa-envelope-o fa-2x"></div> Send Email with Events</a></li>
-		
-		<li><a href="/admin/features"><div class="fa fa-cogs fa-2x"></div> Features</a></li>
-		
-		<li><a href="/admin/settings"><div class="fa fa-cogs fa-2x"></div> Settings</a></li>
+			<ul class="actionList">
 
-		<li><a href="/admin/media"><div class="fa fa-file-image-o fa-2x"></div> Media Storage</a></li>
+				<li><a href="/admin/profile"><div class="fa fa-user fa-2x"></div> Profile</a></li>
 
-	</ul>
+				<li><a href="/admin/visibility"><div class="fa fa-eye fa-2x"></div> Visiblity</a></li>
 
+				<li><a href="/admin/usergroup"><div class="fa fa-users fa-2x"></div> User Groups (Permissions)</a></li>
+
+				<li><a href="/admin/user"><div class="fa fa-users fa-2x"></div> Users (Permissions)</a></li>
+
+				{%  if not config.isSingleSiteMode %}
+					<li><a href="/admin/usernoteditor"><div class="fa fa-users fa-2x"></div> Users blocked from being editors (Permissions)</a></li>
+				{% endif %}
+
+				<li><a href="/admin/countries"><div class="fa fa-globe fa-2x"></div> Countries</a></li>
+
+				{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
+					<li><a href="/admin/areas"><div class="fa fa-globe fa-2x"></div> Areas in a country</a></li>
+				{% endif %}
+
+				<li><a href="/admin/sendemail"><div class="fa fa-envelope-o fa-2x"></div> Send Email with Events</a></li>
+
+				<li><a href="/admin/features"><div class="fa fa-cogs fa-2x"></div> Features</a></li>
+
+				<li><a href="/admin/settings"><div class="fa fa-cogs fa-2x"></div> Settings</a></li>
+
+				<li><a href="/admin/media"><div class="fa fa-file-image-o fa-2x"></div> Media Storage</a></li>
+
+			</ul>
+
+		</div>
+	</div>
 {% endblock %}
 

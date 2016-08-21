@@ -30,32 +30,28 @@
 {% block content %}
 
 	{% if not currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
-		
-		
-	<h2>{{  area.title }}</h2>
-	
+
+	<div class="contentMain">
+		<h2>{{  area.title }}</h2>
+	</div>
+
 	{%  if areaIsDuplicateOf %}
-		<div class="flash-notice">
+		<div class="flash-notice"><div class="contentMain">
 			This area is a duplicate of <a href="/area/{{  areaIsDuplicateOf.slugForURL }}">{{  areaIsDuplicateOf.title }}</a>.
-		</div>
+			</div></div>
 	{% endif %}
-	
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% block actions %}{% endblock %}
 			<li class="tab {% block tabDetails %}{% endblock %}"><a href="/area/{{ area.slugForUrl }}">Details &amp; Events</a></li>
 			{%  if currentUserActions.has("org.openacalendar","areaHistory") %}<li class="tab {% block tabHistory %}{% endblock %}"><a href="/area/{{ area.slugForUrl }}/history">History of changes</a></li>{%  endif %}
 		</ul>
-		<div id="innerPage">
-
-			{% block innerContent %}{% endblock %}
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
 
+	{% block innerContent %}{% endblock %}
 
 {% endblock %}
 

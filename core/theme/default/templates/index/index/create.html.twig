@@ -5,62 +5,70 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'index/page2col.html.twig' %}
+{% extends 'index/page.html.twig' %}
 
 {% block pageTitle %}Create - {% endblock %}
 
-{% block contentRight %}
-
-	{%  if sites|length > 0 %}
-		<h2>Do you want to add an event to an existing calendar?</h2>
-
-		<ul class="sites">
-			{% for site in sites %}
-				<li class="site">
-					<a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/new" class="title">
-						<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
-						<span class="titleWrapper">{{ site.title }}</span>
-					</a>
-					<a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/new" class="link">
-						Add to this calendar!
-					</a>
-				</li>
-			{% endfor %}
-		</ul>
-	{%  endif %}
-
-{% endblock %}
+{% block content %}
 
 
-{% block contentLeft %}
+	<div class="contentTwoColumns">
 
-	<h2>Do you want to create a calendar of your own?</h2>
+		<div class="contentTwoColumnsRight">
 
+			{%  if sites|length > 0 %}
+				<h2>Do you want to add an event to an existing calendar?</h2>
 
-	<form action="#" method="post" class="styled">
-		{{ form_errors(form) }}
+				<ul class="sites">
+					{% for site in sites %}
+						<li class="site">
+							<a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/new" class="title">
+								<span class="logoWrapper"><img src="{{ config.getWebSiteDomainSecure(site.slug) }}/getLogo.php?v={{ site.logoCacheKey }}" alt="logo"></span>
+								<span class="titleWrapper">{{ site.title }}</span>
+							</a>
+							<a href="{{ config.getWebSiteDomainSecure(site.slug) }}/event/new" class="link">
+								Add to this calendar!
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{%  endif %}
 
-		{{ form_row(form.title) }}
-
-		<div class="rowWrapper">
-			<div class="errorsWrapper">{{ form_errors(form.slug) }}</div>
-			<div class="labelWrapper">{{ form_label(form.slug) }}</div>
-			<div class="widgetWrapperPlacementOnly smallInputs">http{% if config.hasSSL %}s{%  endif %}://{{ form_widget(form.slug) }}.{{ config.webSiteDomain }}</div>
-			<div class="after"></div>
 		</div>
-			
-		{{ form_row(form.read) }}
-		{{ form_row(form.write) }}
+
+		<div class="contentTwoColumnsLeft">
+
+			<h2>Do you want to create a calendar of your own?</h2>
 
 
-		{{ form_rest(form) }}
+			<form action="#" method="post" class="styled">
+				{{ form_errors(form) }}
 
-		<p class="information">Note the address can not be changed later! Everything else can.</p>
+				{{ form_row(form.title) }}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Create New Calendar Now" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+				<div class="rowWrapper">
+					<div class="errorsWrapper">{{ form_errors(form.slug) }}</div>
+					<div class="labelWrapper">{{ form_label(form.slug) }}</div>
+					<div class="widgetWrapperPlacementOnly smallInputs">http{% if config.hasSSL %}s{%  endif %}://{{ form_widget(form.slug) }}.{{ config.webSiteDomain }}</div>
+					<div class="after"></div>
+				</div>
 
+				{{ form_row(form.read) }}
+				{{ form_row(form.write) }}
+
+
+				{{ form_rest(form) }}
+
+				<p class="information">Note the address can not be changed later! Everything else can.</p>
+
+				<div class="bigSubmitActionWrapper"><input type="submit"  value="Create New Calendar Now" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</form>
+
+		</div>
+
+		<div class="afterContentTwoColumns"></div>
+	</div>
 {% endblock %}
 
 {% block scripts %}

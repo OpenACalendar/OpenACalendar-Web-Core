@@ -21,63 +21,67 @@
 
 {% block innerContent %}
 
-	<p>{{  usergroup.description | nl2br }}</p>
+	<div class="contentMain">
 
-	<p>
-		Includes all anonymous users:
-		{%  if usergroup.isIncludesAnonymous %}
-			Yes
-		{%  else %}
-			No
-		{%  endif %}
-	</p>
+		<p>{{  usergroup.description | nl2br }}</p>
 
-	<p>
-		Includes all users:
-		{%  if usergroup.isIncludesUsers %}
-			Yes
-		{%  else %}
-			No
-			</form>
-		{%  endif %}
-	</p>
+		<p>
+			Includes all anonymous users:
+			{%  if usergroup.isIncludesAnonymous %}
+				Yes
+			{%  else %}
+				No
+			{%  endif %}
+		</p>
 
-	<p>
-		Includes verified all users:
-		{%  if usergroup.isIncludesVerifiedUsers %}
-			Yes
-		{%  else %}
-			No
-		{%  endif %}
-	</p>
+		<p>
+			Includes all users:
+			{%  if usergroup.isIncludesUsers %}
+				Yes
+			{%  else %}
+				No
+				</form>
+			{%  endif %}
+		</p>
 
-	<h3>User Permissions</h3>
+		<p>
+			Includes verified all users:
+			{%  if usergroup.isIncludesVerifiedUsers %}
+				Yes
+			{%  else %}
+				No
+			{%  endif %}
+		</p>
 
-	<table class="data">
-		<tr>
-			<th>Extension</th>
-			<th>ID</th>
-		</tr>
-		{% for userpermission in userpermissions %}
+		<h3>User Permissions</h3>
+
+		<table class="data">
 			<tr>
-				<td>{{ userpermission.userPermissionExtensionID }}</td>
-				<td>{{ userpermission.userPermissionKey }}</td>
+				<th>Extension</th>
+				<th>ID</th>
 			</tr>
-		{% endfor %}
-	</table>
+			{% for userpermission in userpermissions %}
+				<tr>
+					<td>{{ userpermission.userPermissionExtensionID }}</td>
+					<td>{{ userpermission.userPermissionKey }}</td>
+				</tr>
+			{% endfor %}
+		</table>
 
-	<h3>Users</h3>
+		<h3>Users</h3>
 
-	<table class="data">
-		<tr>
-			<th>Username</th>
-		</tr>
-		{% for user in users %}
-			<tr {% if loop.index is even %}class="alternative"{% endif %}>
-				<td><a href="/admin/user/{{  user.username }}">{{ user.username }}</a></td>
+		<table class="data">
+			<tr>
+				<th>Username</th>
 			</tr>
-		{% endfor %}
-	</table>
+			{% for user in users %}
+				<tr {% if loop.index is even %}class="alternative"{% endif %}>
+					<td><a href="/admin/user/{{  user.username }}">{{ user.username }}</a></td>
+				</tr>
+			{% endfor %}
+		</table>
 
+
+	</div>
 
 {% endblock %}

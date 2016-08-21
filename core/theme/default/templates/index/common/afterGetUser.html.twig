@@ -6,7 +6,7 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {% if afterGetUserAddEvents|length > 0 or afterGetUserAddAreas|length > 0 %}
-	<div id="afterGetUserWrapper">
+	<div id="afterGetUserWrapper" class="contentMain">
 		<h3>Interested?</h3>
 		{% if afterGetUserAddEvents|length == 1 and afterGetUserAddAreas|length == 0 %}
 			{%  set event = afterGetUserAddEvents[0] %}

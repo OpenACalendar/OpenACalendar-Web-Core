@@ -6,19 +6,27 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="filterListWrapper filterListVenueWrapper">
-	<form method="get" class="filterList filterListVenue">
+	<form method="get" class="filterList filterListVenue  styled">
 		<input type="hidden" name="venueListFilterDataSubmitted" value="1">
 
-		<div class="inputField">
-			<label>Search: <input type="text" name="freeTextSearch" value="{{ venueListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+		<div class="rowWrapper">
+			<label>
+				<div class="labelWrapper">Search:</div>
+				<div class="widgetWrapper"><input type="text" name="freeTextSearch" value="{{ venueListFilterParams.freeTextSearch }}" autocomplete="off"></div>
+				<div class="afterRowWrapper"></div>
+			</label>
 		</div>
 
-		<div class="inputField">
-			<label><input type="checkbox" name="withFutureEventsOnly" value="1" {% if venueListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</label>
+		<div class="rowWrapper">
+			<label>
+				<div class="labelWrapper">&nbsp;</div>
+				<div class="widgetWrapper"><input type="checkbox" name="withFutureEventsOnly" value="1" {% if venueListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</div>
+				<div class="afterRowWrapper"></div>
+			</label>
 		</div>
 
-		<div class="submitField">
-			<input type="submit" value="Filter">
-		</div>
+		<div class="bigSubmitActionWrapper"><input type="submit"  value="Filter" class="bigSubmitAction"/></div>
+		<div class="afterBigSubmitActionWrapper"></div>
+
 	</form>
 </div>

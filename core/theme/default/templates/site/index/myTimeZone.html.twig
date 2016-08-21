@@ -20,21 +20,25 @@
 
 {% block content %}
 
-	<p>Please choose the timezone you want to browse this calendar in:</p>
+	<div class="contentMain">
 
-	<div id="searchWrapper" style="display: none;">
-		Search by capital city: <input type="text" id="searchTerm">
+		<p>Please choose the timezone you want to browse this calendar in:</p>
+
+		<div id="searchWrapper" style="display: none;">
+			Search by capital city: <input type="text" id="searchTerm">
+		</div>
+
+		<ul class="timezones">
+			{% for timezone in currentSite.cachedTimezonesAsList %}
+				{% if timezone == currentTimeZone %}
+					<li>{{ timezone }}</li>
+				{% else %}
+					<li><a href="/?mytimezone={{ timezone|url_encode }}">{{ timezone }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+
 	</div>
-	
-	<ul class="timezones">
-		{% for timezone in currentSite.cachedTimezonesAsList %}
-			{% if timezone == currentTimeZone %}
-				<li>{{ timezone }}</li>
-			{% else %}
-				<li><a href="/?mytimezone={{ timezone|url_encode }}">{{ timezone }}</a></li>
-			{% endif %}
-		{% endfor %}
-	</ul>
 
 {% endblock %}
 

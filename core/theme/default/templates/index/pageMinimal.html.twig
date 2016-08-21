@@ -30,16 +30,16 @@
 			{% include 'index/pageHeaderMinimal.html.twig' %}
 			<div id="body">
 				{% if  currentUser is not null and config.siteReadOnly %}
-					<div class="flash-error">
-						Sorry, the site is currently read only. {{ config.siteReadOnlyReason }}
-					</div>
+					<div class="flash-error"><div class="contentMain">
+							Sorry, the site is currently read only. {{ config.siteReadOnlyReason }}
+						</div></div>
 				{% endif %}
 				{% for msg in getAndClearFlashErrors() %}
-					<div class="flash-error">{{ msg }}</div>
+					<div class="flash-error"><div class="contentMain">{{ msg }}</div></div>
 				{% endfor %}
 				{% for msg in getAndClearFlashMessages() %}
-					<div class="flash-notice">{{ msg }}</div>
-				{% endfor %}	
+					<div class="flash-notice"><div class="contentMain">{{ msg }}</div></div>
+				{% endfor %}
 				{% block breadcrumbs %}{% endblock %}
 				{% block content %}{% endblock %}
 			</div>

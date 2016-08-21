@@ -89,290 +89,298 @@
 			<p class="descriptionCancelled">This event has been cancelled!</p>
 		{%  endif %}
 
-		<div class="innerPageLeft">
+		<div class="contentTwoColumns">
+
+			<div class="contentTwoColumnsLeft">
 
 
-			{% if event.isdeleted %}
-				<div class="dateTimeIcon">
-					<div class="dateIcon">
-						<span class="deleted">Deleted!</span>
-					</div>
-				</div>
-			{% elseif event.isCancelled %}
-				<div class="dateTimeIcon">
-					<div class="dateIcon">
-						<span class="cancelled">Cancel<br>-led!</span>
-					</div>
-				</div>
-			{% else %}
-				<div class="dateTimeIcon">
-					<time datetime="{{ event.getStartAt|date('c', currentTimeZone) }}">
+				{% if event.isdeleted %}
+					<div class="dateTimeIcon">
 						<div class="dateIcon">
-							<span class="startDay">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
-							<span class="startDate">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
-							<span class="startMonthYear">{{ event.getStartAt|date('M \'y', currentTimeZone) }}</span>
+							<span class="deleted">Deleted!</span>
 						</div>
-						<div class="timeIcon">
-							<span class="startTime">{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia': 'H:i', currentTimeZone) }}</span>
+					</div>
+				{% elseif event.isCancelled %}
+					<div class="dateTimeIcon">
+						<div class="dateIcon">
+							<span class="cancelled">Cancel<br>-led!</span>
 						</div>
-					</time>
-				</div>
-			{% endif %}
-
-			<p class="description" itemprop="description">
-				{%  if event.description %}
-					{{ event.description | nl2br  | linkify }}
-				{%  else %}
-
-					{% if event.url %}
-						<p>
-							More details: <a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a>
-						</p>
-					{% endif %}
-
-					{% if event.ticketUrl %}
-						<p>
-							{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a>
-						</p>
-					{% endif %}
-
-				{%  endif %}
-
-				{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
-					{% if customField.isActive and event.hasCustomField(customField) %}
-						<p>
-							{{  customField.label }}:<br>
-							{{ event.getCustomField(customField) | nl2br | linkify }}
-						</p>
-						{% include  ['site/event/show.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/event/show.custom_field.after.html.twig'] with { 'customField':customField } %}
-					{%  endif %}
-				{%  endfor %}
-			</p>
-
-			{% if tags %}
-				<div class="inlineTags">
-					Tags:
-					<ul class="inlineTags">
-						{% for tag in tags %}
-							<li class="tag">
-								<span class="content"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></span>
-								<span class="aftercontent">&nbsp;</span>
-							</li>
-						{% endfor %}
-					</ul>
-				</div>
-			{% endif %}
-
-			{% if mediasForEvent %}
-				<ul class="mediaGrid">
-					{% for media in mediasForEvent %}
-						<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
-					{% endfor %}
-				</ul>
-				<div class="afterMediaGrid"></div>
-			{% endif %}
-
-			<div class="dateAndLocationWrapper">
-				{% if currentTimeZone == event.timezone %}
-					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+					</div>
 				{% else %}
-					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}
-					{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+					<div class="dateTimeIcon">
+						<time datetime="{{ event.getStartAt|date('c', currentTimeZone) }}">
+							<div class="dateIcon">
+								<span class="startDay">{{ event.getStartAt|date('D', currentTimeZone) }}</span>
+								<span class="startDate">{{ event.getStartAt|date('jS', currentTimeZone) }}</span>
+								<span class="startMonthYear">{{ event.getStartAt|date('M \'y', currentTimeZone) }}</span>
+							</div>
+							<div class="timeIcon">
+								<span class="startTime">{{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia': 'H:i', currentTimeZone) }}</span>
+							</div>
+						</time>
+					</div>
 				{% endif %}
-			</div>
 
-			{% if event.isImported %}
-				<p>Imported From: <a href="/import/{{ import.slug }}">{{ import.url | linkinfo }}</a></p>
-			{% endif %}
-
-		</div>
-
-		<div class="innerPageRight">
-
-			{%  set showMoreInfoPromptSignUp = currentUser is null and not event.isInPast and not event.isDeleted and not event.isCancelled and not event.ticketUrl  %}
-
-			{%  if showMoreInfoPromptSignUp or event.url or event.ticketUrl %}
-				<div class="infoBoxWrapper">
-					<div class="infoBoxTitle">More Information</div>
-					<div class="infoBoxContent">
-
+				<p class="description" itemprop="description">
+					{%  if event.description %}
+						{{ event.description | nl2br  | linkify }}
+					{%  else %}
 
 						{% if event.url %}
-							<div class="innerPageRightLinkWrapper">
-								<div class="innerPageRightLinkHeader">More details</div>
-								<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a></div>
-							</div>
+							<p>
+								More details: <a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a>
+							</p>
 						{% endif %}
 
 						{% if event.ticketUrl %}
-							<div class="innerPageRightLinkWrapper">
-								<div class="innerPageRightLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
-								<div class="innerPageRightLinkContent"><a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a></div>
-							</div>
+							<p>
+								{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a>
+							</p>
 						{% endif %}
 
-						{% if showMoreInfoPromptSignUp %}
+					{%  endif %}
+
+					{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
+						{% if customField.isActive and event.hasCustomField(customField) %}
 							<p>
-								Get reminders and notifications of this event and start to build up your personal calendar!
+								{{  customField.label }}:<br>
+								{{ event.getCustomField(customField) | nl2br | linkify }}
 							</p>
-							<p>
-								<a href="{{ config.getWebIndexDomainSecure() }}/you/register?event={{ event.slug }}{%  if not config.isSingleSiteMode %}&eventSite={{ currentSite.slug }}{% endif %}">
-									Create your free account
-								</a>
-							</p>
-							<p>
-								<a href="{{ config.getWebIndexDomainSecure() }}/you/login?event={{ event.slug }}{%  if not config.isSingleSiteMode %}&eventSite={{ currentSite.slug }}{% endif %}">
-									Login
-								</a>
-							</p>
+							{% include  ['site/event/show.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/event/show.custom_field.after.html.twig'] with { 'customField':customField } %}
 						{%  endif %}
+					{%  endfor %}
+				</p>
 
+				{% if tags %}
+					<div class="inlineTags">
+						Tags:
+						<ul class="inlineTags">
+							{% for tag in tags %}
+								<li class="tag">
+									<span class="content"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></span>
+									<span class="aftercontent">&nbsp;</span>
+								</li>
+							{% endfor %}
+						</ul>
 					</div>
-				</div>
-			{%  endif %}
-
-
-			{% if currentUser is not null and not event.isInPast and not event.isDeleted and not event.isCancelled %}
-				<form method="post" action="/event/{{ event.slug }}/myAttendance.json" class="UserAttendingOptions">
-					<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-					You
-					<select name="attending">
-						<option value="unknown" {% if userAtEvent.isPlanUnknownAttending  %}selected{% endif %}>?</option>
-						<option value="no" {% if userAtEvent.isPlanNotAttending  %}selected{% endif %}>are not</option>
-						<option value="maybe" {% if userAtEvent.isPlanMaybeAttending %}selected{% endif %}>might be</option>
-						<option value="yes" {% if userAtEvent.isPlanAttending %}selected{% endif %}>will be</option>
-					</select> attending.
-				<span class="UserAttendingPrivacyOptionsWrapper" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}style="display:none;"{% endif %}>
-					This is
-					<select name="privacy">
-						<option value="private" {% if not userAtEvent.isPlanPublic %}selected{% endif %}>private</option>
-						<option value="public" {% if userAtEvent.isPlanPublic %}selected{% endif %}>public</option>
-					</select>.
-				</span>
-				<span class="savingIndicator" style="display:none;">
-					<img src="/theme/default/img/ajaxLoading.gif?v={{ config.assetsVersion }}"> Saving ...
-				</span>
-					<span class="savedIndicator" style="display:none;"> Saved!</span>
-				</form>
-			{% endif %}
-
-			<div id="UserAttendingListAjaxWrapper">
-				{% include 'site/common/eventUsersAttending.html.twig' with {} %}
-			</div>
-
-		</div>
-
-		<div class="afterInnerPageContent"></div>
-
-
-		{%  for template in templatesAfterDetails %}{% include template %}{%  endfor %}
-
-
-
-		{% for displayGroup in groups %}
-			<div class="innerPageLeftRightTitle">
-				<p class="groupTitle">About <a href="/group/{{ displayGroup.slugForUrl }}">{{ displayGroup.title }}</a></p>
-			</div>
-			<div class="innerPageLeft">
-				{% if displayGroup.description  %}
-					<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
-				{% else %}
-					<p class="groupDescription">We don't know any more about {{ displayGroup.title }}.</p>
 				{% endif %}
-				{% if mediasForGroup[displayGroup.slug] is defined and mediasForGroup[displayGroup.slug] %}
+
+				{% if mediasForEvent %}
 					<ul class="mediaGrid">
-						{% for media in mediasForGroup[displayGroup.slug] %}
-							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>	
+						{% for media in mediasForEvent %}
+							<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
 						{% endfor %}
 					</ul>
 					<div class="afterMediaGrid"></div>
 				{% endif %}
+
+				<div class="dateAndLocationWrapper">
+					{% if currentTimeZone == event.timezone %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':currentSite.cachedIsMultipleTimezones} %}
+					{% else %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}
+						{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':currentTimeZone, 'showTimeZone':true} %}
+					{% endif %}
+				</div>
+
+				{% if event.isImported %}
+					<p>Imported From: <a href="/import/{{ import.slug }}">{{ import.url | linkinfo }}</a></p>
+				{% endif %}
+
 			</div>
-			<div class="innerPageRight">
-				{% if displayGroup.url and displayGroup.url != event.url %}
-					<div class="innerPageRightLinkWrapper">
-						<div class="innerPageRightLinkHeader">More details</div>
-						<div class="innerPageRightLinkContent"><a href="{{ displayGroup.url }}" target="_blank" rel="noopener">{{ displayGroup.url | linkinfo }}</a></div>
-					</div>
-				{% endif %}
-				{% if displayGroup.twitterUsername %}
-					<div class="innerPageRightLinkWrapper">
-						<div class="innerPageRightLinkHeader">On Twitter</div>
-						<div class="innerPageRightLinkContent"><a href="https://twitter.com/{{ displayGroup.twitterUsername }}" target="_blank">@{{ displayGroup.twitterUsername }}</a></div>
-					</div>
-				{% endif %}
-				{% if displayGroup.id == group.id and isGroupRunningOutOfFutureEvents %}
-					<div class="highlightInfoBoxWrapper">
-						<div class="highlightInfoBoxTitle">Any more events?</div>
-						<div class="highlightInfoBoxContent">
-							Do you know of <a href="/group/{{ group.slugForUrl }}">any more events for {{ group.title }}</a>?
-							{% if isGroupRunningOutOfFutureEvents == 1 %}
-								We are about to run out of future events!
-							{% else %}
-								We don't know of any future events.
+
+			<div class="contentTwoColumnsRight">
+
+				{%  set showMoreInfoPromptSignUp = currentUser is null and not event.isInPast and not event.isDeleted and not event.isCancelled and not event.ticketUrl  %}
+
+				{%  if showMoreInfoPromptSignUp or event.url or event.ticketUrl %}
+					<div class="infoBoxWrapper">
+						<div class="infoBoxTitle">More Information</div>
+						<div class="infoBoxContent">
+
+
+							{% if event.url %}
+								<div class="contentTwoColumnsLinkWrapper">
+									<div class="contentTwoColumnsLinkHeader">More details</div>
+									<div class="contentTwoColumnsLinkContent"><a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a></div>
+								</div>
 							{% endif %}
+
+							{% if event.ticketUrl %}
+								<div class="contentTwoColumnsLinkWrapper">
+									<div class="contentTwoColumnsLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
+									<div class="contentTwoColumnsLinkContent"><a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a></div>
+								</div>
+							{% endif %}
+
+							{% if showMoreInfoPromptSignUp %}
+								<p>
+									Get reminders and notifications of this event and start to build up your personal calendar!
+								</p>
+								<p>
+									<a href="{{ config.getWebIndexDomainSecure() }}/you/register?event={{ event.slug }}{%  if not config.isSingleSiteMode %}&eventSite={{ currentSite.slug }}{% endif %}">
+										Create your free account
+									</a>
+								</p>
+								<p>
+									<a href="{{ config.getWebIndexDomainSecure() }}/you/login?event={{ event.slug }}{%  if not config.isSingleSiteMode %}&eventSite={{ currentSite.slug }}{% endif %}">
+										Login
+									</a>
+								</p>
+							{%  endif %}
+
 						</div>
 					</div>
+				{%  endif %}
+
+
+				{% if currentUser is not null and not event.isInPast and not event.isDeleted and not event.isCancelled %}
+					<form method="post" action="/event/{{ event.slug }}/myAttendance.json" class="UserAttendingOptions">
+						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+						You
+						<select name="attending">
+							<option value="unknown" {% if userAtEvent.isPlanUnknownAttending  %}selected{% endif %}>?</option>
+							<option value="no" {% if userAtEvent.isPlanNotAttending  %}selected{% endif %}>are not</option>
+							<option value="maybe" {% if userAtEvent.isPlanMaybeAttending %}selected{% endif %}>might be</option>
+							<option value="yes" {% if userAtEvent.isPlanAttending %}selected{% endif %}>will be</option>
+						</select> attending.
+					<span class="UserAttendingPrivacyOptionsWrapper" {% if not userAtEvent.isPlanAttending and not userAtEvent.isPlanMaybeAttending %}style="display:none;"{% endif %}>
+						This is
+						<select name="privacy">
+							<option value="private" {% if not userAtEvent.isPlanPublic %}selected{% endif %}>private</option>
+							<option value="public" {% if userAtEvent.isPlanPublic %}selected{% endif %}>public</option>
+						</select>.
+					</span>
+					<span class="savingIndicator" style="display:none;">
+						<img src="/theme/default/img/ajaxLoading.gif?v={{ config.assetsVersion }}"> Saving ...
+					</span>
+						<span class="savedIndicator" style="display:none;"> Saved!</span>
+					</form>
 				{% endif %}
+
+				<div id="UserAttendingListAjaxWrapper">
+					{% include 'site/common/eventUsersAttending.html.twig' with {} %}
+				</div>
+
 			</div>
-			<div class="afterInnerPageContent"></div>
+
+			<div class="afterContentTwoColumns"></div>
+
+
+			{%  for template in templatesAfterDetails %}{% include template %}{%  endfor %}
+
+		</div>
+
+
+		{% for displayGroup in groups %}
+			<div class="contentTwoColumns">
+				<div class="contentTwoColumnsTitle">
+					<p class="groupTitle contentMain">About <a href="/group/{{ displayGroup.slugForUrl }}">{{ displayGroup.title }}</a></p>
+				</div>
+				<div class="contentTwoColumnsLeft">
+					{% if displayGroup.description  %}
+						<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
+					{% else %}
+						<p class="groupDescription">We don't know any more about {{ displayGroup.title }}.</p>
+					{% endif %}
+					{% if mediasForGroup[displayGroup.slug] is defined and mediasForGroup[displayGroup.slug] %}
+						<ul class="mediaGrid">
+							{% for media in mediasForGroup[displayGroup.slug] %}
+								<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+							{% endfor %}
+						</ul>
+						<div class="afterMediaGrid"></div>
+					{% endif %}
+				</div>
+				<div class="contentTwoColumnsRight">
+					{% if displayGroup.url and displayGroup.url != event.url %}
+						<div class="contentTwoColumnsLinkWrapper">
+							<div class="contentTwoColumnsLinkHeader">More details</div>
+							<div class="contentTwoColumnsLinkContent"><a href="{{ displayGroup.url }}" target="_blank" rel="noopener">{{ displayGroup.url | linkinfo }}</a></div>
+						</div>
+					{% endif %}
+					{% if displayGroup.twitterUsername %}
+						<div class="contentTwoColumnsLinkWrapper">
+							<div class="contentTwoColumnsLinkHeader">On Twitter</div>
+							<div class="contentTwoColumnsLinkContent"><a href="https://twitter.com/{{ displayGroup.twitterUsername }}" target="_blank">@{{ displayGroup.twitterUsername }}</a></div>
+						</div>
+					{% endif %}
+					{% if displayGroup.id == group.id and isGroupRunningOutOfFutureEvents %}
+						<div class="highlightInfoBoxWrapper">
+							<div class="highlightInfoBoxTitle">Any more events?</div>
+							<div class="highlightInfoBoxContent">
+								Do you know of <a href="/group/{{ group.slugForUrl }}">any more events for {{ group.title }}</a>?
+								{% if isGroupRunningOutOfFutureEvents == 1 %}
+									We are about to run out of future events!
+								{% else %}
+									We don't know of any future events.
+								{% endif %}
+							</div>
+						</div>
+					{% endif %}
+				</div>
+				<div class="afterContentTwoColumns"></div>
+			</div>
 		{% endfor %}
 
 				
 		{% if venue is not null or area is not null or country is not null %}
 			<div itemprop="location" itemscope itemtype="http://schema.org/Place">
-				<div class="innerPageLeftRightTitle">
-					{%  if venue is not null %}
-						<p class="venueTitle">At <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
-					{%  elseif area is not null  %}
-						<p class="areaTitle">In <a href="/area/{{ area.slugForUrl }}" itemprop="url"><span itemprop="name">{{ area.title }}</span></a></p>
-					{%  elseif country is not null  %}
-						<p class="countryTitle"><a href="/country/{{ country.twoCharCode }}" itemprop="url"><span itemprop="name">{{ country.title }}</span></a></p>
-					{%  endif  %}
-				</div>
-				<div class="innerPageLeft">
-					{%  if venue is not null %}
-						{% if venue.description %}
-							<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
-						{% endif %}
-						{% if mediasForVenue %}
-							<ul class="mediaGrid">
-								{% for media in mediasForVenue %}
-									<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
-								{% endfor %}
-							</ul>
-							<div class="afterMediaGrid"></div>
-						{% endif %}
-					{% endif %}
 
-					<div class="dateAndLocationWrapper">
-						{% include 'site/common/eventLocationLine.html.twig' %}
+				<div class="contentTwoColumns">
+					<div class="contentTwoColumnsTitle">
+						{%  if venue is not null %}
+							<p class="venueTitle contentMain">At <a href="/venue/{{ venue.slugForUrl }}" itemprop="url"><span itemprop="name">{{ venue.title }}</span></a></p>
+						{%  elseif area is not null  %}
+							<p class="areaTitle contentMain">In <a href="/area/{{ area.slugForUrl }}" itemprop="url"><span itemprop="name">{{ area.title }}</span></a></p>
+						{%  elseif country is not null  %}
+							<p class="countryTitle contentMain"><a href="/country/{{ country.twoCharCode }}" itemprop="url"><span itemprop="name">{{ country.title }}</span></a></p>
+						{%  endif  %}
 					</div>
-
-					{% if currentUserActions.has("org.openacalendar","eventEditPushToChildAreas") %}
-						<div class="highlightInfoBoxWrapper">
-							<div class="highlightInfoBoxTitle">Where is this?</div>
-							<div class="highlightInfoBoxContent">
-								<p>Is {% if venue %}"{{ venue.title }}"{% else %}this{% endif %} in one of these places?</p>
-								<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
-									{%  include 'site/common/pushToChildArea.html.twig' %}
-								</form>
-							</div>
-						</div>
-					{% endif %}
-
-				</div>
-				<div class="innerPageRight">
-					{%  if venue is not null and venue.hasLatLng %}
-						<div id="Map" class="map"></div>
-						{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-							<ul class="actionList">
-								<li><a href="/map?venue={{ venue.slugForURL }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
-							</ul>
+					<div class="contentTwoColumnsLeft">
+						{%  if venue is not null %}
+							{% if venue.description %}
+								<p class="venueDescription" itemprop="description">{{ venue.description | nl2br  | linkify }}</p>
+							{% endif %}
+							{% if mediasForVenue %}
+								<ul class="mediaGrid">
+									{% for media in mediasForVenue %}
+										<li><a href="/media/{{ media.slug }}" onclick="showMediaPopup({{ media.slug }}); return false;"><img src="/media/{{ media.slug }}/thumbnail"></a></li>
+									{% endfor %}
+								</ul>
+								<div class="afterMediaGrid"></div>
+							{% endif %}
 						{% endif %}
-					{% endif %}
+
+						<div class="dateAndLocationWrapper">
+							{% include 'site/common/eventLocationLine.html.twig' %}
+						</div>
+
+						{% if currentUserActions.has("org.openacalendar","eventEditPushToChildAreas") %}
+							<div class="highlightInfoBoxWrapper">
+								<div class="highlightInfoBoxTitle">Where is this?</div>
+								<div class="highlightInfoBoxContent">
+									<p>Is {% if venue %}"{{ venue.title }}"{% else %}this{% endif %} in one of these places?</p>
+									<form action="/event/{{ event.slugForUrl }}/moveToArea" method="post" id="PushToChildAreaForm">
+										{%  include 'site/common/pushToChildArea.html.twig' %}
+									</form>
+								</div>
+							</div>
+						{% endif %}
+
+					</div>
+					<div class="contentTwoColumnsRight">
+						{%  if venue is not null and venue.hasLatLng %}
+							<div id="Map" class="map"></div>
+							{% if currentSiteFeatures.has('org.openacalendar','Map') %}
+								<ul class="actionList">
+									<li><a href="/map?venue={{ venue.slugForURL }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
+								</ul>
+							{% endif %}
+						{% endif %}
+					</div>
+					<div class="afterContentTwoColumns"></div>
 				</div>
-				<div class="afterInnerPageContent"></div>
 			</div>
 		{% endif %}
 

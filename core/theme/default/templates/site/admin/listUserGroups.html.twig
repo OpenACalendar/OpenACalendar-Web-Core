@@ -19,30 +19,26 @@
 
 	<h2>User Groups</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			<li class="action">
 				<a href="/admin/usergroup/new"><div class="fa fa-pencil"></div> new</a>
 			</li>
 			<li class="tab currentTab"><a href="/admin/usergroup">User Groups</a></li>
 		</ul>
-		<div id="innerPage">
-
-			<ul class="mainListUserGroups">
-				{% for usergroup in usergroups %}
-					<li class="userGroup">
-						<div class="title"><a href="/admin/usergroup/{{ usergroup.id }}">{{ usergroup.title }}</a></div>
-						{{ usergroup.description | nl2br }}
-					</li>
-				{% else %}
-					<li>
-						No user groups found.
-					</li>
-				{% endfor %}
-			</ul>
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
+
+	<ul class="mainListUserGroups">
+		{% for usergroup in usergroups %}
+			<li class="userGroup">
+				<div class="title"><a href="/admin/usergroup/{{ usergroup.id }}">{{ usergroup.title }}</a></div>
+				{{ usergroup.description | nl2br }}
+			</li>
+		{% else %}
+			<li>
+				No user groups found.
+			</li>
+		{% endfor %}
+	</ul>
 
 {% endblock %}

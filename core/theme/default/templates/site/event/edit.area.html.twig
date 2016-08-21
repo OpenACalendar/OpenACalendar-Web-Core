@@ -33,30 +33,34 @@
 		<div class="afterBigSubmitActionWrapper"></div>
 	</form>
 
-	<div class="innerPageLeft">
-		<ul class="areasList" id="EditEventAreaResults">
-			{% for area in areas %}
-				<li class="area" {%  if area.minLat %}onmouseover="mapToBounds({{  area.minLat }}, {{  area.maxLat }}, {{  area.minLng }}, {{  area.maxLng }})"{%  endif %}>
-					<form action="/event/{{  event.slugForURL }}/edit/area" method="post" class="oneActionFormRight">
-						<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-						<input type="hidden" name="area_slug" value="{{  area.slug }}">
-						<input type="submit" value="Select {{ area.title }}">
-					</form>
-					<div class="title">{{ area.title }}</div>
-					{%  if area.parent1Title %}<div>{{ area.parent1Title }}</div>{% endif %}
-					<div class="afterOneActionFormRight"></div>
-				</li>
-			{% endfor %}
-		</ul>
-	</div>
+	<div class="contentTwoColumns">
 
-	<div class="innerPageRight hideIfOneCol">
-		<div id="MapWrapper">
-			<div id="Map" class="fullWidth"></div>
+		<div class="contentTwoColumnsLeft">
+			<ul class="areasList" id="EditEventAreaResults">
+				{% for area in areas %}
+					<li class="area" {%  if area.minLat %}onmouseover="mapToBounds({{  area.minLat }}, {{  area.maxLat }}, {{  area.minLng }}, {{  area.maxLng }})"{%  endif %}>
+						<form action="/event/{{  event.slugForURL }}/edit/area" method="post" class="oneActionFormRight">
+							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+							<input type="hidden" name="area_slug" value="{{  area.slug }}">
+							<input type="submit" value="Select {{ area.title }}">
+						</form>
+						<div class="title">{{ area.title }}</div>
+						{%  if area.parent1Title %}<div>{{ area.parent1Title }}</div>{% endif %}
+						<div class="afterOneActionFormRight"></div>
+					</li>
+				{% endfor %}
+			</ul>
 		</div>
-	</div>
 
-	<div class="afterInnerPageContent"></div>
+		<div class="contentTwoColumnsRight hideIfOneCol">
+			<div id="MapWrapper">
+				<div id="Map" class="fullWidth"></div>
+			</div>
+		</div>
+
+		<div class="afterContentTwoColumns"></div>
+
+	</div>
 
 {% endblock %}
 

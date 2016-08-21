@@ -6,22 +6,24 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {%  if curatedLists|length > 0 %}
-	<div class="innerPageLeftRightTitle">
-		<p class="title">This is part of these Curated Lists</p>
+	<div class="contentTwoColumns">
+		<div class="contentTwoColumnsTitle">
+			<p class="title">This is part of these Curated Lists</p>
+		</div>
+		<div class="contentTwoColumnsLeft">
+			<ul class="mainListCuratedLists">
+			{% for curatedList in curatedLists %}
+				<li class="curatedlist">
+					<a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		<div class="contentTwoColumnsRight">
+			{%  if currentUserActions.has("org.openacalendar.curatedlists","eventEditCuratedLists") %}
+				<a href="/event/{{ event.slugForUrl }}/edit/curatedlists">Edit Curated Lists</a>
+			{% endif %}
+		</div>
+		<div class="afterContentTwoColumns"></div>
 	</div>
-	<div class="innerPageLeft">
-		<ul class="mainListCuratedLists">
-		{% for curatedList in curatedLists %}
-			<li class="curatedlist">
-				<a href="/curatedlist/{{  curatedList.slugForURL }}">{{  curatedList.title }}</a>
-			</li>
-		{% endfor %}
-		</ul>
-	</div>
-	<div class="innerPageRight">
-		{%  if currentUserActions.has("org.openacalendar.curatedlists","eventEditCuratedLists") %}
-			<a href="/event/{{ event.slugForUrl }}/edit/curatedlists">Edit Curated Lists</a>
-		{% endif %}
-	</div>
-	<div class="afterInnerPageContent"></div>
 {%  endif %}

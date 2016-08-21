@@ -191,7 +191,7 @@ body {
 }
 h1 {
   display: inline;
-  font-size: 1.3em;
+  font-size: 1.875rem;
 }
 h1 a {
   text-decoration: none;
@@ -199,7 +199,7 @@ h1 a {
 }
 h2 {
   display: inline;
-  font-size: 1.0em;
+  font-size: 1.5rem;
 }
 h2 a {
   text-decoration: none;
@@ -315,7 +315,7 @@ h2 a {
 .popupBox .popupShowEvent .title {
   padding: 5px 0;
   font-weight: bold;
-  font-size: 110%;
+  font-size: 1.125rem;
 }
 .popupBox .popupShowEvent .description {
   padding: 5px 0;

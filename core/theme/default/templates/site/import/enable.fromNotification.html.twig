@@ -12,15 +12,19 @@
 
 {% block content %}
 
-	<h2>Enable Import {{  import.title }}</h2>
+	<div class="contentMain">
 
-	<form action="#" method="post" class="styled">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="enable" value="yes">
+		<h2>Enable Import {{  import.title }}</h2>
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Enable" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+		<form action="#" method="post" class="styled">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="enable" value="yes">
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Enable" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}
 

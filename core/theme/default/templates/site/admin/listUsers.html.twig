@@ -19,60 +19,56 @@
 
 	<h2>Users</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
-			
-		</ul>
-		<div id="innerPage">
+	<h3>User Permissions all Anonymous Users have</h3>
 
-
-			<h3>User Permissions all Anonymous Users have</h3>
-
-			<table class="data">
+	<div class="contentMain">
+		<table class="data">
+			<tr>
+				<th>Extension</th>
+				<th>ID</th>
+			</tr>
+			{% for userpermission in userPermissionForAnonymous %}
 				<tr>
-					<th>Extension</th>
-					<th>ID</th>
+					<td>{{ userpermission.userPermissionExtensionID }}</td>
+					<td>{{ userpermission.userPermissionKey }}</td>
 				</tr>
-				{% for userpermission in userPermissionForAnonymous %}
-					<tr>
-						<td>{{ userpermission.userPermissionExtensionID }}</td>
-						<td>{{ userpermission.userPermissionKey }}</td>
-					</tr>
-				{% endfor %}
-			</table>
-
-			<h3>User Permissions any User has</h3>
-
-			<table class="data">
-				<tr>
-					<th>Extension</th>
-					<th>ID</th>
-				</tr>
-				{% for userpermission in userPermissionForAnyUser %}
-					<tr>
-						<td>{{ userpermission.userPermissionExtensionID }}</td>
-						<td>{{ userpermission.userPermissionKey }}</td>
-					</tr>
-				{% endfor %}
-			</table>
-
-			<h3>User Permissions any Verified User has</h3>
-
-			<table class="data">
-				<tr>
-					<th>Extension</th>
-					<th>ID</th>
-				</tr>
-				{% for userpermission in userPermissionForAnyVerifiedUser %}
-					<tr>
-						<td>{{ userpermission.userPermissionExtensionID }}</td>
-						<td>{{ userpermission.userPermissionKey }}</td>
-					</tr>
-				{% endfor %}
-			</table>
-
-			<div id="afterInnerPageContent"></div>
-		</div>
+			{% endfor %}
+		</table>
 	</div>
+
+	<h3>User Permissions any User has</h3>
+
+	<div class="contentMain">
+		<table class="data">
+			<tr>
+				<th>Extension</th>
+				<th>ID</th>
+			</tr>
+			{% for userpermission in userPermissionForAnyUser %}
+				<tr>
+					<td>{{ userpermission.userPermissionExtensionID }}</td>
+					<td>{{ userpermission.userPermissionKey }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+
+	<h3>User Permissions any Verified User has</h3>
+
+	<div class="contentMain">
+		<table class="data">
+			<tr>
+				<th>Extension</th>
+				<th>ID</th>
+			</tr>
+			{% for userpermission in userPermissionForAnyVerifiedUser %}
+				<tr>
+					<td>{{ userpermission.userPermissionExtensionID }}</td>
+					<td>{{ userpermission.userPermissionKey }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+
 
 {% endblock %}

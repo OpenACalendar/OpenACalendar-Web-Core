@@ -24,24 +24,25 @@
 
 {% block innerContent %}
 
-	<p>This lists events that happen online and can be accessed from any place.</p>
+	<p class="contentMain">This lists events that happen online and can be accessed from any place.</p>
 
 	{% include '/site/eventListFilterParams.html.twig' %}
 
-	<div class="switcherWrapper">
-		<div class="switcherList">
-			<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
-				<a href="/venue/virtual/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
-			</div>
-			<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
-				<a href="/venue/virtual/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+	<div class="contentSwitcher">
+		<div class="switcherWrapper">
+			<div class="switcherList">
+				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+					<a href="/venue/virtual/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+				</div>
+				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+					<a href="/venue/virtual/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	{% block eventsContent %}{%  endblock %}
 
-	<div id="afterInnerPageContent"></div>
 {% endblock %}
 
 

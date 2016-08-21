@@ -56,70 +56,76 @@
 		<meta itemprop="name" content="{{ area.title|e('html_attr') }}" />
 
 
-		<div  class="innerPageLeft">
-			<p>{{ area.description | nl2br  | linkify }}</p>
+		<div class="contentTwoColumns">
+
+			<div  class="contentTwoColumnsLeft">
+				<p>{{ area.description | nl2br  | linkify }}</p>
 
 
 
-			{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
+				{% include 'site/common/areaList.html.twig' with { 'areasToList':childAreas} %}
 
-			<div class="locationWrapper">
-				<div class="location">
-					<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
-					{% for parentArea in parentAreas|reverse %}
-						<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
-					{% endfor %}
-					<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
-				</div>
-			</div>
-
-		</div>
-
-		<div  class="innerPageRight">
-
-			{%  if not currentUser %}
-				<div class="infoBoxWrapper">
-					<div class="infoBoxTitle">Get notifications?</div>
-					<div class="infoBoxContent">
-						<p>
-							Get reminders and notifications of events in this area!
-						</p>
-						<p>
-							<a href="{{ config.getWebIndexDomainSecure() }}/you/register?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
-								Create your free account
-							</a>
-						</p>
-						<p>
-							<a href="{{ config.getWebIndexDomainSecure() }}/you/login?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
-								Login
-							</a>
-						</p>
+				<div class="locationWrapper">
+					<div class="location">
+						<div class="area"><a href="/area/{{ area.slugForUrl }}">{{ area.title }}</a></div>
+						{% for parentArea in parentAreas|reverse %}
+							<div class="area"><a href="/area/{{ parentArea.slugForUrl }}">{{ parentArea.title }}</a></div>
+						{% endfor %}
+						<div class="country"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
 					</div>
 				</div>
-			{% endif %}
 
-			<div id="MapWrapper">
-				<div id="Map" class="map"></div>
-				{% if currentSiteFeatures.has('org.openacalendar','Map') %}
-					<ul class="actionList">
-						<li><a href="/map?area={{ area.slug }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
-					</ul>
-				{% endif %}
 			</div>
 
-		</div>
+			<div  class="contentTwoColumnsRight">
 
-		<div class="afterInnerPageContent"></div>
+				{%  if not currentUser %}
+					<div class="infoBoxWrapper">
+						<div class="infoBoxTitle">Get notifications?</div>
+						<div class="infoBoxContent">
+							<p>
+								Get reminders and notifications of events in this area!
+							</p>
+							<p>
+								<a href="{{ config.getWebIndexDomainSecure() }}/you/register?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
+									Create your free account
+								</a>
+							</p>
+							<p>
+								<a href="{{ config.getWebIndexDomainSecure() }}/you/login?area={{ area.slug }}{%  if not config.isSingleSiteMode %}&areaSite={{ currentSite.slug }}{% endif %}">
+									Login
+								</a>
+							</p>
+						</div>
+					</div>
+				{% endif %}
+
+				<div id="MapWrapper">
+					<div id="Map" class="map"></div>
+					{% if currentSiteFeatures.has('org.openacalendar','Map') %}
+						<ul class="actionList">
+							<li><a href="/map?area={{ area.slug }}"><div class="fa fa-eye fa-2x"></div> View larger map</a></li>
+						</ul>
+					{% endif %}
+				</div>
+
+			</div>
+
+			<div class="afterContentTwoColumns"></div>
+
+		</div>
 
 		{% include '/site/eventListFilterParams.html.twig' %}
 
-		<div class="switcherWrapper">
-			<div class="switcherList">
-				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
-					<a href="/area/{{ area.slugForURL }}/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
-				</div>
-				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
-					<a href="/area/{{ area.slugForURL }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+		<div class="contentSwitcher">
+			<div class="switcherWrapper">
+				<div class="switcherList">
+					<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+						<a href="/area/{{ area.slugForURL }}/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+					</div>
+					<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+						<a href="/area/{{ area.slugForURL }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+					</div>
 				</div>
 			</div>
 		</div>

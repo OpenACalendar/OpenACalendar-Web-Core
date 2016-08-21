@@ -25,13 +25,15 @@
 {% block content %}
 
 	{% if not currentSiteFeatures.has('org.openacalendar','Tag') %}
-		<div class="flash-error">This feature has been disabled on this calendar. You can not make changes.</div>
+		<div class="flash-error"><div class="contentMain">This feature has been disabled on this calendar. You can not make changes.</div></div>
 	{% endif %}
-	
-	<h2>Tags</h2>
 
-	<div id="innerPageWrapper">
-		<ul id="innerPageActions">
+	<div class="contentMain">
+		<h2>Tags</h2>
+	</div>
+
+	<div class="pageActionsWrapper">
+		<ul class="pageActions">
 			{% if currentUserActions.has("org.openacalendar","tagNew") %}
 				<li class="action">
 					<a href="/tag/new"><div class="fa fa-pencil"></div> Add a tag</a>
@@ -41,23 +43,19 @@
 				<li class="tab currentTab"><a href="/tag">Tags</a></li>
 			</li>
 		</ul>
-		<div id="innerPage">
-
-			<ul class="mainListTags">
-				{% for tag in tags %}
-					<li class="tag">
-						<div class="title"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></div>
-						{{ tag.description | nl2br }}
-					</li>
-				{% else %}
-					<li class="nodata">
-						No tags found.
-					</li>					
-				{% endfor %}
-			</ul>
-
-			<div id="afterInnerPageContent"></div>
-		</div>
 	</div>
-		
+
+	<ul class="mainListTags">
+		{% for tag in tags %}
+			<li class="tag">
+				<div class="title"><a href="/tag/{{ tag.slugForURL }}">{{ tag.title }}</a></div>
+				{{ tag.description | nl2br }}
+			</li>
+		{% else %}
+			<li class="nodata">
+				No tags found.
+			</li>
+		{% endfor %}
+	</ul>
+
 {% endblock %}

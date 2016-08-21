@@ -33,24 +33,27 @@
 
 {% block innerContent %}
 
-	<p>{{ curatedlist.description | nl2br | linkify }}</p>
+	<div class="contentMain">
+		<p>{{ curatedlist.description | nl2br | linkify }}</p>
+	</div>
 
 	{% include '/site/eventListFilterParams.html.twig' %}
 
-	<div class="switcherWrapper">
-		<div class="switcherList">
-			<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
-				<a href="/curatedlist/{{ curatedlist.slug }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
-			</div>
-			<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
-				<a href="/curatedlist/{{ curatedlist.slug }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+	<div class="contentSwitcher">
+		<div class="switcherWrapper">
+			<div class="switcherList">
+				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
+					<a href="/curatedlist/{{ curatedlist.slug }}?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
+				</div>
+				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
+					<a href="/curatedlist/{{ curatedlist.slug }}/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+				</div>
 			</div>
 		</div>
 	</div>
 
 	{% block eventsContent %}{%  endblock %}
 
-	<div id="afterInnerPageContent"></div>
 {% endblock %}
 
 

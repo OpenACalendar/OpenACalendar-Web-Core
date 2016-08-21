@@ -13,24 +13,28 @@
 
 {% block innerContent %}
 
-	<p>Would {{ user.email }} like to stop watching this group?</p>
+	<div class="contentMain">
 
-	<p>By watching this group you can:</p>
+		<p>Would {{ user.email }} like to stop watching this group?</p>
 
-	<ul class="listOfTextItems">
-		<li>Optionally receive emails whenever someone else changes anything.</li>
-		<li>Optionally receive emails whenever we are about to run out of events.</li>
-		<li>Optionally see the events on your personal calendar.</li>
-		<li>Optionally get email reminders when events are on.</li>
-	</ul>
+		<p>By watching this group you can:</p>
 
-	
-	<form action="" method="post">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="action" value="unwatch">
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Stop Watching" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
-	
+		<ul class="listOfTextItems">
+			<li>Optionally receive emails whenever someone else changes anything.</li>
+			<li>Optionally receive emails whenever we are about to run out of events.</li>
+			<li>Optionally see the events on your personal calendar.</li>
+			<li>Optionally get email reminders when events are on.</li>
+		</ul>
+
+
+		<form action="" method="post">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="action" value="unwatch">
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Stop Watching" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
+
 {% endblock %}
 

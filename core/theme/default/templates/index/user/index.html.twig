@@ -5,7 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-{% extends 'index/page2col.html.twig' %}
+{% extends 'index/page.html.twig' %}
 
 {% block pageTitle %}You - {% endblock %} 
 
@@ -14,19 +14,28 @@
 {% endblock %}
 
 
-{% block contentLeft %}
+{% block content %}
 
-	<p>Welcome!</p>
+	<div class="contentTwoColumns">
 
-{% endblock %}
+		<div class="contentTwoColumnsLeft">
 
+			<p>Welcome!</p>
 
-{% block contentRight %}
+		</div>
 
-	<ul class="actionList">
-		<li><a href="/you/register"><div class="fa fa-user fa-2x"></div> Register</a></li>
-		<li><a href="/you/login"><div class="fa fa-user fa-2x"></div> Login</a></li>
-		<li><a href="/you/forgot"><div class="fa fa-user fa-2x"></div> Forgot your login details?</a></li>
-	</ul>
+		<div class="contentTwoColumnsRight">
+
+			<ul class="actionList">
+				<li><a href="/you/register"><div class="fa fa-user fa-2x"></div> Register</a></li>
+				<li><a href="/you/login"><div class="fa fa-user fa-2x"></div> Login</a></li>
+				<li><a href="/you/forgot"><div class="fa fa-user fa-2x"></div> Forgot your login details?</a></li>
+			</ul>
+
+		</div>
+
+		<div class="afterContentTwoColumns"></div>
+
+	</div>
 
 {% endblock %}

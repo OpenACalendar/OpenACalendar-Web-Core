@@ -19,40 +19,42 @@
 
 {% block innerContent %}
 
-	<table class="data">
-		<tr>
-			<th>At</th>
-			<th>Success</th>
-			<th>Message</th>
-			<th>New</th>
-			<th>Existing</th>
-			<th>Saved</th>
-			<th>In Past</th>
-			<th>In Far in Future</th>
-			<th>Not Valid Count</th>
-		</tr>
-		{% for result in results %}
-			<tr {% if loop.index is even %}class="alternative"{% endif %}>
-				<td>
-					{{ result.getCreatedAt|date( currentUserClock12Hour ?  'D jS M Y g:ia': 'D jS M Y H:i', currentTimeZone) }}
-				</td>
-				<td>{% if result.isSuccess %}Yes{% else %}No{% endif %}</td>
-				<td>{{ result.message }}</td>
-				<td>{{ result.newCount }}</td>
-				<td>{{ result.existingCount }}</td>
-				<td>{{ result.savedCount }}</td>
-				<td>{{ result.inPastCount }}</td>
-				<td>{{ result.toFarInFutureCount }}</td>
-				<td>{{ result.notValidCount }}</td>
+	<div class="contentMain">
+		<table class="data">
+			<tr>
+				<th>At</th>
+				<th>Success</th>
+				<th>Message</th>
+				<th>New</th>
+				<th>Existing</th>
+				<th>Saved</th>
+				<th>In Past</th>
+				<th>In Far in Future</th>
+				<th>Not Valid Count</th>
 			</tr>
-		{% else %}
-			<tr class="nodata">
-				<td colspan="9">
-					This importer has not run yet. Importers only run at set times. Please check again later.
-				</td>
-			</tr>
-		{% endfor %}
-	</table>
+			{% for result in results %}
+				<tr {% if loop.index is even %}class="alternative"{% endif %}>
+					<td>
+						{{ result.getCreatedAt|date( currentUserClock12Hour ?  'D jS M Y g:ia': 'D jS M Y H:i', currentTimeZone) }}
+					</td>
+					<td>{% if result.isSuccess %}Yes{% else %}No{% endif %}</td>
+					<td>{{ result.message }}</td>
+					<td>{{ result.newCount }}</td>
+					<td>{{ result.existingCount }}</td>
+					<td>{{ result.savedCount }}</td>
+					<td>{{ result.inPastCount }}</td>
+					<td>{{ result.toFarInFutureCount }}</td>
+					<td>{{ result.notValidCount }}</td>
+				</tr>
+			{% else %}
+				<tr class="nodata">
+					<td colspan="9">
+						This importer has not run yet. Importers only run at set times. Please check again later.
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 
 
 {% endblock %}

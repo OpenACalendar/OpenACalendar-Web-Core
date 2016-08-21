@@ -31,7 +31,7 @@ $(document).ready(function() {
 			event.preventDefault();
 		}
 	});
-	$('ul#innerPageActions > li.actionWithSubMenu a').click(function( event ) {
+	$('ul.pageActions > li.actionWithSubMenu a').click(function( event ) {
 		var submenuLI = $(this).parent();
 		var submenu = submenuLI.children('ul.submenu');
 		if (submenu.size() > 0) {
@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 function closeMenu() {
 	$('#header ul.menu ul.submenu').hide();
-	$('ul#innerPageActions ul.submenu').hide();
+	$('ul.pageActions ul.submenu').hide();
 	$('#MenuMask').hide();
 }
 
@@ -162,9 +162,9 @@ function checkScreenSizeAndUpdate() {
 	var screenWidth = $('body').innerWidth();
 	if (screenWidth < 500 && !isSmallScreenSize) {
 		// Time to add options!
-		var container = $('#innerPageActions');
+		var container = $('.pageActionsWrapper .pageActions');
 		if (container.length == 1) {
-			container.before('<div id="innerPageActionsShow" onclick="innerPageActionsShow(); return false;"><div class="fa fa-bars"></div> Show Options</div>');
+			container.before('<div class="pageActionsShow" onclick="innerPageActionsShow(); return false;"><div class="fa fa-bars"></div> Show Options</div>');
 			container.hide();
 			container.prepend('<li class="hide" onclick="innerPageActionsHide(); return false;"><div class="fa fa-bars"></div> Hide Options</li>');
 			isSmallScreenSize = true;
@@ -173,12 +173,12 @@ function checkScreenSizeAndUpdate() {
 }
 
 function innerPageActionsShow() {
-	$('#innerPageActions').show();
-	$('#innerPageActionsShow').hide();
+	$('.pageActions').show();
+	$('.pageActionsShow').hide();
 }
 
 function innerPageActionsHide() {
-	$('#innerPageActions').hide();
-	$('#innerPageActions ul.submenu').hide();
-	$('#innerPageActionsShow').show();
+	$('.pageActions').hide();
+	$('.pageActions ul.submenu').hide();
+	$('.pageActionsShow').show();
 }

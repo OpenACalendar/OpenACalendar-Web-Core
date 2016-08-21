@@ -17,57 +17,61 @@
 
 {% block innerContent %}
 
-	{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
-	<form action="#" method="post" class="styled" id="EditEventForm" novalidate="novalidate">
+	<div class="contentMain">
 
-		{{ form_errors(form) }}
+		{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
+		<form action="#" method="post" class="styled" id="EditEventForm" novalidate="novalidate">
 
-		{{ form_row(form.summary) }}
-		{{ form_row(form.description) }}
-		{{ form_row(form.url) }}
-		{{ form_row(form.ticket_url) }}
-		<div class="rowWrapper">
-			<div class="labelWrapper">Date/Time</div>
-			<div class="widgetWrapper" id="ReadableDateTimeRange">
+			{{ form_errors(form) }}
+
+			{{ form_row(form.summary) }}
+			{{ form_row(form.description) }}
+			{{ form_row(form.url) }}
+			{{ form_row(form.ticket_url) }}
+			<div class="rowWrapper">
+				<div class="labelWrapper">Date/Time</div>
+				<div class="widgetWrapper" id="ReadableDateTimeRange">
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
-		{{ form_row(form.start_at) }}
-		{{ form_row(form.end_at) }}
-		{{ form_row(form.country_id) }}
-		{{ form_row(form.timezone) }}
-		{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
-			{#  if both are an option, user must check which one.  #}
-			{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-				{{ form_row(form.is_virtual) }}
-			{% endif %}
-			{# Secondly, any options for virtual events? ... nope #}
-		{% endif %}
-		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-			{#  if both are an option, user must check which one.  #}
+			{{ form_row(form.start_at) }}
+			{{ form_row(form.end_at) }}
+			{{ form_row(form.country_id) }}
+			{{ form_row(form.timezone) }}
 			{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
-				{{ form_row(form.is_physical) }}
+				{#  if both are an option, user must check which one.  #}
+				{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
+					{{ form_row(form.is_virtual) }}
+				{% endif %}
+				{# Secondly, any options for virtual events? ... nope #}
 			{% endif %}
-			{# Secondly, any options for physical events? #}
-			<div id="physicalEventOptions">
-				
-			</div>
-		{% endif %}
+			{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
+				{#  if both are an option, user must check which one.  #}
+				{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
+					{{ form_row(form.is_physical) }}
+				{% endif %}
+				{# Secondly, any options for physical events? #}
+				<div id="physicalEventOptions">
 
-		{%  for customField in formCustomFields %}
-			{{ form_row(form['custom_' ~ customField.key]) }}
-			{% include  ['site/event/edit.details.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/event/edit.details.custom_field.after.html.twig'] with { 'customField':customField } %}
-		{%  endfor %}
+				</div>
+			{% endif %}
 
-		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+			{%  for customField in formCustomFields %}
+				{{ form_row(form['custom_' ~ customField.key]) }}
+				{% include  ['site/event/edit.details.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/event/edit.details.custom_field.after.html.twig'] with { 'customField':customField } %}
+			{%  endfor %}
 
-		{{ form_rest(form) }}
+			{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
+			{{ form_rest(form) }}
 
 
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+	</div>
+
 {% endblock %}
 
 {% block scriptsForState %}

@@ -27,20 +27,30 @@
 			</a>
 		</div>
 
-		<form method="get" class="filterList">
+		<form method="get" class="filterList styled"  style="clear: both;">
 			<input type="hidden" name="curatedListListFilterDataSubmitted" value="1">
 
-			<div class="inputField">
-				<label>Search: <input type="text" name="freeTextSearch" value="{{ curatedListListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+
+
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">Search:</div>
+					<div class="widgetWrapper"><input type="text" name="freeTextSearch" value="{{ curatedListListFilterParams.freeTextSearch }}" autocomplete="off"></div>
+					<div class="afterRowWrapper"></div>
+				</label>
 			</div>
 
-			<div class="inputField">
-				<label><input type="checkbox" name="withFutureEventsOnly" value="1" {% if curatedListListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</label>
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">&nbsp;</div>
+					<div class="widgetWrapper"><input type="checkbox" name="withFutureEventsOnly" value="1" {% if curatedListListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</div>
+					<div class="afterRowWrapper"></div>
+				</label>
 			</div>
 
-			<div class="submitField">
-				<input type="submit" value="Filter">
-			</div>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Filter" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+
 		</form>
 
 	</div>

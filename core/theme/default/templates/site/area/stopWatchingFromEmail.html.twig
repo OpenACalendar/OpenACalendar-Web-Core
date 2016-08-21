@@ -13,24 +13,27 @@
 
 {% block innerContent %}
 
-	<p>Would {{ user.email }} like to stop watching this area?</p>
+	<div class="contentMain">
 
-	<p>By watching this area you can:</p>
+		<p>Would {{ user.email }} like to stop watching this area?</p>
 
-	<ul class="listOfTextItems">
-		<li>Optionally receive emails whenever someone else changes anything.</li>
-		<li>Optionally receive emails whenever we are about to run out of events.</li>
-		<li>Optionally see the events on your personal calendar.</li>
-		<li>Optionally get email reminders when events are on.</li>
-	</ul>
+		<p>By watching this area you can:</p>
 
-	
-	<form action="" method="post">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="action" value="unwatch">
-		<input type="submit" value="Stop Watching">
-	</form>
-		
+		<ul class="listOfTextItems">
+			<li>Optionally receive emails whenever someone else changes anything.</li>
+			<li>Optionally receive emails whenever we are about to run out of events.</li>
+			<li>Optionally see the events on your personal calendar.</li>
+			<li>Optionally get email reminders when events are on.</li>
+		</ul>
+
+
+		<form action="" method="post">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="action" value="unwatch">
+			<input type="submit" value="Stop Watching">
+		</form>
+
+	</div>
 	
 {% endblock %}
 

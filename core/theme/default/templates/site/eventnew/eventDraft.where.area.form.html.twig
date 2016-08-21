@@ -24,48 +24,46 @@
 	<div class="afterBigSubmitActionWrapper"></div>
 </form>
 
-<div id="innerPageWrapper">
-	<div id="innerPage">
 
-		<div class="innerPageLeft">
-			<ul class="areasList" id="EditEventAreaResults">
-				<li class="area">
-					<form action="" class="styled" method="POST">
-						<input type="hidden" name="action" value="setvenue">
-						<div class="bigSubmitActionWrapper"><input type="submit" value="I know the exact Venue" class="bigSubmitAction"/></div>
-						<div class="afterBigSubmitActionWrapper"></div>
-					</form>
-				</li>
-				<li class="area">
+<div class="contentTwoColumns">
+	<div class="contentTwoColumnsLeft">
+		<ul class="areasList" id="EditEventAreaResults">
+			<li class="area">
+				<form action="" class="styled" method="POST">
+					<input type="hidden" name="action" value="setvenue">
+					<div class="bigSubmitActionWrapper"><input type="submit" value="I know the exact Venue" class="bigSubmitAction"/></div>
+					<div class="afterBigSubmitActionWrapper"></div>
+				</form>
+			</li>
+			<li class="area">
+				<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight">
+					<input type="hidden" name="action" value="setnoareavenue">
+					<input type="submit" value="None of these places">
+				</form>
+				<div class="afterOneActionFormRight"></div>
+			</li>
+			{% for area in areas %}
+				<li class="area result" {%  if area.minLat %}onmouseover="mapToBounds({{  area.minLat }}, {{  area.maxLat }}, {{  area.minLng }}, {{  area.maxLng }})"{%  endif %}>
 					<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight">
-						<input type="hidden" name="action" value="setnoareavenue">
-						<input type="submit" value="None of these places">
+						<input type="hidden" name="action" value="setthisarea">
+						<input type="hidden" name="area_slug" value="{{  area.slug }}">
+						<input type="submit" value="Select {{ area.title }}">
 					</form>
+					<div class="title">{{ area.title }}</div>
+					{%  if area.parent1Title %}<div>{{ area.parent1Title }}</div>{% endif %}
 					<div class="afterOneActionFormRight"></div>
 				</li>
-				{% for area in areas %}
-					<li class="area result" {%  if area.minLat %}onmouseover="mapToBounds({{  area.minLat }}, {{  area.maxLat }}, {{  area.minLng }}, {{  area.maxLng }})"{%  endif %}>
-						<form action="/event/new/{{  draft.slug }}/{{ currentStep.stepID }}" method="post" class="oneActionFormRight">
-							<input type="hidden" name="action" value="setthisarea">
-							<input type="hidden" name="area_slug" value="{{  area.slug }}">
-							<input type="submit" value="Select {{ area.title }}">
-						</form>
-						<div class="title">{{ area.title }}</div>
-						{%  if area.parent1Title %}<div>{{ area.parent1Title }}</div>{% endif %}
-						<div class="afterOneActionFormRight"></div>
-					</li>
-				{% endfor %}
-			</ul>
-		</div>
-
-		<div class="innerPageRight hideIfOneCol">
-			<div id="MapWrapper">
-				<div id="Map" class="fullWidth"></div>
-			</div>
-		</div>
-
-		<div class="afterInnerPageContent"></div>
-
+			{% endfor %}
+		</ul>
 	</div>
+
+	<div class="contentTwoColumnsRight hideIfOneCol">
+		<div id="MapWrapper">
+			<div id="Map" class="fullWidth"></div>
+		</div>
+	</div>
+
+	<div class="afterContentTwoColumns"></div>
+
 </div>
 

@@ -6,47 +6,49 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div id="header">
-	<div class="title">
-		<a href="/"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.siteTitle  }}</h1></a>
-	</div>
-	<ul class="menu">
-		{%  if actionCreateSite %}
-			<li><a href="{{ config.getWebIndexDomainSecure() }}/create">Create</a></li>
-		{% endif %}
-		<li><a href="/discover">Discover</a></li>
-		<li class="user">
-			{% if currentUser is null %}
-				<a href="{{ config.getWebIndexDomainSecure() }}/you">Your details</a>
-				<ul class="submenu">
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a></li>
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register">Register</a></li>
-				</ul>				
-			{% else %}
-				<a href="{{ config.getWebIndexDomainSecure() }}/me">{{ currentUser.username }}</a>
-				<ul class="submenu">
-					{# At the moment only logged in users can see any times on the Index site, so let's not confuse logged out users #}
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/mytimezone">{{ currentTimeZone }}</a></li>
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/sites">Calendars</a></li>
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/agenda">Your personal events</a></li>
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
-					{% if currentUser.isSystemAdmin %}
-						<li><a href="{{  config.getWebIndexDomainSecure() }}/sysadmin">Sys Admin</a></li>
-					{% endif %}
-					<li><a href="{{ config.getWebIndexDomainSecure() }}/me/logout">Logout</a></li>
-				</ul>				
+	<div class="contentMain">
+		<div class="title">
+			<a href="/"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.siteTitle  }}</h1></a>
+		</div>
+		<ul class="menu">
+			{%  if actionCreateSite %}
+				<li><a href="{{ config.getWebIndexDomainSecure() }}/create">Create</a></li>
 			{% endif %}
-		</li>
-		{% if currentUser %}
-			<li id="NotificationMenu" class="user">
-				<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink">
-					<div class="fa fa-bell-o"></div> <span id="NotificationMenuLinkCount"></span>
-				</a>
-				<ul id="NotificationSubMenu" class="submenu">
-					<li><a href="/me/notification">Loading ...</a></li>
-				</ul>
+			<li><a href="/discover">Discover</a></li>
+			<li class="user">
+				{% if currentUser is null %}
+					<a href="{{ config.getWebIndexDomainSecure() }}/you">Your details</a>
+					<ul class="submenu">
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a></li>
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register">Register</a></li>
+					</ul>
+				{% else %}
+					<a href="{{ config.getWebIndexDomainSecure() }}/me">{{ currentUser.username }}</a>
+					<ul class="submenu">
+						{# At the moment only logged in users can see any times on the Index site, so let's not confuse logged out users #}
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/mytimezone">{{ currentTimeZone }}</a></li>
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/me/sites">Calendars</a></li>
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/me/agenda">Your personal events</a></li>
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/me/">Your account</a></li>
+						{% if currentUser.isSystemAdmin %}
+							<li><a href="{{  config.getWebIndexDomainSecure() }}/sysadmin">Sys Admin</a></li>
+						{% endif %}
+						<li><a href="{{ config.getWebIndexDomainSecure() }}/me/logout">Logout</a></li>
+					</ul>
+				{% endif %}
 			</li>
-		{% endif %}
-	</ul>
-	<div class="afterMenu"></div>
+			{% if currentUser %}
+				<li id="NotificationMenu" class="user">
+					<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink">
+						<div class="fa fa-bell-o"></div> <span id="NotificationMenuLinkCount"></span>
+					</a>
+					<ul id="NotificationSubMenu" class="submenu">
+						<li><a href="/me/notification">Loading ...</a></li>
+					</ul>
+				</li>
+			{% endif %}
+		</ul>
+		<div class="afterMenu"></div>
+	</div>
 </div>
 

@@ -11,17 +11,21 @@
 
 {% block content %}
 
-	<p>Hello {{  user.username }}</p>
+	<div class="contentMain">
 
-	<p>To verify {{ user.email }} as your email simply press here:</p>
+		<p>Hello {{  user.username }}</p>
 
-	<form action="" method="post">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="action" value="verify">
+		<p>To verify {{ user.email }} as your email simply press here:</p>
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Verify {{  user.email | e('html_attr') }}" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+		<form action="" method="post">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="action" value="verify">
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Verify {{  user.email | e('html_attr') }}" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 
 {% endblock %}
