@@ -44,6 +44,20 @@
 			<li><a href="/event/{{ event.slugForUrl }}/edit/media"><div class="fa fa-pencil"></div> Edit Media</a></li>
 		{% endif %}
 
-	</ul>
+		{% if currentUserActions.has("org.openacalendar","eventUndelete") %}
+			<li><a href="/event/{{ event.slugForUrl }}/undelete"><div class="fa fa-pencil"></div> Undelete</a></li>
+		{% endif %}
 
+		{% if currentUserActions.has("org.openacalendar","eventUncancel") %}
+			<li><a href="/event/{{ event.slugForUrl }}/uncancel"><div class="fa fa-pencil"></div> Uncancel</a></li>
+		{%  endif  %}
+
+		{% if currentUserActions.has("org.openacalendar","eventDelete") and currentUserActions.has("org.openacalendar","eventCancel") %}
+			<li><a href="/event/{{ event.slugForUrl }}/cancel"><div class="fa fa-pencil"></div> Cancel/Delete</a></li>
+		{%  elseif currentUserActions.has("org.openacalendar","eventDelete")  %}
+			<li><a href="/event/{{ event.slugForUrl }}/delete"><div class="fa fa-trash-o"></div> Delete</a></li>
+		{% endif %}
+
+	</ul>
+	
 {% endblock %}
