@@ -87,8 +87,8 @@ class CurrentUserController {
 					$userAccountRepository = new UserAccountRepository($app);
 					$userAccountRepository->editPassword($app['currentUser']);
 					$app['flashmessages']->addMessage("Password Changed.");
-					return $app['twig']->render('index/currentuser/changePasswordDone.html.twig', array());
-				}
+                    return $app->redirect("/me/");
+                }
 								
 			}
 		}
