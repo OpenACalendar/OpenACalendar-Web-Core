@@ -76,6 +76,26 @@ class VenueFilterParams {
     {
         return $this->withFutureEventsOnly;
     }
+
+
+    public function getHumanTextRepresentation() {
+        $out = array();
+
+        // WITH FUTURE EVENTS ONLY
+        if ($this->withFutureEventsOnly) {
+            $out[] = 'with future events only';
+        }
+
+        // FREE TEXT
+        if ($this->freeTextSearch) {
+            $out[]  = 'free text search: '.$this->freeTextSearch;
+        }
+
+        return implode(", ",$out);
+    }
+
+
+
 }
 
 

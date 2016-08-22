@@ -6,27 +6,51 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div class="filterListWrapper filterListGroupWrapper">
-	<form method="get" class="filterList filterListGroup styled">
-		<input type="hidden" name="groupListFilterDataSubmitted" value="1">
+	<div id="FilterListGroupWrapperSectionHidden" {% if not groupListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListGroupWrapperSectionHidden').hide(); $('#FilterListGroupWrapperSectionShown').show();">
+				Show Filters <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+			</a>
+		</div>
+		{% if not groupListFilterParams.isDefaultFilters %}
+			<div class="currentFilters">
+				{{ groupListFilterParams.getHumanTextRepresentation }}
+			</div>
+		{%  endif %}
+		<div style="clear: both"></div>
+	</div>
+	<div id="FilterListGroupWrapperSectionShown"  {% if groupListFilterParams.isDefaultFilters %}style="display: none;"{% endif %}>
 
-		<div class="rowWrapper">
-			<label>
-				<div class="labelWrapper">Search:</div>
-				<div class="widgetWrapper"><input type="text" name="freeTextSearch" value="{{ groupListFilterParams.freeTextSearch }}" autocomplete="off"></div>
-				<div class="afterRowWrapper"></div>
-			</label>
+		<div class="showHideLink">
+			<a href="#" onclick="$('#FilterListGroupWrapperSectionHidden').show(); $('#FilterListGroupWrapperSectionShown').hide();">
+				Hide Filters <i class="fa fa-minus-square-o" aria-hidden="true"></i>
+			</a>
 		</div>
 
-		<div class="rowWrapper">
-			<label>
-				<div class="labelWrapper">&nbsp;</div>
-				<div class="widgetWrapper"><input type="checkbox" name="withFutureEventsOnly" value="1" {% if groupListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</div>
-				<div class="afterRowWrapper"></div>
-			</label>
-		</div>
+		<form method="get" class="filterList filterListGroup styled" style="clear: both;">
+			<input type="hidden" name="groupListFilterDataSubmitted" value="1">
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Filter" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">Search:</div>
+					<div class="widgetWrapper"><input type="text" name="freeTextSearch" value="{{ groupListFilterParams.freeTextSearch }}" autocomplete="off"></div>
+					<div class="afterRowWrapper"></div>
+				</label>
+			</div>
 
-	</form>
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">&nbsp;</div>
+					<div class="widgetWrapper"><input type="checkbox" name="withFutureEventsOnly" value="1" {% if groupListFilterParams.withFutureEventsOnly %}checked{% endif %}> With future events only</div>
+					<div class="afterRowWrapper"></div>
+				</label>
+			</div>
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Filter" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+
+		</form>
+
+	</div>
 </div>
+
