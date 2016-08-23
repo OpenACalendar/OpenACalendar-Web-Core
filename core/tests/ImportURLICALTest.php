@@ -54,15 +54,18 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 		$siteRepo = new SiteRepository($this->app);
 		$siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), $this->getSiteQuotaUsedForTesting());
-		
-		
-		$areaRepo = new AreaRepository($this->app);
-		
-		$area = new AreaModel();
-		$area->setTitle("test");
-		$area->setDescription("test test");
-		
-		$areaRepo->create($area, null, $site, $countryRepo->loadByTwoCharCode('GB') , $user);
+
+        $areaScotland = new AreaModel();
+        $areaScotland->setSiteId($site->getId());
+        $areaScotland->setTitle('Scotland');
+        $areaScotland->setMinLat(55.573169);
+        $areaScotland->setMinLng(-6.317139);
+        $areaScotland->setMaxLat(60.893935);
+        $areaScotland->setMaxLng(-0.604248);
+        $areaScotland->setCountryId($countryRepo->loadByTwoCharCode('GB'));
+
+        $areaRepo = new AreaRepository($this->app);
+        $areaRepo->create($areaScotland, null, $site, $countryRepo->loadByTwoCharCode('GB'), $user);
 		
 		$group = new GroupModel();
 		$group->setTitle("test");
@@ -79,7 +82,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$importURL->setSiteId($site->getId());
 		$importURL->setGroupId($group->getId());
 		$importURL->setCountryId($countryRepo->loadByTwoCharCode('GB')->getId());
-		$importURL->setAreaId($area->getId());
+		// We don't set - $importURL->setAreaId($area->getId()); - importer should get this from lat lng!
 		$importURL->setTitle("Test");
 		$importURL->setUrl("http://test.com");
 		
@@ -113,7 +116,7 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		$this->assertEquals('http://opentechcalendar.co.uk/index.php/event/166',$event->getURL());
 		$this->assertFalse($event->getIsDeleted());
 		$this->assertEquals($countryRepo->loadByTwoCharCode('GB')->getId(), $event->getCountryId());
-		$this->assertEquals($area->getId(), $event->getAreaId());
+		$this->assertEquals($areaScotland->getId(), $event->getAreaId());
 		$this->assertEquals("Europe/London",$event->getTimezone());
 		
 		// Import again

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cb3cac7529f026a5e0feb9515911d9ec",
-    "content-hash": "5ae5aa87c74782edff34ff7bc2b67cff",
+    "hash": "aecd2611301955c70a667a0313a5d33f",
+    "content-hash": "3cbbcba50f77475f08fae3c4bd1747b1",
     "packages": [
         {
             "name": "facebook/php-sdk-v4",
             "version": "4.0.23",
             "source": {
                 "type": "git",
-                "url": "https://github.com/facebook/facebook-php-sdk-v4.git",
+                "url": "https://github.com/facebook/php-graph-sdk.git",
                 "reference": "c82611e05596622c9bd7abfa1cea1512d885c95e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/c82611e05596622c9bd7abfa1cea1512d885c95e",
+                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/c82611e05596622c9bd7abfa1cea1512d885c95e",
                 "reference": "c82611e05596622c9bd7abfa1cea1512d885c95e",
                 "shasum": ""
             },
@@ -54,6 +54,7 @@
                 "facebook",
                 "sdk"
             ],
+            "abandoned": "facebook/graph-sdk",
             "time": "2015-04-03 20:31:47"
         },
         {
@@ -259,23 +260,20 @@
         },
         {
             "name": "jmbtechnologylimited/icaldissect",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JMB-Technology-Limited/ICalDissect.git",
-                "reference": "72e230c51001d5762c10f49deb2c1766a9effb1a"
+                "reference": "97883885931301e6e1ddbe8d68bc686deeae5b7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/72e230c51001d5762c10f49deb2c1766a9effb1a",
-                "reference": "72e230c51001d5762c10f49deb2c1766a9effb1a",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/97883885931301e6e1ddbe8d68bc686deeae5b7e",
+                "reference": "97883885931301e6e1ddbe8d68bc686deeae5b7e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -300,7 +298,7 @@
             "keywords": [
                 "ical"
             ],
-            "time": "2015-07-30 21:26:48"
+            "time": "2016-08-05 22:20:09"
         },
         {
             "name": "jmbtechnologylimited/osdata",

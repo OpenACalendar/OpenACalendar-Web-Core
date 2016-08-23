@@ -158,6 +158,11 @@ class ImportICalHandler extends ImportHandlerBase {
 			$importedEvent->setUrl($icalevent->getUrl());
 			$changesToSave = true;
 		}
+        if ($importedEvent->getLat() != $icalevent->getGeoLat() || $importedEvent->getLng() != $icalevent->getGeoLng()) {
+            $importedEvent->setLng($icalevent->getGeoLng());
+            $importedEvent->setLat($icalevent->getGeoLat());
+            $changesToSave = true;
+        }
 		if ($this->importRun->hasFlag(ImportRun::$FLAG_SET_TICKET_URL_AS_URL) && $importedEvent->getTicketUrl() != $icalevent->getUrl()) {
 			$importedEvent->setTicketUrl($icalevent->getUrl());
 			$changesToSave = true;

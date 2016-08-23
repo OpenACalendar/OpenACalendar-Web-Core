@@ -8,5 +8,6 @@ DESCRIPTION:http://opentechcalendar.co.uk/index.php/event/166
 URL:http://opentechcalendar.co.uk/index.php/event/166
 DTSTART:20131112T180000Z
 DTEND:20131112T203000Z
+GEO:58.962784;-2.914585
 END:VEVENT
 END:VCALENDAR
