@@ -51,7 +51,7 @@
 	{% endif %}
 	{% if currentSiteFeatures.has('org.openacalendar','Importer') and currentUserActions.has("org.openacalendar","groupNewEvent") %}{# TODO #}
 		<li class="action">
-			<a href="/group/{{ group.slugForURL }}/newimporturl"><div class="fa fa-pencil"></div> import an event</a>
+			<a href="/group/{{ group.slugForURL }}/newimporturl"><div class="fa fa-pencil"></div> import event(s)</a>
 		</li>
 	{% endif %}
 	<li class="action">
