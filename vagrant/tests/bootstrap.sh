@@ -4,7 +4,7 @@ echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
 
 locale-gen
 
-echo "tmpfs  /var/lib/postgresql  tmpfs  size=512m,auto  0  0" >> /etc/fstab
+echo "tmpfs  /var/lib/postgresql  tmpfs  size=1024m,auto  0  0" >> /etc/fstab
 mkdir /var/lib/postgresql
 mount /var/lib/postgresql
 
