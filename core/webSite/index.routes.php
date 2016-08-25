@@ -511,18 +511,6 @@ $app->match('/admin/media', 'site\controllers\AdminController::media')
 		->before($appFileStoreRequired)
 		->before($permissionCalendarAdministratorRequired)
 		->before($canChangeSite);
-$app->match('/admin/sendemail', 'site\controllers\SendEmailNewController::index')
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-$app->match('/admin/sendemail/', 'site\controllers\SendEmailNewController::index')
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-$app->match('/admin/sendemail/{slug}', 'site\controllers\SendEmailController::show')
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
-$app->match('/admin/sendemail/{slug}/', 'site\controllers\SendEmailController::show')
-		->before($permissionCalendarAdministratorRequired)
-		->before($canChangeSite);
 
 $app->match('/admin/areas/', 'site\controllers\AdminController::areas')
 		->before($permissionCalendarAdministratorRequired)
