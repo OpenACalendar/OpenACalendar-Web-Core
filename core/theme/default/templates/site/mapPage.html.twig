@@ -11,7 +11,7 @@
         <meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>Map - {{ currentSite.title }} {{ config.siteTitle }}</title>
+		<title>Map - {{ currentSite.title }} {{ config.installTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/map.css?v={{ config.assetsVersion }}">
 		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css{%  else %}/font-awesome-4.5.0/css/font-awesome.min.css{%  endif %}">
 		{% include 'site/common/mapLibrary.css.html.twig' %}
@@ -29,7 +29,7 @@
 		</div>
 		<div id="MapInfo">
 			<h1><a href="/">{{ currentSite.title }}</a></h1>
-			{% if not config.isSingleSiteMode %}<h2><a href="/">{{ config.siteTitle }}</a></h2>{% endif %}
+			{% if not config.isSingleSiteMode %}<h2><a href="/">{{ config.installTitle }}</a></h2>{% endif %}
 			<a href="/"><div class="fa fa-times-circle-o fa-2x" title="Close"></div></a>
 		</div>
 		<script type="text/javascript">

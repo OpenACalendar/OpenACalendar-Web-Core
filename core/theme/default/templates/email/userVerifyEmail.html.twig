@@ -11,13 +11,13 @@
 	
 	<p>Hello {{ user.username }}</p>
 
-	<p>Welcome to {{ config.siteTitle }}. To use your account, please take a second to verify this email address.</p>
+	<p>Welcome to {{ config.installTitle }}. To use your account, please take a second to verify this email address.</p>
 
 	{% include 'email/common/actionButton.html.twig' with { link: config.getWebIndexDomainSecure() ~ '/you/verify/' ~ user.id ~ '/' ~  code, text: 'Verify your account' } %}
 
 	<p>If you did not sign up for an account, please ignore this email or contact support by hitting reply.</p>
 
 	<p>Thanks,<br>
-	{{ config.siteTitle }}</p>
+	{{ config.installTitle }}</p>
 
 {% endblock %}

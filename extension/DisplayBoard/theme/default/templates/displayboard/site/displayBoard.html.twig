@@ -11,7 +11,7 @@
         <meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>{% block pageTitle %}{% endblock %} {{ config.siteTitle }}</title>
+		<title>{% block pageTitle %}{% endblock %} {{ config.installTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/displayboard.css?v={{ config.assetsVersion }}">
 		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
 		<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
@@ -23,11 +23,11 @@
 				<div id="headerWrapper">
 					{% if config.isSingleSiteMode %}
 						<img src="/theme/default/img/logo.png?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
-						<h1><a href="/">{{ config.siteTitle }}</a></h1>
+						<h1><a href="/">{{ config.installTitle }}</a></h1>
 					{% else %}
 						<img src="/getLogo.php?v={{ currentSite.logoCacheKey }}" alt="logo" class="logo">
 						<h1><a href="/">{{ currentSite.title }}</a></h1>
-						<h2><a href="/">{{ config.siteTitle }}</a></h2>
+						<h2><a href="/">{{ config.installTitle }}</a></h2>
 					{% endif %}					
 				</div>
 				<div class="displayBoardSegment">

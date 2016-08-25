@@ -41,12 +41,12 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
 					 htmlentities($this->site->getTitle()).' '.
-					 htmlentities($this->app['config']->siteTitle).
+					 htmlentities($this->app['config']->installTitle).
 					'</title>'."\n";
 		} else {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
-					 htmlentities($this->app['config']->siteTitle).
+					 htmlentities($this->app['config']->installTitle).
 					'</title>'."\n";
 		}
 		$txt .= '<id>'.$this->feedURL.'</id>'."\n";
@@ -105,7 +105,7 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 		// TODO $event->getUrl()
 		$content .= '<a href="'.htmlentities($ourUrl).'">More details at '.htmlentities($ourUrl).'</a><br>';
 		$content .= '<p style="font-style:italic;font-size:80%">'.
-					'Powered by <a href="'.$ourUrl.'">'.$this->app['config']->siteTitle.'</a>';
+					'Powered by <a href="'.$ourUrl.'">'.$this->app['config']->installTitle.'</a>';
 		foreach($this->extraFooters as $extraFooter) {
 			$content .= "<br>".$extraFooter->getHtml();
 		}
@@ -115,7 +115,7 @@ class EventListATOMCreateBuilder extends BaseEventListBuilder  {
 				
 		$txt .= $this->getUpdatedString($event);
 		
-		$txt .= '<author><name>'.$this->app['config']->siteTitle.'</name></author></entry>'." \r\n";
+		$txt .= '<author><name>'.$this->app['config']->installTitle.'</name></author></entry>'." \r\n";
 		
 		$this->events[] = $txt;
 	}

@@ -39,9 +39,9 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		$txt .= $this->getIcalLine('VERSION','2.0');
 		$txt .= $this->getIcalLine('PRODID','-//OpenACalendar//NONSGML OpenACalendar//EN');
 		if ($this->site && !$this->app['config']->isSingleSiteMode) {
-			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->site->getTitle().' '.$this->app['config']->siteTitle);
+			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->site->getTitle().' '.$this->app['config']->installTitle);
 		} else {
-			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->app['config']->siteTitle);
+			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->app['config']->installTitle);
 		}
 		$txt .= implode("", $this->events);
 		$txt .= $this->getIcalLine('END','VCALENDAR');
@@ -95,7 +95,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			$description .= $event->getDescription()."\n".
 					//($event->getUrl() ? $event->getUrl()."\n" : '').
 					$url."\n".
-					"Powered by ".$this->app['config']->siteTitle;
+					"Powered by ".$this->app['config']->installTitle;
 			foreach($this->extraFooters as $extraFooter) {
 				$description .= "\n".$extraFooter->getText();
 			}
@@ -108,7 +108,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			$descriptionHTML .=	"<p>".str_replace("\r","",str_replace("\n","<br>",htmlentities($event->getDescription())))."</p>";
 			//if ($event->getUrl()) $descriptionHTML .= '<p>More info: <a href="'.$event->getUrl().'">'.$event->getUrl().'</a></p>';
 			$descriptionHTML .= '<p>More info: <a href="'.$url.'">'.$url.'</a></p>';
-			$descriptionHTML .= '<p style="font-style:italic;font-size:80%">Powered by <a href="'.$url.'">'.$this->app['config']->siteTitle.'</a>';
+			$descriptionHTML .= '<p style="font-style:italic;font-size:80%">Powered by <a href="'.$url.'">'.$this->app['config']->installTitle.'</a>';
 			foreach($this->extraFooters as $extraFooter) {
 				$descriptionHTML .= "<br>".$extraFooter->getHtml();
 			}

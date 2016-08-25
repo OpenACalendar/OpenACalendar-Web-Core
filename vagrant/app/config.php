@@ -25,7 +25,7 @@ $CONFIG->databasePassword = 'password';
 /**
  * Site Title.
  */
-$CONFIG->siteTitle = "Open A Calendar";
+$CONFIG->installTitle = "Open A Calendar";
 
 
 if (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == 8082)) {

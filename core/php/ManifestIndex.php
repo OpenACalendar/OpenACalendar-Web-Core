@@ -19,8 +19,8 @@ class ManifestIndex {
 
     function get() {
         return array(
-            'name'=>$this->app['config']->siteTitle,
-            'short_name'=>$this->app['config']->siteTitle,
+            'name'=>$this->app['config']->installTitle,
+            'short_name'=>$this->app['config']->installTitle,
             'start_url'=>'/',
         );
     }

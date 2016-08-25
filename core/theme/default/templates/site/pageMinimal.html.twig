@@ -11,7 +11,7 @@
         <meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>{% block pageTitle %}{% endblock %} {{ currentSite.title }} {{ config.siteTitle }}</title>
+		<title>{% block pageTitle %}{% endblock %} {{ currentSite.title }} {{ config.installTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/css/main.css?v={{ config.assetsVersion }}">
 		<link rel="stylesheet" type="text/css" href="{%  if config.useLibraryCDNs %}https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css{%  else %}/font-awesome-4.5.0/css/font-awesome.min.css{%  endif %}">
 		{%  if config.useLibraryCDNs %}

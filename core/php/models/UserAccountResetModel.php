@@ -63,7 +63,7 @@ class UserAccountResetModel {
 		global $CONFIG;
 
 		$message = \Swift_Message::newInstance();
-		$message->setSubject("Reset your account on ".$CONFIG->siteTitle);
+		$message->setSubject("Reset your account on ".$CONFIG->installTitle);
 		$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 		$message->setTo($user->getEmail());
 

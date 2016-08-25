@@ -82,7 +82,7 @@ class UserAccountVerifyEmailModel {
 		global $CONFIG;
 		
 		$message = \Swift_Message::newInstance();
-		$message->setSubject("Please verify your account on ".$CONFIG->siteTitle);
+		$message->setSubject("Please verify your account on ".$CONFIG->installTitle);
 		$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 		$message->setTo($user->getEmail());
 

@@ -21,7 +21,7 @@ $CONFIG->webSysAdminDomainSSL = "openacalendar.org";
 
 $CONFIG->webCommonSessionDomain = "openacalendar.org";
 
-$CONFIG->siteTitle = "Open A Calendar TESTS";
+$CONFIG->installTitle = "Open A Calendar TESTS";
 
 
 

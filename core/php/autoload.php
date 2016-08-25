@@ -101,7 +101,7 @@ if ($CONFIG->logFile) {
     }
 	$app->register(new Silex\Provider\MonologServiceProvider(), array(
 		'monolog.logfile' => $CONFIG->logFile,
-		'monolog.name'=>$CONFIG->siteTitle,
+		'monolog.name'=>$CONFIG->installTitle,
 		'monolog.level'=>  $level,
 	));
 	if ($CONFIG->logToStdError) {

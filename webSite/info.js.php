@@ -35,7 +35,7 @@ if (!$site) {
 	header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() + 30*60));
 
 	$data  = array();
-	$data['siteTitle'] = $CONFIG->siteTitle;
+	$data['installTitle'] = $CONFIG->installTitle;
 	// TODO would like to depreceate httpDomain and get scripts to just use httpDomainIndex & httpDomainSite for clarity
 	$data['httpDomain'] = $site->getSlug().".".$CONFIG->webSiteDomain;
 	$data['httpDomainIndex'] = $CONFIG->webIndexDomain;

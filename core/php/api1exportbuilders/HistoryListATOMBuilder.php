@@ -38,12 +38,12 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
 					 htmlentities($this->site->getTitle()).' '.
-					 htmlentities($this->app['config']->siteTitle).
+					 htmlentities($this->app['config']->installTitle).
 					'</title>'."\n";
 		} else {
 			$txt .= '<title>'.
 					($this->title ? htmlentities($this->title).' - ' : '').
-					 htmlentities($this->app['config']->siteTitle).
+					 htmlentities($this->app['config']->installTitle).
 					'</title>'."\n";
 		}
 		$txt .= '<id>'.$this->feedURL.'</id>'."\n";
@@ -67,7 +67,7 @@ class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 				$txt .= '<title>'.  $this->getData($r->getTitle()).'</title>';
 				$txt .= '<summary>'.$this->getBigData($r->getSummary()).'</summary>';
 				$txt .= '<updated>'.$r->getCreatedAt()->format("Y-m-d")."T".$r->getCreatedAt()->format("H:i:s")."Z</updated>";
-				$txt .= '<author><name>'.$this->app['config']->siteTitle.'</name></author></entry>'." \r\n";
+				$txt .= '<author><name>'.$this->app['config']->installTitle.'</name></author></entry>'." \r\n";
 				$this->histories[] = $txt;
 				return;
 			}

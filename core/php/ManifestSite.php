@@ -18,7 +18,7 @@ class ManifestSite {
 
     function get(\models\SiteModel $site) {
         return array(
-            'name'=>$site->getTitle() . ($this->app['config']->isSingleSiteMode ? '' : ' : '.$this->app['config']->siteTitle),
+            'name'=>$site->getTitle() . ($this->app['config']->isSingleSiteMode ? '' : ' : '.$this->app['config']->installTitle),
             'short_name'=>$site->getTitle(),
             'start_url'=>'/',
         );

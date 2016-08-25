@@ -56,8 +56,8 @@ function showExportSharePopup() {
 				emailSubject = exportData.curatedlistTitle;
 			} else {
 				url += "/";
-				text = config.siteTitle;
-				emailSubject = config.siteTitle;
+				text = config.installTitle;
+				emailSubject = config.installTitle;
 			}
 			html += '<div id="ExportSharePopupShareIntroText"><p class="header">Share this:</p></div>';
 			html += '<ul class="ExportSharePopupShareMenu">'

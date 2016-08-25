@@ -18,17 +18,17 @@
 				<a href="{{ config.getWebSiteDomainSecure(currentSite.slug) }}" style="text-decoration: none; color: black;">
 					{% if config.isSingleSiteMode %}
 						<img src="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/theme/default/img/logo.png?v={{ currentSite.logoCacheKey }}" alt="Logo" style="max-height: 30px; max-width: 30px; border: 0;">
-						<h1 style="font-size: 18pt; font-weight: bold; display: inline; margin: 0; padding: 0;">{{ config.siteTitle }}</h1>
+						<h1 style="font-size: 18pt; font-weight: bold; display: inline; margin: 0; padding: 0;">{{ config.installTitle }}</h1>
 					{% else %}
 						<img src="{{ config.getWebSiteDomainSecure(currentSite.slug) }}/getLogo.php?v={{ currentSite.logoCacheKey }}" alt="Logo" style="max-height: 30px; max-width: 30px; border: 0;">
 						<h1 style="font-size: 18pt; font-weight: bold; display: inline; margin: 0; padding: 0;">{{ currentSite.title }}</h1>
-						<h2 style="font-size: 16pt; font-weight: normal; display: inline; margin: 0; padding: 0;">{{ config.siteTitle }}</h2>
+						<h2 style="font-size: 16pt; font-weight: normal; display: inline; margin: 0; padding: 0;">{{ config.installTitle }}</h2>
 					{% endif %}
 				</a>
 			{% else %}
 				<a href="{{ config.getWebIndexDomainSecure() }}" style="text-decoration: none; color: black;">
 					<img src="{{ config.getWebIndexDomainSecure() }}/theme/default/img/logo.png" alt="Logo" style="max-height: 30px; max-width: 30px; border: 0;">
-					<h1 style="font-size: 14pt; font-weight: bold; display: inline; margin: 0; padding: 0;">{{ config.siteTitle }}</h1>
+					<h1 style="font-size: 14pt; font-weight: bold; display: inline; margin: 0; padding: 0;">{{ config.installTitle }}</h1>
 				</a>
 			{% endif %}
 		</div>

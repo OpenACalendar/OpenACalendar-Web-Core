@@ -11,7 +11,7 @@
         <meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>{% block pageTitle %}{% endblock %} Sysadmin {{ config.siteTitle }}</title>
+		<title>{% block pageTitle %}{% endblock %} Sysadmin {{ config.installTitle }}</title>
 		<link rel="stylesheet" type="text/css" href="/theme/default/csssysadmin/main.css?v={{ config.assetsVersion }}">
 		<link rel="shortcut icon" href="/theme/default/imgsysadmin/favicon.png?v={{ config.assetsVersion }}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
@@ -20,7 +20,7 @@
 		<div id="header">
 			<a href="/sysadmin/" class="homelink">
 				<img src="/theme/default/imgsysadmin/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo">
-				<h1>ADMIN - {{ config.siteTitle }}</h1>
+				<h1>ADMIN - {{ config.installTitle }}</h1>
 			</a>
 			<div id="currentUser">
 				Hi {{ currentUser.username }} 

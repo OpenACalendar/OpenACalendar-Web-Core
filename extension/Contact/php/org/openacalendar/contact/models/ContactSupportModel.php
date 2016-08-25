@@ -129,7 +129,7 @@ class ContactSupportModel {
 		if ($CONFIG->contactEmail) {
 		
 			$message = \Swift_Message::newInstance();
-			$message->setSubject("Contact Message From ".$CONFIG->siteTitle." : ".$this->subject);
+			$message->setSubject("Contact Message From ".$CONFIG->installTitle." : ".$this->subject);
 			$message->setFrom(array($CONFIG->emailFrom => $CONFIG->emailFromName));
 			$message->setTo($CONFIG->contactEmail);
 			$message->setReplyTo(array($this->email => $this->email));

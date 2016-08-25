@@ -25,7 +25,7 @@ $CONFIG->databasePassword = 'password';
 /**
  * Site Title.
  */
-$CONFIG->siteTitle = "Open A Calendar";
+$CONFIG->installTitle = "Open A Calendar";
 
 /**
  * To understand the differences between Single Site and Multi Site mode see

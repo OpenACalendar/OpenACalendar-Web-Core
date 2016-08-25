@@ -45,7 +45,7 @@ class Config {
 
 	public $bcryptRounds = 5;
 	
-	public $siteTitle = "Open A Calendar";
+	public $installTitle = "Open A Calendar";
 	
 	public $emailFrom = "hello@example.com";
 	public $emailFromName = "Open A Calendar";
