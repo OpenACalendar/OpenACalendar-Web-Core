@@ -23,7 +23,7 @@ $CONFIG->databaseUser = 'openacalendar';
 $CONFIG->databasePassword = 'password';
 
 /**
- * Site Title.
+ * Install Title.
  */
 $CONFIG->installTitle = "Open A Calendar";
 
