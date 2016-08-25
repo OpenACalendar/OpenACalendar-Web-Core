@@ -88,9 +88,7 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 		
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();
 		
-		$ourUrl = $this->app['config']->isSingleSiteMode ?
-				'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlug() :
-				'http://'.$siteSlug.".".$this->app['config']->webSiteDomain.'/event/'.$event->getSlug() ;
+		$ourUrl = $this->app['config']->getWebSiteDomainSecure($siteSlug) .'/event/'.$event->getSlugForUrl();
 		
 		$dh = new \DateTime('', $this->localTimeZone);
 		$dh->setTimestamp($event->getStartAt()->getTimestamp());

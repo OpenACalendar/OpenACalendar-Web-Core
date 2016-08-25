@@ -70,9 +70,9 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			                                 '@'.$siteSlug.".".$this->app['config']->webSiteDomain);
 		}
 
-		$url = $this->app['config']->isSingleSiteMode ?
-			'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl() :
-			'http://'.$siteSlug.".".$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl() ;
+
+        $url = $this->app['config']->getWebSiteDomainSecure($siteSlug) .'/event/'.$event->getSlugForUrl();
+
 		$txt .= $this->getIcalLine('URL',$url);
 
 		if ($event->getIsDeleted()) {

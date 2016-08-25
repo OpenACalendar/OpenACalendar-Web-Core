@@ -52,11 +52,9 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 			'is_physical'=> (boolean)$event->getIsPhysical(),
 			'is_virtual'=> (boolean)$event->getIsVirtual(),
 			'custom_fields'=> array(),
+            'siteurl' => $this->app['config']->getWebSiteDomainSecure($this->site?$this->site->getSlug():$event->getSiteSlug()) .'/event/'.$event->getSlugForUrl(),
 		);
-		
-		$out['siteurl'] = $this->app['config']->isSingleSiteMode ?
-				'http://'.$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl() :
-				'http://'.($this->site?$this->site->getSlug():$event->getSiteSlug()).".".$this->app['config']->webSiteDomain.'/event/'.$event->getSlugForUrl();
+
 		$out['url'] = $event->getUrl() && filter_var($event->getUrl(), FILTER_VALIDATE_URL) ? $event->getUrl() : $out['siteurl'];
 		$out['ticket_url'] = $event->getTicketUrl() && filter_var($event->getTicketUrl(), FILTER_VALIDATE_URL) ? $event->getTicketUrl() : null;
 		$out['timezone'] = $event->getTimezone();
