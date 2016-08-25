@@ -66,10 +66,7 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 		$eventRecurSet = $eventRecurSetRepository->getForEvent($event);
 		$eventRecurSet->setTimeZoneName($event->getTimezone());
 
-		$newStart = new \DateTime("", new \DateTimeZone($event->getTimezone()));
-		$newStart->setDate(2015,6,1);
-
-		$newEvent = $eventRecurSet->getNewEventOnArbitraryDate($event, $newStart);
+		$newEvent = $eventRecurSet->getNewEventOnArbitraryDate($event, 2015, 6, 1);
 
 		// What we are really testing here is start and end times set correctly
 		$this->assertEquals("2015-06-01T18:00:00+00:00", $newEvent->getStartAtInUTC()->format("c"));
@@ -128,10 +125,7 @@ class EventRecurSetModelGetNewArbitraryEventWithDBTest extends \BaseAppWithDBTes
 		$eventRecurSet->setTimeZoneName($event->getTimezone());
 
 
-		$newStart = new \DateTime();
-		$newStart->setDate(2015,11,1);
-
-		$newEvent = $eventRecurSet->getNewEventOnArbitraryDate($event, $newStart);
+		$newEvent = $eventRecurSet->getNewEventOnArbitraryDate($event, 2015, 11, 1);
 
 		// What we are really testing here is start and end times set correctly
 		$this->assertEquals("2015-11-01T19:00:00+00:00", $newEvent->getStartAtInUTC()->format("c"));

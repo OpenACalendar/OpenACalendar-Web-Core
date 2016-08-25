@@ -289,13 +289,13 @@ class EventRecurSetModel {
 		return $newDate > $now;
 	}
 
-	public function getNewEventOnArbitraryDate(EventModel $event, \DateTime $newDate) {
+	public function getNewEventOnArbitraryDate(EventModel $event, $year, $month, $day) {
 
 		$timeZoneUTC = new \DateTimeZone("UTC");
 		$timeZone = new \DateTimeZone($this->timeZoneName);
 
-		$start = clone $newDate;
-		$start->setTimezone($timeZone);
+		$start = new \DateTime('',$timeZone);
+        $start->setDate($year, $month, $day);
 		$start->setTime($event->getStartAtInTimezone()->format('G'), $event->getStartAtInTimezone()->format('i'), $event->getStartAtInTimezone()->format('s'));
 		$start->setTimezone($timeZoneUTC);
 
@@ -366,8 +366,8 @@ class EventRecurSetModel {
 		return $this->filterEventsForExisting($event, $this->getNewMonthlyEventsOnLastDayInWeek($event, $daysInAdvance));
 	}
 
-	public function getNewEventOnArbitraryDateFilteredForExisting(EventModel $event, \DateTime $newDate,  $daysInAdvance = 186) {
-		$newEvent = $this->getNewEventOnArbitraryDate($event, $newDate);
+	public function getNewEventOnArbitraryDateFilteredForExisting(EventModel $event, $year, $month, $day) {
+		$newEvent = $this->getNewEventOnArbitraryDate($event, $year, $month, $day);
 		if ($newEvent) {
 			return $this->filterEventsForExisting($event, array ( $newEvent ));
 		}

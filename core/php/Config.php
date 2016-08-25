@@ -178,8 +178,6 @@ class Config {
 		
 	public $recurEventForDaysInFutureWhenWeekly = 93; // 3 * 31
 	public $recurEventForDaysInFutureWhenMonthly = 186; // 6 * 31
-	public $recurEventForDaysInFutureWhenArbitrary = 365; // year
-
 	
 	public $CLIAPI1Enabled = false;
 

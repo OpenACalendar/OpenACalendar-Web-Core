@@ -1435,7 +1435,8 @@ class EventController {
 
 			} else {
 
-				$newEvents = $eventRecurSet->getNewEventOnArbitraryDateFilteredForExisting($this->parameters['event'], $start, $app['config']->recurEventForDaysInFutureWhenArbitrary);
+				$newEvents = $eventRecurSet->getNewEventOnArbitraryDateFilteredForExisting($this->parameters['event'],
+                    $start->format('Y'), $start->format('n'), $start->format('j'));
 
 				if ($newEvents) {
 
