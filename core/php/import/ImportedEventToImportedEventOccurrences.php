@@ -2,10 +2,6 @@
 
 namespace import;
 
-use JMBTechnologyLimited\RRuleUnravel\ICalData;
-use JMBTechnologyLimited\RRuleUnravel\ResultFilterAfterDateTime;
-use JMBTechnologyLimited\RRuleUnravel\ResultFilterBeforeDateTime;
-use JMBTechnologyLimited\RRuleUnravel\Unraveler;
 use models\ImportedEventModel;
 use models\ImportedEventOccurrenceModel;
 
@@ -31,34 +27,34 @@ class ImportedEventToImportedEventOccurrences {
 
 		if (isset($reoccur) && isset($reoccur['ical_rrule']) && $reoccur['ical_rrule']) {
 
-			$icaldata = new ICalData(
-				clone $importedEvent->getStartAt(),
-				clone $importedEvent->getEndAt(),
-				$reoccur['ical_rrule'],
-				$importedEvent->getTimezone());
-			if (isset($reoccur['ical_exdates']) && is_array($reoccur['ical_exdates'])) {
-				foreach($reoccur['ical_exdates'] as $exdate) {
-					$icaldata->addExDateByString($exdate['values'], $exdate['properties']);
-				}
-			}
+            // Include Original
+            $newImportedOccurrenceEvent = New ImportedEventOccurrenceModel();
+            $newImportedOccurrenceEvent->setFromImportedEventModel($importedEvent);
+            $newImportedOccurrenceEvent->setStartAt($importedEvent->getStartAt());
+            $newImportedOccurrenceEvent->setEndAt($importedEvent->getEndAt());
+            $this->importedEventOccurrences[] = $newImportedOccurrenceEvent;
 
-			$unraveler = new Unraveler($icaldata);
-			$unraveler->setIncludeOriginalEvent(true);
-            $unraveler->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
+            // New get rest .....
+            $start = clone $importedEvent->getStartAt();
+            $start->setTimezone(new \DateTimeZone($importedEvent->getTimezone()));
+            $end = clone $importedEvent->getEndAt();
+            $end->setTimezone(new \DateTimeZone($importedEvent->getTimezone()));
+            $rule  = new \Recurr\Rule($reoccur['ical_rrule'], $start, $end, $importedEvent->getTimezone());
+            $transformerConfig = new \Recurr\Transformer\ArrayTransformerConfig();
+            $transformerConfig->setVirtualLimit( max( $app['config']->importLimitToSaveOnEachRunImportedEvents, $app['config']->importLimitToSaveOnEachRunEvents )  );
+            $transformer = new \Recurr\Transformer\ArrayTransformer($transformerConfig);
+
             $toEnd = $app['timesource']->getDateTime();
             $toEnd->setTimestamp($toEnd->getTimestamp() + $app['config']->importAllowEventsSecondsIntoFuture);
-            $unraveler->addResultFilter(new ResultFilterBeforeDateTime($toEnd));
-            $unraveler->setResultsCountLimit(max( $app['config']->importLimitToSaveOnEachRunImportedEvents, $app['config']->importLimitToSaveOnEachRunEvents ));
-			$unraveler->process();
-			$results = $unraveler->getResults();
+            $constraint = new \Recurr\Transformer\Constraint\BetweenConstraint($app['timesource']->getDateTime(), $toEnd, true);
 
-			foreach($results as $wantedTimes) {
-				$newImportedOccurrenceEvent = New ImportedEventOccurrenceModel();
-				$newImportedOccurrenceEvent->setFromImportedEventModel($importedEvent);
-				$newImportedOccurrenceEvent->setStartAt($wantedTimes->getStart());
-				$newImportedOccurrenceEvent->setEndAt($wantedTimes->getEnd());
-				$this->importedEventOccurrences[] = $newImportedOccurrenceEvent;
-			}
+            foreach($transformer->transform($rule, $constraint) as $wantedTimes) {
+                $newImportedOccurrenceEvent = New ImportedEventOccurrenceModel();
+                $newImportedOccurrenceEvent->setFromImportedEventModel($importedEvent);
+                $newImportedOccurrenceEvent->setStartAt($wantedTimes->getStart());
+                $newImportedOccurrenceEvent->setEndAt($wantedTimes->getEnd());
+                $this->importedEventOccurrences[] = $newImportedOccurrenceEvent;
+            }
 
 			$this->toMultiples = true;
 

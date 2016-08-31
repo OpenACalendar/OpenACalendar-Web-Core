@@ -4,9 +4,7 @@
 namespace models;
 
 
-use JMBTechnologyLimited\RRuleUnravel\ICalData;
-use JMBTechnologyLimited\RRuleUnravel\ResultFilterAfterDateTime;
-use JMBTechnologyLimited\RRuleUnravel\Unraveler;
+use Recurr\Transformer\Constraint\BetweenConstraint;
 use repositories\builders\EventRepositoryBuilder;
 
 /**
@@ -104,18 +102,19 @@ class EventRecurSetModel {
 			
 	
 	public function getNewWeeklyEvents(EventModel $event,  $daysInAdvance = 93) {
-        global $app;
         $untilDateTime = new \DateTime();
         $untilDateTime->setTimestamp(\TimeSource::time() + $daysInAdvance*24*60*60);
 
-        $rruleunraveller = new Unraveler(new ICalData($event->getStartAtInUTC(), $event->getEndAtInUTC(), array("FREQ"=>"WEEKLY","UNTIL"=>$untilDateTime->format("Ymd")), $event->getTimezone()));
-        // as well as the until clause above, we set a limit here for safety and robustness.
-        $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 7) + 1);
-        $rruleunraveller->setIncludeOriginalEvent(false);
-        $rruleunraveller->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
-        $rruleunraveller->process();
+        $start = clone $event->getStartAt();
+        $start->setTimezone(new \DateTimeZone($event->getTimezone()));
+        $end = clone $event->getEndAt();
+        $end->setTimezone(new \DateTimeZone($event->getTimezone()));
+        $rule        = new \Recurr\Rule('FREQ=WEEKLY', $start, $end, $event->getTimezone());
+        $transformer = new \Recurr\Transformer\ArrayTransformer();
+        $constraint = new BetweenConstraint(\TimeSource::getDateTime(), $untilDateTime, true);
+
         $out = array();
-        foreach($rruleunraveller->getResults() as $result) {
+        foreach($transformer->transform($rule, $constraint) as $result) {
             $newEvent = new EventModel();
             $newEvent->setGroupId($event->getGroupId());
             $newEvent->setVenueId($event->getVenueId());
@@ -123,8 +122,12 @@ class EventRecurSetModel {
             $newEvent->setEventRecurSetId($this->id);
             $newEvent->setSummary($event->getSummary());
             $newEvent->setDescription($event->getDescription());
-            $newEvent->setStartAt($result->getStartInUTC());
-            $newEvent->setEndAt($result->getEndInUTC());
+            $start = $result->getStart();
+            $start->setTimezone(new \DateTimeZone('UTC'));
+            $newEvent->setStartAt($start);
+            $end = $result->getEnd();
+            $end->setTimezone(new \DateTimeZone('UTC'));
+            $newEvent->setEndAt($end);
             foreach($this->customFields as $customField) {
                 if ($event->hasCustomField($customField)) {
                     $newEvent->setCustomField($customField, $event->getCustomField($customField));
@@ -177,22 +180,23 @@ class EventRecurSetModel {
 
 	
 	public function getNewMonthlyEventsOnLastDayInWeek(EventModel $event,  $daysInAdvance = 186) {
-        global $app;
         $dayOfWeek = substr(strtoupper($event->getStartAt()->format("l")),0,2);
 
         $untilDateTime = new \DateTime();
         $untilDateTime->setTimestamp(\TimeSource::time() + $daysInAdvance*24*60*60);
 
-        $rruleunraveller = new Unraveler(new ICalData($event->getStartAtInUTC(), $event->getEndAtInUTC(), array("FREQ"=>"MONTHLY","BYDAY"=>"-1".$dayOfWeek,"UNTIL"=>$untilDateTime->format("Ymd")), $event->getTimezone()));
-        // as well as the until clause above, we set a limit here for safety and robustness.
-        $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 30) + 1);
-        $rruleunraveller->setIncludeOriginalEvent(false);
-        $rruleunraveller->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
-        $rruleunraveller->process();
+        $start = clone $event->getStartAt();
+        $start->setTimezone(new \DateTimeZone($event->getTimezone()));
+        $end = clone $event->getEndAt();
+        $end->setTimezone(new \DateTimeZone($event->getTimezone()));
+        $rule        = new \Recurr\Rule('FREQ=MONTHLY;BYDAY=-1'.$dayOfWeek, $start, $end, $event->getTimezone());
+        $transformer = new \Recurr\Transformer\ArrayTransformer();
+        $constraint = new BetweenConstraint(\TimeSource::getDateTime(), $untilDateTime, true);
+
         $out = array();
         $currentMonthLong = $event->getStartAtInTimezone()->format('F');
         $currentMonthShort = $event->getStartAtInTimezone()->format('M');
-        foreach($rruleunraveller->getResults() as $result) {
+        foreach($transformer->transform($rule, $constraint) as $result) {
             $newEvent = new EventModel();
             $newEvent->setGroupId($event->getGroupId());
             $newEvent->setVenueId($event->getVenueId());
@@ -200,8 +204,12 @@ class EventRecurSetModel {
             $newEvent->setEventRecurSetId($this->id);
             $newEvent->setSummary($event->getSummary());
             $newEvent->setDescription($event->getDescription());
-            $newEvent->setStartAt($result->getStartInUTC());
-            $newEvent->setEndAt($result->getEndInUTC());
+            $start = $result->getStart();
+            $start->setTimezone(new \DateTimeZone('UTC'));
+            $newEvent->setStartAt($start);
+            $end = $result->getEnd();
+            $end->setTimezone(new \DateTimeZone('UTC'));
+            $newEvent->setEndAt($end);
             foreach($this->customFields as $customField) {
                 if ($event->hasCustomField($customField)) {
                     $newEvent->setCustomField($customField, $event->getCustomField($customField));
@@ -228,23 +236,24 @@ class EventRecurSetModel {
 	 * @return \models\EventModel
 	 */
 	public function getNewMonthlyEventsOnSetDayInWeek(EventModel $event,  $daysInAdvance = 186) {
-        global $app;
         $patternData = $this->getEventPatternData($event);
         $dayOfWeek = substr(strtoupper($event->getStartAt()->format("l")),0,2);
 
         $untilDateTime = new \DateTime();
         $untilDateTime->setTimestamp(\TimeSource::time() + $daysInAdvance*24*60*60);
 
-        $rruleunraveller = new Unraveler(new ICalData($event->getStartAtInUTC(), $event->getEndAtInUTC(), array("FREQ"=>"MONTHLY","BYDAY"=>$patternData['weekInMonth'].$dayOfWeek,'UNTIL'=>$untilDateTime->format("Ymd")), $event->getTimezone()));
-        // as well as the until clause above, we set a limit here for safety and robustness.
-        $rruleunraveller->setResultsCountLimit(intval($daysInAdvance / 30) + 1);
-        $rruleunraveller->setIncludeOriginalEvent(false);
-        $rruleunraveller->addResultFilter(new ResultFilterAfterDateTime($app['timesource']->getDateTime()));
-        $rruleunraveller->process();
+        $start = clone $event->getStartAt();
+        $start->setTimezone(new \DateTimeZone($event->getTimezone()));
+        $end = clone $event->getEndAt();
+        $end->setTimezone(new \DateTimeZone($event->getTimezone()));
+        $rule        = new \Recurr\Rule('FREQ=MONTHLY;BYDAY='.$patternData['weekInMonth'].$dayOfWeek, $start, $end, $event->getTimezone());
+        $transformer = new \Recurr\Transformer\ArrayTransformer();
+        $constraint = new BetweenConstraint(\TimeSource::getDateTime(), $untilDateTime, true);
+
         $out = array();
         $currentMonthLong = $event->getStartAtInTimezone()->format('F');
         $currentMonthShort = $event->getStartAtInTimezone()->format('M');
-        foreach($rruleunraveller->getResults() as $result) {
+        foreach($transformer->transform($rule, $constraint) as $result) {
             $newEvent = new EventModel();
             $newEvent->setGroupId($event->getGroupId());
             $newEvent->setVenueId($event->getVenueId());
@@ -252,8 +261,12 @@ class EventRecurSetModel {
             $newEvent->setEventRecurSetId($this->id);
             $newEvent->setSummary($event->getSummary());
             $newEvent->setDescription($event->getDescription());
-            $newEvent->setStartAt($result->getStartInUTC());
-            $newEvent->setEndAt($result->getEndInUTC());
+            $start = $result->getStart();
+            $start->setTimezone(new \DateTimeZone('UTC'));
+            $newEvent->setStartAt($start);
+            $end = $result->getEnd();
+            $end->setTimezone(new \DateTimeZone('UTC'));
+            $newEvent->setEndAt($end);
             foreach($this->customFields as $customField) {
                 if ($event->hasCustomField($customField)) {
                     $newEvent->setCustomField($customField, $event->getCustomField($customField));
