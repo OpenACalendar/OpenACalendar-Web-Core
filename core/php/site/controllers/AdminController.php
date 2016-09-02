@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\UserGroupEditMetaDataModel;
 use models\UserGroupModel;
 use repositories\builders\UserGroupRepositoryBuilder;
 use repositories\SiteFeatureRepository;
@@ -113,8 +114,12 @@ class AdminController {
 
 			if ($form->isValid()) {
 
+                $userGroupEditMetaData = new UserGroupEditMetaDataModel();
+                $userGroupEditMetaData->setFromRequest($request);
+                $userGroupEditMetaData->setUserAccount($app['currentUser']);
+
 				$ugRepository = new UserGroupRepository($app);
-				$ugRepository->createForSite($app['currentSite'], $userGroup, $app['currentUser']);
+				$ugRepository->createForSiteWithMetaData($app['currentSite'], $userGroup, $userGroupEditMetaData);
 				return $app->redirect("/admin/usergroup/".$userGroup->getId());
 
 			}

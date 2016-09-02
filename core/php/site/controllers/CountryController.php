@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\AreaEditMetaDataModel;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use repositories\CountryRepository;
@@ -159,9 +160,13 @@ class CountryController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+                $areaEditMetaData = new AreaEditMetaDataModel();
+                $areaEditMetaData->setUserAccount($app['currentUser']);
+                $areaEditMetaData->setFromRequest($request);
+
 				$areaRepository = new AreaRepository($app);
-				$areaRepository->create($area, null, $app['currentSite'], $this->parameters['country'], $app['currentUser']);
+				$areaRepository->createWithMetaData($area, $app['currentSite'], $this->parameters['country'], $areaEditMetaData, null );
 				// don't need to call $areaRepository->buildCacheAreaHasParent($area); - there are no parents!
 				return $app->redirect("/area/".$area->getSlug());
 				

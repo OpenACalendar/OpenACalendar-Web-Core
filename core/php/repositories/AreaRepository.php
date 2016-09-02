@@ -40,11 +40,20 @@ class AreaRepository {
         $this->app = $app;
 		$this->areaDBAccess = new AreaDBAccess($app);
 	}
-	
+
+    /*
+    * @deprecated
+    */
 	public function create(AreaModel $area, AreaModel $parentArea = null, SiteModel $site, CountryModel $country, UserAccountModel $creator = null) {
+        $areaEditMetaDataModel = new AreaEditMetaDataModel();
+        $areaEditMetaDataModel->setUserAccount($creator);
+        $this->createWithMetaData($area, $site, $country, $areaEditMetaDataModel, $parentArea);
+    }
+
+	public function createWithMetaData(AreaModel $area, SiteModel $site, CountryModel $country, AreaEditMetaDataModel $areaEditMetaDataModel, AreaModel $parentArea = null) {
         $slugify = new Slugify($this->app);
 
-		$this->app['extensionhookrunner']->beforeAreaSave($area,$creator);
+		$this->app['extensionhookrunner']->beforeAreaSave($area,$areaEditMetaDataModel->getUserAccount());
 
 		try {
             $this->app['db']->beginTransaction();
@@ -77,8 +86,8 @@ class AreaRepository {
 			$data = $stat->fetch();
 			$area->setId($data['id']);
 			
-			$stat = $this->app['db']->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_new, is_deleted, min_lat, max_lat, min_lng, max_lng) VALUES ".
-					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at,'1','0', :min_lat, :max_lat, :min_lng, :max_lng)");
+			$stat = $this->app['db']->prepare("INSERT INTO area_history (area_id,  title,description,country_id,parent_area_id,user_account_id  , created_at, approved_at, is_new, is_deleted, min_lat, max_lat, min_lng, max_lng, from_ip) VALUES ".
+					"(:area_id,  :title,:description,:country_id,:parent_area_id,:user_account_id, :created_at,:approved_at,'1','0', :min_lat, :max_lat, :min_lng, :max_lng, :from_ip)");
 			$stat->execute(array(
 					'area_id'=>$area->getId(),
 					'title'=>substr($area->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -89,9 +98,10 @@ class AreaRepository {
                     'max_lat' => $area->getMaxLat(),
                     'min_lng' => $area->getMinLng(),
                     'max_lng' => $area->getMaxLng(),
-					'user_account_id'=>($creator ? $creator->getId() : null),
+					'user_account_id'=>($areaEditMetaDataModel->getUserAccount() ? $areaEditMetaDataModel->getUserAccount()->getId() : null),
 					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
+                    'from_ip' => $areaEditMetaDataModel->getIp(),
 				));
 
             $this->app['db']->commit();

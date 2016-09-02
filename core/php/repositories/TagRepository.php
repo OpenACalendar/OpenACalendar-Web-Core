@@ -34,8 +34,18 @@ class TagRepository {
 		$this->tagDBAccess = new TagDBAccess($app);
 	}
 
-	
+
+    /*
+    * @deprecated
+    */
 	public function create(TagModel $tag, SiteModel $site, UserAccountModel $creator) {
+        $tagEditMetaDataModel = new TagEditMetaDataModel();
+        $tagEditMetaDataModel->setUserAccount($creator);
+        $this->createWithMetaData($tag, $site, $tagEditMetaDataModel);
+
+    }
+
+	public function createWithMetaData(TagModel $tag, SiteModel $site, TagEditMetaDataModel $tagEditMetaDataModel) {
         $slugify = new Slugify($this->app);
 		try {
 			$this->app['db']->beginTransaction();
@@ -59,15 +69,16 @@ class TagRepository {
 			$data = $stat->fetch();
 			$tag->setId($data['id']);
 			
-			$stat = $this->app['db']->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_new, is_deleted) VALUES ".
-					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1', '0')");
+			$stat = $this->app['db']->prepare("INSERT INTO tag_history (tag_id, title, description, user_account_id  , created_at, approved_at, is_new, is_deleted, from_ip) VALUES ".
+					"(:tag_id, :title, :description, :user_account_id  , :created_at, :approved_at, '1', '0', :from_ip)");
 			$stat->execute(array(
 					'tag_id'=>$tag->getId(),
 					'title'=>substr($tag->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$tag->getDescription(),
-					'user_account_id'=>$creator->getId(),				
+					'user_account_id'=> ($tagEditMetaDataModel->getUserAccount() ? $tagEditMetaDataModel->getUserAccount()->getId() : null),
 					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
+                    'from_ip' => $tagEditMetaDataModel->getIp(),
 				));
 						
 			$this->app['db']->commit();

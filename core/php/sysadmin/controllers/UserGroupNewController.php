@@ -2,6 +2,7 @@
 
 namespace sysadmin\controllers;
 
+use models\UserGroupEditMetaDataModel;
 use models\UserGroupModel;
 use repositories\builders\UserAccountRepositoryBuilder;
 use repositories\UserPermissionsRepository;
@@ -33,8 +34,12 @@ class UserGroupNewController {
 
 			if ($form->isValid()) {
 
+                $userGroupEditMetaDataModel = new UserGroupEditMetaDataModel();
+                $userGroupEditMetaDataModel->setUserAccount($app['currentUser']);
+                $userGroupEditMetaDataModel->setFromRequest($request);
+
 				$ugRepository = new UserGroupRepository($app);
-				$ugRepository->createForIndex($userGroup, $app['currentUser']);
+				$ugRepository->createForIndexWithMetaData($userGroup, $userGroupEditMetaDataModel);
 				return $app->redirect("/sysadmin/usergroup/".$userGroup->getId());
 
 			}

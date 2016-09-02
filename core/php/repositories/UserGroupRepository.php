@@ -37,15 +37,24 @@ class UserGroupRepository {
 	}
 
 
+    /*
+    * @deprecated
+    */
 	public function createForSite(SiteModel $site, UserGroupModel $userGroupModel, UserAccountModel $userAccountModel=null, $initialUserPermissions=array(), $initialUsers=array()) {
+        $userGroupEditMetaDataModel = new UserGroupEditMetaDataModel();
+        $userGroupEditMetaDataModel->setUserAccount($userAccountModel);
+        $this->createForSiteWithMetaData($site, $userGroupModel, $userGroupEditMetaDataModel, $initialUserPermissions, $initialUsers);
+    }
+
+	public function createForSiteWithMetaData(SiteModel $site, UserGroupModel $userGroupModel, UserGroupEditMetaDataModel $userGroupEditMetaDataModel ,  $initialUserPermissions=array(), $initialUsers=array()) {
 
 
 		$inTransaction = $this->app['db']->inTransaction();
 
 		$statInsertUserGroupInfo = $this->app['db']->prepare("INSERT INTO user_group_information (title,description,is_in_index,is_includes_anonymous,is_includes_users,is_includes_verified_users,created_at) ".
 			"VALUES (:title,:description,'0',:is_includes_anonymous,:is_includes_users,:is_includes_verified_users,:created_at) RETURNING id");
-		$statInsertUserGroupHistory = $this->app['db']->prepare("INSERT INTO user_group_history (user_group_id,title,description,is_in_index,is_includes_anonymous,is_includes_users,is_includes_verified_users,created_at,user_account_id) ".
-			"VALUES (:user_group_id,:title,:description,'0',:is_includes_anonymous,:is_includes_users,:is_includes_verified_users,:created_at,:user_account_id)");
+		$statInsertUserGroupHistory = $this->app['db']->prepare("INSERT INTO user_group_history (user_group_id,title,description,is_in_index,is_includes_anonymous,is_includes_users,is_includes_verified_users,created_at,user_account_id, from_ip) ".
+			"VALUES (:user_group_id,:title,:description,'0',:is_includes_anonymous,:is_includes_users,:is_includes_verified_users,:created_at,:user_account_id, :from_ip)");
 
 		$statInsertUserGroupInSite = $this->app['db']->prepare("INSERT INTO user_group_in_site (user_group_id,site_id,added_at,added_by_user_account_id) ".
 			"VALUES (:user_group_id,:site_id,:added_at,:added_by_user_account_id)");
@@ -77,14 +86,15 @@ class UserGroupRepository {
 				"is_includes_users"=> $userGroupModel->getIsIncludesUsers() ? "1" : "0",
 				"is_includes_verified_users"=> $userGroupModel->getIsIncludesVerifiedUsers() ? "1" : "0",
 				"created_at"=>$this->app['timesource']->getFormattedForDataBase(),
-				"user_account_id"=>($userAccountModel ? $userAccountModel->getId() : null),
+				"user_account_id"=>($userGroupEditMetaDataModel->getUserAccount() ? $userGroupEditMetaDataModel->getUserAccount()->getId() : null),
+                'from_ip' => $userGroupEditMetaDataModel->getIp(),
 			));
 
 			$statInsertUserGroupInSite->execute(array(
 				"user_group_id"=>$userGroupModel->getId(),
 				"site_id"=>$site->getId(),
 				"added_at"=>$this->app['timesource']->getFormattedForDataBase(),
-				"added_by_user_account_id"=>($userAccountModel ? $userAccountModel->getId() : null),
+				"added_by_user_account_id"=>($userGroupEditMetaDataModel->getUserAccount() ? $userGroupEditMetaDataModel->getUserAccount()->getId() : null),
 			));
 
 			// Permissions
@@ -95,7 +105,7 @@ class UserGroupRepository {
 						"extension_id"=>$initialUserPermission[0],
 						"permission_key"=>$initialUserPermission[1],
 						"added_at"=>$this->app['timesource']->getFormattedForDataBase(),
-						"added_by_user_account_id"=>($userAccountModel ? $userAccountModel->getId() : null),
+						"added_by_user_account_id"=>($userGroupEditMetaDataModel->getUserAccount() ? $userGroupEditMetaDataModel->getUserAccount()->getId() : null),
 					));
 				}
 			}
@@ -106,7 +116,7 @@ class UserGroupRepository {
 						"user_group_id"=>$userGroupModel->getId(),
 						"user_account_id"=>$initialUser->getId(),
 						"added_at"=>$this->app['timesource']->getFormattedForDataBase(),
-						"added_by_user_account_id"=>($userAccountModel ? $userAccountModel->getId() : null),
+						"added_by_user_account_id"=>($userGroupEditMetaDataModel->getUserAccount() ? $userGroupEditMetaDataModel->getUserAccount()->getId() : null),
 				));
 			}
 
@@ -117,15 +127,24 @@ class UserGroupRepository {
 
 	}
 
-	public function createForIndex(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel=null) {
+    /*
+    * @deprecated
+    */
+    public function createForIndex(UserGroupModel $userGroupModel, UserAccountModel $userAccountModel=null) {
+        $userGroupEditMetaDataModel = new UserGroupEditMetaDataModel();
+        $userGroupEditMetaDataModel->setUserAccount($userAccountModel);
+        $this->createForIndexWithMetaData($userGroupModel, $userGroupEditMetaDataModel);
+    }
+
+	public function createForIndexWithMetaData(UserGroupModel $userGroupModel, UserGroupEditMetaDataModel $userGroupEditMetaDataModel) {
 
 
 		$inTransaction = $this->app['db']->inTransaction();
 
 		$statInsertUserGroupInfo = $this->app['db']->prepare("INSERT INTO user_group_information (title,description,is_in_index,is_includes_anonymous,is_includes_users,is_includes_verified_users,created_at) ".
 			"VALUES (:title,:description,'1',:is_includes_anonymous,:is_includes_users,:is_includes_verified_users,:created_at) RETURNING id");
-		$statInsertUserGroupHistory = $this->app['db']->prepare("INSERT INTO user_group_history (user_group_id,title,description,is_in_index,is_includes_anonymous,is_includes_users,is_includes_verified_users,created_at,user_account_id) ".
-			"VALUES (:user_group_id,:title,:description,'1',:is_includes_anonymous,:is_includes_users,:is_includes_verified_users,:created_at,:user_account_id)");
+		$statInsertUserGroupHistory = $this->app['db']->prepare("INSERT INTO user_group_history (user_group_id,title,description,is_in_index,is_includes_anonymous,is_includes_users,is_includes_verified_users,created_at,user_account_id, from_ip) ".
+			"VALUES (:user_group_id,:title,:description,'1',:is_includes_anonymous,:is_includes_users,:is_includes_verified_users,:created_at,:user_account_id, :from_ip)");
 
 		try {
 			if (!$inTransaction) $this->app['db']->beginTransaction();
@@ -150,7 +169,8 @@ class UserGroupRepository {
 				"is_includes_users"=> $userGroupModel->getIsIncludesUsers() ? "1" : "0",
 				"is_includes_verified_users"=> $userGroupModel->getIsIncludesVerifiedUsers() ? "1" : "0",
 				"created_at"=>$this->app['timesource']->getFormattedForDataBase(),
-				"user_account_id"=>($userAccountModel ? $userAccountModel->getId() : null),
+				"user_account_id"=>($userGroupEditMetaDataModel->getUserAccount() ? $userGroupEditMetaDataModel->getUserAccount()->getId() : null),
+                'from_ip' => $userGroupEditMetaDataModel->getIp(),
 			));
 
 			if (!$inTransaction) $this->app['db']->commit();

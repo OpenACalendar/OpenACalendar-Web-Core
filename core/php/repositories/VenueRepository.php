@@ -83,8 +83,8 @@ class VenueRepository {
 			$data = $stat->fetch();
 			$venue->setId($data['id']);
 			
-			$stat = $this->app['db']->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new, is_deleted, edit_comment) VALUES ".
-					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1', '0', :edit_comment)");
+			$stat = $this->app['db']->prepare("INSERT INTO venue_history (venue_id, title,description,lat,lng, country_id,area_id,user_account_id  , created_at,approved_at,address,address_code, is_new, is_deleted, edit_comment, from_ip) VALUES ".
+					"(:venue_id,:title, :description, :lat, :lng,:country_id,:area_id,:user_account_id  , :created_at,:approved_at,:address,:address_code, '1', '0', :edit_comment, :from_ip)");
 			$stat->execute(array(
 					'venue_id'=>$venue->getId(),
 					'title'=>substr($venue->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -99,6 +99,7 @@ class VenueRepository {
 					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'edit_comment'=>$venueEditMetaDataModel->getEditComment(),
+                    'from_ip' => $venueEditMetaDataModel->getIp(),
 				));
 			$data = $stat->fetch();
 			

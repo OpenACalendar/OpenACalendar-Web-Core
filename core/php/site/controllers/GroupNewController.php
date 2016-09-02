@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\GroupEditMetaDataModel;
 use Silex\Application;
 use site\forms\GroupNewForm;
 use site\forms\GroupEditForm;
@@ -45,9 +46,13 @@ class GroupNewController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
-				$groupRepository = new GroupRepository($app);
-				$groupRepository->create($group, $app['currentSite'], $app['currentUser']);
+
+                $groupEditMetaDataModel = new GroupEditMetaDataModel();
+                $groupEditMetaDataModel->setUserAccount($app['currentUser']);
+                $groupEditMetaDataModel->setFromRequest($request);
+
+                $groupRepository = new GroupRepository($app);
+                $groupRepository->createWithMetaData($group, $app['currentSite'], $groupEditMetaDataModel);
 				
 				return $app->redirect("/group/".$group->getSlugForUrl());
 				

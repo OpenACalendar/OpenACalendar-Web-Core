@@ -34,7 +34,16 @@ class ImportRepository {
 		$this->importDBAccess = new ImportDBAccess($app);
 	}
 
-	public function create(ImportModel $importURL, SiteModel $site, UserAccountModel $creator) {
+    /*
+    * @deprecated
+    */
+    public function create(ImportModel $importURL, SiteModel $site, UserAccountModel $creator) {
+        $importEditMetaDataModel = new ImportEditMetaDataModel();
+        $importEditMetaDataModel->setUserAccount($creator);
+        $this->createWithMetaData($importURL, $site, $importEditMetaDataModel);
+    }
+
+	public function createWithMetaData(ImportModel $importURL, SiteModel $site, ImportEditMetaDataModel $importEditMetaDataModel) {
 
        $importURL->guessATitleIfMissing();
 
@@ -65,19 +74,20 @@ class ImportRepository {
 			$data = $stat->fetch();
 			$importURL->setId($data['id']);
 			
-			$stat = $this->app['db']->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, approved_at, is_new, is_manual_events_creation) VALUES ".
-					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id, :approved_at, '1', :is_manual_events_creation )");
+			$stat = $this->app['db']->prepare("INSERT INTO import_url_history (import_url_id, title, user_account_id  , created_at,group_id,is_enabled,country_id,area_id, approved_at, is_new, is_manual_events_creation, from_ip) VALUES ".
+					"(:curated_list_id, :title, :user_account_id  , :created_at, :group_id,:is_enabled,:country_id,:area_id, :approved_at, '1', :is_manual_events_creation, :from_ip )");
 			$stat->execute(array(
 					'curated_list_id'=>$importURL->getId(),
 					'title'=>substr($importURL->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'group_id'=>$importURL->getGroupId(),
 					'country_id'=>$importURL->getCountryId(),
 					'area_id'=>$importURL->getAreaId(),
-					'user_account_id'=>$creator->getId(),				
+					'user_account_id'=>($importEditMetaDataModel->getUserAccount() ? $importEditMetaDataModel->getUserAccount()->getId() : null),
 					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'is_enabled'=>$importURL->getIsEnabled()?1:0,
 					'is_manual_events_creation'=>$importURL->getIsManualEventsCreation()?1:0,
+                    'from_ip' => $importEditMetaDataModel->getIp(),
 				));
 			
 			

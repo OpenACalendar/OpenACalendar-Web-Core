@@ -33,8 +33,17 @@ class MediaRepository {
         $this->app = $app;
 	    $this->mediaDBAccess = new MediaDBAccess($app);
     }
-	
-	public function createFromFile(UploadedFile $newMedia, SiteModel $site, UserAccountModel $user, $title = null, $sourceText = null, $sourceURL = null) {
+
+    /*
+    * @deprecated
+    */
+    public function createFromFile(UploadedFile $newMedia, SiteModel $site, UserAccountModel $user, $title = null, $sourceText = null, $sourceURL = null) {
+        $mediaEditMetaDataModel = new MediaEditMetaDataModel();
+        $mediaEditMetaDataModel->setUserAccount($user);
+        $this->createFromFileWithMetaData($newMedia, $site, $mediaEditMetaDataModel, $title, $sourceText, $sourceURL);
+    }
+
+	public function createFromFileWithMetaData(UploadedFile $newMedia, SiteModel $site, MediaEditMetaDataModel $mediaEditMetaDataModel, $title = null, $sourceText = null, $sourceURL = null) {
 
 		if ($newMedia && in_array(strtolower($newMedia->guessExtension()), MediaModel::getAllowedImageExtensions())) {
 
@@ -46,7 +55,7 @@ class MediaRepository {
 			$media->setSourceUrl($sourceURL);
 			$media->setMd5(md5_file($newMedia->getRealPath()));
 
-			$this->create($media, $user);
+			$this->createWithMetaData($media, $mediaEditMetaDataModel);
 
 			$storeDirectory = $this->app['config']->fileStoreLocation.DIRECTORY_SEPARATOR."media";
 			$extension = strtolower($newMedia->guessExtension());
@@ -57,8 +66,17 @@ class MediaRepository {
 			
 		}
 	}
-	
-	public function create(MediaModel $media, UserAccountModel $owner) {
+
+    /*
+    * @deprecated
+    */
+    public function create(MediaModel $media, UserAccountModel $owner) {
+        $mediaEditMetaDataModel = new MediaEditMetaDataModel();
+        $mediaEditMetaDataModel->setUserAccount($owner);
+        $this->createWithMetaData($media, $mediaEditMetaDataModel);
+    }
+
+	public function createWithMetaData(MediaModel $media, MediaEditMetaDataModel $mediaEditMetaDataModel) {
 
 		$createdat = $this->app['timesource']->getFormattedForDataBase();
 		
@@ -76,7 +94,7 @@ class MediaRepository {
 					'site_id'=>$media->getSiteId(), 
 					'slug'=>$media->getSlug(), 
 					'storage_size'=>$media->getStorageSize(), 
-					'created_by_user_account_id'=> $owner->getId(), 
+					'created_by_user_account_id'=> $mediaEditMetaDataModel->getUserAccount()->getId(),
 					'created_at'=>  $createdat,
 					'title'=>substr($media->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'source_text'=>substr($media->getSourceText(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -86,8 +104,8 @@ class MediaRepository {
 			$data = $stat->fetch();
 			$media->setId($data['id']);
 
-			$stat = $this->app['db']->prepare("INSERT INTO media_history (media_id,title,title_changed,source_text,source_text_changed,source_url,source_url_changed,user_account_id,created_at) ".
-				"VALUES (:media_id,:title,:title_changed,:source_text,:source_text_changed,:source_url,:source_url_changed,:user_account_id,:created_at)");
+			$stat = $this->app['db']->prepare("INSERT INTO media_history (media_id,title,title_changed,source_text,source_text_changed,source_url,source_url_changed,user_account_id,created_at,from_ip) ".
+				"VALUES (:media_id,:title,:title_changed,:source_text,:source_text_changed,:source_url,:source_url_changed,:user_account_id,:created_at,:from_ip)");
 			$stat->execute(array(
 				'media_id'=>$media->getId(),
 				'title'=>substr($media->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
@@ -96,8 +114,9 @@ class MediaRepository {
 				'source_text_changed'=>0,
 				'source_url'=>substr($media->getSourceUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 				'source_url_changed'=>0,
-				'user_account_id'=>$owner->getId(),
+				'user_account_id'=>$mediaEditMetaDataModel->getUserAccount()->getId(),
 				'created_at'=>$createdat,
+                'from_ip' => $mediaEditMetaDataModel->getIp(),
 			));
 
 			$this->app['db']->commit();

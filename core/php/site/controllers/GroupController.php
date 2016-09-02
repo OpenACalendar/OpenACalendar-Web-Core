@@ -5,6 +5,8 @@ namespace site\controllers;
 use import\ImportURLRecommendationDataToCheck;
 use models\EventEditMetaDataModel;
 use models\GroupEditMetaDataModel;
+use models\ImportEditMetaDataModel;
+use models\MediaEditMetaDataModel;
 use repositories\builders\TagRepositoryBuilder;
 use repositories\TagRepository;
 use Silex\Application;
@@ -222,8 +224,12 @@ class GroupController {
 
 				if ($form->isValid() && $form['media']->getData()) {
 
+                    $mediaEditMetaDataModel = new MediaEditMetaDataModel();
+                    $mediaEditMetaDataModel->setUserAccount($app['currentUser']);
+                    $mediaEditMetaDataModel->setFromRequest($request);
+
 					$mediaRepository = new MediaRepository($app);
-					$media = $mediaRepository->createFromFile($form['media']->getData(), $app['currentSite'], $app['currentUser'],
+					$media = $mediaRepository->createFromFileWithMetaData($form['media']->getData(), $app['currentSite'], $mediaEditMetaDataModel ,
 							$form['title']->getData(),$form['source_text']->getData(),$form['source_url']->getData());
 					
 					if ($media) {
@@ -559,8 +565,12 @@ class GroupController {
 					}
 				}
 				$importurl->setAreaId($area ? $area->getId() : null);
-				
-				$importRepository->create($importurl, $app['currentSite'], $app['currentUser']);
+
+                $importEditMetaDataModel = new ImportEditMetaDataModel();
+                $importEditMetaDataModel->setUserAccount($app['currentUser']);
+                $importEditMetaDataModel->setFromRequest($request);
+
+				$importRepository->createWithMetaData($importurl, $app['currentSite'], $importEditMetaDataModel);
 				
 				return $app->redirect("/importurl/".$importurl->getSlug());
 				

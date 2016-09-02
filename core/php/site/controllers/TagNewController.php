@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use models\TagEditMetaDataModel;
 use Silex\Application;
 use site\forms\TagNewForm;
 use site\forms\TagEditForm;
@@ -35,9 +36,13 @@ class TagNewController {
 			$form->bind($request);
 
 			if ($form->isValid()) {
-				
+
+                $tagEditMetaDataModel = new TagEditMetaDataModel();
+                $tagEditMetaDataModel->setUserAccount($app['currentUser']);
+                $tagEditMetaDataModel->setFromRequest($request);
+
 				$tagRepository = new TagRepository($app);
-				$tagRepository->create($tag, $app['currentSite'], $app['currentUser']);
+				$tagRepository->createWithMetaData($tag, $app['currentSite'], $tagEditMetaDataModel);
 				
 				return $app->redirect("/tag/".$tag->getSlugForUrl());
 				

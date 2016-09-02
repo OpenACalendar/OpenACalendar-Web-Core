@@ -37,10 +37,19 @@ class GroupRepository {
 		$this->groupDBAccess = new GroupDBAccess($app);
 	}
 
-	
+
+    /*
+    * @deprecated
+    */
 	public function create(GroupModel $group, SiteModel $site, UserAccountModel $creator) {
+        $groupEditMetaDataModel = new GroupEditMetaDataModel();
+        $groupEditMetaDataModel->setUserAccount($creator);
+        $this->createWithMetaData($group, $site, $groupEditMetaDataModel);
+    }
+
+	public function createWithMetaData(GroupModel $group, SiteModel $site, GroupEditMetaDataModel $groupEditMetaDataModel) {
         $slugify = new Slugify($this->app);
-		$this->app['extensionhookrunner']->beforeGroupSave($group,$creator);
+		$this->app['extensionhookrunner']->beforeGroupSave($group,$groupEditMetaDataModel->getUserAccount());
 
 		try {
 			$this->app['db']->beginTransaction();
@@ -66,22 +75,23 @@ class GroupRepository {
 			$data = $stat->fetch();
 			$group->setId($data['id']);
 			
-			$stat = $this->app['db']->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, approved_at, twitter_username, is_new) VALUES ".
-					"(:group_id, :title, :url, :description, :user_account_id  , :created_at, :approved_at, :twitter_username, '1')");
+			$stat = $this->app['db']->prepare("INSERT INTO group_history (group_id, title, url, description, user_account_id  , created_at, approved_at, twitter_username, is_new, from_ip) VALUES ".
+					"(:group_id, :title, :url, :description, :user_account_id  , :created_at, :approved_at, :twitter_username, '1', :from_ip)");
 			$stat->execute(array(
 					'group_id'=>$group->getId(),
 					'title'=>substr($group->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'url'=>substr($group->getUrl(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'twitter_username'=>substr($group->getTwitterUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
 					'description'=>$group->getDescription(),
-					'user_account_id'=>$creator->getId(),				
+					'user_account_id'=>$groupEditMetaDataModel->getUserAccount()->getId(),
 					'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 					'approved_at'=>$this->app['timesource']->getFormattedForDataBase(),
+                    'from_ip'=>$groupEditMetaDataModel->getIp(),
 				));
 			$data = $stat->fetch();
 			
 			$ufgr = new UserWatchesGroupRepository($this->app);
-			$ufgr->startUserWatchingGroupIfNotWatchedBefore($creator, $group);
+			$ufgr->startUserWatchingGroupIfNotWatchedBefore($groupEditMetaDataModel->getUserAccount(), $group);
 
             $this->app['db']->commit();
 
