@@ -235,7 +235,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
                 $userAccountModel->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey().'>');
 
 			$this->logVerbose("Sending ...");
-			if (!$this->app['config']->isDebug) {
+			if ($this->app['config']->actuallySendEmail) {
 				$this->app['mailer']->send($message);
 			}
 			$userNotificationRepo->markEmailed($userNotification);

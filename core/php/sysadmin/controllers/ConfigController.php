@@ -68,8 +68,8 @@ class ConfigController {
 	}
 
 
-	function smtp(Request $request, Application $app) {
-		return $app['twig']->render('sysadmin/config/index.smtp.html.twig', array(
+	function email(Request $request, Application $app) {
+		return $app['twig']->render('sysadmin/config/index.email.html.twig', array(
 				'configCheck'=>new \ConfigCheck($app['config']),
 			));
 	}

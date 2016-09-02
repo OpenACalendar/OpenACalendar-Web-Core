@@ -13,6 +13,12 @@
 
 	<table class="oneData">
 		<tr>
+			<th>actuallySendEmail</th>
+			<td>{% if config.actuallySendEmail %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'actuallySendEmail'} %}</td>
+		</tr>
+
+		<tr>
 			<th>SMTPPort</th>
 			<td>{{ config.SMTPPort }}
 				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'SMTPPort'} %}

@@ -13,6 +13,7 @@
  * Is in Debug mode?
  */
 $CONFIG->isDebug = true;
+$CONFIG->actuallySendEmail = false;
 
 /**
  * DB details.

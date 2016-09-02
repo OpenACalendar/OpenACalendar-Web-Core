@@ -1,6 +1,7 @@
 <?php
 
 $CONFIG->isDebug = true;
+$CONFIG->actuallySendEmail = false;
 
 $CONFIG->databaseName = 'openacalendartest';
 $CONFIG->databaseHost = 'localhost';

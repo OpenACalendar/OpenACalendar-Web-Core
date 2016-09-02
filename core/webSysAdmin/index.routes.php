@@ -221,7 +221,7 @@ $app->match('/sysadmin/config/newSites', 'sysadmin\controllers\ConfigController:
 $app->match('/sysadmin/config/media', 'sysadmin\controllers\ConfigController::media');
 $app->match('/sysadmin/config/urls', 'sysadmin\controllers\ConfigController::urls');
 $app->match('/sysadmin/config/sysadminUI', 'sysadmin\controllers\ConfigController::sysadminUI');
-$app->match('/sysadmin/config/smtp', 'sysadmin\controllers\ConfigController::smtp');
+$app->match('/sysadmin/config/email', 'sysadmin\controllers\ConfigController::email');
 $app->match('/sysadmin/config/logging', 'sysadmin\controllers\ConfigController::logging');
 $app->match('/sysadmin/config/externalAnalytics', 'sysadmin\controllers\ConfigController::externalAnalytics');
 $app->match('/sysadmin/config/import', 'sysadmin\controllers\ConfigController::import');

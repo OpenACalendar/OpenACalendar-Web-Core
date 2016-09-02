@@ -147,7 +147,7 @@ class RunImportsTask extends \BaseTask  {
                         }
                         $message->addPart($messageHTML,'text/html');
 
-                        if (!$this->app['config']->isDebug) {
+                        if ($this->app['config']->actuallySendEmail) {
                             $this->app['mailer']->send($message);
                         }
                         $userNotificationRepo->markEmailed($userNotification);
@@ -204,7 +204,7 @@ class RunImportsTask extends \BaseTask  {
                         }
                         $message->addPart($messageHTML,'text/html');
 
-                        if (!$this->app['config']->isDebug) {
+                        if ($this->app['config']->actuallySendEmail) {
                             $this->app['mailer']->send($message);
                         }
                         $userNotificationRepo->markEmailed($userNotification);

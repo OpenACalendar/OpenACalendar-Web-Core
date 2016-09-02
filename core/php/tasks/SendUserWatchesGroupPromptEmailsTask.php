@@ -166,7 +166,7 @@ class SendUserWatchesGroupPromptEmailsTask  extends \BaseTask  {
                             $user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey().'>');
 
 						$this->logVerbose( " ... sending");
-						if (!$this->app['config']->isDebug) {
+						if ($this->app['config']->actuallySendEmail) {
 							$this->app['mailer']->send($message);
 						}
 						

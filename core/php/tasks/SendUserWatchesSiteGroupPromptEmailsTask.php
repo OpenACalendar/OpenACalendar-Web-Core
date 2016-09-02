@@ -156,7 +156,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 
 
 								$this->logVerbose(" ... sending" );
-								if (!$this->app['config']->isDebug) {
+								if ($this->app['config']->actuallySendEmail) {
 									$this->app['mailer']->send($message);
 								}
 								

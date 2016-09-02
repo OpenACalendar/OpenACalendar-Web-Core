@@ -83,7 +83,9 @@ class UserAccountResetModel {
 		if ($CONFIG->isDebug) file_put_contents('/tmp/userResetEmail.html', $messageHTML);
 		$message->addPart($messageHTML,'text/html');
 
-		if (!$CONFIG->isDebug) $app['mailer']->send($message);
+        if ($CONFIG->actuallySendEmail) {
+            $app['mailer']->send($message);
+        }
 	}
 }
 
