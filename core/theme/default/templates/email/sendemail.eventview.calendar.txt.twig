@@ -1,18 +1,4 @@
 {#
- # @package Core
- # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
- # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
- # @author James Baster <james@jarofgreen.co.uk>
+ # This feature removed
+ # https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/682
  #}
-{% for d in data %}
-
-{% if d.dayOfWeek == 1 %}Mon{% elseif d.dayOfWeek == 2 %}Tue{% elseif d.dayOfWeek == 3 %}Wed{% elseif d.dayOfWeek == 4 %}Thu{% elseif d.dayOfWeek == 5 %}Fri{% elseif d.dayOfWeek == 6 %}SAT{% elseif d.dayOfWeek == 7 %}SUN{% endif %} {{ d.display }}
-{% for event in d.eventsContinuing %}
-- {{ event.summaryDisplay }}
-{% endfor %}
-{% for event in d.events %}
-- {{ event.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone ) }} {{ event.summaryDisplay }}
-{% endfor %}
-
-{% endfor %}

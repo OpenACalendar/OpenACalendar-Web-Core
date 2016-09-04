@@ -1,19 +1,4 @@
 {#
- # @package Core
- # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
- # @license http://ican.openacalendar.org/license.html 3-clause BSD
- # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
- # @author James Baster <james@jarofgreen.co.uk>
+ # This feature removed
+ # https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/682
  #}
-{% extends 'email/email.txt.twig' %}
-
-{% block content %}
-	
-{{ sendemail.introduction | wordwrap | raw }}
-
-{{ sendemail.eventText | raw }}
-
-See more events at 
-{{ config.getWebSiteDomainSecure(currentSite.slug) }}
-
-{% endblock %}
