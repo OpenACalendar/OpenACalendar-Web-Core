@@ -4,6 +4,7 @@
 namespace repositories;
 
 use dbaccess\SiteDBAccess;
+use models\SiteEditMetaDataModel;
 use models\SiteModel;
 use models\UserAccountModel;
 use models\SiteQuotaModel;
@@ -34,7 +35,20 @@ class SiteRepository {
 		$this->siteDBAccess = new SiteDBAccess($app);
 	}
 
+
+    /*
+    * @deprecated
+    */
 	public function create(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota, $canAnyUserVerifiedEdit = false) {
+        $siteEditMetaDataModel = new SiteEditMetaDataModel();
+        $siteEditMetaDataModel->setUserAccount($owner);
+        $this->createWithMetaData($site, $owner, $countries, $siteQuota, $siteEditMetaDataModel, $canAnyUserVerifiedEdit);
+    }
+
+    /**
+     * @param UserAccountModel $owner Owner is passed as a separate param from the user in $siteEditMetaDataModel because an admin could be creating a calendar for someone else to own.
+     */
+    public function createWithMetaData(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota, SiteEditMetaDataModel $siteEditMetaDataModel, $canAnyUserVerifiedEdit = false) {
 		$createdat = $this->app['timesource']->getFormattedForDataBase();
 
 		if (!$site->isSlugValid($site->getSlug(), $this->app['config'])) {
@@ -85,13 +99,13 @@ class SiteRepository {
 			
 			$stat = $this->app['db']->prepare("INSERT INTO site_history (site_id, user_account_id, ".
 						"title, slug, slug_canonical, created_at,is_listed_in_index,is_web_robots_allowed, ".
-						" prompt_emails_days_in_advance, is_new ) ".
+						" prompt_emails_days_in_advance, is_new, from_ip ) ".
 					"VALUES (:site_id, :user_account_id, :title, ".
 						":slug, :slug_canonical,  :created_at, :is_listed_in_index,:is_web_robots_allowed, ".
-						" :prompt_emails_days_in_advance, '1' )");
+						" :prompt_emails_days_in_advance, '1', :from_ip )");
 			$stat->execute(array(
 					'site_id'=>$site->getId(),
-					'user_account_id'=>$owner->getId(),
+					'user_account_id'=>($siteEditMetaDataModel->getUserAccount() ? $siteEditMetaDataModel->getUserAccount()->getId() : null),
 					'title'=>substr($site->getTitle(),0,VARCHAR_COLUMN_LENGTH_USED), 
 					'slug'=> $site->getSlug(), 
 					'slug_canonical'=>SiteModel::makeCanonicalSlug($site->getSlug()), 
@@ -99,6 +113,7 @@ class SiteRepository {
 					'is_listed_in_index'=>$site->getIsListedInIndex() ? 1 : 0,
 					'is_web_robots_allowed'=>$site->getIsWebRobotsAllowed() ? 1 : 0,
 					'prompt_emails_days_in_advance'=>$site->getPromptEmailsDaysInAdvance(),
+                    'from_ip' => $siteEditMetaDataModel->getIp(),
 				));
 
 

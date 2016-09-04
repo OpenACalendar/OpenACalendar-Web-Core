@@ -2,6 +2,7 @@
 
 namespace index\controllers;
 
+use models\SiteEditMetaDataModel;
 use Silex\Application;
 use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,14 +97,19 @@ class IndexController {
 
 				$countryRepository = new CountryRepository($app);
 				$siteQuotaRepository = new SiteQuotaRepository($app);
-				
-				$siteRepository->create(
-							$site,
-							$app['currentUser'],
-							array( $countryRepository->loadByTwoCharCode("GB") ), 
-							$siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode),
-							$isAllUsersEditors
-						);
+
+                $siteEditMetaDataModel = new SiteEditMetaDataModel();
+                $siteEditMetaDataModel->setUserAccount($app['currentUser']);
+                $siteEditMetaDataModel->setFromRequest($request);
+
+                $siteRepository->createWithMetaData(
+                    $site,
+                    $app['currentUser'],
+                    array( $countryRepository->loadByTwoCharCode("GB") ),
+                    $siteQuotaRepository->loadByCode($app['config']->newSiteHasQuotaCode),
+                    $siteEditMetaDataModel,
+                    $isAllUsersEditors
+                );
 
 				if ($app['config']->hasSSL){
 					return $app->redirect("https://".$site->getSlug().".".$app['config']->webSiteDomainSSL);
