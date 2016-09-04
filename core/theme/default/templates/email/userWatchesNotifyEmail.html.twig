@@ -54,7 +54,7 @@
 	{%  endfor %}
 
 	<p>Thanks,<br>
-	{{ config.installTitle }}</p>
+	{{ currentSite.title }}{% if not config.isSingleSiteMode %} {{ config.installTitle }}{%  endif %}</p>
 		
 	<p>ps. To <a href="{{ unsubscribeURL }}">change which emails you get, click here</a>.</p>
 

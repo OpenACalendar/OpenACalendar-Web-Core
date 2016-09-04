@@ -32,7 +32,7 @@
 	<p>If this source is no longer correct or no longer useful, you can just ignore this email.</p>
 
 	<p>Thanks,<br>
-	{{ currentSite.title }}</p>
+	{{ currentSite.title }}{% if not config.isSingleSiteMode %} {{ config.installTitle }}{%  endif %}</p>
 		
 
 	<p>ps.  

@@ -30,6 +30,6 @@ To change which emails you get:
 
 
 Thanks,
-{{ config.installTitle }}
+{{ currentSite.title }}{% if not config.isSingleSiteMode %} {{ config.installTitle }}{%  endif %}
 
 {% endblock %}

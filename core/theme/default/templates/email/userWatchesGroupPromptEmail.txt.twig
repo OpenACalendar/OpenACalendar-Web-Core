@@ -29,6 +29,6 @@ To change which emails you get:
 {{ unsubscribeURL }}
 
 Thanks,
-{{ config.installTitle }}
+{{ currentSite.title }}{% if not config.isSingleSiteMode %} {{ config.installTitle }}{%  endif %}
 
 {% endblock %}
