@@ -5,6 +5,8 @@ namespace site\controllers;
 use models\EventEditMetaDataModel;
 use models\NewEventDraftModel;
 use repositories\AreaRepository;
+use repositories\CountryInSiteRepository;
+use repositories\CountryRepository;
 use repositories\NewEventDraftRepository;
 use Silex\Application;
 use site\controllers\newevent\NewEventPreview;
@@ -92,6 +94,18 @@ class EventNewController {
 				$newEventDraft->setDetailsValue('group.title',$group->getTitle());
 			}
 		}
+
+        // check for incoming country
+        if ($request->query->get('country_id')) {
+            $cr = new CountryRepository($app);
+            $country = $cr->loadByTwoCharCode($request->query->get('country_id'));
+            if ($country) {
+                $cisr = new CountryInSiteRepository($app);
+                if ($cisr->isCountryInSite($country, $app['currentSite'])) {
+                    $incomingData['event.country_id'] = $country->getId();
+                }
+            }
+        }
 
 		/////////////////////////////////////////////////////// Check Permissions and Prompt IF NEEDED
 

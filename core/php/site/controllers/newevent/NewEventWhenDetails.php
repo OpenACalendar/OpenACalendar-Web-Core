@@ -3,6 +3,10 @@
 namespace site\controllers\newevent;
 use JMBTechnologyLimited\ParseDateTimeRangeString\ParseDateTimeRangeString;
 use models\EventModel;
+use repositories\builders\CountryRepositoryBuilder;
+use repositories\CountryInSiteRepository;
+use repositories\CountryRepository;
+use Silex\Application;
 use site\forms\EventNewWhenDetailsForm;
 
 /**
@@ -59,12 +63,44 @@ class NewEventWhenDetails extends BaseNewEvent
 			$timezone = isset($_POST['EventNewWhenDetailsForm']) && isset($_POST['EventNewWhenDetailsForm']['timezone']) ? $_POST['EventNewWhenDetailsForm']['timezone'] : $this->application['currentTimeZone'];
 
 
-			$this->ourForm = new EventNewWhenDetailsForm($timezone, $this->application, $this->draftEvent);
+			$this->ourForm = new EventNewWhenDetailsForm($this->getDefaultCountry($this->application), $timezone, $this->application, $this->draftEvent);
 			$this->form = $this->application['form.factory']->create($this->ourForm);
 		}
 		return array();
 
 	}
+
+
+    /**
+     * @return \models\CountryModel
+     */
+    protected function getDefaultCountry(Application $app) {
+
+        // Option 1 - Was it set as incoming?
+        if ($this->draftEvent->getDetailsValue('incoming.event.country_id')) {
+            $cr = new CountryRepository($app);
+            $country = $cr->loadById($this->draftEvent->getDetailsValue('incoming.event.country_id'));
+            if ($country) {
+                $cisr = new CountryInSiteRepository($app);
+                if ($cisr->isCountryInSite($country, $app['currentSite'])) {
+                    return $country;
+                }
+            }
+        }
+
+        // Option 2 - work it out from Timezone?
+        $crb = new CountryRepositoryBuilder($app);
+        $crb->setSiteIn($app['currentSite']);
+        foreach($crb->fetchAll() as $country) {
+            if (in_array($app['currentTimeZone'], $country->getTimezonesAsList())) {
+                return $country;
+            }
+        }
+
+        // This should never happen????
+        return null;
+
+    }
 
 	protected $currentStart;
 	protected $currentEnd;

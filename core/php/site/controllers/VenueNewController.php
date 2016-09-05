@@ -4,6 +4,8 @@ namespace site\controllers;
 
 use actions\GetAreaForLatLng;
 use models\VenueEditMetaDataModel;
+use repositories\builders\CountryRepositoryBuilder;
+use repositories\CountryInSiteRepository;
 use Silex\Application;
 use site\forms\VenueNewForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +68,7 @@ class VenueNewController {
 		
 		
 		
-		$form = $app['form.factory']->create(new VenueNewForm($app['currentTimeZone'], $app), $venue);
+		$form = $app['form.factory']->create(new VenueNewForm($app, $this->getDefaultCountry($request, $app)), $venue);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -124,8 +126,37 @@ class VenueNewController {
 		
 		return $app['twig']->render('site/venuenew/new.html.twig', $this->parameters);		
 	}
-	
-	
+
+    /**
+     * @return \models\CountryModel
+     */
+    protected function getDefaultCountry(Request $request, Application $app) {
+
+        // Option 1 - is it passed in URL?
+        if ($request->query->get('country_id')) {
+            $cr = new CountryRepository($app);
+            $country = $cr->loadByTwoCharCode($request->query->get('country_id'));
+            if ($country) {
+                $cisr = new CountryInSiteRepository($app);
+                if ($cisr->isCountryInSite($country, $app['currentSite'])) {
+                    return $country;
+                }
+            }
+        }
+
+        // Option 2 - work it out from Timezone?
+        $crb = new CountryRepositoryBuilder($app);
+        $crb->setSiteIn($app['currentSite']);
+        foreach($crb->fetchAll() as $country) {
+            if (in_array($app['currentTimeZone'], $country->getTimezonesAsList())) {
+                return $country;
+            }
+        }
+
+        // This should never happen????
+        return null;
+
+    }
 	
 	function newVenueJSON(Request $request, Application $app) {		
 		$venue = new VenueModel();

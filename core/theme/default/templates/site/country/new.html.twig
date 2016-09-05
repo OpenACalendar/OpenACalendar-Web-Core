@@ -20,7 +20,8 @@
 	{% if currentUserActions.has("org.openacalendar","eventNew") %}
 		<p>Is this an event?</p>
 
-		<form method="get" action="/event/new?country={{  country.twoCharCode }}">
+		<form method="get" action="/event/new">
+			<input type="hidden" name="country_id" value="{{ country.twoCharCode }}">
 			<div class="bigSubmitActionWrapper"><input type="submit"  value="New Event" class="bigSubmitAction"/></div>
 			<div class="afterBigSubmitActionWrapper"></div>
 		</form>

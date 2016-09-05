@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use models\CountryModel;
 use models\NewEventDraftModel;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
@@ -40,10 +41,11 @@ class EventNewWhenDetailsForm extends AbstractType {
 	/** @var  NewEventDraftModel */
 	protected $eventDraft;
 
-	protected $defaultCountry;
+	protected $defaultCountryModel;
 
-	function __construct($timeZoneName, Application $application, NewEventDraftModel $newEventDraftModel ) {
+	function __construct(CountryModel $countryModel, $timeZoneName, Application $application, NewEventDraftModel $newEventDraftModel ) {
 		$this->site = $application['currentSite'];
+        $this->defaultCountryModel = $countryModel;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
 		$this->timeZoneName = $timeZoneName;
 		$this->extensionManager = $application['extensions'];
@@ -57,29 +59,23 @@ class EventNewWhenDetailsForm extends AbstractType {
 
 		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
-		$this->defaultCountry = null;
-		$defaultCountryID = null;
 		$countries = $crb->fetchAll();
 		if (count($countries) > 1) {
 			$countriesForSelect = array();
 			foreach($countries as $country) {
 				$countriesForSelect[$country->getId()] = $country->getTitle();
-				if ($this->defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
-					$this->defaultCountry = $country;
-					$defaultCountryID = $country->getId();
-				}
 			}
 			$builder->add('country_id', 'choice', array(
 				'label'=>'Country',
 				'choices' => $countriesForSelect,
 				'required' => true,
-				'data' => $defaultCountryID,
+				'data' => $this->defaultCountryModel->getId(),
                 'choices_as_values'=>false,
 			));
 		} else if (count($countries) == 1) {
 			$this->defaultCountry = $countries[0];
 			$builder->add('country_id', 'hidden', array(
-				'data' => $this->defaultCountry->getId(),
+				'data' => $this->defaultCountryModel->getId(),
 			));
 		}
 
@@ -221,11 +217,11 @@ class EventNewWhenDetailsForm extends AbstractType {
 	}
 
 	/**
-	 * @return mixed
+	 * @return CountryModel
 	 */
 	public function getDefaultCountry()
 	{
-		return $this->defaultCountry;
+		return $this->defaultCountryModel;
 	}
 
 

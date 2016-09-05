@@ -2,6 +2,7 @@
 
 namespace site\forms;
 
+use models\CountryModel;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,11 +27,14 @@ class VenueNewForm extends \BaseFormWithEditComment {
 	
 	/** @var SiteModel **/
 	protected $site;
+
+    /** @var  CountryModel */
+    protected $defaultCountryModel;
 	
-	function __construct($timeZoneName, Application $app) {
+	function __construct(Application $app, CountryModel $countryModel) {
 		parent::__construct($app);
 		$this->site = $app['currentSite'];
-		$this->timeZoneName = $timeZoneName;
+        $this->defaultCountryModel = $countryModel;
 	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
@@ -62,19 +66,15 @@ class VenueNewForm extends \BaseFormWithEditComment {
 		$crb = new CountryRepositoryBuilder($this->app);
 		$crb->setSiteIn($this->site);
 		$countries = array();
-		$defaultCountry = null;
 		foreach($crb->fetchAll() as $country) {
 			$countries[$country->getId()] = $country->getTitle();
-			if ($defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
-				$defaultCountry = $country->getId();
-			}			
 		}
 		// TODO if current country not in list add it now
 		$builder->add('country_id', 'choice', array(
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
-			'data' => $defaultCountry,
+			'data' => $this->defaultCountryModel->getId(),
             'choices_as_values'=>false,
 		));
 		
