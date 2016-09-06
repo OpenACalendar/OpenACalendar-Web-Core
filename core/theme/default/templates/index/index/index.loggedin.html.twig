@@ -46,18 +46,20 @@
 				</a>					
 			</li>			
 		{% endif %}
-		<li class="site">
-			<a href="/create" class="title">
-				<span class="logoWrapper"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo"></span>
-				<span class="titleWrapper">Create?</span>
-			</a>
-			<a href="/create" class="link">
-				Create your own calendar
-			</a>					
-		</li>			
+		{%  if actionCreateSite %}
+			<li class="site">
+				<a href="/create" class="title">
+					<span class="logoWrapper"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo"></span>
+					<span class="titleWrapper">Create?</span>
+				</a>
+				<a href="/create" class="link">
+					Create your own calendar
+				</a>
+			</li>
+		{%  endif %}
 	</ul>
-	
-	
 
 	
+
+
 {% endblock %}
