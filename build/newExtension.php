@@ -43,6 +43,16 @@ if (!$packageName) {
 	die();
 }
 
+if (strpos($packageName, '.') !== false) {
+    print "Your package name has a dot in -  you should use \\ as a package separator instead\n";
+    die();
+}
+
+if (strpos($packageName, '/') !== false) {
+    print "Your package name has / in -  you should use \\ as a package separator instead\n";
+    die();
+}
+
 $extFolder = APP_ROOT_DIR. DIRECTORY_SEPARATOR. 'extension'. DIRECTORY_SEPARATOR.$folderName.DIRECTORY_SEPARATOR;
 if (file_exists($extFolder)) {
 	print "That folder already seems to exist!\n";
