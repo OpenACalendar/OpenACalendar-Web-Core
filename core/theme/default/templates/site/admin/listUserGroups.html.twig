@@ -16,8 +16,9 @@
 
 {% block content %}
 
-
-	<h2>User Groups</h2>
+	<div class="contentMain">
+		<h2>User Groups</h2>
+	</div>
 
 	<div class="pageActionsWrapper">
 		<ul class="pageActions">
@@ -28,17 +29,21 @@
 		</ul>
 	</div>
 
-	<ul class="mainListUserGroups">
-		{% for usergroup in usergroups %}
-			<li class="userGroup">
-				<div class="title"><a href="/admin/usergroup/{{ usergroup.id }}">{{ usergroup.title }}</a></div>
-				{{ usergroup.description | nl2br }}
-			</li>
-		{% else %}
-			<li>
-				No user groups found.
-			</li>
-		{% endfor %}
-	</ul>
+	<div class="contentMain">
+
+		<ul class="mainListUserGroups">
+			{% for usergroup in usergroups %}
+				<li class="userGroup">
+					<div class="title"><a href="/admin/usergroup/{{ usergroup.id }}">{{ usergroup.title }}</a></div>
+					{{ usergroup.description | nl2br }}
+				</li>
+			{% else %}
+				<li>
+					No user groups found.
+				</li>
+			{% endfor %}
+		</ul>
+
+	</div>
 
 {% endblock %}

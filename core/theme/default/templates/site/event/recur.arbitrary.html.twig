@@ -21,16 +21,20 @@
 
 {% block innerContent %}
 
-	<p>What date does the event next happen on?</p>
+	<div class="contentMain">
 
-	<form id="GroupSearchForm" method="POST">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+		<p>What date does the event next happen on?</p>
 
-		<input type="text" name="date" value="" id="RecurArbitraryDate" class="hasDatePicker" required="true">
+		<form id="GroupSearchForm" method="POST">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Create new event" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			<input type="text" name="date" value="" id="RecurArbitraryDate" class="hasDatePicker" required="true">
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Create new event" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}
 

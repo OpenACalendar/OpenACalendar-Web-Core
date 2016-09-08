@@ -19,7 +19,9 @@
 
 {% block content %}
 
-	<h2>Add an event</h2>
+	<div class="contentMain">
+		<h2>Add an event</h2>
+	</div>
 
 	<div class="wizardProgressWrapper">
 		<ul class="steps">
@@ -39,39 +41,43 @@
 		</ul>
 	</div>
 
-	<form action="#" method="post"  class="styled">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="action" value="CREATE">
+	<div class="contentMain">
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Event Now!" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
+		<form action="#" method="post"  class="styled">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="action" value="CREATE">
 
-		{%  for step in steps %}
-			{%  if step.stepDoneGetViewName %}{%  include step.stepDoneGetViewName %}{%  endif %}
-		{% endfor %}
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Event Now!" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 
-		{%  if currentSiteFeatures.has('org.openacalendar','EditComments') %}
-			{%  include 'site/common/editCommentInputField.html.twig' %}
-		{%  endif %}
+			{%  for step in steps %}
+				{%  if step.stepDoneGetViewName %}{%  include step.stepDoneGetViewName %}{%  endif %}
+			{% endfor %}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Event Now!" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			{%  if currentSiteFeatures.has('org.openacalendar','EditComments') %}
+				{%  include 'site/common/editCommentInputField.html.twig' %}
+			{%  endif %}
 
-	<div class="likeFormStyled">
-		<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
-			<div class="labelWrapper">&nbsp;</div>
-			<div class="widgetWrapperPlacementOnly">
-				<div class="highlightInfoBoxWrapper">
-					<div class="highlightInfoBoxTitle">Duplicate?</div>
-					<div class="highlightInfoBoxContent">
-						<p>Wait, is this event maybe a duplicate of one of these? Click for more information - you won't lose what you have already entered.</p>
-						<ul id="DuplicateEventsList" class="mainListEvents"></ul>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Add Event Now!" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+		<div class="likeFormStyled">
+			<div class="rowWrapper" id="DuplicateEventsContainer" style="display: none;">
+				<div class="labelWrapper">&nbsp;</div>
+				<div class="widgetWrapperPlacementOnly">
+					<div class="highlightInfoBoxWrapper">
+						<div class="highlightInfoBoxTitle">Duplicate?</div>
+						<div class="highlightInfoBoxContent">
+							<p>Wait, is this event maybe a duplicate of one of these? Click for more information - you won't lose what you have already entered.</p>
+							<ul id="DuplicateEventsList" class="mainListEvents"></ul>
+						</div>
 					</div>
 				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
 		</div>
+
 	</div>
 
 {% endblock %}

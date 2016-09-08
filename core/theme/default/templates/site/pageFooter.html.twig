@@ -1,14 +1,16 @@
 <div id="footer">
-	<ul>
-		{% if currentSite.cachedIsMultipleTimezones %}
-			<li><a href="/mytimezone">Current Timezone: {{ currentTimeZone }}</a></li>
-		{% endif %}
-		<li>{{ currentSite.footerText | nl2br  | linkify }}</li>
-		<li>Powered by <a href="http://ican.openacalendar.org">OpenACalendar</a></li>
-		<li><a href="http://{{ config.webIndexDomain }}/terms">terms</a></li>
-		{% if currentUserActions.has("org.openacalendar","admin") %}
-			<li><a href="/admin">Admin</a></li>
-		{% endif %}
-	</ul>
+	<div class="contentMain">
+		<ul>
+			{% if currentSite.cachedIsMultipleTimezones %}
+				<li><a href="/mytimezone">Current Timezone: {{ currentTimeZone }}</a></li>
+			{% endif %}
+			<li>{{ currentSite.footerText | nl2br  | linkify }}</li>
+			<li>Powered by <a href="http://ican.openacalendar.org">OpenACalendar</a></li>
+			<li><a href="http://{{ config.webIndexDomain }}/terms">terms</a></li>
+			{% if currentUserActions.has("org.openacalendar","admin") %}
+				<li><a href="/admin">Admin</a></li>
+			{% endif %}
+		</ul>
+	</div>
 </div>
 

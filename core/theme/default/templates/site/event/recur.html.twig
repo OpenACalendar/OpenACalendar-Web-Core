@@ -23,22 +23,25 @@
 
 {% block innerContent %}
 
+	<div class="contentMain">
 
-	<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/weekly">weekly</a>?</p>
-	
-	{% if recurMonthlyOnWeekNumber %}
-		<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/monthly">monthly 
-				on the {{ recurMonthlyOnWeekNumber }}{{ recurMonthlyOnWeekNumberOrdinal }} 
-				{{ event.getStartAt|date('l', currentTimeZone)  }} in the month</a>?</p>
-	{% endif %}
-	
-	{% if recurMonthlyOnLastWeek %}
-		<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/monthlyLast">monthly 
-				on the last {{ event.getStartAt|date('l', currentTimeZone)  }} in the month</a>?</p>
-	{% endif %}
+		<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/weekly">weekly</a>?</p>
+
+		{% if recurMonthlyOnWeekNumber %}
+			<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/monthly">monthly
+					on the {{ recurMonthlyOnWeekNumber }}{{ recurMonthlyOnWeekNumberOrdinal }}
+					{{ event.getStartAt|date('l', currentTimeZone)  }} in the month</a>?</p>
+		{% endif %}
+
+		{% if recurMonthlyOnLastWeek %}
+			<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/monthlyLast">monthly
+					on the last {{ event.getStartAt|date('l', currentTimeZone)  }} in the month</a>?</p>
+		{% endif %}
 
 
-	<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/arbitrary">at a set date</a>?</p>
+		<p>Does this event recur <a href="/event/{{ event.slugForUrl }}/recur/arbitrary">at a set date</a>?</p>
+
+	</div>
 
 {% endblock %}
 

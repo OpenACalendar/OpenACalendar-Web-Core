@@ -6,10 +6,12 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 <div id="footer">
-	<ul>
-		{%  if extensions.hasExtensionID('org.openacalendar.contact') %}<a href="{{ config.getWebIndexDomainSecure() }}/contact">contact</a>{% endif %}
-		<li><a href="/terms">terms</a></li>
-		<li><a href="/privacy">privacy</a></li>
-		<li>Powered by <a href="http://ican.openacalendar.org">OpenACalendar</a></li>
-	</ul>
+	<div class="contentMain">
+		<ul>
+			{%  if extensions.hasExtensionID('org.openacalendar.contact') %}<a href="{{ config.getWebIndexDomainSecure() }}/contact">contact</a>{% endif %}
+			<li><a href="/terms">terms</a></li>
+			<li><a href="/privacy">privacy</a></li>
+			<li>Powered by <a href="http://ican.openacalendar.org">OpenACalendar</a></li>
+		</ul>
+	</div>
 </div>

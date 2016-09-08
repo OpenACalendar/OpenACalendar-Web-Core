@@ -21,21 +21,25 @@
 
 {% block innerContent %}
 
-	<p>Before you can make this event an recurring one, you must add it to a group.</p>
+	<div class="contentMain">
 
-	<form id="GroupSearchForm" method="POST">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		
-		Group title: <input name="NewGroupTitle" type="text" id="GroupSearchText" value="{{ event.summary }}">
-		
-		<div class="bigButtonContainer">
-			<input type="submit" value="Create New Group" class="button">
-		</div>
-	</form>
-		
-	<ul class="mainListGroups" id="GroupSearchList">
-	</ul>
-	
+		<p>Before you can make this event an recurring one, you must add it to a group.</p>
+
+		<form id="GroupSearchForm" method="POST">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+
+			Group title: <input name="NewGroupTitle" type="text" id="GroupSearchText" value="{{ event.summary }}">
+
+			<div class="bigButtonContainer">
+				<input type="submit" value="Create New Group" class="button">
+			</div>
+		</form>
+
+		<ul class="mainListGroups" id="GroupSearchList">
+		</ul>
+
+	</div>
+
 {% endblock %}
 
 
