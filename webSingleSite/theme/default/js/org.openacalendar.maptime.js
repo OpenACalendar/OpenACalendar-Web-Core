@@ -1,4 +1,5 @@
 /**
+ * This is not named 'maptime.js' because then it would clash with the file of the same name in core.
  * @package org.openacalendar.maptime
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
