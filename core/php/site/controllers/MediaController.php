@@ -53,7 +53,7 @@ class MediaController {
 		}
 		
 		if ($request->request->get('CSFRToken') == $app['websession']->getCSFRToken()) {
-			if ($request->request->get('action') == 'makeSiteLogo' && $app['currentUserCanAdminSite']) {
+			if ($request->request->get('action') == 'makeSiteLogo' && $app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_ADMINISTRATE")) {
 				$app['currentSite']->setLogoMediaId($this->parameters['media']->getId());
 				$siteProfileMediaRepository = new SiteProfileMediaRepository($app);
 				$siteProfileMediaRepository->createOrEdit($app['currentSite'], $app['currentUser']);

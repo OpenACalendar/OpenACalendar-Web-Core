@@ -135,7 +135,9 @@ class AdminController {
 		
 	function profile(Request $request, Application $app) {		
 		$form = $app['form.factory']->create(new SiteEditProfileForm($app['config']), $app['currentSite']);
-				
+
+        $siteLogoAllowed = $app['config']->isFileStore() && !$app['config']->isSingleSiteMode;
+
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 			
@@ -144,7 +146,7 @@ class AdminController {
 				$siteRepository = new SiteRepository($app);
 				$siteRepository->edit($app['currentSite'], $app['currentUser']);
 
-				if ($app['config']->isFileStore()) {
+				if ($siteLogoAllowed) {
 					$newLogo = $form['logo']->getData();
 					if ($newLogo) {
 						$mediaRepository = new MediaRepository($app);
@@ -166,6 +168,7 @@ class AdminController {
 		
 		return $app['twig']->render('site/admin/profile.html.twig', array(
 				'form'=>$form->createView(),
+                'siteLogoAllowed' => $siteLogoAllowed
 			));
 	}
 		

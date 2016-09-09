@@ -25,7 +25,7 @@
 		{{ form_row(form.description_text) }}
 		{{ form_row(form.footer_text) }}
 
-		{% if config.isFileStore %}
+		{% if siteLogoAllowed %}
 			<div class="rowWrapper">
 				<div class="labelWrapper">Existing Logo</div>
 				<div class="widgetWrapper">
@@ -43,9 +43,11 @@
 
 	</form>
 
-	<div class="contentMain">
-		<p>(Note you can also pick a site logo from <a href="/media/">your existing media</a>.)</p>
-	</div>
+	{% if siteLogoAllowed %}
+		<div class="contentMain">
+			<p>(Note you can also pick a site logo from <a href="/media/">your existing media</a>.)</p>
+		</div>
+	{%  endif %}
 
 {% endblock %}
 

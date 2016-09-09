@@ -46,7 +46,7 @@ class SiteEditProfileForm extends AbstractType{
 			'required'=>false
 		));
 		
-		if ($this->config->isFileStore()) {
+		if ($this->config->isFileStore() && !$this->config->isSingleSiteMode) {
 			$builder->add('logo', 'file', array(
 				"mapped" => false, 
 				'label'=>'Upload new Logo',
