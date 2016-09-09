@@ -23,33 +23,11 @@ $siteRepository = new SiteRepository($app);
 $site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
 
 if (!$site) {
-	// 404 - deny for now
-	print "User-agent: *\nDisallow: /";
-} else if ($site && $site->getIsWebRobotsAllowed()  && !$site->getIsClosedBySysAdmin()) {
-	// ALLOW
-	print "User-agent: *\n".
-			"Disallow: /mytimezone\n".
-			"Disallow: /history\n".
-			"Disallow: /currentuser\n".
-			"Disallow: /demo\n".
-			"Disallow: /displayboard/run/\n";
+    // 404 - deny for now
+    print "User-agent: *\nDisallow: /";
 } else {
-	// DENY
-	// we can't just do Disallow / because then Google Calendar which fetches feeds with Googlebot goes "EWWWW" and refuses to work.
-	// so we have to deny the real pages one by one
-	print "User-agent: *\n".
-			"Disallow: /curatedlist\n".
-			"Disallow: /event\n".
-			"Disallow: /group\n".
-			"Disallow: /venue\n".
-			"Disallow: /map\n".
-			"Disallow: /country\n".
-			"Disallow: /history\n".
-			"Disallow: /mytimezone\n".
-			"Disallow: /currentuser\n".
-			"Disallow: /places\n".
-			"Disallow: /demo\n".
-			"Disallow: /displayboard/run/\n".
-			"";
+    // There is a valid site.
+    // Allow all access. Meta tags sort out indexing.
+    print "";
 }
 
