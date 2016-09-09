@@ -40,7 +40,7 @@ class MediaRepository {
     public function createFromFile(UploadedFile $newMedia, SiteModel $site, UserAccountModel $user, $title = null, $sourceText = null, $sourceURL = null) {
         $mediaEditMetaDataModel = new MediaEditMetaDataModel();
         $mediaEditMetaDataModel->setUserAccount($user);
-        $this->createFromFileWithMetaData($newMedia, $site, $mediaEditMetaDataModel, $title, $sourceText, $sourceURL);
+        return $this->createFromFileWithMetaData($newMedia, $site, $mediaEditMetaDataModel, $title, $sourceText, $sourceURL);
     }
 
 	public function createFromFileWithMetaData(UploadedFile $newMedia, SiteModel $site, MediaEditMetaDataModel $mediaEditMetaDataModel, $title = null, $sourceText = null, $sourceURL = null) {
