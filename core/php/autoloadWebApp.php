@@ -83,6 +83,30 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 	$twig->addGlobal('config', $app['config']);
 	$twig->addGlobal('extensions', $app['extensions']);
 	$twig->addGlobal('COPYRIGHT_YEARS', COPYRIGHT_YEARS);
+    $twig->addGlobal('currentUser', $app['currentUser']);
+    $twig->addFunction(new Twig_SimpleFunction('getCurrentUserPrivateFeedKey', function () use ($app) {
+        $r = new \repositories\UserAccountPrivateFeedKeyRepository($app);
+        return $r->getForUser( userGetCurrent());
+    }));
+    $twig->addFunction(new Twig_SimpleFunction('getCSFRToken', function () {
+        global $WEBSESSION;
+        return $WEBSESSION->getCSFRToken();
+    }));
+    $twig->addFunction(new Twig_SimpleFunction('getAndClearFlashMessages', function () {
+        global $FLASHMESSAGES;
+        return $FLASHMESSAGES->getAndClearMessages();
+    }));
+    $twig->addFunction(new Twig_SimpleFunction('getAndClearFlashErrors', function () {
+        global $FLASHMESSAGES;
+        return $FLASHMESSAGES->getAndClearErrors();
+    }));
+    # ////////////// 12 or 24 hour clock
+    $clock12Hour = true;
+    if ($app['currentUser']) {
+        $clock12Hour = $app['currentUser']->getIsClock12Hour() ;
+    }
+    $app['currentUserClock12Hour'] = $clock12Hour;
+    $twig->addGlobal('currentUserClock12Hour', $clock12Hour);
     return $twig;
 }));
 
@@ -168,32 +192,3 @@ function userGetCurrent() {
 }
 
 $app['currentUser'] = userGetCurrent();
-
-$app->before(function () use ($app) {
-	$app['twig']->addGlobal('currentUser', $app['currentUser']);
-	$app['twig']->addFunction(new Twig_SimpleFunction('getCurrentUserPrivateFeedKey', function () use ($app) {
-		$r = new \repositories\UserAccountPrivateFeedKeyRepository($app);
-		return $r->getForUser( userGetCurrent());
-	}));
-	$app['twig']->addFunction(new Twig_SimpleFunction('getCSFRToken', function () {
-		global $WEBSESSION;
-		return $WEBSESSION->getCSFRToken();
-	}));
-	$app['twig']->addFunction(new Twig_SimpleFunction('getAndClearFlashMessages', function () {
-		global $FLASHMESSAGES;
-		return $FLASHMESSAGES->getAndClearMessages();
-	}));	
-	$app['twig']->addFunction(new Twig_SimpleFunction('getAndClearFlashErrors', function () {
-		global $FLASHMESSAGES;
-		return $FLASHMESSAGES->getAndClearErrors();
-	}));		
-	# ////////////// 12 or 24 hour clock
-	$clock12Hour = true;
-	if ($app['currentUser']) {
-		$clock12Hour = $app['currentUser']->getIsClock12Hour() ;
-	}
-	$app['currentUserClock12Hour'] = $clock12Hour;
-	$app['twig']->addGlobal('currentUserClock12Hour', $clock12Hour);
-});
-
-

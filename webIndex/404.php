@@ -13,7 +13,4 @@ require_once APP_ROOT_DIR.'/core/php/autoloadWebApp.php';
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-header("HTTP/1.0 404 Not Found");
-print $app['twig']->render('index/error404.html.twig', array());
-
-
+require_once APP_ROOT_DIR.'/core/webIndex/index.php';

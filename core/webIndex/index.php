@@ -49,7 +49,7 @@ $app->before(function (Request $request) use ($app) {
 
 });
 
-
+# ////////////// Route Functions
 $permissionCreateSiteRequired = function(Request $request, Application $app) {
 	if (!$app['currentUserPermissions']->hasPermission("org.openacalendar","CREATE_SITE")) {
 		return new RedirectResponse($app['config']->getWebIndexDomainSecure().'/you/login');
@@ -99,14 +99,17 @@ $canChangeSite = function(Request $request) use ($app) {
 };
 
 
+# ////////////// Routes
 $app->match('/', "index\controllers\IndexController::index");
 
 require APP_ROOT_DIR.'/core/webIndex/index.routes.php';
 require APP_ROOT_DIR.'/core/webIndex/index.routes.multisiteonly.php';
 
+# ////////////// Errors
 if (!$CONFIG->isDebug) {
 	$app->error(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $code) use ($app) {
 		if ($e->getStatusCode() == 404) {
+            header("HTTP/1.0 404 Not Found");
 			return new Response($app['twig']->render('index/error404.html.twig', array('exception'=>$e)));
 		} else {
 			return new Response($app['twig']->render('index/error.html.twig', array('exception'=>$e)));
@@ -114,6 +117,7 @@ if (!$CONFIG->isDebug) {
 	});
 }
 
+# ////////////// Extensions
 foreach($CONFIG->extensions as $extensionName) {
 	if (file_exists(APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/index.routes.php')) {
 		require APP_ROOT_DIR.'/extension/'.$extensionName.'/webIndex/index.routes.php';
@@ -121,6 +125,7 @@ foreach($CONFIG->extensions as $extensionName) {
 }
 
 
+# ////////////// GO!
 $app->run(); 
 
 

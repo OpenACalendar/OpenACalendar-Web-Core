@@ -16,14 +16,5 @@ use repositories\SiteRepository;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 
-$siteRepository = new SiteRepository($app);
-$site = $siteRepository->loadById($CONFIG->singleSiteID);
-if (!$site) {
-	die ("404 Not Found"); 
-	// maybe could do something better here, but this will only happen if site config is broken
-}
-
-header("HTTP/1.0 404 Not Found");
-print $app['twig']->render('site/error404.html.twig', array('currentSite'=>$site));
-
+require_once APP_ROOT_DIR.'/core/webSingleSite/index.php';
 

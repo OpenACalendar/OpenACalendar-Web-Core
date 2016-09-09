@@ -16,13 +16,4 @@ use repositories\SiteRepository;
  * @author James Baster <james@jarofgreen.co.uk> 
  */
 
-$siteRepository = new SiteRepository($app);
-$site = $siteRepository->loadByDomain($_SERVER['SERVER_NAME']);
-if (!$site) {
-	die ("404 Not Found"); // TODO
-}
-
-header("HTTP/1.0 404 Not Found");
-print $app['twig']->render('site/error404.html.twig', array('currentSite'=>$site));
-
-
+require_once APP_ROOT_DIR.'/core/webSite/index.php';

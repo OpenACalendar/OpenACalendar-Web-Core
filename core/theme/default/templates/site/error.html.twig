@@ -5,58 +5,32 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<!DOCTYPE html>
-<html>
-	<head>
-        <meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<title>{% block pageTitle %}{% endblock %} {{ config.installTitle }}</title>
-		<link rel="stylesheet" type="text/css" href="/theme/default/css/main.css?v={{ config.assetsVersion }}">
-		{% block htmlHeader %}{% endblock %}
-		<link rel="shortcut icon" href="/theme/default/img/favicon.png?v={{ config.assetsVersion }}" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-	</head>
-	<body>
-		<div id="page">
-			<div id="header">
-				<div class="contentMain">
-					<ul class="menu">
-						<li class="title">
-							<a href="/"><img src="/theme/default/img/logo.png?v={{ config.assetsVersion }}" alt="logo" class="logo"><h1>{{ config.installTitle  }}</h1></a>
-						</li>
-					</ul>
-					<div class="afterMenu"></div>
-				</div>
-			</div>
-			<div id="body">
-				{% block breadcrumbs %}{% endblock %}
-				<div class="contentTwoColumns">
-					<div class="contentTwoColumnsLeft">
+{% extends 'site/pageMinimal.html.twig' %}
 
-						<p class="errorPageHeader">{{ exception.statusCode }}</p>
-						<p class="errorPageHeader">{{ exception.message }}</p>
-						<p class="errorPageHeader">Error</p>
-					</div>
-					<div class="contentTwoColumnsRight">
+{% block pageTitle %}Sorry - {% endblock %}
 
-						<p class="errorPageText">Sorry, there was a problem.</p>
+{% block htmlHeader %}
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+{% endblock %}
 
-						<p  class="errorPageText">
-							Please <a href="/">return to the home page and try again</a>
-							{%  if extensions.hasExtensionID('org.openacalendar.contact') %}, or <a href="/contact">contact us</a> with any problems.{%  endif %}
-						</p>
+{% block content %}
+	<div class="contentTwoColumns">
+		<div class="contentTwoColumnsLeft">
 
-					</div>
-					<div class="afterContentTwoColumns"></div>
-				</div>
-			</div>
-			<div id="footer">
-				{%  if extensions.hasExtensionID('org.openacalendar.contact') %}<a href="{{ config.getWebIndexDomainSecure() }}/contact">contact</a>{% endif %}
-				<a href="{{ config.getWebIndexDomainSecure() }}/terms">terms</a>
-				<a href="{{ config.getWebIndexDomainSecure() }}/privacy">privacy</a>
-				<a href="http://jmbtechnology.co.uk/">&copy; JMB Technology Limited {{ COPYRIGHT_YEARS }}</a> (<a href="{{ config.getWebIndexDomainSecure() }}/credits">credits</a>)
-			</div>
+			<p class="errorPageHeader">404</p>
+			<p class="errorPageHeader">Not found</p>
+			<p class="errorPageHeader">Error</p>
 		</div>
-	</body>
-</html>
+		<div class="contentTwoColumnsRight">
+
+			<p class="errorPageText">Sorry, there was a problem.</p>
+
+			<p  class="errorPageText">
+				Please <a href="/">return to the home page and try again</a>
+				{%  if extensions.hasExtensionID('org.openacalendar.contact') %}, or <a href="/contact">contact us</a> with any problems.{%  endif %}
+			</p>
+
+		</div>
+		<div class="afterContentTwoColumns"></div>
+	</div>
+{%  endblock %}
