@@ -33,7 +33,7 @@
 		currentUserActions.has("org.openacalendar","eventCancel") or
 		currentUserActions.has("org.openacalendar","eventEditMedia")  %}
 		<li class="actionWithSubMenu">
-			<a href="/event/{{ event.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
+			<a href="/event/{{ event.slugForUrl }}/edit" class="action"><div class="fa fa-pencil"></div> edit</a>
 			<ul class="submenu">
 				{%  if currentUserActions.has("org.openacalendar","eventEditDetails") %}
 					<li><a href="/event/{{ event.slugForURL }}/edit/details">Edit Details</a></li>

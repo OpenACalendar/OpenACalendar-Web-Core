@@ -15,7 +15,7 @@
 		</div>
 		<ul class="menu">
 			<li class="menu">
-				<a href="/event">Events</a>
+				<a href="/event" class="action">Events</a>
 				<ul class="submenu">
 					<li><a href="/event">Events</a></li>
 					<li><a href="/event/calendar">Calendar</a></li>
@@ -35,7 +35,7 @@
 			</li>
 			{% if currentSiteFeatures.has('org.openacalendar','Group') %}
 				<li class="menu">
-					<a href="/group">Groups</a>
+					<a href="/group" class="action">Groups</a>
 					{% if currentUserActions.has("org.openacalendar","groupNew") or ( currentUser is null and anyVerifiedUserActions.has("org.openacalendar","groupNew") )  %}
 						<ul class="submenu">
 							<li><a href="/group">Groups</a></li>
@@ -50,7 +50,7 @@
 			#}
 			{% if currentSite.cachedIsMultipleCountries  or currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 				<li class="menu">
-					<a href="/places">Places</a>
+					<a href="/places" class="action">Places</a>
 					<ul class="submenu">
 						{% if not currentSite.cachedIsMultipleCountries and currentSiteHasOneCountry is defined %}
 							<li><a href="/country/{{ currentSiteHasOneCountry.twoCharCode }}">{{ currentSiteHasOneCountry.title }}</a></li>
@@ -73,7 +73,7 @@
 				</li>
 			{% endif %}
 			<li class="menu">
-				<a href="/history">Changes</a>
+				<a href="/history" class="action">Changes</a>
 				{% if currentUser is not null and currentUserWatchesSite is defined %}
 					<ul class="submenu">
 						<li><a href="/history">Recent Changes</a></li>
@@ -97,7 +97,7 @@
 						<a href="{{ config.getWebIndexDomainSecure() }}/you/register{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Sign up</a>
 					</li>
 				{% else %}
-					<a href="/currentuser">{{ currentUser.username }}</a>
+					<a href="/currentuser" class="action">{{ currentUser.username }}</a>
 					<ul class="submenu">
 						{% if currentSite.cachedIsMultipleTimezones %}
 							<li><a href="/mytimezone">{{ currentTimeZone }}</a></li>
@@ -116,7 +116,7 @@
 			{% if currentUser %}
 				{#  the class user is used by JS to move the menu to the left #}
 				<li id="NotificationMenu" class="user">
-					<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink">
+					<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink" class="action">
 						<div class="fa fa-bell-o"></div> <span id="NotificationMenuLinkCount"></span>
 					</a>
 					<ul id="NotificationSubMenu" class="submenu">

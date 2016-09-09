@@ -83,6 +83,10 @@ body {
 			}
 		}
 		li {
+            > a.action {
+                position: relative;
+                z-index: 1000;
+            }
 			list-style-type: none;
 			display: inline-block;
 			font-size: 1.25REM;
@@ -524,6 +528,10 @@ div.filterListWrapper {
 		font-size: 0.875rem;
 		.contentMain();
 		padding: 10px 0 0 0;
+        li.actionWithSubMenu > a.action {
+            position: relative;
+            z-index: 1000;
+        }
 		li.action, li.actionWithSubMenu, li.hide {
 			padding: 0px 5px;
 			display: inline;

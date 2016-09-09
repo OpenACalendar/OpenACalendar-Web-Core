@@ -21,7 +21,7 @@
 	{% if currentUserActions.has("org.openacalendar","venueEditDetails")
 	or currentUserActions.has("org.openacalendar","venueEditMedia") %}
 		<li class="actionWithSubMenu">
-			<a href="/venue/{{ venue.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
+			<a href="/venue/{{ venue.slugForUrl }}/edit" class="action"><div class="fa fa-pencil"></div> edit</a>
 			<ul class="submenu">
 				{%  if currentUserActions.has("org.openacalendar","venueEditDetails") %}
 					<li><a href="/venue/{{ venue.slugForUrl }}/edit/details">Edit Details</a></li>

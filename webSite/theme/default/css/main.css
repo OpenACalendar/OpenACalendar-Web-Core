@@ -1193,6 +1193,10 @@ body {
   display: inline-block;
   font-size: 1.25REM;
 }
+#header ul.menu li > a.action {
+  position: relative;
+  z-index: 1000;
+}
 #header ul.menu li a {
   text-decoration: none;
   color: #333;
@@ -1747,6 +1751,10 @@ div.filterListWrapper form.filterList #importedEventListFilterFromWrapper input 
   margin-right: auto;
   padding: 0 3px;
   padding: 10px 0 0 0;
+}
+.pageActionsWrapper .pageActions li.actionWithSubMenu > a.action {
+  position: relative;
+  z-index: 1000;
 }
 .pageActionsWrapper .pageActions li.action,
 .pageActionsWrapper .pageActions li.actionWithSubMenu,

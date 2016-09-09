@@ -17,13 +17,13 @@
 			<li><a href="/discover">Discover</a></li>
 			<li class="user">
 				{% if currentUser is null %}
-					<a href="{{ config.getWebIndexDomainSecure() }}/you">Your details</a>
+					<a href="{{ config.getWebIndexDomainSecure() }}/you" class="action">Your details</a>
 					<ul class="submenu">
 						<li><a href="{{ config.getWebIndexDomainSecure() }}/you/login">Login</a></li>
 						<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register">Register</a></li>
 					</ul>
 				{% else %}
-					<a href="{{ config.getWebIndexDomainSecure() }}/me">{{ currentUser.username }}</a>
+					<a href="{{ config.getWebIndexDomainSecure() }}/me" class="action">{{ currentUser.username }}</a>
 					<ul class="submenu">
 						{# At the moment only logged in users can see any times on the Index site, so let's not confuse logged out users #}
 						<li><a href="{{ config.getWebIndexDomainSecure() }}/mytimezone">{{ currentTimeZone }}</a></li>
@@ -39,7 +39,7 @@
 			</li>
 			{% if currentUser %}
 				<li id="NotificationMenu" class="user">
-					<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink">
+					<a href="{{ config.getWebIndexDomainSecure() }}/me/notification" id="NotificationMenuLink" class="action">
 						<div class="fa fa-bell-o"></div> <span id="NotificationMenuLinkCount"></span>
 					</a>
 					<ul id="NotificationSubMenu" class="submenu">

@@ -16,7 +16,7 @@
 	or currentUserActions.has("org.openacalendar","groupEditCuratedLists")
 	or currentUserActions.has("org.openacalendar","groupEditMedia") %}
 		<li class="actionWithSubMenu">
-			<a href="/group/{{ group.slugForUrl }}/edit"><div class="fa fa-pencil"></div> edit</a>
+			<a href="/group/{{ group.slugForUrl }}/edit" class="action"><div class="fa fa-pencil"></div> edit</a>
 			<ul class="submenu">
 				{%  if currentUserActions.has("org.openacalendar","groupEditDetails") %}
 					<li><a href="/group/{{ group.slugForUrl }}/edit/details">Edit Details</a></li>

@@ -21,11 +21,11 @@ $(document).ready(function() {
 			}
 			if (submenu.css("display") == 'none') {
 				$('#header ul.menu ul.submenu').hide();
-				$('ul#innerPageActions ul.submenu').hide();
+				$('ul.pageActions ul.submenu').hide();
 				submenu.show();
 			} else {
 				$('#header ul.menu ul.submenu').hide();
-				$('ul#innerPageActions ul.submenu').hide();
+				$('ul.pageActions ul.submenu').hide();
 				$('#MenuMask').hide();
 			}
 			event.preventDefault();
@@ -43,11 +43,11 @@ $(document).ready(function() {
 			submenu.css({left:Math.max(0,left)});
 			if (submenu.css("display") == 'none') {
 				$('#header ul.menu ul.submenu').hide();
-				$('ul#innerPageActions ul.submenu').hide();
+                $('ul.pageActions ul.submenu').hide();
 				submenu.show();
 			} else {
 				$('#header ul.menu ul.submenu').hide();
-				$('ul#innerPageActions ul.submenu').hide();
+                $('ul.pageActions ul.submenu').hide();
 				$('#MenuMask').hide();
 			}
 			event.preventDefault();
