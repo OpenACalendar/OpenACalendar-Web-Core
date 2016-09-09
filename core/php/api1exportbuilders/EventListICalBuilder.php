@@ -19,7 +19,6 @@ use models\CountryModel;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class EventListICalBuilder extends BaseEventListBuilder  {
-	use TraitICal;
 
 	/** @var ICalEventIdConfig */
 	protected $iCalEventIdConfig;
@@ -31,26 +30,26 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 		$time->sub(new \DateInterval("P30D"));
 		$this->eventRepositoryBuilder->setAfter($time);
 		$this->iCalEventIdConfig = $ICalEventIdConfig ? $ICalEventIdConfig : new ICalEventIdConfig();
+
 	}
 
 	
 	public function getContents() {
-		$txt = $this->getIcalLine('BEGIN','VCALENDAR');
-		$txt .= $this->getIcalLine('VERSION','2.0');
-		$txt .= $this->getIcalLine('PRODID','-//OpenACalendar//NONSGML OpenACalendar//EN');
-		if ($this->site && !$this->app['config']->isSingleSiteMode) {
-			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->site->getTitle().' '.$this->app['config']->installTitle);
-		} else {
-			$txt .= $this->getIcalLine('X-WR-CALNAME', ($this->title ? $this->title .' - ' : '').$this->app['config']->installTitle);
-		}
-		$txt .= implode("", $this->events);
-		$txt .= $this->getIcalLine('END','VCALENDAR');
-		return $txt;
+        $calendar =  new \Eluceo\iCal\Component\Calendar('-//OpenACalendar//NONSGML OpenACalendar//EN');
+        if ($this->site && !$this->app['config']->isSingleSiteMode) {
+            $calendar->setName(($this->title ? $this->title .' - ' : '').$this->site->getTitle().' '.$this->app['config']->installTitle);
+        } else {
+            $calendar->setName(($this->title ? $this->title .' - ' : '').$this->app['config']->installTitle);
+        }
+        foreach($this->events as $event) {
+            $calendar->addComponent($event);
+        }
+        return $calendar->render();
 	}
 	
 	public function getResponse() {
 		$response = new Response($this->getContents());
-		$response->headers->set('Content-Type', 'text/calendar');
+		$response->headers->set('Content-Type', 'text/calendar; charset=utf-8');
 		$response->setPublic();
 		$response->setMaxAge($this->app['config']->cacheFeedsInSeconds);
 		return $response;				
@@ -60,33 +59,37 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
 
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();
-		
-		$txt = $this->getIcalLine('BEGIN','VEVENT');
+
+        $eventComponent = new \Eluceo\iCal\Component\Event();
+
+
+
 		if ($this->iCalEventIdConfig->isSlug()) {
-			$txt .= $this->getIcalLine('UID',$event->getSlug().'@'.$siteSlug.".".$this->app['config']->webSiteDomain);
+            $eventComponent->setUniqueId($event->getSlug().'@'.$siteSlug.".".$this->app['config']->webSiteDomain);
 		} else if ($this->iCalEventIdConfig->isSlugStartEnd()) {
-			$txt .= $this->getIcalLine('UID',$event->getSlug().'-'.
+            $eventComponent->setUniqueId($event->getSlug().'-'.
 			                                 md5($event->getStartAtInUTC()->format('c').'-'.$event->getEndAtInUTC()->format('c')).
 			                                 '@'.$siteSlug.".".$this->app['config']->webSiteDomain);
 		}
 
 
         $url = $this->app['config']->getWebSiteDomainSecure($siteSlug) .'/event/'.$event->getSlugForUrl();
-
-		$txt .= $this->getIcalLine('URL',$url);
+        $eventComponent->setUrl($url);
 
 		if ($event->getIsDeleted()) {
-			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay(). " [DELETED]");
-			$txt .= $this->getIcalLine('METHOD','CANCEL');
-			$txt .= $this->getIcalLine('STATUS','CANCELLED');
-			$txt .= $this->getIcalLine('DESCRIPTION','DELETED');
+            $eventComponent->setSummary($event->getSummaryDisplay(). " [DELETED]");
+            $eventComponent->setStatus('CANCELLED');
+            $eventComponent->setDescription('DELETED');
+
+			//$txt .= $this->getIcalLine('METHOD','CANCEL');
 		} else if ($event->getIsCancelled()) {
-			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay(). " [CANCELLED]");
-			$txt .= $this->getIcalLine('METHOD','CANCEL');
-			$txt .= $this->getIcalLine('STATUS','CANCELLED');
-			$txt .= $this->getIcalLine('DESCRIPTION','CANCELLED');
+            $eventComponent->setSummary($event->getSummaryDisplay(). " [DELETED]");
+            $eventComponent->setStatus('CANCELLED');
+            $eventComponent->setDescription('CANCELLED');
+
+			//$txt .= $this->getIcalLine('METHOD','CANCEL');
 		} else {
-			$txt .= $this->getIcalLine('SUMMARY',$event->getSummaryDisplay());
+            $eventComponent->setSummary($event->getSummaryDisplay());
 
 			$description = '';
 			foreach($this->extraHeaders as $extraHeader) {
@@ -99,8 +102,8 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			foreach($this->extraFooters as $extraFooter) {
 				$description .= "\n".$extraFooter->getText();
 			}
-			$txt .= $this->getIcalLine('DESCRIPTION',$description);
-			
+            $eventComponent->setDescription($description);
+
 			$descriptionHTML = "<html><body>";
 			foreach($this->extraHeaders as $extraHeader) {
 				$descriptionHTML .= "<p>".$extraHeader->getHtml()."</p>";
@@ -114,40 +117,47 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 			}
 			$descriptionHTML .= '</p>';
 			$descriptionHTML .= '</body></html>';
-			$txt .= $this->getIcalLine("X-ALT-DESC;FMTTYPE=text/html", $descriptionHTML);
-			
+            $eventComponent->setDescriptionHTML($descriptionHTML);
+
 			$locationDetails = array();
-			if ($event->getVenue() && $event->getVenue()->getTitle()) $locationDetails[] = $event->getVenue()->getTitle();
-			if ($event->getVenue() && $event->getVenue()->getAddress()) $locationDetails[] = $event->getVenue()->getAddress();
-			if ($event->getArea() && $event->getArea()->getTitle()) $locationDetails[] = $event->getArea()->getTitle();
-			if ($event->getVenue() && $event->getVenue()->getAddressCode()) $locationDetails[] = $event->getVenue()->getAddressCode();
-			if ($locationDetails) {
-				$txt .= $this->getIcalLine('LOCATION',implode(", ", $locationDetails));
-			}
+			if ($event->getVenue() && $event->getVenue()->getTitle()) {
+                $locationDetails[] = $event->getVenue()->getTitle();
+            }
+			if ($event->getVenue() && $event->getVenue()->getAddress()) {
+                $locationDetails[] = $event->getVenue()->getAddress();
+            }
+			if ($event->getArea() && $event->getArea()->getTitle()) {
+                $locationDetails[] = $event->getArea()->getTitle();
+            }
+			if ($event->getVenue() && $event->getVenue()->getAddressCode()) {
+                $locationDetails[] = $event->getVenue()->getAddressCode();
+            }
 			if ($event->getVenue() && $event->getVenue()->getLat() && $event->getVenue()->getLng()) {
-				$txt .= $this->getIcalGeoLine($event->getVenue()->getLat(),$event->getVenue()->getLng());
-			}
+                $eventComponent->setLocation(implode(", ", $locationDetails), $event->getVenue()->getTitle(), $event->getVenue()->getLat().",".$event->getVenue()->getLng());
+			} else if ($locationDetails) {
+                $eventComponent->setLocation(implode(", ", $locationDetails));
+            }
 		}
-		
-		$txt .= $this->getIcalLine('DTSTART',$event->getStartAt()->format("Ymd")."T".$event->getStartAt()->format("His")."Z");
-		$txt .= $this->getIcalLine('DTEND',$event->getEndAt()->format("Ymd")."T".$event->getEndAt()->format("His")."Z");
+
+        $eventComponent->setDtStart($event->getStartAt());
+        $eventComponent->setDtEnd($event->getEndAt());
+
 
         if ($event->getUpdatedAt()) {
-            $txt .= $this->getIcalLine('LAST-MODIFIED', $event->getUpdatedAt()->format("Ymd") . "T" . $event->getUpdatedAt()->format("His") . "Z");
+            $eventComponent->setModified($event->getUpdatedAt());
             // 1469647083 is a magic number - it's the timestamp at the time we introduced this feature.
             // Since we can't have any values less than that, we will reduce SEQUENCE by that to keep SEQUENCE reasonably small.
-            $txt .= $this->getIcalLine('SEQUENCE', $event->getUpdatedAt()->getTimestamp() - 1469647083);
+            $eventComponent->setSequence($event->getUpdatedAt()->getTimestamp() - 1469647083);
         } else {
-            $txt .= $this->getIcalLine('SEQUENCE', 0);
+            $eventComponent->setSequence(0);
         }
 		if ($event->getCreatedAt()) {
-			$txt .= $this->getIcalLine('DTSTAMP', $event->getCreatedAt()->format("Ymd") . "T" . $event->getCreatedAt()->format("His") . "Z");
+            $eventComponent->setDtStamp($event->getCreatedAt());
 		} else {
-			$txt .= $this->getIcalLine('DTSTAMP', "201001010T010000Z");
+            $eventComponent->setDtStamp(new \DateTime('2010-01-01 01:00:00', new \DateTimeZone('UTC')));
 		}
 
-		$txt .= $this->getIcalLine('END','VEVENT');
-		$this->events[] = $txt;
+		$this->events[] = $eventComponent;
 	}
 
 }
