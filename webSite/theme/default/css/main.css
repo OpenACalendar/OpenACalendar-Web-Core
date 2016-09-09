@@ -1600,7 +1600,7 @@ body {
   border-bottom: #4d3e04 2px solid;
   border-left: #4d3e04 2px solid;
   border-right: #4d3e04 2px solid;
-  z-index: 999;
+  z-index: 10000;
 }
 #header ul.menu li ul.submenu li {
   list-style-type: none;
