@@ -40,7 +40,7 @@ class ImportResultRepository {
 				'not_valid_count'=>$importURLResult->getNotValidCount(), 
 				'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				'is_success'=>$importURLResult->getIsSuccess()?1:0,
-				'message'=>$importURLResult->getMessage(),
+				'message'=>substr($importURLResult->getMessage(),0,VARCHAR_COLUMN_LENGTH_USED),
 			));
 	}
 

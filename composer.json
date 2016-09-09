@@ -28,7 +28,7 @@
 		"monolog/monolog": "1.17.*",
 		"symfony/monolog-bridge": "2.8.*",
 		"jmbtechnologylimited/parsedatetimerangestring":"1.0.*",
-		"facebook/php-sdk-v4" : "4.0.*",
+		"facebook/graph-sdk" : "5.3.*",
 		"jmbtechnologylimited/rruleunravel" : "0.4.*",
 		"jmbtechnologylimited/icaldissect" : "1.3.*",
 		"jmbtechnologylimited/osdata" : "1.0.*",

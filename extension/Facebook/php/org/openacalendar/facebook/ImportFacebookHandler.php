@@ -3,9 +3,6 @@
 namespace org\openacalendar\facebook;
 
 use import\ImportHandlerBase;
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
-use Facebook\FacebookAuthorizationException;
 use models\ImportedEventModel;
 use models\ImportResultModel;
 use repositories\ImportedEventRepository;
@@ -51,10 +48,9 @@ class ImportFacebookHandler extends ImportHandlerBase {
 
 	protected $countNew, $countExisting, $countSaved, $countInPast, $countToFarInFuture, $countNotValid;
 
+    protected $facebook;
 
 	public function handle() {
-		global $app;
-
 		$this->countNew = 0;
 		$this->countExisting = 0;
 		$this->countSaved = 0;
@@ -62,12 +58,17 @@ class ImportFacebookHandler extends ImportHandlerBase {
 		$this->countToFarInFuture = 0;
 		$this->countNotValid = 0;
 		
-		$extension = $app['extensions']->getExtensionById('org.openacalendar.facebook');
-		$appID = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_id'));
-		$appSecret = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_secret'));
-		$userToken = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('user_token'));
-		
-		FacebookSession::setDefaultApplication($appID, $appSecret);
+		$extension = $this->app['extensions']->getExtensionById('org.openacalendar.facebook');
+		$appID = $this->app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_id'));
+		$appSecret = $this->app['appconfig']->getValue($extension->getAppConfigurationDefinition('app_secret'));
+		$userToken = $this->app['appconfig']->getValue($extension->getAppConfigurationDefinition('user_token'));
+
+        $this->facebook = new \Facebook\Facebook([
+            'app_id' => $appID,
+            'app_secret' => $appSecret,
+            'default_graph_version' => 'v2.7',
+            'default_access_token' => $userToken,
+        ]);
 
 		$iurlr = new ImportResultModel();
 		$iurlr->setIsSuccess(true);
@@ -80,7 +81,10 @@ class ImportFacebookHandler extends ImportHandlerBase {
 				if ($fbData) {
 					$this->processFBData($this->eventId, $fbData);
 				}
-			} catch (FacebookAuthorizationException $err) {
+			} catch (\Facebook\Exceptions\FacebookResponseException $err) {
+				$iurlr->setIsSuccess(false);
+				$iurlr->setMessage("Facebook API error: ". $err->getCode()." ".$err->getMessage());
+			} catch (\Facebook\Exceptions\FacebookSDKException $err) {
 				$iurlr->setIsSuccess(false);
 				$iurlr->setMessage("Facebook API error: ". $err->getCode()." ".$err->getMessage());
 			}
@@ -98,44 +102,44 @@ class ImportFacebookHandler extends ImportHandlerBase {
 	}	
 	
 	protected function getFBDataForEventID($id) {
-		global $app;
-		
-		$extension = $app['extensions']->getExtensionById('org.openacalendar.facebook');
-		$userToken = $app['appconfig']->getValue($extension->getAppConfigurationDefinition('user_token'));
-		$session = new FacebookSession($userToken);
-		
-		$url = '/' . strval($this->eventId);
-		$request = new FacebookRequest($session, 'GET', $url);
-		$response = $request->execute();
-		$graphObject = $response->getGraphObject();
 
-		// This tests 2 things
-		// 1) Can some events not have a start and a end time set? Saw comments that suggested this.
-		// 2) How do we know this FB event is an event? It could be group or a page. 
-		if ($graphObject->getProperty('start_time')) {
-		
-			return array(
-				'name' => $graphObject->getProperty('name'),
-				'description' => $graphObject->getProperty('description'),
-				'ticket_uri' => $graphObject->getProperty('ticket_uri'),
-				'start_time' => $graphObject->getProperty('start_time'),
-				'end_time' => $graphObject->getProperty('end_time'),
-				'timezone' => $graphObject->getProperty('timezone'),
-				'is_date_only' => $graphObject->getProperty('is_date_only'),
-				'url' => 'https://www.facebook.com/events/'.$id,
-			);
-		
-		}
-		
+		$url = '/' . strval($this->eventId);
+
+        $response = $this->facebook->get( $url );
+
+        $graphObject = $response->getGraphNode();
+
+        // This tests 2 things
+        // 1) Can some events not have a start and a end time set? Saw comments that suggested this.
+        // 2) How do we know this FB event is an event? It could be group or a page.
+        if ( $graphObject->getField( 'start_time' ) ) {
+
+            return array(
+                'name'         => $graphObject->getField( 'name' ),
+                'description'  => $graphObject->getField( 'description' ),
+                'ticket_uri'   => $graphObject->getField( 'ticket_uri' ),
+                'start_time'   => $graphObject->getField( 'start_time' ),
+                'end_time'     => $graphObject->getField( 'end_time' ),
+                'timezone'     => $graphObject->getField( 'timezone' ),
+                'is_date_only' => $graphObject->getField( 'is_date_only' ),
+                'url'          => 'https://www.facebook.com/events/' . $id,
+                'lat'         => ($graphObject->getField('place') && $graphObject->getField('place')->getField('location') ? $graphObject->getField('place')->getField('location')->getField('latitude') : null),
+                'lng'         => ($graphObject->getField('place') && $graphObject->getField('place')->getField('location') ? $graphObject->getField('place')->getField('location')->getField('longitude') : null),
+            );
+
+        }
+
 	}
 	
 	protected function processFBData($id, $fbData) {
-		$start = new \DateTime($fbData['start_time'], new \DateTimeZone('UTC'));
-		if ($fbData['end_time']) {
-			$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
-		} else {
-			$end = clone $start;
-		}
+        $start = clone $fbData['start_time'];
+        $start->setTimezone(new \DateTimeZone('UTC'));
+        if ($fbData['end_time']) {
+            $end = clone $fbData['end_time'];
+            $end->setTimezone(new \DateTimeZone('UTC'));
+        } else {
+            $end = clone $start;
+        }
 		if ($start && $end && $start <= $end) { 
 
             $importedEventRepo = new \repositories\ImportedEventRepository($this->app);
@@ -182,12 +186,15 @@ class ImportFacebookHandler extends ImportHandlerBase {
 			$importedEvent->setDescription($fbData['description']);
 			$changesToSave = true;
 		}
-		$start = new \DateTime($fbData['start_time'], new \DateTimeZone('UTC'));
-		if ($fbData['end_time']) {
-			$end = new \DateTime($fbData['end_time'], new \DateTimeZone('UTC'));
-		} else {
-			$end = clone $start;
-		}
+
+        $start = clone $fbData['start_time'];
+        $start->setTimezone(new \DateTimeZone('UTC'));
+        if ($fbData['end_time']) {
+            $end = clone $fbData['end_time'];
+            $end->setTimezone(new \DateTimeZone('UTC'));
+        } else {
+            $end = clone $start;
+        }
 		if ($fbData['is_date_only']) {
 			$start->setTime(0,0,0);
 			$end->setTime(23, 59, 59);
@@ -216,6 +223,14 @@ class ImportFacebookHandler extends ImportHandlerBase {
 			$importedEvent->setTicketUrl($fbData['ticket_uri']);
 			$changesToSave = true;
 		}
+        if (isset($fbData['lng']) && $fbData['lng'] != $importedEvent->getLng()) {
+            $importedEvent->setLng($fbData['lng']);
+            $changesToSave = true;
+        }
+        if (isset($fbData['lat']) && $fbData['lat'] != $importedEvent->getLat()) {
+            $importedEvent->setLat($fbData['lat']);
+            $changesToSave = true;
+        }
 		return $changesToSave;
 	}
 	
