@@ -1408,6 +1408,9 @@ form.styled p.information,
   font-style: italic;
   font-size: 0.875rem;
 }
+.ui-datepicker {
+  z-index: 1000 !important;
+}
 #PopupMask {
   position: fixed;
   top: 0px;
