@@ -9,13 +9,15 @@ This box runs the app in both single site and multi site mode. To use:
     php /vagrant/core/cli/createUser.php USERNAME EMAIL PASSWORD sysadmin
     php /vagrant/core/cli/createSite.php test1 EMAIL
 
+(Replace the placeholders USERNAME, EMAIL and PASSWORD with your own data.)
+
 ### Single Site Mode
 
 The Single Site Mode app is then available at http://localhost:8082
 
 ### Multi Site Mode
 
-If you also want to use Multi Site mode, then on the host machine you need to edit you hosts file.
+If you also want to use Multi Site mode, then on the host machine you need to edit your hosts file.
 
     127.0.0.1    openadevcalendar.co.uk
     127.0.0.1    test1.openadevcalendar.co.uk
