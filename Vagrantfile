@@ -4,11 +4,11 @@
 Vagrant.configure(2) do |config|
 
 	# It seems to need this here or "destroy" errors.
-	config.vm.box = "boxcutter/debian82"
+	config.vm.box = "boxcutter/debian85"
 
 	config.vm.define "app" do |normal|
 
-		config.vm.box = "boxcutter/debian82"
+		config.vm.box = "boxcutter/debian85"
 
 		config.vm.network "forwarded_port", guest: 8080, host: 8080
 		config.vm.network "forwarded_port", guest: 8081, host: 8081
@@ -52,7 +52,7 @@ Vagrant.configure(2) do |config|
 
 	config.vm.define "tests" do |normal|
 
-		config.vm.box = "boxcutter/debian82"
+		config.vm.box = "boxcutter/debian85"
 
 		config.vm.synced_folder ".", "/vagrant",  :owner=> 'vagrant', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
 
