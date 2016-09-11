@@ -22,58 +22,61 @@
 
 
 {% block innerContent %}
-	
-	{% if newEvents %}
-		<p>Select the dates you want to create events on.</p>
 
-	
-		<form method="post" action="">
-			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-			<input type="hidden" name="submitted" value="yes">
+	<div class="contentMain">
 
-			<ul class="newRecuringEvents">
-				{% for newEvent in newEvents %}
-					<li  class="newRecuringEvent">
-						<label>
-							<input type="checkbox" name="new[]" value="{{ newEvent.getStartAt.getTimeStamp }}" checked>
-							<div class="summary">{{ newEvent.summary }}</div>
-							<div class="date">
-								<time datetime="{{ newEvent.getStartAt|date('c', currentTimeZone) }}">
-									<span class="startDay">{{ newEvent.getStartAt|date('D jS', currentTimeZone) }}</span>
-									<span class="startMonthYear">{{ newEvent.getStartAt|date('M Y', currentTimeZone) }}</span>
-									<span class="startTime">
-										{{ newEvent.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}
-									</span>
-								</time>
-								<span class="to">to</span>
-								{% if sameday(newEvent.getStartAt,newEvent.getEndAt) %}
-									<time datetime="{{ newEvent.getEndAt|date('c', currentTimeZone) }}">
-										<span class="end">
-											{{ newEvent.getEndAt|date( currentUserClock12Hour ?  'g:ia': 'H:i', currentTimeZone) }}
+		{% if newEvents %}
+			<p>Select the dates you want to create events on.</p>
+
+
+			<form method="post" action="">
+				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+				<input type="hidden" name="submitted" value="yes">
+
+				<ul class="newRecuringEvents">
+					{% for newEvent in newEvents %}
+						<li  class="newRecuringEvent">
+							<label>
+								<input type="checkbox" name="new[]" value="{{ newEvent.getStartAt.getTimeStamp }}" checked>
+								<div class="summary">{{ newEvent.summary }}</div>
+								<div class="date">
+									<time datetime="{{ newEvent.getStartAt|date('c', currentTimeZone) }}">
+										<span class="startDay">{{ newEvent.getStartAt|date('D jS', currentTimeZone) }}</span>
+										<span class="startMonthYear">{{ newEvent.getStartAt|date('M Y', currentTimeZone) }}</span>
+										<span class="startTime">
+											{{ newEvent.getStartAt|date( currentUserClock12Hour ?  'g:ia' : 'H:i', currentTimeZone) }}
 										</span>
 									</time>
-								{% else %}
-									<time datetime="{{ newEvent.getEndAt|date('c', currentTimeZone) }}">
-										<span class="end">
-											{{ newEvent.getEndAt|date( currentUserClock12Hour ? 'D jS M Y g:ia': 'D jS M Y H:i', currentTimeZone) }}
-										</span>
-									</time>
-								{% endif %}
-							</div>
-						</label>
+									<span class="to">to</span>
+									{% if sameday(newEvent.getStartAt,newEvent.getEndAt) %}
+										<time datetime="{{ newEvent.getEndAt|date('c', currentTimeZone) }}">
+											<span class="end">
+												{{ newEvent.getEndAt|date( currentUserClock12Hour ?  'g:ia': 'H:i', currentTimeZone) }}
+											</span>
+										</time>
+									{% else %}
+										<time datetime="{{ newEvent.getEndAt|date('c', currentTimeZone) }}">
+											<span class="end">
+												{{ newEvent.getEndAt|date( currentUserClock12Hour ? 'D jS M Y g:ia': 'D jS M Y H:i', currentTimeZone) }}
+											</span>
+										</time>
+									{% endif %}
+								</div>
+							</label>
 
-					</li>
-				{% endfor %}
-			</ul>
+						</li>
+					{% endfor %}
+				</ul>
 
-			<div class="bigSubmitActionWrapper"><input type="submit" value="Create new events" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>
-		</form>
-	{% else %}
-		<p>We could find no new dates to create. 
-		This may be because events alredy exist, or because the event is to far in the future.</p>
-	{% endif %}
+				<div class="bigSubmitActionWrapper"><input type="submit" value="Create new events" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</form>
+		{% else %}
+			<p>We could find no new dates to create.
+			This may be because events alredy exist, or because the event is to far in the future.</p>
+		{% endif %}
 
+	</div>
 
 {% endblock %}
 

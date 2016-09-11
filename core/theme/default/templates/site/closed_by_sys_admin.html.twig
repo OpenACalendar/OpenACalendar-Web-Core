@@ -8,6 +8,8 @@
 {% extends 'site/page.html.twig' %}
 
 {% block content %}
-	Sorry, this site has been closed by {{ config.installTitle }} administrators.
-	{{ currentSite.closedBySysAdminReason }}
+	<div class="contentMain">
+		Sorry, this site has been closed by {{ config.installTitle }} administrators.
+		{{ currentSite.closedBySysAdminReason }}
+	</div>
 {% endblock %}
