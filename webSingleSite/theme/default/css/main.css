@@ -2684,6 +2684,9 @@ form .afterBigSubmitActionWrapper {
   display: inline;
   padding: 3px;
 }
+.ui-datepicker {
+  z-index: 1000 !important;
+}
 #PopupMask {
   position: fixed;
   top: 0px;
