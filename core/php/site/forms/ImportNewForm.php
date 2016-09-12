@@ -79,7 +79,12 @@ class ImportNewForm extends AbstractType{
 			// or no value
 			if (strpos($form->get("url")->getData(), " ") !== false || !trim($form->get("url")->getData())) {
 				$form['url']->addError(new FormError("Please enter a URL"));
-			}
+            } else {
+                $scheme = parse_url($form->get("url")->getData(), PHP_URL_SCHEME);
+                if (strtolower($scheme) != 'http' && strtolower($scheme) != 'https') {
+                    $form['url']->addError(new FormError("Only http:// or https:// URL's are allowed."));
+                }
+            }
 		};
 
 		// adding the validator to the FormBuilderInterface
