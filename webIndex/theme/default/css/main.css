@@ -1419,7 +1419,7 @@ form.styled p.information,
   height: 100%;
   background-color: #ccc;
   background-color: rgba(200,200,200,0.7);
-  z-index: 500;
+  z-index: 100000;
 }
 .popupBox {
   border: 4px solid #004300;
@@ -1438,7 +1438,7 @@ form.styled p.information,
   margin: 0 auto;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 100001;
 }
 .popupBox .popupBoxClose {
   padding: 3px;
