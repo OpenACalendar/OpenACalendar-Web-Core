@@ -23,84 +23,88 @@
 
 {% block content %}
 
-	<form action="/displayboard/cycledetails/run/" method="GET" class="styled">
+	<div class="contentMain">
+
+		<form action="/displayboard/cycledetails/run/" method="GET" class="styled">
 
 
-		<ul class="eventsFilters">
-			{% set idx = 0 %}
-			{% for eventQuery in data %}
-				<li class="eventsFilter">
-					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
-						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}">
+			<ul class="eventsFilters">
+				{% set idx = 0 %}
+				{% for eventQuery in data %}
+					<li class="eventsFilter">
+						<div class="rowWrapper">
+							<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
+							<div class="widgetWrapperPlacementOnly">
+								<input type="text" value="{% if eventQuery.area %}{{ eventQuery.area.id }}{% endif %}" name="eventArea{{ idx }}">
+							</div>
+							<div class="after"></div>
 						</div>
-						<div class="after"></div>
-					</div>
-					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="eventGroup{{ idx }}">Group Filter:</label></div>
-						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="{% if eventQuery.group %}{{ eventQuery.group.id }}{% endif %}" name="eventGroup{{ idx }}">
+						<div class="rowWrapper">
+							<div class="labelWrapper"><label for="eventGroup{{ idx }}">Group Filter:</label></div>
+							<div class="widgetWrapperPlacementOnly">
+								<input type="text" value="{% if eventQuery.group %}{{ eventQuery.group.id }}{% endif %}" name="eventGroup{{ idx }}">
+							</div>
+							<div class="after"></div>
 						</div>
-						<div class="after"></div>
-					</div>
-					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="eventVenue{{ idx }}">Venue Filter:</label></div>
-						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="{% if eventQuery.venue %}{{ eventQuery.venue.id }}{% endif %}" name="eventVenue{{ idx }}">
+						<div class="rowWrapper">
+							<div class="labelWrapper"><label for="eventVenue{{ idx }}">Venue Filter:</label></div>
+							<div class="widgetWrapperPlacementOnly">
+								<input type="text" value="{% if eventQuery.venue %}{{ eventQuery.venue.id }}{% endif %}" name="eventVenue{{ idx }}">
+							</div>
+							<div class="after"></div>
 						</div>
-						<div class="after"></div>
-					</div>
-				</li>
-				{% set idx = idx+1 %}
-			{% endfor %}
-			{% if idx < MAX_EVENT_QUERIES_ON_EVENT_BOARD %}
-				<li class="eventsFilter" style="border: 2px solid #999966;">
-					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
-						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="" name="eventArea{{ idx }}">
+					</li>
+					{% set idx = idx+1 %}
+				{% endfor %}
+				{% if idx < MAX_EVENT_QUERIES_ON_EVENT_BOARD %}
+					<li class="eventsFilter" style="border: 2px solid #999966;">
+						<div class="rowWrapper">
+							<div class="labelWrapper"><label for="eventArea{{ idx }}">Area Filter:</label></div>
+							<div class="widgetWrapperPlacementOnly">
+								<input type="text" value="" name="eventArea{{ idx }}">
+							</div>
+							<div class="after"></div>
 						</div>
-						<div class="after"></div>
-					</div>
-					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="eventGroup{{ idx }}">Group Filter:</label></div>
-						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="" name="eventGroup{{ idx }}">
+						<div class="rowWrapper">
+							<div class="labelWrapper"><label for="eventGroup{{ idx }}">Group Filter:</label></div>
+							<div class="widgetWrapperPlacementOnly">
+								<input type="text" value="" name="eventGroup{{ idx }}">
+							</div>
+							<div class="after"></div>
 						</div>
-						<div class="after"></div>
-					</div>
-					<div class="rowWrapper">
-						<div class="labelWrapper"><label for="eventVenue{{ idx }}">Venue Filter:</label></div>
-						<div class="widgetWrapperPlacementOnly">
-							<input type="text" value="" name="eventVenue{{ idx }}">
+						<div class="rowWrapper">
+							<div class="labelWrapper"><label for="eventVenue{{ idx }}">Venue Filter:</label></div>
+							<div class="widgetWrapperPlacementOnly">
+								<input type="text" value="" name="eventVenue{{ idx }}">
+							</div>
+							<div class="after"></div>
 						</div>
-						<div class="after"></div>
-					</div>
-				</li>
-			{% endif %}
-		</ul>
+					</li>
+				{% endif %}
+			</ul>
 
 
-		<div class="rowWrapper">
-			<div class="labelWrapper"><label for="daysInAdvance">How Many Days in advance to show?</label></div>
-			<div class="widgetWrapperPlacementOnly">
-				<input type="text" name="daysInAdvance" value="{{ daysInAdvance }}">
+			<div class="rowWrapper">
+				<div class="labelWrapper"><label for="daysInAdvance">How Many Days in advance to show?</label></div>
+				<div class="widgetWrapperPlacementOnly">
+					<input type="text" name="daysInAdvance" value="{{ daysInAdvance }}">
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
 
 
-		<div class="rowWrapper">
-			<div class="labelWrapper"><label for="refreshInSeconds">How Many Seconds To Refresh?</label></div>
-			<div class="widgetWrapperPlacementOnly">
-				<input type="text" name="refreshInSeconds" value="{{ refreshInSeconds }}">
+			<div class="rowWrapper">
+				<div class="labelWrapper"><label for="refreshInSeconds">How Many Seconds To Refresh?</label></div>
+				<div class="widgetWrapperPlacementOnly">
+					<input type="text" name="refreshInSeconds" value="{{ refreshInSeconds }}">
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
 
 
-		<input type="submit" value="Run">
-	</form>
+			<input type="submit" value="Run">
+		</form>
+
+	</div>
 
 {% endblock %}
