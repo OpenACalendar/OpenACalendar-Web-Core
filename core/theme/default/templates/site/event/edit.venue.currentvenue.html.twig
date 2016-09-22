@@ -18,28 +18,32 @@
 
 {% block innerContent %}
 
-	<p>Current Venue:</p>
+	<div class="contentMain">
 
-	<div class="dateAndLocationWrapper">
-		{% include 'site/common/eventLocationLine.html.twig' %}
-	</div>
+		<p>Current Venue:</p>
 
-	{%  if venue %}{# TODO and edit venue user permission #}
-		<form action="/venue/{{  venue.slugForURL }}/edit/details" class="oneActionFormRight" method="get">
-			<input type="submit" value="Edit details of {{ venue.title|e('html_attr') }}">
+		<div class="dateAndLocationWrapper">
+			{% include 'site/common/eventLocationLine.html.twig' %}
+		</div>
+
+		{%  if venue %}{# TODO and edit venue user permission #}
+			<form action="/venue/{{  venue.slugForURL }}/edit/details" class="oneActionFormRight" method="get">
+				<input type="submit" value="Edit details of {{ venue.title|e('html_attr') }}">
+			</form>
+			<div class="afterOneActionFormRight"></div>
+		{%  endif %}
+
+		<form action="/event/{{  event.slugForURL }}/edit/venue/search" class="oneActionFormRight" method="get">
+			<input type="submit" value="Change to a different venue">
 		</form>
 		<div class="afterOneActionFormRight"></div>
-	{%  endif %}
 
-	<form action="/event/{{  event.slugForURL }}/edit/venue/search" class="oneActionFormRight" method="get">
-		<input type="submit" value="Change to a different venue">
-	</form>
-	<div class="afterOneActionFormRight"></div>
+		<form action="/event/{{  event.slugForURL }}/edit/area" class="oneActionFormRight" method="get">
+			<input type="submit" value="Exact venue not known">
+		</form>
+		<div class="afterOneActionFormRight"></div>
 
-	<form action="/event/{{  event.slugForURL }}/edit/area" class="oneActionFormRight" method="get">
-		<input type="submit" value="Exact venue not known">
-	</form>
-	<div class="afterOneActionFormRight"></div>
+	</div>
 
 
 {% endblock %}

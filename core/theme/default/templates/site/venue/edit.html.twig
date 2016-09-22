@@ -18,33 +18,37 @@
 
 {% block innerContent %}
 
-	<form action="#" method="post" class="styled">
+	<div class="contentMain">
 
-		{{ form_errors(form) }}
+		<form action="#" method="post" class="styled">
 
-		{{ form_row(form.title) }}
-		{{ form_row(form.description) }}
-		{{ form_row(form.address) }}
-		
-		{% include 'site/common/venueFormAreaBrowser.html.twig' %}
-						
-		{{ form_row(form.address_code) }}
-		{{ form_row(form.country_id) }}
-								
-		<div class="rowWrapper">
-			<div class="labelWrapper">Map (Click to set location)</div>
-			<div class="widgetWrapperPlacementOnly"><div id="Map"></div></div>
-			<div class="after"></div>
-		</div>
+			{{ form_errors(form) }}
+
+			{{ form_row(form.title) }}
+			{{ form_row(form.description) }}
+			{{ form_row(form.address) }}
+
+			{% include 'site/common/venueFormAreaBrowser.html.twig' %}
+
+			{{ form_row(form.address_code) }}
+			{{ form_row(form.country_id) }}
+
+			<div class="rowWrapper">
+				<div class="labelWrapper">Map (Click to set location)</div>
+				<div class="widgetWrapperPlacementOnly"><div id="Map"></div></div>
+				<div class="after"></div>
+			</div>
 
 
-		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+			{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
 
-		{{ form_rest(form) }}
+			{{ form_rest(form) }}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 
 

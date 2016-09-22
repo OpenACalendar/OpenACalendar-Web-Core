@@ -18,67 +18,72 @@
 
 {% block innerContent %}
 
-	<p>Current Venue:</p>
+	<div class="contentMain">
 
-	<div class="dateAndLocationWrapper">
-		{% include 'site/common/eventLocationLine.html.twig' %}
-	</div>
+		<p>Current Venue:</p>
 
-	{%  if venue %}{# TODO and edit venue user permission #}
-		<form action="/venue/{{  venue.slugForURL }}/edit/details" class="oneActionFormRight" method="get">
-			<input type="submit" value="Edit details of {{ venue.title|e('html_attr') }}">
-		</form>
-		<div class="afterOneActionFormRight"></div>
-	{%  endif %}
-
-	<p>{%  if venue %}Or change venue{%  else %}Search for a venue{%  endif %}</p>
-
-	<form action="" method="get" class="styled" id="EditEventVenueForm">
-		<input type="hidden" name="fieldsSubmitted" value="1">
-
-		<div class="rowWrapper">
-			<div class="labelWrapper">Venue Name</div>
-			<div class="widgetWrapperPlacementOnly"><input type="text" name="searchTitle"  id="TitleField" value="{{ searchTitle | e('html_attr') }}" autocomplete="off"></div>
-			<div class="after"></div>
+		<div class="dateAndLocationWrapper">
+			{% include 'site/common/eventLocationLine.html.twig' %}
 		</div>
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Address</div>
-			<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddress"  id="AddressField" value="{{ searchAddress | e('html_attr')  }}" autocomplete="off"></div>
-			<div class="after"></div>
-		</div>
 
-		{% if  doesCountryHaveAnyNotDeletedAreas %}
+		{%  if venue %}{# TODO and edit venue user permission #}
+			<form action="/venue/{{  venue.slugForURL }}/edit/details" class="oneActionFormRight" method="get">
+				<input type="submit" value="Edit details of {{ venue.title|e('html_attr') }}">
+			</form>
+			<div class="afterOneActionFormRight"></div>
+		{%  endif %}
+
+		<p>{%  if venue %}Or change venue{%  else %}Search for a venue{%  endif %}</p>
+
+		<form action="" method="get" class="styled" id="EditEventVenueForm">
+			<input type="hidden" name="fieldsSubmitted" value="1">
+
 			<div class="rowWrapper">
-				<div class="labelWrapper">City/Area</div>
-				<div class="widgetWrapperPlacementOnly">
-					<input type="text" name="searchArea"  id="AreaField" value="{{ searchArea | e('html_attr') }}" autocomplete="off">
-					<ul id="AreaList">
-						{%  for area in areas %}
-							<li><label><input type="radio" name="searchAreaSlug" value="{{  area.slug  }}" {% if searchAreaObject and searchAreaObject.slug == area.slug %}checked="checked"{%  endif %}>{{  area.title }}</label></li>
-						{%  endfor %}
-					</ul>
-				</div>
+				<div class="labelWrapper">Venue Name</div>
+				<div class="widgetWrapperPlacementOnly"><input type="text" name="searchTitle"  id="TitleField" value="{{ searchTitle | e('html_attr') }}" autocomplete="off"></div>
 				<div class="after"></div>
 			</div>
-		{% endif %}
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Post Code</div>
-			<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddressCode"  id="AddressCodeField" value="{{ searchAddressCode | e('html_attr')  }}" autocomplete="off"></div>
-			<div class="after"></div>
-		</div>
+			<div class="rowWrapper">
+				<div class="labelWrapper">Address</div>
+				<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddress"  id="AddressField" value="{{ searchAddress | e('html_attr')  }}" autocomplete="off"></div>
+				<div class="after"></div>
+			</div>
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Country</div>
-			<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
-			<div class="after"></div>
-		</div>
+			{% if  doesCountryHaveAnyNotDeletedAreas %}
+				<div class="rowWrapper">
+					<div class="labelWrapper">City/Area</div>
+					<div class="widgetWrapperPlacementOnly">
+						<input type="text" name="searchArea"  id="AreaField" value="{{ searchArea | e('html_attr') }}" autocomplete="off">
+						<ul id="AreaList">
+							{%  for area in areas %}
+								<li><label><input type="radio" name="searchAreaSlug" value="{{  area.slug  }}" {% if searchAreaObject and searchAreaObject.slug == area.slug %}checked="checked"{%  endif %}>{{  area.title }}</label></li>
+							{%  endfor %}
+						</ul>
+					</div>
+					<div class="after"></div>
+				</div>
+			{% endif %}
 
-		<div class="bigSubmitActionWrapper"><input type="submit" value="Search"></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			<div class="rowWrapper">
+				<div class="labelWrapper">Post Code</div>
+				<div class="widgetWrapperPlacementOnly"><input type="text" name="searchAddressCode"  id="AddressCodeField" value="{{ searchAddressCode | e('html_attr')  }}" autocomplete="off"></div>
+				<div class="after"></div>
+			</div>
 
+			<div class="rowWrapper">
+				<div class="labelWrapper">Country</div>
+				<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
+				<div class="after"></div>
+			</div>
+
+			<div class="bigSubmitActionWrapper"><input type="submit" value="Search"></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+
+	</div>
 
 	<div class="contentTwoColumns">
 

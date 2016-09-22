@@ -19,29 +19,35 @@
 
 {% block innerContent %}
 
-	<p>Current Venue:</p>
+	<div class="contentMain">
 
-	<div class="dateAndLocationWrapper">
-		{% include 'site/common/eventLocationLine.html.twig' %}
+		<p>Current Venue:</p>
+
+		<div class="dateAndLocationWrapper">
+			{% include 'site/common/eventLocationLine.html.twig' %}
+		</div>
+
+		<p>If this venue is wrong, you can remove it.</p>
+
+
+		<form action="#" method="post" class="styled">
+
+			{{ form_errors(form) }}
+
+			{{ form_row(form.remove) }}
+
+			{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+
+			{{ form_rest(form) }}
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+
+		<p><a href="/event/{{  event.slugForURL }}">The event is at this venue</a></p>
+
 	</div>
 
-	<p>If this venue is wrong, you can remove it.</p>
 
-
-	<form action="#" method="post" class="styled">
-
-		{{ form_errors(form) }}
-
-		{{ form_row(form.remove) }}
-
-		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
-
-		{{ form_rest(form) }}
-
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
-
-
-	<p><a href="/event/{{  event.slugForURL }}">The event is at this venue</a></p>
 {% endblock %}
