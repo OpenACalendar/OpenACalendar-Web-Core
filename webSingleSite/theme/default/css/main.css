@@ -2295,6 +2295,10 @@ form.styled .rowWrapper .widgetWrapper textarea,
   width: 80%;
   height: 100px;
 }
+form.styled .rowWrapper .widgetWrapper .sectionHeader,
+.likeFormStyled .rowWrapper .widgetWrapper .sectionHeader {
+  font-weight: bold;
+}
 form.styled .rowWrapper .widgetWrapperPlacementOnly,
 .likeFormStyled .rowWrapper .widgetWrapperPlacementOnly {
   display: block;
