@@ -11,7 +11,7 @@ var marker;
 $(document).ready(function() {
 	
 	if (mapData.lat && mapData.lng) {
-		map = L.map('Map')
+		map = L.map('Map', { 'scrollWheelZoom':false });
 		configureBasicMap(map);
 		map.setView([mapData.lat,mapData.lng], 13);
 
