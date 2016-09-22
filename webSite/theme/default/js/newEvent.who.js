@@ -36,7 +36,7 @@ function groupSearchChanged() {
                         out += '<li class="group">';
 						out += '<div class="title">'+escapeHTML(group.title)+'</div>';
                         out += '<form method="post"><input type="hidden" name="action" value="selectgroup"><input type="hidden" name="group" value="'+group.slug+'">';
-						out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event in this Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
+						out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event with this Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
                         out += '</form>';
                         out += '</li>';
                     }

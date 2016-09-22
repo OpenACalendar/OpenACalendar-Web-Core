@@ -49,7 +49,15 @@ class NewEventWhoGroup extends BaseNewEvent
 		if ($this->request->request->get('action') == 'nogroup') {
 			$this->draftEvent->setDetailsValue('group.none',true);
 			$this->draftEvent->setDetailsValue('group.new',false);
+            $this->draftEvent->setDetailsValue('group.existing',false);
 			$this->isAllInformationGathered = true;
+			return true;
+		}
+
+		if ($this->request->request->get('action') == 'group') {
+			$this->draftEvent->setDetailsValue('group.none',false);
+			$this->draftEvent->setDetailsValue('group.new',false);
+			$this->draftEvent->setDetailsValue('group.existing',true);
 			return true;
 		}
 
@@ -79,21 +87,46 @@ class NewEventWhoGroup extends BaseNewEvent
 
 
 
-	function onThisStepSetUpPageView() {
+    function onThisStepSetUpPageView() {
 
-		$out = array('groupSearchText'=>$this->request->request->get('groupsearch'));
+        if ($this->draftEvent->getDetailsValue('group.existing')) {
 
-		if ($this->request->request->get('action') == 'groupsearch') {
-			$grb = new GroupRepositoryBuilder($this->application);
-			$grb->setSite($this->site);
-			$grb->setIncludeDeleted(false);
-			$grb->setFreeTextsearch($this->request->request->get('groupsearch'));
-			$grb->setLimit(100);
-			$out['groups'] = $grb->fetchAll();
-		}
+            $out = array(
+                'groupExisting' => true,
+                'groupSearchText' => $this->request->request->get('groupsearch')
+            );
 
-		return $out;
-	}
+            if ($this->request->request->get('action') == 'groupsearch') {
+                $grb = new GroupRepositoryBuilder($this->application);
+                $grb->setSite($this->site);
+                $grb->setIncludeDeleted(false);
+                $grb->setFreeTextsearch($this->request->request->get('groupsearch'));
+                $grb->setLimit(100);
+                $out['groups'] = $grb->fetchAll();
+            }
+
+            return $out;
+
+        } else {
+
+            $out = array(
+                'groupExisting' => false,
+                'incomingGroup' => null,
+            );
+
+            if ($this->draftEvent->hasDetailsValue('incoming.group.id')) {
+                $gr = new GroupRepository($this->application);
+                $group = $gr->loadById($this->draftEvent->getDetailsValue('incoming.group.id'));
+                if ($group) {
+                    $out['incomingGroup'] = $group;
+                }
+            }
+
+            return $out;
+
+        }
+
+    }
 
 	function stepDoneGetViewName()
 	{

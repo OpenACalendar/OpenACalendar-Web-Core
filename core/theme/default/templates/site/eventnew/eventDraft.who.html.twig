@@ -18,29 +18,60 @@
 		<p>Groups let you add more information and lets users find future events
 			from the same organisers easily.</p>
 
-		<form id="GroupSearchForm" method="post">
-			<input type="hidden" name="action" value="groupsearch">
-			Search for a group: <input type="text"  name="groupsearch" id="GroupSearchText" autocomplete="off" value="{{  groupSearchText }}">
+		{%  if not groupExisting %}
 
-			<div class="bigSubmitActionWrapper"><input type="submit" value="Search For a Group" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>
-		</form>
+			{%  if incomingGroup %}
 
-		<ul class="mainListGroups" id="GroupSearchList">
-			{%  if groups is defined %}
-				{% for group in groups %}
-					<li class="group">
-						<div class="title">{{  group.title }}</div>
-						<form action="" class="styled" method="POST">
-							<input type="hidden" name="action" value="selectgroup">
-							<input type="hidden" name="group" value="{{  group.slug }}">
-							<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event in this Group" class="bigSubmitAction"/></div>
-							<div class="afterBigSubmitActionWrapper"></div>
-						</form>
-					</li>
-				{% endfor %}
+				<form action="" class="styled" method="POST">
+					<input type="hidden" name="action" value="selectgroup">
+					<input type="hidden" name="group" value="{{  incomingGroup.slug }}">
+					<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event with {{ incomingGroup.title|e('html_attr') }}" class="bigSubmitAction"/></div>
+					<div class="afterBigSubmitActionWrapper"></div>
+				</form>
+
+				<form action="" class="styled" method="POST">
+					<input type="hidden" name="action" value="group">
+					<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event with a different Group" class="bigSubmitAction"/></div>
+					<div class="afterBigSubmitActionWrapper"></div>
+				</form>
+
+			{%  else %}
+
+				<form action="" class="styled" method="POST">
+					<input type="hidden" name="action" value="group">
+					<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event with a Group" class="bigSubmitAction"/></div>
+					<div class="afterBigSubmitActionWrapper"></div>
+				</form>
+
 			{%  endif %}
-		</ul>
+
+		{%  else %}
+
+			<form id="GroupSearchForm" method="post">
+				<input type="hidden" name="action" value="groupsearch">
+				Search for a group: <input type="text"  name="groupsearch" id="GroupSearchText" autocomplete="off" value="{{  groupSearchText }}">
+
+				<div class="bigSubmitActionWrapper"><input type="submit" value="Search For a Group" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</form>
+
+			<ul class="mainListGroups" id="GroupSearchList">
+				{%  if groups is defined %}
+					{% for group in groups %}
+						<li class="group">
+							<div class="title">{{  group.title }}</div>
+							<form action="" class="styled" method="POST">
+								<input type="hidden" name="action" value="selectgroup">
+								<input type="hidden" name="group" value="{{  group.slug }}">
+								<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event with this Group" class="bigSubmitAction"/></div>
+								<div class="afterBigSubmitActionWrapper"></div>
+							</form>
+						</li>
+					{% endfor %}
+				{%  endif %}
+			</ul>
+
+		{%  endif %}
 
 	</div>
 
@@ -54,7 +85,7 @@
 			<input type="hidden" name="action" value="nogroup">
 
 
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event Without a Group" class="bigSubmitAction"/></div>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event without a Group" class="bigSubmitAction"/></div>
 			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 

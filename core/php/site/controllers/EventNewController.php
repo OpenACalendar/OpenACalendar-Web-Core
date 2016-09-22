@@ -90,8 +90,8 @@ class EventNewController {
 			$gr = new GroupRepository($app);
 			$group = $gr->loadBySlug($app['currentSite'], $request->query->get('group'));
 			if ($group) {
-				$newEventDraft->setDetailsValue('group.id',$group->getId());
-				$newEventDraft->setDetailsValue('group.title',$group->getTitle());
+				$incomingData['group.id'] = $group->getId();
+				$incomingData['group.title'] = $group->getTitle();
 			}
 		}
 
