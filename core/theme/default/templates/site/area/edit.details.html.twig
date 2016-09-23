@@ -18,42 +18,45 @@
 
 {% block innerContent %}
 
-	<form action="#" method="post" class="styled">
+	<div class="contentMain">
 
-		{{ form_errors(form) }}
+		<form action="#" method="post" class="styled">
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">&nbsp;</div>
-			<div class="widgetWrapperPlacementOnly">
-				<ul id="ChangeAreaAreaList">
-					<li class="selectedarea">
-						<span class="content">
-							<span class="title">{{ country.title }}</span>
-						</span>
-					</li>
+			{{ form_errors(form) }}
 
-					{% for parentArea in parentAreas %}
+			<div class="rowWrapper">
+				<div class="labelWrapper">&nbsp;</div>
+				<div class="widgetWrapperPlacementOnly">
+					<ul id="ChangeAreaAreaList">
 						<li class="selectedarea">
 							<span class="content">
-								<span class="title">{{ parentArea.title }}</span>
+								<span class="title">{{ country.title }}</span>
 							</span>
 						</li>
-					{% endfor %}
-				</ul>
+
+						{% for parentArea in parentAreas %}
+							<li class="selectedarea">
+								<span class="content">
+									<span class="title">{{ parentArea.title }}</span>
+								</span>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
 			</div>
-		</div>
-		
-		{{ form_row(form.title) }}
-		{{ form_row(form.description) }}
 
-		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+			{{ form_row(form.title) }}
+			{{ form_row(form.description) }}
 
-		{{ form_rest(form) }}
+			{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			{{ form_rest(form) }}
 
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 
 {% endblock %}
