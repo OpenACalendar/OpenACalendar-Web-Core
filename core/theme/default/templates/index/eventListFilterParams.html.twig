@@ -27,39 +27,58 @@
 			</a>
 		</div>
 
-		<form method="get" class="filterList filterListEvent">
+		<form method="get" class="filterList filterListEvent styled" style="clear: both;">
 			<input type="hidden" name="eventListFilterDataSubmitted" value="1">
 
 			{% if eventListFilterParams.dateControls %}
-				<div class="inputField">
-					<label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label>
+				<div class="rowWrapper">
+					<div class="labelWrapper">&nbsp;</div>
+					<div class="widgetWrapper"><label><input type="checkbox" name="fromNow" value="1" {% if eventListFilterParams.fromNow %}checked{% endif %}> From now</label></div>
+					<div class="afterRowWrapper"></div>
 				</div>
 
-				<div class="inputField" id="eventListFilterFromWrapper">
-					<label>From <input type="text" name="from" value="{{  eventListFilterParams.from }}"></label>
+				<div class="rowWrapper" id="eventListFilterFromWrapper">
+					<label>
+						<div class="labelWrapper">From:</div>
+						<div class="widgetWrapper"><input type="text" name="from" value="{{  eventListFilterParams.from }}" autocomplete="off"></div>
+						<div class="afterRowWrapper"></div>
+					</label>
 				</div>
 			{% endif %}
 
 			{% if eventListFilterParams.specifiedUserControls %}
-				<div class="inputField">
-					<select name="specifiedUserWhich">
-						<option value="AW" {% if eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending or Watching</option>
-						<option value="A" {% if not eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending</option>
-					</select>
+				<div class="rowWrapper">
+					<label>
+						<div class="labelWrapper">Show:</div>
+						<div class="widgetWrapper"><select name="specifiedUserWhich">
+								<option value="AW" {% if eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending or Watching</option>
+								<option value="A" {% if not eventListFilterParams.includeSpecifiedUserWatching %}selected{% endif %}>Attending</option>
+							</select></div>
+						<div class="afterRowWrapper"></div>
+					</label>
 				</div>
 			{% endif %}
 
-			<div class="inputField">
-				<label>Search: <input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></label>
+
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">Search:</div>
+					<div class="widgetWrapper"><input type="text" name="freeTextSearch" value="{{ eventListFilterParams.freeTextSearch }}" autocomplete="off"></div>
+					<div class="afterRowWrapper"></div>
+				</label>
 			</div>
 
-			<div class="inputField">
-				<label><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</label>
+			<div class="rowWrapper">
+				<label>
+					<div class="labelWrapper">&nbsp;</div>
+					<div class="widgetWrapper"><input type="checkbox" name="includeDeleted" value="1" {% if eventListFilterParams.includeDeleted %}checked{% endif %}> Show Deleted</div>
+					<div class="afterRowWrapper"></div>
+				</label>
 			</div>
 
-			<div class="submitField">
-				<input type="submit" value="Filter">
-			</div>
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Filter" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 	</div>
 </div>
