@@ -124,20 +124,6 @@
 				<div class="description" itemprop="description">
 					{%  if event.description %}
 						<p>{{ event.description | nl2br  | linkify }}</p>
-					{%  else %}
-
-						{% if event.url %}
-							<p>
-								More details: <a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a>
-							</p>
-						{% endif %}
-
-						{% if event.ticketUrl %}
-							<p>
-								{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a>
-							</p>
-						{% endif %}
-
 					{%  endif %}
 
 					{%  for customField in currentSite.getCachedEventCustomFieldDefinitionsAsModels %}
@@ -183,6 +169,28 @@
 					{% endif %}
 				</div>
 
+				{% if event.isUrlAndTicketUrlSetAndTheSame %}
+
+					<p>
+						More details and {%  if event.isInPast %}tickets{%  else %}get tickets from{%  endif %}: <a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a>
+					</p>
+
+				{%  else %}
+
+					{% if event.url %}
+						<p>
+							More details: <a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a>
+						</p>
+					{% endif %}
+
+					{% if event.ticketUrl %}
+						<p>
+							{%  if event.isInPast %}Tickets{%  else %}Get tickets from{%  endif %}: <a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a>
+						</p>
+					{% endif %}
+
+				{%  endif %}
+
 				{% if event.isImported %}
 					<p>Imported From: <a href="/import/{{ import.slug }}">{{ import.url | linkinfo }}</a></p>
 				{% endif %}
@@ -199,19 +207,31 @@
 						<div class="infoBoxContent">
 
 
-							{% if event.url %}
+							{% if event.isUrlAndTicketUrlSetAndTheSame %}
+
 								<div class="contentTwoColumnsLinkWrapper">
-									<div class="contentTwoColumnsLinkHeader">More details</div>
+									<div class="contentTwoColumnsLinkHeader">More details and {%  if event.isInPast %}tickets{%  else %}get tickets from{%  endif %}</div>
 									<div class="contentTwoColumnsLinkContent"><a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a></div>
 								</div>
-							{% endif %}
 
-							{% if event.ticketUrl %}
-								<div class="contentTwoColumnsLinkWrapper">
-									<div class="contentTwoColumnsLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get Tickets From{%  endif %}</div>
-									<div class="contentTwoColumnsLinkContent"><a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a></div>
-								</div>
-							{% endif %}
+							{%  else %}
+
+
+								{% if event.url %}
+									<div class="contentTwoColumnsLinkWrapper">
+										<div class="contentTwoColumnsLinkHeader">More details</div>
+										<div class="contentTwoColumnsLinkContent"><a href="{{ event.url }}" target="_blank" rel="noopener">{{ event.url | linkinfo }}</a></div>
+									</div>
+								{% endif %}
+
+								{% if event.ticketUrl %}
+									<div class="contentTwoColumnsLinkWrapper">
+										<div class="contentTwoColumnsLinkHeader">{%  if event.isInPast %}Tickets{%  else %}Get tickets from{%  endif %}</div>
+										<div class="contentTwoColumnsLinkContent"><a href="{{ event.ticketUrl }}" target="_blank" rel="noopener">{{ event.ticketUrl | linkinfo }}</a></div>
+									</div>
+								{% endif %}
+
+							{%  endif %}
 
 							{% if showMoreInfoPromptSignUp %}
 								<p>

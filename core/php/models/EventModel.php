@@ -534,6 +534,14 @@ class EventModel {
 		return false;
 	}
 
+    /**
+     *
+     * @return bool True if set and both the same, false if different or not set.
+     */
+    public function isUrlAndTicketUrlSetAndTheSame() {
+        return $this->url && $this->ticket_url && $this->url == $this->ticket_url;
+    }
+
 		
 	/**
 	 * @return VenueModel
