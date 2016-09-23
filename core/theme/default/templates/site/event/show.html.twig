@@ -121,9 +121,9 @@
 					</div>
 				{% endif %}
 
-				<p class="description" itemprop="description">
+				<div class="description" itemprop="description">
 					{%  if event.description %}
-						{{ event.description | nl2br  | linkify }}
+						<p>{{ event.description | nl2br  | linkify }}</p>
 					{%  else %}
 
 						{% if event.url %}
@@ -149,7 +149,7 @@
 							{% include  ['site/event/show.custom_field.' ~ customField.key ~ '.after.html.twig', 'site/event/show.custom_field.after.html.twig'] with { 'customField':customField } %}
 						{%  endif %}
 					{%  endfor %}
-				</p>
+				</div>
 
 				{% if tags %}
 					<div class="inlineTags">
