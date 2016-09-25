@@ -14,13 +14,17 @@
 
 {% block content %}
 
-	<h2>Add an event</h2>
+	<div class="contentMain">
 
-	<p>Create an account or login to add an event</p>
+		<h2>Add an event</h2>
 
-	<div class="bigButtonContainer">
-		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/login{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Login</a>
-		<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/register{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Register</a>
+		<p>Create an account or login to add an event</p>
+
+		<div class="bigButtonContainer">
+			<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/login{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Login</a>
+			<a  class="button" href="{{ config.getWebIndexDomainSecure() }}/you/register{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Register</a>
+		</div>
+
 	</div>
 
 {% endblock %}
