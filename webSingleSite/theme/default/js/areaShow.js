@@ -10,7 +10,7 @@ var markerGroup;
 
 $(document).ready(function() {
 	
-	map = L.map('Map');
+	map = L.map('Map', { 'scrollWheelZoom':false });
 	configureBasicMap(map);
 
 	markerGroup = new L.MarkerClusterGroup();

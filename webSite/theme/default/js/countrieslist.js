@@ -9,7 +9,7 @@ var map;
 
 $(document).ready(function() {
 	
-	map = L.map('Map');
+	map = L.map('Map', { 'scrollWheelZoom':false });
 	configureBasicMap(map);
 
 	if (countries.length < 20) {
