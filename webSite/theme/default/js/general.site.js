@@ -74,7 +74,7 @@ function showExportSharePopup() {
 		if (exportData.hasOwnProperty("event") || exportData.hasOwnProperty("tag") || exportData.hasOwnProperty("area")  || exportData.hasOwnProperty("group") || exportData.hasOwnProperty("country") || exportData.hasOwnProperty("venue") || exportData.hasOwnProperty("curatedlist")) {
 			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportAll" checked> all events</label></div>';
 			if (exportData.hasOwnProperty("country") ) {
-				html += '<label><input type="radio" name="ExportWhat" id="ExportCountry"> all events from ';
+				html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportCountry"> all events from ';
 				html += (exportData.hasOwnProperty("countryTitle") ? 'country: '+ escapeHTML(exportData.countryTitle) : 'this country' );
 				html += '</label></div>';
 			}
