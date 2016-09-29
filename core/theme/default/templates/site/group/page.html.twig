@@ -27,11 +27,16 @@
 		<h2>{{  group.title }}</h2>
 	</div>
 
-	{%  if groupIsDuplicateOf %}
-		<div class="flash-notice"><div class="contentMain">
-			This group is a duplicate of <a href="/group/{{  groupIsDuplicateOf.slugForURL }}">{{  groupIsDuplicateOf.title }}</a>.
-		</div></div>
-	{% endif %}
+	{% if group.isdeleted %}
+		<div class="diversionBanner">
+			<div class="contentMain">
+				This group has been deleted!
+				{%  if groupIsDuplicateOf %}
+					It is a duplicate of <a href="/group/{{  groupIsDuplicateOf.slugForURL }}">{{  groupIsDuplicateOf.title }}</a>.
+				{% endif %}
+			</div>
+		</div>
+	{%  endif %}
 
 	<div class="pageActionsWrapper">
 		<ul class="pageActions">

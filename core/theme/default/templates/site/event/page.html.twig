@@ -54,11 +54,18 @@
 		</ul>
 	{% endif %}
 
-	{%  if eventIsDuplicateOf %}
-		<div class="flash-notice"><div class="contentMain">
-			This event is a duplicate of <a href="/event/{{  eventIsDuplicateOf.slugForURL }}">{{  eventIsDuplicateOf.summaryDisplay }}</a>.
-		</div></div>
-	{% endif %}
+	{% if event.isdeleted %}
+		<div class="diversionBanner">
+			<div class="contentMain">
+				This event has been deleted!
+				{%  if eventIsDuplicateOf %}
+					It is a duplicate of <a href="/event/{{  eventIsDuplicateOf.slugForURL }}">{{  eventIsDuplicateOf.summaryDisplay }}</a>.
+				{% endif %}
+			</div>
+		</div>
+	{% elseif event.isCancelled %}
+		<div class="diversionBanner"><div class="contentMain">This event has been cancelled!</div></div>
+	{%  endif %}
 
 	<div class="pageActionsWrapper">
 		<ul class="pageActions">

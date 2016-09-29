@@ -65,10 +65,6 @@
 	<div  class="mainShowGroup" itemscope itemtype="http://schema.org/Organization">
 		<meta itemprop="name" content="{{ group.title|e('html_attr') }}" />
 
-		{% if group.isdeleted %}
-			<p class="descriptionDeleted">This group has been deleted!</p>
-		{%  endif %}
-
 		<div class="contentTwoColumns">
 
 			<div class="contentTwoColumnsLeft">

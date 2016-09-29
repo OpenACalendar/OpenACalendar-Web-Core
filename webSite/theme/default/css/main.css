@@ -1470,18 +1470,6 @@ div.mainShowEvent div.title a:focus {
   color: black;
   text-decoration: underline;
 }
-ul.mainListEvents li.event .descriptionDeleted,
-ul.mainListEvents li.event .descriptionCancelled,
-div.mainShowEvent .descriptionDeleted,
-div.mainShowEvent .descriptionCancelled {
-  font-style: italic;
-  font-weight: bold;
-  font-size: 2rem;
-  text-align: center;
-  padding: 20px 10px;
-  background: #000;
-  color: #fff;
-}
 ul.mainListEvents li.event p.description,
 div.mainShowEvent p.description {
   padding: 0px 0px 0px 0px;
@@ -1690,13 +1678,16 @@ div.mainShowGroup p.description {
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 10px 0px;
 }
-div.mainShowGroup .descriptionDeleted {
+.diversionBanner {
   font-style: italic;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.875rem;
   text-align: center;
   padding: 20px 10px;
   background: #000;
+  color: #fff;
+}
+.diversionBanner a {
   color: #fff;
 }
 div.mainShowCountry .map {

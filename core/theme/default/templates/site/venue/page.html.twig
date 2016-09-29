@@ -37,11 +37,16 @@
 		<h2>{{  venue.title }}</h2>
 	</div>
 
-	{%  if venueIsDuplicateOf %}
-		<div class="flash-notice"><div class="contentMain">
-			This venue is a duplicate of <a href="/venue/{{  venueIsDuplicateOf.slugForURL }}">{{  venueIsDuplicateOf.title }}</a>.
-		</div></div>
-	{% endif %}
+	{% if venue.isdeleted %}
+		<div class="diversionBanner">
+			<div class="contentMain">
+				This venue has been deleted!
+				{%  if venueIsDuplicateOf %}
+					It is a duplicate of <a href="/venue/{{  venueIsDuplicateOf.slugForURL }}">{{  venueIsDuplicateOf.title }}</a>.
+				{% endif %}
+			</div>
+		</div>
+	{%  endif %}
 
 	<div class="pageActionsWrapper">
 		<ul class="pageActions">
