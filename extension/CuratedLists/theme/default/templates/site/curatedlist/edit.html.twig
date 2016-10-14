@@ -16,20 +16,22 @@
 {% endblock %}
 
 {% block innerContent %}
+	
+	<div class="contentMain">
 
+		<form action="#" method="post" class="styled">
 
-	<form action="#" method="post" class="styled">
+			{{ form_errors(form) }}
 
-		{{ form_errors(form) }}
+			{{ form_row(form.title) }}
+			{{ form_row(form.description) }}
+			{{ form_rest(form) }}
 
-		{{ form_row(form.title) }}
-		{{ form_row(form.description) }}
-		{{ form_rest(form) }}
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
-
+	</div>
 {% endblock %}
 
 
