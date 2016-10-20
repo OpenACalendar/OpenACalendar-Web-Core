@@ -495,6 +495,86 @@ class ImportURLICALTest extends \BaseAppWithDBTest {
 		
 	}
 
+
+    /**
+     *
+     * @group import
+     */
+    function testTimeZone() {
+
+        $this->app['timesource']->mock(2016, 10, 1, 1, 1, 1);
+        $this->app['config']->importAllowEventsSecondsIntoFuture = 7776000; // 90 days
+        $this->app['config']->importLimitToSaveOnEachRunImportedEvents = 1000;
+        $this->app['config']->importLimitToSaveOnEachRunEvents = 100;
+
+        $this->addCountriesToTestDB();
+        $countryRepo = new CountryRepository($this->app);
+
+        $user = new UserAccountModel();
+        $user->setEmail("test@jarofgreen.co.uk");
+        $user->setUsername("test");
+        $user->setPassword("password");
+
+        $userRepo = new UserAccountRepository($this->app);
+        $userRepo->create($user);
+
+        $site = new SiteModel();
+        $site->setTitle("Test");
+        $site->setSlug("test");
+
+        $siteRepo = new SiteRepository($this->app);
+        $siteRepo->create($site, $user, array(  $countryRepo->loadByTwoCharCode('GB')  ), $this->getSiteQuotaUsedForTesting());
+
+        $group = new GroupModel();
+        $group->setTitle("test");
+        $group->setDescription("test test");
+        $group->setUrl("http://www.group.com");
+
+        $groupRepo = new GroupRepository($this->app);
+        $groupRepo->create($group, $site, $user);
+
+        $importRepository = new ImportRepository($this->app);
+
+        $importURL = new ImportModel();
+        $importURL->setIsEnabled(true);
+        $importURL->setSiteId($site->getId());
+        $importURL->setGroupId($group->getId());
+        $importURL->setCountryId($countryRepo->loadByTwoCharCode('GB')->getId());
+        // We don't set - $importURL->setAreaId($area->getId()); - importer should get this from lat lng!
+        $importURL->setTitle("Test");
+        $importURL->setUrl("http://test.com");
+
+        $importRepository->create($importURL, $site, $user);
+
+
+
+        // Import
+        $importURLRun = new ImportRun($this->app, $importURL, $site);
+        $importURLRun->setTemporaryFileStorageForTesting(dirname(__FILE__).'/data/TimeZone1.ics');
+        $i = new ImportICalHandler($this->app);
+        $i->setImportRun($importURLRun);
+        $this->assertTrue($i->canHandle());
+        $r =  $i->handle();
+
+
+        $importRunner = new TestsImportRunner($this->app);
+        $importRunner->testRunImportedEventsToEvents($importURLRun);
+
+        // Load!
+        $erb = new EventRepositoryBuilder($this->app);
+        $erb->setSite($site);
+        $events = $erb->fetchAll();
+        $this->assertEquals(1, count($events));
+        $event = $events[0];
+
+        $this->assertEquals("Python talks night",$event->getSummary());
+        $this->assertEquals('2016-10-11 16:30:00', $event->getStartAtInUTC()->format('Y-m-d H:i:s'));
+        $this->assertEquals('2016-10-11 20:00:00', $event->getEndAtInUTC()->format('Y-m-d H:i:s'));
+        $this->assertEquals('2016-10-11 17:30:00', $event->getStartAtInTimezone()->format('Y-m-d H:i:s'));
+        $this->assertEquals('2016-10-11 21:00:00', $event->getEndAtInTimezone()->format('Y-m-d H:i:s'));
+        $this->assertEquals("Europe/London",$event->getTimezone());
+
+    }
 	
 }
 

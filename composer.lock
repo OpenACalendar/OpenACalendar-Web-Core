@@ -261,16 +261,16 @@
         },
         {
             "name": "jmbtechnologylimited/icaldissect",
-            "version": "v1.3.0",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JMB-Technology-Limited/ICalDissect.git",
-                "reference": "97883885931301e6e1ddbe8d68bc686deeae5b7e"
+                "reference": "a11f373d0cd585bbec656c39dba081883431a30d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/97883885931301e6e1ddbe8d68bc686deeae5b7e",
-                "reference": "97883885931301e6e1ddbe8d68bc686deeae5b7e",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/ICalDissect/zipball/a11f373d0cd585bbec656c39dba081883431a30d",
+                "reference": "a11f373d0cd585bbec656c39dba081883431a30d",
                 "shasum": ""
             },
             "require": {
@@ -299,7 +299,7 @@
             "keywords": [
                 "ical"
             ],
-            "time": "2016-08-05 22:20:09"
+            "time": "2016-10-20 13:50:38"
         },
         {
             "name": "jmbtechnologylimited/osdata",
