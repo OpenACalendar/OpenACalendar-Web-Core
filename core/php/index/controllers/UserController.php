@@ -262,9 +262,13 @@ class UserController {
 			$form->bind($request);
 			$data = $form->getData();
 
-			if (is_array($app['config']->userNameReserved) && in_array($data['username'], $app['config']->userNameReserved)) {
-				$form->addError(new FormError('That user name is already taken'));
-			}
+            if (is_array($app['config']->userNameReserved)) {
+                foreach($app['config']->userNameReserved as $reserved) {
+                    if (UserAccountModel::makeCanonicalUserName($reserved) == UserAccountModel::makeCanonicalUserName($data['username'])) {
+                        $form->addError(new FormError('That user name is already taken'));
+                    }
+                }
+            }
 
 			$userExistingUserName = $userRepository->loadByUserName($data['username']);
 			if ($userExistingUserName) {

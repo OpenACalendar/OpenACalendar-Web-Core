@@ -42,9 +42,13 @@ print "Starting ...\n";
 
 $userRepository = new UserAccountRepository($app);
 
-if (is_array($CONFIG->userNameReserved) && in_array($username, $CONFIG->userNameReserved)) {
-	print "That user name is reserved\n";
-	exit(1);
+if (is_array($app['config']->userNameReserved)) {
+    foreach($app['config']->userNameReserved as $reserved) {
+        if (UserAccountModel::makeCanonicalUserName($reserved) == UserAccountModel::makeCanonicalUserName($username)) {
+            print "That user name is reserved\n";
+            exit(1);
+        }
+    }
 }
 
 $userExistingUserName = $userRepository->loadByUserName($username);
