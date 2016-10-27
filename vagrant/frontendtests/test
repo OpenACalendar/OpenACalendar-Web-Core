@@ -5,8 +5,8 @@
 sudo /etc/init.d/postgresql stop
 ## Sleep to make sure server has shut down properly before trying the next bit.
 sleep 2s
-sudo pg_dropcluster 9.4 main
-sudo pg_createcluster 9.4 main
+sudo pg_dropcluster 9.5 main
+sudo pg_createcluster 9.5 main
 sudo /etc/init.d/postgresql start
 ## Sleep to make sure server has started up properly before trying the next bit.
 sleep 2s

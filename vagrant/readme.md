@@ -1,11 +1,11 @@
 # Vagrant Boxes
 
-## The app box
+## The app7 box
 
 This box runs the app in both single site and multi site mode. To use:
 
-    vagrant up app
-    vagrant ssh app
+    vagrant up app7
+    vagrant ssh app7
     php /vagrant/core/cli/createUser.php USERNAME EMAIL PASSWORD sysadmin
     php /vagrant/core/cli/createSite.php test1 EMAIL
 
@@ -41,14 +41,10 @@ User accounts will not be verified. Click the link to send the email again, then
 
 ### Testing on the app box
 
-You can also run tests on this box, but this will run slowly and we recommend you use the tests vagrant box instead. To run tests:
+You can also run tests on this box, but this will run slowly and we recommend you use the tests vagrant box instead. But if you must, to run tests:
 
-    vagrant ssh app
+    vagrant ssh app7
     ./test
-
-## The app box (in php7)
-
-The box app7 is the same as the box app, except it runs PHP7 instead. Set it up the same way.
 
 ## The tests box
 
@@ -60,12 +56,12 @@ This is a special box only for running tests. The Database files are saved on a 
 
 ## The Front End Tests box
 
+To setup:
+
     vagrant up frontendtests
-
-When ready, go the the Vagrant UI (Ubuntu). Open a terminal and type "./run". You only have to do this once.
-(This must be done in the VM so it is connected to the desktop environment.)
-
-Now to run the tests, go back to your dev machine and run:
-
     vagrant ssh frontendtests
+    ./run
+
+Now to run tests, simply run
+
     ./test
