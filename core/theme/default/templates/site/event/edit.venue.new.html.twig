@@ -17,65 +17,66 @@
 
 {% block innerContent %}
 
+	<div class="contentMain">
 
-	<p>Create a New Venue</p>
+		<p>Create a New Venue</p>
 
-	<form action="" method="post" class="styled" id="NewVenueForm">
-		<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-		<input type="hidden" name="newVenueFieldsSubmitted" value="1">
+		<form action="" method="post" class="styled" id="NewVenueForm">
+			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+			<input type="hidden" name="newVenueFieldsSubmitted" value="1">
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Venue Name</div>
-			<div class="widgetWrapperPlacementOnly"><input type="text" name="fieldTitle"  id="TitleField" value="{{ venue.title | e('html_attr') }}"></div>
-			<div class="after"></div>
-		</div>
-
-		<div class="rowWrapper">
-			<div class="labelWrapper">Address</div>
-			<div class="widgetWrapperPlacementOnly"><textarea name="fieldAddress">{{  venue.address | e }}</textarea></div>
-			<div class="after"></div>
-		</div>
-
-		{% if fieldAreaObject %}
 			<div class="rowWrapper">
-				<div class="labelWrapper">City/Area</div>
-				<div class="widgetWrapperPlacementOnly" id="AreaFieldsWrapper">
-						{{  fieldAreaObject.title }}
-						<a href="#" onclick="clearArea(); return false;">Clear</a>
-						<input type="hidden" name="fieldAreaSlug" value="{{ fieldAreaObject.slug  }}">
-				</div>
+				<div class="labelWrapper">Venue Name</div>
+				<div class="widgetWrapperPlacementOnly"><input type="text" name="fieldTitle"  id="TitleField" value="{{ venue.title | e('html_attr') }}"></div>
 				<div class="after"></div>
 			</div>
-		{%  elseif shouldWeAskForArea %}
-			<input type="hidden" name="fieldAreaSearchText" value="{{  fieldAreaSearchText | e('html_attr') }}">
-		{%  endif %}
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Post Code</div>
-			<div class="widgetWrapperPlacementOnly"><input type="text" name="fieldAddressCode"  id="AddressCodeField" value="{{ venue.addressCode | e('html_attr')  }}"></div>
-			<div class="after"></div>
-		</div>
+			<div class="rowWrapper">
+				<div class="labelWrapper">Address</div>
+				<div class="widgetWrapperPlacementOnly"><textarea name="fieldAddress">{{  venue.address | e }}</textarea></div>
+				<div class="after"></div>
+			</div>
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Country</div>
-			<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
-			<div class="after"></div>
-		</div>
+			{% if fieldAreaObject %}
+				<div class="rowWrapper">
+					<div class="labelWrapper">City/Area</div>
+					<div class="widgetWrapperPlacementOnly" id="AreaFieldsWrapper">
+							{{  fieldAreaObject.title }}
+							<a href="#" onclick="clearArea(); return false;">Clear</a>
+							<input type="hidden" name="fieldAreaSlug" value="{{ fieldAreaObject.slug  }}">
+					</div>
+					<div class="after"></div>
+				</div>
+			{%  elseif shouldWeAskForArea %}
+				<input type="hidden" name="fieldAreaSearchText" value="{{  fieldAreaSearchText | e('html_attr') }}">
+			{%  endif %}
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">Any notes about venue</div>
-			<div class="widgetWrapperPlacementOnly"><textarea name="fieldDescription">{{  venue.description | e }}</textarea></div>
-			<div class="after"></div>
-		</div>
+			<div class="rowWrapper">
+				<div class="labelWrapper">Post Code</div>
+				<div class="widgetWrapperPlacementOnly"><input type="text" name="fieldAddressCode"  id="AddressCodeField" value="{{ venue.addressCode | e('html_attr')  }}"></div>
+				<div class="after"></div>
+			</div>
 
-		<input type="hidden" name="fieldLat" value="{{  venue.lat }}">
-		<input type="hidden" name="fieldLng" value="{{  venue.lng }}">
+			<div class="rowWrapper">
+				<div class="labelWrapper">Country</div>
+				<div class="widgetWrapperPlacementOnly">{{ country.title }}</div>
+				<div class="after"></div>
+			</div>
 
-		<div class="bigSubmitActionWrapper"><input type="submit" value="Save"></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			<div class="rowWrapper">
+				<div class="labelWrapper">Any notes about venue</div>
+				<div class="widgetWrapperPlacementOnly"><textarea name="fieldDescription">{{  venue.description | e }}</textarea></div>
+				<div class="after"></div>
+			</div>
 
+			<input type="hidden" name="fieldLat" value="{{  venue.lat }}">
+			<input type="hidden" name="fieldLng" value="{{  venue.lng }}">
 
+			<div class="bigSubmitActionWrapper"><input type="submit" value="Save"></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}
 
