@@ -45,10 +45,10 @@ class AreaController {
 			'parentAreas'=>array(),
 			'areaIsDuplicateOf'=>null,
 		);
-		
-		if (strpos($slug, "-")) {
-			$slug = array_shift(explode("-", $slug, 2));
-		}
+
+        if (strpos($slug, "-")) {
+            $slug = substr($slug, 0, strpos($slug, "-"));
+        }
 		
 		$ar = new AreaRepository($app);
 		$this->parameters['area'] = $ar->loadBySlug($app['currentSite'], $slug);

@@ -194,13 +194,12 @@ class DisplayBoardController {
 		return $app['twig']->render('displayboard/site/displayboard/run.html.twig', $this->parameters);
 	}
 
-	protected function getIdFromPassedVariable($var) {
-		if (strpos($var, "-")) {
-			$var = array_shift(explode("-", $var, 2));
-		}
-		return intval($var);
-
-	}
+    protected function getIdFromPassedVariable($var) {
+        if (strpos($var, "-")) {
+            $var = substr($var, 0, strpos($var, "-"));
+        }
+        return intval($var);
+    }
 
 }
 

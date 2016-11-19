@@ -185,17 +185,17 @@ class SiteRepository {
 
 	public function loadByDomain($domain) {
 		$compareTo = $this->app['config']->webSiteDomain;
-		if (strpos($compareTo, ":") > 0) {
-			$compareTo = array_shift(explode(":", $compareTo));
-		}
+        if (strpos($compareTo, ":") > 0) {
+            $compareTo = substr($compareTo, 0, strpos($compareTo, ":"));
+        }
 		if (substr(strtolower($_SERVER['SERVER_NAME']), 0-  strlen($compareTo)) == $compareTo) {
 			$siteSlug = substr(strtolower($_SERVER['SERVER_NAME']), 0, 0- strlen($compareTo)-1);
 			return $this->loadBySlug($siteSlug);
 		}
 		foreach($this->app['config']->webSiteAlternateDomains as $compareTo) {
-			if (strpos($compareTo, ":") > 0) {
-				$compareTo = array_shift(explode(":", $compareTo));
-			}
+            if (strpos($compareTo, ":") > 0) {
+                $compareTo = substr($compareTo, 0, strpos($compareTo, ":"));
+            }
 			if (substr(strtolower($_SERVER['SERVER_NAME']), 0-  strlen($compareTo)) == $compareTo) {
 				$siteSlug = substr(strtolower($_SERVER['SERVER_NAME']), 0, 0- strlen($compareTo)-1);
 				return $this->loadBySlug($siteSlug);
@@ -210,9 +210,9 @@ class SiteRepository {
 	 */
 	public function loadByAPIDomain($domain) {
 		foreach(array( $this->app['config']->webAPI1Domain ) as $compareTo) {
-			if (strpos($compareTo, ":") > 0) {
-				$compareTo = array_shift(explode(":", $compareTo));
-			}
+            if (strpos($compareTo, ":") > 0) {
+                $compareTo = substr($compareTo, 0, strpos($compareTo, ":"));
+            }
 			if (substr(strtolower($_SERVER['SERVER_NAME']), 0-  strlen($compareTo)) == $compareTo) {
 				$siteSlug = substr(strtolower($_SERVER['SERVER_NAME']), 0, 0- strlen($compareTo)-1);
 				return $this->loadBySlug($siteSlug);

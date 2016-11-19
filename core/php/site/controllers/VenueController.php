@@ -43,10 +43,10 @@ class VenueController {
 			'parentAreas'=>array(),
 			'childAreas'=>array(),
 			'venueIsDuplicateOf'=>null,);
-		
-		if (strpos($slug, "-")) {
-			$slug = array_shift(explode("-", $slug, 2));
-		}
+
+        if (strpos($slug, "-")) {
+            $slug = substr($slug, 0, strpos($slug, "-"));
+        }
 		
 		$vr = new VenueRepository($app);
 		$this->parameters['venue'] = $vr->loadBySlug($app['currentSite'], $slug);

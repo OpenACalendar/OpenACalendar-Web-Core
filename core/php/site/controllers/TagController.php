@@ -23,10 +23,10 @@ class TagController {
 	
 	protected function build($slug, Request $request, Application $app) {
 		$this->parameters = array('currentUserWatchesGroup'=>false);
-		
-		if (strpos($slug, "-")) {
-			$slug = array_shift(explode("-", $slug, 2));
-		}
+
+        if (strpos($slug, "-")) {
+            $slug = substr($slug, 0, strpos($slug, "-"));
+        }
 		
 		$tr = new TagRepository($app);
 		$this->parameters['tag'] = $tr->loadBySlug($app['currentSite'], $slug);

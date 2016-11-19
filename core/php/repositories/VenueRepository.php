@@ -113,9 +113,9 @@ class VenueRepository {
 	
 	
 	public function loadBySlug(SiteModel $site, $slug) {
-		if (strpos($slug, "-")) {
-			$slug = array_shift(explode("-", $slug, 2));
-		}
+        if (strpos($slug, "-")) {
+            $slug = substr($slug, 0, strpos($slug, "-"));
+        }
 		$stat = $this->app['db']->prepare("SELECT venue_information.* FROM venue_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {

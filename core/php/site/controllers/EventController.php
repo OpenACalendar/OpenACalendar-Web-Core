@@ -66,9 +66,9 @@ class EventController {
 			'eventIsDuplicateOf'=>null,
 		);
 
-		if (strpos($slug, "-")) {
-			$slug = array_shift(explode("-", $slug, 2));
-		}
+        if (strpos($slug, "-")) {
+            $slug = substr($slug, 0, strpos($slug, "-"));
+        }
 		
 		$eventRepository = new EventRepository($app);
 		$this->parameters['event'] =  $eventRepository->loadBySlug($app['currentSite'], $slug);

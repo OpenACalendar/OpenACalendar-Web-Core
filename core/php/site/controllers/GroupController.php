@@ -58,10 +58,10 @@ class GroupController {
 		$this->parameters = array(
 			'currentUserWatchesGroup'=>false,
 			'groupIsDuplicateOf'=>null);
-		
-		if (strpos($slug, "-")) {
-			$slug = array_shift(explode("-", $slug, 2));
-		}
+
+        if (strpos($slug, "-")) {
+            $slug = substr($slug, 0, strpos($slug, "-"));
+        }
 		
 		$gr = new GroupRepository($app);
 		$this->parameters['group'] = $gr->loadBySlug($app['currentSite'], $slug);
