@@ -110,14 +110,18 @@ class ImportRun {
 	public function downloadURLreturnFileName() {
 		if ($this->temporaryFileStorageFromTesting) return $this->temporaryFileStorageFromTesting;
 		if ($this->temporaryFileStorage) return $this->temporaryFileStorage;
-		
-		$request = $this->guzzle->createRequest("GET", $this->getRealUrl());
-		$response = $this->guzzle->send($request);
-		if ($response->getStatusCode() == 200) {
-			$this->temporaryFileStorage = tempnam("/tmp", "oacimport");
-			file_put_contents($this->temporaryFileStorage, $response->getBody(true));
-			return $this->temporaryFileStorage;
-		}
+
+        try {
+            $request = $this->guzzle->createRequest("GET", $this->getRealUrl());
+            $response = $this->guzzle->send($request);
+            if ($response->getStatusCode() == 200) {
+                $this->temporaryFileStorage = tempnam("/tmp", "oacimport");
+                file_put_contents($this->temporaryFileStorage, $response->getBody(true));
+                return $this->temporaryFileStorage;
+            }
+        } catch (\GuzzleHttp\Exception\TransferException $e) {
+            return null;
+        }
 
 		return null;
 	}

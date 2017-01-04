@@ -105,8 +105,11 @@ class ImportFacebookHandler extends ImportHandlerBase {
 
 		$url = '/' . strval($this->eventId);
 
-        $response = $this->facebook->get( $url );
-
+        try {
+            $response = $this->facebook->get( $url );
+        } catch (\Facebook\Exceptions\FacebookSDKException $e) {
+            return null;
+        }
         $graphObject = $response->getGraphNode();
 
         // This tests 2 things

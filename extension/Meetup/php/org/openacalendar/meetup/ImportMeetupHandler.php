@@ -104,25 +104,29 @@ class ImportMeetupHandler extends ImportHandlerBase {
 		// Avoid Throttling
 		sleep(1);
 
-		$request = $this->importRun->getGuzzle()->createRequest("GET", "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain");
-		$response = $this->importRun->getGuzzle()->send($request);
+        try {
+            $request = $this->importRun->getGuzzle()->createRequest("GET", "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain");
+            $response = $this->importRun->getGuzzle()->send($request);
 
-		if ($response->getStatusCode() == 200) {
-			$data =  $response->json();
-			if (isset($data['code']) && $data['code']) {
-				if ($data['code'] == 'not_authorized') {
-					throw new ImportURLMeetupHandlerAPIError("API Key is not working",1);
-				} else if ($data['code'] == 'throttled') {
-					sleep(15);
-					throw new ImportURLMeetupHandlerAPIError("Our Access has been throttled",1);
-				} else if ($data['code'] == 'blocked') {
-					throw new ImportURLMeetupHandlerAPIError("Our Access has been blocked temporarily because throttling failed",1);
-				}
-			}
-			return $data;
-		} else {
-			throw new ImportURLMeetupHandlerAPIError("Non 200 response - got ".$response->getStatusCode(), 1);
-		}
+            if ($response->getStatusCode() == 200) {
+                $data =  $response->json();
+                if (isset($data['code']) && $data['code']) {
+                    if ($data['code'] == 'not_authorized') {
+                        throw new ImportURLMeetupHandlerAPIError("API Key is not working",1);
+                    } else if ($data['code'] == 'throttled') {
+                        sleep(15);
+                        throw new ImportURLMeetupHandlerAPIError("Our Access has been throttled",1);
+                    } else if ($data['code'] == 'blocked') {
+                        throw new ImportURLMeetupHandlerAPIError("Our Access has been blocked temporarily because throttling failed",1);
+                    }
+                }
+                return $data;
+            } else {
+                throw new ImportURLMeetupHandlerAPIError("Non 200 response - got ".$response->getStatusCode(), 1);
+            }
+        } catch (\GuzzleHttp\Exception\TransferException $e) {
+            throw new ImportURLMeetupHandlerAPIError( "Got Exception " . $e->getMessage(), 1 );
+        }
 		
 	}
 	
@@ -139,29 +143,34 @@ class ImportMeetupHandler extends ImportHandlerBase {
 			"&fields=timezone&text_format=plain&group_urlname=".
 			str_replace(array("&","?"), array("",""),$groupName);
 
-		$request = $this->importRun->getGuzzle()->createRequest("GET", $url);
-		$response = $this->importRun->getGuzzle()->send($request);
 
-		if ($response->getStatusCode() == 200) {
-			$data =  $response->json();
-			if (isset($data['code']) && $data['code']) {
-				if ($data['code'] == 'not_authorized') {
-					throw new ImportURLMeetupHandlerAPIError("API Key is not working",1);
-				} else if ($data['code'] == 'throttled') {
-					sleep(15);
-					throw new ImportURLMeetupHandlerAPIError("Our Access has been throttled",1);
-				} else if ($data['code'] == 'blocked') {
-					throw new ImportURLMeetupHandlerAPIError("Our Access has been blocked temporarily because throttling failed",1);
-				}
-			}
-			if (isset($data['results']) && is_array($data['results'])) {
-				return $data['results'];
-			}
-		} else {
-			throw new ImportURLMeetupHandlerAPIError("Non 200 response - got ".$response->getStatusCode(),1);
-		}
+        try {
+            $request = $this->importRun->getGuzzle()->createRequest( "GET", $url );
+            $response = $this->importRun->getGuzzle()->send( $request );
 
-		return array();
+            if ( $response->getStatusCode() == 200 ) {
+                $data = $response->json();
+                if ( isset( $data['code'] ) && $data['code'] ) {
+                    if ( $data['code'] == 'not_authorized' ) {
+                        throw new ImportURLMeetupHandlerAPIError( "API Key is not working", 1 );
+                    } else if ( $data['code'] == 'throttled' ) {
+                        sleep( 15 );
+                        throw new ImportURLMeetupHandlerAPIError( "Our Access has been throttled", 1 );
+                    } else if ( $data['code'] == 'blocked' ) {
+                        throw new ImportURLMeetupHandlerAPIError( "Our Access has been blocked temporarily because throttling failed", 1 );
+                    }
+                }
+                if ( isset( $data['results'] ) && is_array( $data['results'] ) ) {
+                    return $data['results'];
+                }
+            } else {
+                throw new ImportURLMeetupHandlerAPIError( "Non 200 response - got " . $response->getStatusCode(), 1 );
+            }
+
+            return array();
+        } catch (\GuzzleHttp\Exception\TransferException $e) {
+            throw new ImportURLMeetupHandlerAPIError( "Got Exception " . $e->getMessage(), 1 );
+        }
 	}
 
     protected function processMeetupData($meetupData) {
