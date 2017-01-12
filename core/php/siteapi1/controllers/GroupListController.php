@@ -46,13 +46,14 @@ class GroupListController {
         }
 		
 		$out = array();
-		
-		foreach($groupRepoBuilder->fetchAll() as $group) {
-			$out[] = array(
-					'slug'=>$group->getSlug(),
-					'title'=>$group->getTitle(),
-				);
-		}
+
+        foreach($groupRepoBuilder->fetchAll() as $group) {
+            $out[] = array(
+                'slug'=>$group->getSlug(),
+                'title'=>$group->getTitle(),
+                'description'=>$group->getDescription(),
+            );
+        }
 		
 		$response = new Response(json_encode(array('data'=>$out)));
 		$response->headers->set('Content-Type', 'application/json');
