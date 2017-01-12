@@ -34,9 +34,12 @@ function groupSearchChanged() {
                     for(i in data.data) {
                         var group = data.data[i];
                         out += '<li class="group">';
-						out += '<div class="title">'+escapeHTML(group.title)+'</div>';
+						out += '<div class="title"><div class="text">'+escapeHTML(group.title)+'</div></div>';
+						if (group.description) {
+							out += '<div class="description">' + escapeHTMLNewLine(group.description) + '</div>';
+						}
                         out += '<form method="post"><input type="hidden" name="action" value="selectgroup"><input type="hidden" name="group" value="'+group.slug+'">';
-						out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event with this Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
+						out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Create Event with '+escapeHTMLAttribute(group.title)+'" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
                         out += '</form>';
                         out += '</li>';
                     }
@@ -49,7 +52,7 @@ function groupSearchChanged() {
 				out += '<form method="post">';
 				out += '<input type="hidden" name="action" value="selectnewgroup">';
 				out += '<div>It\'s a new group called: <input type="text" name="newgrouptitle" value="'+escapeHTMLAttribute(groupSearchValue)+'"></div>'
-				out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Add This Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
+				out += '<div class="bigSubmitActionWrapper"><input type="submit"  value="Add A New Group" class="bigSubmitAction"/></div><div class="afterBigSubmitActionWrapper"></div>';
 				out += '</form>';
 				out += '</li>';
 				$('#GroupSearchList').append(out);
