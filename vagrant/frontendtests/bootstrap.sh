@@ -60,3 +60,5 @@ chmod a+x /home/vagrant/run
 cp /vagrant/vagrant/frontendtests/test /home/vagrant/test
 chmod a+x /home/vagrant/test
 
+gsettings set org.gnome.desktop.session idle-delay 0
+
