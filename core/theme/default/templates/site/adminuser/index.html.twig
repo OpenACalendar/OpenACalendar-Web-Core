@@ -17,24 +17,27 @@
 
 {% block content %}
 
-	<h2>User {{ user.username }}</h2>
 
+	<div class="contentMain">
 
-	<h3>Has User Permissions</h3>
+		<h2>User {{ user.username }}</h2>
+		
+		<h3>Has User Permissions</h3>
 
-	<table class="data">
-		<tr>
-			<th>Extension</th>
-			<th>ID</th>
-		</tr>
-		{% for userpermission in userpermissions %}
+		<table class="data">
 			<tr>
-				<td>{{ userpermission.userPermissionExtensionID }}</td>
-				<td>{{ userpermission.userPermissionKey }}</td>
+				<th>Extension</th>
+				<th>ID</th>
 			</tr>
-		{% endfor %}
-	</table>
+			{% for userpermission in userpermissions %}
+				<tr>
+					<td>{{ userpermission.userPermissionExtensionID }}</td>
+					<td>{{ userpermission.userPermissionKey }}</td>
+				</tr>
+			{% endfor %}
+		</table>
 
+	</div>
 
 
 
