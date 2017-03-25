@@ -22,6 +22,7 @@ class CountryModel {
 	protected $max_lng;
 	protected $min_lat;
 	protected $min_lng;
+    protected $cached_future_events_in_site;
 
 
 	protected $site_is_in;
@@ -36,6 +37,7 @@ class CountryModel {
 		$this->max_lng = $data['max_lng'];
 		$this->min_lat = $data['min_lat'];
 		$this->min_lng = $data['min_lng'];
+        $this->cached_future_events_in_site = isset($data['cached_future_events_in_site']) ? $data['cached_future_events_in_site'] : null;
 	}
 
 	public function getId() {
@@ -98,6 +100,20 @@ class CountryModel {
 	public function getMinLng() {
 		return $this->min_lng;
 	}
+
+    /**
+     * @return integer
+     */
+    public function getCachedFutureEventsInSite() {
+        return $this->cached_future_events_in_site;
+    }
+
+    /**
+     * @param integer $cached_future_events_in_site
+     */
+    public function setCachedFutureEventsInSite(int $cached_future_events_in_site ) {
+        $this->cached_future_events_in_site = $cached_future_events_in_site;
+    }
 
 
 	

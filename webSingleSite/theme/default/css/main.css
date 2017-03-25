@@ -263,7 +263,8 @@ table {
   font-weight: bold;
 }
 ul.mainListGroups li.group .futureEvents,
-ul.mainListVenues li.venue .futureEvents {
+ul.mainListVenues li.venue .futureEvents,
+ul.mainListCountries li.country .futureEvents {
   margin-left: 10px;
   padding: 4px 20px 0px 20px;
   font-size: 0.75rem;

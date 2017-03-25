@@ -6,6 +6,7 @@ namespace repositories;
 use models\CountryModel;
 use models\SiteModel;
 use models\UserAccountModel;
+use repositories\builders\EventRepositoryBuilder;
 use Silex\Application;
 
 /**
@@ -61,7 +62,24 @@ class CountryInSiteRepository {
 		$stat->execute(array( 'country_id'=>$country->getId(), 'site_id'=>$site->getId() ));		
 		return ($stat->rowCount() == 1);
 	}
-	
+
+
+    public function updateFutureEventsCache(CountryModel $countryModel, SiteModel $siteModel) {
+
+        $statUpdate = $this->app['db']->prepare("UPDATE country_in_site_information SET cached_future_events=:count WHERE site_id = :site_id AND country_id = :country_id");
+
+        $erb = new EventRepositoryBuilder($this->app);
+        $erb->setCountry($countryModel);
+        $erb->setSite($siteModel);
+        $erb->setIncludeDeleted(false);
+        $erb->setIncludeCancelled(false);
+        $erb->setAfterNow();
+        $count = count($erb->fetchAll());
+
+        $statUpdate->execute(array('count'=>$count,'site_id'=>$siteModel->getId(), 'country_id'=>$countryModel->getId()));
+
+        $countryModel->setCachedFutureEventsInSite($count);
+    }
 	
 }
 

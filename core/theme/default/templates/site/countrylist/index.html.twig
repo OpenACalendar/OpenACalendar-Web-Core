@@ -32,7 +32,16 @@
 			<ul class="mainListCountries">
 				{% for country in countries %}
 					<li class="country">
-						<div class="title"><a href="/country/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+						<div class="title">
+							<a href="/country/{{ country.twoCharCode }}">
+								{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag">
+								{% if country.cachedFutureEventsInSite == 1 %}
+									<span class="futureEvents">1 Future Event</span>
+								{% elseif country.cachedFutureEventsInSite > 1 %}
+									<span class="futureEvents">{{  country.cachedFutureEventsInSite }} Future Events</span>
+								{%  endif %}
+							</a>
+						</div>
 					</li>
 				{% else %}
 					<li>

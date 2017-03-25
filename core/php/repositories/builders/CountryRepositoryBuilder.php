@@ -55,6 +55,7 @@ class CountryRepositoryBuilder  extends BaseRepositoryBuilder {
 			$this->where[] = " country_in_site_information.site_id = :site_id";
 			$this->where[] = " country_in_site_information.is_in = '1'";
 			$this->params['site_id'] = $this->site->getId();
+            $this->select[] = " country_in_site_information.cached_future_events AS cached_future_events_in_site ";
 		}
 
         if ($this->titleSearch) {
@@ -92,7 +93,7 @@ class CountryRepositoryBuilder  extends BaseRepositoryBuilder {
 			$results[] = $country;
 		}
 		return $results;
-		
+
 	}
 
 }

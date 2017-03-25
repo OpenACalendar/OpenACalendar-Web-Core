@@ -13,6 +13,13 @@
 
 	<table class="oneData">
 	<tr>
+		<th>taskUpdateCountryInSiteFutureEventsCacheAutomaticUpdateInterval</th>
+		<td>{{ config.taskUpdateCountryInSiteFutureEventsCacheAutomaticUpdateInterval }}
+			({{ (config.taskUpdateCountryInSiteFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
+			({{ (config.taskUpdateCountryInSiteFutureEventsCacheAutomaticUpdateInterval / 60/60) | round (0,'floor') }} hours)
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskUpdateCountryInSiteFutureEventsCacheAutomaticUpdateInterval'} %}</td>
+	</tr>
+	<tr>
 		<th>taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval</th>
 		<td>{{ config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval }}
 			({{ (config.taskUpdateVenueFutureEventsCacheAutomaticUpdateInterval / 60) | round (0,'floor') }} mins)
