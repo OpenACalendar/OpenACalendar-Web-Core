@@ -16,8 +16,9 @@ before_script:
   - echo "\$CONFIG->databaseUser = 'postgres';" >> config.test.php
   - echo "\$CONFIG->databasePassword = '';" >> config.test.php
   - echo "\$CONFIG->extensions = array('CuratedLists','Meetup');" >> config.test.php
+  - wget https://phar.phpunit.de/phpunit-5.7.phar
 
-script: phpunit  --configuration core/tests/phpunit.xml
+script: php phpunit-5.7.phar --configuration core/tests/phpunit.xml
 
 
 
