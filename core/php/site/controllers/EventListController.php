@@ -81,6 +81,7 @@ class EventListController {
         $params->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
         $params->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
         $params->setFallBackFrom(true);
+        $params->getEventRepositoryBuilder()->setIncludeCountryInformation(true);
         $params->set($_GET);
 
         $cal = new \RenderCalendar($app, $params);
