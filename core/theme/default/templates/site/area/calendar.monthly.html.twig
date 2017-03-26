@@ -21,7 +21,7 @@
 
 {% block eventsContent %}
 
-	{%  include '/site/common/calendar.monthly.html.twig' with {'showCurrentUserOptions':true, 'addURL':'/event/new', 'calURL':'/area/' ~ area.slugForURL ~ '/calendar' } %}
+	{%  include '/site/common/calendar.monthly.html.twig' with {'showCurrentUserOptions':true, 'addURL':'/event/new', 'calURL':'/area/' ~ area.slugForURL ~ '/calendar' , 'showCountries':false } %}
 
 {% endblock %}
 

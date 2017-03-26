@@ -23,7 +23,7 @@
 
 {% block eventsContent %}
 
-	{%  include '/site/common/calendar.monthly.html.twig' with {'showCurrentUserOptions':true, 'addURL':'/event/new', 'calURL':'/country/' ~ country.twoCharCode ~ '/calendar' } %}
+	{%  include '/site/common/calendar.monthly.html.twig' with {'showCurrentUserOptions':true, 'addURL':'/event/new', 'calURL':'/country/' ~ country.twoCharCode ~ '/calendar', 'showCountries':false  } %}
 
 {% endblock %}
 

@@ -88,7 +88,7 @@
 								{{ event.getSummaryDisplay() }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
 								{%  if event.hasTicketUrl %}<span class="fa fa-ticket" title="See information about tickets"></span>{%  endif %}
 							</a>
-							{%  if showCountries and event.country %}
+							{%  if showCountries is defined and showCountries and event.country %}
 								<img src="/theme/default/img/countries/{{ event.country.twoCharCode|lower }}.png" alt="{{  event.country.title }}" title="{{  event.country.title }}">
 							{%  endif %}
 							<div class="below"></div>

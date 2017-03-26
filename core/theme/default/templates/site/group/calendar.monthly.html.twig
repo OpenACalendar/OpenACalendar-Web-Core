@@ -22,7 +22,7 @@
 {% block eventsContent %}
 
 
-	{%  include '/site/common/calendar.monthly.html.twig' with {'showCurrentUserOptions':true, 'addURL':'/event/new?group=' ~ group.slug, 'calURL':'/group/' ~ group.slugForUrl ~ '/calendar' } %}
+	{%  include '/site/common/calendar.monthly.html.twig' with {'showCurrentUserOptions':true, 'addURL':'/event/new?group=' ~ group.slug, 'calURL':'/group/' ~ group.slugForUrl ~ '/calendar', 'showCountries':true  } %}
 
 
 {% endblock %}
