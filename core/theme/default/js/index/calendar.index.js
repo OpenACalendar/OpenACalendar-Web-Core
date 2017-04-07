@@ -31,7 +31,7 @@ function showEventPopup(data) {
 		'<div id="EventPopupDescription" class="description"></div>'+
 		'<div id="EventPopupMedias"></div>'+
 		'<div id="EventPopupGroupsWrapper"></div>'+
-		'<div id="EventPopupVenueWrapper" class="popupShowVenue"></div>'+
+		'<div id="EventPopupPlaceWrapper" class="popupShowPlace"></div>'+
 		'<div id="EventPopupTimes" class="times"></div>'+
 		'<div class="popupLink"><a href="' +eventURL + '">View More Details</a></div>'+
 		'<div id="EventPopupTickets" class="popupLink"><a href="/event/' + data.slugForURL + '" target="_blank" rel="noopener">Tickets from </a></div>'+
@@ -51,15 +51,18 @@ function showEventPopup(data) {
         }
 		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,1000));
 		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
+		var html = '';
 		if (event.venue) {
-			$('#EventPopupVenueWrapper').html(
+			$('#EventPopupPlaceWrapper').html(
 				'<div class="title">Venue '+escapeHTML(event.venue.title)+'</div>'+
 					'<div class="description">'+(event.venue.description ? escapeHTMLNewLine(event.venue.description, 300) : '')+'</div>'+
 					'<div class="address">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
 			);
-		} else {
-			$('#EventPopupVenueWrapper').html('&nbsp;');
 		}
+		if (event.country) {
+			html += '<div class="country"><img src="/theme/default/img/countries/' + escapeHTML(event.country.twocharcode.toLowerCase())  + '.png" alt="' + escapeHTML(event.country.title)  + '" title="' + escapeHTML(event.country.title)  + '">' + escapeHTML(event.country.title)  + '</div>';
+		}
+		$('#EventPopupPlaceWrapper').html(html);
 		var html = '';
 		if (event.medias) {
 			html += '<ul class="mediaGrid">';

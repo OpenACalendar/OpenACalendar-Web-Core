@@ -49,6 +49,7 @@ if (!$site) {
     $data['isWebRobotsAllowed'] = $site->getIsWebRobotsAllowed();
 	$data['twitter'] = $CONFIG->contactTwitter;
 	$data['isSingleSiteMode'] = false;
+    $data['isMultipleCountries'] = $site->getCachedIsMultipleCountries();
 	$user = userGetCurrent();
 	if ($user) {
 		$data['currentUser'] = array(

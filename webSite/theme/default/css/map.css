@@ -329,15 +329,21 @@ h2 a {
   padding: 5px 0;
   text-align: right;
 }
-.popupBox .popupShowVenue .title {
+.popupBox .popupShowPlace .title {
   padding: 5px 0;
   font-weight: bold;
 }
-.popupBox .popupShowVenue .description {
+.popupBox .popupShowPlace .description {
   padding: 5px 0;
 }
-.popupBox .popupShowVenue .address {
+.popupBox .popupShowPlace .address {
   padding: 5px 0;
+}
+.popupBox .popupShowPlace .country {
+  padding: 5px 0;
+}
+.popupBox .popupShowPlace .country img {
+  margin-right: 5px;
 }
 .popupBox #ExportSharePopupShareIntroText,
 .popupBox #ExportSharePopupExportIntroText {

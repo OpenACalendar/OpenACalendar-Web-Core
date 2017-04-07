@@ -39,6 +39,7 @@ $data['httpDomainSite'] = $CONFIG->webSiteDomain;
 $data['isWebRobotsAllowed'] = $site->getIsWebRobotsAllowed();
 $data['twitter'] = $CONFIG->contactTwitter;
 $data['isSingleSiteMode'] = true;
+$data['isMultipleCountries'] = $site->getCachedIsMultipleCountries();
 if ($CONFIG->hasSSL) {
 	$data['hasSSL'] = true;
 	$data['httpsDomain'] = $CONFIG->webIndexDomainSSL;

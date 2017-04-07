@@ -181,6 +181,7 @@ class CurrentUserController {
 	function calendarNow(Application $app) {
 		$cal = new \RenderCalendar($app);
 		$params = new EventFilterParams($app, $cal->getEventRepositoryBuilder());
+        $cal->getEventRepositoryBuilder()->setIncludeCountryInformation(true);
 		$params->setHasDateControls(false);
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
         $params->setFallBackFrom(true);
@@ -203,6 +204,7 @@ class CurrentUserController {
 		
 		$cal = new \RenderCalendar($app);
 		$params = new EventFilterParams($app, $cal->getEventRepositoryBuilder());
+        $cal->getEventRepositoryBuilder()->setIncludeCountryInformation(true);
 		$params->setHasDateControls(false);
 		$params->setSpecifiedUserControls(true, $app['currentUser'], true);
         $params->setFallBackFrom(true);

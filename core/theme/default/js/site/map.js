@@ -89,7 +89,7 @@ function onClickMarker() {
 	showPopup();
 	$('#VenuePopup').fadeIn(500);
 
-	$('#VenuePopupContent').html('<div class="popupShowVenue"><div id="VenuePopupTitle" class="title">Loading ...</div></div>'+
+	$('#VenuePopupContent').html('<div class="popupShowPlace"><div id="VenuePopupTitle" class="title">Loading ...</div></div>'+
 			'<div id="VenuePopupEvents"></div>'+
 			'<div class="popupLink"><a href="/venue/' + this.slug + '">View More Details</a></div>');
 	$.ajax({

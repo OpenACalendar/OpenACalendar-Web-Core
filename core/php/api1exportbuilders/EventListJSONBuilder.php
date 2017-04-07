@@ -140,6 +140,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 		if ($country) {
 			$out['country'] = array(
 				'title'=>$country->getTitle(),
+                'twocharcode'=>$country->getTwoCharCode(),
 			);
 		}
 
