@@ -39,7 +39,12 @@ $data['httpDomainSite'] = $CONFIG->webSiteDomain;
 $data['isWebRobotsAllowed'] = $site->getIsWebRobotsAllowed();
 $data['twitter'] = $CONFIG->contactTwitter;
 $data['isSingleSiteMode'] = true;
-$data['isMultipleCountries'] = $site->getCachedIsMultipleCountries();
+// Several other keys should really be in currentSite, but for historical reasons they are outside it
+$data['currentSite'] = array(
+    'isMultipleCountries' => $site->getCachedIsMultipleCountries(),
+    'isMultipleTimezones' => $site->getCachedIsMultipleTimezones(),
+    'id' => $site->getId(), // This is used in the name of the cookie that holds the timezone, so it is needed.
+);
 if ($CONFIG->hasSSL) {
 	$data['hasSSL'] = true;
 	$data['httpsDomain'] = $CONFIG->webIndexDomainSSL;

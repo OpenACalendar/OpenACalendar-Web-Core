@@ -102,3 +102,10 @@ function exportPopupTabClickNone() {
 }
 
 
+
+//////////////////////////////////////////////////////////////////////////////// Timezones
+
+function getCurrentTimeZone() {
+	// TODO
+}
+

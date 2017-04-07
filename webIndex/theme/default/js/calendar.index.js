@@ -39,7 +39,7 @@ function showEventPopup(data) {
 	var apiURL = (config.hasSSL ? "https://" : "http://") +
 				(config.isSingleSiteMode ? '' : data.site+'.') +
 				(config.hasSSL ? config.httpsDomainSite : config.httpDomainSite )+
-				'/api1/event/'+data.slug+"/info.jsonp?includeMedias=yes&callback=?";
+				'/api1/event/'+data.slug+"/info.jsonp?includeMedias=yes&callback=?&mytimezone=" + getCurrentTimeZone();
 	
 	$.getJSON(apiURL,{
 	}).success(function ( eventdata ) {
@@ -50,7 +50,14 @@ function showEventPopup(data) {
             $('#EventPopupTitle').text(event.summaryDisplay);
         }
 		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,1000));
-		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
+		if (event.timezone != eventdata.localtimezone) {
+			$('#EventPopupTimes').html(
+				'<div>' + escapeHTML(event.start.displaylocal)+" to " +escapeHTML(event.end.displaylocal) + " (" + escapeHTML(eventdata.localtimezone) + ")</div>" +
+				'<div>' + escapeHTML(event.start.displaytimezone)+" to " +escapeHTML(event.end.displaytimezone) + " (" + escapeHTML(event.timezone) + ")</div>"
+			);
+		} else {
+			$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(event.end.displaylocal) + " (" + escapeHTML(eventdata.localtimezone) + ")");
+		}
 		var html = '';
 		if (event.venue) {
 			$('#EventPopupPlaceWrapper').html(

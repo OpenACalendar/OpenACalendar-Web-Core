@@ -32,7 +32,7 @@ function showEventPopup(data) {
 		'<div id="EventPopupTickets" class="popupLink"><a href="/event/' + data.slugForURL + '" target="_blank" rel="noopener">Tickets from </a></div>'+
 		'</div>');
 	$.ajax({
-		url: "/api1/event/"+data.slug+"/info.json?includeMedias=yes"
+		url: "/api1/event/"+data.slug+"/info.json?includeMedias=yes&mytimezone="+getCurrentTimeZone()
 	}).success(function ( eventdata ) {
         var event = eventdata.data[0];
         if (event.cancelled) {
@@ -41,7 +41,14 @@ function showEventPopup(data) {
             $('#EventPopupTitle').text(event.summaryDisplay);
         }
 		$('#EventPopupDescription').html(escapeHTMLNewLine(event.description,500));
-		$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(eventdata.data[0].end.displaylocal));
+		if (event.timezone != eventdata.localtimezone) {
+			$('#EventPopupTimes').html(
+				'<div>' + escapeHTML(event.start.displaylocal)+" to " +escapeHTML(event.end.displaylocal) + " (" + escapeHTML(eventdata.localtimezone) + ")</div>" +
+				'<div>' + escapeHTML(event.start.displaytimezone)+" to " +escapeHTML(event.end.displaytimezone) + " (" + escapeHTML(event.timezone) + ")</div>"
+			);
+		} else {
+			$('#EventPopupTimes').html(escapeHTML(event.start.displaylocal)+" to " +escapeHTML(event.end.displaylocal) + ( config.currentSite.isMultipleTimezones ? " (" + escapeHTML(eventdata.localtimezone) + ")" : ""));
+		}
 		var html = '';
 		if (event.venue) {
 			$('#EventPopupPlaceWrapper').html(
@@ -50,7 +57,7 @@ function showEventPopup(data) {
 					'<div class="address">'+(event.venue.address ? escapeHTMLNewLine(event.venue.address, 300) : '')+' '+(event.venue.addresscode ? escapeHTML(event.venue.addresscode) : '')+'</div>'
 			);
 		}
-		if (config.isMultipleCountries && event.country) {
+		if (config.currentSite.isMultipleCountries && event.country) {
 			html += '<div class="country"><img src="/theme/default/img/countries/' + escapeHTML(event.country.twocharcode.toLowerCase())  + '.png" alt="' + escapeHTML(event.country.title)  + '" title="' + escapeHTML(event.country.title)  + '">' + escapeHTML(event.country.title)  + '</div>';
 		}
 		$('#EventPopupPlaceWrapper').html(html);

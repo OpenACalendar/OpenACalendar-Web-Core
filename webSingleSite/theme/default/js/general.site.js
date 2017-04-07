@@ -399,3 +399,10 @@ function onClickFormRowEditCommentToggler() {
 		$('#formRowEditCommentToggler .arrow').html('&#x25BC;');
 	}
 }
+
+//////////////////////////////////////////////////////////////////////////////// Timezones
+
+function getCurrentTimeZone() {
+	// TODO
+}
+
