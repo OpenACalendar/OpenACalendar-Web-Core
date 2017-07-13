@@ -243,25 +243,34 @@ class ImportRepository {
 	
 	public function loadClashForImportUrl(ImportModel $importURL) {
 
-		
-		$sql = "SELECT import_url_information.* FROM import_url_information WHERE ".
-				"is_enabled='1' AND expired_at IS NULL AND site_id=:site_id AND url_canonical=:url_canonical ";
-		$params = array(
-				'site_id'=>$importURL->getSiteId(),
-				'url_canonical'=>$importURL->getUrlCanonical(),
-			);
-		if ($importURL->getId()) {
-			$sql .= " AND id != :id";
-			$params['id'] = $importURL->getId();
-		}
-				
-		$stat = $this->app['db']->prepare($sql);
-		$stat->execute($params);
-		if ($stat->rowCount() > 0) {
-			$iurl = new ImportModel();
-			$iurl->setFromDataBaseRow($stat->fetch());
-			return $iurl;
-		}
+
+        $urls = array(
+            str_ireplace("http://", "https://", $importURL->getUrlCanonical()),
+            str_ireplace("https://", "http://", $importURL->getUrlCanonical()),
+        );
+
+        foreach($urls as $url) {
+
+            $sql = "SELECT import_url_information.* FROM import_url_information WHERE " .
+                "is_enabled='1' AND expired_at IS NULL AND site_id=:site_id AND url_canonical=:url_canonical ";
+            $params = array(
+                'site_id' => $importURL->getSiteId(),
+                'url_canonical' => $url,
+            );
+            if ($importURL->getId()) {
+                $sql .= " AND id != :id";
+                $params['id'] = $importURL->getId();
+            }
+
+            $stat = $this->app['db']->prepare($sql);
+            $stat->execute($params);
+            if ($stat->rowCount() > 0) {
+                $iurl = new ImportModel();
+                $iurl->setFromDataBaseRow($stat->fetch());
+
+                return $iurl;
+            }
+        }
 	}	
 	
 }

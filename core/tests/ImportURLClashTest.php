@@ -15,69 +15,140 @@ use repositories\ImportRepository;
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
  * @license http://ican.openacalendar.org/license.html 3-clause BSD
  * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
- * @author James Baster <james@jarofgreen.co.uk> 
+ * @author James Baster <james@jarofgreen.co.uk>
  */
-class ImportURLClashTest extends \BaseAppWithDBTest {
+class ImportURLClashTest extends \BaseAppWithDBTest
+{
+
+    function dataForTestClash()
+    {
+        return array(
+            array('http://www.group.com', 'http://www.group.com'),
+            array('http://www.group.com', 'http://www.GROUP.com'),
+            array('https://www.group.com', 'http://www.GROUP.com'),
+        );
+    }
 
     /**
-     *
+     * @dataProvider dataForTestClash
      * @group import
      */
-    function test1() {
+    function testClash($originalURL, $clashURL)
+    {
+        
+        $user = new UserAccountModel();
+        $user->setEmail("test@jarofgreen.co.uk");
+        $user->setUsername("test");
+        $user->setPassword("password");
+
+        $userRepo = new UserAccountRepository($this->app);
+        $userRepo->create($user);
+
+        $site = new SiteModel();
+        $site->setTitle("Test");
+        $site->setSlug("test");
+
+        $siteRepo = new SiteRepository($this->app);
+        $siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
+
+        $group = new GroupModel();
+        $group->setTitle("test");
+        $group->setDescription("test test");
+        $group->setUrl($originalURL);
+
+        $groupRepo = new GroupRepository($this->app);
+        $groupRepo->create($group, $site, $user);
+
+        $importRepository = new ImportRepository($this->app);
+
+        $originalImport = new ImportModel();
+        $originalImport->setIsEnabled(true);
+        $originalImport->setSiteId($site->getId());
+        $originalImport->setGroupId($group->getId());
+        $originalImport->setTitle("Test");
+        $originalImport->setUrl($originalURL);
+
+        $clash = $importRepository->loadClashForImportUrl($originalImport);
+        $this->assertNull($clash);
+
+        $importRepository->create($originalImport, $site, $user);
+
+        $clashURLImport = new ImportModel();
+        $clashURLImport->setIsEnabled(true);
+        $clashURLImport->setSiteId($site->getId());
+        $clashURLImport->setGroupId($group->getId());
+        $clashURLImport->setTitle("Test.com site");
+        $clashURLImport->setUrl($clashURL);
+
+        $clash = $importRepository->loadClashForImportUrl($clashURLImport);
+        $this->assertTrue($clash != null);
+
+    }
+
+    function dataForTestNoClash()
+    {
+        return array(
+            array('http://www.group.com', 'http://www.example.com'),
+        );
+    }
+
+    /**
+     * @dataProvider dataForTestNoClash
+     * @group import
+     */
+    function testNoClash($originalURL, $noClashURL)
+    {
 
 
-		$user = new UserAccountModel();
-		$user->setEmail("test@jarofgreen.co.uk");
-		$user->setUsername("test");
-		$user->setPassword("password");
-		
-		$userRepo = new UserAccountRepository($this->app);
-		$userRepo->create($user);
-		
-		$site = new SiteModel();
-		$site->setTitle("Test");
-		$site->setSlug("test");
-		
-		$siteRepo = new SiteRepository($this->app);
-		$siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
-		
-		$group = new GroupModel();
-		$group->setTitle("test");
-		$group->setDescription("test test");
-		$group->setUrl("http://www.group.com");
-		
-		$groupRepo = new GroupRepository($this->app);
-		$groupRepo->create($group, $site, $user);
-		
-		$importRepository = new ImportRepository($this->app);
-		
-		$newImportURL = new ImportModel();
-		$newImportURL->setIsEnabled(true);
-		$newImportURL->setSiteId($site->getId());
-		$newImportURL->setGroupId($group->getId());
-		$newImportURL->setTitle("Test");
-		$newImportURL->setUrl("http://test.com");
-		
-		# no clash
-		$clash = $importRepository->loadClashForImportUrl($newImportURL);
-		$this->assertNull($clash);
-		
-		# save import, now clash!
-		$importRepository->create($newImportURL, $site, $user);
-		
-		$newImportURL2 = new ImportModel();
-		$newImportURL2->setIsEnabled(true);
-		$newImportURL2->setSiteId($site->getId());
-		$newImportURL2->setGroupId($group->getId());
-		$newImportURL2->setTitle("Test.com site");
-		$newImportURL2->setUrl("http://TEST.com");
-		
-		# no clash
-		$clash = $importRepository->loadClashForImportUrl($newImportURL2);
-		$this->assertTrue($clash != null);	
-		
-	}
-	
+        $user = new UserAccountModel();
+        $user->setEmail("test@jarofgreen.co.uk");
+        $user->setUsername("test");
+        $user->setPassword("password");
+
+        $userRepo = new UserAccountRepository($this->app);
+        $userRepo->create($user);
+
+        $site = new SiteModel();
+        $site->setTitle("Test");
+        $site->setSlug("test");
+
+        $siteRepo = new SiteRepository($this->app);
+        $siteRepo->create($site, $user, array(), $this->getSiteQuotaUsedForTesting());
+
+        $group = new GroupModel();
+        $group->setTitle("test");
+        $group->setDescription("test test");
+        $group->setUrl($originalURL);
+
+        $groupRepo = new GroupRepository($this->app);
+        $groupRepo->create($group, $site, $user);
+
+        $importRepository = new ImportRepository($this->app);
+
+        $originalImport = new ImportModel();
+        $originalImport->setIsEnabled(true);
+        $originalImport->setSiteId($site->getId());
+        $originalImport->setGroupId($group->getId());
+        $originalImport->setTitle("Test");
+        $originalImport->setUrl($originalURL);
+
+        $clash = $importRepository->loadClashForImportUrl($originalImport);
+        $this->assertNull($clash);
+
+        $importRepository->create($originalImport, $site, $user);
+
+        $noClashURLImport = new ImportModel();
+        $noClashURLImport->setIsEnabled(true);
+        $noClashURLImport->setSiteId($site->getId());
+        $noClashURLImport->setGroupId($group->getId());
+        $noClashURLImport->setTitle("Test.com site");
+        $noClashURLImport->setUrl($noClashURL);
+
+        $clash = $importRepository->loadClashForImportUrl($noClashURLImport);
+        $this->assertNull($clash);
+
+    }
+
 }
 
 
