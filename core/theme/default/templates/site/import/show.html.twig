@@ -43,6 +43,12 @@
 
 		<p>Imported from: {{ import.url }}</p>
 
+        {% if  import.isEnabled %}
+            <p>While this is enabled, we will check this URL regularly for new information. But there still may be a delay before the latest information appears here.</p>
+
+            <p>If we are missing an event you think we should have, please wait a day and check again. If there is still a problem, contact us.</p>
+        {% endif %}
+
 		{# %  if import.isManualEventsCreation %}
 			<p>Do you want to create events manually from this import: Yes</p>
 		{%  else %}
