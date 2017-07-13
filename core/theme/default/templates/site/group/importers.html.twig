@@ -19,9 +19,9 @@
 
 	
 	<ul class="mainListImports">
-		{% for importurl in importurls %}
+		{% for import in importurls %}
 			<li class="import">
-				<div class="title"><a href="/import/{{ importurl.slug }}">{{ importurl.title }}</a></div>
+				<div class="title"><a href="/import/{{ import.slug }}">{{ import.title }} ({% if not import.isEnabled %}disabled{% elseif import.expiredat %}expired{% else %}enabled{% endif %})</a></div>
 			</li>
 		{% else %}
 			<li>
