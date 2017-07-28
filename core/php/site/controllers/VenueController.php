@@ -135,7 +135,7 @@ class VenueController {
 			$app->abort(404, "Venue does not exist.");
 		}
 		
-		$this->parameters['eventListFilterParams'] = new EventFilterParams($app);
+		$this->parameters['eventListFilterParams'] = new EventFilterParams($app, null, $app['currentSite']);
         $this->parameters['eventListFilterParams']->setHasTagControl($app['currentSiteFeatures']->has('org.openacalendar','Tag'));
         $this->parameters['eventListFilterParams']->setHasGroupControl($app['currentSiteFeatures']->has('org.openacalendar','Group'));
 		$this->parameters['eventListFilterParams']->getEventRepositoryBuilder()->setVenue($this->parameters['venue']);
