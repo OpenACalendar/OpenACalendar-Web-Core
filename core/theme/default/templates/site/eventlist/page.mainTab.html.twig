@@ -56,8 +56,8 @@
 				<div class="switcherAction {% block switcherAgenda %}{% endblock %}">
 					<a href="/event/?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Agenda</a>
 				</div>
-				<div class="switcherAction {% block switcherMonthly %}{% endblock %}">
-					<a href="/event/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Monthly</a>
+				<div class="switcherAction {% block switcherCalendar %}{% endblock %}">
+					<a href="/event/calendar?{%  if eventListFilterParams is defined and eventListFilterParams %}{{ eventListFilterParams.getGetString() }}{%  endif %}">Calendar</a>
 				</div>
 			</div>
 		</div>
