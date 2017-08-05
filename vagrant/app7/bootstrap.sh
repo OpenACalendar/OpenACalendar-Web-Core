@@ -5,7 +5,7 @@ echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 
 sudo apt-get update
-sudo apt-get install -y postgresql apache2 php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit libapache2-mod-php
+sudo apt-get install -y postgresql apache2 php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit libapache2-mod-php beanstalkd
 
 mkdir /home/vagrant/fileStore
 chown www-data:www-data  /home/vagrant/fileStore
