@@ -13,6 +13,10 @@ use Symfony\Component\Form\FormError;
 use models\SiteModel;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  *
@@ -58,7 +62,7 @@ class EventNewWhatDetailsForm extends AbstractType {
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$builder->add('summary', 'text', array(
+		$builder->add('summary', TextType::class, array(
 			'label'=>'Summary',
 			'required'=>true, // TODO THIS IS NOT RESPCTED
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
@@ -66,7 +70,7 @@ class EventNewWhatDetailsForm extends AbstractType {
 			'data' => $this->eventDraft->getDetailsValue('event.summary'),
 		));
 		
-		$builder->add('description', 'textarea', array(
+		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false,
 			'data' => $this->eventDraft->getDetailsValue('event.description'),
@@ -108,7 +112,7 @@ class EventNewWhatDetailsForm extends AbstractType {
 			if ($this->siteFeaturePhysicalEvents) {
 
 				$builder->add("is_virtual",
-					"checkbox",
+                    CheckboxType::class,
 					array(
 						'required'=>false,
 						'label'=>'Is event accessible online?',
@@ -116,11 +120,11 @@ class EventNewWhatDetailsForm extends AbstractType {
 					)
 				);
 			} else {
-				$builder->add('is_virtual', 'hidden', array( 'data' => true, ));
+				$builder->add('is_virtual', HiddenType::class, array( 'data' => true, ));
 			}
 
 		} else {
-			$builder->add('is_virtual', 'hidden', array( 'data' => false, ));
+			$builder->add('is_virtual', HiddenType::class, array( 'data' => false, ));
 
 		}
 
@@ -130,7 +134,7 @@ class EventNewWhatDetailsForm extends AbstractType {
 			if ($this->siteFeatureVirtualEvents) {
 
 				$builder->add("is_physical",
-					"checkbox",
+                    CheckboxType::class,
 					array(
 						'required'=>false,
 						'label'=>'Does the event happen at a place?',
@@ -139,13 +143,13 @@ class EventNewWhatDetailsForm extends AbstractType {
 				);
 
 			} else {
-				$builder->add('is_physical', 'hidden', array( 'data' => true, ));
+				$builder->add('is_physical', HiddenType::class, array( 'data' => true, ));
 
 			}
 
 		} else {
 
-			$builder->add('is_physical', 'hidden', array( 'data' => false, ));
+			$builder->add('is_physical', HiddenType::class, array( 'data' => false, ));
 		}
 
 		/** @var \closure $myExtraFieldValidator **/

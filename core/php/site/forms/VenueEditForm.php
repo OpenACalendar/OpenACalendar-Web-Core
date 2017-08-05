@@ -10,6 +10,10 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use models\SiteModel;
 use repositories\builders\CountryRepositoryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 /**
@@ -34,25 +38,25 @@ class VenueEditForm extends \BaseFormWithEditComment {
 		parent::buildForm($builder, $options);
 
 
-		$builder->add('title', 'text', array(
+		$builder->add('title', TextType::class, array(
 			'label'=>'Title',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
 		
-		$builder->add('description', 'textarea', array(
+		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false
 		));
 			
-		$builder->add('address', 'textarea', array(
+		$builder->add('address', TextareaType::class, array(
 				'label'=>'Address',
 				'required'=>false
 			));
 		
 		// TODO use proper label for country
-		$builder->add('address_code', 'text', array(
+		$builder->add('address_code', TextType::class, array(
 				'label'=>'Postcode',
 				'required'=>false
 			));
@@ -61,18 +65,18 @@ class VenueEditForm extends \BaseFormWithEditComment {
 		$crb->setSiteIn($this->site);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {
-			$countries[$country->getId()] = $country->getTitle();
+            $countries[$country->getTitle()] = $country->getId();
 		}
 		// TODO if current country not in list add it now
-		$builder->add('country_id', 'choice', array(
+		$builder->add('country_id', ChoiceType::class, array(
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
-            'choices_as_values'=>false,
+            'choices_as_values' => true,
 		));
 		
-		$builder->add('lat', 'hidden', array());
-		$builder->add('lng', 'hidden', array());
+		$builder->add('lat', HiddenType::class, array());
+		$builder->add('lng', HiddenType::class, array());
 
 	}
 	

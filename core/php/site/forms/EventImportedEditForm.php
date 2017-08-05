@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormError;
 use models\SiteModel;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 /**
@@ -52,14 +54,14 @@ class EventImportedEditForm extends AbstractType{
 		$crb->setSiteIn($this->site);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {
-			$countries[$country->getId()] = $country->getTitle();
+			$countries[$country->getTitle()] = $country->getId();
 		}
 		// TODO if current country not in list add it now
-		$builder->add('country_id', 'choice', array(
+		$builder->add('country_id', ChoiceType::class, array(
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
-            'choices_as_values'=>false,
+            'choices_as_values' => true,
 		));
 		
 		$timezones = array();
@@ -67,11 +69,11 @@ class EventImportedEditForm extends AbstractType{
 		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
 			$timezones[$timezone] = $timezone;
 		}		// TODO if current timezone not in list add it now
-		$builder->add('timezone', 'choice', array(
+		$builder->add('timezone', ChoiceType::class, array(
 			'label'=>'Time Zone',
 			'choices' => $timezones,
 			'required' => true,
-            'choices_as_values'=>false,
+            'choices_as_values' => true,
 		));
 			
 				
@@ -81,7 +83,7 @@ class EventImportedEditForm extends AbstractType{
 			if ($this->siteFeaturePhysicalEvents) {
 			
 				$builder->add("is_virtual",
-					"checkbox",
+                    CheckboxType::class,
 						array(
 							'required'=>false,
 							'label'=>'Is event accessible online?'
@@ -98,7 +100,7 @@ class EventImportedEditForm extends AbstractType{
 			if ($this->siteFeatureVirtualEvents) {
 				
 				$builder->add("is_physical",
-					"checkbox",
+                    CheckboxType::class,
 						array(
 							'required'=>false,
 							'label'=>'Does the event happen at a place?'

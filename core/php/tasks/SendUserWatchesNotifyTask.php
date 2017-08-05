@@ -201,7 +201,7 @@ class SendUserWatchesNotifyTask extends \BaseTask {
 			configureAppForSite($siteModel);
 			configureAppForUser($userAccountModel);
 
-			$message = \Swift_Message::newInstance();
+			$message = new \Swift_Message();
 			$message->setSubject($this->getEmailSubject($siteModel, $userAccountModel, $contentsToSend));
 			$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 			$message->setTo($userAccountModel->getEmail());

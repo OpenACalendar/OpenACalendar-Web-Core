@@ -187,7 +187,7 @@ sleep(10);
 // ######################################################### Send
 print "Sending to ".$thisconfig->get('To')." ...\n\n\n";
 
-$message = \Swift_Message::newInstance();
+$message = new \Swift_Message();
 $message->setSubject($thisconfig->get('Subject'));
 $message->setFrom(array($thisconfig->get('FromEmail') => $thisconfig->get('FromName')));
 $message->setTo($thisconfig->get('To'));

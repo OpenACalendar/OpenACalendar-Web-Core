@@ -9,6 +9,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  *
@@ -23,29 +27,29 @@ class LogInUserForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('username', 'text', array(
+		$builder->add('username', TextType::class, array(
 			'label'=>'Username',
 			'required'=>false, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
-		$builder->add('email', 'email', array(
+		$builder->add('email', EmailType::class, array(
 			'label'=>'Email',
 			'required'=>false, 
 		));
 		
-		$builder->add('password', 'password', array(
+		$builder->add('password', PasswordType::class, array(
 			'label'=>'Password',
 			'required'=>true
 		));
-		
-		$builder->add("rememberme",
-				"checkbox",
-					array(
-						'required'=>false,
-						'label'=>'Remember Me'
-					)
-			    );
-		$builder->get('rememberme')->setData( true );
+
+        $builder->add("rememberme",
+            CheckboxType::class,
+            array(
+                'required' => false,
+                'label' => 'Remember Me'
+            )
+        );
+        $builder->get('rememberme')->setData(true);
 		
 	}
 	

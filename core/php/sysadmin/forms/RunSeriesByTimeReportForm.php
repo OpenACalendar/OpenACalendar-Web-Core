@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 /**
@@ -36,15 +39,15 @@ class RunSeriesByTimeReportForm extends AbstractType{
 		$this->report = $report;
 
 		$this->timeperiodChoices = array(
-			"PT1H" => '1 hour',
-			"PT4H" => '4 hours',
-			"PT12H" => '12 hours',
-			"P1D" => '1 day',
-			"P7D" => '1 week',
-			"P1M" => '1 month',
-			"P3M" => '3 months',
-			"P6M" => '6 months',
-			"P1Y" => '1 year',
+			 '1 hour' =>"PT1H",
+			 '4 hours' =>"PT4H",
+			 '12 hours' =>"PT12H",
+			 '1 day' =>"P1D",
+			 '1 week' =>"P7D",
+			 '1 month' =>"P1M" ,
+			 '3 months' =>"P3M",
+			 '6 months' =>"P6M",
+			 '1 year' =>"P1Y",
 		);
 	}
 
@@ -55,20 +58,21 @@ class RunSeriesByTimeReportForm extends AbstractType{
 		$builder
 			->add('output', 'choice', array(
 				'expanded' => true,
-				'choices' => array('htmlTable' => 'Table in Web Browser', 'csv' => 'Download CSV'),
-				'data' => 'htmlTable',
+                'choices' => array('Table in Web Browser' => 'htmlTable', 'Download CSV' => 'csv'),
+                'data' => 'htmlTable',
+                'choices_as_values'=>true
 			));
 
 		if ($this->report->getHasFilterSite()) {
 
-			$builder->add('site_id', 'integer' ,array(
+			$builder->add('site_id', IntegerType::class ,array(
 				'label'=>'Site ID',
 				'required'=>false,
 				'data'=> ($this->app['config']->isSingleSiteMode ? $this->app['config']->singleSiteID : null),
 			));
 		}
 
-		$builder->add('start_at', 'datetime' ,array(
+		$builder->add('start_at', DateTimeType::class ,array(
 			'label'=>'Start Date & Time',
 			'model_timezone' => 'UTC',
 			'view_timezone' => $this->timeZoneName,
@@ -76,7 +80,7 @@ class RunSeriesByTimeReportForm extends AbstractType{
 			'data'=>new \DateTime("2013-01-01 00:00:00", new \DateTimeZone('UTC')),
 		));
 
-		$builder->add('end_at', 'datetime' ,array(
+		$builder->add('end_at', DateTimeType::class ,array(
 			'label'=>'End Date & Time',
 			'model_timezone' => 'UTC',
 			'view_timezone' => $this->timeZoneName,
@@ -84,10 +88,11 @@ class RunSeriesByTimeReportForm extends AbstractType{
 		));
 
 		$builder
-			->add('timeperiod', 'choice', array(
+			->add('timeperiod', ChoiceType::class, array(
 				'expanded' => true,
 				'choices' => $this->timeperiodChoices,
 				'data' => "P1M",
+                'choices_as_values'=>true
 			));
 	}
 	

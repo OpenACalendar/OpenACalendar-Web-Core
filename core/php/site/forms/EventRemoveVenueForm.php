@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 /**
@@ -25,7 +26,7 @@ class EventRemoveVenueForm extends BaseFormWithEditComment {
 		parent::buildForm($builder, $options);
 		
 		$builder->add("remove",
-				"checkbox",
+            CheckboxType::class,
 					array(
 						'required'=>true,
 						'label'=>'This event is not at this venue'

@@ -63,7 +63,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 unset($dirs);
 
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+$app['twig'] = $app->extend('twig', function($twig, $app) {
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array(
         'callback' => function($url, $caption, $isEmail) {
@@ -108,7 +108,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $app['currentUserClock12Hour'] = $clock12Hour;
     $twig->addGlobal('currentUserClock12Hour', $clock12Hour);
     return $twig;
-}));
+});
 
 ///////////////////////// Mailer
 $app->register(new Silex\Provider\SwiftmailerServiceProvider());

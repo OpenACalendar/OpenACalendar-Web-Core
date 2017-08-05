@@ -105,11 +105,10 @@ class ImportMeetupHandler extends ImportHandlerBase {
 		sleep(1);
 
         try {
-            $request = $this->importRun->getGuzzle()->createRequest("GET", "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain");
-            $response = $this->importRun->getGuzzle()->send($request);
+            $response = $this->importRun->getGuzzle()->request("GET", "https://api.meetup.com/2/event/".$id."?sign=true&key=".$appKey."&fields=timezone&text_format=plain", array());
 
             if ($response->getStatusCode() == 200) {
-                $data =  $response->json();
+                $data = json_decode($response->getBody(), true);
                 if (isset($data['code']) && $data['code']) {
                     if ($data['code'] == 'not_authorized') {
                         throw new ImportURLMeetupHandlerAPIError("API Key is not working",1);
@@ -145,11 +144,10 @@ class ImportMeetupHandler extends ImportHandlerBase {
 
 
         try {
-            $request = $this->importRun->getGuzzle()->createRequest( "GET", $url );
-            $response = $this->importRun->getGuzzle()->send( $request );
+            $response = $this->importRun->getGuzzle()->request("GET", $url, array());
 
             if ( $response->getStatusCode() == 200 ) {
-                $data = $response->json();
+                $data = json_decode($response->getBody(), true);
                 if ( isset( $data['code'] ) && $data['code'] ) {
                     if ( $data['code'] == 'not_authorized' ) {
                         throw new ImportURLMeetupHandlerAPIError( "API Key is not working", 1 );

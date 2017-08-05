@@ -75,7 +75,7 @@ class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 					$userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
                     $unsubscribeURL = $this->app['config']->getWebIndexDomainSecure().'/you/emails/'.
                         $user->getId().'/'.$userAccountGeneralSecurityKey->getAccessKey();
-					$message = \Swift_Message::newInstance();
+					$message = new \Swift_Message();
 					$message->setSubject("Events coming up");
 					$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 					$message->setTo($user->getEmail());

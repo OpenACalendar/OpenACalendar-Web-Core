@@ -13,6 +13,8 @@ use Symfony\Component\Form\FormError;
 use \ExtensionManager;
 use repositories\UserNotificationPreferenceRepository;
 use models\UserAccountModel;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  *
@@ -43,12 +45,12 @@ class UserEmailsForm  extends AbstractType {
 		global $app;
 
 		$choices = array(
-				'n'=>'None',
-				'a'=>'You are attending',
-				'm'=>'You are or might be attending',
-				'w'=>'You are or might be attending, or you watch the event',
+				'None'=>'n',
+				'You are attending'=>'a',
+				'You are or might be attending'=>'m',
+				'You are or might be attending, or you watch the event'=>'w',
 			);
-		$builder->add('email_upcoming_events', 'choice', array('label'=>'Notify you of upcoming events','required'=>true,'choices'=>$choices,'expanded'=>true, 'choices_as_values'=>false));
+		$builder->add('email_upcoming_events', ChoiceType::class, array('label'=>'Notify you of upcoming events','required'=>true,'choices'=>$choices,'expanded'=>true, 'choices_as_values'=>true));
 	
 		$builder->add("email_upcoming_events_days_notice",
 				"number",
@@ -65,16 +67,17 @@ class UserEmailsForm  extends AbstractType {
 			
 			$userPref = $repo->load($this->user, $preference->getUserNotificationPreferenceExtensionID(), 
 					$preference->getUserNotificationPreferenceType());
-			
-			$builder->add($key,
-					"checkbox",
-						array(
-							'required'=>false,
-							'label'=>$preference->getLabel(),
-							'mapped'=>false,
-							'data'=>$userPref->getIsEmail(),
-						)
-					);
+
+            $builder->add($key,
+                CheckboxType::class,
+                array(
+                    'required' => false,
+                    'label' => $preference->getLabel(),
+                    'mapped' => false,
+                    'data' => $userPref->getIsEmail(),
+                )
+            );
+
 		}
 
 		

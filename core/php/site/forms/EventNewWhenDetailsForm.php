@@ -13,6 +13,10 @@ use Symfony\Component\Form\FormError;
 use models\SiteModel;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  *
@@ -63,18 +67,18 @@ class EventNewWhenDetailsForm extends AbstractType {
 		if (count($countries) > 1) {
 			$countriesForSelect = array();
 			foreach($countries as $country) {
-				$countriesForSelect[$country->getId()] = $country->getTitle();
+				$countriesForSelect[$country->getTitle()] = $country->getId();
 			}
-			$builder->add('country_id', 'choice', array(
+			$builder->add('country_id', ChoiceType::class, array(
 				'label'=>'Country',
 				'choices' => $countriesForSelect,
 				'required' => true,
 				'data' => $this->defaultCountryModel->getId(),
-                'choices_as_values'=>false,
+                'choices_as_values' => true,
 			));
 		} else if (count($countries) == 1) {
 			$this->defaultCountry = $countries[0];
-			$builder->add('country_id', 'hidden', array(
+			$builder->add('country_id', HiddenType::class, array(
 				'data' => $this->defaultCountryModel->getId(),
 			));
 		}
@@ -86,15 +90,15 @@ class EventNewWhenDetailsForm extends AbstractType {
 			$timezones[$timezone] = $timezone;
 		}
 		if (count($timezones) != 1) {
-			$builder->add('timezone', 'choice', array(
+			$builder->add('timezone', ChoiceType::class, array(
 				'label'=>'Time Zone',
 				'choices' => $timezones,
 				'required' => true,
-                'choices_as_values'=>false,
+                'choices_as_values' => true,
 			));
 		} else {
 			$timezone = array_pop($timezones);
-			$builder->add('timezone', 'hidden', array(
+			$builder->add('timezone', HiddenType::class, array(
 				'data' => $timezone,
 			));
 		}
@@ -127,7 +131,7 @@ class EventNewWhenDetailsForm extends AbstractType {
 				$startOptions['minutes'][] = $i;
 			}
 		}
-		$builder->add('start_at', 'datetime' ,$startOptions);
+		$builder->add('start_at', DateTimeType::class ,$startOptions);
 
 		$data = null;
 		if ($this->eventDraft->hasDetailsValue('event.end_at')) {
@@ -155,7 +159,7 @@ class EventNewWhenDetailsForm extends AbstractType {
 				$endOptions['minutes'][] = $i;
 			}
 		}
-		$builder->add('end_at', 'datetime' ,$endOptions);
+		$builder->add('end_at', DateTimeType::class ,$endOptions);
 
 
 

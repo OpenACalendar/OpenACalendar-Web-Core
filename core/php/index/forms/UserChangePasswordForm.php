@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 /**
  *
@@ -23,16 +24,16 @@ class UserChangePasswordForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('oldpassword', 'password', array(
+		$builder->add('oldpassword', PasswordType::class, array(
 			'label'=>'Old Password',
 			'required'=>true, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
-		$builder->add('password1', 'password', array(
+		$builder->add('password1', PasswordType::class, array(
 			'label'=>'New Password',
 			'required'=>true
 		));
-		$builder->add('password2', 'password', array(
+		$builder->add('password2', PasswordType::class, array(
 			'label'=>'Repeat new password',
 			'required'=>true
 		));	

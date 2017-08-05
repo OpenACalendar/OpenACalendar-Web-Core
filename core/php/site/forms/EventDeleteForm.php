@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 /**
@@ -26,7 +27,7 @@ class EventDeleteForm extends BaseFormWithEditComment {
 		parent::buildForm($builder, $options);
 		
 		$builder->add("agree",
-				"checkbox",
+                CheckboxType::class,
 					array(
 						'required'=>true,
 						'label'=>'Delete this event'

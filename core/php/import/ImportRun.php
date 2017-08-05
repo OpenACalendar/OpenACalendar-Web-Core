@@ -112,8 +112,7 @@ class ImportRun {
 		if ($this->temporaryFileStorage) return $this->temporaryFileStorage;
 
         try {
-            $request = $this->guzzle->createRequest("GET", $this->getRealUrl());
-            $response = $this->guzzle->send($request);
+            $response = $this->guzzle->request("GET", $this->getRealUrl(), array());
             if ($response->getStatusCode() == 200) {
                 $this->temporaryFileStorage = tempnam("/tmp", "oacimport");
                 file_put_contents($this->temporaryFileStorage, $response->getBody(true));

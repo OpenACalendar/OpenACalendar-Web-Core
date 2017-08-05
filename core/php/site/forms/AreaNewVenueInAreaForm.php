@@ -9,6 +9,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use models\SiteModel;
 use repositories\builders\CountryRepositoryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 
 /**
@@ -30,20 +33,20 @@ class AreaNewVenueInAreaForm extends AbstractType{
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('title', 'text', array(
+		$builder->add('title', TextType::class, array(
 			'label'=>'Title',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
 		
-		$builder->add('description', 'textarea', array(
+		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false
 		));
 		
-		$builder->add('lat', 'hidden', array());
-		$builder->add('lng', 'hidden', array());
+		$builder->add('lat', HiddenType::class, array());
+		$builder->add('lng', HiddenType::class, array());
 
 	}
 	

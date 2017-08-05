@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 
 /**
@@ -49,14 +51,14 @@ class RunSeriesReportForm extends AbstractType{
 		if ($this->report->getHasFilterTime()) {
 
 
-			$builder->add('start_at', 'datetime' ,array(
+			$builder->add('start_at', DateTimeType::class ,array(
 				'label'=>'Start Date & Time',
 				'model_timezone' => 'UTC',
 				'view_timezone' => $this->timeZoneName,
 				'required'=>false
 			));
 
-			$builder->add('end_at', 'datetime' ,array(
+			$builder->add('end_at', DateTimeType::class ,array(
 				'label'=>'End Date & Time',
 				'model_timezone' => 'UTC',
 				'view_timezone' => $this->timeZoneName,
@@ -67,7 +69,7 @@ class RunSeriesReportForm extends AbstractType{
 
 		if ($this->report->getHasFilterSite()) {
 
-			$builder->add('site_id', 'integer' ,array(
+			$builder->add('site_id', IntegerType::class ,array(
 				'label'=>'Site ID',
 				'required'=>false,
 				'data'=> ($this->app['config']->isSingleSiteMode ? $this->app['config']->singleSiteID : null),

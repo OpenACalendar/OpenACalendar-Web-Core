@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 /**
  *
@@ -23,8 +24,8 @@ class LogInUserForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('password', 'password', array('label'=>'Your Password','required'=>true));
-		$builder->add('extrapassword', 'password', array('label'=>'Extra Password','required'=>true));
+		$builder->add('password', PasswordType::class, array('label'=>'Your Password','required'=>true));
+		$builder->add('extrapassword', PasswordType::class, array('label'=>'Extra Password','required'=>true));
 		
 	}
 	

@@ -32,8 +32,8 @@ class EventsCountExtension  extends \Twig_Extension {
 	public function getFilters()
 	{
 		return array(
-			'futureeventscount' => new \Twig_Filter_Method($this, 'futureEventsCount'),
-			'pasteventscount' => new \Twig_Filter_Method($this, 'pastEventsCount'),
+			new \Twig_SimpleFilter('futureeventscount', array($this, 'futureEventsCount')),
+			new \Twig_SimpleFilter('pasteventscount', array($this, 'pastEventsCount')),
 		);
 	}
 

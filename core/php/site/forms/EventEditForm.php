@@ -13,6 +13,12 @@ use Symfony\Component\Form\FormError;
 use models\SiteModel;
 use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 /**
@@ -58,7 +64,7 @@ class EventEditForm extends \BaseFormWithEditComment {
         $crb = new CountryRepositoryBuilder($this->app);
         $crb->setSiteIn($this->site);
         foreach($crb->fetchAll() as $country) {
-            $this->countries[$country->getId()] = $country->getTitle();
+            $this->countries[$country->getTitle()] = $country->getId();
         }
         // TODO if current country not in list add it now
 
@@ -76,14 +82,14 @@ class EventEditForm extends \BaseFormWithEditComment {
 		parent::buildForm($builder, $options);
 
 
-		$builder->add('summary', 'text', array(
+		$builder->add('summary', TextType::class, array(
 			'label'=>'Summary',
 			'required'=>true,
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
 			'attr' => array('autofocus' => 'autofocus')
 		));
 
-		$builder->add('description', 'textarea', array(
+		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false
 		));
@@ -99,32 +105,32 @@ class EventEditForm extends \BaseFormWithEditComment {
 		));
 
 		if (count($this->countries) != 1) {
-			$builder->add('country_id', 'choice', array(
+			$builder->add('country_id', ChoiceType::class, array(
 				'label'=>'Country',
 				'choices' => $this->countries,
 				'required' => true,
-                'choices_as_values'=>false,
+                'choices_as_values' => true,
 			));
 		} else {
-            // Note we must have array_keys here - if we don't we are changing a class variable and we re-use that class variable later!
-			$countryID = array_shift(array_keys($this->countries));
-			$builder->add('country_id', 'hidden', array(
+            // Note we must have array_values here - if we don't we are changing a class variable and we re-use that class variable later!
+			$countryID = array_shift(array_values($this->countries));
+			$builder->add('country_id', HiddenType::class, array(
 				'data' => $countryID,
 			));
 		}
 
 
 		if (count($this->timezones) != 1) {
-			$builder->add('timezone', 'choice', array(
+			$builder->add('timezone', ChoiceType::class, array(
 				'label'=>'Time Zone',
 				'choices' => $this->timezones,
 				'required' => true,
-                'choices_as_values'=>false,
+                'choices_as_values' => true,
 			));
 		} else {
-            // Note we must have array_keys here - if we don't we are changing a class variable and we re-use that class variable later!
-			$timezone = array_pop(array_keys($this->timezones));
-			$builder->add('timezone', 'hidden', array(
+            // Note we must have array_values here - if we don't we are changing a class variable and we re-use that class variable later!
+			$timezone = array_pop(array_values($this->timezones));
+			$builder->add('timezone', HiddenType::class, array(
 				'data' => $timezone,
 			));
 		}
@@ -136,7 +142,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 			if ($this->siteFeaturePhysicalEvents) {
 
 				$builder->add("is_virtual",
-					"checkbox",
+                    CheckboxType::class,
 						array(
 							'required'=>false,
 							'label'=>'Is event accessible online?'
@@ -153,7 +159,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 			if ($this->siteFeatureVirtualEvents) {
 
 				$builder->add("is_physical",
-					"checkbox",
+                    CheckboxType::class,
 						array(
 							'required'=>false,
 							'label'=>'Does the event happen at a place?'
@@ -182,7 +188,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 				$startOptions['minutes'][] = $i;
 			}
 		}
-		$builder->add('start_at', 'datetime' , $startOptions);
+		$builder->add('start_at', DateTimeType::class , $startOptions);
 
 		$endOptions = array(
 			'label'=>'End',
@@ -200,7 +206,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 				$endOptions['minutes'][] = $i;
 			}
 		}
-		$builder->add('end_at', 'datetime' , $endOptions);
+		$builder->add('end_at', DateTimeType::class , $endOptions);
 
 		$this->customFields = array();
 		foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
@@ -265,11 +271,11 @@ class EventEditForm extends \BaseFormWithEditComment {
 				$form['ticket_url']->addError(new FormError("Please enter a URL"));
 			}
             // Country
-            if (!in_array($form->get('country_id')->getData(), array_keys($this->countries))) {
+            if (!in_array($form->get('country_id')->getData(), array_values($this->countries))) {
                 $form['country_id']->addError(new FormError("Please select a country"));
             }
             // Timezone
-            if (!in_array($form->get('timezone')->getData(), array_keys($this->timezones))) {
+            if (!in_array($form->get('timezone')->getData(), array_values($this->timezones))) {
                 $form['timezone']->addError(new FormError("Please select a timezone"));
                 // The user will see this error if they try to pass
                 // 1) ''

@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use repositories\builders\CountryRepositoryBuilder;
 use models\SiteModel;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 /**
@@ -34,7 +37,7 @@ class ImportEditForm extends AbstractType{
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$builder->add('title', 'text', array(
+		$builder->add('title', TextType::class, array(
 			'label'=>'Title',
 			'required'=>false, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
@@ -42,7 +45,7 @@ class ImportEditForm extends AbstractType{
 
 		/**
 		$builder->add("is_manual_events_creation",
-			"checkbox",
+            CheckboxType::class,
 			array(
 				'required'=>false,
 				'label'=>'Do you want to create events manually from this import?'
@@ -54,14 +57,14 @@ class ImportEditForm extends AbstractType{
 		$crb->setSiteIn($this->site);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {
-			$countries[$country->getId()] = $country->getTitle();
+			$countries[$country->getTitle()] = $country->getId();
 		}
 		// TODO if current country not in list add it now
-		$builder->add('country_id', 'choice', array(
+		$builder->add('country_id', ChoiceType::class, array(
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
-            'choices_as_values'=>false,
+            'choices_as_values' => true,
 		));
 		
 	}

@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 /**
@@ -23,13 +25,13 @@ class AreaEditForm extends \BaseFormWithEditComment {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		parent::buildForm($builder, $options);
 
-		$builder->add('title', 'text', array(
+		$builder->add('title', TextType::class, array(
 			'label'=>'Title',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
-		$builder->add('description', 'textarea', array(
+		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false
 		));

@@ -9,6 +9,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 /**
  *
@@ -23,12 +25,12 @@ class ForgotUserForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('username', 'text', array(
+		$builder->add('username', TextType::class, array(
 			'label'=>'Username',
 			'required'=>false, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
-		$builder->add('email', 'email', array(
+		$builder->add('email', EmailType::class, array(
 			'label'=>'Email',
 			'required'=>false, 
 		));

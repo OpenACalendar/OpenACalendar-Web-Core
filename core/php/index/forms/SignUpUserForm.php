@@ -10,6 +10,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  *
@@ -32,36 +36,36 @@ class SignUpUserForm  extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$builder->add('email', 'email', array(
+		$builder->add('email', EmailType::class, array(
 			'label'=>'Email',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
 		));
-		$builder->add('username', 'text', array(
+		$builder->add('username', TextType::class, array(
 			'label'=>'Username',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
-		$builder->add('password1', 'password', array(
+		$builder->add('password1', PasswordType::class, array(
 			'label'=>'Password',
 			'required'=>true
 		));
-		$builder->add('password2', 'password', array(
+		$builder->add('password2', PasswordType::class, array(
 			'label'=>'Repeat password',
 			'required'=>true
 		));
-		
-		$builder->add("agree",
-				"checkbox",
-					array(
-						'required'=>true,
-						'label'=>'I agree to the terms and conditions'
-					)
-			    );
+
+        $builder->add("agree",
+            CheckboxType::class,
+            array(
+                'required' => true,
+                'label' => 'I agree to the terms and conditions'
+            )
+        );
 		
 		if ($this->app['config']->newUserRegisterAntiSpam) {
-			$builder->add('antispam','text',array('label'=>'What is 2 + 2?','required'=>true));
+			$builder->add('antispam',TextType::class,array('label'=>'What is 2 + 2?','required'=>true));
 			
 			$myExtraFieldValidatorSpam = function(FormEvent $event){
 				$form = $event->getForm();

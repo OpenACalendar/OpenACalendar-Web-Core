@@ -139,7 +139,7 @@ class SendUserWatchesGroupPromptEmailsTask  extends \BaseTask  {
 							'unsubscribeURL'=>$unsubscribeURL,
 						);
 
-						$message = \Swift_Message::newInstance();
+						$message = new \Swift_Message();
 						$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 						$message->setTo($user->getEmail());
 

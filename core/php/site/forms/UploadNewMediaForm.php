@@ -7,7 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
-
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 /**
  *
@@ -34,19 +35,19 @@ class UploadNewMediaForm extends AbstractType{
 			'required'=>true
 		));
 		
-		$builder->add('title', 'text', array(
+		$builder->add('title', TextType::class, array(
 			'label'=>'Title',
 			'required'=>false, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
 			'data'=>$this->defaultTitle,
 		));
 		
-		$builder->add('source_text', 'text', array(
+		$builder->add('source_text', TextType::class, array(
 			'label'=>'Source',
 			'required'=>false, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
 		));
-		$builder->add('source_url', 'url', array(
+		$builder->add('source_url', UrlType::class, array(
 			'label'=>'Source URL',
 			'required'=>false, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED

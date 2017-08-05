@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  *
@@ -22,14 +23,14 @@ class UserPrefsForm  extends AbstractType {
 	
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
-		$builder->add("is_clock_12hour",
-				"checkbox",
-					array(
-						'required'=>false,
-						'label'=>'Prefer 12 hour clock?'
-					)
-			    );
+
+        $builder->add("is_clock_12hour",
+            CheckboxType::class,
+            array(
+                'required' => false,
+                'label' => 'Prefer 12 hour clock?'
+            )
+        );
 		
 		
 	}

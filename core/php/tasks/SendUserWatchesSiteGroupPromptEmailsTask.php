@@ -119,7 +119,7 @@ class SendUserWatchesSiteGroupPromptEmailsTask  extends \BaseTask  {
 								$futureEventsBuilder->setLimit($this->app['config']->userWatchesSiteGroupPromptEmailShowEventsMax);
 								$futureEvents = $futureEventsBuilder->fetchAll();
 
-								$message = \Swift_Message::newInstance();
+								$message = new \Swift_Message();
 								$message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
 								$message->setTo($user->getEmail());
 

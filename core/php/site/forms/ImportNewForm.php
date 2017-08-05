@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use repositories\builders\CountryRepositoryBuilder;
 use models\SiteModel;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 /**
@@ -36,7 +39,7 @@ class ImportNewForm extends AbstractType{
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$builder->add('url', 'url', array(
+		$builder->add('url', UrlType::class, array(
 			'label'=>'URL',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
@@ -44,7 +47,7 @@ class ImportNewForm extends AbstractType{
 
 		/**
 		$builder->add("is_manual_events_creation",
-			"checkbox",
+            CheckboxType::class,
 			array(
 				'required'=>false,
 				'label'=>'Do you want to create events manually from this import?',
@@ -57,18 +60,18 @@ class ImportNewForm extends AbstractType{
 		$countries = array();
 		$defaultCountry = null;
 		foreach($crb->fetchAll() as $country) {
-			$countries[$country->getId()] = $country->getTitle();
+			$countries[$country->getTitle()] = $country->getId();
 			if ($defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
 				$defaultCountry = $country->getId();
 			}	
 		}
 		// TODO if current country not in list add it now
-		$builder->add('country_id', 'choice', array(
+		$builder->add('country_id', ChoiceType::class, array(
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
 			'data' => $defaultCountry,
-            'choices_as_values'=>false,
+            'choices_as_values' => true,
 		));
 
 

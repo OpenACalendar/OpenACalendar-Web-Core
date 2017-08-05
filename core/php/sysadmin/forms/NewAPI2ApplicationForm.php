@@ -9,6 +9,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 /**
  *
@@ -23,8 +25,8 @@ class NewAPI2ApplicationForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('email', 'email', array('label'=>'Email Of Owner','required'=>true));
-		$builder->add('title', 'text', array('label'=>'Title','required'=>true));
+		$builder->add('email', EmailType::class, array('label'=>'Email Of Owner','required'=>true));
+		$builder->add('title', TextType::class, array('label'=>'Title','required'=>true));
 		
 	}
 	

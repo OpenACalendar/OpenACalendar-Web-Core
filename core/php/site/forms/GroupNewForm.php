@@ -7,6 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
 /**
@@ -29,7 +32,7 @@ class GroupNewForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('title', 'text', array(
+		$builder->add('title', TextType::class, array(
 			'label'=>'Title',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
@@ -38,17 +41,17 @@ class GroupNewForm extends AbstractType{
 
 		));
 		
-		$builder->add('description', 'textarea', array(
+		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false
 		));
-		$builder->add('url', 'url', array(
+		$builder->add('url', UrlType::class, array(
 			'label'=>'URL',
 			'required'=>false, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
 		));
 		
-		$builder->add('twitterUsername', 'text', array(
+		$builder->add('twitterUsername', TextType::class, array(
 			'label'=>'Twitter',
 			'required'=>false
 		));

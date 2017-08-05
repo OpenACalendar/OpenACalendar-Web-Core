@@ -48,9 +48,9 @@ class UserController {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 			$result = curl_exec($ch);
-			curl_close($ch); 
+			curl_close($ch);
 
-			parse_str($result, $resultArray);
+            $resultArray = json_decode($result, true);
 			if (!$resultArray['access_token']) {
 				die("Did not get long-lived access token, problem.");
 			}

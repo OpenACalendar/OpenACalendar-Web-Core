@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 /**
  *
@@ -23,12 +24,12 @@ class ResetUserForm  extends AbstractType {
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('password1', 'password', array(
+		$builder->add('password1', PasswordType::class, array(
 			'label'=>'Password',
 			'required'=>true, 
 			'attr' => array('autofocus' => 'autofocus')
 		));
-		$builder->add('password2', 'password', array(
+		$builder->add('password2', PasswordType::class, array(
 			'label'=>'Repeat password',
 			'required'=>true
 		));	

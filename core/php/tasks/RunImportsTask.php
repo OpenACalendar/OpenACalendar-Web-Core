@@ -117,7 +117,7 @@ class RunImportsTask extends \BaseTask  {
                         $userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
                         $userWatchesSiteStop = $userWatchesSiteStopRepository->getForUserAndSite($user, $site);
 
-                        $message = \Swift_Message::newInstance();
+                        $message = new \Swift_Message();
                         $message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
                         $message->setTo($user->getEmail());
 
@@ -174,7 +174,7 @@ class RunImportsTask extends \BaseTask  {
                         $userAccountGeneralSecurityKey = $userAccountGeneralSecurityKeyRepository->getForUser($user);
                         $userWatchesGroupStop = $userWatchesGroupStopRepository->getForUserAndGroup($user, $group);
 
-                        $message = \Swift_Message::newInstance();
+                        $message = new \Swift_Message();
                         $message->setFrom(array($this->app['config']->emailFrom => $this->app['config']->emailFromName));
                         $message->setTo($user->getEmail());
 
