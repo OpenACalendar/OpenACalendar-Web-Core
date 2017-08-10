@@ -105,7 +105,7 @@ class UserController {
 					$app['flashmessages']->addMessage('Sent');
 					$redirect = true;
 				} else if ($action->getCommand() == 'close') {
-					$uar->systemAdminShuts($this->parameters['user'], $app['currentUser'], $action->getParam(0));
+					$uar->systemAdminShuts($this->parameters['user'], $app['currentUser']);
 					$redirect = true;
 				} else if ($action->getCommand() == 'open') {
 					$uar->systemAdminOpens($this->parameters['user'], $app['currentUser']);

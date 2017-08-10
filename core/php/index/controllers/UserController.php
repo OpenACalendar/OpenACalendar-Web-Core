@@ -331,7 +331,7 @@ class UserController {
 				if ($user) {
 					if ($user->checkPassword($data['password'])) {
 						if ($user->getIsClosedBySysAdmin()) {
-							$form->addError(new FormError('There was a problem with this account and it has been closed: '.$user->getClosedBySysAdminReason()));
+							$form->addError(new FormError('There was a problem with this account and it has been closed. Please contact support.'));
 							$app['monolog']->addError("Login attempt - account ".$user->getId().' - closed.');
 						} else {
 							userLogIn($user);
@@ -437,7 +437,7 @@ class UserController {
 				}
 				if ($user) {
 					if ($user->getIsClosedBySysAdmin()) {
-						$form->addError(new FormError('There was a problem with this account and it has been closed: '.$user->getClosedBySysAdminReason()));
+						$form->addError(new FormError('There was a problem with this account and it has been closed. Please contact support.'));
 					} else {
 						$aurr = new UserAccountResetRepository($app);
 						$uarLast = $aurr->loadRecentlyUnusedSentForUserAccountId($user->getId(), $app['config']->resetEmailsGapBetweenInSeconds);

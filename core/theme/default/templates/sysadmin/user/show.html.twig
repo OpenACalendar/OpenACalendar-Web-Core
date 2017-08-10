@@ -43,14 +43,6 @@
 				{% if user.isClosedBySysAdmin %}<span class="yes">yes</span>{% else %}<span class="no">no</span>{% endif %}				
 			</td>
 		</tr>
-		{% if user.isClosedBySysAdmin %}
-			<tr>
-				<th>Closed by sys admin reason</th>
-				<td>
-					{{ user.ClosedBySysAdminReason }}
-				</td>
-			</tr>
-		{% endif %}		
 		<tr>
 			<th>Email Upcoming Events</th>
 			<td>{{ user.getEmailUpcomingEvents }}</td>
@@ -103,7 +95,7 @@
 		<li>sysadmin no</li>
 		<li>verifyemail</li>
 		<li>resendverificationemail</li>
-		<li>close  <span class="param">reason</a></li>
+		<li>close</li>
 		<li>open</li>
 		<li>email email</li>
 	</ul>

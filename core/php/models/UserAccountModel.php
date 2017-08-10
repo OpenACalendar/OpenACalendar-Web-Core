@@ -43,7 +43,6 @@ class UserAccountModel {
 		protected $email_upcoming_events = 'n';
 		protected $is_clock_12hour;
 		protected $is_closed_by_sys_admin = false;
-		protected $closed_by_sys_admin_reason;
 
 
 		protected $created_from_ip;
@@ -72,7 +71,6 @@ class UserAccountModel {
 			$this->email_upcoming_events_days_notice = $data['email_upcoming_events_days_notice'];
 			$this->is_clock_12hour = $data['is_clock_12hour'];
 			$this->is_closed_by_sys_admin = $data['is_closed_by_sys_admin'];
-			$this->closed_by_sys_admin_reason = $data['closed_by_sys_admin_reason'];
 			$utc = new \DateTimeZone("UTC");
 			$this->created_at = $data['created_at'] ? new \DateTime($data['created_at'], $utc) : '';
 			$this->created_from_ip = $data['created_from_ip'];
@@ -250,11 +248,6 @@ class UserAccountModel {
 		public function getIsClosedBySysAdmin() {
 			return $this->is_closed_by_sys_admin;
 		}
-
-		public function getClosedBySysAdminReason() {
-			return $this->closed_by_sys_admin_reason;
-		}
-
 
 		/**
 		 * Normal emails is routine emails about calendars and events.

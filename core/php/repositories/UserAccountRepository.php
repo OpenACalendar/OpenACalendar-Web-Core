@@ -216,12 +216,11 @@ class UserAccountRepository {
         $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
 	}
 	
-	public function systemAdminShuts(UserAccountModel $user, UserAccountModel $shutBy, $reason) {
+	public function systemAdminShuts(UserAccountModel $user, UserAccountModel $shutBy) {
 
-		$stat = $this->app['db']->prepare("UPDATE user_account_information SET  is_closed_by_sys_admin='1', closed_by_sys_admin_reason=:reason WHERE id =:id");
+		$stat = $this->app['db']->prepare("UPDATE user_account_information SET  is_closed_by_sys_admin='1' WHERE id =:id");
 		$stat->execute(array( 
 				'id'=>$user->getId() ,
-				'reason'=>$reason,
 			));
 
         $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
