@@ -26,15 +26,11 @@ class LogInUserForm  extends AbstractType {
 	
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
-		$builder->add('username', TextType::class, array(
-			'label'=>'Username',
-			'required'=>false, 
-			'attr' => array('autofocus' => 'autofocus')
-		));
+
 		$builder->add('email', EmailType::class, array(
 			'label'=>'Email',
-			'required'=>false, 
+			'required'=>true,
+			'attr' => array('autofocus' => 'autofocus')
 		));
 		
 		$builder->add('password', PasswordType::class, array(

@@ -327,14 +327,7 @@ class UserController {
 				$data = $form->getData();
 				
 				$userRepository = new UserAccountRepository($app);
-				$user = null;
-				// We are deliberately very forgiving about people putting the wrong thing in the wrong field.
-				if ($data['email']) {
-					$user = $userRepository->loadByUserNameOrEmail($data['email']);
-				}
-				if (!$user && $data['username']) {
-					$user = $userRepository->loadByUserNameOrEmail($data['username']);
-				}
+				$user = $userRepository->loadByEmail($data['email']);
 				if ($user) {
 					if ($user->checkPassword($data['password'])) {
 						if ($user->getIsClosedBySysAdmin()) {
