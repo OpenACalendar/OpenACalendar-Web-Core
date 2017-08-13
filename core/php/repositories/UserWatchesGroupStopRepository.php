@@ -66,8 +66,8 @@ class UserWatchesGroupStopRepository {
 	/** @return UserWatchesSiteStopModel **/
 	public function loadByUserAccountIDAndGroupIDAndAccessKey($userId, $groupId, $access) {
 
-		$stat = $this->app['db']->prepare("SELECT * FROM user_watches_group_stop WHERE user_account_id=:uid AND group_id=:gid");
-		$stat->execute(array('uid'=>$userId,'gid'=>$groupId));
+		$stat = $this->app['db']->prepare("SELECT * FROM user_watches_group_stop WHERE user_account_id=:uid AND group_id=:gid AND access_key=:access_key");
+		$stat->execute(array('uid'=>$userId,'gid'=>$groupId,'access_key'=>$access));
 		if ($stat->rowCount() > 0) {
 			$uwss = new UserWatchesGroupStopModel();
 			$uwss->setFromDataBaseRow($stat->fetch());
