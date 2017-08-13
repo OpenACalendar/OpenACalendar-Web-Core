@@ -22,41 +22,44 @@
 
 {% block content %}
 
+	<div class="contentMain">
 
-	<form action="#" method="post" class="styled">
+		<form action="#" method="post" class="styled">
 
-		{{ form_errors(form) }}
+			{{ form_errors(form) }}
 
-		<div class="rowWrapper">
-			<div class="labelWrapper">&nbsp;</div>
-			<div class="widgetWrapperPlacementOnly">
-				<ul id="ChangeVenueAreaList">
-					<li class="selectedarea">
-						<span class="content">
-							<span class="title">{{ country.title }}</span>
-						</span>
-					</li>
-					{% for parentArea in parentAreas %}
+			<div class="rowWrapper">
+				<div class="labelWrapper">&nbsp;</div>
+				<div class="widgetWrapperPlacementOnly">
+					<ul id="ChangeVenueAreaList">
 						<li class="selectedarea">
 							<span class="content">
-								<span class="title">{{ parentArea.title }}</span>
+								<span class="title">{{ country.title }}</span>
 							</span>
 						</li>
-					{% endfor %}
-				</ul>
+						{% for parentArea in parentAreas %}
+							<li class="selectedarea">
+								<span class="content">
+									<span class="title">{{ parentArea.title }}</span>
+								</span>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="after"></div>
 			</div>
-			<div class="after"></div>
-		</div>
-
-		
-		{{ form_row(form.title) }}
-		{{ form_row(form.description) }}
-		{{ form_rest(form) }}
 
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
+			{{ form_row(form.title) }}
+			{{ form_row(form.description) }}
+			{{ form_rest(form) }}
 
-	</form>
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+
+		</form>
+
+	</div>
 
 {% endblock %}

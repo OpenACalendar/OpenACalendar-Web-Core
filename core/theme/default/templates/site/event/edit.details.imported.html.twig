@@ -16,38 +16,42 @@
 {% endblock %}
 
 {% block innerContent %}
-	
 
-	<p>This event is imported. Only some fields can be edited.</p>
 
-	<form action="#" method="post" class="styled">
+	<div class="contentMain">
 
-		{{ form_errors(form) }}
+		<p>This event is imported. Only some fields can be edited.</p>
 
-		{{ form_row(form.country_id) }}
-		{{ form_row(form.timezone) }}
-		{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
-			{# Firstly, if both are an option, user must check which one.  #}
-			{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-				{{ form_row(form.is_virtual) }}
-			{% endif %}
-			{# Secondly, any options for virtual events? ... nope #}
-		{% endif %}
-		{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
-			{# Firstly, if both are an option, user must check which one.  #}
+		<form action="#" method="post" class="styled">
+
+			{{ form_errors(form) }}
+
+			{{ form_row(form.country_id) }}
+			{{ form_row(form.timezone) }}
 			{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
-				{{ form_row(form.is_physical) }}
+				{# Firstly, if both are an option, user must check which one.  #}
+				{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
+					{{ form_row(form.is_virtual) }}
+				{% endif %}
+				{# Secondly, any options for virtual events? ... nope #}
 			{% endif %}
-			{# Secondly, any options for physical events? #}
-			<div id="physicalEventOptions">
-				
-			</div>
-		{% endif %}
-		{{ form_rest(form) }}
+			{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
+				{# Firstly, if both are an option, user must check which one.  #}
+				{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
+					{{ form_row(form.is_physical) }}
+				{% endif %}
+				{# Secondly, any options for physical events? #}
+				<div id="physicalEventOptions">
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+				</div>
+			{% endif %}
+			{{ form_rest(form) }}
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}
 

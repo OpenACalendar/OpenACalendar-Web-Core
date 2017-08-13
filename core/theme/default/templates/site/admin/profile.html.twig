@@ -15,39 +15,42 @@
 
 
 {% block content %}
-	
 
-	<form action="#" method="post"  {{ form_enctype(form) }} class="styled">
+	<div class="contentMain">
 
-		{{ form_errors(form) }}
+		<form action="#" method="post"  {{ form_enctype(form) }} class="styled">
 
-		{{ form_row(form.title) }}
-		{{ form_row(form.description_text) }}
-		{{ form_row(form.footer_text) }}
+			{{ form_errors(form) }}
+
+			{{ form_row(form.title) }}
+			{{ form_row(form.description_text) }}
+			{{ form_row(form.footer_text) }}
+
+			{% if siteLogoAllowed %}
+				<div class="rowWrapper">
+					<div class="labelWrapper">Existing Logo</div>
+					<div class="widgetWrapper">
+						<img src="/getLogo.php?t={{ "now"|date('U') }}" class="logo" alt="Logo">
+					</div>
+					<div class="after"></div>
+				</div>
+				{{ form_row(form.logo) }}
+			{% endif %}
+
+			{{ form_rest(form) }}
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+
+		</form>
 
 		{% if siteLogoAllowed %}
-			<div class="rowWrapper">
-				<div class="labelWrapper">Existing Logo</div>
-				<div class="widgetWrapper">
-					<img src="/getLogo.php?t={{ "now"|date('U') }}" class="logo" alt="Logo">
-				</div>
-				<div class="after"></div>
+			<div class="contentMain">
+				<p>(Note you can also pick a site logo from <a href="/media/">your existing media</a>.)</p>
 			</div>
-			{{ form_row(form.logo) }}
-		{% endif %}
+		{%  endif %}
 
-		{{ form_rest(form) }}
-
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-
-	</form>
-
-	{% if siteLogoAllowed %}
-		<div class="contentMain">
-			<p>(Note you can also pick a site logo from <a href="/media/">your existing media</a>.)</p>
-		</div>
-	{%  endif %}
+	</div>
 
 {% endblock %}
 

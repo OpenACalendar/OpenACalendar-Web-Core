@@ -17,19 +17,24 @@
 
 {% block content %}
 
-	<h2>Areas in a country</h2>
 
-	<ul class="mainListCountries">
-		{% for country in countries %}
-			<li class="country">
-				<div class="title"><a href="/admin/areas/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
-			</li>
-		{% else %}
-			<li>
-				There are no countries.
-			</li>								
-		{% endfor %}
-	</ul>
+	<div class="contentMain">
+
+		<h2>Areas in a country</h2>
+
+		<ul class="mainListCountries">
+			{% for country in countries %}
+				<li class="country">
+					<div class="title"><a href="/admin/areas/{{ country.twoCharCode }}">{{ country.title }} <img src="/theme/default/img/countries/{{ country.twoCharCode|lower }}.png" alt="Flag"></a></div>
+				</li>
+			{% else %}
+				<li>
+					There are no countries.
+				</li>
+			{% endfor %}
+		</ul>
+
+	</div>
 
 
 

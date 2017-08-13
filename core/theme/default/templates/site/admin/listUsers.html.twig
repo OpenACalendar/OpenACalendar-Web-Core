@@ -16,59 +16,62 @@
 
 {% block content %}
 
-
-	<h2>Users</h2>
-
-	<h3>User Permissions all Anonymous Users have</h3>
-
+	
 	<div class="contentMain">
-		<table class="data">
-			<tr>
-				<th>Extension</th>
-				<th>ID</th>
-			</tr>
-			{% for userpermission in userPermissionForAnonymous %}
+
+		<h2>Users</h2>
+
+		<h3>User Permissions all Anonymous Users have</h3>
+
+		<div class="contentMain">
+			<table class="data">
 				<tr>
-					<td>{{ userpermission.userPermissionExtensionID }}</td>
-					<td>{{ userpermission.userPermissionKey }}</td>
+					<th>Extension</th>
+					<th>ID</th>
 				</tr>
-			{% endfor %}
-		</table>
-	</div>
+				{% for userpermission in userPermissionForAnonymous %}
+					<tr>
+						<td>{{ userpermission.userPermissionExtensionID }}</td>
+						<td>{{ userpermission.userPermissionKey }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
 
-	<h3>User Permissions any User has</h3>
+		<h3>User Permissions any User has</h3>
 
-	<div class="contentMain">
-		<table class="data">
-			<tr>
-				<th>Extension</th>
-				<th>ID</th>
-			</tr>
-			{% for userpermission in userPermissionForAnyUser %}
+		<div class="contentMain">
+			<table class="data">
 				<tr>
-					<td>{{ userpermission.userPermissionExtensionID }}</td>
-					<td>{{ userpermission.userPermissionKey }}</td>
+					<th>Extension</th>
+					<th>ID</th>
 				</tr>
-			{% endfor %}
-		</table>
-	</div>
+				{% for userpermission in userPermissionForAnyUser %}
+					<tr>
+						<td>{{ userpermission.userPermissionExtensionID }}</td>
+						<td>{{ userpermission.userPermissionKey }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
 
-	<h3>User Permissions any Verified User has</h3>
+		<h3>User Permissions any Verified User has</h3>
 
-	<div class="contentMain">
-		<table class="data">
-			<tr>
-				<th>Extension</th>
-				<th>ID</th>
-			</tr>
-			{% for userpermission in userPermissionForAnyVerifiedUser %}
+		<div class="contentMain">
+			<table class="data">
 				<tr>
-					<td>{{ userpermission.userPermissionExtensionID }}</td>
-					<td>{{ userpermission.userPermissionKey }}</td>
+					<th>Extension</th>
+					<th>ID</th>
 				</tr>
-			{% endfor %}
-		</table>
-	</div>
+				{% for userpermission in userPermissionForAnyVerifiedUser %}
+					<tr>
+						<td>{{ userpermission.userPermissionExtensionID }}</td>
+						<td>{{ userpermission.userPermissionKey }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
 
+	</div>
 
 {% endblock %}

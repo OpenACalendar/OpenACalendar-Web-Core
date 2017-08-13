@@ -16,15 +16,19 @@
 {% block content %}
 
 
-	<form action="#" method="post" class="styled">
+	<div class="contentMain">
 
-		{{ form_errors(form) }}
+		<form action="#" method="post" class="styled">
 
-		{{ form_row(form.is_web_robots_allowed) }}
-		{{ form_rest(form) }}
+			{{ form_errors(form) }}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			{{ form_row(form.is_web_robots_allowed) }}
+			{{ form_rest(form) }}
+
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
+
+	</div>
 
 {% endblock %}
