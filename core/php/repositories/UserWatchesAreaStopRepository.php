@@ -65,8 +65,8 @@ class UserWatchesAreaStopRepository {
 	/** @return UserWatchesSiteStopModel **/
 	public function loadByUserAccountIDAndAreaIDAndAccessKey($userId, $areaId, $access) {
 
-		$stat = $this->app['db']->prepare("SELECT * FROM user_watches_area_stop WHERE user_account_id=:uid AND area_id=:gid");
-		$stat->execute(array('uid'=>$userId,'gid'=>$areaId));
+		$stat = $this->app['db']->prepare("SELECT * FROM user_watches_area_stop WHERE user_account_id=:uid AND area_id=:gid AND access_key=:access_key");
+		$stat->execute(array('uid'=>$userId,'gid'=>$areaId,'access_key'=>$access));
 		if ($stat->rowCount() > 0) {
 			$uwss = new UserWatchesAreaStopModel();
 			$uwss->setFromDataBaseRow($stat->fetch());

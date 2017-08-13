@@ -65,8 +65,8 @@ class UserWatchesSiteStopRepository {
 	/** @return UserWatchesSiteStopModel **/
 	public function loadByUserAccountIDAndSiteIDAndAccessKey($userId, $siteId, $access) {
 
-		$stat = $this->app['db']->prepare("SELECT * FROM user_watches_site_stop WHERE user_account_id=:uid AND site_id=:sid");
-		$stat->execute(array('uid'=>$userId,'sid'=>$siteId));
+		$stat = $this->app['db']->prepare("SELECT * FROM user_watches_site_stop WHERE user_account_id=:uid AND site_id=:sid AND access_key=:access_key");
+		$stat->execute(array('uid'=>$userId,'sid'=>$siteId,'access_key'=>$access));
 		if ($stat->rowCount() > 0) {
 			$uwss = new UserWatchesSiteStopModel();
 			$uwss->setFromDataBaseRow($stat->fetch());
