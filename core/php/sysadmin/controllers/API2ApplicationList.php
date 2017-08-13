@@ -21,7 +21,7 @@ class API2ApplicationList {
 	
 	
 	function index(Request $request, Application $app) {				
-		$form = $app['form.factory']->create(new NewAPI2ApplicationForm());
+		$form = $app['form.factory']->create(NewAPI2ApplicationForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

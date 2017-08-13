@@ -154,7 +154,7 @@ class CountryController {
 		
 		$area = new AreaModel();
 		
-		$form = $app['form.factory']->create(new AreaNewInCountryForm(), $area);
+		$form = $app['form.factory']->create(AreaNewInCountryForm::class, $area);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

@@ -436,7 +436,7 @@ class VenueController {
 			die("No"); // TODO
 		}
 		
-		$form = $app['form.factory']->create(new VenueDeleteForm());
+		$form = $app['form.factory']->create(VenueDeleteForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

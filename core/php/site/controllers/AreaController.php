@@ -142,7 +142,7 @@ class AreaController {
 		
 		$area = new AreaModel();
 		
-		$form = $app['form.factory']->create(new AreaNewInAreaForm(), $area);
+		$form = $app['form.factory']->create( AreaNewInAreaForm::class, $area);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

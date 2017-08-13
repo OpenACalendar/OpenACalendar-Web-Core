@@ -315,7 +315,7 @@ class UserController {
             return $app->redirect("/");
         }
 
-		$form = $app['form.factory']->create(new LogInUserForm());
+		$form = $app['form.factory']->create(LogInUserForm::class);
 
 
 		$this->processThingsToDoAfterGetUser($request, $app);
@@ -421,7 +421,7 @@ class UserController {
             return $app->redirect("/");
         }
 
-		$form = $app['form.factory']->create(new ForgotUserForm());
+		$form = $app['form.factory']->create(ForgotUserForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -494,7 +494,7 @@ class UserController {
 			return $app['twig']->render('index/user/resetFail.html.twig', array());
 		}
 		
-		$form = $app['form.factory']->create(new ResetUserForm());
+		$form = $app['form.factory']->create(ResetUserForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

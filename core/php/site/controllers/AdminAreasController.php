@@ -141,8 +141,8 @@ class AdminAreasController {
 		$area = new AreaModel();
 		
 		$form = $parentArea ? 
-				$app['form.factory']->create(new AreaNewInAreaForm(), $area) :
-				$app['form.factory']->create(new AreaNewInCountryForm(), $area);
+				$app['form.factory']->create( AreaNewInAreaForm::class, $area) :
+				$app['form.factory']->create( AreaNewInCountryForm::class, $area);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

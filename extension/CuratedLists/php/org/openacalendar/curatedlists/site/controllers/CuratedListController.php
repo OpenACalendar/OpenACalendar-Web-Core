@@ -148,7 +148,7 @@ class CuratedListController {
 			$app->abort(404, "curatedlist does not exist for editing.");
 		}
 		
-		$form = $app['form.factory']->create(new CuratedListEditForm(), $this->parameters['curatedlist']);
+		$form = $app['form.factory']->create( CuratedListEditForm::class, $this->parameters['curatedlist']);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

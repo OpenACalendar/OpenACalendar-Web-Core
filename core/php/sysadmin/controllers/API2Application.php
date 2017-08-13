@@ -33,7 +33,7 @@ class API2Application {
 	function show($id, Request $request, Application $app) {
 		$this->build($id, $request, $app);
 				
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(ActionForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

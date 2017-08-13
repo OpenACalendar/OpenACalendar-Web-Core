@@ -72,7 +72,7 @@ class CurrentUserController {
 	}
 	
 	function changePassword(Request $request, Application $app) {		
-		$form = $app['form.factory']->create(new UserChangePasswordForm());
+		$form = $app['form.factory']->create(UserChangePasswordForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

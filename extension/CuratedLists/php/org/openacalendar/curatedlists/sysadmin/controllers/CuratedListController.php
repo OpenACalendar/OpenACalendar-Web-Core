@@ -50,7 +50,7 @@ class CuratedListController {
 		$this->build($siteid, $slug, $request, $app);
 		
 				
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create(ActionForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

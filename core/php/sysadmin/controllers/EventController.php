@@ -83,7 +83,7 @@ class EventController {
 		$this->build($siteid, $slug, $request, $app);
 
 			
-		$form = $app['form.factory']->create(new ActionWithCommentForm());
+		$form = $app['form.factory']->create( ActionWithCommentForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

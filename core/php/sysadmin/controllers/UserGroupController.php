@@ -65,7 +65,7 @@ class UserGroupController {
 			}
 		}
 
-		$form = $app['form.factory']->create(new ActionForm());
+		$form = $app['form.factory']->create( ActionForm::class );
 
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

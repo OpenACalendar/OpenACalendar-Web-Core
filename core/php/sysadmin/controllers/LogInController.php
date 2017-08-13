@@ -22,7 +22,7 @@ class LogInController {
 	
 	
 	function index(Request $request, Application $app) {				
-		$form = $app['form.factory']->create(new LogInUserForm());
+		$form = $app['form.factory']->create( LogInUserForm::class);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
