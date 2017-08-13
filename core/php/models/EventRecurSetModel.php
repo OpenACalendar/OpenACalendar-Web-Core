@@ -118,6 +118,7 @@ class EventRecurSetModel {
         foreach($rruleunraveller->getResults() as $result) {
             $newEvent = new EventModel();
             $newEvent->setGroupId($event->getGroupId());
+			$newEvent->setAreaId($event->getAreaId());
             $newEvent->setVenueId($event->getVenueId());
             $newEvent->setCountryId($event->getCountryId());
             $newEvent->setEventRecurSetId($this->id);
@@ -195,6 +196,7 @@ class EventRecurSetModel {
         foreach($rruleunraveller->getResults() as $result) {
             $newEvent = new EventModel();
             $newEvent->setGroupId($event->getGroupId());
+			$newEvent->setAreaId($event->getAreaId());
             $newEvent->setVenueId($event->getVenueId());
             $newEvent->setCountryId($event->getCountryId());
             $newEvent->setEventRecurSetId($this->id);
@@ -247,6 +249,7 @@ class EventRecurSetModel {
         foreach($rruleunraveller->getResults() as $result) {
             $newEvent = new EventModel();
             $newEvent->setGroupId($event->getGroupId());
+			$newEvent->setAreaId($event->getAreaId());
             $newEvent->setVenueId($event->getVenueId());
             $newEvent->setCountryId($event->getCountryId());
             $newEvent->setEventRecurSetId($this->id);
@@ -304,6 +307,7 @@ class EventRecurSetModel {
 
 		$newEvent = new EventModel();
 		$newEvent->setGroupId($event->getGroupId());
+		$newEvent->setAreaId($event->getAreaId());
 		$newEvent->setVenueId($event->getVenueId());
 		$newEvent->setCountryId($event->getCountryId());
 		$newEvent->setEventRecurSetId($this->id);
