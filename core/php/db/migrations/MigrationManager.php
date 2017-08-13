@@ -14,7 +14,7 @@ use Silex\Application;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class MigrationManager {
-	public static function upgrade(Application $app, $verbose = false) {
+	public static function upgrade(Application $app, bool $verbose = false) {
 		global $LASTMIGRATIONCLASS;
 
 		// some vars

@@ -26,7 +26,7 @@ class EventHistoryRepository {
         $this->app = $app;
     }
 
-    public function loadByEventAndtimeStamp(EventModel $event, $timestamp) {
+    public function loadByEventAndtimeStamp(EventModel $event, int $timestamp) {
 		$stat = $this->app['db']->prepare("SELECT event_history.* FROM event_history ".
 				"WHERE event_history.event_id =:id AND event_history.created_at <= :cat ORDER BY event_history.created_at DESC");
 		$stat->execute(array( 'id'=>$event->getId(), 'cat'=>date("Y-m-d H:i:s",$timestamp) ));

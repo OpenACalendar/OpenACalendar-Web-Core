@@ -39,7 +39,7 @@ class EventDBAccess {
 		'url','ticket_url','is_physical','is_virtual','is_cancelled','is_deleted','is_duplicate_of_id');
 
 
-	public function update(EventModel $event, $fields, EventEditMetaDataModel $eventEditMetaDataModel) {
+	public function update(EventModel $event, array $fields, EventEditMetaDataModel $eventEditMetaDataModel) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 

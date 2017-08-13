@@ -232,7 +232,7 @@ class EventRepository {
 	}
 
 
-	public function loadByID($id) {
+	public function loadByID(int $id) {
 		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 			" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 			" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
@@ -266,7 +266,7 @@ class EventRepository {
 		}
 	}
 
-	public function loadBySlug(SiteModel $site, $slug) {
+	public function loadBySlug(SiteModel $site, int $slug) {
 		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
@@ -301,7 +301,7 @@ class EventRepository {
 	}
 
 
-	public function loadBySiteIDAndEventSlug($siteid, $slug) {
+	public function loadBySiteIDAndEventSlug($siteid, int $slug) {
 		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
@@ -487,7 +487,7 @@ class EventRepository {
 		}
 	}
 	
-	public function loadLastNonDeletedNonImportedByStartTimeInSiteId($siteID) {
+	public function loadLastNonDeletedNonImportedByStartTimeInSiteId(int $siteID) {
 		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
@@ -500,7 +500,7 @@ class EventRepository {
 		}
 	}
 	
-	public function loadLastNonDeletedNonImportedByStartTimeInGroupId($groupID) {
+	public function loadLastNonDeletedNonImportedByStartTimeInGroupId(int $groupID) {
 		// We haven't got a " AND event_in_group.is_main_group = '1' " search term so the group_title & group_id returned may not be from the main group
 		// but given where this is used, that's ok for now.
 		// We need to make sure the search by group clause works.
@@ -523,7 +523,7 @@ class EventRepository {
      *
      * @deprecated
      */
-    public function loadByImportURLIDAndImportId($importURLID, $importID) {
+    public function loadByImportURLIDAndImportId(int $importURLID, string $importID) {
 		$stat = $this->app['db']->prepare("SELECT event_information.*, group_information.title AS group_title, group_information.id AS group_id  FROM event_information ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
 				" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".

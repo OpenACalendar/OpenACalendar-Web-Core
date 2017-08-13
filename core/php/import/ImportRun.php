@@ -141,7 +141,7 @@ class ImportRun {
 	public function hasFlag($flag) { return isset($this->flags[$flag]) && $this->flags[$flag]; }
 
 
-    public function setRealUrl($realurl)
+    public function setRealUrl(string $realurl)
     {
         $this->realurl = $realurl;
 		$this->deleteLocallyStoredURL();

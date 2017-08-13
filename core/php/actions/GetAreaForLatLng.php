@@ -29,7 +29,7 @@ class GetAreaForLatLng {
     }
 
 
-    public function getArea($lat, $lng, CountryModel $countryModel = null) {
+    public function getArea(float $lat, float $lng, CountryModel $countryModel = null) {
 
 
         $areaRepo = new AreaRepositoryBuilder($this->app);
@@ -64,7 +64,7 @@ class GetAreaForLatLng {
 
     }
 
-    protected function isAreaEntirelyBiggerThanOtherArea(AreaModel $area, $areas) {
+    protected function isAreaEntirelyBiggerThanOtherArea(AreaModel $area, array $areas) {
         foreach($areas as $otherArea) {
 
             if ($otherArea->getId() != $area->getId() 

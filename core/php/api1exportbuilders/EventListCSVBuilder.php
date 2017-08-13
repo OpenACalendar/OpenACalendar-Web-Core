@@ -23,7 +23,7 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 
 	protected $delimiter = ",";
 
-	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null) {
+	public function __construct(Application $app, SiteModel $site = null, string $timeZone  = null) {
 		parent::__construct($app, $site, $timeZone);
 		$this->eventRepositoryBuilder->setAfterNow();
 	}
@@ -67,7 +67,7 @@ class EventListCSVBuilder extends BaseEventListBuilder {
 	}
 
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
-							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
+							 AreaModel $area = null, CountryModel $country = null, array $eventMedias = array()) {
 
 		$siteurlbase = $this->app['config']->getWebSiteDomainSecure($this->site?$this->site->getSlug():$event->getSiteSlug());
 		$siteurl = $siteurlbase.'/event/'.$event->getSlugForUrl();

@@ -20,6 +20,6 @@ abstract class BaseMessageQueWorker
         $this->app = $app;
     }
 
-    abstract function process($extension, $type, $data);
+    abstract function process(string $extension, string $type, $data);
 
 }

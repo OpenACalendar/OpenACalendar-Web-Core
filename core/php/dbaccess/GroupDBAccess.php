@@ -35,7 +35,7 @@ class GroupDBAccess {
 	protected $possibleFields = array('title','description','url','twitter_username','is_deleted','is_duplicate_of_id');
 
 
-	public function update(GroupModel $group, $fields, GroupEditMetaDataModel $groupEditMetaDataModel) {
+	public function update(GroupModel $group, array $fields, GroupEditMetaDataModel $groupEditMetaDataModel) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 

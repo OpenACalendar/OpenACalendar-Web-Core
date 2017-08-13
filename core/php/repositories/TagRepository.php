@@ -90,7 +90,7 @@ class TagRepository {
 	}
 	
 	
-	public function loadBySlug(SiteModel $site, $slug) {
+	public function loadBySlug(SiteModel $site, int $slug) {
 		$stat = $this->app['db']->prepare("SELECT tag_information.* FROM tag_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
@@ -112,7 +112,7 @@ class TagRepository {
 	
 	
 	
-	public function loadById($id) {
+	public function loadById(int $id) {
 		$stat = $this->app['db']->prepare("SELECT tag_information.* FROM tag_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id ));
 		if ($stat->rowCount() > 0) {

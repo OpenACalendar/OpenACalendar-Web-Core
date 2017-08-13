@@ -27,7 +27,7 @@ class SiteQuotaRepository {
     }
 
 
-	public function loadByCode($code) {
+	public function loadByCode(string $code) {
 
 		$stat = $this->app['db']->prepare("SELECT site_quota_information.* FROM site_quota_information ".
 				" WHERE site_quota_information.code =:code ");
@@ -39,7 +39,7 @@ class SiteQuotaRepository {
 		}
 	}
 	
-	public function loadById($id) {
+	public function loadById(int $id) {
 
 		$stat = $this->app['db']->prepare("SELECT site_quota_information.* FROM site_quota_information ".
 				" WHERE site_quota_information.id =:id ");

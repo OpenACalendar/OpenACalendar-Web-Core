@@ -45,7 +45,7 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 
 
 
-	public function __construct(Application $app, SiteModel $site = null, $timeZone = null, $title = null) {
+	public function __construct(Application $app, SiteModel $site = null, string $timeZone = null, string $title = null) {
 		parent::__construct($app, $site, $timeZone, $title);
 		$this->eventRepositoryBuilder = new EventRepositoryBuilder($app);
 		$this->eventRepositoryBuilder->setLimit($this->app['config']->api1EventListLimit);
@@ -56,7 +56,7 @@ abstract class BaseEventListBuilder  extends BaseBuilder {
 	}
 
 	abstract public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
-									  AreaModel $area = null, CountryModel $country = null, $eventMedias = array());
+									  AreaModel $area = null, CountryModel $country = null, array $eventMedias = array());
 
 	
 	public function build() {

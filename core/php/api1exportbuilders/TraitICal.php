@@ -21,7 +21,7 @@ trait TraitICal {
 	 * @param type $value
 	 * @return type 
 	 */
-	public function getIcalLine($key,$value) {		
+	public function getIcalLine(string $key, string $value) {
 		// should be wrapping long lines and escaping new lines
 		$value = str_replace("\\", "\\\\", $value);
 		$value = str_replace("\r", "", str_replace("\n", '\\n', $value));
@@ -48,7 +48,7 @@ trait TraitICal {
 	}
 
     /** Special function as this needs a ; that is not escaped in it! */
-    public function getIcalGeoLine($lat,$lng) {
+    public function getIcalGeoLine(float $lat, float $lng) {
         $value = $lat. ";" . $lng;
         // google calendar does not like a space after the ':'.
         $out = "GEO:".$value;

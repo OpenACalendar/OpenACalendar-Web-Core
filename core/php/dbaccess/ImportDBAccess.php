@@ -35,7 +35,7 @@ class ImportDBAccess {
 
 	protected $possibleFields = array('country_id','area_id','title','is_enabled','expired_at','group_id','is_manual_events_creation');
 
-	public function update(ImportModel $import, $fields, ImportEditMetaDataModel $importEditMetaDataModel ) {
+	public function update(ImportModel $import, array $fields, ImportEditMetaDataModel $importEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data

@@ -17,7 +17,7 @@ class PingBack {
 
 	protected $target_url;
 
-	function __construct($source_url, $target_url)
+	function __construct(string $source_url, string $target_url)
 	{
 		$this->source_url = $source_url;
 		$this->target_url = $target_url;

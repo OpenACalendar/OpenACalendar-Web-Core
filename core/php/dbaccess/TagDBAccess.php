@@ -36,7 +36,7 @@ class TagDBAccess {
 	protected $possibleFields = array('title','description','is_deleted');
 
 
-	public function update(TagModel $tag, $fields, TagEditMetaDataModel $tagEditMetaDataModel ) {
+	public function update(TagModel $tag, array $fields, TagEditMetaDataModel $tagEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data

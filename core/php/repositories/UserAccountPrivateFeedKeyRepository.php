@@ -59,7 +59,7 @@ class UserAccountPrivateFeedKeyRepository {
 	}
 	
 	/** @return UserAccountPrivateFeedKeyModel **/
-	public function loadByUserAccountIDAndAccessKey($id, $access) {
+	public function loadByUserAccountIDAndAccessKey(int $id, string $access) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_private_feed_key.* FROM user_account_private_feed_key WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));

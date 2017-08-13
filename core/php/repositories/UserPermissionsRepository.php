@@ -54,7 +54,7 @@ class UserPermissionsRepository {
 	}
 
 
-	public function getPermissionsForUserInIndex(UserAccountModel $userAccountModel = null,  $removeEditorPermissions = false, $includeChildrenPermissions = false) {
+	public function getPermissionsForUserInIndex(UserAccountModel $userAccountModel = null, bool $removeEditorPermissions = false, bool $includeChildrenPermissions = false) {
 
 		if ($userAccountModel) {
 
@@ -90,7 +90,7 @@ class UserPermissionsRepository {
 		return new \UserPermissionsList($this->app['extensions'], $permissions, $userAccountModel, $this->app['config']->siteReadOnly || $removeEditorPermissions, $includeChildrenPermissions);
 	}
 
-	public function getPermissionsForUserInSite(UserAccountModel $userAccountModel = null, SiteModel $siteModel,  $removeEditorPermissions = false, $includeChildrenPermissions = false) {
+	public function getPermissionsForUserInSite(UserAccountModel $userAccountModel = null, SiteModel $siteModel,  bool $removeEditorPermissions = false, bool $includeChildrenPermissions = false) {
 
 		if ($userAccountModel) {
 
@@ -131,7 +131,7 @@ class UserPermissionsRepository {
 		return new \UserPermissionsList($this->app['extensions'], $permissions, $userAccountModel, $this->app['config']->siteReadOnly || $removeEditorPermissions, $includeChildrenPermissions);
 	}
 
-	public function getPermissionsForAnonymousInSite(SiteModel $siteModel,  $removeEditorPermissions = false, $includeChildrenPermissions = false) {
+	public function getPermissionsForAnonymousInSite(SiteModel $siteModel, bool $removeEditorPermissions = false, bool $includeChildrenPermissions = false) {
 
 		$stat = $this->app['db']->prepare("SELECT permission_in_user_group.* FROM permission_in_user_group ".
 			" JOIN user_group_information ON user_group_information.id = permission_in_user_group.user_group_id AND user_group_information.is_deleted = '0' AND user_group_information.is_in_index = '0' ".
@@ -154,7 +154,7 @@ class UserPermissionsRepository {
 		return new \UserPermissionsList($this->app['extensions'], $permissions, null, $this->app['config']->siteReadOnly || $removeEditorPermissions, $includeChildrenPermissions);
 	}
 
-	public function getPermissionsForAnyUserInSite(SiteModel $siteModel,  $removeEditorPermissions = false, $includeChildrenPermissions = false) {
+	public function getPermissionsForAnyUserInSite(SiteModel $siteModel, bool $removeEditorPermissions = false, bool $includeChildrenPermissions = false) {
 
 		$stat = $this->app['db']->prepare("SELECT permission_in_user_group.* FROM permission_in_user_group ".
 			" JOIN user_group_information ON user_group_information.id = permission_in_user_group.user_group_id AND user_group_information.is_deleted = '0' AND user_group_information.is_in_index = '0' ".
@@ -179,7 +179,7 @@ class UserPermissionsRepository {
 		return new \UserPermissionsList($this->app['extensions'], $permissions, $user, $this->app['config']->siteReadOnly || $removeEditorPermissions, $includeChildrenPermissions);
 	}
 
-	public function getPermissionsForAnyVerifiedUserInSite(SiteModel $siteModel,  $removeEditorPermissions = false, $includeChildrenPermissions = false) {
+	public function getPermissionsForAnyVerifiedUserInSite(SiteModel $siteModel, bool $removeEditorPermissions = false, bool $includeChildrenPermissions = false) {
 
 		$stat = $this->app['db']->prepare("SELECT permission_in_user_group.* FROM permission_in_user_group ".
 			" JOIN user_group_information ON user_group_information.id = permission_in_user_group.user_group_id AND user_group_information.is_deleted = '0' AND user_group_information.is_in_index = '0' ".

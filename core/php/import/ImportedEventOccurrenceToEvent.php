@@ -75,7 +75,7 @@ class ImportedEventOccurrenceToEvent {
         $this->getAreaForLatLng = new GetAreaForLatLng($app, $importRun->getSite());
 	}
 
-	public function setEventRecurSet(EventRecurSetModel $eventRecurSet = null, $makeEventRecurSetIfNone = false) {
+	public function setEventRecurSet(EventRecurSetModel $eventRecurSet = null, bool $makeEventRecurSetIfNone = false) {
 		$this->eventRecurSet = $eventRecurSet;
 		$this->makeEventRecurSetIfNone = $makeEventRecurSetIfNone;
 	}

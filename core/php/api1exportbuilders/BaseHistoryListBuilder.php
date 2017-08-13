@@ -29,7 +29,7 @@ abstract class BaseHistoryListBuilder extends BaseBuilder {
 	protected $histories = array();
 
 
-	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null, $title = null) {
+	public function __construct(Application $app, SiteModel $site = null, string $timeZone  = null, string $title = null) {
 		parent::__construct($app, $site, $timeZone, $title);
 		$this->historyRepositoryBuilder = new HistoryRepositoryBuilder($this->app);
 		$this->historyRepositoryBuilder->getHistoryRepositoryBuilderConfig()->setLimit(100);

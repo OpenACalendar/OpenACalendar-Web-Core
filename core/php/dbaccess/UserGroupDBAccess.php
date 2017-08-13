@@ -36,7 +36,7 @@ class UserGroupDBAccess {
 	protected $possibleFields = array('title','description','is_deleted','is_in_index','is_includes_anonymous','is_includes_users','is_includes_verified_users');
 
 
-	public function update(UserGroupModel $userGroup, $fields, UserGroupEditMetaDataModel $userGroupEditMetaDataModel ) {
+	public function update(UserGroupModel $userGroup, array $fields, UserGroupEditMetaDataModel $userGroupEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data

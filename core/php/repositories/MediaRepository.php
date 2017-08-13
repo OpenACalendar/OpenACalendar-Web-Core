@@ -37,13 +37,13 @@ class MediaRepository {
     /*
     * @deprecated
     */
-    public function createFromFile(UploadedFile $newMedia, SiteModel $site, UserAccountModel $user, $title = null, $sourceText = null, $sourceURL = null) {
+    public function createFromFile(UploadedFile $newMedia, SiteModel $site, UserAccountModel $user, string $title = null, string $sourceText = null, string $sourceURL = null) {
         $mediaEditMetaDataModel = new MediaEditMetaDataModel();
         $mediaEditMetaDataModel->setUserAccount($user);
         return $this->createFromFileWithMetaData($newMedia, $site, $mediaEditMetaDataModel, $title, $sourceText, $sourceURL);
     }
 
-	public function createFromFileWithMetaData(UploadedFile $newMedia, SiteModel $site, MediaEditMetaDataModel $mediaEditMetaDataModel, $title = null, $sourceText = null, $sourceURL = null) {
+	public function createFromFileWithMetaData(UploadedFile $newMedia, SiteModel $site, MediaEditMetaDataModel $mediaEditMetaDataModel, string $title = null, string $sourceText = null, string $sourceURL = null) {
 
 		if ($newMedia && in_array(strtolower($newMedia->guessExtension()), MediaModel::getAllowedImageExtensions())) {
 
@@ -128,7 +128,7 @@ class MediaRepository {
 	}
 	
 	
-	public function loadBySlug(SiteModel $site, $slug) {
+	public function loadBySlug(SiteModel $site, int $slug) {
 
 		$stat = $this->app['db']->prepare("SELECT media_information.* FROM media_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug ));
@@ -139,7 +139,7 @@ class MediaRepository {
 		}
 	}
 		
-	public function loadByID($id) {
+	public function loadByID(int $id) {
 
 		$stat = $this->app['db']->prepare("SELECT media_information.*  FROM media_information ".
 				"WHERE media_information.id =:id");

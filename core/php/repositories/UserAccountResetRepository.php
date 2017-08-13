@@ -47,7 +47,7 @@ class UserAccountResetRepository {
 	}
 	
 	/** @return UserAccountResetModel **/
-	public function loadByUserAccountIDAndAccessKey($id, $access) {
+	public function loadByUserAccountIDAndAccessKey(int $id, string $access) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_reset.* FROM user_account_reset WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));
@@ -62,7 +62,7 @@ class UserAccountResetRepository {
 	 * 
 	 * @return \models\UserAccountResetModel A single one or NULL. Technically it may load multiple ones, but we only return one.
 	 */
-	public function loadRecentlyUnusedSentForUserAccountId($id, $seconds= 60) {
+	public function loadRecentlyUnusedSentForUserAccountId(int $id, int $seconds= 60) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_reset.* FROM user_account_reset WHERE reset_at IS NULL AND user_account_id =:user_account_id AND created_at > :since");
 		$time = $this->app['timesource']->getDateTime();

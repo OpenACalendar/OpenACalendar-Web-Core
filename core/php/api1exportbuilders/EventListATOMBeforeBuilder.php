@@ -27,11 +27,11 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 	 * 
 	 * @param type $daysBefore Null can be passed here, in which case use our default.
 	 */
-	public function setDaysBefore($daysBefore = 3) {
+	public function setDaysBefore(int $daysBefore = 3) {
 		$this->daysBefore = $daysBefore && $daysBefore > 0 && $daysBefore < 700 ? $daysBefore : 3;
 	}
 
-	public function __construct(Application $app, SiteModel $site = null, $timeZone = null, $title = null) {
+	public function __construct(Application $app, SiteModel $site = null, string $timeZone = null, string $title = null) {
 		parent::__construct($app, $site, $timeZone, $title);
 		// order by start at time
 		$this->eventRepositoryBuilder->setOrderByStartAt(true);
@@ -79,7 +79,7 @@ class EventListATOMBeforeBuilder extends BaseEventListBuilder  {
 	
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
-							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
+							 AreaModel $area = null, CountryModel $country = null, array $eventMedias = array()) {
 
 		if ($event->getIsDeleted()) return false;
 		

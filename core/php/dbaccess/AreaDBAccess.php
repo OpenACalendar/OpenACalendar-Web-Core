@@ -40,7 +40,7 @@ class AreaDBAccess {
         'country_id',
         'min_lat','max_lat','min_lng','max_lng');
 
-	public function update(AreaModel $area, $fields, AreaEditMetaDataModel $areaEditMetaDataModel ) {
+	public function update(AreaModel $area, array $fields, AreaEditMetaDataModel $areaEditMetaDataModel ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data

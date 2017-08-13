@@ -86,7 +86,7 @@ class SysAdminCommentRepository {
 		}
 	}
 	
-	public function createAboutEvent(EventModel $aboutEvent, $comment, UserAccountModel $author = null) {
+	public function createAboutEvent(EventModel $aboutEvent, string $comment, UserAccountModel $author = null) {
 
 		try {
 			$this->app['db']->beginTransaction();
@@ -107,7 +107,7 @@ class SysAdminCommentRepository {
 	}
 
 	
-	public function createAboutGroup(GroupModel $aboutGroup, $comment, UserAccountModel $author = null) {
+	public function createAboutGroup(GroupModel $aboutGroup, string $comment, UserAccountModel $author = null) {
 
 		try {
 			$this->app['db']->beginTransaction();
@@ -128,7 +128,7 @@ class SysAdminCommentRepository {
 	}
 
 	
-	public function createAboutArea(AreaModel $aboutArea, $comment, UserAccountModel $author = null) {
+	public function createAboutArea(AreaModel $aboutArea, string $comment, UserAccountModel $author = null) {
 
 		try {
 			$this->app['db']->beginTransaction();
@@ -149,7 +149,7 @@ class SysAdminCommentRepository {
 	}
 
 	
-	public function createAboutVenue(VenueModel $aboutVenue, $comment, UserAccountModel $author = null) {
+	public function createAboutVenue(VenueModel $aboutVenue, string $comment, UserAccountModel $author = null) {
 
 		try {
 			$this->app['db']->beginTransaction();
@@ -170,7 +170,7 @@ class SysAdminCommentRepository {
 	}
 
 	
-	public function createAboutMedia(MediaModel $aboutMedia, $comment, UserAccountModel $author = null) {
+	public function createAboutMedia(MediaModel $aboutMedia, string $comment, UserAccountModel $author = null) {
 
 		try {
 			$this->app['db']->beginTransaction();

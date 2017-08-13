@@ -15,7 +15,7 @@ use tasks\RunImportsTask;
 class RunImportNowMessageQueWorker extends BaseMessageQueWorker {
 
 
-    function process($extension, $type, $data)
+    function process(string $extension, string $type, $data)
     {
         if ($extension == 'org.openacalendar' && $type == 'ImportSaved') {
 

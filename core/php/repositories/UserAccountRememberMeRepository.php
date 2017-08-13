@@ -47,7 +47,7 @@ class UserAccountRememberMeRepository {
 	}
 	
 	/** @return UserAccountRememberMeModel **/
-	public function loadByUserAccountIDAndAccessKey($id, $access) {
+	public function loadByUserAccountIDAndAccessKey(int $id, string $access) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_remember_me.* FROM user_account_remember_me WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));
@@ -58,7 +58,7 @@ class UserAccountRememberMeRepository {
 		}
 	}
 	
-	public function deleteByUserAccountIDAndAccessKey($id, $access) {
+	public function deleteByUserAccountIDAndAccessKey(int $id, string $access) {
 
 		$stat = $this->app['db']->prepare("DELETE FROM user_account_remember_me WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));

@@ -33,7 +33,7 @@ class UserInterestedInSiteRepository
 		return $this->loadByUserAndSiteId($user, $site->getId());
 	}
 
-	public function loadByUserAndSiteId(UserAccountModel $user, $siteID)
+	public function loadByUserAndSiteId(UserAccountModel $user, int $siteID)
 	{
 
 		$stat = $this->app['db']->prepare("SELECT user_interested_in_site_information.* FROM user_interested_in_site_information WHERE user_account_id =:user_account_id AND site_id=:site_id");

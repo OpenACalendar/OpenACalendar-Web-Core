@@ -65,7 +65,7 @@ class UserNotificationRepository {
 	
 	
 	
-	public function loadByIdForUser($id, UserAccountModel $user) {
+	public function loadByIdForUser(int $id, UserAccountModel $user) {
 		$stat = $this->app['db']->prepare("SELECT user_notification.*, ".
 				" site_information.id AS site_id,  site_information.slug AS site_slug,  site_information.title AS site_title ".
 				" FROM user_notification ".

@@ -30,7 +30,7 @@ class EventCustomFieldDefinitionRepository
         $this->app = $app;
     }
 
-	public function loadBySiteIDAndID($siteID, $id) {
+	public function loadBySiteIDAndID(int $siteID, int $id) {
 		$stat = $this->app['db']->prepare("SELECT event_custom_field_definition_information.* FROM event_custom_field_definition_information WHERE site_id =:sid AND id =:id");
 		$stat->execute(array( 'sid'=>$siteID, 'id'=>$id ));
 		if ($stat->rowCount() > 0) {

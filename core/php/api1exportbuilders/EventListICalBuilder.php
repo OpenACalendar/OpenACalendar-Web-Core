@@ -24,7 +24,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 	/** @var ICalEventIdConfig */
 	protected $iCalEventIdConfig;
 	
-	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null, $title = null, ICalEventIdConfig $ICalEventIdConfig = null) {
+	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null, string $title = null, ICalEventIdConfig $ICalEventIdConfig = null) {
 		parent::__construct($app, $site, $timeZone, $title);
 		// We go back a month, just so calendars have a bit of the past available.
 		$time = \TimeSource::getDateTime();
@@ -57,7 +57,7 @@ class EventListICalBuilder extends BaseEventListBuilder  {
 	}
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
-							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
+							 AreaModel $area = null, CountryModel $country = null, array $eventMedias = array()) {
 
 		$siteSlug = $this->site ? $this->site->getSlug() : $event->getSiteSlug();
 		

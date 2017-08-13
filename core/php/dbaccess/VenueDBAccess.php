@@ -35,7 +35,7 @@ class VenueDBAccess {
 
 	protected $possibleFields = array('title','lat','lng','description','address','address_code','country_id','area_id','is_duplicate_of_id','is_deleted');
 
-	public function update(VenueModel $venue, $fields, VenueEditMetaDataModel $venueEditMetaDataModel) {
+	public function update(VenueModel $venue, array $fields, VenueEditMetaDataModel $venueEditMetaDataModel) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 		// Make Information Data

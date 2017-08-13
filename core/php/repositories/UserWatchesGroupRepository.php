@@ -33,7 +33,7 @@ class UserWatchesGroupRepository {
 		return $this->loadByUserAndGroupId($user, $group->getId());
 	}
 	
-	public function loadByUserAndGroupId(UserAccountModel $user, $groupID) {
+	public function loadByUserAndGroupId(UserAccountModel $user, int $groupID) {
 
 		$stat = $this->app['db']->prepare("SELECT user_watches_group_information.* FROM user_watches_group_information WHERE user_account_id =:user_account_id AND group_id=:group_id");
 		$stat->execute(array( 'user_account_id'=>$user->getId(), 'group_id'=>$groupID ));
@@ -101,7 +101,7 @@ class UserWatchesGroupRepository {
 	/*
 	 * Note this does not check if user is watching site first! TODO?
 	 */	
-	public function startUserWatchingGroupIdIfNotWatchedBefore(UserAccountModel $user, $groupID) {
+	public function startUserWatchingGroupIdIfNotWatchedBefore(UserAccountModel $user, int $groupID) {
 
 		$uws = $this->loadByUserAndGroupId($user, $groupID);
 		if ($uws) {

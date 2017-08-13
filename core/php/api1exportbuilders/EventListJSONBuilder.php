@@ -24,7 +24,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 	public $otherData = array();
 	
 	
-	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null) {
+	public function __construct(Application $app, SiteModel $site = null, string $timeZone  = null) {
 		parent::__construct($app, $site, $timeZone);
 		$this->eventRepositoryBuilder->setAfterNow();
 	}
@@ -39,7 +39,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 	}
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
-							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
+							 AreaModel $area = null, CountryModel $country = null, array $eventMedias = array()) {
 
 		$out = array(
 			'slug'=>$event->getSlug(),

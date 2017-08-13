@@ -35,7 +35,7 @@ class MediaDBAccess {
 	protected $possibleFields = array('title','source_url','source_text');
 
 
-	public function update(MediaModel $media, $fields, MediaEditMetaDataModel $mediaEditMetaDataModel) {
+	public function update(MediaModel $media, array $fields, MediaEditMetaDataModel $mediaEditMetaDataModel) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 

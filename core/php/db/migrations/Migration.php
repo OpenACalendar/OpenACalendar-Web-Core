@@ -17,7 +17,7 @@ class Migration {
 	protected $applied = false;
 
 
-	public function __construct($id=null, $sql=null) {
+	public function __construct(string $id=null, string $sql=null) {
 		$this->id = $id;
 		$this->sql = $sql;
 	}

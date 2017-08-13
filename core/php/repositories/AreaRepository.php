@@ -116,11 +116,11 @@ class AreaRepository {
 
 
 
-	public function loadBySlug(SiteModel $site, $slug) {
+	public function loadBySlug(SiteModel $site, int $slug) {
 		return $this->loadBySiteIDAndAreaSlug($site->getId(), $slug);
 	}
 
-	public function loadBySiteIDAndAreaSlug($siteID, $slug) {
+	public function loadBySiteIDAndAreaSlug(int $siteID, int $slug) {
 		$stat = $this->app['db']->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid");
 		$stat->execute(array( 'sid'=>$siteID, 'slug'=>$slug ));
 		if ($stat->rowCount() > 0) {
@@ -141,7 +141,7 @@ class AreaRepository {
 	}
 	
 	
-	public function loadBySlugAndCountry(SiteModel $site, $slug, CountryModel $country) {
+	public function loadBySlugAndCountry(SiteModel $site, int $slug, CountryModel $country) {
 		$stat = $this->app['db']->prepare("SELECT area_information.* FROM area_information WHERE slug =:slug AND site_id =:sid AND country_id=:cid");
 		$stat->execute(array( 'sid'=>$site->getId(), 'slug'=>$slug, 'cid'=>$country->getId() ));
 		if ($stat->rowCount() > 0) {
@@ -162,7 +162,7 @@ class AreaRepository {
 	}
 	
 	
-	public function loadById($id) {
+	public function loadById(int $id) {
 		$stat = $this->app['db']->prepare("SELECT area_information.* FROM area_information WHERE id = :id");
 		$stat->execute(array( 'id'=>$id, ));
 		if ($stat->rowCount() > 0) {

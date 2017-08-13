@@ -25,7 +25,7 @@ class SeriesOfValueByTimeReport {
 
 	protected $timeperiod;
 
-	function __construct(BaseValueReport $report, \DateTime $start, $end=null, $timeperiod="P1M")
+	function __construct(BaseValueReport $report, \DateTime $start, $end=null, string $timeperiod="P1M")
 	{
 		$this->end = $end ? $end : \TimeSource::getDateTime();
 		$this->report = $report;

@@ -41,7 +41,7 @@ class SiteDBAccess {
 	 * @throws Exception
 	 * @throws \Exception
 	 */
-	public function update(SiteModel $site, $fields, UserAccountModel $user ) {
+	public function update(SiteModel $site, array $fields, UserAccountModel $user ) {
 		$alreadyInTransaction = $this->db->inTransaction();
 
 

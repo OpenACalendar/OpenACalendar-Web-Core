@@ -40,7 +40,7 @@ class ImportNotUsHandler extends ImportHandlerBase {
 		
 	}
 	
-	public function getDomainMinusPort($in) {
+	public function getDomainMinusPort(string $in) {
 		if (strpos($in, ":")) {
 			$bits = explode(":", $in);
 			return $bits[0];

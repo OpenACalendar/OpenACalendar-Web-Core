@@ -25,7 +25,7 @@ class AppConfigurationDefinition {
 	
 	protected $editable_in_web_ui = true;
 
-	function __construct($extension_id, $key, $type, $editable_in_web_ui = true) {
+	function __construct(string $extension_id, string $key, string $type, bool $editable_in_web_ui = true) {
 		$this->extension_id = $extension_id;
 		$this->key = $key;
 		if ($type == 'text') {

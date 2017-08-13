@@ -26,7 +26,7 @@ use Silex\Application;
 class HistoryListATOMBuilder extends BaseHistoryListBuilder {
 	use TraitATOM;
 
-	public function __construct(Application $app, SiteModel $site = null, $timeZone  = null) {
+	public function __construct(Application $app, SiteModel $site = null, string $timeZone  = null) {
 		parent::__construct($app, $site, $timeZone);
 	}
 

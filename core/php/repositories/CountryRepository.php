@@ -27,7 +27,7 @@ class CountryRepository {
         $this->app = $app;
     }
 
-    public function loadByTwoCharCode($code) {
+    public function loadByTwoCharCode(string $code) {
 		$stat = $this->app['db']->prepare("SELECT country.* FROM country ".
 				" WHERE country.two_char_code =:code ");
 		$stat->execute(array( 'code'=> strtoupper($code)));
@@ -38,7 +38,7 @@ class CountryRepository {
 		}
 	}
 	
-	public function loadById($id) {
+	public function loadById(int $id) {
 		$stat = $this->app['db']->prepare("SELECT country.* FROM country ".
 				" WHERE country.id =:id ");
 		$stat->execute(array( 'id'=>$id));

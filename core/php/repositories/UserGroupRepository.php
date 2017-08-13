@@ -40,13 +40,13 @@ class UserGroupRepository {
     /*
     * @deprecated
     */
-	public function createForSite(SiteModel $site, UserGroupModel $userGroupModel, UserAccountModel $userAccountModel=null, $initialUserPermissions=array(), $initialUsers=array()) {
+	public function createForSite(SiteModel $site, UserGroupModel $userGroupModel, UserAccountModel $userAccountModel=null, array $initialUserPermissions=array(), array $initialUsers=array()) {
         $userGroupEditMetaDataModel = new UserGroupEditMetaDataModel();
         $userGroupEditMetaDataModel->setUserAccount($userAccountModel);
         $this->createForSiteWithMetaData($site, $userGroupModel, $userGroupEditMetaDataModel, $initialUserPermissions, $initialUsers);
     }
 
-	public function createForSiteWithMetaData(SiteModel $site, UserGroupModel $userGroupModel, UserGroupEditMetaDataModel $userGroupEditMetaDataModel ,  $initialUserPermissions=array(), $initialUsers=array()) {
+	public function createForSiteWithMetaData(SiteModel $site, UserGroupModel $userGroupModel, UserGroupEditMetaDataModel $userGroupEditMetaDataModel , array $initialUserPermissions=array(), array $initialUsers=array()) {
 
 
 		$inTransaction = $this->app['db']->inTransaction();
@@ -292,7 +292,7 @@ class UserGroupRepository {
         $this->userGroupDBAccess->update($userGroupModel, array('title'), $userGroupEditMetaDataModel);
     }
 
-	public function loadByIdInIndex($id) {
+	public function loadByIdInIndex(int $id) {
 
 		$stat = $this->app['db']->prepare("SELECT user_group_information.* FROM user_group_information WHERE is_in_index='1' AND id = :id");
 		$stat->execute(array( 'id'=>$id, ));

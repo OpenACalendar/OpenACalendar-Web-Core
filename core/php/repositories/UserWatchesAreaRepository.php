@@ -34,7 +34,7 @@ class UserWatchesAreaRepository {
 		return $this->loadByUserAndAreaId($user, $area->getId());
 	}
 	
-	public function loadByUserAndAreaId(UserAccountModel $user, $areaID) {
+	public function loadByUserAndAreaId(UserAccountModel $user, bool $areaID) {
 
 		$stat = $this->app['db']->prepare("SELECT user_watches_area_information.* FROM user_watches_area_information WHERE user_account_id =:user_account_id AND area_id=:area_id");
 		$stat->execute(array( 'user_account_id'=>$user->getId(), 'area_id'=>$areaID ));
@@ -102,7 +102,7 @@ class UserWatchesAreaRepository {
 	/*
 	 * Note this does not check if user is watching site first! TODO?
 	 */	
-	public function startUserWatchingAreaIdIfNotWatchedBefore(UserAccountModel $user, $areaID) {
+	public function startUserWatchingAreaIdIfNotWatchedBefore(UserAccountModel $user, int $areaID) {
 
 		$uws = $this->loadByUserAndAreaId($user, $areaID);
 		if ($uws) {

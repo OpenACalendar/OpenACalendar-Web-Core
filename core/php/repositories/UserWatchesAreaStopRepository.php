@@ -16,7 +16,7 @@ use Silex\Application;
  * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk> 
  */
-class UserWatchesAreaStopRepository {
+	class UserWatchesAreaStopRepository {
 
     /** @var Application */
     private  $app;
@@ -61,9 +61,9 @@ class UserWatchesAreaStopRepository {
 		return $uwgs;
 		
 	}
-	
+
 	/** @return UserWatchesSiteStopModel **/
-	public function loadByUserAccountIDAndAreaIDAndAccessKey($userId, $areaId, $access) {
+	public function loadByUserAccountIDAndAreaIDAndAccessKey(int $userId, int $areaId, $access) {
 
 		$stat = $this->app['db']->prepare("SELECT * FROM user_watches_area_stop WHERE user_account_id=:uid AND area_id=:gid");
 		$stat->execute(array('uid'=>$userId,'gid'=>$areaId));
@@ -73,5 +73,5 @@ class UserWatchesAreaStopRepository {
 			return $uwss;
 		}
 	}
-	
+
 }

@@ -39,7 +39,7 @@ class SiteRepository {
     /*
     * @deprecated
     */
-	public function create(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota, $canAnyUserVerifiedEdit = false) {
+	public function create(SiteModel $site, UserAccountModel $owner, $countries, SiteQuotaModel $siteQuota, bool $canAnyUserVerifiedEdit = false) {
         $siteEditMetaDataModel = new SiteEditMetaDataModel();
         $siteEditMetaDataModel->setUserAccount($owner);
         $this->createWithMetaData($site, $owner, $countries, $siteQuota, $siteEditMetaDataModel, $canAnyUserVerifiedEdit);
@@ -183,7 +183,7 @@ class SiteRepository {
 	}
 
 
-	public function loadByDomain($domain) {
+	public function loadByDomain(string $domain) {
 		$compareTo = $this->app['config']->webSiteDomain;
         if (strpos($compareTo, ":") > 0) {
             $compareTo = substr($compareTo, 0, strpos($compareTo, ":"));
@@ -208,7 +208,7 @@ class SiteRepository {
 	 * 
 	 * @deprecated
 	 */
-	public function loadByAPIDomain($domain) {
+	public function loadByAPIDomain(string $domain) {
 		foreach(array( $this->app['config']->webAPI1Domain ) as $compareTo) {
             if (strpos($compareTo, ":") > 0) {
                 $compareTo = substr($compareTo, 0, strpos($compareTo, ":"));
@@ -221,7 +221,7 @@ class SiteRepository {
 		die("ERROR");
 	}
 	
-	public function loadBySlug($slug) {
+	public function loadBySlug(string $slug) {
 
 		$stat = $this->app['db']->prepare("SELECT site_information.*, site_profile_media_information.logo_media_id ".
 				"FROM site_information ".
@@ -236,7 +236,7 @@ class SiteRepository {
 	}
 	
 	
-	public function loadById($id) {
+	public function loadById(int $id) {
 
 		$stat = $this->app['db']->prepare("SELECT site_information.* FROM site_information WHERE id =:id");
 		$stat->execute(array( 'id'=>$id ));

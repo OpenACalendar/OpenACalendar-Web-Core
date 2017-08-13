@@ -21,7 +21,7 @@ class AppConfigurationManager {
 		$this->CONFIG = $CONFIG;
 	}
 
-	public function getValue(AppConfigurationDefinition $config, $default=null) {
+	public function getValue(AppConfigurationDefinition $config, string $default=null) {
 		
 		$stat = $this->DB->prepare("SELECT value_text FROM app_configuration_information ".
 				"WHERE extension_id=:e AND configuration_key=:k");
@@ -36,7 +36,7 @@ class AppConfigurationManager {
 		
 	}
 
-	public function setValue(AppConfigurationDefinition $config, $value) {
+	public function setValue(AppConfigurationDefinition $config, string $value) {
 		
 		$stat = $this->DB->prepare("SELECT value_text FROM app_configuration_information ".
 			"WHERE extension_id=:e AND configuration_key=:k");

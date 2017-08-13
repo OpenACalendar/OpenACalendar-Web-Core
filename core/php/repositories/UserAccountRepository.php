@@ -58,7 +58,7 @@ class UserAccountRepository {
 	
 	
 	
-	public function loadByUserName($userName) {
+	public function loadByUserName(string $userName) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_information.* FROM user_account_information WHERE username_canonical =:detail");
 		$stat->execute(array( 'detail'=>UserAccountModel::makeCanonicalUserName($userName) ));
@@ -70,7 +70,7 @@ class UserAccountRepository {
 	}
 	
 	
-	public function loadByEmail($email) {
+	public function loadByEmail(string $email) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_information.* FROM user_account_information WHERE email_canonical =:detail");
 		$stat->execute(array( 'detail'=>UserAccountModel::makeCanonicalEmail($email) ));
@@ -82,7 +82,7 @@ class UserAccountRepository {
 	}
 	
 	
-	public function loadByUserNameOrEmail($userNameOrEmail) {
+	public function loadByUserNameOrEmail(string $userNameOrEmail) {
 		if (strpos($userNameOrEmail, "@") > 0) {
 			return $this->loadByEmail($userNameOrEmail);
 		} else {
@@ -90,7 +90,7 @@ class UserAccountRepository {
 		}
 	}
 	
-	public function loadByID($userID) {
+	public function loadByID(int $userID) {
 
 		$stat = $this->app['db']->prepare("SELECT user_account_information.* FROM user_account_information WHERE id =:id");
 		$stat->execute(array( 'id'=>$userID ));

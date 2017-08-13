@@ -38,7 +38,7 @@ class ImportedEventRepository {
 		}
 	}
 	
-	public function loadByImportIDAndIdInImport($import_id, $id_in_import) {
+	public function loadByImportIDAndIdInImport(int  $import_id, string $id_in_import) {
 		$stat = $this->app['db']->prepare("SELECT imported_event.* FROM imported_event ".
 				"WHERE imported_event.import_url_id =:import_id AND imported_event.import_id =:id_in_import");
 		$stat->execute(array( 'id_in_import'=>$id_in_import, 'import_id'=>$import_id ));
@@ -49,7 +49,7 @@ class ImportedEventRepository {
 		}
 	}
 
-	public function loadByImportIDAndId($import_id, $id) {
+	public function loadByImportIDAndId(int $import_id, int $id) {
 
 		$stat = $this->app['db']->prepare("SELECT imported_event.* FROM imported_event ".
 				"WHERE imported_event.import_url_id =:import_id AND imported_event.id =:id");
