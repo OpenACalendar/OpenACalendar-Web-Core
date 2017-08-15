@@ -256,7 +256,7 @@ class UserController {
 
 		$userRepository = new UserAccountRepository($app);
 				
-		$form = $app['form.factory']->create(new SignUpUserForm($app));
+		$form = $app['form.factory']->create(SignUpUserForm::class, null, array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

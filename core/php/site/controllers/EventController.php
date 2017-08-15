@@ -1799,11 +1799,9 @@ class EventController {
 		}
 		
 		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE")) {
-			
-			
-			$form = $app['form.factory']->create(new UploadNewMediaForm($this->parameters['event']->getSummaryDisplay()));
-		
-			
+
+			$form = $app['form.factory']->create(UploadNewMediaForm::class, null, array( 'defaultTitle'=>$this->parameters['event']->getSummaryDisplay()));
+
 			if ('POST' == $request->getMethod()) {
 				$form->bind($request);
 

@@ -314,7 +314,7 @@ class VenueController {
 		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSiteFeatures']->has('org.openacalendar','PhysicalEvents')) {
 			
 			
-			$form = $app['form.factory']->create(new UploadNewMediaForm( $this->parameters['venue']->getTitle()));
+			$form = $app['form.factory']->create(UploadNewMediaForm::class, null, array( 'defaultTitle'=>$this->parameters['venue']->getTitle()));
 		
 			
 			if ('POST' == $request->getMethod()) {

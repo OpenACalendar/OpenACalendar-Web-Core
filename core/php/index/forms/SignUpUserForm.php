@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  *
@@ -29,12 +30,11 @@ class SignUpUserForm  extends AbstractType {
     /** @var Application */
     protected $app;
 
-    function __construct(Application $app)
-    {
-        $this->app = $app;
-    }
+
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
+
+		$this->app = $options['app'];
 
 		$builder->add('email', EmailType::class, array(
 			'label'=>'Email',
@@ -128,11 +128,13 @@ class SignUpUserForm  extends AbstractType {
 	public function getName() {
 		return 'SignUpUserForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
+
+	public function configureOptions(OptionsResolver $resolver)
+	{
+		$resolver->setDefaults(array(
+			'app' => null,
+		));
 	}
-	
+
 }
 

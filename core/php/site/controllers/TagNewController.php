@@ -28,7 +28,7 @@ class TagNewController {
 		
 		$tag = new TagModel();
 		
-		$form = $app['form.factory']->create(new TagNewForm($request->query->get('title')), $tag);
+		$form = $app['form.factory']->create(TagNewForm::class, $tag);
 
 
 

@@ -122,7 +122,7 @@ class CurrentUserController {
 	
 	
 	function prefs(Request $request, Application $app) {		
-		$form = $app['form.factory']->create(new UserPrefsForm(), $app['currentUser']);
+		$form = $app['form.factory']->create(UserPrefsForm::class, $app['currentUser']);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

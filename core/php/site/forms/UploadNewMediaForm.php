@@ -9,6 +9,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  *
@@ -20,16 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
  */
 class UploadNewMediaForm extends AbstractType{
 
-	protected $defaultTitle;
-
-	function __construct($defaultTitle)
-	{
-		$this->defaultTitle = $defaultTitle;
-	}
-
-
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('media', 'file', array(
+		$builder->add('media', FileType::class, array(
 			"mapped" => false, 
 			'label'=>'Picture',
 			'required'=>true
@@ -39,7 +33,7 @@ class UploadNewMediaForm extends AbstractType{
 			'label'=>'Title',
 			'required'=>false, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
-			'data'=>$this->defaultTitle,
+			'data'=>$options['defaultTitle'],
 		));
 		
 		$builder->add('source_text', TextType::class, array(
@@ -70,11 +64,14 @@ class UploadNewMediaForm extends AbstractType{
 	public function getName() {
 		return 'UploadNewMediaForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
+
+	public function configureOptions(OptionsResolver $resolver)
+	{
+		$resolver->setDefaults(array(
+			'defaultTitle' => null,
+		));
 	}
-	
+
+
 }
 

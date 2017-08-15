@@ -214,11 +214,9 @@ class GroupController {
 		}
 		
 		if ($app['currentUserPermissions']->hasPermission("org.openacalendar","CALENDAR_CHANGE") && $app['currentSiteFeatures']->has('org.openacalendar','Group')) {
-			
-			
-			$form = $app['form.factory']->create(new UploadNewMediaForm($this->parameters['group']->getTitle()));
-		
-			
+
+			$form = $app['form.factory']->create(UploadNewMediaForm::class, null, array( 'defaultTitle'=>$this->parameters['group']->getTitle()));
+
 			if ('POST' == $request->getMethod()) {
 				$form->bind($request);
 
