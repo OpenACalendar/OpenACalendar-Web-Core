@@ -39,7 +39,7 @@ class EventListJSONBuilder extends BaseEventListBuilder {
 	}
 	
 	public function addEvent(EventModel $event, $groups = array(), VenueModel $venue = null,
-							 AreaModel $area = null, CountryModel $country = null, array $eventMedias = array()) {
+							 AreaModel $area = null, CountryModel $country = null, $eventMedias = array()) {
 
 		$out = array(
 			'slug'=>$event->getSlug(),
