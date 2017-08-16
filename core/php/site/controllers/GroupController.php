@@ -311,7 +311,7 @@ class GroupController {
 		}
 		
 		
-		$form = $app['form.factory']->create(new GroupEditForm($app), $this->parameters['group']);
+		$form = $app['form.factory']->create( GroupEditForm::class, $this->parameters['group'], array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

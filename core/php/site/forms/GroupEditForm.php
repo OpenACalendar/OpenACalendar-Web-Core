@@ -68,11 +68,8 @@ class GroupEditForm extends \BaseFormWithEditComment {
 	public function getName() {
 		return 'GroupEditForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+
 	
 }
 

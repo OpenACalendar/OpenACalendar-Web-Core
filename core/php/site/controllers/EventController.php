@@ -440,10 +440,11 @@ class EventController {
 		$timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
 		if ($this->parameters['event']->getIsImported()) {
 			$ourForm = new EventImportedEditForm($app, $app['currentSite'], $timeZone);
+			$form = $app['form.factory']->create($ourForm, $this->parameters['event'], array());
 		} else {
 			$ourForm = new EventEditForm($app['currentSite'], $timeZone, $app);
+			$form = $app['form.factory']->create($ourForm, $this->parameters['event'], array('app'=>$app));
 		}
-		$form = $app['form.factory']->create($ourForm, $this->parameters['event']);
 
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -754,7 +755,7 @@ class EventController {
 			if ($this->parameters['venue']) {
 
 
-				$form = $app['form.factory']->create(new EventRemoveVenueForm($app));
+				$form = $app['form.factory']->create(EventRemoveVenueForm::class, null, array('app'=>$app));
 
 				if ('POST' == $request->getMethod()) {
 					$form->bind($request);
@@ -1484,7 +1485,7 @@ class EventController {
 			die("No"); // TODO
 		}
 		
-		$form = $app['form.factory']->create(new EventDeleteForm($app));
+		$form = $app['form.factory']->create(EventDeleteForm::class, null, array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
@@ -1550,7 +1551,7 @@ class EventController {
 			die("No"); // TODO
 		}
 
-		$form = $app['form.factory']->create(new EventCancelForm($app));
+		$form = $app['form.factory']->create(EventCancelForm::class, null, array('app'=>$app));
 
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

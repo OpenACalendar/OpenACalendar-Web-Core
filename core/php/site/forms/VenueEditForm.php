@@ -26,14 +26,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 class VenueEditForm extends \BaseFormWithEditComment {
 
-	/** @var SiteModel **/
-	protected $site;
 
-	function __construct(Application $application) {
-		parent::__construct($application);
-		$this->site = $application['currentSite'];
-	}
-	
+
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		parent::buildForm($builder, $options);
 
@@ -61,8 +55,8 @@ class VenueEditForm extends \BaseFormWithEditComment {
 				'required'=>false
 			));
 		
-		$crb = new CountryRepositoryBuilder($this->app);
-		$crb->setSiteIn($this->site);
+		$crb = new CountryRepositoryBuilder($options['app']);
+		$crb->setSiteIn($options['app']['currentSite']);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {
             $countries[$country->getTitle()] = $country->getId();
@@ -83,10 +77,7 @@ class VenueEditForm extends \BaseFormWithEditComment {
 	public function getName() {
 		return 'VenueEditForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+
 	
 }

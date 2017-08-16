@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 /**
@@ -27,19 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 class VenueNewForm extends \BaseFormWithEditComment {
 
-	protected $timeZoneName;
-	
-	/** @var SiteModel **/
-	protected $site;
 
-    /** @var  CountryModel */
-    protected $defaultCountryModel;
-	
-	function __construct(Application $app, CountryModel $countryModel) {
-		parent::__construct($app);
-		$this->site = $app['currentSite'];
-        $this->defaultCountryModel = $countryModel;
-	}
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		parent::buildForm($builder, $options);
@@ -67,8 +56,8 @@ class VenueNewForm extends \BaseFormWithEditComment {
 				'required'=>false
 			));
 		
-		$crb = new CountryRepositoryBuilder($this->app);
-		$crb->setSiteIn($this->site);
+		$crb = new CountryRepositoryBuilder($options['app']);
+		$crb->setSiteIn($options['app']['currentSite']);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {
             $countries[$country->getTitle()] = $country->getId();
@@ -78,7 +67,7 @@ class VenueNewForm extends \BaseFormWithEditComment {
 			'label'=>'Country',
 			'choices' => $countries,
 			'required' => true,
-			'data' => $this->defaultCountryModel->getId(),
+			'data' => $options['defaultCountryModel']->getId(),
             'choices_as_values' => true,
 		));
 		
@@ -90,10 +79,14 @@ class VenueNewForm extends \BaseFormWithEditComment {
 	public function getName() {
 		return 'VenueNewForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
+
+
+	public function configureOptions(OptionsResolver $resolver)
+	{
+		$resolver->setDefaults(array(
+			'app' => null,
+			'defaultCountryModel' => null,
+		));
 	}
 	
 }

@@ -38,10 +38,7 @@ class EventCancelForm extends BaseFormWithEditComment {
 	public function getName() {
 		return 'EventCancelForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+
 	
 }

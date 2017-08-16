@@ -51,7 +51,6 @@ class EventEditForm extends \BaseFormWithEditComment {
     protected $timezones = array();
 
 	function __construct(SiteModel $site, $timeZoneName, Application $application) {
-		parent::__construct($application);
 		$this->site = $site;
 		$this->timeZoneName = $timeZoneName;
 		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;

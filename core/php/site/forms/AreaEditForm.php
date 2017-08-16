@@ -41,11 +41,8 @@ class AreaEditForm extends \BaseFormWithEditComment {
 	public function getName() {
 		return 'AreaEditForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+
 	
 }
 

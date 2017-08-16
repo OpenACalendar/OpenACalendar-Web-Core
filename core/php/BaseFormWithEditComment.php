@@ -6,6 +6,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 /**
@@ -19,22 +21,11 @@ use Symfony\Component\Form\FormError;
 abstract class  BaseFormWithEditComment  extends AbstractType
 {
 
-
-	protected $formEditComments = false;
-
-    protected  $app;
-
-	function __construct(Application $application)
-	{
-        $this->app = $application;
-		$this->formEditComments = $application['currentSiteFeatures']->has('org.openacalendar', 'EditComments');
-	}
-
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 
-		if ($this->formEditComments) {
-			$builder->add('edit_comment', 'text', array(
+		if ($options['app']['currentSiteFeatures']->has('org.openacalendar', 'EditComments')) {
+			$builder->add('edit_comment', TextType::class, array(
 				'label'=>'Your Comment (public)',
 				'required'=>false,
 				'mapped'=>false,
@@ -43,4 +34,12 @@ abstract class  BaseFormWithEditComment  extends AbstractType
 
 
 	}
+
+	public function configureOptions(OptionsResolver $resolver)
+	{
+		$resolver->setDefaults(array(
+			'app' => null,
+		));
+	}
+
 }

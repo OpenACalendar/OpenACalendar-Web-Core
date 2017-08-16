@@ -189,7 +189,7 @@ class AreaController {
 			die("No"); // TODO
 		}
 		
-		$form = $app['form.factory']->create(new AreaEditForm($app), $this->parameters['area']);
+		$form = $app['form.factory']->create(AreaEditForm::class, $this->parameters['area'], array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);

@@ -39,10 +39,7 @@ class EventDeleteForm extends BaseFormWithEditComment {
 	public function getName() {
 		return 'EventDeleteForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+
 	
 }

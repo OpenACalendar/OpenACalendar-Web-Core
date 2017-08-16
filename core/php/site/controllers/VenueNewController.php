@@ -65,11 +65,9 @@ class VenueNewController {
 			}
 			
 		}
-		
-		
-		
-		$form = $app['form.factory']->create(new VenueNewForm($app, $this->getDefaultCountry($request, $app)), $venue);
-		
+
+		$form = $app['form.factory']->create(VenueNewForm::class, $venue, array('app'=>$app, 'defaultCountryModel'=>$this->getDefaultCountry($request, $app)));
+
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 

@@ -38,10 +38,7 @@ class EventRemoveVenueForm extends BaseFormWithEditComment {
 	public function getName() {
 		return 'EventRemoveVenueForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+
 	
 }

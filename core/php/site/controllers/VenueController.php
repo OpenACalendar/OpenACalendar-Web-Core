@@ -165,7 +165,7 @@ class VenueController {
 			die("No"); // TODO
 		}
 		
-		$form = $app['form.factory']->create(new VenueEditForm($app), $this->parameters['venue']);
+		$form = $app['form.factory']->create(VenueEditForm::class, $this->parameters['venue'], array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
