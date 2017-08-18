@@ -7,7 +7,7 @@ Vagrant.configure(2) do |config|
 	config.vm.box = "boxcutter/ubuntu1604"
 
 
-	config.vm.define "app7" do |normal|
+	config.vm.define "app" do |normal|
 
 		config.vm.box = "boxcutter/ubuntu1604"
 		config.vm.box_version = "2.0.18"
