@@ -1,11 +1,11 @@
 # Vagrant Boxes
 
-## The app7 box
+## The app box
 
 This box runs the app in both single site and multi site mode. To use:
 
-    vagrant up app7
-    vagrant ssh app7
+    vagrant up app
+    vagrant ssh app
     php /vagrant/core/cli/createUser.php USERNAME EMAIL PASSWORD sysadmin
     php /vagrant/core/cli/createSite.php test1 EMAIL
 
@@ -43,7 +43,7 @@ User accounts will not be verified. Click the link to send the email again, then
 
 You can also run tests on this box, but this will run slowly and we recommend you use the tests vagrant box instead. But if you must, to run tests:
 
-    vagrant ssh app7
+    vagrant ssh app
     ./test
 
 ## The tests box

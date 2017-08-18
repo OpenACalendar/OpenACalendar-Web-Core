@@ -26,7 +26,7 @@ Vagrant.configure(2) do |config|
 			vb.memory = "512"
 		end
 
-		config.vm.provision :shell, path: "vagrant/app7/bootstrap.sh"
+		config.vm.provision :shell, path: "vagrant/app/bootstrap.sh"
 
 	end
 

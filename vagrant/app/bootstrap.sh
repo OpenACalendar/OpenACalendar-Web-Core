@@ -5,7 +5,7 @@ echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 
 sudo apt-get update
-sudo apt-get install -y postgresql apache2 php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit libapache2-mod-php beanstalkd
+sudo apt-get install -y postgresql apache2 php-mbstring php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit libapache2-mod-php beanstalkd
 
 mkdir /home/vagrant/fileStore
 chown www-data:www-data  /home/vagrant/fileStore
@@ -20,11 +20,11 @@ wget -q https://getcomposer.org/composer.phar
 cd /vagrant
 php /home/vagrant/bin/composer.phar install
 
-cp /vagrant/vagrant/app7/apache.conf /etc/apache2/sites-enabled/
-cp /vagrant/vagrant/app7/config.test.php /vagrant/config.test.php
-cp /vagrant/vagrant/app7/config.php /vagrant/config.php
-cp /vagrant/vagrant/app7/99-custom.ini /etc/php/7.0/apache2/conf.d/
-cp /vagrant/vagrant/app7/test /home/vagrant/test
+cp /vagrant/vagrant/app/apache.conf /etc/apache2/sites-enabled/
+cp /vagrant/vagrant/app/config.test.php /vagrant/config.test.php
+cp /vagrant/vagrant/app/config.php /vagrant/config.php
+cp /vagrant/vagrant/app/99-custom.ini /etc/php/7.0/apache2/conf.d/
+cp /vagrant/vagrant/app/test /home/vagrant/test
 chmod a+rx /home/vagrant/test
 
 sudo su --login -c "psql -c \"CREATE USER openacalendartest WITH PASSWORD 'testpassword';\"" postgres
