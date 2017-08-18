@@ -17,25 +17,27 @@
 
 {% block innerContent %}
 
-	{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
-	<form action="#" method="post" class="styled" novalidate="novalidate">
+	<div class="contentMain">
 
-		{{ form_errors(form) }}
+		{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
+		<form action="#" method="post" class="styled" novalidate="novalidate">
 
-		{{ form_row(form.title) }}
-		{{ form_row(form.description) }}
-		{{ form_row(form.url) }}
-		{{ form_row(form.twitterUsername) }}
+			{{ form_errors(form) }}
 
-		{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
+			{{ form_row(form.title) }}
+			{{ form_row(form.description) }}
+			{{ form_row(form.url) }}
+			{{ form_row(form.twitterUsername) }}
 
-		{{ form_rest(form) }}
+			{%  include 'site/common/formRowEditComment.html.twig' with {'form': form} %}
 
-		<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
-		<div class="afterBigSubmitActionWrapper"></div>
-	</form>
+			{{ form_rest(form) }}
 
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
+			<div class="afterBigSubmitActionWrapper"></div>
+		</form>
 
+	</div>
 
 {% endblock %}
 

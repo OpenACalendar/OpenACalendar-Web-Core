@@ -19,38 +19,42 @@
 {% block tabMedia %}currentTab{% endblock %}
 
 {% block innerContent %}
-
-	<h3>Pictures</h3>
-
-	{% if medias %}
-		<ul class="mainListMedias">
-			{% for media in medias %}
-				<li class="media">
-					<div class="thumbnail">
-						<a href="/media/{{ media.slug }}"><img src="/media/{{ media.slug }}/thumbnail"></a>
-					</div>
-					<div class="title">{% if media.title %}{{ media.title }}{% else %}Picture{% endif %}</div>
-					<div class="source">Source: 
-						<a href="{% if media.sourceUrl %}{{ media.sourceUrl }}{% else %}/media/{{ media.slug }}/{% endif %}" target="_blank">
-							{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
-						</a>
-					</div>
-					{% if currentUserActions.has("org.openacalendar","groupEditMedia") %}
-						<form action="" method="post">
-							<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-							<input type="hidden" name="addMedia" value="{{ media.slug }}">
-							<div class="bigSubmitActionWrapper"><input type="submit"  value="Add this picture" class="bigSubmitAction"/></div>
-							<div class="afterBigSubmitActionWrapper"></div>
-						</form>
-					{% endif %}
-					<div class="afterMediaListing"></div>
-				</li>
-			{% endfor %}
-		</ul>
-	{% else %}
-		<p>There are no pictures to add.</p>
-	{% endif %}
 	
+	<div class="contentMain">
+
+		<h3>Pictures</h3>
+
+		{% if medias %}
+			<ul class="mainListMedias">
+				{% for media in medias %}
+					<li class="media">
+						<div class="thumbnail">
+							<a href="/media/{{ media.slug }}"><img src="/media/{{ media.slug }}/thumbnail"></a>
+						</div>
+						<div class="title">{% if media.title %}{{ media.title }}{% else %}Picture{% endif %}</div>
+						<div class="source">Source:
+							<a href="{% if media.sourceUrl %}{{ media.sourceUrl }}{% else %}/media/{{ media.slug }}/{% endif %}" target="_blank">
+								{% if media.sourceText %}{{ media.sourceText }}{% else %}Unknown{% endif %}
+							</a>
+						</div>
+						{% if currentUserActions.has("org.openacalendar","groupEditMedia") %}
+							<form action="" method="post">
+								<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+								<input type="hidden" name="addMedia" value="{{ media.slug }}">
+								<div class="bigSubmitActionWrapper"><input type="submit"  value="Add this picture" class="bigSubmitAction"/></div>
+								<div class="afterBigSubmitActionWrapper"></div>
+							</form>
+						{% endif %}
+						<div class="afterMediaListing"></div>
+					</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<p>There are no pictures to add.</p>
+		{% endif %}
+
+	</div>
+
 {% endblock %}
 
 
