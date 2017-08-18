@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 /**
  *
@@ -33,7 +36,7 @@ class ContactForm  extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		global $CONFIG;
 		
-		$builder->add('subject', 'text', array(
+		$builder->add('subject', TextType::class, array(
 			'label'=>'Subject',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
@@ -41,21 +44,21 @@ class ContactForm  extends AbstractType {
 		));
 		
 
-		$builder->add('email', 'email', array(
+		$builder->add('email', EmailType::class, array(
 			'label'=>'Email',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
 			'data' => $this->currentUser ? $this->currentUser->getEmail() : '',
 		));
 		
-		$builder->add('message', 'textarea', array(
+		$builder->add('message', TextareaType::class, array(
 			'label'=>'Message',
 			'required'=>true, 
 		));
 
 		
 		if ($CONFIG->contactFormAntiSpam && !$this->currentUser) {
-			$builder->add('antispam','text',array('label'=>'What is 2 + 2?','required'=>true));
+			$builder->add('antispam',TextType::class,array('label'=>'What is 2 + 2?','required'=>true));
 			
 			$myExtraFieldValidatorSpam = function(FormEvent $event){
 				$form = $event->getForm();
