@@ -327,30 +327,36 @@ class UserController {
 				$data = $form->getData();
 				
 				$userRepository = new UserAccountRepository($app);
-				$user = $userRepository->loadByEmail($data['email']);
-				if ($user) {
-					if ($user->checkPassword($data['password'])) {
-						if ($user->getIsClosedBySysAdmin()) {
-							$form->addError(new FormError('There was a problem with this account and it has been closed. Please contact support.'));
-							$app['monolog']->addError("Login attempt - account ".$user->getId().' - closed.');
-						} else {
-							userLogIn($user);
-							$this->actionThingsToDoAfterGetUser($app, $user);
+				// The form has required=true for email but some bots were hitting it with a null value so double check.
+				if ($data['email']) {
+					$user = $userRepository->loadByEmail($data['email']);
+					if ($user) {
+						if ($user->checkPassword($data['password'])) {
+							if ($user->getIsClosedBySysAdmin()) {
+								$form->addError(new FormError('There was a problem with this account and it has been closed. Please contact support.'));
+								$app['monolog']->addError("Login attempt - account ".$user->getId().' - closed.');
+							} else {
+								userLogIn($user);
+								$this->actionThingsToDoAfterGetUser($app, $user);
 
-							if ($data['rememberme']) {
-								$uarmr = new UserAccountRememberMeRepository($app);
-								$uarm = $uarmr->create($user);
-								$uarm->sendCookies();
+								if ($data['rememberme']) {
+									$uarmr = new UserAccountRememberMeRepository($app);
+									$uarm = $uarmr->create($user);
+									$uarm->sendCookies();
+								}
+
+								return $app->redirect("/");
 							}
-
-							return $app->redirect("/");
+						} else {
+							$app['monolog']->addError("Login attempt - account ".$user->getId().' - password wrong.');
+							$form->addError(new FormError('User and password not recognised'));
 						}
 					} else {
-						$app['monolog']->addError("Login attempt - account ".$user->getId().' - password wrong.');
+						$app['monolog']->addError("Login attempt - unknown account");
 						$form->addError(new FormError('User and password not recognised'));
 					}
 				} else {
-					$app['monolog']->addError("Login attempt - unknown account");
+					$app['monolog']->addError("Login attempt - no email specified");
 					$form->addError(new FormError('User and password not recognised'));
 				}
 				
