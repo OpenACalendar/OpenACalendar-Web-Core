@@ -15,6 +15,7 @@ use repositories\UserNotificationPreferenceRepository;
 use models\UserAccountModel;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 /**
  *
@@ -53,7 +54,7 @@ class UserEmailsForm  extends AbstractType {
 		$builder->add('email_upcoming_events', ChoiceType::class, array('label'=>'Notify you of upcoming events','required'=>true,'choices'=>$choices,'expanded'=>true, 'choices_as_values'=>true));
 	
 		$builder->add("email_upcoming_events_days_notice",
-				"number",
+				NumberType::class,
 					array(
 						'required'=>true,
 						'precision'=>0,
