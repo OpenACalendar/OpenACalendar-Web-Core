@@ -112,7 +112,8 @@ class EventEditForm extends \BaseFormWithEditComment {
 			));
 		} else {
             // Note we must have array_values here - if we don't we are changing a class variable and we re-use that class variable later!
-			$countryID = array_shift(array_values($this->countries));
+			$countries = array_values($this->countries);
+			$countryID = array_shift($countries);
 			$builder->add('country_id', HiddenType::class, array(
 				'data' => $countryID,
 			));
@@ -128,7 +129,8 @@ class EventEditForm extends \BaseFormWithEditComment {
 			));
 		} else {
             // Note we must have array_values here - if we don't we are changing a class variable and we re-use that class variable later!
-			$timezone = array_pop(array_values($this->timezones));
+			$timezones = array_values($this->timezones);
+			$timezone = array_pop($timezones);
 			$builder->add('timezone', HiddenType::class, array(
 				'data' => $timezone,
 			));
