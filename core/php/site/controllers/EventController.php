@@ -510,7 +510,11 @@ class EventController {
 		$data = array();
 
 		$timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
-		$form = $app['form.factory']->create(new EventEditForm($app['currentSite'], $timeZone, $app), $this->parameters['event']);
+		$form = $app['form.factory']->create(
+			new EventEditForm($app['currentSite'], $timeZone, $app),
+			$this->parameters['event'],
+			array('app' => $app)
+		);
 		$form->bind($request);
 
 		if ($this->parameters['event']->getStartAtInUTC()->getTimestamp() > $this->parameters['event']->getEndAtInUTC()->getTimestamp()) {
