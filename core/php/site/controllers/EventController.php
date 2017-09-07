@@ -1630,7 +1630,11 @@ class EventController {
 		$newEventState->setFromHistory($this->parameters['eventHistory']);
 
         $ourForm = new EventEditForm($app['currentSite'],$app['currentTimeZone'], $app);
-        $form = $app['form.factory']->create($ourForm, $newEventState);
+        $form = $app['form.factory']->create(
+			$ourForm,
+			$newEventState,
+			array('app' => $app)
+		);
 		
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
