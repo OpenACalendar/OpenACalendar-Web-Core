@@ -2,6 +2,7 @@
 
 namespace customfieldtypes\event;
 use InterfaceEventCustomFieldType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  *
@@ -15,7 +16,7 @@ class TextSingleLineEventCustomFieldType implements InterfaceEventCustomFieldTyp
 
 	public function getSymfonyFormType(\models\EventCustomFieldDefinitionModel $eventCustomFieldDefinitionModel)
 	{
-		return 'text';
+		return TextType::class;
 	}
 
 	public function getSymfonyFormOptions(\models\EventCustomFieldDefinitionModel $eventCustomFieldDefinitionModel)

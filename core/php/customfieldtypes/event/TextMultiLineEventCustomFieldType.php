@@ -2,6 +2,7 @@
 
 namespace customfieldtypes\event;
 use InterfaceEventCustomFieldType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  *
@@ -15,7 +16,7 @@ class TextMultiLineEventCustomFieldType implements InterfaceEventCustomFieldType
 
 	public function getSymfonyFormType(\models\EventCustomFieldDefinitionModel $eventCustomFieldDefinitionModel)
 	{
-		return 'textarea';
+		return TextareaType::class;
 	}
 
 	public function getSymfonyFormOptions(\models\EventCustomFieldDefinitionModel $eventCustomFieldDefinitionModel)
