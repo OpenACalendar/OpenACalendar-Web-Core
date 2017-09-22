@@ -18,8 +18,11 @@
 	
 			{{ form_errors(form) }}
 
-			{{ form_row(form.username) }}
 			{{ form_row(form.email) }}
+
+            {{ form_row(form.displayname) }}
+			<p>(Your name will be displayed to the public if you use some features. It doesn't have to be your real name!)</p>
+
 			{{ form_row(form.password1) }}
 			{{ form_row(form.password2) }}
 			{{ form_row(form.agree) }}

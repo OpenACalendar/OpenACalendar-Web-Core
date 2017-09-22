@@ -270,11 +270,6 @@ class UserController {
                 }
             }
 
-			$userExistingUserName = $userRepository->loadByUserName($data['username']);
-			if ($userExistingUserName) {
-				$form->addError(new FormError('That user name is already taken'));
-			}
-			
 			$userExistingEmail = $userRepository->loadByEmail($data['email']);
 			if ($userExistingEmail) {
 				$form->addError(new FormError('That email address already has an account'));
@@ -284,7 +279,7 @@ class UserController {
 			
 				$user = new UserAccountModel();
 				$user->setEmail($data['email']);
-				$user->setUsername($data['username']);
+				$user->setDisplayname($data['displayname']);
 				$user->setPassword($data['password1']);
 
 				$userAccountMeta = new UserAccountEditMetaDataModel();

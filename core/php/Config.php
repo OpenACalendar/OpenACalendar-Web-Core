@@ -223,6 +223,9 @@ class Config {
 
 	public $themeVariables = array('default'=>array());
 
+	public $createUserNameMinimumLength = 10;
+	public $createUserNameMaximumLength = 50;
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

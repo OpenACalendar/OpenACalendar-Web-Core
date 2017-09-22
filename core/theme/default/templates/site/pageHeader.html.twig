@@ -97,7 +97,7 @@
 						<a href="{{ config.getWebIndexDomainSecure() }}/you/register{%  if not config.isSingleSiteMode %}?site={{ currentSite.slug }}{% endif %}">Sign up</a>
 					</li>
 				{% else %}
-					<a href="/currentuser" class="action">{{ currentUser.username }}</a>
+					<a href="/currentuser" class="action">{{ currentUser.displayname }}</a>
 					<ul class="submenu">
 						{% if currentSite.cachedIsMultipleTimezones %}
 							<li><a href="/mytimezone">{{ currentTimeZone }}</a></li>

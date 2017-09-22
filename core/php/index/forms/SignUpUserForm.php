@@ -39,13 +39,13 @@ class SignUpUserForm  extends AbstractType {
 		$builder->add('email', EmailType::class, array(
 			'label'=>'Email',
 			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
+			'attr' => array('autofocus' => 'autofocus'),
 		));
-		$builder->add('username', TextType::class, array(
-			'label'=>'Username',
+		$builder->add('displayname', TextType::class, array(
+			'label'=>'Your Name',
 			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
+			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
 		));
 		$builder->add('password1', PasswordType::class, array(
 			'label'=>'Password',
@@ -98,17 +98,7 @@ class SignUpUserForm  extends AbstractType {
 			}
 		};
 		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator2);
-		
-		
-		/** username alphanumeric **/
-		$myExtraFieldValidator3 = function(FormEvent $event){
-			$form = $event->getForm();
-			$myExtraField = $form->get('username')->getData();
-			if (!ctype_alnum($myExtraField) || strlen($myExtraField) < 2) {
-				$form['username']->addError(new FormError("Please choose a username with numbers and letters only and at least 2 characters."));
-			}
-		};
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator3);
+
 		
 		/** passwords **/
 		$myExtraFieldValidator4 = function(FormEvent $event){
