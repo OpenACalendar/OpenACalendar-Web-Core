@@ -219,6 +219,19 @@ class UserAccountRepository {
 
         $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
 	}
+
+	public function editProfile(UserAccountModel $user) {
+
+
+		$stat = $this->app['db']->prepare("UPDATE user_account_information SET  displayname=:displayname ".
+				"WHERE id =:id");
+		$stat->execute(array(
+				'id'=>$user->getId() ,
+				'displayname'=>$user->getDisplayname(),
+			));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
+	}
 	
 	public function systemAdminShuts(UserAccountModel $user, UserAccountModel $shutBy) {
 

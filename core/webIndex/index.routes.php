@@ -77,6 +77,9 @@ $app->match('/me/emails', "index\controllers\CurrentUserController::emails")
 $app->match('/me/prefs', "index\controllers\CurrentUserController::prefs")
 		->before($canChangeSite)
 		->before($appUserRequired);
+$app->match('/me/profile', "index\controllers\CurrentUserController::profile")
+		->before($canChangeSite)
+		->before($appUserRequired);
 $app->match('/me/sites', "index\controllers\CurrentUserController::sites")
 		->before($appUserRequired);
 $app->match('/me/agenda', "index\controllers\CurrentUserController::agenda")

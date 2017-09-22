@@ -14,11 +14,11 @@ function showExportPopup() {
         html += '<div class="popupBoxContent">';
 		html += '<div id="ExportSharePopupExportIntroText"><p class="header">Export your data!</p>';
 		if (exportData.hasOwnProperty("user")) {
-			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportUserPublic" checked> the public calendar for '+exportData.user+' (events publically attending)</label></div>';
+			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportUserPublic" checked> the public calendar for '+exportData.userDisplayname+' (events publically attending)</label></div>';
 		}
 		if (exportData.hasOwnProperty("user") &&  exportData.hasOwnProperty("userAccessKey") ) {
-			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportUserPrivateA" checked> the private calendar for '+exportData.user+' (events attending)</label></div>';
-			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportUserPrivateAW" checked> the private calendar for '+exportData.user+' (events attending and watching)</label></div>';
+			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportUserPrivateA" checked> the private calendar for '+exportData.userDisplayname+' (events attending)</label></div>';
+			html += '<div class="ExportSharePopupExportFilterOption"><label><input type="radio" name="ExportWhat" id="ExportUserPrivateAW" checked> the private calendar for '+exportData.userDisplayname+' (events attending and watching)</label></div>';
 		}
 		html += '</div>';
 		html += '<ul id="ExportSharePopupExportMenu">';
