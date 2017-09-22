@@ -32,10 +32,13 @@ class UserAccountRepository {
     public function create(UserAccountModel $user, UserAccountEditMetaDataModel $userAccountEditMetaDataModel = null) {
 
 		
-		// TODO should check email and username not already exist and nice error
+		// TODO should check passed email and username not already exist and nice error
 
         if (!$user->getUsername()) {
             $user->setUsername(createKey($this->app['config']->createUserNameMinimumLength,$this->app['config']->createUserNameMaximumLength));
+            while ($this->loadByUserName($user->getUsername())) {
+                $user->setUsername(createKey($this->app['config']->createUserNameMinimumLength,$this->app['config']->createUserNameMaximumLength));
+            }
         }
 		
 		$stat = $this->app['db']->prepare("INSERT INTO user_account_information (username, username_canonical, email, email_canonical, displayname, password_hash, created_at, is_editor, created_from_ip) ".
