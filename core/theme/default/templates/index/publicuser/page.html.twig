@@ -12,7 +12,7 @@
 {% block content %}
 
 	<div class="contentMain">
-		<h2>About {{  user.username }}</h2>
+		<h2>About {{  user.displayname }}</h2>
 	</div>
 
 	<div class="pageActionsWrapper">
@@ -34,6 +34,6 @@
 
 
 {% block scriptsForState %}
-	<script type="text/javascript">var exportData = {user:'{{ user.username }}'}</script>
+	<script type="text/javascript">var exportData = {user:'{{ user.username }}', userDisplayname:'{{ user.displayname }}'}</script>
 {% endblock %}
 

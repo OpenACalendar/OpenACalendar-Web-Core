@@ -21,17 +21,15 @@ use models\UserAccountModel;
  */
 
 
-$username = $argv[1];
-$email = $argv[2];
-$password = $argv[3];
-$extraFlags = explode(",", isset($argv[4]) ? strtolower($argv[4]) : '');
+$email = $argv[1];
+$password = $argv[2];
+$extraFlags = explode(",", isset($argv[3]) ? strtolower($argv[3]) : '');
 $makeSysAdmin = in_array("sysadmin", $extraFlags);
-if (!$username || !$email || !$password) {
-	print "Username and Email and Password?\n\n";
+if ( !$email || !$password) {
+	print "Email and Password?\n\n";
 	exit(1);
 }
 
-print "Username: ". $username."\n";
 print "Email: ". $email."\n";
 print "Password: ". $password."\n";
 print "Sys Admin: ".($makeSysAdmin?"yes":"no")."\n";
@@ -42,21 +40,6 @@ print "Starting ...\n";
 
 $userRepository = new UserAccountRepository($app);
 
-if (is_array($app['config']->userNameReserved)) {
-    foreach($app['config']->userNameReserved as $reserved) {
-        if (UserAccountModel::makeCanonicalUserName($reserved) == UserAccountModel::makeCanonicalUserName($username)) {
-            print "That user name is reserved\n";
-            exit(1);
-        }
-    }
-}
-
-$userExistingUserName = $userRepository->loadByUserName($username);
-if ($userExistingUserName) {
-	print "That user name is already taken\n";
-	exit(1);
-}
-
 $userExistingEmail = $userRepository->loadByEmail($email);
 if ($userExistingEmail) {
 	print "That email address already has an account\n";
@@ -65,7 +48,7 @@ if ($userExistingEmail) {
 
 $user = new UserAccountModel();
 $user->setEmail($email);
-$user->setUsername($username);
+$user->setDisplayname($email);
 $user->setPassword($password);
 
 $userRepository->create($user);

@@ -262,19 +262,10 @@ class UserController {
 			$form->bind($request);
 			$data = $form->getData();
 
-            if (is_array($app['config']->userNameReserved)) {
-                foreach($app['config']->userNameReserved as $reserved) {
-                    if (UserAccountModel::makeCanonicalUserName($reserved) == UserAccountModel::makeCanonicalUserName($data['username'])) {
-                        $form->addError(new FormError('That user name is already taken'));
-                    }
-                }
+            if (!$app['config']->isDisplayNameAllowed($data['displayname'])) {
+                $form->addError(new FormError('That name is not allowed'));
             }
 
-			$userExistingUserName = $userRepository->loadByUserName($data['username']);
-			if ($userExistingUserName) {
-				$form->addError(new FormError('That user name is already taken'));
-			}
-			
 			$userExistingEmail = $userRepository->loadByEmail($data['email']);
 			if ($userExistingEmail) {
 				$form->addError(new FormError('That email address already has an account'));
@@ -284,7 +275,7 @@ class UserController {
 			
 				$user = new UserAccountModel();
 				$user->setEmail($data['email']);
-				$user->setUsername($data['username']);
+				$user->setDisplayname($data['displayname']);
 				$user->setPassword($data['password1']);
 
 				$userAccountMeta = new UserAccountEditMetaDataModel();
@@ -436,11 +427,7 @@ class UserController {
 				$data = $form->getData();
 				
 				$userRepository = new UserAccountRepository($app);
-				if ($data['email']) {
-					$user = $userRepository->loadByEmail($data['email']);
-				} else if ($data['username']) {
-					$user = $userRepository->loadByUserName($data['username']);
-				}
+                $user = $userRepository->loadByEmail($data['email']);
 				if ($user) {
 					if ($user->getIsClosedBySysAdmin()) {
 						$form->addError(new FormError('There was a problem with this account and it has been closed. Please contact support.'));

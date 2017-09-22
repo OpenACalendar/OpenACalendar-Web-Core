@@ -23,6 +23,7 @@ class UserAtEventModel {
 	protected $is_plan_public = false;
 	
 	protected $user_username;
+	protected $user_displayname;
 
 
 	public function setFromDataBaseRow($data) {
@@ -32,7 +33,8 @@ class UserAtEventModel {
 		$this->is_plan_maybe_attending = (boolean)$data['is_plan_maybe_attending'];
 		$this->is_plan_not_attending = (boolean)$data['is_plan_not_attending'];
 		$this->is_plan_public = (boolean)$data['is_plan_public'];
-		$this->user_username = isset($data['user_username']) ? $data['user_username'] : 0;
+		$this->user_username = isset($data['user_username']) ? $data['user_username'] : null;
+		$this->user_displayname = isset($data['user_displayname']) ? $data['user_displayname'] : null;
 	}
 	
 	public function getUserAccountId() {
@@ -125,6 +127,16 @@ class UserAtEventModel {
 	public function getUserUsername() {
 		return $this->user_username;
 	}
+
+    /**
+     * @return string
+     */
+    public function getUserDisplayname()
+    {
+        return $this->user_displayname ? $this->user_displayname : $this->user_username;
+    }
+
+
 
 
 	

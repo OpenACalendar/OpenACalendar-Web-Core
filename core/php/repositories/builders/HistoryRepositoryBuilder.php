@@ -209,15 +209,17 @@ class HistoryRepositoryBuilder {
 				// b) events that were virtual and now aren't, we get some of their history
 				$where[] = " ( event_information.is_virtual = '1' OR event_history.is_virtual = '1' )";
 			}
-			
-			$sql = "SELECT event_history.*, group_information.title AS group_title,  group_information.id AS group_id,  event_information.slug AS event_slug, user_account_information.username AS user_account_username FROM event_history ".
-					" LEFT JOIN user_account_information ON user_account_information.id = event_history.user_account_id ".
-					" LEFT JOIN event_information ON event_information.id = event_history.event_id ".
-					" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
-					" LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
-					implode(" ",$joins).
-					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY event_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+
+            $sql = "SELECT event_history.*, group_information.title AS group_title,  group_information.id AS group_id,  event_information.slug AS event_slug, ".
+                " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
+                " FROM event_history ".
+                " LEFT JOIN user_account_information ON user_account_information.id = event_history.user_account_id ".
+                " LEFT JOIN event_information ON event_information.id = event_history.event_id ".
+                " LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
+                " LEFT JOIN group_information ON group_information.id = event_in_group.group_id ".
+                implode(" ",$joins).
+                ($where ? " WHERE ".implode(" AND ", $where) : "").
+                " ORDER BY event_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -264,12 +266,14 @@ class HistoryRepositoryBuilder {
 				$where[] = 'group_history.api2_application_id  = :api2app';
 				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
-			
-			$sql = "SELECT group_history.*, group_information.slug AS group_slug, user_account_information.username AS user_account_username FROM group_history ".
-					" LEFT JOIN user_account_information ON user_account_information.id = group_history.user_account_id ".
-					" LEFT JOIN group_information ON group_information.id = group_history.group_id ".
-					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY group_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+
+            $sql = "SELECT group_history.*, group_information.slug AS group_slug, ".
+                " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
+                " FROM group_history ".
+                " LEFT JOIN user_account_information ON user_account_information.id = group_history.user_account_id ".
+                " LEFT JOIN group_information ON group_information.id = group_history.group_id ".
+                ($where ? " WHERE ".implode(" AND ", $where) : "").
+                " ORDER BY group_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -317,12 +321,14 @@ class HistoryRepositoryBuilder {
 				$where[] = 'venue_history.api2_application_id  = :api2app';
 				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
-			
-			$sql = "SELECT venue_history.*, venue_information.slug AS venue_slug, user_account_information.username AS user_account_username FROM venue_history ".
-					" LEFT JOIN user_account_information ON user_account_information.id = venue_history.user_account_id ".
-					" LEFT JOIN venue_information ON venue_information.id = venue_history.venue_id ".
-					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY venue_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+
+            $sql = "SELECT venue_history.*, venue_information.slug AS venue_slug, ".
+                " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
+                " FROM venue_history ".
+                " LEFT JOIN user_account_information ON user_account_information.id = venue_history.user_account_id ".
+                " LEFT JOIN venue_information ON venue_information.id = venue_history.venue_id ".
+                ($where ? " WHERE ".implode(" AND ", $where) : "").
+                " ORDER BY venue_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -372,13 +378,15 @@ class HistoryRepositoryBuilder {
 				$where[] = 'area_history.api2_application_id  = :api2app';
 				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
-			
-			$sql = "SELECT area_history.*, area_information.slug AS area_slug, user_account_information.username AS user_account_username FROM area_history ".
-					" LEFT JOIN user_account_information ON user_account_information.id = area_history.user_account_id ".
-					" LEFT JOIN area_information ON area_information.id = area_history.area_id ".
-					implode(" ", $joins).
-					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY area_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+
+            $sql = "SELECT area_history.*, area_information.slug AS area_slug, ".
+                " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
+                " FROM area_history ".
+                " LEFT JOIN user_account_information ON user_account_information.id = area_history.user_account_id ".
+                " LEFT JOIN area_information ON area_information.id = area_history.area_id ".
+                implode(" ", $joins).
+                ($where ? " WHERE ".implode(" AND ", $where) : "").
+                " ORDER BY area_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -419,12 +427,14 @@ class HistoryRepositoryBuilder {
 				$where[] = 'tag_history.api2_application_id  = :api2app';
 				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
-			
-			$sql = "SELECT tag_history.*, tag_information.slug AS tag_slug, user_account_information.username AS user_account_username FROM tag_history ".
-					" LEFT JOIN user_account_information ON user_account_information.id = tag_history.user_account_id ".
-					" LEFT JOIN tag_information ON tag_information.id = tag_history.tag_id ".
-					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY tag_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+
+            $sql = "SELECT tag_history.*, tag_information.slug AS tag_slug, ".
+                " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
+                " FROM tag_history ".
+                " LEFT JOIN user_account_information ON user_account_information.id = tag_history.user_account_id ".
+                " LEFT JOIN tag_information ON tag_information.id = tag_history.tag_id ".
+                ($where ? " WHERE ".implode(" AND ", $where) : "").
+                " ORDER BY tag_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			
@@ -465,11 +475,13 @@ class HistoryRepositoryBuilder {
 				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
 
-			$sql = "SELECT media_history.*, media_information.slug AS media_slug, user_account_information.username AS user_account_username FROM media_history ".
-			       " LEFT JOIN user_account_information ON user_account_information.id = media_history.user_account_id ".
-			       " LEFT JOIN media_information ON media_information.id = media_history.media_id ".
-			       ($where ? " WHERE ".implode(" AND ", $where) : "").
-			       " ORDER BY media_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+            $sql = "SELECT media_history.*, media_information.slug AS media_slug, ".
+                " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
+                " FROM media_history ".
+                " LEFT JOIN user_account_information ON user_account_information.id = media_history.user_account_id ".
+                " LEFT JOIN media_information ON media_information.id = media_history.media_id ".
+                ($where ? " WHERE ".implode(" AND ", $where) : "").
+                " ORDER BY media_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 
@@ -521,14 +533,14 @@ class HistoryRepositoryBuilder {
 				$where[] = 'import_url_history.api2_application_id  = :api2app';
 				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
-			
-			$sql = "SELECT import_url_history.*, import_url_information.slug AS import_url_slug, ".
-					"user_account_information.username AS user_account_username ".
-					" FROM import_url_history ".
-					" LEFT JOIN user_account_information ON user_account_information.id = import_url_history.user_account_id ".
-					" LEFT JOIN import_url_information ON import_url_information.id = import_url_history.import_url_id ".
-					($where ? " WHERE ".implode(" AND ", $where) : "").
-					" ORDER BY import_url_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
+
+            $sql = "SELECT import_url_history.*, import_url_information.slug AS import_url_slug, ".
+                " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
+                " FROM import_url_history ".
+                " LEFT JOIN user_account_information ON user_account_information.id = import_url_history.user_account_id ".
+                " LEFT JOIN import_url_information ON import_url_information.id = import_url_history.import_url_id ".
+                ($where ? " WHERE ".implode(" AND ", $where) : "").
+                " ORDER BY import_url_history.created_at DESC LIMIT ".$this->historyRepositoryBuilderConfig->getLimit();
 
 			//var_dump($sql); var_dump($params);
 			

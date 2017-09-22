@@ -18,6 +18,7 @@ class MediaHistoryModel extends MediaModel implements \InterfaceHistoryModel {
 	protected $created_at; 
 	protected $user_account_id;
 	protected $user_account_username;
+    protected $user_account_displayname;
 	
 	protected $title_changed = 0;
 	protected $source_url_changed = 0;
@@ -36,6 +37,7 @@ class MediaHistoryModel extends MediaModel implements \InterfaceHistoryModel {
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->user_account_id = $data['user_account_id'];
 		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
+        $this->user_account_displayname = isset($data['user_account_displayname']) && $data['user_account_displayname'] ? $data['user_account_displayname'] : $this->user_account_username;
 		$this->title_changed = $data['title_changed'];
 		$this->source_text_changed = $data['source_text_changed'];
 		$this->source_url_changed = $data['source_url_changed'];
@@ -74,6 +76,14 @@ class MediaHistoryModel extends MediaModel implements \InterfaceHistoryModel {
 	public function setUserAccountUsername($user_account_username) {
 		$this->user_account_username = $user_account_username;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getUserAccountDisplayname()
+    {
+        return $this->user_account_displayname;
+    }
 
 	public function isAnyChangeFlagsUnknown() {
 		return $this->title_changed == 0 || $this->source_url_changed == 0 || $this->source_text_changed == 0  ;

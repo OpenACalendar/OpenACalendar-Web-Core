@@ -3,6 +3,7 @@
 namespace index\controllers;
 
 
+use index\forms\UserProfileForm;
 use Silex\Application;
 use index\forms\SignUpUserForm;
 use index\forms\LogInUserForm;
@@ -119,7 +120,30 @@ class CurrentUserController {
 			'form'=>$form->createView(),
 		));
 	}
-	
+
+    function profile(Request $request, Application $app) {
+        $form = $app['form.factory']->create(UserProfileForm::class, $app['currentUser']);
+
+        if ('POST' == $request->getMethod()) {
+            $form->bind($request);
+
+            if (!$app['config']->isDisplayNameAllowed($app['currentUser']->getDisplayname())) {
+                $form->addError(new FormError('That name is not allowed'));
+            }
+
+            if ($form->isValid()) {
+                $userRepo = new UserAccountRepository($app);
+                $userRepo->editProfile($app['currentUser']);
+                $app['flashmessages']->addMessage("Profile Changed.");
+                return $app->redirect("/me/");
+            }
+        }
+
+        return $app['twig']->render('index/currentuser/profile.html.twig', array(
+            'form'=>$form->createView(),
+        ));
+    }
+
 	
 	function prefs(Request $request, Application $app) {		
 		$form = $app['form.factory']->create(UserPrefsForm::class, $app['currentUser']);

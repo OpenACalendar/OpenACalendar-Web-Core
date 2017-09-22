@@ -9,7 +9,7 @@
 
 {% block content %}
 	
-	<p>Hello {{ user.username }}</p>
+	<p>Hello {{ user.displayname }}</p>
 
 	{% if newEvents|length > 0 %}
 		<p>There are new events:</p>

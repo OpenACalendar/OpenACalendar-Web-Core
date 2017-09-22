@@ -40,9 +40,19 @@
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'siteSlugReserved'} %}</td>
 		</tr>
 		<tr>
-			<th>userNameReserved</th>
-			<td>{{ config.userNameReserved | join(", ") }}
-			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'userNameReserved'} %}</td>
+			<th>createUserNameMinimumLength</th>
+			<td>{{ config.createUserNameMinimumLength }}
+                {% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'createUserNameMinimumLength'} %}</td>
+		</tr>
+		<tr>
+			<th>createUserNameMaximumLength</th>
+			<td>{{ config.createUserNameMaximumLength }}
+                {% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'createUserNameMaximumLength'} %}</td>
+		</tr>
+		<tr>
+			<th>displayNameReserved</th>
+			<td>{{ config.displayNameReserved | join(", ") }}
+                {% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'displayNameReserved'} %}</td>
 		</tr>
 		<tr>
 			<th>siteSlugDemoSite</th>

@@ -32,16 +32,23 @@ class UserAccountRepository {
     public function create(UserAccountModel $user, UserAccountEditMetaDataModel $userAccountEditMetaDataModel = null) {
 
 		
-		// TODO should check email and username not already exist and nice error
-			
+		// TODO should check passed email and username not already exist and nice error
+
+        if (!$user->getUsername()) {
+            $user->setUsername(createKey($this->app['config']->createUserNameMinimumLength,$this->app['config']->createUserNameMaximumLength));
+            while ($this->loadByUserName($user->getUsername())) {
+                $user->setUsername(createKey($this->app['config']->createUserNameMinimumLength,$this->app['config']->createUserNameMaximumLength));
+            }
+        }
 		
-		$stat = $this->app['db']->prepare("INSERT INTO user_account_information (username, username_canonical, email, email_canonical, password_hash, created_at, is_editor, created_from_ip) ".
-				"VALUES (:username, :username_canonical, :email, :email_canonical, :password_hash, :created_at, :is_editor, :created_from_ip) RETURNING id");
+		$stat = $this->app['db']->prepare("INSERT INTO user_account_information (username, username_canonical, email, email_canonical, displayname, password_hash, created_at, is_editor, created_from_ip) ".
+				"VALUES (:username, :username_canonical, :email, :email_canonical, :displayname, :password_hash, :created_at, :is_editor, :created_from_ip) RETURNING id");
 		$stat->execute(array(
 				'username'=>substr($user->getUsername(),0,VARCHAR_COLUMN_LENGTH_USED),
 				'username_canonical'=> substr(UserAccountModel::makeCanonicalUserName($user->getUsername()),0,VARCHAR_COLUMN_LENGTH_USED), 
 				'email'=>substr($user->getEmail(),0,VARCHAR_COLUMN_LENGTH_USED),
 				'email_canonical'=>substr(UserAccountModel::makeCanonicalEmail($user->getEmail()),0,VARCHAR_COLUMN_LENGTH_USED),
+				'displayname' => $user->getDisplayname(),
 				'password_hash'=>$user->getPasswordHash(),
 				'created_at'=>$this->app['timesource']->getFormattedForDataBase(),
 				'is_editor'=> $this->app['config']->newUsersAreEditors?1:0,
@@ -215,6 +222,19 @@ class UserAccountRepository {
 
         $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
 	}
+
+    public function editProfile(UserAccountModel $user) {
+
+
+        $stat = $this->app['db']->prepare("UPDATE user_account_information SET  displayname=:displayname ".
+            "WHERE id =:id");
+        $stat->execute(array(
+            'id'=>$user->getId() ,
+            'displayname'=>$user->getDisplayname(),
+        ));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
+    }
 	
 	public function systemAdminShuts(UserAccountModel $user, UserAccountModel $shutBy) {
 

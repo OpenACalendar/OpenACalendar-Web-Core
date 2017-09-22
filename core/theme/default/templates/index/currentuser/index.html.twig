@@ -45,6 +45,7 @@
 				<li><a href="/me/password"><div class="fa fa-key fa-2x"></div> Change Password</a></li>
 				<li><a href="/me/emails"><div class="fa fa-envelope-o fa-2x"></div> Emails we send you</a></li>
 				<li><a href="/me/prefs"><div class="fa fa-cogs fa-2x"></div> Preferences</a></li>
+				<li><a href="/me/profile"><div class="fa fa-user fa-2x"></div> Edit your public profile</a></li>
 				<li><a href="/person/{{ currentUser.username }}"><div class="fa fa-user fa-2x"></div> View your public profile</a></li>
 			</ul>
 
@@ -58,7 +59,7 @@
 {% endblock %}
 
 {% block scriptsForState %}
-	<script type="text/javascript">var exportData = {user:'{{ currentUser.username }}', userAccessKey: '{{ currentUserPrivateFeedKey.accessKey }}'}</script>
+	<script type="text/javascript">var exportData = {user:'{{ currentUser.username }}', userDisplayname:'{{ currentUser.displayname }}',  userAccessKey: '{{ currentUserPrivateFeedKey.accessKey }}'}</script>
 {% endblock %}
 
 

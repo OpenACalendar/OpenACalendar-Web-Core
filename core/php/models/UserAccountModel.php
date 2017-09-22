@@ -26,6 +26,7 @@ class UserAccountModel {
 		protected $id;
 		protected $email;
 		protected $username;
+		protected $displayname;
 		protected $password_hash;
 		protected $is_email_verified;
 		protected $email_verify_code;
@@ -59,6 +60,7 @@ class UserAccountModel {
 			$this->id = $data['id'];
 			$this->email = $data['email'];
 			$this->username = $data['username'];
+			$this->displayname = $data['displayname'];
 			$this->password_hash = $data['password_hash'];
 			$this->is_email_verified = $data['is_email_verified'];
 			$this->email_verify_code = $data['email_verify_code'];
@@ -99,6 +101,24 @@ class UserAccountModel {
 		public function setUsername($username) {
 			$this->username = $username;
 		}
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayname()
+    {
+        return $this->displayname ? $this->displayname : $this->username;
+    }
+
+    /**
+     * @param mixed $displayname
+     */
+    public function setDisplayname($displayname)
+    {
+        $this->displayname = $displayname;
+    }
+
+
 
 
 		public function setPassword($password) {

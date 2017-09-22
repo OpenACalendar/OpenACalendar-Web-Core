@@ -7,7 +7,7 @@
  #}
 {% extends 'index/publicuser/page.html.twig' %}
 
-{% block pageTitle %}{{ user.username }} - {% endblock %} 
+{% block pageTitle %}{{ user.displayname }} - {% endblock %}
 
 {% block htmlHeader %}
 	<link rel="canonical" href="{{ config.getWebIndexDomainSecure }}/person/{{ user.username }}/" />

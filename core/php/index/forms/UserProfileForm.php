@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 /**
  *
@@ -20,20 +19,23 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
  * @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class ForgotUserForm  extends AbstractType {
+class UserProfileForm  extends AbstractType {
 	
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$builder->add('email', EmailType::class, array(
-			'label'=>'Email',
-			'required'=>false, 
-		));
-		
+        $builder->add("displayname",
+            TextType::class,
+            array(
+                'required' => true,
+                'label' => 'Name',
+            )
+        );
+
 	}
 	
 	public function getName() {
-		return 'ForgotUserForm';
+		return 'UserProfileForm';
 	}
 	
 	public function getDefaultOptions(array $options) {

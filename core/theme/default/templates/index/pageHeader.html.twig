@@ -23,7 +23,7 @@
 						<li><a href="{{ config.getWebIndexDomainSecure() }}/you/register">Register</a></li>
 					</ul>
 				{% else %}
-					<a href="{{ config.getWebIndexDomainSecure() }}/me" class="action">{{ currentUser.username }}</a>
+					<a href="{{ config.getWebIndexDomainSecure() }}/me" class="action">{{ currentUser.displayname }}</a>
 					<ul class="submenu">
 						{# At the moment only logged in users can see any times on the Index site, so let's not confuse logged out users #}
 						<li><a href="{{ config.getWebIndexDomainSecure() }}/mytimezone">{{ currentTimeZone }}</a></li>

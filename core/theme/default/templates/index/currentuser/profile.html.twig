@@ -7,7 +7,12 @@
  #}
 {% extends 'index/page.html.twig' %}
 
-{% block pageTitle %}Forgot your password - {% endblock %} 
+{% block pageTitle %}Public Profile - {% endblock %}
+
+{% block breadcrumbs %}
+	{%  include 'index/breadcrumbs.html.twig' with { 'breadcrumbs': [  { 'url':'/me', 'label':'your account' }, { 'url':'/me/emails','label':'emails' } ]  } %}
+{% endblock %}
+
 
 {% block content %}
 
@@ -17,14 +22,17 @@
 
 			{{ form_errors(form) }}
 
-			{{ form_row(form.email) }}
+			{{ form_row(form.displayname) }}
 
 			{{ form_rest(form) }}
 
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="Send details" class="bigSubmitAction"/></div>
+			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
 			<div class="afterBigSubmitActionWrapper"></div>
 		</form>
 
 	</div>
 
+
 {% endblock %}
+
+

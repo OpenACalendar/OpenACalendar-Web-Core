@@ -73,7 +73,7 @@ class UserAtEventRepositoryBuilder  extends BaseRepositoryBuilder {
 
 		
 		
-		$sql = "SELECT user_at_event_information.*, user_account_information.username AS user_username FROM user_at_event_information ".
+		$sql = "SELECT user_at_event_information.*, user_account_information.username AS user_username,  user_account_information.displayname AS user_displayname FROM user_at_event_information ".
 				" JOIN user_account_information ON user_account_information.id = user_at_event_information.user_account_id ".
 				implode(" ", $this->joins).
 				($this->where ? " WHERE ".implode(" AND ", $this->where) : "").

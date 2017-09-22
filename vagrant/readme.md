@@ -6,7 +6,7 @@ This box runs the app in both single site and multi site mode. To use:
 
     vagrant up app
     vagrant ssh app
-    php /vagrant/core/cli/createUser.php USERNAME EMAIL PASSWORD sysadmin
+    php /vagrant/core/cli/createUser.php EMAIL PASSWORD sysadmin
     php /vagrant/core/cli/createSite.php test1 EMAIL
 
 (Replace the placeholders USERNAME, EMAIL and PASSWORD with your own data.)
