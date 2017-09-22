@@ -55,7 +55,7 @@
 			{{ historyItem.getCreatedAt|date( currentUserClock12Hour ? 'D jS M Y g:ia' : 'D jS M Y H:i', currentTimeZone) }}
 			({{ historyItem.getCreatedAt | time_diff }})
 		</time>	
-		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
+		{% if historyItem.userAccountID %}by <a href="{{ config.getWebIndexDomainSecure() }}/person/{{  historyItem.userAccountUserName }}">{{  historyItem.userAccountDisplayName }}</a>{% endif %}
 		{%  if historyItem.editComment %} leaving comment: {{ historyItem.editComment }}{%  endif %}
 	</div>
 </li>

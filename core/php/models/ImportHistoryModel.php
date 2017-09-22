@@ -20,7 +20,8 @@ class ImportHistoryModel extends ImportModel implements \InterfaceHistoryModel {
 	protected $import_url_slug;
 	protected $user_account_id;
 	protected $user_account_username;
-	
+	protected $user_account_displayname;
+
 	protected $title_changed = 0;
 	protected $is_enabled_changed  = 0;
 	protected $expired_at_changed  = 0;
@@ -54,6 +55,7 @@ class ImportHistoryModel extends ImportModel implements \InterfaceHistoryModel {
 		
 		$this->user_account_id = $data['user_account_id'];
 		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
+        $this->user_account_displayname = isset($data['user_account_displayname']) && $data['user_account_displayname'] ? $data['user_account_displayname'] : $this->user_account_username;
 		
 		$this->import_url_slug = isset($data['import_url_slug']) ? $data['import_url_slug'] : null;
 		$this->slug = isset($data['import_url_slug']) ? $data['import_url_slug'] : null;
@@ -182,6 +184,16 @@ class ImportHistoryModel extends ImportModel implements \InterfaceHistoryModel {
 	public function getUserAccountUsername() {
 		return $this->user_account_username;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getUserAccountDisplayname()
+    {
+        return $this->user_account_displayname;
+    }
+
+
 
 
 	public function getImportURLSlug() {

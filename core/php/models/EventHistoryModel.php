@@ -19,6 +19,7 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 	protected $reverted_from_created_at;
 	protected $user_account_id;
 	protected $user_account_username;
+    protected $user_account_displayname;
 	
 
 	protected $summary_changed   = 0;
@@ -78,6 +79,7 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 
 		$this->edit_comment = isset($data['edit_comment']) ? $data['edit_comment'] : null;
 		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
+        $this->user_account_displayname = isset($data['user_account_displayname']) && $data['user_account_displayname'] ? $data['user_account_displayname'] : $this->user_account_username;
 		$this->summary_changed  = isset($data['summary_changed']) ? $data['summary_changed'] : 0;
 		$this->description_changed  = isset($data['description_changed']) ? $data['description_changed'] : 0;
 		$this->start_at_changed  = isset($data['start_at_changed']) ? $data['start_at_changed'] : 0;
@@ -343,6 +345,22 @@ class EventHistoryModel extends EventModel implements \InterfaceHistoryModel {
 	public function setUserAccountUsername($user_account_username) {
 		$this->user_account_username = $user_account_username;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getUserAccountDisplayname()
+    {
+        return $this->user_account_displayname;
+    }
+
+    /**
+     * @param mixed $user_account_displayname
+     */
+    public function setUserAccountDisplayname($user_account_displayname)
+    {
+        $this->user_account_displayname = $user_account_displayname;
+    }
 
 	
 	public function getSummaryChanged() {

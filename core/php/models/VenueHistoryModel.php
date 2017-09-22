@@ -19,6 +19,7 @@ class VenueHistoryModel extends VenueModel implements \InterfaceHistoryModel {
 	protected $created_at; 
 	protected $user_account_id;
 	protected $user_account_username;
+    protected $user_account_displayname;
 	
 	protected $title_changed = 0;
 	protected $description_changed = 0;
@@ -55,6 +56,7 @@ class VenueHistoryModel extends VenueModel implements \InterfaceHistoryModel {
 		$this->created_at = new \DateTime($data['created_at'], $utc);
 		$this->user_account_id = isset($data['user_account_id']) ? $data['user_account_id'] : null;
 		$this->user_account_username = isset($data['user_account_username']) ? $data['user_account_username'] : null;
+		$this->user_account_displayname = isset($data['user_account_displayname']) && $data['user_account_displayname'] ? $data['user_account_displayname'] : $this->user_account_username;
 		$this->title_changed = $data['title_changed'];
 		$this->description_changed = $data['description_changed'];
 		$this->lat_changed = $data['lat_changed'];
@@ -107,6 +109,22 @@ class VenueHistoryModel extends VenueModel implements \InterfaceHistoryModel {
 		$this->user_account_username = $user_account_username;
 	}
 
+
+    /**
+     * @return mixed
+     */
+    public function getUserAccountDisplayname()
+    {
+        return $this->user_account_displayname;
+    }
+
+    /**
+     * @param mixed $user_account_displayname
+     */
+    public function setUserAccountDisplayname($user_account_displayname)
+    {
+        $this->user_account_displayname = $user_account_displayname;
+    }
 
 	public function isAnyChangeFlagsUnknown() {
 		return $this->title_changed == 0 || $this->description_changed == 0 || $this->lat_changed == 0 ||

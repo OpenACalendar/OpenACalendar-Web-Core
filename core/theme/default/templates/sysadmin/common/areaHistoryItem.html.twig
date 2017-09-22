@@ -55,6 +55,6 @@
 			{{ historyItem.getCreatedAt|date( currentUserClock12Hour ?  'D jS M Y g:ia' : 'D jS M Y H:i', currentTimeZone) }}
 			({{ historyItem.getCreatedAt | time_diff }})
 		</time>
-		{% if historyItem.userAccountID %}by {{  historyItem.userAccountUserName }}{% endif %}
+		{% if historyItem.userAccountID %}by <a href="/sysadmin/user/{{ historyItem.userAccountId }}">{{  historyItem.userAccountDisplayName }}</a>{% endif %}
 	</div>
 </li>
