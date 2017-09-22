@@ -34,6 +34,16 @@ class IndexController {
             }
         }
 
+        if ($request->query->get('findUserByUserName')) {
+            $userRepo = new UserAccountRepository($app);
+            $user = $userRepo->loadByUserName($request->query->get('findUserByUserName'));
+            if ($user) {
+                return $app->redirect('/sysadmin/user/'. $user->getId());
+            } else {
+                $app['flashmessages']->addError("Can't find any user for that user name.");
+            }
+        }
+
 		return $app['twig']->render('sysadmin/index/index.html.twig', array(
 				'extensions'=>$app['extensions']->getExtensions(),
 			));
