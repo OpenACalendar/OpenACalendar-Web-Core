@@ -8,7 +8,7 @@
 <div style="padding: 5px; margin: 5px 0 5px 0; background:  {{ themeVariables.colourHistoryMediaBackground  }}; border-radius: 5px;">
 	<div style="font-weight: bold;">{%  if historyItem.isNew %}New {%  endif %}Media: <a href="{{ config.getWebSiteDomainSecure(site.slug) }}/media/{{ historyItem.mediaSlug }}">{{ historyItem.title }}</a></div>
 	{% if historyItem.isAnyChangeFlagsUnknown %}
-		<div>{{ media.title  }}</div>
+		<div>{{ historyItem.title  }}</div>
 	{% else %}
 		{% if historyItem.getTitleChanged %}
 			<div>
