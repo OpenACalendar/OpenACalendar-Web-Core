@@ -20,7 +20,7 @@ class Config {
 	public $databaseUser;
 	public $databasePassword;
 
-	public $userNameReserved = array();
+	public $displayNameReserved = array();
 
 	public $siteSlugReserved = array('www',	'blog');
 	
@@ -242,6 +242,16 @@ class Config {
 	function isFileStore() {
 		return (boolean)$this->fileStoreLocation;
 	}
+	function isDisplayNameAllowed($displayName) {
+	    if (is_array($this->displayNameReserved)) {
+            foreach ($this->displayNameReserved as $displayNameReserved) {
+                if (strtolower(trim($displayName)) == strtolower(trim($displayNameReserved))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 	
 

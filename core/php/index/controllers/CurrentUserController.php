@@ -127,6 +127,10 @@ class CurrentUserController {
 		if ('POST' == $request->getMethod()) {
 			$form->bind($request);
 
+            if (!$app['config']->isDisplayNameAllowed($app['currentUser']->getDisplayname())) {
+                $form->addError(new FormError('That name is not allowed'));
+            }
+
 			if ($form->isValid()) {
 				$userRepo = new UserAccountRepository($app);
 				$userRepo->editProfile($app['currentUser']);

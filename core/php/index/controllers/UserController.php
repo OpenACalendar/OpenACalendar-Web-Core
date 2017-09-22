@@ -262,12 +262,8 @@ class UserController {
 			$form->bind($request);
 			$data = $form->getData();
 
-            if (is_array($app['config']->userNameReserved)) {
-                foreach($app['config']->userNameReserved as $reserved) {
-                    if (UserAccountModel::makeCanonicalUserName($reserved) == UserAccountModel::makeCanonicalUserName($data['username'])) {
-                        $form->addError(new FormError('That user name is already taken'));
-                    }
-                }
+            if (!$app['config']->isDisplayNameAllowed($data['displayname'])) {
+                $form->addError(new FormError('That name is not allowed'));
             }
 
 			$userExistingEmail = $userRepository->loadByEmail($data['email']);
