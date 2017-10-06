@@ -1276,11 +1276,15 @@ class EventController {
 			$mrb->setEvent($this->parameters['event']);
 			$medias = $mrb->fetchAll();
 
-			$eventRepository = new EventRepository($app);
+            $eventEditMetaData = new EventEditMetaDataModel();
+            $eventEditMetaData->setUserAccount($app['currentUser']);
+            $eventEditMetaData->setFromRequest($request);
+
+            $eventRepository = new EventRepository($app);
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'],
+					$eventRepository->createWithMetaData($event, $app['currentSite'], $eventEditMetaData, $this->parameters['group'],
 							$this->parameters['groups'], null, $this->parameters['tags'], $medias);
 					++$count;
 				}
@@ -1331,12 +1335,16 @@ class EventController {
 			$mrb->setSite($app['currentSite']);
 			$mrb->setEvent($this->parameters['event']);
 			$medias = $mrb->fetchAll();
-			
+
+            $eventEditMetaData = new EventEditMetaDataModel();
+            $eventEditMetaData->setUserAccount($app['currentUser']);
+            $eventEditMetaData->setFromRequest($request);
+
 			$eventRepository = new EventRepository($app);
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'],
+					$eventRepository->createWithMetaData($event, $app['currentSite'], $eventEditMetaData, $this->parameters['group'],
 							$this->parameters['groups'], null, $this->parameters['tags'], $medias);
 					++$count;
 				}
@@ -1390,11 +1398,15 @@ class EventController {
 			$mrb->setEvent($this->parameters['event']);
 			$medias = $mrb->fetchAll();
 
+            $eventEditMetaData = new EventEditMetaDataModel();
+            $eventEditMetaData->setUserAccount($app['currentUser']);
+            $eventEditMetaData->setFromRequest($request);
+
 			$eventRepository = new EventRepository($app);
 			$count = 0;
 			foreach($this->parameters['newEvents'] as $event) {
 				if (in_array($event->getStartAt()->getTimeStamp(), $data)) {
-					$eventRepository->create($event, $app['currentSite'], $app['currentUser'], $this->parameters['group'], $this->parameters['groups'],
+					$eventRepository->createWithMetaData($event, $app['currentSite'], $eventEditMetaData, $this->parameters['group'], $this->parameters['groups'],
 						null, $this->parameters['tags'], $medias);
 					++$count;
 				}
