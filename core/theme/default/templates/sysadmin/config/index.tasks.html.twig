@@ -147,6 +147,22 @@
 			({{ (config.taskDeleteOldTaskLogsDeleteOlderThan / 60/60/24) | round (0,'floor') }} days)
 			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskDeleteOldTaskLogsDeleteOlderThan'} %}</td>
 	</tr>
+	<tr>
+		<th>taskDeleteOldHistoryIpsRunInterval</th>
+		<td>{{ config.taskDeleteOldHistoryIpsRunInterval }}
+			({{ (config.taskDeleteOldHistoryIpsRunInterval / 60) | round (0,'floor') }} mins)
+			({{ (config.taskDeleteOldHistoryIpsRunInterval / 60/60) | round (0,'floor') }} hours)
+			({{ (config.taskDeleteOldHistoryIpsRunInterval / 60/60/24) | round (0,'floor') }} days)
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskDeleteOldHistoryIpsRunInterval'} %}</td>
+	</tr>
+	<tr>
+		<th>taskDeleteOldHistoryIpsDeleteOlderThan</th>
+		<td>{{ config.taskDeleteOldHistoryIpsDeleteOlderThan }}
+			({{ (config.taskDeleteOldHistoryIpsDeleteOlderThan / 60) | round (0,'floor') }} mins)
+			({{ (config.taskDeleteOldHistoryIpsDeleteOlderThan / 60/60) | round (0,'floor') }} hours)
+			({{ (config.taskDeleteOldHistoryIpsDeleteOlderThan / 60/60/24) | round (0,'floor') }} days)
+			{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'taskDeleteOldHistoryIpsDeleteOlderThan'} %}</td>
+	</tr>
 	</table>
 
 {% endblock %}
