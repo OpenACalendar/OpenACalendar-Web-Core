@@ -1696,8 +1696,13 @@ class EventController {
 						$gotResultEditedVenue = true;
 					} else {
 						$this->parameters['event']->setAreaId($area->getId());
-						$eventRepository = new EventRepository($app);
-						$eventRepository->edit($this->parameters['event'], $app['currentUser']);
+
+                        $eventEditMetaData = new EventEditMetaDataModel();
+                        $eventEditMetaData->setUserAccount($app['currentUser']);
+                        $eventEditMetaData->setFromRequest($request);
+
+                        $eventRepository = new EventRepository($app);
+						$eventRepository->editWithMetaData($this->parameters['event'], $eventEditMetaData);
 						$gotResultEditedEvent = true;
 					}
 					$app['flashmessages']->addMessage('Thank you; event updated!');
