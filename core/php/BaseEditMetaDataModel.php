@@ -18,7 +18,12 @@ class BaseEditMetaDataModel {
 
 	protected $editComment;
 
-	/** @var  \DateTime */
+	/**
+     *
+     *
+     * @TODO This is a bad title as this field is not only used for reverted from history - it's also used by events for editing future events in a chain based on the first edit.
+     *
+     * @var  \DateTime */
 	protected $revertedFromHistoryCreatedAt;
 
 	protected $ip;
