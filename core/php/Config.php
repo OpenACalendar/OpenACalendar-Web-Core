@@ -203,6 +203,8 @@ class Config {
     public $taskDeleteOldTaskLogsAutomaticRunInterval = 86400; // 1 day
     public $taskDeleteOldTaskLogsDeleteOlderThan = 15552000;  // 180 days, 6 months
 
+    public $taskDeleteOldHistoryIpsRunInterval = 86400; // 1 day
+    public $taskDeleteOldHistoryIpsDeleteOlderThan = 15552000;  // 180 days, 6 months
 
     public $useBeanstalkd = false;
     // This is the default connection if Debian package is used.

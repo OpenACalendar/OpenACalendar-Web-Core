@@ -152,6 +152,7 @@ class ExtensionCore extends BaseExtension {
 			new \tasks\RunImportsTask($this->app),
             new \tasks\DeleteOldTaskLogsTask($this->app),
             new \tasks\UpdateCountryInSiteFutureEventsCacheTask($this->app),
+            new \tasks\DeleteOldHistoryIps($this->app),
 		);
 	}
 
