@@ -1097,6 +1097,13 @@ class EventController {
 				$eventRepo = new EventRepository($app);
 				
 				$countEvents = 0;
+
+
+                $eventEditMetaData = new EventEditMetaDataModel();
+                $eventEditMetaData->setUserAccount($app['currentUser']);
+                $eventEditMetaData->setRevertedFromHistoryCreatedAt($this->parameters['eventHistory']->getCreatedAt());
+                $eventEditMetaData->setFromRequest($request);
+
 				foreach($this->parameters['eventRecurSet']->getFutureEvents() as $futureEvent) {
 					
 					$proposedChanges = $this->parameters['eventRecurSet']->getFutureEventsProposedChangesForEventSlug($futureEvent->getSlug());
@@ -1137,7 +1144,7 @@ class EventController {
 						}
 					}
 					if ($proposedChanges->applyToEvent($futureEvent, $this->parameters['event'])) {
-						$eventRepo->edit($futureEvent, $app['currentUser'], $this->parameters['eventHistory']);
+						$eventRepo->editWithMetaData($futureEvent, $eventEditMetaData);
 						$countEvents++;
 					}
 				}
