@@ -468,6 +468,17 @@ class GroupRepository {
 
 
 
+
+    public function editSlugHuman(GroupModel $groupModel) {
+        $stat = $this->app['db']->prepare("UPDATE group_information  ".
+            "SET slug_human  = :slug_human  ".
+            "WHERE id=:id");
+        $stat->execute(array(
+            'id'=>$groupModel->getId(),
+            'slug_human'=>$groupModel->getSlugHuman(),
+        ));
+    }
+
 	public function purge(GroupModel $group) {
 		try {
             $this->app['db']->beginTransaction();

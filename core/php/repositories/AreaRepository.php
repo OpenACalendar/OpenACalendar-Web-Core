@@ -464,6 +464,19 @@ class AreaRepository {
         $this->app['db']->prepare("UPDATE area_information SET cache_area_has_parent_generated='f'")->execute();
 	}
 
+
+
+
+    public function editSlugHuman(AreaModel $areaModel) {
+        $stat = $this->app['db']->prepare("UPDATE area_information  ".
+            "SET slug_human  = :slug_human  ".
+            "WHERE id=:id");
+        $stat->execute(array(
+            'id'=>$areaModel->getId(),
+            'slug_human'=>$areaModel->getSlugHuman(),
+        ));
+    }
+
 	/**
 	 *
 	 * @TODO This could be improved, At the moment it sets any events with this area to no area but it could set them to area of parent (if any).

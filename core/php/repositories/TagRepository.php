@@ -265,6 +265,17 @@ class TagRepository {
         $this->app['messagequeproducerhelper']->send('org.openacalendar', 'EventHasTagSaved', array('tag_id'=>$tag->getId(),'event_id'=>$event->getId()));
 	}
 
+
+    public function editSlugHuman(TagModel $tagModel) {
+        $stat = $this->app['db']->prepare("UPDATE tag_information  ".
+            "SET slug_human  = :slug_human  ".
+            "WHERE id=:id");
+        $stat->execute(array(
+            'id'=>$tagModel->getId(),
+            'slug_human'=>$tagModel->getSlugHuman(),
+        ));
+    }
+
 	public function purge(TagModel $tag) {
 
 		try {

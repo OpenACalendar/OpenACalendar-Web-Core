@@ -663,6 +663,16 @@ class EventRepository {
 
 	}
 
+    public function editSlugHuman(EventModel $eventModel) {
+        $stat = $this->app['db']->prepare("UPDATE event_information  ".
+            "SET slug_human  = :slug_human  ".
+            "WHERE id=:id");
+        $stat->execute(array(
+            'id'=>$eventModel->getId(),
+            'slug_human'=>$eventModel->getSlugHuman(),
+        ));
+    }
+
 	public function purge(EventModel $event) {
 		try {
             $this->app['db']->beginTransaction();

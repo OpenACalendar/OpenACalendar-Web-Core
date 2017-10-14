@@ -178,6 +178,12 @@ class EventController {
 					$er->markNotDuplicateWithMetaData($this->parameters['event'], $eventEditMetaData);
 					$redirect = true;
 
+                } else if ($action->getCommand() == 'slughuman') {
+
+                    $this->parameters['event']->setSlugHuman($action->getParam(0));
+                    $er = new EventRepository($app);
+                    $er->editSlugHuman($this->parameters['event']);
+                    $redirect = true;
 
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeEventPassword && $app['config']->sysAdminExtraPurgeEventPassword == $action->getParam(0)) {
 
