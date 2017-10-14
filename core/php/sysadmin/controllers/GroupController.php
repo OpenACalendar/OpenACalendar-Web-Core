@@ -92,6 +92,12 @@ class GroupController {
 						$redirect = true;
 					}
 
+                } else if ($action->getCommand() == 'slughuman') {
+
+                    $this->parameters['group']->setSlugHuman($action->getParam(0));
+                    $gr = new GroupRepository($app);
+                    $gr->editSlugHuman($this->parameters['group']);
+                    $redirect = true;
 
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeGroupPassword && $app['config']->sysAdminExtraPurgeGroupPassword == $action->getParam(0)) {
 

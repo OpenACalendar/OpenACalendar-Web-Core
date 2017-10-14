@@ -28,6 +28,7 @@ class TagModel {
 		$this->id = $data['id'];
 		$this->site_id = $data['site_id'];
 		$this->slug = $data['slug'];
+        $this->slug_human = $data['slug_human'];
 		$this->title = $data['title'];
 		$this->description = $data['description'];
 		$this->is_deleted = $data['is_deleted'];

@@ -85,6 +85,12 @@ class VenueController {
 						$redirect = true;
 					}
 
+                } else if ($action->getCommand() == 'slughuman') {
+
+                    $this->parameters['venue']->setSlugHuman($action->getParam(0));
+                    $vr = new VenueRepository($app);
+                    $vr->editSlugHuman($this->parameters['venue']);
+                    $redirect = true;
 
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeVenuePassword && $app['config']->sysAdminExtraPurgeVenuePassword == $action->getParam(0)) {
 

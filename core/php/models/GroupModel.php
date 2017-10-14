@@ -33,6 +33,7 @@ class GroupModel {
 		$this->id = $data['id'];
 		$this->site_id = $data['site_id'];
 		$this->slug = $data['slug'];
+        $this->slug_human = $data['slug_human'];
 		$this->title = $data['title'];
 		$this->url = $data['url'];
 		$this->description = $data['description'];

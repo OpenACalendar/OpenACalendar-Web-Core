@@ -256,6 +256,16 @@ class VenueRepository {
 	}
 
 
+    public function editSlugHuman(VenueModel $venueModel) {
+        $stat = $this->app['db']->prepare("UPDATE venue_information  ".
+            "SET slug_human  = :slug_human  ".
+            "WHERE id=:id");
+        $stat->execute(array(
+            'id'=>$venueModel->getId(),
+            'slug_human'=>$venueModel->getSlugHuman(),
+        ));
+    }
+
 	/**
 	 *
 	 * @TODO This could be improved, At the moment it sets any events with this venue to no venue & no area but it could set them to area of venue.

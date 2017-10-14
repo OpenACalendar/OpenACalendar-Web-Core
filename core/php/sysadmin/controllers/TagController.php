@@ -62,11 +62,21 @@ class TagController {
 					$tr = new TagRepository($app);
 					$tr->delete($this->parameters['tag'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
+
 				} else if ($action->getCommand() == 'undelete' && $this->parameters['tag']->getIsDeleted()) {
 					$this->parameters['tag']->setIsDeleted(false);
 					$tr = new TagRepository($app);
 					$tr->undelete($this->parameters['tag'],  $app['currentUser']);
 					return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
+
+
+                } else if ($action->getCommand() == 'slughuman') {
+
+                    $this->parameters['tag']->setSlugHuman($action->getParam(0));
+                    $tr = new TagRepository($app);
+                    $tr->editSlugHuman($this->parameters['tag']);
+                    return $app->redirect('/sysadmin/site/'.$this->parameters['site']->getId().'/tag/'.$this->parameters['tag']->getSlug());
+
 				}
 			}
 		}

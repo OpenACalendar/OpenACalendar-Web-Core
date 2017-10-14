@@ -114,6 +114,13 @@ class AreaController {
 					}
 
 
+                } else if ($action->getCommand() == 'slughuman') {
+
+                    $this->parameters['area']->setSlugHuman($action->getParam(0));
+                    $ar = new AreaRepository($app);
+                    $ar->editSlugHuman($this->parameters['area']);
+                    $redirect = true;
+
 				} else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeAreaPassword && $app['config']->sysAdminExtraPurgeAreaPassword == $action->getParam(0)) {
 
 					$ar = new AreaRepository($app);
