@@ -21,7 +21,7 @@ class ContactSupportListController {
 	function index(Request $request, Application $app) {
 		
 		
-		$csrb = new ContactSupportRepositoryBuilder();
+		$csrb = new ContactSupportRepositoryBuilder($app);
 		
 		return $app['twig']->render('sysadmin/contactsupportlist/index.html.twig', array(
 				'contactsupports'=>$csrb->fetchAll(),
