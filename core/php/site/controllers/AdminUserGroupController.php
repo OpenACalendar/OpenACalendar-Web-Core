@@ -183,10 +183,10 @@ class AdminUserGroupController {
             $app->abort(404, "User Group does not exist.");
         }
 
-        $form = $app['form.factory']->create(new UserGroupEditForm($app), $this->parameters['usergroup']);
+        $form = $app['form.factory']->create(UserGroupEditForm::class, $this->parameters['usergroup']);
 
         if ('POST' == $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 

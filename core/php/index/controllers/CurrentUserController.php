@@ -76,7 +76,7 @@ class CurrentUserController {
 		$form = $app['form.factory']->create(UserChangePasswordForm::class);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$data = $form->getData();
@@ -101,16 +101,41 @@ class CurrentUserController {
 	}
 	
 	function emails(Request $request, Application $app) {
-		$ourForm = new UserEmailsForm($app['extensions'], $app['currentUser']);
-		$form = $app['form.factory']->create($ourForm, $app['currentUser']);
-		
+
+        $preferences = array();
+        foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+            $extID = $extension->getId();
+            foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+                $key = str_replace(".", "_", $extID.'.'.$type);
+                $preferences[$key] = $extension->getUserNotificationPreference($type);
+            }
+        }
+
+        $form = $app['form.factory']->create(
+            UserEmailsForm::class,
+            $app['currentUser'],
+            array(
+                'app'=>$app,
+                'user'=>$app['currentUser'],
+                'preferences'=>$preferences,
+            )
+        );
+
+
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$userRepo = new UserAccountRepository($app);
-				$userRepo->editEmailsOptions($app['currentUser']);
-				$ourForm->savePreferences($form);
+                $userRepo->editEmailsOptions($app['currentUser']);
+
+
+                $repo = new \repositories\UserNotificationPreferenceRepository($app);
+                foreach($preferences as $key=>$preference) {
+                    $repo->editEmailPreference($app['currentUser'], $preference->getUserNotificationPreferenceExtensionID(),
+                        $preference->getUserNotificationPreferenceType(), $form->get($key)->getData());
+                }
+
 				$app['flashmessages']->addMessage("Options Changed.");
 				return $app->redirect("/me/");
 			}
@@ -125,7 +150,7 @@ class CurrentUserController {
         $form = $app['form.factory']->create(UserProfileForm::class, $app['currentUser']);
 
         if ('POST' == $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if (!$app['config']->isDisplayNameAllowed($app['currentUser']->getDisplayname())) {
                 $form->addError(new FormError('That name is not allowed'));
@@ -149,7 +174,7 @@ class CurrentUserController {
 		$form = $app['form.factory']->create(UserPrefsForm::class, $app['currentUser']);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$userRepo = new UserAccountRepository($app);

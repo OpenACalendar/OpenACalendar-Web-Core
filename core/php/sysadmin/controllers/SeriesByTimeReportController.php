@@ -56,7 +56,7 @@ class SeriesByTimeReportController {
 		}
 
 		$form = $app['form.factory']->create(new RunSeriesByTimeReportForm($app, $this->report));
-		$form->bind($request);
+		$form->handleRequest($request);
 
 		$startAt = $form->get('start_at')->getData();
 		$endAt = $form->get('end_at')->getData();

@@ -68,7 +68,7 @@ class IndexController {
 		$form = $app['form.factory']->create(CreateForm::class, null, array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 			$data = $form->getData();
 			
 			$site = $siteRepository->loadBySlug($data['slug']);

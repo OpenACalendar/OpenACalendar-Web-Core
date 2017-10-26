@@ -25,7 +25,7 @@ class LogInController {
 		$form = $app['form.factory']->create( LogInUserForm::class);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$data = $form->getData();

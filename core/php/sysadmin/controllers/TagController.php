@@ -53,7 +53,7 @@ class TagController {
 		$form = $app['form.factory']->create( ActionForm::class );
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$action = new ActionParser($data['action']);

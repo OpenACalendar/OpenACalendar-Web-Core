@@ -121,7 +121,7 @@ class ImportController {
 		$form = $app['form.factory']->create(new ImportEditForm($app, $app['currentSite']), $this->parameters['import']);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 								

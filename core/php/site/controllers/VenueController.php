@@ -168,7 +168,7 @@ class VenueController {
 		$form = $app['form.factory']->create(VenueEditForm::class, $this->parameters['venue'], array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				
@@ -318,7 +318,7 @@ class VenueController {
 		
 			
 			if ('POST' == $request->getMethod()) {
-				$form->bind($request);
+				$form->handleRequest($request);
 
 				if ($form->isValid() && $form['media']->getData()) {
 
@@ -439,7 +439,7 @@ class VenueController {
 		$form = $app['form.factory']->create(VenueDeleteForm::class);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				

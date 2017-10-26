@@ -20,10 +20,10 @@ class IndexController {
 
 
 	function contact(Application $app, Request $request) {		
-		$form = $app['form.factory']->create(new ContactForm($app['currentUser']));
+		$form = $app['form.factory']->create(ContactForm::class, null, array('config'=>$app['config'], 'user' => $app['currentUser']));
 		
 		if (!$app['config']->siteReadOnly && 'POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 			if ($form->isValid()) {
 				$data = $form->getData();
 

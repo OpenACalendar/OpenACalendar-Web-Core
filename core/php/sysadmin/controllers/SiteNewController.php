@@ -31,7 +31,7 @@ class SiteNewController {
 		$form = $app['form.factory']->create(new NewSiteForm($app));
 
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			$data = $form->getData();
 			$siteRepository = new SiteRepository($app);

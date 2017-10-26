@@ -54,7 +54,7 @@ class SeriesReportController {
 		}
 
 		$form = $app['form.factory']->create(new RunSeriesReportForm($app, $this->report));
-		$form->bind($request);
+		$form->handleRequest($request);
 
 		$filterStartAt = $filterEndAt = $filterSiteID = null;
 		if ($this->report->getHasFilterTime()) {

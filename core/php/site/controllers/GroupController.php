@@ -218,7 +218,7 @@ class GroupController {
 			$form = $app['form.factory']->create(UploadNewMediaForm::class, null, array( 'defaultTitle'=>$this->parameters['group']->getTitle()));
 
 			if ('POST' == $request->getMethod()) {
-				$form->bind($request);
+				$form->handleRequest($request);
 
 				if ($form->isValid() && $form['media']->getData()) {
 
@@ -314,7 +314,7 @@ class GroupController {
 		$form = $app['form.factory']->create( GroupEditForm::class, $this->parameters['group'], array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
@@ -538,7 +538,7 @@ class GroupController {
 		$form = $app['form.factory']->create(new ImportNewForm($app, $app['currentSite'], $app['currentTimeZone']), $importurl);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				

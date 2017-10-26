@@ -151,7 +151,7 @@ class CuratedListController {
 		$form = $app['form.factory']->create( CuratedListEditForm::class, $this->parameters['curatedlist']);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				

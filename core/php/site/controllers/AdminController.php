@@ -107,10 +107,10 @@ class AdminController {
 
 		$userGroup = new UserGroupModel();
 
-		$form = $app['form.factory']->create(new AdminUserGroupNewForm($app['config']), $userGroup);
+		$form = $app['form.factory']->create(AdminUserGroupNewForm::class, $userGroup);
 
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
@@ -133,13 +133,14 @@ class AdminController {
 	}
 
 		
-	function profile(Request $request, Application $app) {		
-		$form = $app['form.factory']->create(new SiteEditProfileForm($app['config']), $app['currentSite']);
+	function profile(Request $request, Application $app) {
 
         $siteLogoAllowed = $app['config']->isFileStore() && !$app['config']->isSingleSiteMode;
 
+        $form = $app['form.factory']->create(SiteEditProfileForm::class, $app['currentSite'], array('siteLogoAllowed'=>$siteLogoAllowed));
+
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 			
 			if ($form->isValid()) {
 				
@@ -224,10 +225,10 @@ class AdminController {
 	
 	
 	function visibility(Request $request, Application $app) {
-		$form = $app['form.factory']->create(new AdminVisibilityPublicForm($app['config']), $app['currentSite']);
+		$form = $app['form.factory']->create(AdminVisibilityPublicForm::class, $app['currentSite'], array('config'=>$app['config']));
 				
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 				
 			if ($form->isValid()) {
 				

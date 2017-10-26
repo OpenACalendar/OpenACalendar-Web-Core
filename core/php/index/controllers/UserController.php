@@ -259,7 +259,7 @@ class UserController {
 		$form = $app['form.factory']->create(SignUpUserForm::class, null, array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 			$data = $form->getData();
 
             if (!$app['config']->isDisplayNameAllowed($data['displayname'])) {
@@ -312,7 +312,7 @@ class UserController {
 		$this->processThingsToDoAfterGetUser($request, $app);
 
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$data = $form->getData();
@@ -421,7 +421,7 @@ class UserController {
 		$form = $app['form.factory']->create(ForgotUserForm::class);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$data = $form->getData();
@@ -490,7 +490,7 @@ class UserController {
 		$form = $app['form.factory']->create(ResetUserForm::class);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$data = $form->getData();
@@ -536,21 +536,42 @@ class UserController {
 			$app['monolog']->addError("Failed changing email - account user ".$user->getId()." - code wrong");
 			return $app['twig']->render('index/user/emails.fail.html.twig', array());
 		}
-		
-		
-		$ourForm = new UserEmailsForm($app['extensions'], $user);
-		$form = $app['form.factory']->create($ourForm, $user);
-		
-		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
 
-			if ($form->isValid()) {
-				$userRepository->editEmailsOptions($user);
-				$ourForm->savePreferences($form);
-				$app['flashmessages']->addMessage("Options Changed.");
-				return $app->redirect("/");
-			}
-		}
+        $preferences = array();
+        foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+            $extID = $extension->getId();
+            foreach($extension->getUserNotificationPreferenceTypes() as $type) {
+                $key = str_replace(".", "_", $extID.'.'.$type);
+                $preferences[$key] = $extension->getUserNotificationPreference($type);
+            }
+        }
+
+        $form = $app['form.factory']->create(
+            UserEmailsForm::class,
+            $user,
+            array(
+                'app'=>$app,
+                'user'=>$user,
+                'preferences'=>$preferences,
+            )
+        );
+
+        if ('POST' == $request->getMethod()) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $userRepository->editEmailsOptions($user);
+
+                $repo = new \repositories\UserNotificationPreferenceRepository($app);
+                foreach($preferences as $key=>$preference) {
+                    $repo->editEmailPreference($user, $preference->getUserNotificationPreferenceExtensionID(),
+                        $preference->getUserNotificationPreferenceType(), $form->get($key)->getData());
+                }
+
+                $app['flashmessages']->addMessage("Options Changed.");
+                return $app->redirect("/");
+            }
+        }
 		
 		return $app['twig']->render('index/user/emails.html.twig', array(
 			'form'=>$form->createView(),

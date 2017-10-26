@@ -57,7 +57,7 @@ class SiteController {
 		$form = $app['form.factory']->create( ActionWithCommentForm::class);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 			
 			
 			if ($form->isValid()) {

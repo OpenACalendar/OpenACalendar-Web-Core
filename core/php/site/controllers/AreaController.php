@@ -145,7 +145,7 @@ class AreaController {
 		$form = $app['form.factory']->create( AreaNewInAreaForm::class, $area);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				
@@ -192,7 +192,7 @@ class AreaController {
 		$form = $app['form.factory']->create(AreaEditForm::class, $this->parameters['area'], array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 

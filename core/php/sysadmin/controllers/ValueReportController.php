@@ -54,7 +54,7 @@ class ValueReportController {
 		}
 
 		$form = $app['form.factory']->create(new RunValueReportForm($app, $this->report));
-		$form->bind($request);
+		$form->handleRequest($request);
 
 		$filterStartAt = $this->report->getHasFilterTime() ? $form->get('start_at')->getData() : null;
 		$filterEndAt = $this->report->getHasFilterTime() ? $form->get('end_at')->getData() : null;

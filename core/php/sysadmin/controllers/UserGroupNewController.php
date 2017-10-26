@@ -27,10 +27,10 @@ class UserGroupNewController {
 
 		$userGroup = new UserGroupModel();
 
-		$form = $app['form.factory']->create(new AdminUserGroupNewForm($app['config']), $userGroup);
+		$form = $app['form.factory']->create(AdminUserGroupNewForm::class, $userGroup);
 
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 

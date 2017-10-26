@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  *
@@ -23,14 +24,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ContactForm  extends AbstractType {
-
-	/** @var  UserAccountModel */
-	protected $currentUser;
-
-	function __construct(UserAccountModel $currentUser = null)
-	{
-		$this->currentUser = $currentUser;
-	}
 
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
@@ -48,7 +41,7 @@ class ContactForm  extends AbstractType {
 			'label'=>'Email',
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
-			'data' => $this->currentUser ? $this->currentUser->getEmail() : '',
+			'data' => $options['user'] ? $options['user']->getEmail() : '',
 		));
 		
 		$builder->add('message', TextareaType::class, array(
@@ -57,7 +50,7 @@ class ContactForm  extends AbstractType {
 		));
 
 		
-		if ($CONFIG->contactFormAntiSpam && !$this->currentUser) {
+		if ($options['config']->contactFormAntiSpam && !$options['user']) {
 			$builder->add('antispam',TextType::class,array('label'=>'What is 2 + 2?','required'=>true));
 			
 			$myExtraFieldValidatorSpam = function(FormEvent $event){
@@ -76,11 +69,15 @@ class ContactForm  extends AbstractType {
 	public function getName() {
 		return 'SignUpUserForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'config' => null,
+            'user' => null,
+        ));
+    }
+
+
 }
 

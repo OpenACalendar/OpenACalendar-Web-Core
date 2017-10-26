@@ -447,7 +447,7 @@ class EventController {
 		}
 
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
@@ -515,7 +515,7 @@ class EventController {
 			$this->parameters['event'],
 			array('app' => $app)
 		);
-		$form->bind($request);
+		$form->handleRequest($request);
 
 		if ($this->parameters['event']->getStartAtInUTC()->getTimestamp() > $this->parameters['event']->getEndAtInUTC()->getTimestamp()) {
 			$data['readableStartEndRange'] = "(The start is after the end)";
@@ -762,7 +762,7 @@ class EventController {
 				$form = $app['form.factory']->create(EventRemoveVenueForm::class, null, array('app'=>$app));
 
 				if ('POST' == $request->getMethod()) {
-					$form->bind($request);
+					$form->handleRequest($request);
 
 					if ($form->isValid()) {
 
@@ -1511,7 +1511,7 @@ class EventController {
 		$form = $app['form.factory']->create(EventDeleteForm::class, null, array('app'=>$app));
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
@@ -1577,7 +1577,7 @@ class EventController {
 		$form = $app['form.factory']->create(EventCancelForm::class, null, array('app'=>$app));
 
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
@@ -1656,7 +1656,7 @@ class EventController {
 		);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
@@ -1836,7 +1836,7 @@ class EventController {
 			$form = $app['form.factory']->create(UploadNewMediaForm::class, null, array( 'defaultTitle'=>$this->parameters['event']->getSummaryDisplay()));
 
 			if ('POST' == $request->getMethod()) {
-				$form->bind($request);
+				$form->handleRequest($request);
 
 				if ($form->isValid() && $form['media']->getData()) {
 

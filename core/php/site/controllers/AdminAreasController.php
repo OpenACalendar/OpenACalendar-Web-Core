@@ -145,7 +145,7 @@ class AdminAreasController {
 				$app['form.factory']->create( AreaNewInCountryForm::class, $area);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 				$areaRepository->create($area, $parentArea, $app['currentSite'], $this->parameters['country'], $app['currentUser']);

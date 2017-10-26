@@ -84,7 +84,7 @@ class TagController {
         $form = $app['form.factory']->create(TagEditForm::class, $this->parameters['tag']);
 
         if ('POST' == $request->getMethod()) {
-            $form->bind($request);
+            $form->handleRequest($request);
 
             if ($form->isValid()) {
 

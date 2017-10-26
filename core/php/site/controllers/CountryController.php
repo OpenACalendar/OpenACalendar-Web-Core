@@ -157,7 +157,7 @@ class CountryController {
 		$form = $app['form.factory']->create(AreaNewInCountryForm::class, $area);
 		
 		if ('POST' == $request->getMethod()) {
-			$form->bind($request);
+			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
