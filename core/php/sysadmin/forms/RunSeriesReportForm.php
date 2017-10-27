@@ -6,6 +6,7 @@ namespace sysadmin\forms;
 use BaseSeriesReport;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
@@ -42,7 +43,7 @@ class RunSeriesReportForm extends AbstractType{
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
 		$builder
-			->add('output', 'choice', array(
+			->add('output', ChoiceType::class, array(
 				'expanded' => true,
 				'choices' => array('htmlTable' => 'Table in Web Browser', 'csv' => 'Download CSV'),
 				'data' => 'htmlTable',
