@@ -40,7 +40,7 @@ class ValueReportController {
 
 
 
-		$form = $app['form.factory']->create(new RunValueReportForm($app, $this->report));
+		$form = $app['form.factory']->create(RunValueReportForm::class, null, ['app'=>$app,'report'=>$this->report]);
 
 		return $app['twig']->render('sysadmin/valuereport/index.html.twig', array(
 			'report'=>$this->report,
@@ -53,7 +53,7 @@ class ValueReportController {
 			die("NO");
 		}
 
-		$form = $app['form.factory']->create(new RunValueReportForm($app, $this->report));
+		$form = $app['form.factory']->create(RunValueReportForm::class, null, ['app'=>$app,'report'=>$this->report]);
 		$form->handleRequest($request);
 
 		$filterStartAt = $this->report->getHasFilterTime() ? $form->get('start_at')->getData() : null;

@@ -42,7 +42,7 @@ class SeriesByTimeReportController {
 
 
 
-		$form = $app['form.factory']->create(new RunSeriesByTimeReportForm($app, $this->report));
+		$form = $app['form.factory']->create(RunSeriesByTimeReportForm::class, null, ['app'=>$app,'report'=>$this->report]);
 
 		return $app['twig']->render('sysadmin/seriesbytimereport/index.html.twig', array(
 			'report'=>$this->report,
@@ -55,7 +55,7 @@ class SeriesByTimeReportController {
 			die("NO");
 		}
 
-		$form = $app['form.factory']->create(new RunSeriesByTimeReportForm($app, $this->report));
+		$form = $app['form.factory']->create(RunSeriesByTimeReportForm::class, null, ['app'=>$app,'report'=>$this->report]);
 		$form->handleRequest($request);
 
 		$startAt = $form->get('start_at')->getData();

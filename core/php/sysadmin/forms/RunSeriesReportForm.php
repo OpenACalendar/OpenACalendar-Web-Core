@@ -6,12 +6,14 @@ namespace sysadmin\forms;
 use BaseSeriesReport;
 use Silex\Application;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 /**
@@ -32,17 +34,14 @@ class RunSeriesReportForm extends AbstractType{
     /** @var Application */
     protected $app;
 
-    function __construct(Application $app, $report)
-	{
-        $this->app = $app;
-		$this->report = $report;
-	}
-
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
+        $this->app = $options['app'];
+        $this->report = $options['report'];
+
 		$builder
-			->add('output', 'choice', array(
+			->add('output', ChoiceType::class, array(
 				'expanded' => true,
 				'choices' => array('htmlTable' => 'Table in Web Browser', 'csv' => 'Download CSV'),
 				'data' => 'htmlTable',
@@ -80,10 +79,13 @@ class RunSeriesReportForm extends AbstractType{
 	public function getName() {
 		return 'RunReportForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'app' => null,
+            'report' => null,
+        ));
+    }
 	
 }

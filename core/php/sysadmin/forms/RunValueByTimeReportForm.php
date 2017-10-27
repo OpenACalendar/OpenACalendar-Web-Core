@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 /**
@@ -33,29 +34,24 @@ class RunValueByTimeReportForm extends AbstractType{
     /** @var Application */
     protected $app;
 
-    function __construct(Application $app, $report)
-	{
-        $this->app = $app;
-		$this->report = $report;
-
-		$this->timeperiodChoices = array(
-            '1 hour' =>"PT1H",
-            '4 hours' =>"PT4H",
-            '12 hours' =>"PT12H",
-            '1 day' =>"P1D",
-            '1 week' =>"P7D",
-            '1 month' =>"P1M" ,
-            '3 months' =>"P3M",
-            '6 months' =>"P6M",
-            '1 year' =>"P1Y",
-		);
-	}
-
-	protected $timeperiodChoices;
+	protected $timeperiodChoices = array(
+        '1 hour' =>"PT1H",
+        '4 hours' =>"PT4H",
+        '12 hours' =>"PT12H",
+        '1 day' =>"P1D",
+        '1 week' =>"P7D",
+        '1 month' =>"P1M" ,
+        '3 months' =>"P3M",
+        '6 months' =>"P6M",
+        '1 year' =>"P1Y",
+    );
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$builder
+        $this->app = $options['app'];
+        $this->report = $options['report'];
+
+        $builder
 			->add('output', ChoiceType::class, array(
 				'expanded' => true,
 				'choices' => array('Table in Web Browser' => 'htmlTable', 'Download CSV' => 'csv'),
@@ -102,10 +98,13 @@ class RunValueByTimeReportForm extends AbstractType{
 	public function getName() {
 		return 'RunReportForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'app' => null,
+            'report' => null,
+        ));
+    }
+
 }
