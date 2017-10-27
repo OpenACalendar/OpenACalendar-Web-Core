@@ -20,7 +20,7 @@
 			 </tr>
 			 <tr>
 				 <td>End</td>
-				 <td>{%  if filterEndAt %}{{  filterEndAt | date('Y-m-d H:i:s'. 'Europe/London')  }}{%  endif %}</td>
+				 <td>{%  if filterEndAt %}{{  filterEndAt | date('Y-m-d H:i:s', 'Europe/London')  }}{%  endif %}</td>
 			 </tr>
 		 {%  endif %}
 		 {%  if report.hasFilterSite %}

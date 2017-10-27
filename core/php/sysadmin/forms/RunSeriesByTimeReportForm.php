@@ -56,7 +56,7 @@ class RunSeriesByTimeReportForm extends AbstractType{
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
 		$builder
-			->add('output', 'choice', array(
+			->add('output', ChoiceType::class, array(
 				'expanded' => true,
                 'choices' => array('Table in Web Browser' => 'htmlTable', 'Download CSV' => 'csv'),
                 'data' => 'htmlTable',
