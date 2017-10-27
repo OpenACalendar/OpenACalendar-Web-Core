@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  *
@@ -28,13 +29,10 @@ class NewSiteForm  extends AbstractType {
     /** @var Application */
     protected $app;
 
-    function __construct(Application $app)
-    {
-        $this->app = $app;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options) {
-		
+
+        $this->app = $options['app'];
+
 		$builder->add('email', EmailType::class, array('label'=>'Email Of Owner','required'=>true));
 
 		// The rest of this is duplicated from index\forms\CreateForm
@@ -81,11 +79,14 @@ class NewSiteForm  extends AbstractType {
 	public function getName() {
 		return 'NewSiteForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'app' => null,
+        ));
+    }
+
 	
 }
 

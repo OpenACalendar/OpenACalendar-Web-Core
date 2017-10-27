@@ -28,7 +28,7 @@ class SiteNewController {
 	
 	function index(Request $request, Application $app) {
 
-		$form = $app['form.factory']->create(new NewSiteForm($app));
+		$form = $app['form.factory']->create(NewSiteForm::class, null, ['app'=>$app]);
 
 		if ('POST' == $request->getMethod()) {
 			$form->handleRequest($request);
