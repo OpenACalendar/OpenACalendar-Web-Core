@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # This box tries to run apt itself automatically, which causes problems for our install scripts. Stop that.
-sudo systemctl disable apt-daily.service
-sudo systemctl disable apt-daily.timer
+systemctl disable apt-daily.service
+systemctl disable apt-daily.timer
 killall apt.systemd.daily
 
 echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
@@ -19,24 +19,23 @@ echo "tmpfs  /var/lib/postgresql  tmpfs  size=1024m,auto  0  0" >> /etc/fstab
 mkdir /var/lib/postgresql
 mount /var/lib/postgresql
 
-sudo apt-get update
-sudo apt-get install -y postgresql apache2 php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit openjdk-8-jre-headless  php-zip libapache2-mod-php
+apt-get update
+apt-get install -y postgresql apache2 php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit openjdk-8-jre-headless  php-zip libapache2-mod-php
+apt-get install -y --no-install-recommends ubuntu-desktop
+apt-get install -y firefox
 
-mkdir /home/vagrant/bin
-cd /home/vagrant/bin
+mkdir /home/ubuntu/bin
+cd /home/ubuntu/bin
 wget -q https://getcomposer.org/composer.phar
 
-cd /vagrant
-php /home/vagrant/bin/composer.phar  install
+mkdir /fileStore
+chown www-data:www-data  /fileStore
 
-mkdir /home/vagrant/fileStore
-chown www-data:www-data  /home/vagrant/fileStore
-
-mkdir /home/vagrant/logs
-chown www-data:www-data  /home/vagrant/logs
+mkdir /logs
+chown www-data:www-data  /logs
 
 cd /vagrant
-php /home/vagrant/bin/composer.phar install
+php /home/ubuntu/bin/composer.phar  install
 
 cp /vagrant/vagrant/frontendtests/apache.conf /etc/apache2/sites-enabled/
 cp /vagrant/vagrant/frontendtests/config.test.php /vagrant/config.test.php
@@ -50,15 +49,15 @@ chown www-data:www-data  /vagrant/cache/templates.web
 a2enmod rewrite
 /etc/init.d/apache2 restart
 
-mkdir /home/vagrant/selenium
-cd /home/vagrant/selenium
+mkdir /home/ubuntu/selenium
+cd /home/ubuntu/selenium
 wget -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
 
-cp /vagrant/vagrant/frontendtests/run /home/vagrant/run
-chmod a+x /home/vagrant/run
+cp /vagrant/vagrant/frontendtests/run /home/ubuntu/run
+chmod a+x /home/ubuntu/run
 
-cp /vagrant/vagrant/frontendtests/test /home/vagrant/test
-chmod a+x /home/vagrant/test
+cp /vagrant/vagrant/frontendtests/test /home/ubuntu/test
+chmod a+x /home/ubuntu/test
 
 gsettings set org.gnome.desktop.session idle-delay 0
 
