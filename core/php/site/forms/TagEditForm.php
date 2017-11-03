@@ -41,9 +41,4 @@ class TagEditForm extends AbstractType {
 		return 'AdminTagEditForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }

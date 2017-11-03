@@ -36,10 +36,5 @@ class VenueDeleteForm extends AbstractType{
 	public function getName() {
 		return 'VenueDeleteForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }

@@ -55,11 +55,6 @@ class UserChangePasswordForm  extends AbstractType {
 	public function getName() {
 		return 'UserChangePasswordForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }
 

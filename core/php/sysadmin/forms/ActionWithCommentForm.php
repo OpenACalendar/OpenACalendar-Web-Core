@@ -34,12 +34,7 @@ class ActionWithCommentForm extends AbstractType{
 	public function getName() {
 		return 'ActionWithCommentForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }
 
 

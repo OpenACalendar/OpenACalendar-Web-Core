@@ -115,7 +115,7 @@ class MediaController {
 			die("No"); // TODO
 		}
 
-		$form = $app['form.factory']->create(new MediaEditForm($app), $this->parameters['media']);
+		$form = $app['form.factory']->create(MediaEditForm::class, $this->parameters['media']);
 
 		if ('POST' == $request->getMethod()) {
 			$form->handleRequest($request);

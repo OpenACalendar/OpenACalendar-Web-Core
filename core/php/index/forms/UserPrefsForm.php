@@ -39,10 +39,5 @@ class UserPrefsForm  extends AbstractType {
 		return 'UserPrefsForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }
 

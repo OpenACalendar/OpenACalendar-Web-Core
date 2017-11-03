@@ -34,11 +34,6 @@ class UserGroupEditForm extends AbstractType {
 	public function getName() {
 		return 'UserGroupEditForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }
 

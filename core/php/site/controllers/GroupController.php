@@ -535,7 +535,7 @@ class GroupController {
 		$importurl->setSiteId($app['currentSite']->getId());
 		$importurl->setGroupId($this->parameters['group']->getId());
 		
-		$form = $app['form.factory']->create(new ImportNewForm($app, $app['currentSite'], $app['currentTimeZone']), $importurl);
+		$form = $app['form.factory']->create(ImportNewForm::class, $importurl, array('app'=>$app, 'site'=>$app['currentSite'], 'timeZoneName'=>$app['currentTimeZone']));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->handleRequest($request);

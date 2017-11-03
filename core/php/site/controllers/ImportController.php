@@ -118,7 +118,7 @@ class ImportController {
 			$app->abort(404, "Import does not exist.");
 		}
 		
-		$form = $app['form.factory']->create(new ImportEditForm($app, $app['currentSite']), $this->parameters['import']);
+		$form = $app['form.factory']->create(ImportEditForm::class, $this->parameters['import'], array('app'=>$app, 'site'=>$app['currentSite']));
 		
 		if ('POST' == $request->getMethod()) {
 			$form->handleRequest($request);

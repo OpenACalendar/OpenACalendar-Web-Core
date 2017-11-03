@@ -37,11 +37,6 @@ class UserProfileForm  extends AbstractType {
 	public function getName() {
 		return 'UserProfileForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }
 

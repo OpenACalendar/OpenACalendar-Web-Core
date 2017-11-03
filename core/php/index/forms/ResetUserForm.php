@@ -52,10 +52,5 @@ class ResetUserForm  extends AbstractType {
 		return 'ResetUserForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }
 

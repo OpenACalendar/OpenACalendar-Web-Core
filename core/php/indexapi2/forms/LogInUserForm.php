@@ -76,11 +76,7 @@ class LogInUserForm  extends AbstractType {
 	public function getName() {
 		return 'LogInUserForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
 	
 }
 

@@ -40,18 +40,29 @@ class NewEventWhatDetails extends BaseNewEvent
 		return true;
 	}
 
-	/** @var EventNewWhatDetailsForm  */
-	protected $ourForm;
+	protected $customFields;
 	protected $form;
 
-	function onThisStepSetUpPage() {
+    function onThisStepSetUpPage() {
 
-		$this->ourForm = new EventNewWhatDetailsForm($this->application, $this->draftEvent);
-		$this->form = $this->application['form.factory']->create($this->ourForm);
+        $this->customFields = array();
+        foreach($this->application['currentSite']->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
+            if ($customField->getIsActive()) {
+                $extension = $this->application['extensions']->getExtensionById($customField->getExtensionId());
+                if ($extension) {
+                    $fieldType = $extension->getEventCustomFieldByType($customField->getType());
+                    if ($fieldType) {
+                        $this->customFields[] = array('fieldType'=>$fieldType, 'customField'=>$customField);
+                    }
+                }
+            }
+        }
 
-		return array();
+        $this->form = $this->application['form.factory']->create(EventNewWhatDetailsForm::class, null, array('app'=>$this->application,'newEventDraftModel'=>$this->draftEvent,'customFields'=>$this->customFields));
 
-	}
+        return array();
+
+    }
 
 	function onThisStepProcessPage() {
 
@@ -72,9 +83,9 @@ class NewEventWhatDetails extends BaseNewEvent
 					$this->draftEvent->setDetailsValue('event.is_virtual', $this->form->get('is_virtual')->getData());
 				}
 
-				foreach($this->ourForm->getCustomFields() as $customField) {
+				foreach($this->customFields as $customFieldData) {
 
-					$this->draftEvent->setDetailsValue('event.custom.' . $customField->getKey(), $this->form->get('custom_'.$customField->getKey())->getData() );
+					$this->draftEvent->setDetailsValue('event.custom.' . $customFieldData['customField']->getKey(), $this->form->get('custom_'.$customFieldData['customField']->getKey())->getData() );
 				}
 
 				$this->isAllInformationGathered = true;
@@ -85,13 +96,18 @@ class NewEventWhatDetails extends BaseNewEvent
 		return false;
 	}
 
-	/** return array of variables to add to paramaters */
-	function onThisStepSetUpPageView() {
-		return array(
-			'form' => $this->form->createView(),
-			'formCustomFields' => $this->ourForm->getCustomFields(),
-		);
-	}
+    /** return array of variables to add to paramaters */
+    function onThisStepSetUpPageView() {
+
+        $customFieldsForForm = array();
+        foreach($this->customFields as $customFieldData) {
+            $customFieldsForForm[] = $customFieldData['customField'];
+        }
+        return array(
+            'form' => $this->form->createView(),
+            'formCustomFields' => $customFieldsForForm,
+        );
+    }
 
 
 	function onThisStepGetViewName() {

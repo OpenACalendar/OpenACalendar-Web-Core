@@ -436,24 +436,41 @@ class EventController {
 		if ($this->parameters['event']->getIsDeleted()) {
 			die("No"); // TODO
 		}
-		
-		$timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
-		if ($this->parameters['event']->getIsImported()) {
-			$ourForm = new EventImportedEditForm($app, $app['currentSite'], $timeZone);
-			$form = $app['form.factory']->create($ourForm, $this->parameters['event'], array());
-		} else {
-			$ourForm = new EventEditForm($app['currentSite'], $timeZone, $app);
-			$form = $app['form.factory']->create($ourForm, $this->parameters['event'], array('app'=>$app));
-		}
+
+        $customFields = $this->getCustomFields($app);
+        $timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
+        if ($this->parameters['event']->getIsImported()) {
+            $form = $app['form.factory']->create(
+                EventImportedEditForm::class,
+                $this->parameters['event'],
+                array(
+                    'app' => $app,
+                    'site' => $app['currentSite'],
+                    'timeZoneName' => $timeZone,
+                    'customFields' => $customFields,
+                )
+            );
+        } else {
+            $form = $app['form.factory']->create(
+                EventEditForm::class,
+                $this->parameters['event'],
+                array(
+                    'app' => $app,
+                    'site' => $app['currentSite'],
+                    'timeZoneName' => $timeZone,
+                    'customFields' => $customFields,
+                )
+            );
+        }
 
 		if ('POST' == $request->getMethod()) {
 			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
-				foreach($ourForm->getCustomFields() as $customField) {
-					$this->parameters['event']->setCustomField(  $customField, $form->get('custom_'.$customField->getKey())->getData() );
-				}
+                foreach($customFields as $customFieldData) {
+                    $this->parameters['event']->setCustomField(  $customFieldData['customField'], $form->get('custom_'.$customFieldData['customField']->getKey())->getData() );
+                }
 
 				$eventEditMetaData = new EventEditMetaDataModel();
 				$eventEditMetaData->setUserAccount($app['currentUser']);
@@ -475,12 +492,12 @@ class EventController {
 			}
 		}
 
-		$this->parameters['form'] = $form->createView();
-		if ($this->parameters['event']->getIsImported()) {
-			$this->parameters['formCustomFields'] = array();
-		} else {
-			$this->parameters['formCustomFields'] = $ourForm->getCustomFields();
-		}
+        $this->parameters['form'] = $form->createView();
+        $customFieldsForForm = array();
+        foreach($customFields as $customFieldData) {
+            $customFieldsForForm[] = $customFieldData['customField'];
+        }
+        $this->parameters['formCustomFields'] = $customFieldsForForm;
 
 		if ($this->parameters['event']->getIsImported()) {
 			return $app['twig']->render('site/event/edit.details.imported.html.twig', $this->parameters);
@@ -509,13 +526,18 @@ class EventController {
 
 		$data = array();
 
-		$timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
-		$form = $app['form.factory']->create(
-			new EventEditForm($app['currentSite'], $timeZone, $app),
-			$this->parameters['event'],
-			array('app' => $app)
-		);
-		$form->handleRequest($request);
+        $timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
+        $form = $app['form.factory']->create(
+            EventEditForm::class,
+            $this->parameters['event'],
+            array(
+                'app' => $app,
+                'site' => $app['currentSite'],
+                'timeZoneName' => $timeZone,
+                'customFields' => $this->getCustomFields($app),
+            )
+        );
+        $form->handleRequest($request);
 
 		if ($this->parameters['event']->getStartAtInUTC()->getTimestamp() > $this->parameters['event']->getEndAtInUTC()->getTimestamp()) {
 			$data['readableStartEndRange'] = "(The start is after the end)";
@@ -1648,20 +1670,25 @@ class EventController {
 		$newEventState = clone $this->parameters['event'];
 		$newEventState->setFromHistory($this->parameters['eventHistory']);
 
-        $ourForm = new EventEditForm($app['currentSite'],$app['currentTimeZone'], $app);
+        $customFields = $this->getCustomFields($app);
         $form = $app['form.factory']->create(
-			$ourForm,
-			$newEventState,
-			array('app' => $app)
-		);
+            EventEditForm::class,
+            $newEventState,
+            array(
+                'app' => $app,
+                'site' => $app['currentSite'],
+                'timeZoneName' => $app['currentTimeZone'],
+                'customFields' => $customFields,
+            )
+        );
 		
 		if ('POST' == $request->getMethod()) {
 			$form->handleRequest($request);
 
 			if ($form->isValid()) {
 
-                foreach($ourForm->getCustomFields() as $customField) {
-                    $newEventState->setCustomField(  $customField, $form->get('custom_'.$customField->getKey())->getData() );
+                foreach($customFields as $customFieldData) {
+                    $newEventState->setCustomField(  $customFieldData['customField'], $form->get('custom_'.$customFieldData['customField']->getKey())->getData() );
                 }
 
 				// Because to undelete or uncancel something, you rollback to a valid state, when you rollback you must set these.
@@ -1970,8 +1997,23 @@ class EventController {
 		return $app->redirect($newURL);
 
 	}
-	
-	
+
+    protected function getCustomFields(Application $app) {
+        $customFields = array();
+        foreach($app['currentSite']->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
+            if ($customField->getIsActive()) {
+                $extension = $app['extensions']->getExtensionById($customField->getExtensionId());
+                if ($extension) {
+                    $fieldType = $extension->getEventCustomFieldByType($customField->getType());
+                    if ($fieldType) {
+                        $customFields[] = array('fieldType'=>$fieldType, 'customField'=>$customField);
+                    }
+                }
+            }
+        }
+        return $customFields;
+    }
+
 }
 
 

@@ -40,12 +40,7 @@ class AreaNewInCountryForm extends AbstractType {
 	public function getName() {
 		return 'AreaNewInCountryForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }
 
 

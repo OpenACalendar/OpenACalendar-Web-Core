@@ -42,9 +42,4 @@ class CuratedListEditForm extends AbstractType{
 		return 'CuratedListEditForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }

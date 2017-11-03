@@ -51,24 +51,29 @@ class NewEventWhenDetails extends BaseNewEvent
 		return true;
 	}
 
-	protected $ourForm;
+	protected $defaultCountry;
 	protected $form;
 
-	function onThisStepSetUpPage() {
+    function onThisStepSetUpPage() {
 
-		if ($this->getCurrentMode() == $this->MODE_FREE) {
-			// nothing to do
-		} else {
-			// TODO use $request NOT POST
-			$timezone = isset($_POST['EventNewWhenDetailsForm']) && isset($_POST['EventNewWhenDetailsForm']['timezone']) ? $_POST['EventNewWhenDetailsForm']['timezone'] : $this->application['currentTimeZone'];
+        if ($this->getCurrentMode() == $this->MODE_FREE) {
+            // nothing to do
+        } else {
+            // TODO use $request NOT POST
+            $timezone = isset($_POST['EventNewWhenDetailsForm']) && isset($_POST['EventNewWhenDetailsForm']['timezone']) ? $_POST['EventNewWhenDetailsForm']['timezone'] : $this->application['currentTimeZone'];
 
+            $this->defaultCountry = $this->getDefaultCountry($this->application);
 
-			$this->ourForm = new EventNewWhenDetailsForm($this->getDefaultCountry($this->application), $timezone, $this->application, $this->draftEvent);
-			$this->form = $this->application['form.factory']->create($this->ourForm);
-		}
-		return array();
+            $this->form = $this->application['form.factory']->create(EventNewWhenDetailsForm::class, null, array(
+                'timeZoneName'=>$timezone,
+                'countryModel'=>$this->defaultCountry,
+                'newEventDraftModel'=>$this->draftEvent,
+                'app'=> $this->application
+            ));
+        }
+        return array();
 
-	}
+    }
 
 
     /**
@@ -165,7 +170,7 @@ class NewEventWhenDetails extends BaseNewEvent
 		} else {
 			return array(
 				'form' => $this->form->createView(),
-				'defaultCountry' => $this->ourForm->getDefaultCountry(),
+				'defaultCountry' => $this->defaultCountry,
 			);
 		}
 	}

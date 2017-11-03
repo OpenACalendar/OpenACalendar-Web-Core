@@ -40,10 +40,5 @@ class TagNewForm extends AbstractType{
 	public function getName() {
 		return 'AdminTagNewForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }

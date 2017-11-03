@@ -36,10 +36,5 @@ class ForgotUserForm  extends AbstractType {
 		return 'ForgotUserForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }
 

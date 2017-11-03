@@ -53,10 +53,5 @@ class AreaNewVenueInAreaForm extends AbstractType{
 	public function getName() {
 		return 'AreaNewVenueInAreaForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
 }

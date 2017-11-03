@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 /**
@@ -22,13 +23,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
  */
 class GroupNewForm extends AbstractType{
 
-	protected $defaultTitle;
-
-	function __construct($defaultTitle=null)
-	{
-		$this->defaultTitle = $defaultTitle;
-	}
-
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
@@ -37,7 +31,7 @@ class GroupNewForm extends AbstractType{
 			'required'=>true, 
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
 			'attr' => array('autofocus' => 'autofocus'),
-			'data'=>$this->defaultTitle,
+			'data'=>$options['defaultTitle'],
 
 		));
 		
@@ -76,11 +70,14 @@ class GroupNewForm extends AbstractType{
 	public function getName() {
 		return 'GroupNewForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
+
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'defaultTitle' => null,
+        ));
+    }
 	
 }
 

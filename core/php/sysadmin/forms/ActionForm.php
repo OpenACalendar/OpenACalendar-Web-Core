@@ -30,9 +30,4 @@ class ActionForm extends AbstractType{
 		return 'AdminEditorsAddForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }

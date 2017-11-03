@@ -13,6 +13,8 @@ use models\SiteModel;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 
 /**
@@ -24,19 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
  * @author James Baster <james@jarofgreen.co.uk>
  */
 class ImportNewForm extends AbstractType{
-	
-	protected $timeZoneName;
-	/** @var SiteModel **/
-	protected $site;
 
-    protected $app;
-
-    function __construct(Application $application, SiteModel $site, $timeZoneName) {
-        $this->app = $application;
-		$this->site = $site;
-		$this->timeZoneName = $timeZoneName;
-	}
-	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
 		$builder->add('url', UrlType::class, array(
@@ -55,13 +45,13 @@ class ImportNewForm extends AbstractType{
 		);
 		 * **/
 			
-		$crb = new CountryRepositoryBuilder($this->app);
-		$crb->setSiteIn($this->site);
+		$crb = new CountryRepositoryBuilder($options['app']);
+		$crb->setSiteIn($options['site']);
 		$countries = array();
 		$defaultCountry = null;
 		foreach($crb->fetchAll() as $country) {
 			$countries[$country->getTitle()] = $country->getId();
-			if ($defaultCountry == null && in_array($this->timeZoneName, $country->getTimezonesAsList())) {
+			if ($defaultCountry == null && in_array($options['timeZoneName'], $country->getTimezonesAsList())) {
 				$defaultCountry = $country->getId();
 			}	
 		}
@@ -97,11 +87,17 @@ class ImportNewForm extends AbstractType{
 	public function getName() {
 		return 'ImportNewForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'timeZoneName' => null,
+            'site' => null,
+            'app' => null,
+        ));
+    }
+
+
+
 }
 

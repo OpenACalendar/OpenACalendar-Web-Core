@@ -13,6 +13,8 @@ use models\SiteModel;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 
 /**
@@ -25,16 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
  */
 class ImportEditForm extends AbstractType{
 
-    protected $app;
 
-    /** @var SiteModel **/
-	protected $site;
-	
-	function __construct(Application $application, SiteModel $site) {
-        $this->app = $application;
-		$this->site = $site;
-	}
-	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
 		$builder->add('title', TextType::class, array(
@@ -53,8 +46,8 @@ class ImportEditForm extends AbstractType{
 		);
 		 * **/
 
-		$crb = new CountryRepositoryBuilder($this->app);
-		$crb->setSiteIn($this->site);
+		$crb = new CountryRepositoryBuilder($options['app']);
+		$crb->setSiteIn($options['site']);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {
 			$countries[$country->getTitle()] = $country->getId();
@@ -72,12 +65,15 @@ class ImportEditForm extends AbstractType{
 	public function getName() {
 		return 'ImportEditForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'site' => null,
+            'app' => null,
+        ));
+    }
+
 }
 
 

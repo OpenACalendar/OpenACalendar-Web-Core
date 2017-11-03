@@ -21,18 +21,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
  */
 class MediaEditForm extends AbstractType{
 
-	protected $defaultTitle;
-
-	function __construct($defaultTitle)
-	{
-		$this->defaultTitle = $defaultTitle;
-	}
-
-
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-
-		
 		$builder->add('title', TextType::class, array(
 			'label'=>'Title',
 			'required'=>false, 
@@ -66,11 +56,6 @@ class MediaEditForm extends AbstractType{
 	
 	public function getName() {
 		return 'MediaEditForm';
-	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
 	}
 	
 }

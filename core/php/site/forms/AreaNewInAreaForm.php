@@ -41,11 +41,6 @@ class AreaNewInAreaForm extends AbstractType {
 		return 'AreaNewInAreaForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }
 
 

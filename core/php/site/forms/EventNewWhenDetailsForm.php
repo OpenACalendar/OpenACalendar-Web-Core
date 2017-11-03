@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  *
@@ -31,38 +32,13 @@ class EventNewWhenDetailsForm extends AbstractType {
     /** @var Application */
     protected $app;
 
-	protected $timeZoneName;
-
-	/** @var SiteModel **/
-	protected $site;
-
-	protected $formWidgetTimeMinutesMultiples;
-
-	/** @var  ExtensionManager */
-	protected $extensionManager;
-
-
-	/** @var  NewEventDraftModel */
-	protected $eventDraft;
-
-	protected $defaultCountryModel;
-
-	function __construct(CountryModel $countryModel, $timeZoneName, Application $application, NewEventDraftModel $newEventDraftModel ) {
-		$this->site = $application['currentSite'];
-        $this->defaultCountryModel = $countryModel;
-		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
-		$this->timeZoneName = $timeZoneName;
-		$this->extensionManager = $application['extensions'];
-		$this->eventDraft = $newEventDraftModel;
-        $this->app = $application;
-	}
-
-	protected $customFields;
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$crb = new CountryRepositoryBuilder($this->app);
-		$crb->setSiteIn($this->site);
+        $this->app = $options['app'];
+
+        $crb = new CountryRepositoryBuilder($options['app']);
+		$crb->setSiteIn($options['app']['currentSite']);
 		$countries = $crb->fetchAll();
 		if (count($countries) > 1) {
 			$countriesForSelect = array();
@@ -73,20 +49,20 @@ class EventNewWhenDetailsForm extends AbstractType {
 				'label'=>'Country',
 				'choices' => $countriesForSelect,
 				'required' => true,
-				'data' => $this->defaultCountryModel->getId(),
+				'data' => $options['countryModel']->getId(),
                 'choices_as_values' => true,
 			));
 		} else if (count($countries) == 1) {
 			$this->defaultCountry = $countries[0];
 			$builder->add('country_id', HiddenType::class, array(
-				'data' => $this->defaultCountryModel->getId(),
+				'data' => $options['countryModel']->getId(),
 			));
 		}
 
 
 		$timezones = array();
 		// Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
-		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
+		foreach($options['app']['currentSite']->getCachedTimezonesAsList() as $timezone) {
 			$timezones[$timezone] = $timezone;
 		}
 		if (count($timezones) != 1) {
@@ -106,12 +82,12 @@ class EventNewWhenDetailsForm extends AbstractType {
 		$years = array( date('Y'), date('Y')+1 );
 
 		$data = null;
-		if ($this->eventDraft->hasDetailsValue('event.start_at')) {
-			$data = $this->eventDraft->getDetailsValueAsDateTime('event.start_at');
-		} else if ($this->eventDraft->hasDetailsValue('event.start_end_freetext.start')) {
-			$data = $this->eventDraft->getDetailsValueAsDateTime('event.start_end_freetext.start');
-		} else if ($this->eventDraft->hasDetailsValue('incoming.event.start_at')) {
-			$data = $this->eventDraft->getDetailsValueAsDateTime('incoming.event.start_at');
+		if ($options['newEventDraftModel']->hasDetailsValue('event.start_at')) {
+			$data = $options['newEventDraftModel']->getDetailsValueAsDateTime('event.start_at');
+		} else if ($options['newEventDraftModel']->hasDetailsValue('event.start_end_freetext.start')) {
+			$data = $options['newEventDraftModel']->getDetailsValueAsDateTime('event.start_end_freetext.start');
+		} else if ($options['newEventDraftModel']->hasDetailsValue('incoming.event.start_at')) {
+			$data = $options['newEventDraftModel']->getDetailsValueAsDateTime('incoming.event.start_at');
 		}
 
 		$startOptions = array(
@@ -119,27 +95,27 @@ class EventNewWhenDetailsForm extends AbstractType {
 			'date_widget'=> 'single_text',
 			'date_format'=>'d/M/y',
 			'model_timezone' => 'UTC',
-			'view_timezone' => $this->timeZoneName,
+			'view_timezone' => $options['timeZoneName'],
 			'years' => $years,
 			'attr' => array('class' => 'dateInput'),
 			'required'=>true,
 			'data' => $data,
 		);
-		if ($this->formWidgetTimeMinutesMultiples > 1) {
+		if ($options['app']['config']->formWidgetTimeMinutesMultiples > 1) {
 			$startOptions['minutes'] = array();
-			for ($i = 0; $i <= 59; $i=$i+$this->formWidgetTimeMinutesMultiples) {
+			for ($i = 0; $i <= 59; $i=$i+$options['app']['config']->formWidgetTimeMinutesMultiples) {
 				$startOptions['minutes'][] = $i;
 			}
 		}
 		$builder->add('start_at', DateTimeType::class ,$startOptions);
 
 		$data = null;
-		if ($this->eventDraft->hasDetailsValue('event.end_at')) {
-			$data = $this->eventDraft->getDetailsValueAsDateTime('event.end_at');
-		} else if ($this->eventDraft->hasDetailsValue('event.start_end_freetext.end')) {
-			$data = $this->eventDraft->getDetailsValueAsDateTime('event.start_end_freetext.end');
-		} else if ($this->eventDraft->hasDetailsValue('incoming.event.end_at')) {
-			$data = $this->eventDraft->getDetailsValueAsDateTime('incoming.event.end_at');
+		if ($options['newEventDraftModel']->hasDetailsValue('event.end_at')) {
+			$data = $options['newEventDraftModel']->getDetailsValueAsDateTime('event.end_at');
+		} else if ($options['newEventDraftModel']->hasDetailsValue('event.start_end_freetext.end')) {
+			$data = $options['newEventDraftModel']->getDetailsValueAsDateTime('event.start_end_freetext.end');
+		} else if ($options['newEventDraftModel']->hasDetailsValue('incoming.event.end_at')) {
+			$data = $options['newEventDraftModel']->getDetailsValueAsDateTime('incoming.event.end_at');
 		}
 
 		$endOptions = array(
@@ -147,15 +123,15 @@ class EventNewWhenDetailsForm extends AbstractType {
 			'date_widget'=> 'single_text',
 			'date_format'=>'d/M/y',
 			'model_timezone' => 'UTC',
-			'view_timezone' =>  $this->timeZoneName,
+			'view_timezone' =>  $options['timeZoneName'],
 			'years' => $years,
 			'attr' => array('class' => 'dateInput'),
 			'required'=>true,
 			'data' => $data,
 		);
-		if ($this->formWidgetTimeMinutesMultiples > 1) {
+		if ($options['app']['config']->formWidgetTimeMinutesMultiples > 1) {
 			$endOptions['minutes'] = array();
-			for ($i = 0; $i <= 59; $i=$i+$this->formWidgetTimeMinutesMultiples) {
+			for ($i = 0; $i <= 59; $i=$i+$options['app']['config']->formWidgetTimeMinutesMultiples) {
 				$endOptions['minutes'][] = $i;
 			}
 		}
@@ -207,28 +183,15 @@ class EventNewWhenDetailsForm extends AbstractType {
 		return 'EventNewWhenDetailsForm';
 	}
 
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getCustomFields()
-	{
-		return $this->customFields;
-	}
-
-	/**
-	 * @return CountryModel
-	 */
-	public function getDefaultCountry()
-	{
-		return $this->defaultCountryModel;
-	}
-
-
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'app' => null,
+            'newEventDraftModel' => null,
+            'timeZoneName' => null,
+            'countryModel' => null,
+        ));
+    }
 
 }
 

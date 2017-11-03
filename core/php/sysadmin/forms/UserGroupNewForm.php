@@ -41,9 +41,4 @@ class UserGroupNewForm extends AbstractType{
 		return 'UserGroupNewForm';
 	}
 
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-
 }

@@ -41,9 +41,4 @@ class CuratedListNewForm extends AbstractType{
 		return 'CuratedListNewForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }

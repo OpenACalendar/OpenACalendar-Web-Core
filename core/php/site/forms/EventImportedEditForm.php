@@ -14,6 +14,7 @@ use repositories\builders\CountryRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 /**
@@ -27,31 +28,15 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 class EventImportedEditForm extends AbstractType{
 
 
-    protected $app;
-
-	protected $timeZoneName;
-	/** @var SiteModel **/
-	protected $site;
-
-    protected $siteFeaturePhysicalEvents = false;
-    protected $siteFeatureVirtualEvents = false;
-
-    function __construct(Application $application, SiteModel $site, $timeZoneName) {
-        $this->app = $application;
-		$this->site = $site;
-		$this->timeZoneName = $timeZoneName;
-        $siteFeatureRepo = new SiteFeatureRepository($application);
-        $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
-        $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
-	}
-
-
-    protected $customFields;
-
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$crb = new CountryRepositoryBuilder($this->app);
-		$crb->setSiteIn($this->site);
+        $siteFeatureRepo = new SiteFeatureRepository($options['app']);
+        $siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($options['site'],'org.openacalendar','PhysicalEvents');
+        $siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($options['site'],'org.openacalendar','VirtualEvents');
+
+
+        $crb = new CountryRepositoryBuilder($options['app']);
+        $crb->setSiteIn($options['site']);
 		$countries = array();
 		foreach($crb->fetchAll() as $country) {
 			$countries[$country->getTitle()] = $country->getId();
@@ -66,7 +51,7 @@ class EventImportedEditForm extends AbstractType{
 		
 		$timezones = array();
 		// Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
-		foreach($this->site->getCachedTimezonesAsList() as $timezone) {
+		foreach($options['site']->getCachedTimezonesAsList() as $timezone) {
 			$timezones[$timezone] = $timezone;
 		}		// TODO if current timezone not in list add it now
 		$builder->add('timezone', ChoiceType::class, array(
@@ -77,10 +62,10 @@ class EventImportedEditForm extends AbstractType{
 		));
 			
 				
-		if ($this->siteFeatureVirtualEvents) {
+		if ($siteFeatureVirtualEvents) {
 			
 			// if both are an option, user must check which one.
-			if ($this->siteFeaturePhysicalEvents) {
+			if ($siteFeaturePhysicalEvents) {
 			
 				$builder->add("is_virtual",
                     CheckboxType::class,
@@ -94,10 +79,10 @@ class EventImportedEditForm extends AbstractType{
 		}
 
 		
-		if ($this->siteFeaturePhysicalEvents) {
+		if ($siteFeaturePhysicalEvents) {
 			
 			// if both are an option, user must check which one.
-			if ($this->siteFeatureVirtualEvents) {
+			if ($siteFeatureVirtualEvents) {
 				
 				$builder->add("is_physical",
                     CheckboxType::class,
@@ -112,22 +97,11 @@ class EventImportedEditForm extends AbstractType{
 
 		}
 
-
-        $this->customFields = array();
-        foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
-            if ($customField->getIsActive()) {
-                $extension = $this->app['extensions']->getExtensionById($customField->getExtensionId());
-                if ($extension) {
-                    $fieldType = $extension->getEventCustomFieldByType($customField->getType());
-                    if ($fieldType) {
-                        $this->customFields[] = $customField;
-                        $options = $fieldType->getSymfonyFormOptions($customField);
-                        $options['mapped'] = false;
-                        $options['data'] = $builder->getData()->getCustomField($customField);
-                        $builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
-                    }
-                }
-            }
+        foreach($options['customFields'] as $customFieldData) {
+            $fieldOptions = $customFieldData['fieldType']->getSymfonyFormOptions($customFieldData['customField']);
+            $fieldOptions['mapped'] = false;
+            $fieldOptions['data'] = $builder->getData()->getCustomField($customFieldData['customField']);
+            $builder->add('custom_' . $customFieldData['customField']->getKey(), $customFieldData['fieldType']->getSymfonyFormType($customFieldData['customField']), $fieldOptions);
         }
 		
 	}
@@ -137,18 +111,15 @@ class EventImportedEditForm extends AbstractType{
 		// We want it to imitate the normal edit form so that all JS that relies on the ID continues to work.
 		return 'EventEditForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
 
-    /**
-     * @return mixed
-     */
-    public function getCustomFields()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return $this->customFields;
+        $resolver->setDefaults(array(
+            'app' => null,
+            'site' => null,
+            'timeZoneName' => null,
+            'customFields'=> null,
+        ));
     }
 
 }

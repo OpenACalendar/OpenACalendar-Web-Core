@@ -18,6 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+
 /**
  *
  * @package Core
@@ -28,95 +31,61 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
  */
 class EventNewWhatDetailsForm extends AbstractType {
 
-	/** @var SiteModel **/
-	protected $site;
-
-    protected $siteFeaturePhysicalEvents = false;
-    protected $siteFeatureVirtualEvents = false;
-
-    protected $formWidgetTimeMinutesMultiples;
-
-	/** @var  ExtensionManager */
-	protected $extensionManager;
-
-	/** @var  NewEventDraftModel */
-	protected $eventDraft;
-
-	function __construct(Application $application, NewEventDraftModel $newEventDraftModel) {
-		$this->site = $application['currentSite'];
-		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
-		$this->extensionManager = $application['extensions'];
-		$this->eventDraft = $newEventDraftModel;
-        $siteFeatureRepo = new SiteFeatureRepository($application);
-        $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
-        $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
-		// TODO $this->fieldIsVirtualDefault = from config!
-		// TODO $this->fieldIsPhysicalDefault  = from config!
-	}
-
-	protected $fieldIsVirtualDefault = false;
-
-	protected $fieldIsPhysicalDefault = true;
-
-	protected $customFields;
-
 	public function buildForm(FormBuilderInterface $builder, array $options) {
+
+
+
+        $siteFeatureRepo = new SiteFeatureRepository($options['app']);
+        $siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($options['app']['currentSite'],'org.openacalendar','PhysicalEvents');
+        $siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($options['app']['currentSite'],'org.openacalendar','VirtualEvents');
+        // TODO next two should come from config!
+        $fieldIsVirtualDefault = false;
+        $fieldIsPhysicalDefault  = true;
 
 		$builder->add('summary', TextType::class, array(
 			'label'=>'Summary',
 			'required'=>true, // TODO THIS IS NOT RESPCTED
 			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
 			'attr' => array('autofocus' => 'autofocus'),
-			'data' => $this->eventDraft->getDetailsValue('event.summary'),
+			'data' => $options['newEventDraftModel']->getDetailsValue('event.summary'),
 		));
 		
 		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false,
-			'data' => $this->eventDraft->getDetailsValue('event.description'),
+			'data' => $options['newEventDraftModel']->getDetailsValue('event.description'),
 		));
 		
 		
 		$builder->add('url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Information Web Page URL',
 			'required'=>false,
-			'data' => $this->eventDraft->getDetailsValue('event.url'),
+			'data' => $options['newEventDraftModel']->getDetailsValue('event.url'),
 		));
 		
 		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
 			'label'=>'Tickets Web Page URL',
 			'required'=>false,
-			'data' => $this->eventDraft->getDetailsValue('event.ticket_url'),
+			'data' => $options['newEventDraftModel']->getDetailsValue('event.ticket_url'),
 		));
 
+        foreach($options['customFields'] as $customFieldData) {
+            $fieldOptions = $customFieldData['fieldType']->getSymfonyFormOptions($customFieldData['customField']);
+            $fieldOptions['data'] = $options['newEventDraftModel']->getDetailsValue('event.custom.'.$customFieldData['customField']->getKey());
+            $builder->add('custom_' . $customFieldData['customField']->getKey(), $customFieldData['fieldType']->getSymfonyFormType($customFieldData['customField']), $fieldOptions);
+        }
 
-		$this->customFields = array();
-		foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
-			if ($customField->getIsActive()) {
-				$extension = $this->extensionManager->getExtensionById($customField->getExtensionId());
-				if ($extension) {
-					$fieldType = $extension->getEventCustomFieldByType($customField->getType());
-					if ($fieldType) {
-						$this->customFields[] = $customField;
-						$options = $fieldType->getSymfonyFormOptions($customField);
-						$options['data'] = $this->eventDraft->getDetailsValue('event.custom.'.$customField->getKey());
-						$builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
-					}
-				}
-			}
-		}
-
-		if ($this->siteFeatureVirtualEvents) {
+		if ($siteFeatureVirtualEvents) {
 
 			//  if both are an option, user must check which one.
-			if ($this->siteFeaturePhysicalEvents) {
+			if ($siteFeaturePhysicalEvents) {
 
 				$builder->add("is_virtual",
                     CheckboxType::class,
 					array(
 						'required'=>false,
 						'label'=>'Is event accessible online?',
-						'data'=>$this->eventDraft->hasDetailsValue('event.is_virtual') ?  $this->eventDraft->getDetailsValue('event.is_virtual') : $this->fieldIsVirtualDefault,
+						'data'=>$options['newEventDraftModel']->hasDetailsValue('event.is_virtual') ?  $options['newEventDraftModel']->getDetailsValue('event.is_virtual') : $fieldIsVirtualDefault,
 					)
 				);
 			} else {
@@ -128,17 +97,17 @@ class EventNewWhatDetailsForm extends AbstractType {
 
 		}
 
-		if ($this->siteFeaturePhysicalEvents) {
+		if ($siteFeaturePhysicalEvents) {
 
 			//  if both are an option, user must check which one.
-			if ($this->siteFeatureVirtualEvents) {
+			if ($siteFeatureVirtualEvents) {
 
 				$builder->add("is_physical",
                     CheckboxType::class,
 					array(
 						'required'=>false,
 						'label'=>'Does the event happen at a place?',
-						'data'=>$this->eventDraft->hasDetailsValue('event.is_physical') ?  $this->eventDraft->getDetailsValue('event.is_physical') : $this->fieldIsPhysicalDefault,
+						'data'=>$options['newEventDraftModel']->hasDetailsValue('event.is_physical') ?  $options['newEventDraftModel']->getDetailsValue('event.is_physical') : $fieldIsPhysicalDefault,
 					)
 				);
 
@@ -178,19 +147,17 @@ class EventNewWhatDetailsForm extends AbstractType {
 	public function getName() {
 		return 'EventNewWhatDetailsForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getCustomFields()
-	{
-		return $this->customFields;
-	}
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'app' => null,
+            'newEventDraftModel'=>null,
+            'customFields'=>null,
+        ));
+    }
+
 
 }
 

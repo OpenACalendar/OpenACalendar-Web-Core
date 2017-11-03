@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 /**
@@ -34,51 +35,31 @@ class EventEditForm extends \BaseFormWithEditComment {
     /** @var Application */
     protected $app;
 
-	protected $timeZoneName;
-
-	/** @var SiteModel **/
-	protected $site;
-
-    protected $siteFeaturePhysicalEvents = false;
-    protected $siteFeatureVirtualEvents = false;
-
-	protected $formWidgetTimeMinutesMultiples;
-
-	/** @var  ExtensionManager */
-	protected $extensionManager;
-
     protected $countries = array();
     protected $timezones = array();
 
-	function __construct(SiteModel $site, $timeZoneName, Application $application) {
-		$this->site = $site;
-		$this->timeZoneName = $timeZoneName;
-		$this->formWidgetTimeMinutesMultiples = $application['config']->formWidgetTimeMinutesMultiples;
-		$this->extensionManager = $application['extensions'];
-        $this->app = $application;
-        $siteFeatureRepo = new SiteFeatureRepository($application);
-        $this->siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','PhysicalEvents');
-        $this->siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($this->site,'org.openacalendar','VirtualEvents');
+    public function buildForm(FormBuilderInterface $builder, array $options) {
+        parent::buildForm($builder, $options);
+
+        $this->app = $options['app'];
+        $siteFeatureRepo = new SiteFeatureRepository($this->app);
+        $siteFeaturePhysicalEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($options['site'],'org.openacalendar','PhysicalEvents');
+        $siteFeatureVirtualEvents = $siteFeatureRepo->doesSiteHaveFeatureByExtensionAndId($options['site'],'org.openacalendar','VirtualEvents');
 
         $crb = new CountryRepositoryBuilder($this->app);
-        $crb->setSiteIn($this->site);
+        $crb->setSiteIn($options['site']);
         foreach($crb->fetchAll() as $country) {
             $this->countries[$country->getTitle()] = $country->getId();
         }
         // TODO if current country not in list add it now
 
         // Must explicetly set name as key otherwise Symfony forms puts an ID in, and that's no good for processing outside form
-        foreach($this->site->getCachedTimezonesAsList() as $timezone) {
+        foreach($options['site']->getCachedTimezonesAsList() as $timezone) {
             $this->timezones[$timezone] = $timezone;
         }
         // TODO if current timezone not in list add it now
-	}
-
-	protected $customFields;
 
 
-	public function buildForm(FormBuilderInterface $builder, array $options) {
-		parent::buildForm($builder, $options);
 
 
 		$builder->add('summary', TextType::class, array(
@@ -137,10 +118,10 @@ class EventEditForm extends \BaseFormWithEditComment {
 		}
 
 
-		if ($this->siteFeatureVirtualEvents) {
+		if ($siteFeatureVirtualEvents) {
 
 			//  if both are an option, user must check which one.
-			if ($this->siteFeaturePhysicalEvents) {
+			if ($siteFeaturePhysicalEvents) {
 
 				$builder->add("is_virtual",
                     CheckboxType::class,
@@ -154,10 +135,10 @@ class EventEditForm extends \BaseFormWithEditComment {
 		}
 
 
-		if ($this->siteFeaturePhysicalEvents) {
+		if ($siteFeaturePhysicalEvents) {
 
 			// if both are an option, user must check which one.
-			if ($this->siteFeatureVirtualEvents) {
+			if ($siteFeatureVirtualEvents) {
 
 				$builder->add("is_physical",
                     CheckboxType::class,
@@ -178,14 +159,14 @@ class EventEditForm extends \BaseFormWithEditComment {
 			'date_widget'=> 'single_text',
 			'date_format'=>'d/M/y',
 			'model_timezone' => 'UTC',
-			'view_timezone' => $this->timeZoneName,
+			'view_timezone' => $options['timeZoneName'],
 			'years' => $years,
 			'attr' => array('class' => 'dateInput'),
 			'required'=>true
 		);
-		if ($this->formWidgetTimeMinutesMultiples > 1) {
+		if ($this->app['config']->formWidgetTimeMinutesMultiples > 1) {
 			$startOptions['minutes'] = array();
-			for ($i = 0; $i <= 59; $i=$i+$this->formWidgetTimeMinutesMultiples) {
+			for ($i = 0; $i <= 59; $i=$i+$application['config']->formWidgetTimeMinutesMultiples) {
 				$startOptions['minutes'][] = $i;
 			}
 		}
@@ -196,35 +177,25 @@ class EventEditForm extends \BaseFormWithEditComment {
 			'date_widget'=> 'single_text',
 			'date_format'=>'d/M/y',
 			'model_timezone' => 'UTC',
-			'view_timezone' => $this->timeZoneName,
+			'view_timezone' => $options['timeZoneName'],
 			'years' => $years,
 			'attr' => array('class' => 'dateInput'),
 			'required'=>true
 		);
-		if ($this->formWidgetTimeMinutesMultiples > 1) {
+		if ($this->app['config']->formWidgetTimeMinutesMultiples > 1) {
 			$endOptions['minutes'] = array();
-			for ($i = 0; $i <= 59; $i=$i+$this->formWidgetTimeMinutesMultiples) {
+			for ($i = 0; $i <= 59; $i=$i+$application['config']->formWidgetTimeMinutesMultiples) {
 				$endOptions['minutes'][] = $i;
 			}
 		}
 		$builder->add('end_at', DateTimeType::class , $endOptions);
-
-		$this->customFields = array();
-		foreach($this->site->getCachedEventCustomFieldDefinitionsAsModels() as $customField) {
-			if ($customField->getIsActive()) {
-				$extension = $this->extensionManager->getExtensionById($customField->getExtensionId());
-				if ($extension) {
-					$fieldType = $extension->getEventCustomFieldByType($customField->getType());
-					if ($fieldType) {
-						$this->customFields[] = $customField;
-						$options = $fieldType->getSymfonyFormOptions($customField);
-						$options['mapped'] = false;
-						$options['data'] = $builder->getData()->getCustomField($customField);
-						$builder->add('custom_' . $customField->getKey(), $fieldType->getSymfonyFormType($customField), $options);
-					}
-				}
-			}
-		}
+        
+        foreach($options['customFields'] as $customFieldData) {
+            $fieldOptions = $customFieldData['fieldType']->getSymfonyFormOptions($customFieldData['customField']);
+            $fieldOptions['mapped'] = false;
+            $fieldOptions['data'] = $builder->getData()->getCustomField($customFieldData['customField']);
+            $builder->add('custom_' . $customFieldData['customField']->getKey(), $customFieldData['fieldType']->getSymfonyFormType($customFieldData['customField']), $fieldOptions);
+        }
 
 		/** @var \closure $myExtraFieldValidator **/
 		$myExtraFieldValidator = function(FormEvent $event){
@@ -294,20 +265,16 @@ class EventEditForm extends \BaseFormWithEditComment {
 	public function getName() {
 		return 'EventEditForm';
 	}
-	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getCustomFields()
-	{
-		return $this->customFields;
-	}
-
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'app' => null,
+            'site' => null,
+            'timeZoneName' => null,
+            'customFields' => null,
+        ));
+    }
 
 	
 }

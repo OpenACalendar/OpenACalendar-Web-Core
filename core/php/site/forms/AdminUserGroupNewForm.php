@@ -41,9 +41,4 @@ class AdminUserGroupNewForm extends AbstractType{
 		return 'AdminUserGroupNewForm';
 	}
 
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-
 }

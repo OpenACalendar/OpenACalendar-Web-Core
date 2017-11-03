@@ -34,10 +34,5 @@ class NewAPI2ApplicationForm  extends AbstractType {
 		return 'NewAPI2ApplicationForm';
 	}
 	
-	public function getDefaultOptions(array $options) {
-		return array(
-		);
-	}
-	
 }
 
