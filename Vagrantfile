@@ -32,10 +32,10 @@ Vagrant.configure(2) do |config|
 
 	config.vm.define "tests" do |normal|
 
-		config.vm.box = "boxcutter/ubuntu1604"
-		config.vm.box_version = "2.0.18"
+		config.vm.box = "ubuntu/xenial64"
+	    config.ssh.username = "ubuntu"
 
-		config.vm.synced_folder ".", "/vagrant",  :owner=> 'vagrant', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
+		config.vm.synced_folder ".", "/vagrant",  :owner=> 'ubuntu', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
 
 		config.vm.provider "virtualbox" do |vb|
 			# Display the VirtualBox GUI when booting the machine

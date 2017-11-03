@@ -11,21 +11,21 @@ mount /var/lib/postgresql
 sudo apt-get update
 sudo apt-get install -y postgresql php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit
 
-mkdir /home/vagrant/bin
-cd /home/vagrant/bin
+mkdir /home/ubuntu/bin
+cd /home/ubuntu/bin
 wget -q https://getcomposer.org/composer.phar
 
 cd /vagrant
-php /home/vagrant/bin/composer.phar  install
+php /home/ubuntu/bin/composer.phar  install
 
-mkdir /home/vagrant/fileStore
-chown vagrant:users  /home/vagrant/fileStore
+mkdir /fileStore
+chown vagrant:users  /fileStore
 
-mkdir /home/vagrant/logs
-chown vagrant:users  /home/vagrant/logs
+mkdir /logs
+chown vagrant:users  /logs
 
 
 cp /vagrant/vagrant/tests/config.test.php /vagrant/config.test.php
-cp /vagrant/vagrant/tests/test /home/vagrant/test
-chmod a+rx /home/vagrant/test
+cp /vagrant/vagrant/tests/test /home/ubuntu/test
+chmod a+rx /home/ubuntu/test
 
