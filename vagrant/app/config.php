@@ -87,7 +87,7 @@ $CONFIG->hasSSL = FALSE;
  * A folder writeable by the app in which to store uploaded files.
  * Back this up along side your database!
  */
-$CONFIG->fileStoreLocation= '/home/vagrant/fileStore';
+$CONFIG->fileStoreLocation= '/fileStore';
 
 
 /**

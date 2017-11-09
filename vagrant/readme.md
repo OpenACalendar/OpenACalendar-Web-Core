@@ -44,7 +44,26 @@ User accounts will not be verified. Click the link to send the email again, then
 You can also run tests on this box, but this will run slowly and we recommend you use the tests vagrant box instead. But if you must, to run tests:
 
     vagrant ssh app
-    ./test
+    test
+    
+### Composer
+
+There are handy commands:
+
+    vagrant ssh app
+    composer-update
+    composer-install
+
+### Import database contents
+
+If you have a file "import.sql" in the main directory, this box will automatically import that file on first run.
+
+### Access the database
+
+There is a handy command:
+
+    vagrant ssh app
+    db
 
 ## The tests box
 
