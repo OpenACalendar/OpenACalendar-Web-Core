@@ -24,9 +24,9 @@ apt-get install -y postgresql apache2 php-gd php php-curl php-pgsql git php-intl
 apt-get install -y --no-install-recommends ubuntu-desktop
 apt-get install -y firefox
 
-mkdir /home/ubuntu/bin
-cd /home/ubuntu/bin
-wget -q https://getcomposer.org/composer.phar
+mkdir /bin
+wget -O /bin/composer.phar -q https://getcomposer.org/composer.phar
+wget -O /bin/selenium.jar -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
 
 mkdir /fileStore
 chown www-data:www-data  /fileStore
@@ -35,7 +35,7 @@ mkdir /logs
 chown www-data:www-data  /logs
 
 cd /vagrant
-php /home/ubuntu/bin/composer.phar  install
+php /bin/composer.phar  install
 
 cp /vagrant/vagrant/frontendtests/apache.conf /etc/apache2/sites-enabled/
 cp /vagrant/vagrant/frontendtests/config.test.php /vagrant/config.test.php
@@ -49,15 +49,11 @@ chown www-data:www-data  /vagrant/cache/templates.web
 a2enmod rewrite
 /etc/init.d/apache2 restart
 
-mkdir /home/ubuntu/selenium
-cd /home/ubuntu/selenium
-wget -q http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
-
 cp /vagrant/vagrant/frontendtests/run /home/ubuntu/run
 chmod a+x /home/ubuntu/run
 
 cp /vagrant/vagrant/frontendtests/test /home/ubuntu/test
 chmod a+x /home/ubuntu/test
 
-gsettings set org.gnome.desktop.session idle-delay 0
+# gsettings set org.gnome.desktop.session idle-delay 0
 

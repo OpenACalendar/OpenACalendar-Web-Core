@@ -1,3 +1,3 @@
 #!/bin/bash
 export DISPLAY=:0
-nohup java -jar /home/ubuntu/selenium/selenium-server-standalone-2.53.0.jar &
+nohup java -jar /bin/selenium.jar &
