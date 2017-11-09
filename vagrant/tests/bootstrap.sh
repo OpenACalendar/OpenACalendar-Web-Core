@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo "en_GB.UTF-8 UTF-8" >> /etc/locale.gen
 
 locale-gen
@@ -11,21 +13,20 @@ mount /var/lib/postgresql
 sudo apt-get update
 sudo apt-get install -y postgresql php-gd php php-curl php-pgsql git php-intl php-geoip curl zip  phpunit
 
-mkdir /home/vagrant/bin
-cd /home/vagrant/bin
-wget -q https://getcomposer.org/composer.phar
+mkdir -p /bin
+wget -O /bin/composer.phar -q https://getcomposer.org/composer.phar
 
 cd /vagrant
-php /home/vagrant/bin/composer.phar  install
+php /bin/composer.phar  install
 
-mkdir /home/vagrant/fileStore
-chown vagrant:users  /home/vagrant/fileStore
+mkdir /fileStore
+chown www-data:www-data  /fileStore
 
-mkdir /home/vagrant/logs
-chown vagrant:users  /home/vagrant/logs
+mkdir /logs
+chown www-data:www-data  /logs
 
 
 cp /vagrant/vagrant/tests/config.test.php /vagrant/config.test.php
-cp /vagrant/vagrant/tests/test /home/vagrant/test
-chmod a+rx /home/vagrant/test
+cp /vagrant/vagrant/tests/test /home/ubuntu/test
+chmod a+rx /home/ubuntu/test
 

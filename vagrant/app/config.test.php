@@ -30,11 +30,11 @@ $CONFIG->siteSlugDemoSite = "test1";
 
 $CONFIG->userNameReserved = array('admin','superadmin');
 
-$CONFIG->fileStoreLocation= '/home/vagrant/fileStore';
+$CONFIG->fileStoreLocation= '/fileStore';
 
 $CONFIG->extensions = array('AddressCodeGBOpenCodePoint','Facebook','Meetup','DisplayBoard','CuratedLists','Contact');
 
 
-$CONFIG->logFile = '/home/vagrant/logs/openacalendar.log';
+$CONFIG->logFile = '/logs/openacalendar.log';
 
 $CONFIG->CLIAPI1Enabled = true;
