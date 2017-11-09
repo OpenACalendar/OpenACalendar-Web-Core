@@ -17,7 +17,6 @@ use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
 use models\ImportHistoryModel;
-use models\API2ApplicationModel;
 use repositories\builders\config\HistoryRepositoryBuilderConfig;
 use Silex\Application;
 
@@ -134,10 +133,6 @@ class HistoryRepositoryBuilder {
 		$this->historyRepositoryBuilderConfig->setNotUser($notUser);
 	}
 
-	public function setAPI2Application(API2ApplicationModel $api2app) {
-		$this->historyRepositoryBuilderConfig->setAPI2Application($api2app);
-	}
-	
 	public function fetchAll() {
 
 		$results = array();
@@ -181,11 +176,6 @@ class HistoryRepositoryBuilder {
 			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'event_history.user_account_id != :userid ';
 				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
-			}
-			
-			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
-				$where[] = 'event_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 
 			if ($this->historyRepositoryBuilderConfig->getArea()) {
@@ -261,11 +251,7 @@ class HistoryRepositoryBuilder {
 				$where[] = 'group_history.user_account_id != :userid ';
 				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
-			
-			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
-				$where[] = 'group_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
-			}
+
 
             $sql = "SELECT group_history.*, group_information.slug AS group_slug, ".
                 " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
@@ -315,11 +301,6 @@ class HistoryRepositoryBuilder {
 			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'venue_history.user_account_id != :userid ';
 				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
-			}
-			
-			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
-				$where[] = 'venue_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 
             $sql = "SELECT venue_history.*, venue_information.slug AS venue_slug, ".
@@ -373,11 +354,6 @@ class HistoryRepositoryBuilder {
 				$where[] = 'area_history.user_account_id != :userid ';
 				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
-			
-			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
-				$where[] = 'area_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
-			}
 
             $sql = "SELECT area_history.*, area_information.slug AS area_slug, ".
                 " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
@@ -422,11 +398,7 @@ class HistoryRepositoryBuilder {
 				$where[] = 'tag_history.user_account_id != :userid ';
 				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
 			}
-			
-			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
-				$where[] = 'tag_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
-			}
+
 
             $sql = "SELECT tag_history.*, tag_information.slug AS tag_slug, ".
                 " user_account_information.username AS user_account_username, user_account_information.displayname AS user_account_displayname ".
@@ -527,11 +499,6 @@ class HistoryRepositoryBuilder {
 			if ($this->historyRepositoryBuilderConfig->getNotUser()) {
 				$where[] = 'import_url_history.user_account_id != :userid ';
 				$params['userid'] = $this->historyRepositoryBuilderConfig->getNotUser()->getId();
-			}
-			
-			if ($this->historyRepositoryBuilderConfig->getApi2app()) {
-				$where[] = 'import_url_history.api2_application_id  = :api2app';
-				$params['api2app'] = $this->historyRepositoryBuilderConfig->getApi2app()->getId();
 			}
 
             $sql = "SELECT import_url_history.*, import_url_information.slug AS import_url_slug, ".

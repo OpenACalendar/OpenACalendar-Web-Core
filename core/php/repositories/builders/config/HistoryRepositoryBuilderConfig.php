@@ -18,7 +18,6 @@ use models\VenueHistoryModel;
 use models\AreaHistoryModel;
 use models\TagHistoryModel;
 use models\ImportHistoryModel;
-use models\API2ApplicationModel;
 
 /**
  *
@@ -233,33 +232,12 @@ class HistoryRepositoryBuilderConfig {
 		$this->notUser = $notUser;
 	}
 
-	/** @var API2ApplicationModel **/
-	protected $api2app;
-
-	public function setAPI2Application(API2ApplicationModel $api2app) {
-		$this->api2app = $api2app;
-	}
-
 
 
 
 	protected $limit = 50;
 
-	/**
-	 * @param \models\API2ApplicationModel $api2app
-	 */
-	public function setApi2app($api2app)
-	{
-		$this->api2app = $api2app;
-	}
 
-	/**
-	 * @return \models\API2ApplicationModel
-	 */
-	public function getApi2app()
-	{
-		return $this->api2app;
-	}
 
 	/**
 	 * @param int $limit

@@ -8,7 +8,6 @@ use models\UserAccountModel;
 use models\EventModel;
 use models\EventHistoryModel;
 use Silex\Application;
-use sysadmin\controllers\API2Application;
 
 /**
  *

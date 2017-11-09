@@ -7,7 +7,6 @@ use models\MediaEditMetaDataModel;
 use models\UserAccountModel;
 use models\MediaModel;
 use Silex\Application;
-use sysadmin\controllers\API2Application;
 
 /**
  *

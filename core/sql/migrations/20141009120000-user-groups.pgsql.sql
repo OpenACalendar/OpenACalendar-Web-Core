@@ -76,17 +76,3 @@ CREATE TABLE permission_in_user_group (
 ALTER TABLE permission_in_user_group ADD CONSTRAINT permission_in_user_group_user_group_id FOREIGN KEY (user_group_id) REFERENCES user_group_information(id);
 ALTER TABLE permission_in_user_group ADD CONSTRAINT permission_in_user_group_added_by_user_account_id FOREIGN KEY (added_by_user_account_id) REFERENCES user_account_information(id);
 ALTER TABLE permission_in_user_group ADD CONSTRAINT permission_in_user_group_removed_by_user_account_id FOREIGN KEY (removed_by_user_account_id) REFERENCES user_account_information(id);
-
-
-ALTER TABLE api2_application_information  DROP is_write_user_actions;
-ALTER TABLE api2_application_information DROP is_write_calendar;
-ALTER TABLE api2_application_information ADD is_editor SMALLINT DEFAULT '0' NOT NULL;
-
-ALTER TABLE user_in_api2_application_information DROP is_write_user_actions;
-ALTER TABLE user_in_api2_application_information DROP is_write_calendar;
-ALTER TABLE user_in_api2_application_information ADD is_editor SMALLINT DEFAULT '0' NOT NULL;
-
-ALTER TABLE api2_application_request_token DROP is_write_user_actions;
-ALTER TABLE api2_application_request_token DROP is_write_calendar;
-ALTER TABLE api2_application_request_token ADD is_editor SMALLINT DEFAULT '0' NOT NULL;
-

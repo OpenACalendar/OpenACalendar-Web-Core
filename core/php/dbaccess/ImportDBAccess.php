@@ -7,7 +7,6 @@ use models\ImportEditMetaDataModel;
 use models\UserAccountModel;
 use models\ImportModel;
 use Silex\Application;
-use sysadmin\controllers\API2Application;
 
 /**
  *

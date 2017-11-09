@@ -7,7 +7,6 @@ use models\UserAccountModel;
 use models\VenueEditMetaDataModel;
 use models\VenueModel;
 use Silex\Application;
-use sysadmin\controllers\API2Application;
 
 /**
  *

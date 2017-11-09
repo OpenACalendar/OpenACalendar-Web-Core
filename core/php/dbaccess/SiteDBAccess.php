@@ -6,7 +6,6 @@ namespace dbaccess;
 use models\UserAccountModel;
 use models\SiteModel;
 use Silex\Application;
-use sysadmin\controllers\API2Application;
 
 /**
  *

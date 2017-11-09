@@ -4,7 +4,10 @@
 /**
  *
  * Holds information about the current UserAgent interacting with the site
- * eg Web Browser, API2 App
+ * eg Web Browser, an API user.
+ *
+ * This used to hold API2 info but then we scrapped that.
+ * Left in place for future API stuff, and for possible web stuff.
  * 
  * @package Core
  * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
@@ -15,19 +18,6 @@
 class UserAgent {
 	
 
-	protected $api2_application_id;
-	
-	public function hasApi2ApplicationId() {
-		return (boolean)$this->api2_application_id;
-	}
-	
-	public function getApi2ApplicationId() {
-		return $this->api2_application_id;
-	}
 
-	public function setApi2ApplicationId($api2_application_id) {
-		$this->api2_application_id = $api2_application_id;
-	}
-	
 }
 

@@ -43,8 +43,6 @@
 			<directory suffix=".php">../../core/php/autoloadWebApp.php</directory>
 		</blacklist>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">../php/indexapi2/controllers</directory>
-			<directory suffix=".php">../php/indexapi2/forms</directory>
 			<directory suffix=".php">../php/index/controllers</directory>
 			<directory suffix=".php">../php/index/forms</directory>
 			<directory suffix=".php">../php/site/controllers</directory>
@@ -61,7 +59,6 @@
 			<directory suffix=".php">../php/repositories/builders</directory>
 			<directory suffix=".php">../php/repositories/builders/filterparams</directory>
 			<directory suffix=".php">../php/siteapi1/controllers</directory>
-			<directory suffix=".php">../php/siteapi2/controllers</directory>
 			<directory suffix=".php">../php/tasks</directory>
 			<directory suffix=".php">../php/twig/extensions</directory>
 			<directory suffix=".php">../php/usernotifications/models</directory>

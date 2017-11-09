@@ -7,7 +7,6 @@ use models\TagEditMetaDataModel;
 use models\UserAccountModel;
 use models\TagModel;
 use Silex\Application;
-use sysadmin\controllers\API2Application;
 
 /**
  *

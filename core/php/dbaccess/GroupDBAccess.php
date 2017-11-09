@@ -7,7 +7,6 @@ use models\GroupEditMetaDataModel;
 use models\UserAccountModel;
 use models\GroupModel;
 use Silex\Application;
-use sysadmin\controllers\API2Application;
 
 /**
  *
