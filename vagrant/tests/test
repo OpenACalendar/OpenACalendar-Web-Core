@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 ## Drop and recreate cluster.
 ##   As RAM disk is limited this saves space.
 ##   Also if VM just started RAM disk will be empty so need to create
