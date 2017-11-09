@@ -1,31 +1,31 @@
 {
 	"config": {
 		"platform": {
-			"php": "7.0.0"
+			"php": "7.0.8"
 		}
 	},
 	"require": {
-		"php": ">=7.0.0",
+		"php": ">=7.0.8",
 		"silex/silex": "2.2.*",
 		"twig/twig": "2.4.*",
 		"twig/extensions": "1.5.*",
 		"jmbtechnologylimited/twigextensions": "v2.0.alpha3",
-		"symfony/twig-bridge": "2.8.*",
-		"symfony/form": "2.8.*",
-		"symfony/validator": "2.8.*",
-		"symfony/config": "2.8.*",
-		"symfony/translation": "2.8.*",
-		"symfony/filesystem": "2.8.*",
-		"symfony/intl": "2.8.*",
-		"symfony/http-foundation": "2.8.*",
-		"symfony/event-dispatcher":"2.8.*",
-		"symfony/http-kernel":"2.8.*",
-		"symfony/property-access":"2.8.*",
-		"symfony/security":"2.8.*",
-		"symfony/routing":"2.8.*",
+		"symfony/twig-bridge": "3.3.*",
+		"symfony/form": "3.3.*",
+		"symfony/validator": "3.3.*",
+		"symfony/config": "3.3.*",
+		"symfony/translation": "3.3.*",
+		"symfony/filesystem": "3.3.*",
+		"symfony/intl": "3.3.*",
+		"symfony/http-foundation": "3.3.*",
+		"symfony/event-dispatcher":"3.3.*",
+		"symfony/http-kernel":"3.3.*",
+		"symfony/property-access":"3.3.*",
+		"symfony/security":"3.3.*",
+		"symfony/routing":"3.3.*",
 		"swiftmailer/swiftmailer": "6.0.*",
 		"monolog/monolog": "1.23.*",
-		"symfony/monolog-bridge": "2.8.*",
+		"symfony/monolog-bridge": "3.3.*",
 		"jmbtechnologylimited/parsedatetimerangestring":"1.0.*",
 		"facebook/graph-sdk" : "5.6.*",
 		"jmbtechnologylimited/rruleunravel" : "0.4.*",
@@ -36,7 +36,7 @@
 	},
 	"require-dev": {
 		"php": ">=7.0.0",
-		"symfony/debug":"2.8.*",
+		"symfony/debug":"3.3.*",
         "facebook/webdriver": "1.1.*"
 	}
 }

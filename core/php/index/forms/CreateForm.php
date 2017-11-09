@@ -31,18 +31,18 @@ class CreateForm extends AbstractType{
 
 		$this->app = $options['app'];
 
-		$builder->add('title', TextType::class, array(
-			'label'=>'Title',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
-		));
-		
-		$builder->add('slug', TextType::class, array(
-			'label'=>'Address',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
+        $builder->add('title', TextType::class, array(
+            'label'=>'Title',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus')
+        ));
+
+        $builder->add('slug', TextType::class, array(
+            'label'=>'Address',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
 		
 		$myExtraFieldValidator = function(FormEvent $event){
 			$form = $event->getForm();
@@ -57,7 +57,7 @@ class CreateForm extends AbstractType{
 				$form['slug']->addError(new FormError("That is not allowed."));
 			}
 		};
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 
         $readChoices = array(
             'Public, and listed on search engines and our directory' => 'public',

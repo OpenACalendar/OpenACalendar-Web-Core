@@ -45,7 +45,7 @@ class ResetUserForm  extends AbstractType {
 				$form['password2']->addError(new FormError("Passwords do not match"));
 			}
 		};
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);		
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 	}
 	
 	public function getName() {

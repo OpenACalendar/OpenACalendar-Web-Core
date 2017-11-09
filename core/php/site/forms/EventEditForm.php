@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
@@ -65,7 +66,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 		$builder->add('summary', TextType::class, array(
 			'label'=>'Summary',
 			'required'=>true,
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
+			'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
 			'attr' => array('autofocus' => 'autofocus')
 		));
 
@@ -74,12 +75,12 @@ class EventEditForm extends \BaseFormWithEditComment {
 			'required'=>false
 		));
 
-		$builder->add('url', new \symfony\form\MagicUrlType(), array(
+		$builder->add('url', \symfony\form\MagicUrlType::class, array(
 			'label'=>'Information Web Page URL',
 			'required'=>false
 		));
 
-		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
+		$builder->add('ticket_url', \symfony\form\MagicUrlType::class, array(
 			'label'=>'Tickets Web Page URL',
 			'required'=>false
 		));
@@ -166,7 +167,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 		);
 		if ($this->app['config']->formWidgetTimeMinutesMultiples > 1) {
 			$startOptions['minutes'] = array();
-			for ($i = 0; $i <= 59; $i=$i+$application['config']->formWidgetTimeMinutesMultiples) {
+			for ($i = 0; $i <= 59; $i=$i+$this->app['config']->formWidgetTimeMinutesMultiples) {
 				$startOptions['minutes'][] = $i;
 			}
 		}
@@ -184,7 +185,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 		);
 		if ($this->app['config']->formWidgetTimeMinutesMultiples > 1) {
 			$endOptions['minutes'] = array();
-			for ($i = 0; $i <= 59; $i=$i+$application['config']->formWidgetTimeMinutesMultiples) {
+			for ($i = 0; $i <= 59; $i=$i+$this->app['config']->formWidgetTimeMinutesMultiples) {
 				$endOptions['minutes'][] = $i;
 			}
 		}
@@ -259,7 +260,7 @@ class EventEditForm extends \BaseFormWithEditComment {
 		};
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 	}
 	
 	public function getName() {

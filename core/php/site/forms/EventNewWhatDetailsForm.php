@@ -42,32 +42,32 @@ class EventNewWhatDetailsForm extends AbstractType {
         $fieldIsVirtualDefault = false;
         $fieldIsPhysicalDefault  = true;
 
-		$builder->add('summary', TextType::class, array(
-			'label'=>'Summary',
-			'required'=>true, // TODO THIS IS NOT RESPCTED
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus'),
-			'data' => $options['newEventDraftModel']->getDetailsValue('event.summary'),
-		));
+        $builder->add('summary', TextType::class, array(
+            'label'=>'Summary',
+            'required'=>true, // TODO THIS IS NOT RESPCTED
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus'),
+            'data' => $options['newEventDraftModel']->getDetailsValue('event.summary'),
+        ));
 		
 		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false,
 			'data' => $options['newEventDraftModel']->getDetailsValue('event.description'),
 		));
-		
-		
-		$builder->add('url', new \symfony\form\MagicUrlType(), array(
-			'label'=>'Information Web Page URL',
-			'required'=>false,
-			'data' => $options['newEventDraftModel']->getDetailsValue('event.url'),
-		));
-		
-		$builder->add('ticket_url', new \symfony\form\MagicUrlType(), array(
-			'label'=>'Tickets Web Page URL',
-			'required'=>false,
-			'data' => $options['newEventDraftModel']->getDetailsValue('event.ticket_url'),
-		));
+
+
+        $builder->add('url', \symfony\form\MagicUrlType::class, array(
+            'label'=>'Information Web Page URL',
+            'required'=>false,
+            'data' => $options['newEventDraftModel']->getDetailsValue('event.url'),
+        ));
+
+        $builder->add('ticket_url', \symfony\form\MagicUrlType::class, array(
+            'label'=>'Tickets Web Page URL',
+            'required'=>false,
+            'data' => $options['newEventDraftModel']->getDetailsValue('event.ticket_url'),
+        ));
 
         foreach($options['customFields'] as $customFieldData) {
             $fieldOptions = $customFieldData['fieldType']->getSymfonyFormOptions($customFieldData['customField']);
@@ -141,7 +141,7 @@ class EventNewWhatDetailsForm extends AbstractType {
 
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);	
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 	}
 	
 	public function getName() {

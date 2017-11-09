@@ -29,11 +29,11 @@ class ImportNewForm extends AbstractType{
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 
-		$builder->add('url', UrlType::class, array(
-			'label'=>'URL',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
+        $builder->add('url', UrlType::class, array(
+            'label'=>'URL',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
 
 		/**
 		$builder->add("is_manual_events_creation",
@@ -81,7 +81,7 @@ class ImportNewForm extends AbstractType{
 		};
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 	}
 	
 	public function getName() {

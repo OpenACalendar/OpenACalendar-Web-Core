@@ -28,21 +28,21 @@ class ContactForm  extends AbstractType {
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		global $CONFIG;
-		
-		$builder->add('subject', TextType::class, array(
-			'label'=>'Subject',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
-		));
-		
 
-		$builder->add('email', EmailType::class, array(
-			'label'=>'Email',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
-			'data' => $options['user'] ? $options['user']->getEmail() : '',
-		));
+        $builder->add('subject', TextType::class, array(
+            'label'=>'Subject',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus')
+        ));
+
+
+        $builder->add('email', EmailType::class, array(
+            'label'=>'Email',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'data' => $options['user'] ? $options['user']->getEmail() : '',
+        ));
 		
 		$builder->add('message', TextareaType::class, array(
 			'label'=>'Message',
@@ -60,7 +60,7 @@ class ContactForm  extends AbstractType {
 					$form['antispam']->addError(new FormError("Please prove you are human"));
 				}
 			};
-			$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidatorSpam);
+			$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidatorSpam);
 			
 		}
 		

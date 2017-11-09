@@ -30,7 +30,7 @@ $(document).ready(function() {
 	
 	map.on('click', onMapClick);
 	
-	$('#VenueNewForm_country_id, #VenueEditForm_country_id').change(function() {  onCountryChanged(); });
+	$('#venue_new_form_country_id, #venue_edit_form_country_id').change(function() {  onCountryChanged(); });
 });
 
 function setUpBlankVenueForm() {
@@ -48,14 +48,14 @@ function onMapClick(e) {
 		marker.setLatLng( e.latlng );
 	}
 	
-	$('#VenueEditForm_lat, #VenueNewForm_lat, #AreaNewVenueInAreaForm_lat').val(lat);
-	$('#VenueEditForm_lng, #VenueNewForm_lng, #AreaNewVenueInAreaForm_lng').val(lng);
+	$('#venue_edit_form_lat, #venue_new_form_lat, #AreaNewVenueInAreaForm_lat').val(lat);
+	$('#venue_edit_form_lng, #venue_new_form_lng, #AreaNewVenueInAreaForm_lng').val(lng);
 
 }
 
 
 function onCountryChanged() {
-	var countryID = $('#VenueNewForm_country_id, #VenueEditForm_country_id').val();
+	var countryID = $('#venue_new_form_country_id, #venue_edit_form_country_id').val();
 	var html = '<li class="loading">Loading</li>';
 	$('#ChangeVenueAreaList').html(html);
 	$.ajax({

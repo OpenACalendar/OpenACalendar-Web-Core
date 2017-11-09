@@ -5,6 +5,7 @@ namespace symfony\form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  *
@@ -30,7 +31,7 @@ class MagicUrlType extends AbstractType
 	 */
 	public function getParent()
 	{
-		return 'text';
+		return TextType::class;
 	}
 
 	/**

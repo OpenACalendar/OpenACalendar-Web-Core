@@ -142,7 +142,7 @@ class NewEventWhenDetails extends BaseNewEvent
 		} else {
 
 			if ('POST' == $this->request->getMethod()) {
-				$this->form->bind($this->request);
+				$this->form->handleRequest($this->request);
 
 				// Store these on object for JS
 				$this->currentStart = $this->form->get('start_at')->getData();

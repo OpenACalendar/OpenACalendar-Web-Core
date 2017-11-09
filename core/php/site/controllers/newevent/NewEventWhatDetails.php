@@ -68,7 +68,7 @@ class NewEventWhatDetails extends BaseNewEvent
 
 
 		if ('POST' == $this->request->getMethod()) {
-			$this->form->bind($this->request);
+			$this->form->handleRequest($this->request);
 			if ($this->form->isValid()) {
 
 				$this->draftEvent->setDetailsValue('event.summary', $this->form->get('summary')->getData());

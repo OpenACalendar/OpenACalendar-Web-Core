@@ -23,13 +23,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class AreaNewInAreaForm extends AbstractType {
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
-		$builder->add('title', TextType::class, array(
-			'label'=>'Title',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
-		));
+
+        $builder->add('title', TextType::class, array(
+            'label'=>'Title',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus')
+        ));
 		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false

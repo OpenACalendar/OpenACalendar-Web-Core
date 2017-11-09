@@ -25,13 +25,13 @@ class SiteEditProfileForm extends AbstractType{
 
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
-		$builder->add('title', TextType::class, array(
-			'label'=>'Title',
-			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
-		));
+
+        $builder->add('title', TextType::class, array(
+            'label'=>'Title',
+            'required'=>false,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus')
+        ));
 		
 		$builder->add('description_text', TextareaType::class, array(
 			'label'=>'Description',

@@ -36,16 +36,16 @@ class SignUpUserForm  extends AbstractType {
 
 		$this->app = $options['app'];
 
-		$builder->add('email', EmailType::class, array(
-			'label'=>'Email',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
-			'attr' => array('autofocus' => 'autofocus'),
-		));
+        $builder->add('email', EmailType::class, array(
+            'label'=>'Email',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus'),
+        ));
         $builder->add('displayname', TextType::class, array(
             'label'=>'Your Name',
             'required'=>true,
-            'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
             'data' => 'Person'.rand(1,10000000),
         ));
 		$builder->add('password1', PasswordType::class, array(
@@ -75,7 +75,7 @@ class SignUpUserForm  extends AbstractType {
 					$form['antispam']->addError(new FormError("Please prove you are human"));
 				}
 			};
-			$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidatorSpam);
+			$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidatorSpam);
 			
 		}
 		
@@ -87,7 +87,7 @@ class SignUpUserForm  extends AbstractType {
 				$form['agree']->addError(new FormError("Please agree to the terms and conditions"));
 			}
 		};
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator1);	
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator1);
 		
 		
 		/** email looks real **/
@@ -98,7 +98,7 @@ class SignUpUserForm  extends AbstractType {
 				$form['email']->addError(new FormError("Please enter a email address"));
 			}
 		};
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator2);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator2);
 
 		
 		/** passwords **/
@@ -113,7 +113,7 @@ class SignUpUserForm  extends AbstractType {
 				$form['password2']->addError(new FormError("Please enter your password again; they did not match."));
 			}
 		};
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator4);		
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator4);
 	}
 	
 	public function getName() {

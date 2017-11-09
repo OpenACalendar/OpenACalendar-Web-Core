@@ -28,24 +28,24 @@ class UploadNewMediaForm extends AbstractType{
 			'label'=>'Picture',
 			'required'=>true
 		));
-		
-		$builder->add('title', TextType::class, array(
-			'label'=>'Title',
-			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
-			'data'=>$options['defaultTitle'],
-		));
-		
-		$builder->add('source_text', TextType::class, array(
-			'label'=>'Source',
-			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
-		$builder->add('source_url', UrlType::class, array(
-			'label'=>'Source URL',
-			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
+
+        $builder->add('title', TextType::class, array(
+            'label'=>'Title',
+            'required'=>false,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'data'=>$options['defaultTitle'],
+        ));
+
+        $builder->add('source_text', TextType::class, array(
+            'label'=>'Source',
+            'required'=>false,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
+        $builder->add('source_url', UrlType::class, array(
+            'label'=>'Source URL',
+            'required'=>false,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
 
 
 		/** @var \closure $myExtraFieldValidator **/
@@ -58,7 +58,7 @@ class UploadNewMediaForm extends AbstractType{
 		};
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 	}
 	
 	public function getName() {

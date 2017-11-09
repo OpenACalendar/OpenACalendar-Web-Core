@@ -25,25 +25,24 @@ class GroupNewForm extends AbstractType{
 
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		
-		$builder->add('title', TextType::class, array(
-			'label'=>'Title',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus'),
-			'data'=>$options['defaultTitle'],
 
-		));
-		
-		$builder->add('description', TextareaType::class, array(
-			'label'=>'Description',
-			'required'=>false
-		));
-		$builder->add('url', UrlType::class, array(
-			'label'=>'URL',
-			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
+        $builder->add('title', TextType::class, array(
+            'label'=>'Title',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus'),
+            'data'=>$options['defaultTitle'],
+        ));
+
+        $builder->add('description', TextareaType::class, array(
+            'label'=>'Description',
+            'required'=>false
+        ));
+        $builder->add('url', UrlType::class, array(
+            'label'=>'URL',
+            'required'=>false,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
 		
 		$builder->add('twitterUsername', TextType::class, array(
 			'label'=>'Twitter',
@@ -64,7 +63,7 @@ class GroupNewForm extends AbstractType{
 		};
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 	}
 	
 	public function getName() {

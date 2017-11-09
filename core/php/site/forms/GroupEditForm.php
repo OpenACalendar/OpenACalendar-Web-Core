@@ -25,23 +25,23 @@ class GroupEditForm extends \BaseFormWithEditComment {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		parent::buildForm($builder, $options);
 
-		$builder->add('title', TextType::class, array(
-			'label'=>'Title',
-			'required'=>true, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED, 
-			'attr' => array('autofocus' => 'autofocus')
-		));
+        $builder->add('title', TextType::class, array(
+            'label'=>'Title',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+            'attr' => array('autofocus' => 'autofocus')
+        ));
 
 		$builder->add('description', TextareaType::class, array(
 			'label'=>'Description',
 			'required'=>false
 		));
 
-		$builder->add('url', UrlType::class, array(
-			'label'=>'URL',
-			'required'=>false, 
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
+        $builder->add('url', UrlType::class, array(
+            'label'=>'URL',
+            'required'=>false,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
 		$builder->add('twitterUsername', TextType::class, array(
 			'label'=>'Twitter',
 			'required'=>false
@@ -61,7 +61,7 @@ class GroupEditForm extends \BaseFormWithEditComment {
 		};
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 
 	}
 	

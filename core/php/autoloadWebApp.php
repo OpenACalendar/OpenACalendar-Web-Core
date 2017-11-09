@@ -125,6 +125,7 @@ $app['swiftmailer.options'] = array(
 ///////////////////////// Forms
 
 $app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
       'locale' => 'GB',

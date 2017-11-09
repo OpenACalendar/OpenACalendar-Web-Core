@@ -37,17 +37,17 @@ class NewSiteForm  extends AbstractType {
 
 		// The rest of this is duplicated from index\forms\CreateForm
 
-		$builder->add('title', TextType::class, array(
-			'label'=>'Title',
-			'required'=>true,
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED,
-		));
+        $builder->add('title', TextType::class, array(
+            'label'=>'Title',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
 
-		$builder->add('slug', TextType::class, array(
-			'label'=>'Slug For Web Address',
-			'required'=>true,
-			'max_length'=>VARCHAR_COLUMN_LENGTH_USED
-		));
+        $builder->add('slug', TextType::class, array(
+            'label'=>'Slug For Web Address',
+            'required'=>true,
+            'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
+        ));
 
 		$myExtraFieldValidator = function(FormEvent $event){
 			$form = $event->getForm();
@@ -58,7 +58,7 @@ class NewSiteForm  extends AbstractType {
 				$form['slug']->addError(new FormError("That is already taken."));
 			}
 		};
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 
 		$readChoices = array(
 			'Public, and listed on search engines and our directory'=>'public',

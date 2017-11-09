@@ -176,7 +176,7 @@ class EventNewWhenDetailsForm extends AbstractType {
 		};
 
 		// adding the validator to the FormBuilderInterface
-		$builder->addEventListener(FormEvents::POST_BIND, $myExtraFieldValidator);
+		$builder->addEventListener(FormEvents::POST_SUBMIT, $myExtraFieldValidator);
 	}
 
 	public function getName() {
