@@ -30,4 +30,10 @@
 	{% if showTimeZone %}
 		({{ timezone }} time)
 	{% endif %}
+	{%  if startAt.timestamp != endAt.timestamp %}
+		Lasts {{ timebetween(endAt, startAt) }}.
+		{%  if (endAt.timestamp - startAt.timestamp) > config.warnWhenEventsLastLongerThanSeconds %}
+			<div class="warning">(Does it really last this long?)</div>
+		{%  endif %}
+	{% endif %}
 </div>

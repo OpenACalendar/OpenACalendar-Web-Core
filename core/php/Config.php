@@ -225,6 +225,8 @@ class Config {
 
 	public $themeVariables = array('default'=>array());
 
+	public $warnWhenEventsLastLongerThanSeconds = 24*60*60*7; // 1 week.
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 
