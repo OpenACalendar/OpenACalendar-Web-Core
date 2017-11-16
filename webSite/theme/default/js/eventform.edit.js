@@ -26,13 +26,13 @@ function loadData() {
 		loadDataAJAX.abort();
 	}
 	// set loading indicators
-	var currentStartDate = $('#EventEditForm_start_at_date').val();
-	var currentStartHours = $('#EventEditForm_start_at_time_hour').val();
-	var currentStartMins = $('#EventEditForm_start_at_time_minute').val();
-	var currentEndDate = $('#EventEditForm_end_at_date').val();
-	var currentEndHours = $('#EventEditForm_end_at_time_hour').val();
-	var currentEndMins = $('#EventEditForm_end_at_time_minute').val();
-	var currentTimezone = $('#EventEditForm_timezone').val();
+    var currentStartDate = $('#FieldStartAtWrapper input[type="text"]').val();
+    var currentStartHours = $('#FieldStartAtWrapper #event_edit_form_start_at_time_hour').val();
+    var currentStartMins = $('#FieldStartAtWrapper #event_edit_form_start_at_time_minute').val();
+    var currentEndDate = $('#FieldEndAtWrapper input[type="text"]').val();
+    var currentEndHours = $('#FieldEndAtWrapper  #event_edit_form_end_at_time_hour').val();
+    var currentEndMins = $('#FieldEndAtWrapper  #event_edit_form_end_at_time_minute').val();
+    var currentTimezone = $('#FieldTimeZoneWrapper select').val();
 	if (currentStartDate != startDate || currentStartHours != startHours || currentStartMins != startMins || currentEndDate != endDate || currentEndHours != endHours || currentEndMins != endMins || currentTimezone != timezone) {
 		$('#ReadableDateTimeRange').html('&nbsp;');
 		startDate = currentStartDate;

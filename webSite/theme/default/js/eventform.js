@@ -6,20 +6,20 @@
  * @author James Baster <james@jarofgreen.co.uk>
 */
 $(document).ready(function() {
-	$('#EventNewForm_start_at_date, #EventNewForm_end_at_date, #EventEditForm_start_at_date, #EventEditForm_end_at_date').datepicker({
+	$('#FieldStartAtWrapper input, #FieldEndAtWrapper input').datepicker({
 		dateFormat:'dd/mm/yy'
 	});
-	$('#EventNewForm_start_at_date,  #EventEditForm_start_at_date').change(function() {
-		var start = $('#EventNewForm_start_at_date,  #EventEditForm_start_at_date');
-		var end = $('#EventNewForm_end_at_date,  #EventEditForm_end_at_date');
+	$('#FieldStartAtWrapper input, #FieldEndAtWrapper input').change(function() {
+		var start = $('#FieldStartAtWrapper input');
+		var end = $('#FieldEndAtWrapper input');
 		if (start.val() && !end.val()) {
 			end.val(start.val());
 		}
 	});	
-	$('#EventEditForm_country_id, #EventNewForm_country_id').change(function() {
+	$('#FieldCountryWrapper select').change(function() {
 		onCountryChange();
 	});
-	$('#EventNewForm_is_physical, #EventEditForm_is_physical').change(function() {
+	$('#FieldIsPhysicalWrapper input').change(function() {
 		onPhysicalEventChange();
 	});
 	onCountryChange();
@@ -27,7 +27,7 @@ $(document).ready(function() {
 });
 	
 function onPhysicalEventChange() {
-	var opt = $('#EventNewForm_is_physical, #EventEditForm_is_physical');
+	var opt = $('#FieldIsPhysicalWrapper input');
 	if (opt.length == 0 || opt.is(':checked')) {
 		$('#physicalEventOptions').show();
 	} else {
@@ -38,13 +38,13 @@ function onPhysicalEventChange() {
 var lastCountryIDSeen = -1;	
 var countryDataAJAX;
 function onCountryChange() {
-	var countrySelect = $('#EventEditForm_country_id, #EventNewForm_country_id');
+	var countrySelect = $('#FieldCountryWrapper select');
 	if (countrySelect.attr('type') != 'hidden' && lastCountryIDSeen !== countrySelect.val()) {
 		countryDataAJAX = $.ajax({
 			url: "/country/" + countrySelect.val()+"/info.json",
 		}).success(function ( data ) {
 			// timezones
-			var timezoneSelect = $('#EventEditForm_timezone, #EventNewForm_timezone');
+			var timezoneSelect = $('#FieldTimeZoneWrapper select');
 			var timezoneSelectVal = timezoneSelect.val();
 			var timezoneSelectValFound = false;
 			timezoneSelect.children('option').remove();

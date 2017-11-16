@@ -34,10 +34,18 @@
 				</div>
 				<div class="after"></div>
 			</div>
-			{{ form_row(form.start_at) }}
-			{{ form_row(form.end_at) }}
-			{{ form_row(form.country_id) }}
-			{{ form_row(form.timezone) }}
+			<div id="FieldStartAtWrapper">
+				{{ form_row(form.start_at) }}
+			</div>
+			<div id="FieldEndAtWrapper">
+				{{ form_row(form.end_at) }}
+			</div>
+			<div id="FieldCountryWrapper">
+				{{ form_row(form.country_id) }}
+			</div>
+			<div id="FieldTimeZoneWrapper">
+				{{ form_row(form.timezone) }}
+			</div>
 			{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
 				{#  if both are an option, user must check which one.  #}
 				{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
@@ -48,7 +56,9 @@
 			{% if currentSiteFeatures.has('org.openacalendar','PhysicalEvents') %}
 				{#  if both are an option, user must check which one.  #}
 				{% if currentSiteFeatures.has('org.openacalendar','VirtualEvents') %}
-					{{ form_row(form.is_physical) }}
+					<div id="FieldIsPhysicalWrapper">
+						{{ form_row(form.is_physical) }}
+					</div>
 				{% endif %}
 				{# Secondly, any options for physical events? #}
 				<div id="physicalEventOptions">

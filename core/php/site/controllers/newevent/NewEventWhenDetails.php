@@ -60,7 +60,7 @@ class NewEventWhenDetails extends BaseNewEvent
             // nothing to do
         } else {
             // TODO use $request NOT POST
-            $timezone = isset($_POST['EventNewWhenDetailsForm']) && isset($_POST['EventNewWhenDetailsForm']['timezone']) ? $_POST['EventNewWhenDetailsForm']['timezone'] : $this->application['currentTimeZone'];
+            $timezone = isset($_POST['event_new_when_details_form']) && isset($_POST['event_new_when_details_form']['timezone']) ? $_POST['event_new_when_details_form']['timezone'] : $this->application['currentTimeZone'];
 
             $this->defaultCountry = $this->getDefaultCountry($this->application);
 

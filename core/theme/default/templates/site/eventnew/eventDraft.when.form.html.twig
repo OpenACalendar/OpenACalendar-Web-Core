@@ -13,11 +13,20 @@
 
 	{{ form_errors(form) }}
 
-	{{ form_row(form.country_id) }}
-	{{ form_row(form.timezone) }}
 
-	{{ form_row(form.start_at) }}
-	{{ form_row(form.end_at) }}
+	<div id="FieldCountryWrapper">
+		{{ form_row(form.country_id) }}
+	</div>
+	<div id="FieldTimeZoneWrapper">
+		{{ form_row(form.timezone) }}
+	</div>
+
+	<div id="FieldStartAtWrapper">
+		{{ form_row(form.start_at) }}
+	</div>
+	<div id="FieldEndAtWrapper">
+		{{ form_row(form.end_at) }}
+	</div>
 
 	<div class="rowWrapper">
 		<div class="labelWrapper">Date/Time</div>

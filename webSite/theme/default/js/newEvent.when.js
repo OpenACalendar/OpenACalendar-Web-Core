@@ -8,17 +8,17 @@
 
 $(document).ready(function() {
 
-	$('#EventNewWhenDetailsForm_start_at_date, #EventNewWhenDetailsForm_end_at_date, #EventEditForm_start_at_date, #EventEditForm_end_at_date').datepicker({
+	$('#FieldStartAtWrapper input, #FieldEndAtWrapper input').datepicker({
 		dateFormat:'dd/mm/yy'
 	});
 	$('#NewEventForm').change(function() {
 		loadData();
 	});
-    $('#EventNewWhenDetailsForm_country_id').change(function() {
+    $('#FieldCountryWrapper select').change(function() {
        onCountryChange();
     });
 
-    var countrySelect = $('#EventNewWhenDetailsForm_country_id');
+    var countrySelect = $('#FieldCountryWrapper select');
     if (countrySelect.attr('type') != 'hidden' && lastCountryIDSeen !== countrySelect.val()) {
         repopulateTimeZoneSelect(defaultCountryTimeZones);
     }
@@ -32,13 +32,13 @@ var loadDataAJAX;
 var startDate, startHours, startMins, endDate, endHours, endMins, timezone;
 
 function loadDataSetLoadingIndicators() {
-	var currentStartDate = $('#EventNewWhenDetailsForm_start_at_date').val();
-	var currentStartHours = $('#EventNewWhenDetailsForm_start_at_time_hour').val();
-	var currentStartMins = $('#EventNewWhenDetailsForm_start_at_time_minute').val();
-	var currentEndDate = $('#EventNewWhenDetailsForm_end_at_date').val();
-	var currentEndHours = $('#EventNewWhenDetailsForm_end_at_time_hour').val();
-	var currentEndMins = $('#EventNewWhenDetailsForm_end_at_time_minute').val();
-	var currentTimezone = $('#EventNewWhenDetailsForm_timezone').val();
+	var currentStartDate = $('#FieldStartAtWrapper input[type="text"]').val();
+	var currentStartHours = $('#FieldStartAtWrapper #event_new_when_details_form_start_at_time_hour').val();
+	var currentStartMins = $('#FieldStartAtWrapper #event_new_when_details_form_start_at_time_minute').val();
+	var currentEndDate = $('#FieldEndAtWrapper input[type="text"]').val();
+	var currentEndHours = $('#FieldEndAtWrapper  #event_new_when_details_form_end_at_time_hour').val();
+	var currentEndMins = $('#FieldEndAtWrapper  #event_new_when_details_form_end_at_time_minute').val();
+	var currentTimezone = $('#FieldTimeZoneWrapper select').val();
 	if (currentStartDate != startDate || currentStartHours != startHours || currentStartMins != startMins || currentEndDate != endDate || currentEndHours != endHours || currentEndMins != endMins || currentTimezone != timezone) {
 		$('#ReadableDateTimeRange').html('&nbsp;');
 		startDate = currentStartDate;
@@ -62,14 +62,14 @@ function loadDataGotData(data) {
 var lastCountryIDSeen = -1;
 var countryDataAJAX;
 function onCountryChange() {
-	var countrySelect = $('#EventEditForm_country_id, #EventNewWhenDetailsForm_country_id');
+	var countrySelect = $('#FieldCountryWrapper select');
 	if (countrySelect.attr('type') != 'hidden' && lastCountryIDSeen !== countrySelect.val()) {
 		countryDataAJAX = $.ajax({
 			url: "/country/" + countrySelect.val()+"/info.json",
 		}).success(function ( data ) {
 			// timezones
             repopulateTimeZoneSelect(data.country.timezones);
-			var timezoneSelect = $('#EventEditForm_timezone, #EventNewWhenDetailsForm_timezone');
+			var timezoneSelect = $('#FieldTimeZoneWrapper select');
 			timezoneSelect.trigger("change");
 		});
 	}
@@ -77,7 +77,7 @@ function onCountryChange() {
 }
 
 function repopulateTimeZoneSelect(timezones) {
-    var timezoneSelect = $('#EventEditForm_timezone, #EventNewWhenDetailsForm_timezone');
+    var timezoneSelect = $('#FieldTimeZoneWrapper select');
     var timezoneSelectVal = timezoneSelect.val();
     var timezoneSelectValFound = false;
     timezoneSelect.children('option').remove();

@@ -526,7 +526,7 @@ class EventController {
 
 		$data = array();
 
-        $timeZone = isset($_POST['EventEditForm']) && isset($_POST['EventEditForm']['timezone']) ? $_POST['EventEditForm']['timezone'] : $this->parameters['event']->getTimezone();
+        $timeZone = isset($_POST['event_edit_form']) && isset($_POST['event_edit_form']['timezone']) ? $_POST['event_edit_form']['timezone'] : $this->parameters['event']->getTimezone();
         $form = $app['form.factory']->create(
             EventEditForm::class,
             $this->parameters['event'],
