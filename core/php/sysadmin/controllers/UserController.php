@@ -111,9 +111,14 @@ class UserController {
 					$uar->systemAdminOpens($this->parameters['user'], $app['currentUser']);
 					$redirect = true;
 				} else if ($action->getCommand() == 'email' && filter_var($action->getParam(0), FILTER_VALIDATE_EMAIL)) {
-					$this->parameters['user']->setEmail($action->getParam(0));
-					$uar->editEmail($this->parameters['user']);
-					$redirect = true;
+                    $checkNewEmail = $uar->loadByEmail($action->getParam(0));
+                    if ($checkNewEmail) {
+                        $app['flashmessages']->addError('That email address already exists in the system. User ID '. $checkNewEmail->getId());
+                    } else {
+                        $this->parameters['user']->setEmail($action->getParam(0));
+                        $uar->editEmail($this->parameters['user']);
+                        $redirect = true;
+                    }
 				}
 
 				if ($redirect) {
