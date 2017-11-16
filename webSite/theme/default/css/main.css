@@ -1209,6 +1209,11 @@ body {
   padding: 5px;
   display: inline-block;
 }
+#header ul.menu li a:hover,
+#header ul.menu li a:focus {
+  color: black;
+  text-decoration: underline;
+}
 #header ul.menu li ul.submenu {
   padding: 0;
   margin: 0;
