@@ -1116,6 +1116,11 @@ ul#ImportURLRecommendations li.ImportURLRecommendation .action a:focus {
 ul.listFeatures li.feature {
   border-bottom: 2px solid #E9E9E9;
 }
+#ReadableDateTimeRange .date .warning {
+  color: red;
+  font-weight: bold;
+  padding-top: 10px;
+}
 ul.loginOrRegisterInterestedIn li {
   margin: 3px 3px 3px 20px;
   list-style-type: circle;

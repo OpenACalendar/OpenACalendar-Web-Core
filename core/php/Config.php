@@ -228,6 +228,8 @@ class Config {
 	public $createUserNameMinimumLength = 10;
 	public $createUserNameMaximumLength = 50;
 
+	public $warnWhenEventsLastLongerThanSeconds = 24*60*60*7; // 1 week.
+
 	/** DEPRECATED */
 	public $canCreateSitesVerifiedEditorUsers = true;
 

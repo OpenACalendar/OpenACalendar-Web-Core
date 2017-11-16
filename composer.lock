@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2d35ee74a962ce7fca39a7e59991dfc",
+    "content-hash": "38ccde5aa602ba1de2121c4c8de337f3",
     "packages": [
         {
             "name": "doctrine/lexer",
@@ -552,16 +552,16 @@
         },
         {
             "name": "jmbtechnologylimited/twigextensions",
-            "version": "v2.0.alpha3",
+            "version": "v2.0.alpha4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JMB-Technology-Limited/Twig-Extensions.git",
-                "reference": "4f3fcce4296a7f1d55ee198ecb3155bb3b8c1902"
+                "reference": "71a75af37a164969088e33a45efa668530e314c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JMB-Technology-Limited/Twig-Extensions/zipball/4f3fcce4296a7f1d55ee198ecb3155bb3b8c1902",
-                "reference": "4f3fcce4296a7f1d55ee198ecb3155bb3b8c1902",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/Twig-Extensions/zipball/71a75af37a164969088e33a45efa668530e314c5",
+                "reference": "71a75af37a164969088e33a45efa668530e314c5",
                 "shasum": ""
             },
             "require": {
@@ -593,7 +593,7 @@
                 "date",
                 "time"
             ],
-            "time": "2017-07-28T23:15:06+00:00"
+            "time": "2017-11-16T09:07:59+00:00"
         },
         {
             "name": "misd/linkify",

@@ -9,7 +9,7 @@
 		"silex/silex": "2.2.*",
 		"twig/twig": "2.4.*",
 		"twig/extensions": "1.5.*",
-		"jmbtechnologylimited/twigextensions": "v2.0.alpha3",
+		"jmbtechnologylimited/twigextensions": "v2.0.alpha4",
 		"symfony/twig-bridge": "3.3.*",
 		"symfony/form": "3.3.*",
 		"symfony/validator": "3.3.*",

@@ -64,6 +64,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 unset($dirs);
 
 $app['twig'] = $app->extend('twig', function($twig, $app) {
+    $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\TimeBetweenExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array(
         'callback' => function($url, $caption, $isEmail) {

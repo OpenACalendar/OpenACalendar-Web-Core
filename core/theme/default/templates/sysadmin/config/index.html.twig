@@ -432,6 +432,14 @@
 			<th>Logging</th>
 			<td><a href="/sysadmin/config/logging">More</a></td>
 		</tr>
+		<tr>
+			<th>warnWhenEventsLastLongerThanSeconds</th>
+			<td>{{ config.warnWhenEventsLastLongerThanSeconds }}
+				({{ (config.warnWhenEventsLastLongerThanSeconds / 60/60) | round (0,'floor') }} hours)
+				({{ (config.warnWhenEventsLastLongerThanSeconds / 60/60/24 )| round (0,'floor') }} days)
+				{% include 'sysadmin/config/index.configcheck.html.twig' with {'field':'warnWhenEventsLastLongerThanSeconds'} %}
+			</td>
+		</tr>
 	</table>
 
 {% endblock %}
