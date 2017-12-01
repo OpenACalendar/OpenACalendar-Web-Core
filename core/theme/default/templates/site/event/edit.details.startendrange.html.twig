@@ -6,8 +6,8 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 {%  if currentSite.cachedIsMultipleTimezones %}
-	{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true} %}
+	{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':true,'showDuration':true } %}
 {%  else %}
-	{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':false} %}
+	{% include 'site/common/eventFromToLine.html.twig' with {'startAt': event.startAtInUTC, 'endAt': event.endAtInUTC, 'timezone':event.timezone, 'showTimeZone':false,'showDuration':true } %}
 {%  endif %}
 
