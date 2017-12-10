@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -44,7 +45,7 @@ class SiteEditProfileForm extends AbstractType{
 		));
 		
 		if ($options['siteLogoAllowed']) {
-			$builder->add('logo', 'file', array(
+			$builder->add('logo', FileType::class, array(
 				"mapped" => false, 
 				'label'=>'Upload new Logo',
 				'required'=>false

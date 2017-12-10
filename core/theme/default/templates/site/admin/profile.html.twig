@@ -18,7 +18,7 @@
 
 	<div class="contentMain">
 
-		<form action="#" method="post"  {{ form_enctype(form) }} class="styled">
+        {{ form_start(form, {'method': 'POST',  'attr': { 'class':'styled' }, 'action':'#'}) }}
 
 			{{ form_errors(form) }}
 

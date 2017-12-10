@@ -57,7 +57,7 @@
 			<h3>Add new picture</h3>
 
 			{# We don't client side validate any form with URL fields to get around UI/UX bug. See https://github.com/OpenACalendar/OpenACalendar-Web-Core/issues/221  #}
-			<form action="#" method="post"  {{ form_enctype(uploadNewMediaForm) }} class="styled"  novalidate="novalidate">
+            {{ form_start(uploadNewMediaForm, {'method': 'POST',  'attr': { 'class':'styled','novalidate':'novalidate' }, 'action':'#'}) }}
 
 				{{ form_errors(uploadNewMediaForm) }}
 
