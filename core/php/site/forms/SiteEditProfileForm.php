@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 
 /**
@@ -49,7 +50,7 @@ class SiteEditProfileForm extends AbstractType{
 		));
 		
 		if ($this->config->isFileStore() && !$this->config->isSingleSiteMode) {
-			$builder->add('logo', 'file', array(
+			$builder->add('logo', FileType::class, array(
 				"mapped" => false, 
 				'label'=>'Upload new Logo',
 				'required'=>false
