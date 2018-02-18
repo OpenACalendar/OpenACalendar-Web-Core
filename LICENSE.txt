@@ -1,7 +1,7 @@
 OpenACalendar License
 =====================
 
-Copyright (c) 2013-2016, JMB Technology Ltd
+Copyright (c) 2013-2018, JMB Technology Ltd
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
