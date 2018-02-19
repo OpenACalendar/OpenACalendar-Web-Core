@@ -160,12 +160,13 @@ class ImportMeetupHandler extends ImportHandlerBase {
                 }
                 if ( isset( $data['results'] ) && is_array( $data['results'] ) ) {
                     return $data['results'];
+                } else {
+                    throw new ImportURLMeetupHandlerAPIError( "No Results where returned", 1 );
                 }
             } else {
                 throw new ImportURLMeetupHandlerAPIError( "Non 200 response - got " . $response->getStatusCode(), 1 );
             }
 
-            return array();
         } catch (\GuzzleHttp\Exception\TransferException $e) {
             throw new ImportURLMeetupHandlerAPIError( "Got Exception " . $e->getMessage(), 1 );
         }
