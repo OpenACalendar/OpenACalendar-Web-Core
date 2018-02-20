@@ -25,10 +25,11 @@ class GroupHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 	/** @var GroupHistoryModel */
 	protected $groupHistoryModel;
 
-	function __construct($groupHistoryModel, SiteModel $siteModel)
-	{
-		$this->groupHistoryModel = $groupHistoryModel;
-	}
+    function __construct($groupHistoryModel, SiteModel $siteModel)
+    {
+        $this->groupHistoryModel = $groupHistoryModel;
+        $this->siteModel = $siteModel;
+    }
 
 
 	/** @return \DateTime */

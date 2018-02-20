@@ -64,7 +64,7 @@ class MediaHistoryNewsFeedModel implements  \InterfaceNewsFeedModel {
 			$txt .= 'New! '."\n";
 		}
 		if ($this->mediaHistoryModel->isAnyChangeFlagsUnknown()) {
-			$txt .= $this->mediaHistoryModel->getDescription();
+			$txt .= $this->mediaHistoryModel->getTitle();
 		} else {
 			if ($this->mediaHistoryModel->getTitleChanged()) {
 				$txt .= 'Title Changed. '."\n";
