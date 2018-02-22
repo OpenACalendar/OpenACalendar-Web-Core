@@ -45,7 +45,7 @@ $app['twig'] = $app->extend('twig', function($twig, $app) {
 });
 	
 
-function configureAppForSite(SiteModel $site) {
+function configureAppForSite(SiteModel $site = null) {
 	global $app;
 
 	# ////////////// Site
@@ -56,15 +56,17 @@ function configureAppForSite(SiteModel $site) {
 	$app['twig']->addGlobal('currentSite', $site);	
 	$app['currentSite'] = $site;
 
-	# ////////////// Timezone
-	$timezone = "";
-	if (in_array('Europe/London',$site->getCachedTimezonesAsList())) {
-		$timezone = 'Europe/London';
-	} else {
-		$timezone  = $site->getCachedTimezonesAsList()[0];
-	}
-	$app['twig']->addGlobal('currentTimeZone', $timezone);	
-	$app['currentTimeZone'] = $timezone;
+    # ////////////// Timezone
+    $timezone = "Europe/London";
+    if ($site) {
+        if (in_array('Europe/London', $site->getCachedTimezonesAsList())) {
+            $timezone = 'Europe/London';
+        } else {
+            $timezone = $site->getCachedTimezonesAsList()[0];
+        }
+    }
+    $app['twig']->addGlobal('currentTimeZone', $timezone);
+    $app['currentTimeZone'] = $timezone;
 
 	# ////////////// Theme Vars
 	configureAppForThemeVariables($site);
