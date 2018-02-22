@@ -48,6 +48,7 @@ class SendUpcomingEventsForUsersTask  extends \BaseTask  {
 		$userNotificationType = $this->app['extensions']->getCoreExtension()->getUserNotificationType('UpcomingEvents');
 
 		configureAppForThemeVariables(null);
+		configureAppForSite(null);
 
 		foreach($userRepoBuilder->fetchAll() as $user) {
 
