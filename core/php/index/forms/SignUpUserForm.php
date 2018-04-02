@@ -46,7 +46,7 @@ class SignUpUserForm  extends AbstractType {
             'label'=>'Your Name',
             'required'=>true,
             'constraints' => new \Symfony\Component\Validator\Constraints\Length(array('min'=>1,'max'=>VARCHAR_COLUMN_LENGTH_USED)),
-            'data' => 'Person'.rand(1,10000000),
+            'data' => 'Person',
         ));
 		$builder->add('password1', PasswordType::class, array(
 			'label'=>'Password',
