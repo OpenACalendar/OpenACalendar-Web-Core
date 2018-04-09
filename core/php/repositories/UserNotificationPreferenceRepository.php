@@ -87,18 +87,19 @@ class UserNotificationPreferenceRepository {
 		
 		# update or insert
 		if ($stat->rowCount() > 0) {
-			$stat = $this->app['db']->prepare("UPDATE user_notification_preference SET is_email = :is_email ".
+			$stat = $this->app['db']->prepare("UPDATE user_notification_preference SET is_email = :is_email, last_save_at = :last_save_at ".
 				"WHERE user_id =:user_id AND extension_id=:extension_id AND user_notification_preference_type = :user_notification_preference_type");
 		} else {
-			$stat = $this->app['db']->prepare("INSERT INTO user_notification_preference (user_id,extension_id,user_notification_preference_type,is_email) ".
-					"VALUES (:user_id,:extension_id,:user_notification_preference_type,:is_email)");
+			$stat = $this->app['db']->prepare("INSERT INTO user_notification_preference (user_id,extension_id,user_notification_preference_type,is_email,last_save_at) ".
+					"VALUES (:user_id,:extension_id,:user_notification_preference_type,:is_email,:last_save_at)");
 		}
 		$stat->execute(array( 
 				'user_id'=>$user->getId(), 
 				'extension_id'=>$extensionId, 
 				'user_notification_preference_type'=>$userNotificationPreferenceType, 
 				'is_email'=>$value?1:0,
-			));
+                'last_save_at'=>$this->app['timesource']->getFormattedForDataBase(),
+        ));
 
 	}
 	
