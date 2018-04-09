@@ -16,6 +16,9 @@ class WatchPromptNotificationPreference extends \BaseUserNotificationPreference 
 	public function getLabel() { return 'Send emails when something I watch is running out of future events'; }
 
 	public function getUserNotificationPreferenceType() { return 'WatchPrompt'; }
-	
+
+    public function isAboutEventsInterestedIn(): bool { return false; }
+    public function isAboutEditsIn(): bool { return true; }
+
 }
 

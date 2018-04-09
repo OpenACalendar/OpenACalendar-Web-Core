@@ -64,7 +64,23 @@ class SignUpUserForm  extends AbstractType {
                 'label' => 'I agree to the terms and conditions'
             )
         );
-		
+
+        $builder->add("email_about_events_interested_in",
+            CheckboxType::class,
+            array(
+                'required' => false,
+                'label' => 'Can we email you about events you express an interest in?'
+            )
+        );
+
+        $builder->add("email_about_edits",
+            CheckboxType::class,
+            array(
+                'required' => false,
+                'label' => 'Can we email you about any additions or edits you make to the site?'
+            )
+        );
+
 		if ($this->app['config']->newUserRegisterAntiSpam) {
 			$builder->add('antispam',TextType::class,array('label'=>'What is 2 + 2?','required'=>true));
 			

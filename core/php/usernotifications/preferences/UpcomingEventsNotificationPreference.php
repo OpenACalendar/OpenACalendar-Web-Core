@@ -16,6 +16,10 @@ class UpcomingEventsNotificationPreference extends \BaseUserNotificationPreferen
 	public function getLabel() { return 'Send Emails of upcoming events'; }
 
 	public function getUserNotificationPreferenceType() { return 'UpcomingEvents'; }
-	
+
+
+    public function isAboutEventsInterestedIn(): bool { return true; }
+    public function isAboutEditsIn(): bool { return false; }
+
 }
 

@@ -28,5 +28,8 @@ abstract class BaseUserNotificationPreference {
 	public abstract function getUserNotificationPreferenceType();
 
 	public abstract function getLabel();
-	
+
+	public function isAboutEventsInterestedIn(): bool { return false; }
+	public function isAboutEditsIn(): bool { return false; }
+
 }

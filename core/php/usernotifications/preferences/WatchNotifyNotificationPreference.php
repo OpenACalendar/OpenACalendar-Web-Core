@@ -16,6 +16,9 @@ class WatchNotifyNotificationPreference extends \BaseUserNotificationPreference 
 	public function getLabel() { return 'Send emails when something I watch changes'; }
 
 	public function getUserNotificationPreferenceType() { return 'WatchNotify'; }
-	
+
+    public function isAboutEventsInterestedIn(): bool { return true; }
+    public function isAboutEditsIn(): bool { return false; }
+
 }
 

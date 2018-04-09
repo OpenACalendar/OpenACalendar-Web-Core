@@ -10,6 +10,7 @@ use repositories\EventRepository;
 use repositories\SiteRepository;
 use repositories\UserAtEventRepository;
 use repositories\UserInterestedInSiteRepository;
+use repositories\UserNotificationPreferenceRepository;
 use repositories\UserWatchesAreaRepository;
 use Silex\Application;
 use index\forms\SignUpUserForm;
@@ -270,28 +271,50 @@ class UserController {
 			if ($userExistingEmail) {
 				$form->addError(new FormError('That email address already has an account'));
 			}
-			
-			if ($form->isValid()) {
-			
-				$user = new UserAccountModel();
-				$user->setEmail($data['email']);
-				$user->setDisplayname($data['displayname']);
-				$user->setPassword($data['password1']);
 
-				$userAccountMeta = new UserAccountEditMetaDataModel();
-				$userAccountMeta->setFromRequest($request);
+            if ($form->isValid()) {
 
-				$userRepository->create($user, $userAccountMeta);
-				
-				$repo = new UserAccountVerifyEmailRepository($app);
-				$userVerify = $repo->create($user);
-				$userVerify->sendEmail($app, $user);
-				
-				userLogIn($user);
-				$this->actionThingsToDoAfterGetUser($app, $user);
-				return $app->redirect("/");
-				
-			}
+                ##### Create User
+                $user = new UserAccountModel();
+                $user->setEmail($data['email']);
+                $user->setDisplayname($data['displayname']);
+                $user->setPassword($data['password1']);
+
+                $userAccountMeta = new UserAccountEditMetaDataModel();
+                $userAccountMeta->setFromRequest($request);
+
+                $userRepository->create($user, $userAccountMeta);
+
+                ##### Send Signup Email
+                $userAccountVerifyEmailRepository = new UserAccountVerifyEmailRepository($app);
+                $userVerify = $userAccountVerifyEmailRepository->create($user);
+                $userVerify->sendEmail($app, $user);
+
+                ##### Watch things they wanted to
+                $this->actionThingsToDoAfterGetUser($app, $user);
+
+                ##### Email Prefs
+                $userNotificationPreferenceRepo = new UserNotificationPreferenceRepository($app);
+                $emailAboutEventsInterestedIn = $data['email_about_events_interested_in'];
+                $emailAboutEdits = $data['email_about_edits'];
+                foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+                    foreach($extension->getUserNotificationPreferenceTypes() as $userNotificationPreferenceType) {
+                        $allowed = false;
+                        if ($extension->getUserNotificationPreference($userNotificationPreferenceType)->isAboutEventsInterestedIn() && $emailAboutEventsInterestedIn) {
+                            $allowed = true;
+                        }
+                        if ($extension->getUserNotificationPreference($userNotificationPreferenceType)->isAboutEditsIn() && $emailAboutEdits) {
+                            $allowed = true;
+                        }
+                        $userNotificationPreferenceRepo->editEmailPreference($user, $extension->getId(), $userNotificationPreferenceType, $allowed);
+                    }
+                }
+
+                ##### Log User In and redirect back to home page
+                userLogIn($user);
+                return $app->redirect("/");
+
+            }
 		}
 		
 

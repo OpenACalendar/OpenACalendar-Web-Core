@@ -16,6 +16,9 @@ class WatchImportExpiredNotificationPreference extends \BaseUserNotificationPref
 	public function getLabel() { return 'Send emails when something I watch has an importer that expires'; }
 	
 	public function getUserNotificationPreferenceType() { return 'WatchImportExpired'; }
-	
+
+    public function isAboutEventsInterestedIn(): bool { return false; }
+    public function isAboutEditsIn(): bool { return true; }
+
 }
 
