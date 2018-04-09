@@ -27,7 +27,7 @@ class UserNotificationPreferenceRepository {
         $this->app = $app;
     }
 
-	public function load(UserAccountModel $user, $extensionId, $userNotificationPreferenceType) {
+	public function load(UserAccountModel $user, $extensionId, $userNotificationPreferenceType, $overRideDefaultToFalse = false) {
 
 		$stat = $this->app['db']->prepare("SELECT user_notification_preference.* FROM user_notification_preference ".
 				"WHERE user_id =:user_id AND extension_id=:extension_id AND user_notification_preference_type = :user_notification_preference_type");
@@ -39,7 +39,10 @@ class UserNotificationPreferenceRepository {
 		$pm = new UserNotificationPreferenceModel();
 		if ($stat->rowCount() > 0) {
 			$pm->setFromDataBaseRow($stat->fetch());
-		} else {
+        } else if ($overRideDefaultToFalse) {
+            $pm->setIsEmail(false);
+            return $pm;
+        } else {
 			// set the default
 			$pm->setIsEmail(true);
 			

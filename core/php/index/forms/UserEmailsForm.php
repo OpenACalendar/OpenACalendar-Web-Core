@@ -65,9 +65,11 @@ class UserEmailsForm  extends AbstractType {
 		$repo = new \repositories\UserNotificationPreferenceRepository($app);
 		
 		foreach($this->preferences as $key=>$preference) {
-			
-			$userPref = $repo->load($this->user, $preference->getUserNotificationPreferenceExtensionID(), 
-					$preference->getUserNotificationPreferenceType());
+
+            $userPref = $repo->load($this->user,
+                $preference->getUserNotificationPreferenceExtensionID(),
+                $preference->getUserNotificationPreferenceType(),
+                true);
 
             $builder->add($key,
                 CheckboxType::class,
