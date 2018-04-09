@@ -29,11 +29,17 @@
 
 			{{ form_errors(form) }}
 
-			{{ form_row(form.email_upcoming_events) }}
+			<h3>Upcoming Events</h3>
 
-			{{ form_row(form.email_upcoming_events_days_notice) }}
+            {{ form_row(form.org_openacalendar_UpcomingEvents) }}
 
-			{{ form_rest(form) }}
+            {{ form_row(form.email_upcoming_events) }}
+
+            {{ form_row(form.email_upcoming_events_days_notice) }}
+
+			<h3>Other Emails</h3>
+
+            {{ form_rest(form) }}
 
 			<div class="bigSubmitActionWrapper"><input type="submit"  value="Save" class="bigSubmitAction"/></div>
 			<div class="afterBigSubmitActionWrapper"></div>
