@@ -15,6 +15,7 @@ Vagrant.configure(2) do |config|
 		config.vm.network "forwarded_port", guest: 8080, host: 8080
 		config.vm.network "forwarded_port", guest: 8081, host: 8081
 		config.vm.network "forwarded_port", guest: 8082, host: 8082
+		config.vm.network "forwarded_port", guest: 8025, host: 8025
 
 		config.vm.synced_folder ".", "/vagrant",  :owner=> 'ubuntu', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
 

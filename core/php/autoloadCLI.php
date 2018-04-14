@@ -93,6 +93,6 @@ $app['mailer'] =  function ($app) {
 	$transport->setUsername($app['config']->SMTPUsername);
 	$transport->setPassword($app['config']->SMTPPassword);
 	$transport->setEncryption($app['config']->SMTPEncyption);
-	return new Swift_Mailer($transport);
+	return new OAC_Swift_Mailer($transport);
 };
 

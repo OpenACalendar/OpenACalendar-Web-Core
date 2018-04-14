@@ -65,6 +65,13 @@ There is a handy command:
     vagrant ssh app
     db
 
+### Email Spool
+
+    vagrant ssh app
+    /bin/mailhog
+    
+Open in a browser: http://localhost:8025/
+
 ## The tests box
 
 This is a special box only for running tests. The Database files are saved on a RAM disk for speed. To use:

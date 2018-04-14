@@ -13,7 +13,17 @@
  * Is in Debug mode?
  */
 $CONFIG->isDebug = true;
-$CONFIG->actuallySendEmail = false;
+
+/**
+ * Email
+ */
+$CONFIG->actuallySendEmail = true;
+$CONFIG->SMTPPort = 1025;
+$CONFIG->SMTPHost = "localhost";
+$CONFIG->SMTPUsername = null;
+$CONFIG->SMTPPassword = null;
+$CONFIG->SMTPEncyption = null;
+$CONFIG->SMTPAuthMode = null;
 
 /**
  * DB details.

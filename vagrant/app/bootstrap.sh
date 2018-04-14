@@ -17,6 +17,8 @@ chown www-data:www-data  /logs
 
 mkdir -p /bin
 wget -O /bin/composer.phar -q https://getcomposer.org/composer.phar
+wget -O /bin/mailhog https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64
+chmod a+x /bin/mailhog
 
 cd /vagrant
 php /bin/composer.phar install
