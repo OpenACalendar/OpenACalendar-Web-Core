@@ -2,6 +2,7 @@
 
 namespace site\controllers;
 
+use repositories\UserNotificationPreferenceRepository;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,10 +39,13 @@ class IndexController {
 		}
 		$erb->setLimit(100);
 		$events = $erb->fetchAll();
-		
-		return $app['twig']->render('site/index/index.html.twig', array(
-				'events'=>$events,
-			));
+
+        $userNotificationPreferenceRepo= new UserNotificationPreferenceRepository($app);
+
+        return $app['twig']->render('site/index/index.html.twig', array(
+            'events'=>$events,
+            'showUserEmailPreferencesPrompt' => ($app['currentUser'] && !$userNotificationPreferenceRepo->hasUserExpressedAnyPreferences($app['currentUser'])),
+        ));
 		
 	}
 	

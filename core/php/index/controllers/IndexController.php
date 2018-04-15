@@ -3,6 +3,7 @@
 namespace index\controllers;
 
 use models\SiteEditMetaDataModel;
+use repositories\UserNotificationPreferenceRepository;
 use Silex\Application;
 use index\forms\CreateForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,9 +45,13 @@ class IndexController {
 			foreach($srb->fetchAll() as $site) {
 				$sites[$site->getId()] = $site;
 			}
-			
-			return $app['twig']->render('index/index/index.loggedin.html.twig', array(
-				'sites'=>$sites,
+
+            $userNotificationPreferenceRepo= new UserNotificationPreferenceRepository($app);
+
+
+            return $app['twig']->render('index/index/index.loggedin.html.twig', array(
+                'sites'=>$sites,
+                'showUserEmailPreferencesPrompt' => !$userNotificationPreferenceRepo->hasUserExpressedAnyPreferences($app['currentUser']),
 			));
 		} else {
 			return $app['twig']->render('index/index/index.loggedout.html.twig', array(

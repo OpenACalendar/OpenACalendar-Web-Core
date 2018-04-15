@@ -22,6 +22,12 @@
 
 			<p>Welcome {{ currentUser.displayname }}.</p>
 
+			{%  if showUserEmailPreferencesPrompt %}
+				<div class="flash-notice">
+					Please can you confirm <a href="/me/emails">which emails you are happy to get from us</a>?
+				</div>
+			{%  endif %}
+
 		</div>
 
 		<div class="contentTwoColumnsRight">

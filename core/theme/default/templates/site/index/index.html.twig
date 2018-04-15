@@ -25,6 +25,13 @@
 	<div class="contentTwoColumns">
 
 		<div class="contentTwoColumnsLeft">
+
+			{%  if showUserEmailPreferencesPrompt %}
+				<div class="flash-notice">
+					Please can you confirm <a href="{{ config.getWebIndexDomainSecure() }}/me/emails">which emails you are happy to get from us</a>?
+				</div>
+			{%  endif %}
+
 			{% if currentSite.descriptionText %}
 				<p>{{ currentSite.descriptionText | nl2br | linkify }}</p>
 			{% else %}

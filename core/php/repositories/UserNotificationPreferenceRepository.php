@@ -27,6 +27,15 @@ class UserNotificationPreferenceRepository {
         $this->app = $app;
     }
 
+    public function hasUserExpressedAnyPreferences(UserAccountModel $userAccountModel) {
+        $stat = $this->app['db']->prepare("SELECT user_notification_preference.* FROM user_notification_preference ".
+            "WHERE user_id =:user_id");
+        $stat->execute(array(
+            'user_id'=>$userAccountModel->getId(),
+        ));
+        return $stat->rowCount() > 0;
+    }
+
 	public function load(UserAccountModel $user, $extensionId, $userNotificationPreferenceType, $overRideDefaultToFalse = false) {
 
 		$stat = $this->app['db']->prepare("SELECT user_notification_preference.* FROM user_notification_preference ".
