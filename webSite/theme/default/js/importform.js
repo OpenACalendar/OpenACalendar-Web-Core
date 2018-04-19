@@ -6,14 +6,14 @@
  * @author James Baster <james@jarofgreen.co.uk>
 */
 $(document).ready(function() {
-	$('#ImportEditForm_country_id, #ImportNewForm_country_id').change(function() {
+	$('#import_edit_form_country_id, #import_new_form_country_id').change(function() {
 		onCountryChange();
 	});
 });
 	
 	
 function getCurrentCountry() {
-	return $('#ImportEditForm_country_id, #ImportNewForm_country_id').val();
+	return $('#import_edit_form_country_id, #import_new_form_country_id').val();
 }
 	
 var lastCountryIDSeen = -1;	
