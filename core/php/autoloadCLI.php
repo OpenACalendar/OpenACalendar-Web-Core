@@ -38,10 +38,11 @@ $app['twig'] = $app->extend('twig', function($twig, $app) {
     $twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension(array('attr'=>array('target'=>'_blank'))));
     $twig->addExtension(new twig\extensions\TypeCheckExtension($app));
     $twig->addExtension(new Twig_Extensions_Extension_Text());
-	$twig->addGlobal('config', $app['config']);
-	$twig->addGlobal('currentUserClock12Hour', true);
-	$twig->addGlobal('COPYRIGHT_YEARS', COPYRIGHT_YEARS);
-	return $twig;
+    $twig->addGlobal('config', $app['config']);
+    $twig->addGlobal('extensions', $app['extensions']);
+    $twig->addGlobal('currentUserClock12Hour', true);
+    $twig->addGlobal('COPYRIGHT_YEARS', COPYRIGHT_YEARS);
+    return $twig;
 });
 	
 
