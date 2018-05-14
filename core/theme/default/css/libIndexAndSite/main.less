@@ -430,6 +430,54 @@ ul.mainListEvents li.event, div.mainShowEvent {
 	}
 }
 
+ul.mainListEvents li.event.notAttending {
+	div.dateTimeIcon {
+		border: 2px solid #666666;
+		.rounded-corners(4px);
+		div.dateIcon {
+			background: #666666;
+		}
+		div.timeIcon {
+			padding: 1px;
+			text-align: center;
+		}
+		span.startTime {
+			color: #666666;
+		}
+		a {
+			span.startTime {
+				color: #666666;
+			}
+		}
+	}
+	div.title {
+		font-size: 1rem;
+		font-weight: normal;
+		line-height: 1.25em;
+		a {
+			color: #666666;
+		}
+		a:hover, a:focus {
+			color: black;
+		}
+	}
+	p.description {
+		color: #666666;
+		font-size: 0.875rem;
+	}
+	.dateAndLocationWrapper {
+		div.date {
+			color: #666666;
+		}
+		div.location {
+			color: #666666;
+			a {
+				color: #666666;
+			}
+		}
+	}
+}
+
 div.mainShowVenue, div.mainShowArea {
 	.locationWrapper {
 		clear: both;

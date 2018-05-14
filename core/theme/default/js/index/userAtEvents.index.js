@@ -84,21 +84,25 @@ function showCurrentUserAttendanceForEvent(data) {
 				} else {
 					privacyWrapperObj.show();
 				}
-				var imageDiv = formObj.parents('.currentUserAttendance').children('.activationLinkWrapper');
-				var ticketDiv = formObj.parents('.currentUserAttendance').children('.ticketWrapper');
-				if (attendingObj.val() == 'yes') {
-					imageDiv.html('<div class="iconUserAttendingSmall" title="You are attending"></div>');
-					ticketDiv.show();
-				} else if (attendingObj.val() == 'maybe') {
-					imageDiv.html('<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>');
-					ticketDiv.show();
-				} else if (attendingObj.val() == 'no') {
-					imageDiv.html('<div class="iconUserNotAttendingSmall" title="You are not attending"></div>');
-					ticketDiv.hide();
-				} else {
-					imageDiv.html('<div class="iconUserUnknownAttendingSmall" title="Are you attending?"></div>');
-					ticketDiv.hide();
-				}
+                var imageDiv = formObj.parents('.currentUserAttendance').children('.activationLinkWrapper');
+                var ticketDiv = formObj.parents('.currentUserAttendance').children('.ticketWrapper');
+                if (attendingObj.val() == 'yes') {
+                    imageDiv.html('<div class="iconUserAttendingSmall" title="You are attending"></div>');
+                    ticketDiv.show();
+                    formObj.parents('li.event').removeClass('notAttending');
+                } else if (attendingObj.val() == 'maybe') {
+                    imageDiv.html('<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>');
+                    ticketDiv.show();
+                    formObj.parents('li.event').removeClass('notAttending');
+                } else if (attendingObj.val() == 'no') {
+                    imageDiv.html('<div class="iconUserNotAttendingSmall" title="You are not attending"></div>');
+                    ticketDiv.hide();
+                    formObj.parents('li.event').addClass('notAttending');
+                } else {
+                    imageDiv.html('<div class="iconUserUnknownAttendingSmall" title="Are you attending?"></div>');
+                    ticketDiv.hide();
+                    formObj.parents('li.event').removeClass('notAttending');
+                }
 
 			});
 		

@@ -1701,6 +1701,52 @@ div.mainShowEvent .GetTicket {
   color: black;
   text-decoration: none;
 }
+ul.mainListEvents li.event.notAttending div.dateTimeIcon {
+  border: 2px solid #666666;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+ul.mainListEvents li.event.notAttending div.dateTimeIcon div.dateIcon {
+  background: #666666;
+}
+ul.mainListEvents li.event.notAttending div.dateTimeIcon div.timeIcon {
+  padding: 1px;
+  text-align: center;
+}
+ul.mainListEvents li.event.notAttending div.dateTimeIcon span.startTime {
+  color: #666666;
+}
+ul.mainListEvents li.event.notAttending div.dateTimeIcon a span.startTime {
+  color: #666666;
+}
+ul.mainListEvents li.event.notAttending div.title {
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.25em;
+}
+ul.mainListEvents li.event.notAttending div.title a {
+  color: #666666;
+}
+ul.mainListEvents li.event.notAttending div.title a:hover,
+ul.mainListEvents li.event.notAttending div.title a:focus {
+  color: black;
+}
+ul.mainListEvents li.event.notAttending p.description {
+  color: #666666;
+  font-size: 0.875rem;
+}
+ul.mainListEvents li.event.notAttending .dateAndLocationWrapper div.date {
+  color: #666666;
+}
+ul.mainListEvents li.event.notAttending .dateAndLocationWrapper div.location {
+  color: #666666;
+}
+ul.mainListEvents li.event.notAttending .dateAndLocationWrapper div.location a {
+  color: #666666;
+}
 div.mainShowVenue .locationWrapper,
 div.mainShowArea .locationWrapper {
   clear: both;
@@ -2667,6 +2713,10 @@ table.calendar .event div.currentUserAttendance a {
 }
 table.calendar .event .below {
   clear: both;
+}
+table.calendar .event.notAttending {
+  background: none repeat scroll 0 0 #cccccc;
+  border: 1px solid #cccccc;
 }
 table.calendar .deleted {
   background: url('/theme/default/img/deletedBackground.png');

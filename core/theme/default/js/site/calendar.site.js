@@ -180,16 +180,21 @@ function showCurrentUserAttendanceForEventInPopupFromCalendar(eventSlug, content
 				} else {
 					privacyWrapperObj.show();
 				}
-				var imageDiv = $('#currentUserAttendanceForEvent'+eventSlug+' a.activationLinkWrapper');
-				if (attendingObj.val() == 'yes') {
-					imageDiv.html('<div class="iconUserAttendingSmall" title="You are attending"></div>');
-				} else if (attendingObj.val() == 'maybe') {
-					imageDiv.html('<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>');
-				} else if (attendingObj.val() == 'no') {
-					imageDiv.html('<div class="iconUserNotAttendingSmall" title="You are not attending"></div>');
-				} else {
-					imageDiv.html('<div class="iconUserUnknownAttendingSmall" title="Are you attending?"></div>');
-				}
+                var imageDiv = $('#currentUserAttendanceForEvent'+eventSlug+' a.activationLinkWrapper');
+                var eventEntries = $('table.calendar .event'+eventSlug);
+                if (attendingObj.val() == 'yes') {
+                    imageDiv.html('<div class="iconUserAttendingSmall" title="You are attending"></div>');
+                    eventEntries.removeClass('notAttending');
+                } else if (attendingObj.val() == 'maybe') {
+                    imageDiv.html('<div class="iconUserMaybeAttendingSmall" title="You are maybe attending"></div>');
+                    eventEntries.removeClass('notAttending');
+                } else if (attendingObj.val() == 'no') {
+                    imageDiv.html('<div class="iconUserNotAttendingSmall" title="You are not attending"></div>');
+                    eventEntries.addClass('notAttending');
+                } else {
+                    imageDiv.html('<div class="iconUserUnknownAttendingSmall" title="Are you attending?"></div>');
+                    eventEntries.removeClass('notAttending');
+                }
 			});
 		}
 	});

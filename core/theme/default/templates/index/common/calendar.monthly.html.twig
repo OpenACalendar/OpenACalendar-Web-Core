@@ -47,7 +47,7 @@
 			</div>
 			<div class="events">
 				{% for event in data.eventsContinuing %}
-					<div class="event continuing {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
+					<div class="event site{{ event.siteSlug }}event{{ event.slug }} continuing {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %} {% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions and event.userIsPlanNotAttending %}notAttending{%  endif %}">
 						<div class="above"></div>
 						<a href="/event/{{ event.slugForUrl }}" onclick="showEventPopup({slug: {{ event.slug }}, slugForURL: '{{ event.slugForURL|e('js') }}' }); return false;">
 							{{ event.getSummaryDisplay()  }} {%  if event.isDeleted  %}[DELETED]{%  elseif event.isCancelled  %}[CANCELLED]{%  endif %}
@@ -56,7 +56,7 @@
 					</div>
 				{% endfor %}
 				{% for event in data.events %}
-					<div class="event starting {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %}">
+					<div class="event site{{ event.siteSlug }}event{{ event.slug }} starting {% if event.isDeleted %}deleted{%  elseif event.isCancelled  %}cancelled{% endif %} {% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions and event.userIsPlanNotAttending %}notAttending{%  endif %}">
 						<div class="above"></div>
 						{% if currentUser is not null and showCurrentUserOptions is defined and showCurrentUserOptions %}
 							<div class="currentUserAttendance" id="currentUserAttendanceForSite{{ event.siteSlug }}Event{{ event.slug }}">

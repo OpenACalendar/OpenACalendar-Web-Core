@@ -5,7 +5,7 @@
  # @copyright (c) JMB Technology Limited, http://jmbtechnology.co.uk/
  # @author James Baster <james@jarofgreen.co.uk>
  #}
-<li class="event" itemprop="event" itemscope itemtype="http://schema.org/Event">
+<li class="event {% if showCurrentUserOptions is defined and showCurrentUserOptions and currentUser is not null and event.userIsPlanNotAttending %}notAttending{%  endif %}" itemprop="event" itemscope itemtype="http://schema.org/Event">
 	{% if event.isdeleted %}
 		<div class="dateTimeIcon">
 			<div class="dateIcon">
