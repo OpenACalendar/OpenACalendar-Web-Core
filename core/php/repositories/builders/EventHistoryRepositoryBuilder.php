@@ -46,7 +46,8 @@ class EventHistoryRepositoryBuilder  extends BaseRepositoryBuilder {
 	
 		
 		
-		$sql = "SELECT event_history.*, group_information.id AS group_id, group_information.title AS group_title, user_account_information.username AS user_account_username FROM event_history ".
+		$sql = "SELECT event_history.*, group_information.id AS group_id, group_information.title AS group_title, ".
+                " user_account_information.displayname AS user_account_displayname, user_account_information.username AS user_account_username FROM event_history ".
 				" LEFT JOIN user_account_information ON user_account_information.id = event_history.user_account_id ".
 				" LEFT JOIN event_information ON event_information.id = event_history.event_id ".
 				" LEFT JOIN event_in_group ON event_in_group.event_id = event_information.id AND event_in_group.removed_at IS NULL AND event_in_group.is_main_group = '1' ".
