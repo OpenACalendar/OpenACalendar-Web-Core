@@ -28,68 +28,12 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		
 		### Test
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
-		$this->assertEquals(true, $pref->getIsEmail());
-		
-		
-	}
-	
-	
-	function testSetOldWayFalseThenGet() {
-
-
-		$user = new UserAccountModel();
-		$user->setEmail("test@jarofgreen.co.uk");
-		$user->setUsername("test");
-		$user->setPassword("password");
-		
-		$userRepo = new UserAccountRepository($this->app);
-		$userRepo->create($user);
-		
-		
-		$prefRepo = new UserNotificationPreferenceRepository($this->app);
-		
-		### Set
-		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '0' NOT NULL");
-		$stat->execute();
-		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_prompt boolean default '0' NOT NULL");
-		$stat->execute();
-		
-		### Test
-		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
-		$this->assertEquals(false, $pref->getIsEmail());
-		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchNotify');
 		$this->assertEquals(false, $pref->getIsEmail());
 		
+		
 	}
-	
-	function testSetOldWayTrueThenGet() {
-			
 
-		$user = new UserAccountModel();
-		$user->setEmail("test@jarofgreen.co.uk");
-		$user->setUsername("test");
-		$user->setPassword("password");
-		
-		$userRepo = new UserAccountRepository($this->app);
-		$userRepo->create($user);
-		
-		
-		$prefRepo = new UserNotificationPreferenceRepository($this->app);
-		
-		### Set
-		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_notify boolean default '1' NOT NULL");
-		$stat->execute();
-		$stat = $this->app['db']->prepare("ALTER TABLE user_account_information ADD is_email_watch_prompt boolean default '1' NOT NULL");
-		$stat->execute();
-		
-		### Test
-		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
-		$this->assertEquals(true, $pref->getIsEmail());
-		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchNotify');
-		$this->assertEquals(true, $pref->getIsEmail());
-		
-	}
-	
+
 	function testSetThenGet() {
 			
 
@@ -111,7 +55,7 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
 		$this->assertEquals(true, $pref->getIsEmail());
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchNotify');
-		$this->assertEquals(true, $pref->getIsEmail());
+		$this->assertEquals(false, $pref->getIsEmail());
 		
 		### Set
 		$prefRepo->editEmailPreference($user, 'org.openacalendar', 'WatchPrompt', false);
@@ -120,17 +64,17 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
 		$this->assertEquals(false, $pref->getIsEmail());
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchNotify');
-		$this->assertEquals(true, $pref->getIsEmail());
+		$this->assertEquals(false, $pref->getIsEmail());
 		
 		
 		### Set
-		$prefRepo->editEmailPreference($user, 'org.openacalendar', 'WatchNotify', false);
+		$prefRepo->editEmailPreference($user, 'org.openacalendar', 'WatchNotify', true);
 		
 		### Test
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
 		$this->assertEquals(false, $pref->getIsEmail());
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchNotify');
-		$this->assertEquals(false, $pref->getIsEmail());
+		$this->assertEquals(true, $pref->getIsEmail());
 
 		
 		
@@ -141,7 +85,7 @@ class UserNotificationPreferenceRepositoryTest extends \BaseAppWithDBTest {
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchPrompt');
 		$this->assertEquals(true, $pref->getIsEmail());
 		$pref = $prefRepo->load($user, 'org.openacalendar', 'WatchNotify');
-		$this->assertEquals(false, $pref->getIsEmail());
+		$this->assertEquals(true, $pref->getIsEmail());
 		
 		
 	}

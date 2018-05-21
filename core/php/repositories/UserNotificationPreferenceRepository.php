@@ -36,7 +36,7 @@ class UserNotificationPreferenceRepository {
         return $stat->rowCount() > 0;
     }
 
-	public function load(UserAccountModel $user, $extensionId, $userNotificationPreferenceType, $overRideDefaultToFalse = false) {
+	public function load(UserAccountModel $user, $extensionId, $userNotificationPreferenceType) {
 
 		$stat = $this->app['db']->prepare("SELECT user_notification_preference.* FROM user_notification_preference ".
 				"WHERE user_id =:user_id AND extension_id=:extension_id AND user_notification_preference_type = :user_notification_preference_type");
@@ -48,40 +48,8 @@ class UserNotificationPreferenceRepository {
 		$pm = new UserNotificationPreferenceModel();
 		if ($stat->rowCount() > 0) {
 			$pm->setFromDataBaseRow($stat->fetch());
-        } else if ($overRideDefaultToFalse) {
-            $pm->setIsEmail(false);
-            return $pm;
         } else {
-			// set the default
-			$pm->setIsEmail(true);
-			
-			// But wait, can we try to load setting from old fields on User Table?
-			if (($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchPrompt') || 
-				($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchNotify') ||
-				($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchImportExpired') ||
-				($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'UpcomingEvents') || 
-				($extensionId == 'org.openacalendar.newsletter' && $userNotificationPreferenceType == 'Newsletter')) {
-				
-				$stat = $this->app['db']->prepare("SELECT user_account_information.* FROM user_account_information WHERE id = :id");
-				$stat->execute(array('id'=>$user->getId()));
-				$oldData = $stat->fetch();
-				
-				if ($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchPrompt' && isset($oldData['is_email_watch_prompt'])) {
-					$pm->setIsEmail($oldData['is_email_watch_prompt']);
-				}
-				if ($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchNotify' && isset($oldData['is_email_watch_notify'])) {
-					$pm->setIsEmail($oldData['is_email_watch_notify']);
-				}
-				if ($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'WatchImportExpired' && isset($oldData['is_email_watch_import_expired'])) {
-					$pm->setIsEmail($oldData['is_email_watch_import_expired']);
-				}
-				if ($extensionId == 'org.openacalendar' && $userNotificationPreferenceType == 'UpcomingEvents' && isset($oldData['email_upcoming_events'])) {
-					$pm->setIsEmail($oldData['email_upcoming_events'] != 'n');
-				}				
-				if ($extensionId == 'org.openacalendar.newsletter' && $userNotificationPreferenceType == 'Newsletter' && isset($oldData['is_email_newsletter'])) {
-					$pm->setIsEmail($oldData['is_email_newsletter']);
-				}				
-			}
+            $pm->setIsEmail(false);
 		}
 		return $pm;
 	}

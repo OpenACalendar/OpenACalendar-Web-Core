@@ -53,8 +53,7 @@ class UserEmailsForm  extends AbstractType {
             $userPref = $repo->load(
                 $options['user'],
                 $preference->getUserNotificationPreferenceExtensionID(),
-                $preference->getUserNotificationPreferenceType(),
-                true
+                $preference->getUserNotificationPreferenceType()
             );
 
             $builder->add($key,
