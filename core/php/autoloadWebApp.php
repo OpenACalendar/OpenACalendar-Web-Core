@@ -138,10 +138,12 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 ///////////////////////// Users
 
 function userLogIn(UserAccountModel $user) {
-	global $WEBSESSION;
+	global $WEBSESSION, $app;
 	if (!$user->getIsClosedBySysAdmin()) {
 		$WEBSESSION->set('userID', $user->getId());
 	}
+	$repo = new UserAccountRepository($app);
+	$repo->editLastWebsiteLogin($user);
 }
 
 function userLogOut() {
@@ -184,6 +186,8 @@ function userGetCurrent() {
 				if ($USER_CURRENT && $USER_CURRENT->getIsClosedBySysAdmin()) $USER_CURRENT = null;
 				if ($USER_CURRENT) {
 					userLogIn($USER_CURRENT);
+					$repo = new UserAccountRememberMeRepository($app);
+					$repo->editLastUsed($uarm);
 				}
 			}
 		}

@@ -42,7 +42,8 @@ class PrivateUserController {
 		if (!$this->parameters['feedKey']) {
 			return false;
 		}
-		
+
+		$repository->editLastUsed($this->parameters['feedKey']);
 		
 		return true;
 

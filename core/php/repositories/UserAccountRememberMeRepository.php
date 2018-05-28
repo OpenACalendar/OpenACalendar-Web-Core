@@ -63,4 +63,17 @@ class UserAccountRememberMeRepository {
 		$stat = $this->app['db']->prepare("DELETE FROM user_account_remember_me WHERE user_account_id =:user_account_id AND access_key=:access_key");
 		$stat->execute(array( 'user_account_id'=>$id, 'access_key'=>$access ));
 	}
+
+    public function editLastUsed(UserAccountRememberMeModel $userAccountRememberMeModel) {
+
+        $stat = $this->app['db']->prepare("UPDATE user_account_remember_me SET  last_used_at=:last_used_at ".
+            "WHERE user_account_id = :user_account_id AND access_key = :access_key");
+        $stat->execute(array(
+            'last_used_at'=>$this->app['timesource']->getFormattedForDataBase() ,
+            'user_account_id'=>$userAccountRememberMeModel->getUserAccountId(),
+            'access_key' => $userAccountRememberMeModel->getAccessKey(),
+        ));
+
+    }
+
 }

@@ -69,7 +69,18 @@ class UserAccountPrivateFeedKeyRepository {
 			return $uapfkm;
 		}
 	}
-	
+
+    public function editLastUsed(UserAccountPrivateFeedKeyModel $userAccountPrivateFeedKeyModel) {
+
+        $stat = $this->app['db']->prepare("UPDATE user_account_private_feed_key SET  last_used_at=:last_used_at ".
+            "WHERE user_account_id = :user_account_id AND access_key = :access_key");
+        $stat->execute(array(
+            'last_used_at'=>$this->app['timesource']->getFormattedForDataBase() ,
+            'user_account_id'=>$userAccountPrivateFeedKeyModel->getUserAccountId(),
+            'access_key' => $userAccountPrivateFeedKeyModel->getAccessKey(),
+        ));
+
+    }
 }
 
 

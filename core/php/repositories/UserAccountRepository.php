@@ -304,6 +304,18 @@ class UserAccountRepository {
 
         $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
 	}
-	
+
+    public function editLastWebsiteLogin(UserAccountModel $user) {
+
+        $stat = $this->app['db']->prepare("UPDATE user_account_information SET  last_website_login_at=:last_website_login_at WHERE id =:id");
+        $stat->execute(array(
+            'id'=>$user->getId() ,
+            'last_website_login_at'=>$this->app['timesource']->getFormattedForDataBase(),
+        ));
+
+        $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserSaved', array('user_account_id'=>$user->getId()));
+
+    }
+
 }
 
