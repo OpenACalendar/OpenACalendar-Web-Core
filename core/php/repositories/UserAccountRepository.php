@@ -317,5 +317,57 @@ class UserAccountRepository {
 
     }
 
+    public function purge(UserAccountModel $userAccountModel) {
+        try {
+            $this->app['db']->beginTransaction();
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_notification WHERE user_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_notification_preference WHERE user_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_watches_area_information WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_watches_area_stop WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_watches_group_information WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_watches_site_information WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_account_general_security_key WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_account_private_feed_key WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_account_remember_me WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_account_reset WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_account_verify_email WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_at_event_information WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_account_information WHERE id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $this->app['db']->commit();
+
+            $this->app['messagequeproducerhelper']->send('org.openacalendar', 'UserPurged', array());
+        } catch (Exception $e) {
+            $this->app['db']->rollBack();
+            throw $e;
+        }
+    }
+
 }
 

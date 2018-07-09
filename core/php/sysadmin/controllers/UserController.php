@@ -119,7 +119,13 @@ class UserController {
                         $uar->editEmail($this->parameters['user']);
                         $redirect = true;
                     }
-				}
+
+
+                } else if ($action->getCommand() == 'purge' && $app['config']->sysAdminExtraPurgeUserPassword && $app['config']->sysAdminExtraPurgeUserPassword == $action->getParam(0)) {
+
+                    $uar->purge($this->parameters['user']);
+                    return $app->redirect('/sysadmin/user/');
+                }
 
 				if ($redirect) {
 					return $app->redirect('/sysadmin/user/'.$this->parameters['user']->getId());
@@ -134,6 +140,14 @@ class UserController {
 		$sacrb = new SysadminCommentRepositoryBuilder($app);
 		$sacrb->setUser($this->parameters['user']);
 		$this->parameters['comments'] = $sacrb->fetchAll();
+
+        $canPurge = true;
+        foreach($app['extensions']->getExtensionsIncludingCore() as $extension) {
+            if (!$extension->canPurgeUser($this->parameters['user'])) {
+                $canPurge = false;
+            }
+        }
+        $this->parameters['canPurge'] = $canPurge;
 
 		return $app['twig']->render('sysadmin/user/show.html.twig', $this->parameters);
 	}

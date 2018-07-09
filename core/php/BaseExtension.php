@@ -191,5 +191,9 @@ abstract class BaseExtension {
 		return array();
 	}
 
+    public function canPurgeUser(UserAccountModel $userAccountModel) {
+        return true;
+    }
+
 }
 

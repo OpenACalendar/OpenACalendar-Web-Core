@@ -68,6 +68,10 @@
 			<td>{{  user.createdFromIP }}</td>
 		</tr>
 		<tr>
+			<th>Can Purge</th>
+			<td>{% if canPurge %}Yes{%  else %}No{%  endif %}</td>
+		</tr>
+		<tr>
 			<th>More</th>
 			<td>
 				<ul>
@@ -102,6 +106,7 @@
 		<li>close</li>
 		<li>open</li>
 		<li>email email</li>
+		<li>purge <span class="param">password</span></li>
 	</ul>
 
 {% endblock %}

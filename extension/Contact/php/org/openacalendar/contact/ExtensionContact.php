@@ -2,6 +2,8 @@
 
 namespace org\openacalendar\contact;
 
+use models\UserAccountModel;
+
 /**
  *
  * @package org.openacalendar.contact
@@ -28,4 +30,18 @@ class ExtensionContact extends \BaseExtension {
 		return array(array('title'=>'Contact Support','url'=>'/sysadmin/contactsupport'));
 	}
 
+    public function canPurgeUser(UserAccountModel $userAccountModel) {
+
+        // Have they ever used contact?
+        $stat = $this->app['db']->prepare("SELECT COUNT(*) AS c FROM contact_support ".
+            "WHERE contact_support.user_account_id =:id");
+        $stat->execute(array( 'id'=>$userAccountModel->getId() ));
+        if ($stat->fetch()['c'] > 0) {
+            return false;
+        }
+
+
+        // Ok, we are happy.
+        return true;
+    }
 }

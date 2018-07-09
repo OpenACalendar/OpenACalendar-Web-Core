@@ -1,6 +1,8 @@
 <?php
 
 namespace org\openacalendar\curatedlists;
+
+use models\UserAccountModel;
 use org\openacalendar\curatedlists\userpermissions\CuratedListsChangeUserPermission;
 
 /**
@@ -53,6 +55,28 @@ class ExtensionCuratedLists extends \BaseExtension {
         if ($key == 'CURATED_LISTS_CHANGE') {
             return new CuratedListsChangeUserPermission();
         }
+    }
+
+    public function canPurgeUser(UserAccountModel $userAccountModel) {
+
+        // Have they ever used this extension?
+        $stat = $this->app['db']->prepare("SELECT COUNT(*) AS c FROM curated_list_history ".
+            "WHERE curated_list_history.user_account_id =:id");
+        $stat->execute(array( 'id'=>$userAccountModel->getId() ));
+        if ($stat->fetch()['c'] > 0) {
+            return false;
+        }
+
+        $stat = $this->app['db']->prepare("SELECT COUNT(*) AS c FROM user_in_curated_list_information ".
+            "WHERE user_in_curated_list_information.user_account_id =:id");
+        $stat->execute(array( 'id'=>$userAccountModel->getId() ));
+        if ($stat->fetch()['c'] > 0) {
+            return false;
+        }
+
+
+        // Ok, we are happy.
+        return true;
     }
 
 }
