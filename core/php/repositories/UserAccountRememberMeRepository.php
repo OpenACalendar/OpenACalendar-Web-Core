@@ -76,4 +76,16 @@ class UserAccountRememberMeRepository {
 
     }
 
+    public function getLastUsedForUser(UserAccountModel $userAccountModel) {
+
+        $stat = $this->app['db']->prepare("SELECT user_account_remember_me.last_used_at FROM user_account_remember_me WHERE ".
+            "user_account_id =:user_account_id AND last_used_at IS NOT NULL ORDER BY last_used_at DESC");
+        $stat->execute(array( 'user_account_id'=>$userAccountModel->getId() ));
+        if ($stat->rowCount() > 0) {
+            $data = $stat->fetch();
+            return $data['last_used_at'];
+        }
+
+    }
+
 }

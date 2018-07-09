@@ -55,6 +55,8 @@ class UserAccountModel {
 		
 		protected $created_at;
 
+		protected $last_website_login_at = null;
+
 
 		public function setFromDataBaseRow($data) {
 			$this->id = $data['id'];
@@ -76,6 +78,7 @@ class UserAccountModel {
 			$utc = new \DateTimeZone("UTC");
 			$this->created_at = $data['created_at'] ? new \DateTime($data['created_at'], $utc) : '';
 			$this->created_from_ip = $data['created_from_ip'];
+            $this->last_website_login_at = $data['last_website_login_at'] ? new \DateTime($data['last_website_login_at'], $utc) : '';
 		}
 		
 		public function getId() {
@@ -202,6 +205,15 @@ class UserAccountModel {
 			$this->email_upcoming_events_days_notice = $email_upcoming_events_days_notice;
 			return $this;
 		}
+
+    /**
+     * @return DateTime|Null
+     */
+    public function getLastWebsiteLoginAt()
+    {
+        return $this->last_website_login_at;
+    }
+
 
 
 		/**

@@ -72,6 +72,18 @@
 			<td>{% if canPurge %}Yes{%  else %}No{%  endif %}</td>
 		</tr>
 		<tr>
+			<th>Last Website Login at</th>
+			<td>{% if user.getLastWebsiteLoginAt %}{{ user.getLastWebsiteLoginAt |date('D H:i jS M Y', currentTimeZone ) }}{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Last Website Remember Me Used at</th>
+			<td>{% if remember_me_last_used %}{{ remember_me_last_used |date('D H:i jS M Y', currentTimeZone ) }}{% endif %}</td>
+		</tr>
+		<tr>
+			<th>Last Private Feed Key Used at</th>
+			<td>{% if private_feed_key_last_used %}{{ private_feed_key_last_used |date('D H:i jS M Y', currentTimeZone ) }}{% endif %}</td>
+		</tr>
+		<tr>
 			<th>More</th>
 			<td>
 				<ul>

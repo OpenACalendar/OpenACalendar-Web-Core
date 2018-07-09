@@ -9,6 +9,8 @@ use repositories\builders\HistoryRepositoryBuilder;
 use repositories\builders\SysadminCommentRepositoryBuilder;
 use repositories\builders\VenueRepositoryBuilder;
 use repositories\SysAdminCommentRepository;
+use repositories\UserAccountPrivateFeedKeyRepository;
+use repositories\UserAccountRememberMeRepository;
 use Silex\Application;
 use site\forms\NewEventForm;
 use Symfony\Component\HttpFoundation\Request;
@@ -148,6 +150,13 @@ class UserController {
             }
         }
         $this->parameters['canPurge'] = $canPurge;
+
+
+        $userAccountRememberMeRepository = new UserAccountRememberMeRepository($app);
+        $this->parameters['remember_me_last_used'] = $userAccountRememberMeRepository->getLastUsedForUser($this->parameters['user']);
+
+        $userAccountPrivateFeedKeyRepository = new UserAccountPrivateFeedKeyRepository($app);
+        $this->parameters['private_feed_key_last_used'] = $userAccountPrivateFeedKeyRepository->getLastUsedForUser($this->parameters['user']);
 
 		return $app['twig']->render('sysadmin/user/show.html.twig', $this->parameters);
 	}
