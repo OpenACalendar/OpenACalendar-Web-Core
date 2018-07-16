@@ -303,8 +303,12 @@ class ExtensionCore extends BaseExtension {
             return false;
         }
 
-
-
+        $stat = $this->app['db']->prepare("SELECT COUNT(*) AS c FROM import_url_history ".
+            "WHERE import_url_history.user_account_id =:id");
+        $stat->execute(array( 'id'=>$userAccountModel->getId() ));
+        if ($stat->fetch()['c'] > 0) {
+            return false;
+        }
 
 
         // Ok, we are happy.

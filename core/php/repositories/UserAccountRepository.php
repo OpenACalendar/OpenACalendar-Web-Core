@@ -336,7 +336,13 @@ class UserAccountRepository {
             $stat = $this->app['db']->prepare("DELETE FROM user_watches_group_information WHERE user_account_id=:id");
             $stat->execute(array('id'=>$userAccountModel->getId()));
 
+            $stat = $this->app['db']->prepare("DELETE FROM user_watches_group_stop WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
             $stat = $this->app['db']->prepare("DELETE FROM user_watches_site_information WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM user_watches_site_stop WHERE user_account_id=:id");
             $stat->execute(array('id'=>$userAccountModel->getId()));
 
             $stat = $this->app['db']->prepare("DELETE FROM user_account_general_security_key WHERE user_account_id=:id");
@@ -355,6 +361,17 @@ class UserAccountRepository {
             $stat->execute(array('id'=>$userAccountModel->getId()));
 
             $stat = $this->app['db']->prepare("DELETE FROM user_at_event_information WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM new_event_draft_history WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            $stat = $this->app['db']->prepare("DELETE FROM new_event_draft_information WHERE user_account_id=:id");
+            $stat->execute(array('id'=>$userAccountModel->getId()));
+
+            // This one is not great - we should also clear out the linked sysadmin_comment_information table to.
+            // However it's easy to find sysadmin_comment_information records with no links and delete them later.
+            $stat = $this->app['db']->prepare("DELETE FROM sysadmin_comment_about_user WHERE user_account_id=:id");
             $stat->execute(array('id'=>$userAccountModel->getId()));
 
             $stat = $this->app['db']->prepare("DELETE FROM user_account_information WHERE id=:id");
