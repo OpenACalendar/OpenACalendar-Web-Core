@@ -12,63 +12,65 @@
 
 
 {% block innerContent %}
-	
-	{% if currentUserWatchesArea %}
 
-		<p>By watching this area you:</p>
-		
-		<ul class="listOfTextItems">
-			<li>
-				Receive a notification {%  if preferences['org.openacalendar']['WatchNotify'].email %} and email {% endif %} whenever someone else changes anything.
-			</li>
-			<li>
-				Receive a notification {%  if preferences['org.openacalendar']['WatchPrompt'].email %} and email {% endif %} whenever we are about to run out of events.
-			</li>
-			<li>
-				Optionally see the events on your personal calendar.
-			</li>
-			<li>
-				Receive a notification {%  if preferences['org.openacalendar']['UpcomingEvents'].email %} and email {% endif %} to remind you when events are on.
-			</li>
-		</ul>
+	<div class="contentMain">
+		{% if currentUserWatchesArea %}
 
-		<p>You can stop watching from a link in any email, or by pressing:</p>
+			<p>By watching this area you:</p>
+
+			<ul class="listOfTextItems">
+				<li>
+					Receive a notification {%  if preferences['org.openacalendar']['WatchNotify'].email %} and email {% endif %} whenever someone else changes anything.
+				</li>
+				<li>
+					Receive a notification {%  if preferences['org.openacalendar']['WatchPrompt'].email %} and email {% endif %} whenever we are about to run out of events.
+				</li>
+				<li>
+					Optionally see the events on your personal calendar.
+				</li>
+				<li>
+					Receive a notification {%  if preferences['org.openacalendar']['UpcomingEvents'].email %} and email {% endif %} to remind you when events are on.
+				</li>
+			</ul>
+
+			<p>You can stop watching from a link in any email, or by pressing:</p>
 
 
-		<form action="" method="post">
-			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-			<input type="hidden" name="action" value="unwatch">
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="Stop Watching" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>
-		</form>
-		
-	{% else %}
-		<p>Watch this area to:</p>
-		
-		<ul class="listOfTextItems">
-			<li>
-				Receive a notification {%  if preferences['org.openacalendar']['WatchNotify'].email %} and email {% endif %} whenever someone else changes anything.
-			</li>
-			<li>
-				Receive a notification {%  if preferences['org.openacalendar']['WatchPrompt'].email %} and email {% endif %} whenever we are about to run out of events.
-			</li>
-			<li>
-				Optionally see the events on your personal calendar.
-			</li>
-			<li>
-				Receive a notification {%  if preferences['org.openacalendar']['UpcomingEvents'].email %} and email {% endif %} to remind you when events are on.
-			</li>
-		</ul>
+			<form action="" method="post">
+				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+				<input type="hidden" name="action" value="unwatch">
+				<div class="bigSubmitActionWrapper"><input type="submit"  value="Stop Watching" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</form>
 
-		
-		
-		<form action="" method="post">
-			<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
-			<input type="hidden" name="action" value="watch">
-			<div class="bigSubmitActionWrapper"><input type="submit"  value="Start Watching" class="bigSubmitAction"/></div>
-			<div class="afterBigSubmitActionWrapper"></div>	
-		</form>
-	{% endif %}
+		{% else %}
+			<p>Watch this area to:</p>
+
+			<ul class="listOfTextItems">
+				<li>
+					Receive a notification {%  if preferences['org.openacalendar']['WatchNotify'].email %} and email {% endif %} whenever someone else changes anything.
+				</li>
+				<li>
+					Receive a notification {%  if preferences['org.openacalendar']['WatchPrompt'].email %} and email {% endif %} whenever we are about to run out of events.
+				</li>
+				<li>
+					Optionally see the events on your personal calendar.
+				</li>
+				<li>
+					Receive a notification {%  if preferences['org.openacalendar']['UpcomingEvents'].email %} and email {% endif %} to remind you when events are on.
+				</li>
+			</ul>
+
+
+
+			<form action="" method="post">
+				<input type="hidden" name="CSFRToken" value="{{ getCSFRToken() }}">
+				<input type="hidden" name="action" value="watch">
+				<div class="bigSubmitActionWrapper"><input type="submit"  value="Start Watching" class="bigSubmitAction"/></div>
+				<div class="afterBigSubmitActionWrapper"></div>
+			</form>
+		{% endif %}
+	</div>
 	
 {% endblock %}
 
