@@ -34,7 +34,7 @@ class UserWatchesAreaRepository {
 		return $this->loadByUserAndAreaId($user, $area->getId());
 	}
 	
-	public function loadByUserAndAreaId(UserAccountModel $user, bool $areaID) {
+	public function loadByUserAndAreaId(UserAccountModel $user, int $areaID) {
 
 		$stat = $this->app['db']->prepare("SELECT user_watches_area_information.* FROM user_watches_area_information WHERE user_account_id =:user_account_id AND area_id=:area_id");
 		$stat->execute(array( 'user_account_id'=>$user->getId(), 'area_id'=>$areaID ));
