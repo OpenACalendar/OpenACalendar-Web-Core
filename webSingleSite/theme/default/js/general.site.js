@@ -65,7 +65,6 @@ function showExportSharePopup() {
 			html += '<li><a href="mailto:?subject='+encodeURIComponent(emailSubject)+'&body='+encodeURIComponent(emailBody ? emailBody : text+"\n\n"+url)+'" title="Email"><div class="fa fa-envelope-o fa-2x" title="Email"></div></li>';
 			html += '<li><a href="https://twitter.com/intent/tweet?text='+encodeURIComponent(url+" "+text+( config.twitter ? " via @"+config.twitter : ""))+'" target="_blank" title="Twitter"><div class="fa fa-twitter fa-2x" title="Twitter"></div></li>';
 			html += '<li><a href="https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url)+'" target="_blank" title="Facebook"><div class="fa fa-facebook-official fa-2x" title="Facebook"></div></a></li>';
-			html += '<li><a href="https://plus.google.com/share?url='+encodeURIComponent(url)+'" target="_blank" title="Google Plus"><div class="fa fa-google-plus-square fa-2x" title="Google Plus"></div></a></li>';
 
 			html += '</ul>'
 
