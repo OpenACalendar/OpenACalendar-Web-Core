@@ -9,17 +9,17 @@ Vagrant.configure(2) do |config|
 
 	config.vm.define "app" do |normal|
 
-		config.vm.box = "ubuntu/xenial64"
-		config.ssh.username = "ubuntu"
+		normal.vm.box = "ubuntu/xenial64"
+		normal.ssh.username = "ubuntu"
 
-		config.vm.network "forwarded_port", guest: 8080, host: 8080
-		config.vm.network "forwarded_port", guest: 8081, host: 8081
-		config.vm.network "forwarded_port", guest: 8082, host: 8082
-		config.vm.network "forwarded_port", guest: 8025, host: 8025
+		normal.vm.network "forwarded_port", guest: 8080, host: 8080
+		normal.vm.network "forwarded_port", guest: 8081, host: 8081
+		normal.vm.network "forwarded_port", guest: 8082, host: 8082
+		normal.vm.network "forwarded_port", guest: 8025, host: 8025
 
-		config.vm.synced_folder ".", "/vagrant",  :owner=> 'ubuntu', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
+		normal.vm.synced_folder ".", "/vagrant",  :owner=> 'ubuntu', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
 
-		config.vm.provider "virtualbox" do |vb|
+		normal.vm.provider "virtualbox" do |vb|
 			# Display the VirtualBox GUI when booting the machine
 			vb.gui = false
 
@@ -27,18 +27,18 @@ Vagrant.configure(2) do |config|
 			vb.memory = "1024"
 		end
 
-		config.vm.provision :shell, path: "vagrant/app/bootstrap.sh"
+		normal.vm.provision :shell, path: "vagrant/app/bootstrap.sh"
 
 	end
 
 	config.vm.define "tests" do |normal|
 
-		config.vm.box = "ubuntu/xenial64"
-		config.ssh.username = "ubuntu"
+		normal.vm.box = "ubuntu/xenial64"
+		normal.ssh.username = "ubuntu"
 
-		config.vm.synced_folder ".", "/vagrant",  :owner=> 'ubuntu', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
+		normal.vm.synced_folder ".", "/vagrant",  :owner=> 'ubuntu', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
 
-		config.vm.provider "virtualbox" do |vb|
+		normal.vm.provider "virtualbox" do |vb|
 			# Display the VirtualBox GUI when booting the machine
 			vb.gui = false
 
@@ -46,23 +46,23 @@ Vagrant.configure(2) do |config|
 			vb.memory = "2048"
 		end
 
-		config.vm.provision :shell, path: "vagrant/tests/bootstrap.sh"
+		normal.vm.provision :shell, path: "vagrant/tests/bootstrap.sh"
 
 	end
 
 	config.vm.define "frontendtests" do |normal|
 
-		config.vm.box = "boxcutter/ubuntu1604-desktop"
-		config.vm.box_version = "2.0.18"
+		normal.vm.box = "boxcutter/ubuntu1604-desktop"
+		normal.vm.box_version = "2.0.18"
 
-		config.vm.synced_folder ".", "/vagrant",  :owner=> 'vagrant', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
+		normal.vm.synced_folder ".", "/vagrant",  :owner=> 'vagrant', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
 
-		config.vm.provider "virtualbox" do |vb|
+		normal.vm.provider "virtualbox" do |vb|
 			vb.gui = true
 			vb.memory = "2048"
 		end
 
-		config.vm.provision :shell, path: "vagrant/frontendtests/bootstrap.sh"
+		normal.vm.provision :shell, path: "vagrant/frontendtests/bootstrap.sh"
 
 	end
 
