@@ -4,13 +4,12 @@
 Vagrant.configure(2) do |config|
 
 	# It seems to need this here or "destroy" errors.
-	config.vm.box = "boxcutter/ubuntu1604"
+	config.vm.box = "ubuntu/xenial64"
 
 
 	config.vm.define "app" do |normal|
 
 		normal.vm.box = "ubuntu/xenial64"
-		normal.ssh.username = "ubuntu"
 
 		normal.vm.network "forwarded_port", guest: 8080, host: 8080
 		normal.vm.network "forwarded_port", guest: 8081, host: 8081
@@ -34,7 +33,6 @@ Vagrant.configure(2) do |config|
 	config.vm.define "tests" do |normal|
 
 		normal.vm.box = "ubuntu/xenial64"
-		normal.ssh.username = "ubuntu"
 
 		normal.vm.synced_folder ".", "/vagrant",  :owner=> 'ubuntu', :group=>'users', :mount_options => ['dmode=777', 'fmode=777']
 
