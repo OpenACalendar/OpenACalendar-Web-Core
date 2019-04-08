@@ -124,6 +124,15 @@ print "venue_history\n";
 $stat = $DB->prepare('UPDATE venue_history SET from_ip=\'1.1.1.1\' WHERE from_ip IS NOT NULL ');
 $stat->execute();
 
+// area_history Table
+print "area_history\n";
+$stat = $DB->prepare('UPDATE area_history SET from_ip=\'1.1.1.1\' WHERE from_ip IS NOT NULL ');
+$stat->execute();
+
+// sysadmin_comment_information Table
+print "sysadmin_comment_information\n";
+$stat = $DB->prepare('UPDATE sysadmin_comment_information SET comment=\'REMOVED\'');
+$stat->execute();
 
 print "Done\n";
 
