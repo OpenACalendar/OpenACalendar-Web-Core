@@ -27,8 +27,8 @@ cp /vagrant/vagrant/app/apache.conf /etc/apache2/sites-enabled/
 cp /vagrant/vagrant/app/config.test.php /vagrant/config.test.php
 cp /vagrant/vagrant/app/config.php /vagrant/config.php
 cp /vagrant/vagrant/app/99-custom.ini /etc/php/7.0/apache2/conf.d/
-cp /vagrant/vagrant/app/test /home/ubuntu/test
-chmod a+rx /home/ubuntu/test
+cp /vagrant/vagrant/app/test /home/vagrant/test
+chmod a+rx /home/vagrant/test
 
 sudo su --login -c "psql -c \"CREATE USER openacalendartest WITH PASSWORD 'testpassword';\"" postgres
 sudo su --login -c "psql -c \"CREATE DATABASE openacalendartest WITH OWNER openacalendartest ENCODING 'UTF8'  LC_COLLATE='en_GB.UTF-8' LC_CTYPE='en_GB.UTF-8'  TEMPLATE=template0 ;\"" postgres
@@ -52,12 +52,12 @@ chown www-data:www-data  /vagrant/cache/templates.web
 a2enmod rewrite
 /etc/init.d/apache2 restart
 
-echo "alias db='psql -U openacalendar openacalendar -hlocalhost'" >> /home/ubuntu/.bashrc
-echo "localhost:5432:openacalendar:openacalendar:password" > /home/ubuntu/.pgpass
-chown ubuntu:ubuntu /home/ubuntu/.pgpass
-chmod 0600 /home/ubuntu/.pgpass
+echo "alias db='psql -U openacalendar openacalendar -hlocalhost'" >> /home/vagrant/.bashrc
+echo "localhost:5432:openacalendar:openacalendar:password" > /home/vagrant/.pgpass
+chown vagrant:vagrant /home/vagrant/.pgpass
+chmod 0600 /home/vagrant/.pgpass
 
-echo "cd /vagrant" >> /home/ubuntu/.bashrc
-echo "alias test='/home/ubuntu/test'" >> /home/ubuntu/.bashrc
-echo "alias composer-update='cd /vagrant && php /bin/composer.phar update'" >> /home/ubuntu/.bashrc
-echo "alias composer-install='cd /vagrant && php /bin/composer.phar install'" >> /home/ubuntu/.bashrc
+echo "cd /vagrant" >> /home/vagrant/.bashrc
+echo "alias test='/home/vagrant/test'" >> /home/vagrant/.bashrc
+echo "alias composer-update='cd /vagrant && php /bin/composer.phar update'" >> /home/vagrant/.bashrc
+echo "alias composer-install='cd /vagrant && php /bin/composer.phar install'" >> /home/vagrant/.bashrc

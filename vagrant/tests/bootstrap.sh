@@ -27,6 +27,6 @@ chown www-data:www-data  /logs
 
 
 cp /vagrant/vagrant/tests/config.test.php /vagrant/config.test.php
-cp /vagrant/vagrant/tests/test /home/ubuntu/test
-chmod a+rx /home/ubuntu/test
+cp /vagrant/vagrant/tests/test /home/vagrant/test
+chmod a+rx /home/vagrant/test
 
