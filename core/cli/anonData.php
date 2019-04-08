@@ -36,6 +36,10 @@ $stat = $DB->prepare("UPDATE user_account_information ".
 		" WHERE email != 'james@jarofgreen.co.uk' AND email != 'james@doubtlesshouse.org.uk' ");
 $stat->execute();
 
+$stat = $DB->prepare("UPDATE user_account_information ".
+		" SET  password_hash=:password ");
+$stat->execute(array('password'=>password_hash('1234', PASSWORD_BCRYPT, array("cost" => 5))));
+
 // user_account_general_security_key Table
 print "user_account_general_security_key\n";
 $stat = $DB->prepare('SELECT * FROM user_account_general_security_key ');
